@@ -1,63 +1,63 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1482638BC
-	for <soc@lists.linux.dev>; Sun, 31 Aug 2025 13:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223B8265CA7
+	for <soc@lists.linux.dev>; Sun, 31 Aug 2025 13:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756646894; cv=none; b=SM1FWFYSuE2xEZyNMRoZ/HP3Bw0jahJVSKUiABTzAURl8GjKoZ46Y2u1GUMrKNfGlcKvjXHWJCrax4N4db3NEH2Hnod33bT+99WSGCrQ1VJEXLRWyK4sohCBldXnwUn7LZb6BgIzLpnHqLAqxbj1/Dx7Wq4OYHUwFIZJazGPnKY=
+	t=1756646898; cv=none; b=gj0X3TtUMNoAeoKyA4PU8mAEYjAx+x4S2FLIvwomlXqs0XEkWMQbAi9ohxnlZ+3hTn3OvGKMSHgVEH6H5YJRIDFPYpND5dau1dmpypjlMIrajCTCH5SNPT/2sP72imvWN8bOzK1MrYtyQfj7czyfphLHHejgfJGAE4SI1T+1EM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756646894; c=relaxed/simple;
-	bh=MEVeAxVhndT/7Ap1qgmz1gUcPCdJBlzqawgLrzkMB+k=;
+	s=arc-20240116; t=1756646898; c=relaxed/simple;
+	bh=4724Qznr91+tj8Y9/XUYmvNyXil/j8ZgBOQhRyA1BqQ=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Nl+6cE9NcrqMFXcbu7sqytmAh0QWrqSTYiFP67pshHZoXV2OXrMvLczUzAXBqrrfiJNAiqLVrLoRvAt3RV/8ouSjy0PUBEXu0zq+IB+WZh5Rg2j0anMtmhhS8Ab6EMhzUBzAM8qFH9WtkgdAk+VxV54rGdLNrxgL0sBpNoGKYFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=loWGoyrL; arc=none smtp.client-ip=209.85.221.49
+	 MIME-Version:Content-Type; b=S0LgyssnBOhu02beSKk5UUDx55jxwTZ9neOROE0tVubaMkQuuAAU8KiQD+HUWUqoGc3mtDLGLQRXnIzIZe543e8zcAAYct6MKWjXQYFBaA8cDQrUhKPvIDRDuf633sfc5n2BqAKnHUIwVbm35SAJWsO3N8zPIMKlh2W/4XZJSig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OyL9h4Qx; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="loWGoyrL"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3d323be1617so118377f8f.1
-        for <soc@lists.linux.dev>; Sun, 31 Aug 2025 06:28:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OyL9h4Qx"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3cd299b1833so442058f8f.3
+        for <soc@lists.linux.dev>; Sun, 31 Aug 2025 06:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756646891; x=1757251691; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1756646893; x=1757251693; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C174R2YaizzIOWtPzR0PtYRjLpsIdj5ksrAYTRWCGTw=;
-        b=loWGoyrLq6uPskAE3/LLvPjY/tCj15Mchn2ZvYM9tY966yi6KdExiuBon2Pmink017
-         +9443nFBlCbEvFf/a15VtWHzXnlJIE8LyfwuPqU9tA8MPKB2ZKQ/wPII5ynJNM/IY1NT
-         wniGqozEda5BqgGCX2P52bp/qwcq7JO/++aY/GN0BVmQmZ+Ja+DONzh/+NewrCQT6yNf
-         no+LfRb92Lh6GPvH/JJdCsA70GhaVGbJRp0yZD10Q3600jz5NYDS0fO3NZSm8tab2Tlr
-         inPvLg25y8uVJjl1sMrkeyK9bKfYERmZT+SDHkgqiiYGgv7ItVxS40oqG+cpfZjyVMAe
-         V7FA==
+        bh=mD6lZo1DYlhz45rUzy85fH782HipOjBn1uPVn9HDDvM=;
+        b=OyL9h4QxRaOD/0jIDXbkS/q/FU4s3MsGc10NTquGa2AVaBbAlwg9TeYKOzEtmQiXC2
+         Ap/OduYoH4AGS2tknEAeYLhWrS2LZwoOUyFOcIYgZlh2VTJQ1SMZFYsHwKDDRcl7B8PT
+         Jw04x90j1wuIsliIgzsq+dLgiHgMzsLr29z91C3EQ5VFa+5NMrto16VdonhbVFMD6rkl
+         vhZ1nTzHHo2tUSYolmvkEbsS5wnDbB2LjkzMXqVdx6l7HLku63D1uZcPMhX51GcKCEu0
+         +A9rl/K4R/il9Aa7H9ucbh5NLVdBsMrKpGUL2jbPJKC3V7qRIkTkgTqZSZDCnBm9Wabo
+         fQyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756646891; x=1757251691;
+        d=1e100.net; s=20230601; t=1756646893; x=1757251693;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C174R2YaizzIOWtPzR0PtYRjLpsIdj5ksrAYTRWCGTw=;
-        b=WGL4Khenv37Vo83UoRDV1dgRbB7m/NqW8o/QlO67OPleG6VyRSJbV5gp/Lrnf3Rbs6
-         vj4kkUFrTQXuxCJNwIySl/B3PDPjfmpQFLf+QOjms2LAnQ223vOOwrrhelEwQZ6nozTf
-         7wfdxaNN9c7tNW4HSRabOAYEzm88D5qVIXoDmlWF6SFP0101qX4BKJerOUroYnj+xfkq
-         d4Zr5Zr1uLL2jVp0Dz0yd0uZ0i2JQFgfNMePnyIaNyDl6PkU1rGqbNg2KMZ2Vc29DugJ
-         /PxDWu9aNwzFtcK6FINfE5HhAS0d4meblxjwzEyn/ucgJZYxWW8CfqDxOcs19MGzJYAc
-         5Cdg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZp8L7WKQBA2TltxPaXkzQaapybNDdbxDGI84PBC2rKt0Qp8toNdZ8VFUnq08x+XHj0Bw=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyCx/Mg68qHRwV186Y6XwZS0t+dSTY9hlTNcmnKqjz1SxKa/6fL
-	xQC/qzVI4d5M90I46Vyrfn4/yD2sKdYkI1ZjXw++XEkz4tE3C5DCNXCmu7cgny7/Z2M=
-X-Gm-Gg: ASbGncvKEUpx0Yd9Vk5pUYyrMQC83r8UMYGBHGLKx+VjP3wqQ8lvnECuc+bBTuQ/onS
-	pu9GxNCCj1YbXvUiDlYWPdif6WUidfgKf7FRSDYZgC6MK0MDrLMHl2Xo6Fk8IzU6ZiASXge/WKg
-	00OPPTNQ+vbGzd9LSJw85/xceM4kMsiWCJ5j6CuuFwK/22zjhoYNkkFl5VzuMXF1oohr+ykgotK
-	d1dSSY0sv/OBtHWrQJojxNR5eVGfKWUu9W2LSx5lf0r3yTQ3BQIwskooFK76T9K+FjrRq8L1UT5
-	BY+1+HrUIiSx1jjo64W4bHMsRePCvCTIvTRZiuc2iMEE4GWP2HdNG1DLm6/345olMv0q33Mvvkg
-	/vuh8eNB1sVi+Eusq0iZvOmd40TgnW3iR+8rvl8Q=
-X-Google-Smtp-Source: AGHT+IHkPBdwt6L3VH7t04bp7Le2oXr0tHCapltVXb93QgdyVU4QJ8bZvFGna7E4/zYnUQGrTwhkug==
-X-Received: by 2002:a05:600c:19c7:b0:456:1a00:c745 with SMTP id 5b1f17b1804b1-45b802c57dbmr32352025e9.3.1756646891177;
-        Sun, 31 Aug 2025 06:28:11 -0700 (PDT)
+        bh=mD6lZo1DYlhz45rUzy85fH782HipOjBn1uPVn9HDDvM=;
+        b=eqX7NJonf74x/kx/eBkWy+ZyupvJRr2Gxulym2gn7QTK/Mm46xO6fuliTkOKyDMdr0
+         eEU84f18JkQvGaaf37iSG7LPmo4NpMPkuvZtKfcF9iCsJapqOwUxhoXYy1Z1gIt372yi
+         whMb6GcQ59dmAUZDP9E2NILL/TyfmQSbGcMMtuuDaojai2FrXSk1mNrlVjWauucSZAEv
+         uWAZRGZ5bdUSvZ+v8h/k0G528zdDYbfzFnTHJuD4ARJkF7ReT1v4EhcRweKUu/hUUfYV
+         Ct/svSAa1Hx+C3gFpj0tog08/2muLMEiZ2b+3rn7yEn63Twz2VjVig4Ryv5Gh1v00x4/
+         bDog==
+X-Forwarded-Encrypted: i=1; AJvYcCUmvWCEK8KQk490SP+tnZhxQYowVghWbah36W7CBcWIC8HlPaRg9YxUocLFA3hseR9woww=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzLW8zUgB8QJZ+h3qjBpFtKrhQS+H1XlEd91G6yEIIdme7PFraf
+	ELuNIxqpeVmcnsXu9EoHoslnWJfOrU+OMWwtZHWp+n1qz9O0UT2GNopFNAZEeOm2Iyk=
+X-Gm-Gg: ASbGncuH0ANoo0nnFaLfvDfMeYVPi7/0zqpaipN1tggWzsgVMbQu79ZGY9oZJJqpoa8
+	iQPZvTFi/3a8A2eKpaBg6ji4sNiiGqwJ3pKjxiehaP29twGvoC31HU+u+E2Q5hmCJbhbpty+LAv
+	Z40i2dDTL6+r6CfwPCzFCAt1HLfTBN2CqGB7Up2qt+ER3JkIygeVNeE1GadMrgJ1NovzbUYY0XF
+	lReuq22SGw4WAyrvArkm4zTMgC2W/2Mo9bImvgUF+eJo6VJPwa7lQvgnxWZSQpAVpjFgRsyOxwb
+	aVCfqxeWsS4kNaAPy7VNdMpobJf6U2tJllMIX4dTz/4VqMCzJIuNq3rY/Wbk/IFriQOIeUXYii4
+	58tOYEsnoTMSCFIPN9bYl9KcVO2AaEcgQ51/cijW1SY6vB2ILUA==
+X-Google-Smtp-Source: AGHT+IENOgSWDvrR5me5DMoY53wRwsPVCOq3Mq4OdX9AjWmXw0wgs5GSbqe1NiXMSDlX3rSsquKhHQ==
+X-Received: by 2002:a05:600c:4e0f:b0:458:b6b9:6df5 with SMTP id 5b1f17b1804b1-45b81eb0a80mr30834275e9.1.1756646893387;
+        Sun, 31 Aug 2025 06:28:13 -0700 (PDT)
 Received: from [127.0.1.1] ([178.197.219.123])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b87b3900dsm29956925e9.0.2025.08.31.06.28.08
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b87b3900dsm29956925e9.0.2025.08.31.06.28.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Aug 2025 06:28:10 -0700 (PDT)
+        Sun, 31 Aug 2025 06:28:12 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: jesper.nilsson@axis.com, mturquette@baylibre.com, sboyd@kernel.org, 
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, krzk@kernel.org, 
@@ -73,14 +73,14 @@ Cc: ksk4725@coasia.com, kenkim@coasia.com, pjsin865@coasia.com,
  linux-samsung-soc@vger.kernel.org, linux-arm-kernel@axis.com, 
  linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-gpio@vger.kernel.org, soc@lists.linux.dev
-In-Reply-To: <20250825114436.46882-2-ravi.patel@samsung.com>
+In-Reply-To: <20250825114436.46882-3-ravi.patel@samsung.com>
 References: <20250825114436.46882-1-ravi.patel@samsung.com>
- <CGME20250825120659epcas5p47ea3377840efb9ce3d5901a27c85e4ed@epcas5p4.samsung.com>
- <20250825114436.46882-2-ravi.patel@samsung.com>
-Subject: Re: (subset) [PATCH v3 01/10] dt-bindings: clock: Add ARTPEC-8
- clock controller
-Message-Id: <175664688891.195158.13270877080433356384.b4-ty@linaro.org>
-Date: Sun, 31 Aug 2025 15:28:08 +0200
+ <CGME20250825120704epcas5p37385c913027d74d221012c4ae1550c73@epcas5p3.samsung.com>
+ <20250825114436.46882-3-ravi.patel@samsung.com>
+Subject: Re: (subset) [PATCH v3 02/10] clk: samsung: Add clock PLL support
+ for ARTPEC-8 SoC
+Message-Id: <175664689125.195158.15680456692339310248.b4-ty@linaro.org>
+Date: Sun, 31 Aug 2025 15:28:11 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -92,27 +92,21 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.2
 
 
-On Mon, 25 Aug 2025 17:14:27 +0530, Ravi Patel wrote:
-> Add dt-schema for Axis ARTPEC-8 SoC clock controller.
+On Mon, 25 Aug 2025 17:14:28 +0530, Ravi Patel wrote:
+> Add below clock PLL support for Axis ARTPEC-8 SoC platform:
+> - pll_1017x: Integer PLL with mid frequency FVCO (950 to 2400 MHz)
+>              This is used in ARTPEC-8 SoC for shared PLL
 > 
-> The Clock Management Unit (CMU) has a top-level block CMU_CMU
-> which generates clocks for other blocks.
-> 
-> Add device-tree binding definitions for following CMU blocks:
-> - CMU_CMU
-> - CMU_BUS
-> - CMU_CORE
-> - CMU_CPUCL
-> - CMU_FSYS
-> - CMU_IMEM
-> - CMU_PERI
+> - pll_1031x: Integer/Fractional PLL with mid frequency FVCO
+>              (600 to 1200 MHz)
+>              This is used in ARTPEC-8 SoC for Audio PLL
 > 
 > [...]
 
 Applied, thanks!
 
-[01/10] dt-bindings: clock: Add ARTPEC-8 clock controller
-        https://git.kernel.org/krzk/linux/c/91f98de42310c70f9a23595b3b20aa305717d955
+[02/10] clk: samsung: Add clock PLL support for ARTPEC-8 SoC
+        https://git.kernel.org/krzk/linux/c/80770fccb7f60b0bc795852c154273e511f296a0
 
 Best regards,
 -- 
