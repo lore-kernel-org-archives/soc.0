@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBD928DC4;
-	Mon,  1 Sep 2025 05:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3138421CA14;
+	Mon,  1 Sep 2025 05:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756703517; cv=none; b=DN0TKKXiiO/Lh4ILJTnWHKmAYtPuyyYpVi/PDHJaXr18gZ3cH6GrH8u+XLQeYwJLJr/DH2ZzQBUZ9d1V4u+CQn23i+RMFivwHolnuVBSwryNldvpO0DdvsoL8H8TCK3OxBPlV7jVWVDpZenkKN7e833nPYJBgJUbYP7pOPoV+yE=
+	t=1756704390; cv=none; b=avR7Y0V3q/iI9oR5SSxziKUSqoYFq0v7vlDbKAaNzBmrrKkI2Aqgg2NKD2xHJ3eFmPB7TlxAoNl+ZIBQ8XFeDVkMdIfs94UjG10UM5vcAxc1/HHEBUgZhBk8+GEYhI3xRa4+/DbgDIo2bwWDZToPp58vdEI8CnJAj8+vEYO7myQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756703517; c=relaxed/simple;
-	bh=0zcGP1JHy/F4YX2Ldd+o0wMIBnWn3+zAZi/ObO2lfWI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lxcr1Np2VWQqY91XAbsVVuILiKci5/sl777FnRUeWEcGt2uBj9tOFL9wI1sfOkEBhaQDY6L2NR7qm2v/O0nwB29bwZZasVdmm+aeUjZK/Bwm+YbPwZ8HdNf+7ZT3Q/B2I05WY+zvb98ww64mRQoZgKKc8kxZt/yIcspBNtatcRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iXxFGAxC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756704390; c=relaxed/simple;
+	bh=FRFTRStSejwYOz/sgD9a0MfVP0EKn4qNwwC+A2ftFS8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=eRqMD8Fz5dMFlW9vnEWsQMLD6Yj0Ai9ODYYGj7hBGIhUJRdU/xvfiemBz3koQ1Gw4wVj11B5HrBtJTSDWJlNYRssPGyQwOyUK9LRdS5/vMA+ziS0xmHbJTx7gqS9PmVkLnIXF4lM4u1mACxmq8OZ7B6GuprMiWmGAYx/jeXQNP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nbvm5O6P; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iXxFGAxC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E36C4CEF0;
-	Mon,  1 Sep 2025 05:11:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nbvm5O6P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E68C4CEF0;
+	Mon,  1 Sep 2025 05:26:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756703516;
-	bh=0zcGP1JHy/F4YX2Ldd+o0wMIBnWn3+zAZi/ObO2lfWI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iXxFGAxCyAX2Z/ywg/XTCdRGqX79L6oBBeyP61F+WMwJg6iYcL060e1uvnqvJrSVl
-	 eSWFl94eCQPDLdUPxOObV2KH038zR9dClh6XwqdfYpu5Kn6Jkl6fohDg9HlGov+n+M
-	 cX3/YBqSK4WlGVn8u9X/KHKukZAVwT3bndFB94AjkJtef3E6buyP805gRqd0WhaYDK
-	 CxyhnZ82kTr/EesV5DzOmo8iNApgiYBYgbg2VuTIQkovtYJfCpOllYBmYKEwSM/xca
-	 IPSSqumL1ENJEKQPZhvJE6soZ82L0zkISRnoKUleKab0h5OFcAHcInGZLYgbugOeDf
-	 55ua6+AvgjyKA==
-Message-ID: <e3f6d000-bbb7-45c2-93f2-69be9815ca99@kernel.org>
-Date: Mon, 1 Sep 2025 07:11:46 +0200
+	s=k20201202; t=1756704390;
+	bh=FRFTRStSejwYOz/sgD9a0MfVP0EKn4qNwwC+A2ftFS8=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=Nbvm5O6Pj2OiQimofs8q/FvJwJxK0ea3lWeTfxM64+SNtaoIsxtkwpAUAW6YEUg3g
+	 hQjVipiP5dVZ+rbwYSZQxePI/PK1/BRdbTDp9IawnR22uGF5htHmzsHnFi90VVbZL0
+	 Z8Q9x4TUiORpXbFL3wCZL0XXtjUcmC4t9H/uu2EXk/mC3HV5pScsmQ+oIg74ylapW2
+	 0l/Avrn893QUswQ0fBuP4tKb81ouKe6TZ975iI5u7ScpWsnnOXDOX6BtDFdSsiK8TE
+	 5Z3vP8BnRedowl2dgXNyhDWYiK8c6YSciQ5RWMCqIjP8Jqfe4fRLR5NuFw2JY5iYBS
+	 l3oKzuywFcLkQ==
+Message-ID: <a305a5e3-7164-4aba-b732-7ccb9f2daa76@kernel.org>
+Date: Mon, 1 Sep 2025 07:26:21 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,28 +35,28 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/10] dt-bindings: pinctrl: samsung: Add compatible
- for ARTPEC-8 SoC
-To: Ravi Patel <ravi.patel@samsung.com>, jesper.nilsson@axis.com,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, s.nawrocki@samsung.com,
- cw00.choi@samsung.com, alim.akhtar@samsung.com, linus.walleij@linaro.org,
- tomasz.figa@gmail.com, catalin.marinas@arm.com, will@kernel.org,
- arnd@arndb.de
-Cc: ksk4725@coasia.com, kenkim@coasia.com, pjsin865@coasia.com,
- gwk1013@coasia.com, hgkim05@coasia.com, mingyoungbo@coasia.com,
- smn1196@coasia.com, pankaj.dubey@samsung.com, shradha.t@samsung.com,
- inbaraj.e@samsung.com, swathi.ks@samsung.com, hrishikesh.d@samsung.com,
- dj76.yang@samsung.com, hypmean.kim@samsung.com,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@axis.com,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-gpio@vger.kernel.org, soc@lists.linux.dev
-References: <20250825114436.46882-1-ravi.patel@samsung.com>
- <CGME20250825120715epcas5p3a0c8b6eaff7bdd69cbed6ce463079c64@epcas5p3.samsung.com>
- <20250825114436.46882-5-ravi.patel@samsung.com>
- <b8085dd8-e1a0-48b1-a49f-f3edaa0381da@kernel.org>
- <000201dc1af2$537b4e70$fa71eb50$@samsung.com>
+Subject: Re: [PATCH v5 5/5] arm64: configs: Update defconfig for AST2700
+ platform support
+To: Ryan Chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>,
+ nfraprado@collabora.com, Taniya Das <quic_tdas@quicinc.com>,
+ Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+ Eric Biggers <ebiggers@google.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, soc@lists.linux.dev,
+ Mo Elbadry <elbadrym@google.com>, Rom Lemarchand <romlem@google.com>,
+ William Kennington <wak@google.com>, Yuxiao Zhang <yuxiaozhang@google.com>,
+ wthai@nvidia.com, leohu@nvidia.com, dkodihalli@nvidia.com,
+ spuranik@nvidia.com
+References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
+ <20250901031311.1247805-6-ryan_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,50 +102,19 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <000201dc1af2$537b4e70$fa71eb50$@samsung.com>
+In-Reply-To: <20250901031311.1247805-6-ryan_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01/09/2025 05:41, Ravi Patel wrote:
+On 01/09/2025 05:13, Ryan Chen wrote:
+> Enable options for ASPEED AST2700 SoC.
 > 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzk@kernel.org>
->> Sent: 31 August 2025 18:55
->> To: Ravi Patel <ravi.patel@samsung.com>; jesper.nilsson@axis.com; mturquette@baylibre.com; sboyd@kernel.org; robh@kernel.org;
->> krzk+dt@kernel.org; conor+dt@kernel.org; s.nawrocki@samsung.com; cw00.choi@samsung.com; alim.akhtar@samsung.com;
->> linus.walleij@linaro.org; tomasz.figa@gmail.com; catalin.marinas@arm.com; will@kernel.org; arnd@arndb.de
->> Cc: ksk4725@coasia.com; kenkim@coasia.com; pjsin865@coasia.com; gwk1013@coasia.com; hgkim05@coasia.com;
->> mingyoungbo@coasia.com; smn1196@coasia.com; pankaj.dubey@samsung.com; shradha.t@samsung.com; inbaraj.e@samsung.com;
->> swathi.ks@samsung.com; hrishikesh.d@samsung.com; dj76.yang@samsung.com; hypmean.kim@samsung.com; linux-
->> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-arm-kernel@axis.com; linux-
->> clk@vger.kernel.org; devicetree@vger.kernel.org; linux-gpio@vger.kernel.org; soc@lists.linux.dev
->> Subject: Re: [PATCH v3 04/10] dt-bindings: pinctrl: samsung: Add compatible for ARTPEC-8 SoC
->>
->> On 25/08/2025 13:44, Ravi Patel wrote:
->>> From: SeonGu Kang <ksk4725@coasia.com>
->>>
->>> Document the compatible string for ARTPEC-8 SoC pinctrl block,
->>> which is similar to other Samsung SoC pinctrl blocks.
->>>
->>> Signed-off-by: SeonGu Kang <ksk4725@coasia.com>
->>> Acked-by: Rob Herring (Arm) <robh@kernel.org>
->>> Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
->>> ---
->>>  Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml | 1 +
->>>  1 file changed, 1 insertion(+)
->>
->>
->> No wakeup-eint interrupts here? samsung,pinctrl-wakeup-interrupt.yaml?
-> 
-> I don't see any use case for external wake-up interrupt here (as of now).
+> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> ---
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-It is more about hardware, not use case. Does this hardware has EINT
-wakeup pin banks?
-
-> So wakeup-eint entry is not present in dts and yaml both.
-
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
