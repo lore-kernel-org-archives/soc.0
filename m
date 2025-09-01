@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387C930E0E5
-	for <soc@lists.linux.dev>; Mon,  1 Sep 2025 09:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E7330F7E0
+	for <soc@lists.linux.dev>; Mon,  1 Sep 2025 09:58:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756720703; cv=none; b=pon0BPfQYItg3+6PRc4dhZl3cMM1yk/62tb262ycmTfQvtXi57O4PBr8180apJir22dCIq5hgD6ETMvH8cCq+ULroFkadcMU/PjZmL/+zp/daX7Uxgr9yBauxTn4vaUllbxOdiu3+4egzmZsI6cpNlUyKvR2tv5nfExY7fKTzkI=
+	t=1756720703; cv=none; b=qhKnp63ggfotY8fI+0kCL0zGNy9bXh2pZGvoSsvAj4eIpbbXkcgFtGjeSnnerN9DVVCjeD8kisNnH0rGAto1ZgbMaaYDQK+E7lkJsFa/yYtHDGGCRdOb4/dRUwds2NfStv9fI79VCs/NKw+F9jcdFoCGbienHYvm6lLMYSghg4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756720703; c=relaxed/simple;
-	bh=KW/7za5xnEKvksykLKyuTW0Rd52vyF99ZQSWnkTRT8Y=;
+	bh=cjGsIoIs7t7yPk/G+EOtNJ1n8eDOmcmV44Y/xREdHEk=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=V8B9HxCJHndX0lIp3+KITfn2t70ZyMi5JVgBJHYX+7n0TWFaDrJMGCKKVo1HDaH1uf2/bc60OXFsKncTuBjX+pXUv3zFsByEoHMChMHeT0U39wV6JsF8wJqtNPhDBUAZxKWFYqo4wGfePbSS9brj6NqzKO/YyVOAjfGUsz/+mfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i5xkBwSk; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=jgjBCmr26wy5p8MN5DrNl4PD6t76eH9Ql+M8zARkfzd/1v8bYDHNjJ1OqWCtyQ2lPgkSee3mFkEOJXsigLWh57vYGcamaDhqdS5Hlh3llhFB2L6ebSb+ujkUI4eTRcO4pttn1WxEK1siG6OOsf/FvBDylg5wOX8E5HncnAS0hGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H6qdmS7p; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i5xkBwSk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H6qdmS7p"
 Received: by smtp.kernel.org (Postfix)
-	id B71F3C4CEFC; Mon,  1 Sep 2025 09:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95ED7C4CEF7;
-	Mon,  1 Sep 2025 09:58:21 +0000 (UTC)
+	id 1717BC4CEF7; Mon,  1 Sep 2025 09:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E294AC4CEF0;
+	Mon,  1 Sep 2025 09:58:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756720701;
-	bh=KW/7za5xnEKvksykLKyuTW0Rd52vyF99ZQSWnkTRT8Y=;
+	s=k20201202; t=1756720702;
+	bh=cjGsIoIs7t7yPk/G+EOtNJ1n8eDOmcmV44Y/xREdHEk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=i5xkBwSkP7rgThixBncp1U+mHQ/ezFENuxyclPGxJTrgbX4HftIAuwOsPAAWTS3Bz
-	 Iyf/3JphrNW9z7LIeLoobWsY+zaWj+hxk/ZoC5LP2i/r5FkNAaryzqbPvsIjMmRH9i
-	 KRPpY6U6d922U9S6BGrRguZsqkOGsoT6ZwSPapbcg+UvY8tdWLhxuefa+NEGOHf07E
-	 9VQ4IS1q8NfL8JBqSg0ITShlNjGeblq+87FXjsPTsteptPO7speC3ZAsf43mQg5//a
-	 XbddH0pCT+9Z23zrXOD9LkBp8bwUP/wslyoLhaKk70dWBWCem1k0CQsrm7wG1uD6Pr
-	 +By+UFrQZynvg==
+	b=H6qdmS7pGoBn1vXQ7Qws8EslGDc/j3erENbKXbCMIvTE7mkZNVHRg+UlxUBrY3Yg2
+	 RORwL/sePDkIBnXHO8rmqAQVH1cuPmpoBu51fTlz7y1NNn4UNHPhDvQnOatUjW1Qfz
+	 Gf3kw6sh2aVGvGcNQw4pDVTyEr8IgZ0U+u4g9HJekWbDXmp8HMtIKG52zajcJSAa7w
+	 7oHaJynsB2y0GxZDyGau9iJvGE0TkMgIVdDT3pSkxzn42fhEP6rmhQYWVnditBpdzE
+	 r4Qi0hQlNjva0OPkcNtwascoK8AwDa2ABBkfAHao58qfpBFey+VIPV1n00KhJP1GRP
+	 MEz6330p5JfEQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE19B383BF4E;
-	Mon,  1 Sep 2025 09:58:28 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEA3383BF4E;
+	Mon,  1 Sep 2025 09:58:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,16 +39,16 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] arm64: dts: axiado: Add missing UART aliases
+Subject: Re: [PATCH v2] MAINTAINERS: Update Nobuhiro Iwamatsu's email address
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175672070723.3637164.12448480234097551575.git-patchwork-notify@kernel.org>
-Date: Mon, 01 Sep 2025 09:58:27 +0000
+ <175672070874.3637164.11511021099092293819.git-patchwork-notify@kernel.org>
+Date: Mon, 01 Sep 2025 09:58:28 +0000
 References: 
- <20250828-axiado-ax3000-missing-serial-alias-v3-1-393111f4bd9e@axiado.com>
+ <1756087556-25424-1-git-send-email-nobuhiro.iwamatsu.x90@mail.toshiba>
 In-Reply-To: 
- <20250828-axiado-ax3000-missing-serial-alias-v3-1-393111f4bd9e@axiado.com>
-To: Harshit Shah <hshah@axiado.com>
+ <1756087556-25424-1-git-send-email-nobuhiro.iwamatsu.x90@mail.toshiba>
+To: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
 Cc: soc@kernel.org
 
 Hello:
@@ -56,21 +56,21 @@ Hello:
 This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 28 Aug 2025 11:27:49 -0700 you wrote:
-> Axiado AX3000 EVK has total of 4 UART ports. Add missing alias for uart0,
-> uart1, uart2.
+On Mon, 25 Aug 2025 11:05:56 +0900 you wrote:
+> The company's email address has been changed, so update my email
+> address in MAINTAINERS and .mailmap files.
 > 
-> This fixes the probe failures on the remaining UARTs.
+> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
+> ---
 > 
-> Fixes: 1f7055779001 ("arm64: dts: axiado: Add initial support for AX3000 SoC and eval board")
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Harshit Shah <hshah@axiado.com>
+> v2:
+>   Remove extra space.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3] arm64: dts: axiado: Add missing UART aliases
-    https://git.kernel.org/soc/soc/c/75e81743e381
+  - [v2] MAINTAINERS: Update Nobuhiro Iwamatsu's email address
+    https://git.kernel.org/soc/soc/c/0aee6faf5b2e
 
 You are awesome, thank you!
 -- 
