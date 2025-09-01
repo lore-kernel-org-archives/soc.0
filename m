@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A609213DB9F;
-	Mon,  1 Sep 2025 05:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71528237707;
+	Mon,  1 Sep 2025 06:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756705960; cv=none; b=XxFNzJ76Z3qBu926HlYmpH/6nwX2s8aWdEnVdvyudHjr9K3HLTChLI0GuMjoI8iKkTnrNGuP6DHcga124UEkaYImOklVvBu5jS/LA5KEoAzuZQCSqL/jnOUBSBe7IhOIYSuWvPPp+/y6y7jk9+XuFmYccEbhHt2MAb6pAVWgdgw=
+	t=1756708287; cv=none; b=ti+lU3RnWhbLlGQkQL2aOU/6zCvChkv7OGM1bzmVPpa6R/iWGLXUxWJhyUCBtrbALq0iWYYiNjXeDQpWLsaX684129wm6Yin+l5+GpgZalf5d710h7/qBuVaKjg2NVnmN6jQAnfwqpYuGV9ns8IJVyAd8GOnLNoCwki160AbGoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756705960; c=relaxed/simple;
-	bh=XoTpNOAyoQ2QagVwjJXE09PuDOMwU4O7m89dZyPiwSc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=en58a7ONhug6Ga5jNowxBrvc+R0GuDy1eoiFgwRb/Ly1tveElXts9CwpzJ9qJr3Qy6X2eaBAsXEZIoxqs6Z8DRtKCaH4OpdqRQeAGlU2xW5TAiuV+aIZG1TD0L42gKBzq5rS0ZyC5OGie+tHrsOgVXlco8GaBw8wdsMVPLgHyaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IGWaSZeE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756708287; c=relaxed/simple;
+	bh=sVvatHqFEezgOp6wHYN1XZxHCHWHK5et7wUQgkBExPs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CjZ4xujG9cG7+BfmW7TBA1ueJnns1WlxFvntEaWUJRG3S+t7Uh+tsuHNITyCmVEPg2hZElikUr1PWTlyggIwpRU7JxxgoBv8Z3Jjumpx37Y57dULNkdEOEjij+V3WcCZtOpYctfKBGWGpBjlUkm7NlCB2/FY1SXlpyTKr1MsZVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RNouerq6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IGWaSZeE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30FA8C4CEF0;
-	Mon,  1 Sep 2025 05:52:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RNouerq6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7713DC4CEF0;
+	Mon,  1 Sep 2025 06:31:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756705959;
-	bh=XoTpNOAyoQ2QagVwjJXE09PuDOMwU4O7m89dZyPiwSc=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=IGWaSZeEZdzmwetszRWF/zekZx6h8k8kq1SE6iSw72U0kH2ciJ0irXxxY1nPJ7ap4
-	 7kX3uGg7FDThpmuWJ+7NsBd0P5CMreP9f7yEfe/3O1rDHsBP8hkYslrOT0qKM07rT/
-	 GBFg2OuRQMJTCFL47GoqtjjUi/2f/KPGl4PQafQYJMmAFC3BC24fZ3Vaj7AdC4xsfc
-	 OS179rGHV1i001aqZgZ8Yut4mKkXMTu/6aqYFUYkE59Trfl5TCPbuHEd3w9tfJgdGN
-	 lMbeQZzPsZau0QOHDNfABKS9XdRBLqwfww2BXRckT73p7c+AfV+DhNQEjz7DGdyXHX
-	 ahpzDR80xvaQg==
-Message-ID: <f80b0de7-6b31-4b1f-b5ba-84e41a42420b@kernel.org>
-Date: Mon, 1 Sep 2025 07:52:29 +0200
+	s=k20201202; t=1756708287;
+	bh=sVvatHqFEezgOp6wHYN1XZxHCHWHK5et7wUQgkBExPs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RNouerq6PsPwzlLjxHg14yZ7Db0V7b4LlKprLZ813dlvu9MspmIDBPqpZqr98RIKy
+	 o5zGQM+qrpAwlJQSsgRGAF02K4OlURdZwcLIZ3KLqLiZf6afunNlNkZzh95zI51zB3
+	 gDVoeLHgs5rNCheB568SKLso7aYf8JjT5nmdhyGS7kVGVdD1p0Z9Hmdl7tReyNZw0K
+	 UK9jBNmdRFzaQbxVSOfdnNvLcfYqJLmN1DD6NJaQ5Wc2l3sSbgMVdSsXXlgxta640y
+	 qBZ2y4ZtMcyCWfXxJPUik12ck9MJpfbb7s099VqLJvUr1o3JONcyAGxO8d814diF5j
+	 hdXqdHlDgeaSQ==
+Message-ID: <929b0908-62eb-4494-b56c-9513205d5bbf@kernel.org>
+Date: Mon, 1 Sep 2025 08:31:16 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,27 +35,29 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/5] arm64: dts: aspeed: Add AST2700 Evaluation Board
-To: Ryan Chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>,
- nfraprado@collabora.com, Taniya Das <quic_tdas@quicinc.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Eric Biggers <ebiggers@google.com>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, soc@lists.linux.dev,
- Mo Elbadry <elbadrym@google.com>, Rom Lemarchand <romlem@google.com>,
- William Kennington <wak@google.com>, Yuxiao Zhang <yuxiaozhang@google.com>,
- wthai@nvidia.com, leohu@nvidia.com, dkodihalli@nvidia.com,
- spuranik@nvidia.com
-References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
- <20250901031311.1247805-5-ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH v3 04/10] dt-bindings: pinctrl: samsung: Add compatible
+ for ARTPEC-8 SoC
+To: Ravi Patel <ravi.patel@samsung.com>, jesper.nilsson@axis.com,
+ mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, s.nawrocki@samsung.com,
+ cw00.choi@samsung.com, alim.akhtar@samsung.com, linus.walleij@linaro.org,
+ tomasz.figa@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+ arnd@arndb.de
+Cc: ksk4725@coasia.com, kenkim@coasia.com, pjsin865@coasia.com,
+ gwk1013@coasia.com, hgkim05@coasia.com, mingyoungbo@coasia.com,
+ smn1196@coasia.com, shradha.t@samsung.com, inbaraj.e@samsung.com,
+ swathi.ks@samsung.com, hrishikesh.d@samsung.com, dj76.yang@samsung.com,
+ hypmean.kim@samsung.com, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-arm-kernel@axis.com, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, soc@lists.linux.dev
+References: <20250825114436.46882-1-ravi.patel@samsung.com>
+ <CGME20250825120715epcas5p3a0c8b6eaff7bdd69cbed6ce463079c64@epcas5p3.samsung.com>
+ <20250825114436.46882-5-ravi.patel@samsung.com>
+ <b8085dd8-e1a0-48b1-a49f-f3edaa0381da@kernel.org>
+ <000201dc1af2$537b4e70$fa71eb50$@samsung.com>
+ <e3f6d000-bbb7-45c2-93f2-69be9815ca99@kernel.org>
+ <000301dc1b01$71e4f5a0$55aee0e0$@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -101,37 +103,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250901031311.1247805-5-ryan_chen@aspeedtech.com>
+In-Reply-To: <000301dc1b01$71e4f5a0$55aee0e0$@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01/09/2025 05:13, Ryan Chen wrote:
-> ASPEED AST2700 EVB is prototype development board based
-> on AST2700 SOC.
+On 01/09/2025 07:29, Ravi Patel wrote:
+>>>>
+>>>> No wakeup-eint interrupts here? samsung,pinctrl-wakeup-interrupt.yaml?
+>>>
+>>> I don't see any use case for external wake-up interrupt here (as of now).
+>>
+>> It is more about hardware, not use case. Does this hardware has EINT
+>> wakeup pin banks?
 > 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> ---
->  arch/arm64/boot/dts/Makefile               |  1 +
->  arch/arm64/boot/dts/aspeed/Makefile        |  4 ++++
->  arch/arm64/boot/dts/aspeed/ast2700-evb.dts | 22 ++++++++++++++++++++++
->  3 files changed, 27 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
->  create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
-> 
-> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-> index b0844404eda1..3729e7d480db 100644
-> --- a/arch/arm64/boot/dts/Makefile
-> +++ b/arch/arm64/boot/dts/Makefile
-> @@ -38,3 +38,4 @@ subdir-y += tesla
->  subdir-y += ti
->  subdir-y += toshiba
->  subdir-y += xilinx
-> +subdir-y += aspeed
-
-
-Messed order. We already asked in other patches to keep alphabetical
-order when extending entries.
+> I checked SFR sheet, ARTPEC-8 does not have any EINT wakeup pins or SFRs.
+OK
 
 Best regards,
 Krzysztof
-
