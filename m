@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1933A30F800
-	for <soc@lists.linux.dev>; Mon,  1 Sep 2025 09:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940A030DEA0
+	for <soc@lists.linux.dev>; Mon,  1 Sep 2025 09:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756720699; cv=none; b=dYk9eFNP3JIAQmJ9wUS+Uq1geBGIyda4X9R5C1gIMLfY6jCh96TjDo1XNDDe2ZWTFBMEX6jhdR9J5PbNZzIy6b8G/676SR68elXCJYqwsBAC+gIe0LcvL+5bmhd5g8lPhYOZBeU3HlsdXph8i84FTrn7cbsUkVVMw/GoedY1ILQ=
+	t=1756720700; cv=none; b=A9L1zkfLtuQJfGGgDlWmVGR4AuWBjZ/hR6udYRY6p9B8Eu11cfhCI09qeQ1xun52cioSPvxgo5XpmwZyJbkyndg2hFTz4glUDf5cw7gA+9wFyrSN9zKJG3gG1HC6sNqK7eXzGMlsYnDabG7jRAUFXTJU2j6Eq2mKOdskx79Y6ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756720699; c=relaxed/simple;
-	bh=4iSUkAOKCAQOHHKoGfLY+Kjiom9caYSpqsxm67RtTYo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=N+R5vWaNYSnL/9rREK7JR6/RznVlQ2iUSqmpMkjjk8RjRR8NOvpYlf9YY6T6OS3HUFIU5WVF58qfHrj+rJ7WMLVfWswPXvxPDHhmjQ5sPC0rmQcPuC5ZVpECBQC6I/Qer6zEO9Xv02Dp7wB0IKqtVfdHb7Xi6JhjGQKkrZAGL3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H5zoqUuA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756720700; c=relaxed/simple;
+	bh=HHgzlI3vchSOsqbjjEL679NzlPW5KsucRs02XOy8upg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=c0mQ+Nqnsha8mRfADV3AdmIt/4LwisIA8HRl9CAli9nwIF+u1LeVXV5n2Wfg8SbioVwr+G0sd64NCbcQl+djCn+goR547SdIdKu7ecLVJEv5adwXZJAy+m+zhmtUPTHmCkwQhIvvEjOHLVM0ssFecut6doBPKnCxsgiVvcTT61g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0EUfkKJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H5zoqUuA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0EUfkKJ"
 Received: by smtp.kernel.org (Postfix)
-	id A6A17C4CEF7; Mon,  1 Sep 2025 09:58:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9187EC4CEF0
-	for <soc@kernel.org>; Mon,  1 Sep 2025 09:58:18 +0000 (UTC)
+	id 2EEDAC4CEF7; Mon,  1 Sep 2025 09:58:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 193C1C4CEF0;
+	Mon,  1 Sep 2025 09:58:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756720698;
-	bh=4iSUkAOKCAQOHHKoGfLY+Kjiom9caYSpqsxm67RtTYo=;
-	h=Subject:From:Date:To:Cc:From;
-	b=H5zoqUuAb4TWZIU2y469RrOMN0anBtBsKcYS1uFQlotsW1kOS/CUmN11bxC7MP5Hj
-	 9zJ7zOiB+IQdvzBI2SOKlvR2FikJC9LdDAG8LfSoWVblKlYd57p1w8RBT49M93a9v+
-	 EAEzvfLfCJ+rJNcfWbXphLvjkArzJFDyYeb6NOz0xzGW1+VuY9ZNMkZlDME8y7bcFP
-	 ZBoyn4/TyGnS/UhCSmcn4KseIe1a2Q693ghrEghbj9OgV7PoYD/HQPduv/1D5NkBLJ
-	 gIiZaejRR0+hJYX9xVnjpH8pTSBvPPxaOUULLaDpvP5u+uME1IGcCWd6pL7sGlbDpF
-	 PFFUvJ54+pacA==
+	s=k20201202; t=1756720700;
+	bh=HHgzlI3vchSOsqbjjEL679NzlPW5KsucRs02XOy8upg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=V0EUfkKJ1L0SKlAciGyU287wov7mlzTXgNC8M4oXdz6y5sWAs5IJskOFepKDDoZBd
+	 Y1ay0mpfPQI5M5wMimHsSN61XqH/vTtdUKKNy+4bIZu6oEsW8oK5oyaGiX9ZJbwpVM
+	 0v6yxo/fom5eo/VjRqR8H88nQ6MjWvA2boWPqCgDOb8TKDbkJAbJ4iE5w8OVRogWZK
+	 oyOu++k6Yb0OySiZVp4K1jyxw8uZS4o9LfFMRf04C9husZVY2cgp0arE2tSsZbKdNT
+	 yHWkkrGNKX6hyuabALtgVt4oKO/4UGabUV1eZ20qjnHr8nsjtn/FYitNxvQ1nRK0dr
+	 CMnqmX+jGfbYA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE079383BF4E;
-	Mon,  1 Sep 2025 09:58:25 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B66383BF4E;
+	Mon,  1 Sep 2025 09:58:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,40 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Qualcomm driver fixes for v6.17-rc1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175672070429.3637164.4071748192966283737.git-patchwork-summary@kernel.org>
-Date: Mon, 01 Sep 2025 09:58:24 +0000
-To: soc@kernel.org
+ <175672070574.3637164.11726520782816492262.git-patchwork-notify@kernel.org>
+Date: Mon, 01 Sep 2025 09:58:25 +0000
+References: <20250811145613.120917-1-andersson@kernel.org>
+In-Reply-To: <20250811145613.120917-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Qualcomm driver fixes for v6.17-rc1
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=990087
-  Lore link: https://lore.kernel.org/r/20250811145613.120917-1-andersson@kernel.org
+On Mon, 11 Aug 2025 09:56:11 -0500 you wrote:
+> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+> 
+>   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.17
+> 
+> [...]
 
-Patch: [v3] arm64: dts: axiado: Add missing UART aliases
-  Submitter: Harshit Shah <hshah@axiado.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=996628
-  Lore link: https://lore.kernel.org/r/20250828-axiado-ax3000-missing-serial-alias-v3-1-393111f4bd9e@axiado.com
+Here is the summary with links:
+  - [GIT,PULL] Qualcomm driver fixes for v6.17-rc1
+    https://git.kernel.org/soc/soc/c/e6e709901c33
 
-Patch: [v2] MAINTAINERS: Update Nobuhiro Iwamatsu's email address
-  Submitter: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=995007
-  Lore link: https://lore.kernel.org/r/1756087556-25424-1-git-send-email-nobuhiro.iwamatsu.x90@mail.toshiba
-
-
-Total patches: 3
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
