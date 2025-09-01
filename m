@@ -1,77 +1,158 @@
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C06D221FA8
-	for <soc@lists.linux.dev>; Mon,  1 Sep 2025 03:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64320221DB9
+	for <soc@lists.linux.dev>; Mon,  1 Sep 2025 03:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756696410; cv=none; b=jYUXeDztt++xd+N/I0uwF4zh+oXOp7szCVFaiCB36Hn95g03s1dA+egKxg3HOxhtgj/2lql3Fkhfe2rHkly9bhVREhkYKkTQeTaWm2ArAmRLxMePSCFQYau58acwE1A3vuzU5HUKW0k0jBC53MC+X5/o2J/OnLooilJsVhSk9QM=
+	t=1756697650; cv=none; b=YxCbFQ0sv1y0IYIshuEl2aupcyhRvg9wwcGE/A9UHstRMMRxngI8Ivzi2ipbuHilEVjrrOE/V4NM/JqA/qP91d8e6cJgh5pne5AJTvWRbphB4irP9iy5dOuP7KAn3aj8vJdCrilchQQ2RNh3UkOnya5spqMfg4u374G9hmwiFzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756696410; c=relaxed/simple;
-	bh=jGts/msZ+fPolgVex+4r9FQJCOeYKx+D1+dC1WWKfQw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FifoOaD9ouOry0hI8L0cf0axF9yQus0jzguw2Zc98ZU2L+NG6koXTFaFL938MxeXFGF8AFFGug32gXC5op4OkK3Lggd6NKMuKzXgNYhxSDZyMDMmPE+DatuWDAmI99+voUBc6liSy+7PEKt8GdvFkMRboyySKD6XL3OwzNV20tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Mon, 1 Sep
- 2025 11:13:11 +0800
-Received: from twmbx02.aspeed.com (192.168.10.13) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Mon, 1 Sep 2025 11:13:11 +0800
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: ryan_chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson
-	<bjorn.andersson@oss.qualcomm.com>, Geert Uytterhoeven
-	<geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>,
-	<nfraprado@collabora.com>, Taniya Das <quic_tdas@quicinc.com>, Lad Prabhakar
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, Kuninori Morimoto
-	<kuninori.morimoto.gx@renesas.com>, Eric Biggers <ebiggers@google.com>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-	<soc@lists.linux.dev>, Mo Elbadry <elbadrym@google.com>, Rom Lemarchand
-	<romlem@google.com>, William Kennington <wak@google.com>, Yuxiao Zhang
-	<yuxiaozhang@google.com>, <wthai@nvidia.com>, <leohu@nvidia.com>,
-	<dkodihalli@nvidia.com>, <spuranik@nvidia.com>
-Subject: [PATCH v5 5/5] arm64: configs: Update defconfig for AST2700 platform support
-Date: Mon, 1 Sep 2025 11:13:11 +0800
-Message-ID: <20250901031311.1247805-6-ryan_chen@aspeedtech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
-References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
+	s=arc-20240116; t=1756697650; c=relaxed/simple;
+	bh=qtZoxAkXv495MzlPMfGyn54WlNk7BPz08rPmn2O5hoI=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=HbnqPah5AkBnKt6lXGFGmG2b0sgDLyXM8g2LGha6Z+Wb398hmkMiNz64zeS7TqZYXxjua/v9M1L/4hEMT/Q18HSRMxb/hFxtFzqu1fRCLlV3KCglfs/0qxzCvmya+zzuucOCR+t6sPsvfmLWNGEzyd4u9j/fPCl5Ipra0EhPeGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=dxpygT4g; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="dxpygT4g"
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250901033400epoutp02ac58622af95dc059b0f70128d5caf70c~hCzJ01yxZ2642226422epoutp02o
+	for <soc@lists.linux.dev>; Mon,  1 Sep 2025 03:34:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250901033400epoutp02ac58622af95dc059b0f70128d5caf70c~hCzJ01yxZ2642226422epoutp02o
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1756697641;
+	bh=uU0UrKirjvX5fa8m8MUKd9RwSD+yLy9b8io3irBzxG8=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=dxpygT4gWAUUKJDRI4VWQHqVa+8eUzjre26YsG4Ptm4PqPBDH51a58f513uU8Atr1
+	 BgOyW0SMz+bc6D0x2mhIaeDy8euSza/RGRx2aquPIM1Uet1PCcLr+WfJWcfaUepqPZ
+	 UWO/H7BKnKwtS0Vb2SLUGcWp6AnhnWnrVMk3zgvs=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250901033359epcas5p1c283a30d1db11caef94473d360e336f5~hCzI40H2Z2963529635epcas5p1V;
+	Mon,  1 Sep 2025 03:33:59 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.90]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4cFZGt6tycz6B9mB; Mon,  1 Sep
+	2025 03:33:58 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250901033358epcas5p155659ad43787629cdd3221f359b8a72a~hCzHQdwnE2963529635epcas5p1R;
+	Mon,  1 Sep 2025 03:33:58 +0000 (GMT)
+Received: from FDSFTE411 (unknown [107.122.81.184]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250901033353epsmtip17c5fa910804d2969d332336802e28da9~hCzCu9gwp0939709397epsmtip1E;
+	Mon,  1 Sep 2025 03:33:53 +0000 (GMT)
+From: "Ravi Patel" <ravi.patel@samsung.com>
+To: "'Krzysztof Kozlowski'" <krzk@kernel.org>
+Cc: <jesper.nilsson@axis.com>, <mturquette@baylibre.com>,
+	<sboyd@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <s.nawrocki@samsung.com>, <cw00.choi@samsung.com>,
+	<alim.akhtar@samsung.com>, <linus.walleij@linaro.org>,
+	<tomasz.figa@gmail.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
+	<arnd@arndb.de>, <ksk4725@coasia.com>, <kenkim@coasia.com>,
+	<pjsin865@coasia.com>, <gwk1013@coasia.com>, <hgkim05@coasia.com>,
+	<mingyoungbo@coasia.com>, <smn1196@coasia.com>, <shradha.t@samsung.com>,
+	<inbaraj.e@samsung.com>, <swathi.ks@samsung.com>,
+	<hrishikesh.d@samsung.com>, <dj76.yang@samsung.com>,
+	<hypmean.kim@samsung.com>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-arm-kernel@axis.com>, <linux-clk@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<soc@lists.linux.dev>
+In-Reply-To: <20250829-attentive-watchful-guan-b79ccc@kuoka>
+Subject: RE: [PATCH v3 08/10] arm64: dts: exynos: axis: Add initial ARTPEC-8
+ SoC support
+Date: Mon, 1 Sep 2025 09:03:52 +0530
+Message-ID: <000001dc1af1$4026d700$c0748500$@samsung.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHHo9j0Rv1rvZf0N1R8AXn4x9PYUAJmRP9VAu8V1FcBMgRwRbRyXiFg
+Content-Language: en-in
+X-CMS-MailID: 20250901033358epcas5p155659ad43787629cdd3221f359b8a72a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-541,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250825120735epcas5p3c86b9db5f17c0938f1d53ef6014ab342
+References: <20250825114436.46882-1-ravi.patel@samsung.com>
+	<CGME20250825120735epcas5p3c86b9db5f17c0938f1d53ef6014ab342@epcas5p3.samsung.com>
+	<20250825114436.46882-9-ravi.patel@samsung.com>
+	<20250829-attentive-watchful-guan-b79ccc@kuoka>
 
-Enable options for ASPEED AST2700 SoC.
 
-Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 58f87d09366c..321a7dbccff8 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -38,6 +38,7 @@ CONFIG_ARCH_AIROHA=y
- CONFIG_ARCH_SUNXI=y
- CONFIG_ARCH_ALPINE=y
- CONFIG_ARCH_APPLE=y
-+CONFIG_ARCH_ASPEED=y
- CONFIG_ARCH_AXIADO=y
- CONFIG_ARCH_BCM=y
- CONFIG_ARCH_BCM2835=y
--- 
-2.34.1
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzk@kernel.org>
+> Sent: 29 August 2025 13:26
+...
+> Subject: Re: [PATCH v3 08/10] arm64: dts: exynos: axis: Add initial ARTPEC-8 SoC support
+> 
+> On Mon, Aug 25, 2025 at 05:14:34PM +0530, Ravi Patel wrote:
+> >  config ARCH_AXIADO
+> >  	bool "Axiado SoC Family"
+> >  	select GPIOLIB
+> > diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
+> > index bdb9e9813e50..bcca63136557 100644
+> > --- a/arch/arm64/boot/dts/exynos/Makefile
+> > +++ b/arch/arm64/boot/dts/exynos/Makefile
+> > @@ -1,4 +1,5 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> > +subdir-y += axis
+> >  subdir-y += google
+> >
+> >  dtb-$(CONFIG_ARCH_EXYNOS) += \
+> > diff --git a/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h b/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h
+> > new file mode 100644
+> > index 000000000000..70bd1dcac85e
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h
+> > @@ -0,0 +1,36 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> 
+> Does not match rest of licenses.
+> 
+> > +/*
+> > + * Axis ARTPEC-8 SoC device tree pinctrl constants
+> > + *
+> > + * Copyright (c) 2025 Samsung Electronics Co., Ltd.
+> > + *             https://www.samsung.com
+> > + * Copyright (c) 2025  Axis Communications AB.
+> > + *             https://www.axis.com
+> > + */
+> > +
+> > +#ifndef __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__
+> > +#define __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__
+> > +
+> > +#define ARTPEC_PIN_PULL_NONE		0
+...
+> > +#define ARTPEC_PIN_DRV_SR6		0xd
+> > +
+> > +#endif /* __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__ */
+> > diff --git a/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi b/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi
+> > new file mode 100644
+> > index 000000000000..8d239a70f1b4
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi
+> > @@ -0,0 +1,120 @@
+> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> 
+> This is Dual license, so why pincltr header is not?
+
+Thanks for the review.
+I will update the Dual license in pinctrl header in the next version.
+
+Thanks,
+Ravi
+
+> 
+> Best regards,
+> Krzysztof
+
 
