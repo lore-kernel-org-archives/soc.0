@@ -1,203 +1,207 @@
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023117.outbound.protection.outlook.com [52.101.127.117])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C56D26E709
-	for <soc@lists.linux.dev>; Tue,  2 Sep 2025 00:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.117
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756771848; cv=fail; b=Bj3/Sx8gENS8+1AfagNisM95Tnij8FWbZfDZn5C7nzvHeSKwLxFZHKNRgq++zvfp0oCupL1CTt3/Zm4UNPyWxxRl6zPG3WA7TXa9Bv/b/y1rscYgCEkND4QYpmYOWqw4hTHmOKOkmtfFZiXhNJpEz9g8aVLqSiDRnm7+EuaqVKI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756771848; c=relaxed/simple;
-	bh=UwcwYTeiz2uIw9n2ntZqjpon4IRWaGGA+BhS4QgyBo0=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=olNLB5hFSWO2luHpgniad6BGSpjkULul6pGpt8EY2jJ/5PGLi/A9bM02fYPfqtpexdqH24qbyFeHOps5ZlY2y71mhzeLI/7bvazpGLxh5hFQAP0a7KW6r3M7tvwb7whgYiDlGUqOSrOXU5AAG9VNrzbZz8VQ1gO0zut0ZT8SAzM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=MRQ4NDBD; arc=fail smtp.client-ip=52.101.127.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B22307AE6;
+	Tue,  2 Sep 2025 13:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756819101; cv=none; b=tK6IWICm9za0/q4Uzjsbzyg1ZkGur8qxY2QnD5W60xV/Mw2g/pGonf9HBUt42o3ewzS9RWmnpN62EPw+QZ0ZY6fTY3ft31DSnHetYy1ddAyypx9nyjO0DKwbohoKareJ05nF/3EaQHx5dUqaweeJAwTaZtJtQOMhMFrSkOhGWnI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756819101; c=relaxed/simple;
+	bh=nva1mBFyuVVPLmXTARaBeIiR0B0nMGh017Yl7IN3WDQ=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=f4QcU9J/YTyC5XnD5HqHP+laczDuSuFSzvhvkb//gUzBLxORnFPoLmmn14EdiQ2W0GygvAnLl7nIiNnI5622tX69wsmb/9qpYIVTMhp44fEDcidzNbxU8HK9vv6l27Xuwi6EO2d+cVuxGVzHVx//NTXIv26O5eThBGbaz8avEBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pFPc0Bif; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="MRQ4NDBD"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KZX2kR/ZVJrZ2bRi7LA7qcZrcCdVChvSoGXoI+SLBbpYLlj91HV5oIsDMujzkvDKGOfLvzCwhwSWmlqmfGQi4tkaxDWKGpbkBAPcYEwxM7WQFLqtRivC2VRkHj1rz0f6qGhn+0gZ8ZV5kfjdY5piSFgGA6wt4tcOjXwCpfVT/sK1edR/g9qxtW0PhyZ7QxkEVg7+bSBdW39Jpe3aapUTgpoKzOwuKO6r6bXFF6IbH3pIimfJKSdqLL15MT/BumogigNwJ1cYsHmA4C/07TuvDPJL+CwAa2Vgy1r38wrgKRJ+wgq8a262A+7Mv03YKGdtBveQwCXbPfja3/+HXmLUfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UwcwYTeiz2uIw9n2ntZqjpon4IRWaGGA+BhS4QgyBo0=;
- b=QLBsNyl3ES46SMIB14TvOb7jtuOtH/4qM+5JgATmNaKXgrZ1d8VsDBXrTisfTSAxGa4IaJEsrVSwl3NgsgY9pjBdJ6Wq2B8NhEb7Xj3hrAjJykyDU0UQ6oPN0V30DJmivyOw8b0JcY54+1ZhB6NkHzyOeTrHXOlujKBJWc6G5dCyrxL+84RUa27f7HDIZdI1wItOfm1I9eHVZMF0flV56Za+N5W1CwGA8/Y1iskbcUMpNv3RdeH2EIno9/ZpfIQUcrytLEEeTqOM/HISZuRJpxXFLlhOo9+8quifPnGp9YyIJ4Mgzz+eg6fj7HB14yOXb0MUOKoC8+DqOh/ag7VrRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UwcwYTeiz2uIw9n2ntZqjpon4IRWaGGA+BhS4QgyBo0=;
- b=MRQ4NDBDxcMGCpd4HHfpsiG54YEjopZElAl7vcAr1ylgiFxeZ+B5+Pm0vMv5YVVk+LJrZDIoiiKVVBOouJIAHzQLUsyIavYcMHfit//8FMx2hHFdz3qVGkVUCva5nKwyiEvqHNhEGAWQOyy2n8FmKXIP7KwnfW0pGiAbi/c0JGu2YWBzyNPvU9K/js0f2rygQGJta4inl1AV7PdcXkXBpGucm3HC1wwTOSrA3uxASNiniyWjC6Pgrj/8fWQ7Ucy5pAZ6SjKlr2ErHOquaz5ExILYWA6J2n5+RLQP1sTwBIuqI4Fx1ptkYju5JDBkG6Y3ho4ptuFbpG7IY93vhQWwZw==
-Received: from SI6PR06MB7535.apcprd06.prod.outlook.com (2603:1096:4:235::12)
- by SEZPR06MB5391.apcprd06.prod.outlook.com (2603:1096:101:66::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.27; Tue, 2 Sep
- 2025 00:10:41 +0000
-Received: from SI6PR06MB7535.apcprd06.prod.outlook.com
- ([fe80::8af2:b731:a5e5:169f]) by SI6PR06MB7535.apcprd06.prod.outlook.com
- ([fe80::8af2:b731:a5e5:169f%4]) with mapi id 15.20.9073.021; Tue, 2 Sep 2025
- 00:10:41 +0000
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson
-	<bjorn.andersson@oss.qualcomm.com>, Geert Uytterhoeven
-	<geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>, "nfraprado@collabora.com"
-	<nfraprado@collabora.com>, Taniya Das <quic_tdas@quicinc.com>, Lad Prabhakar
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, Kuninori Morimoto
-	<kuninori.morimoto.gx@renesas.com>, Eric Biggers <ebiggers@google.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "soc@lists.linux.dev" <soc@lists.linux.dev>,
-	Mo Elbadry <elbadrym@google.com>, Rom Lemarchand <romlem@google.com>, William
- Kennington <wak@google.com>, Yuxiao Zhang <yuxiaozhang@google.com>,
-	"wthai@nvidia.com" <wthai@nvidia.com>, "leohu@nvidia.com" <leohu@nvidia.com>,
-	"dkodihalli@nvidia.com" <dkodihalli@nvidia.com>, "spuranik@nvidia.com"
-	<spuranik@nvidia.com>
-Subject: RE: [PATCH v5 4/5] arm64: dts: aspeed: Add AST2700 Evaluation Board
-Thread-Topic: [PATCH v5 4/5] arm64: dts: aspeed: Add AST2700 Evaluation Board
-Thread-Index: AQHcGu5dWNF4/+xaEUancT+W9VWj/bR901eAgAEyYMA=
-Date: Tue, 2 Sep 2025 00:10:40 +0000
-Message-ID:
- <SI6PR06MB7535DDE719CD3F742F28B1B0F206A@SI6PR06MB7535.apcprd06.prod.outlook.com>
-References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
- <20250901031311.1247805-5-ryan_chen@aspeedtech.com>
- <f80b0de7-6b31-4b1f-b5ba-84e41a42420b@kernel.org>
-In-Reply-To: <f80b0de7-6b31-4b1f-b5ba-84e41a42420b@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SI6PR06MB7535:EE_|SEZPR06MB5391:EE_
-x-ms-office365-filtering-correlation-id: c7d8e37d-b83b-40ae-0aea-08dde9b526fd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|1800799024|376014|7416014|38070700018|921020;
-x-microsoft-antispam-message-info:
- =?utf-8?B?Q2RtY01oQ3M2bVgrV0p4UDJEVzFBWTIyWHB6N2pvWlBvZ3N4OTFLdGtJYy9S?=
- =?utf-8?B?UnZ5TGJaS0Z6QTMvemU4clJjNldObVVzSGtEblBQUXk0SEw4RW90Tlpkc3R0?=
- =?utf-8?B?UjRJMHEwbDd5NkJOOEZCOGMvL2tmVEVFSjVTNm5mNVlmbkR4NUFOaGt2Rm8v?=
- =?utf-8?B?SUQ0Z1ZZNFhRaEgwQStNbW1xOE5KV1RRMTEra3NEMVRRaWJDbFRUUnl0ZFRF?=
- =?utf-8?B?czJnK3BtMUtaWThQYXJDMkp4Q01xME9KRHlzZzFUSDY2RnE4MVFiK3BoODQ5?=
- =?utf-8?B?bjZmZmtUVnhoVDJlS3NVVVFiUFdPS0kvb1U2NjRhRFBFcU13QThGUzAxaWVP?=
- =?utf-8?B?U0FmSVkxNDNmS1B0ZzloUEZFdlN1WHJTdnFMVW4rNFNNT3RvaUJrdURqZFk5?=
- =?utf-8?B?ajAwZmoyK1FnSldzRTdubFBNTXZvMFFTOUhlOVUvYWNUSHk4b3hqUUwvTjZ0?=
- =?utf-8?B?YllqNEpPOEtSNW5VTGtwNlZ6ZnVYcFFuSTJJdERxL3ZRSGtYUHdNK2syc0FS?=
- =?utf-8?B?aGo4ZEVNeWR4M1NmYm5IMlZMdUFyMTZVdngraU02Ly9pNU5ZMStCTG5zTnFm?=
- =?utf-8?B?RmtkYkRrZ1BqRjk0ZHBjY2VLMytjd3QwNExKVmh0TXIwejQxMlczMENRdVAz?=
- =?utf-8?B?aiswSmtaUmc4MXRlNkZJbXY4dHFtVnAyZHEzSTZ1bFU3L3pYYzBFZURkQnRQ?=
- =?utf-8?B?TjdkdmVHZitIWml3OEdicWo3NUQyRkRpSUVROEgxbC9jOFIyVjJOOG9POEJs?=
- =?utf-8?B?enZlRUEvM2h0QlUzc0cyKy85a3Z5cWI4cUJRZHlYVXYyQUpnMDhnL1ZQS0Uv?=
- =?utf-8?B?NnNsWVF0ZGh1MThjMVJBMzFqUmpyTFJRTEh6bG1BS3lQSXF4aVFWOEhyTEVK?=
- =?utf-8?B?ZEdkQXhRYm00MkFaVU9IdWE0T2ZvWUgzM3FiYVpkVzRMNWNsRDRLbE9iaC9Z?=
- =?utf-8?B?MVpDdHB2b0lQMDMvMkthWXVuVUdRMXJJN0dzWUhuNHpqTnQyNEh3b25WRzNG?=
- =?utf-8?B?anhtRlo1ZUcvNTR1SWpTVUVYZWpEbmZXNE4zRmZTQkJZb2VBeVNpZ3Rpa3NS?=
- =?utf-8?B?VUpLMHpDVHVNNmdsS0pubHVFZTJxNVdiRWVCRTBwSkozYzZwSVBwVG5OdlhK?=
- =?utf-8?B?RDVzcVBncjcyNTNlRklxMTRhYWN2Q3ZsSGpXWmptdGFiN2RQZTlGbWIzUjdp?=
- =?utf-8?B?Z0JMNkdIQnJDVVo3Q1hzOFlPN2dJOFBtS2FacWlZNThNVVZLc1V2T0NqdDMx?=
- =?utf-8?B?N1N4dVRLRnV3L1pkTWJjTCtDV1JRTHI1a3NDQVE2NTNjd3Y0QXBBWC9tRjRB?=
- =?utf-8?B?OExMZHdSRXNZSzVFNGVVSVJGVlNOU1ZreWxmRFEvNW14M0dUSE82NGwweDBF?=
- =?utf-8?B?dVplREw4TUt5UHBNSnR1alZOQm8rcC80Q0FFSDl0MjR6bStnT1RoZ1RNd2dx?=
- =?utf-8?B?M0IvbXZMNHpyQkVGUWdEMWJHVzBkaGpyY0xqU3loaDF2MHk0cCtNcmlvWDY3?=
- =?utf-8?B?UmIwVGRjcjI5S2lSR2ZEck1JS2tNUjJMUkorOCtURGRqT29Qd1VoUVdMc0xr?=
- =?utf-8?B?WnN0WGZxbW9RUkFWWXdIWGlpQ1RCN2FKQXhtYjdLeWQ0NHVnMjNHOUlzQ3VJ?=
- =?utf-8?B?aE5reWtmNXR3R0RBMURDaTFmZW5ncm9iVU1KQm5QdFQ1dlVjS2FZejR3QnV0?=
- =?utf-8?B?UjVlaU1HMzQyczF0WUxyYnU3Y0M2Z2RxRG5xYmV6YVJIRTVuZlZXeDhXT2pj?=
- =?utf-8?B?YUN1QXV4SnQxVW96QW9aVEY5WjVha2p2NmFqU2g5STVMQ2tmOTJtby9uVm02?=
- =?utf-8?B?MXl1dDJNajdtTHpuNm5aRnZ1d3AzUUl4R3lSd3ZJSk9kRzJ5NFhNbE44QkZ0?=
- =?utf-8?B?N0xBeTByaVZMNTBTcStoWjFqVTFmL24vL3ZwQ0Yrd3UyK21MeXdUM3lFbFN5?=
- =?utf-8?B?UXZYSkk3V1J2L0Y4T0llZFgrcy8ycTBhYjVZUTI1Q0RxS2pNWU9uWXhOYk91?=
- =?utf-8?Q?I6TA0C4TLJitDf4Ms8o3QgFaxSYpbM=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI6PR06MB7535.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(38070700018)(921020);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?SVRtdUxQT3NidXhpOUxTTkZpYS8vZmlmckpKcDFKVUhSQTkzK3RNQ29oZWNh?=
- =?utf-8?B?b2RjUDVubVpsRDVxVWdsZHBhcGxTb0lXVEsvZDlZWWx1OXJSc3JBdlRuMHI3?=
- =?utf-8?B?QVpYQk04UkVPQTZoaDgwY1FjV2VyUjFwVThQb2hsYjVNNGkzRVQyVjIvY3Iv?=
- =?utf-8?B?VkNOMGJnSHZnRUNJbjJQQ2QxZVBIRjVpZG04ZEw5dktDZzV3c2dQTnd4ZVMx?=
- =?utf-8?B?TU84bysvYXRKZWthOEkzOHBaYnFyMUcrOE9OMExUeDN3dnRYWDBDSmpLamFa?=
- =?utf-8?B?SEJmVzJFbkVSNGFMWjZpZTE3N0J1czBKbGVtZ3BxTmJsZm9MNUZLT2FqWWVo?=
- =?utf-8?B?eTdFQWN4OGtLUjV6R1lEMU9uUlloby93N1oxWGFpM1hDbXBYeUhtNjRwaDRq?=
- =?utf-8?B?dmN3Q21sVm5wN1dUeGtvR0dSQW92Qmd0T0dhNFJRemoyTllYSEdoTDhUYUJR?=
- =?utf-8?B?S0ZpcThBMVgxMGoxTDJ5NmVHRElXMGw2SktORi9icU5GYVlDMjVWMHNrUkQ5?=
- =?utf-8?B?cGlFU0RQSjI2QWxkWEZwc0Q2ZytSeW1RTlpGSXpDemd6NEwxdzAwNG9TeU5q?=
- =?utf-8?B?dW1RTndSWWR2c3phNmVkTVNycXRDbVBqL3dTa01oU0NidUREbmR5Sm95VWE0?=
- =?utf-8?B?emN4RHZoK1FPRXdId1psOG5NbnhFSU9jS3BVbFdYem9rTm0zNGJYTUlUQTBV?=
- =?utf-8?B?NFpoeHhGVUppMGJNNjVPazJZcWdkQkZpWVgxYVFlZDdOdGhEcmNFdmJ6RDFO?=
- =?utf-8?B?bDFVb3dBK3lGNjlnaEdiOUlhRWtRT3gvQnhiSzRsRnhiaUpHUTVET29vNGtx?=
- =?utf-8?B?dytGOTFZNWxnUkE4b1o5L2R3dit2ckRBNVVVaG9WVXRqL0NIVlNKbGI1a0l5?=
- =?utf-8?B?K0lsUFV5QWJkYllkekFJRUFJYnRUWkdJRmRqNE1JZHpkcStsOVNZRCsraWVF?=
- =?utf-8?B?VGVsOUJEdUpWSVZYMjZRYTJaMmZ1MDVYUTFPazc5bjV1WGducFdnY0hNVjlE?=
- =?utf-8?B?bWVHbGY5VThCN1JIdVpFVlYwNGhLaGZhczRxQTNYNWFCUGhwWE5rSGtsZ3JO?=
- =?utf-8?B?TlR2QUxjUk1YY291TFhJSXFJbC9IVWRKTlkySXBmTWlaT3k3YzZScUREVE42?=
- =?utf-8?B?ZTVnSC9sUG5IbldUeXRGK0FBZmVrTW8wbEhUMkgzOW1mYlBoYXpPa2RlcVFL?=
- =?utf-8?B?TTBiREc3SHB1TGxEQlBLeFdOemlDK3ZCSlQwOFR0OVpLdDlDb1paQkI3QnQ1?=
- =?utf-8?B?YS8ySFhmZ0E3RCt5U1BoRmhmYkJCbUdSd0RCRzlYZzZDNCtqSUNTTmp1L3FC?=
- =?utf-8?B?MjE3SWpUQjhwR2FTK2E0MEptaUpNSWZWSmRub2FHc3MwQ0Y4N25UVXdWUmxU?=
- =?utf-8?B?ZUQxWjMvdlJtb2FiYk16VXRCWlBRUm5kRllSdDdFRGtJZWFDZnJnNEtOQS9h?=
- =?utf-8?B?MEM1dkNZWVA4RWE4Z0RRWG40YjEwbUFJRVl2azBUc0YxQkNmRTFDajA1aUFR?=
- =?utf-8?B?UEhTMFRKcm9CaEtodnYzV1JnbXRsNTZ0OEVXcFR2MHhTVkVPWmRVY2o0T3gy?=
- =?utf-8?B?dktBSFdTYVA1NWNNZHZLdmk0d2Z0aDRMQUQyejlqckVRSDhQcjZBZFlzUkd4?=
- =?utf-8?B?a2xVWGQ2WmI5YUFwRDQzcW94UnpiU2prc3JZTURwWU85Sk5UeWdKNWQxSkJv?=
- =?utf-8?B?V0hTeXU3UXh5ZU5WT0lGU1VZelpNbDRTVXBCbmpPdmRYSXBBOUVIem5iSlRn?=
- =?utf-8?B?RXU3QmU2cWpBeGx2WjNZVCtlcEJTTzVCZUZvN3hsWTVqOE9laEtDcE56VUsw?=
- =?utf-8?B?Znd4eGc5R3p3b0Yrdy81VG1WdFF6Y0x5SlNtakxPdTIzQll2aEV1TkFMZVFo?=
- =?utf-8?B?eGZOR1J3WFdzYVBpYWpxWHBWNVdyNi9rYmduNnpCMmFxdThQUkFvaWNGN2Mv?=
- =?utf-8?B?YS9PNHhlUkFCUUVtR0h6Skk5Wm9HdERUcHBkMkpXelVVNVJjTTRPT3E1RmRP?=
- =?utf-8?B?YnVmMmEwdkF0QzF3ODRqVlhlVVl3ajFCam5xc056VWZ5UTROd1JOdHZFNURI?=
- =?utf-8?B?NytYY0JYVXVCRTFUUWx2aU1YZktNM2NQanIzQitFK2FvUDI0ZEI0bUc1Zlh2?=
- =?utf-8?Q?xbVwnuvUr80yOIu2h22/FyNA2?=
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pFPc0Bif"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C42EC4CEF4;
+	Tue,  2 Sep 2025 13:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756819100;
+	bh=nva1mBFyuVVPLmXTARaBeIiR0B0nMGh017Yl7IN3WDQ=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=pFPc0BifN8nXlB5qQF3uMhlUA2pS/cvrdR7LZYW9cfLFnPrqKhQFg8HjdWMjkJSE6
+	 /2DAUy4Ow72fxShmqCwuvTiaivE2iaaYrs3CaRCSLz4MDrEggMLXEoHOdZU7WtVYM4
+	 MEndwIA0vPKw4cTPzji1gUMPgiqc+rB4UpEb+PurhEiWcQ/BVdcLdovRKdc41HaapM
+	 75mA1fV9TJqGmNZF/F2wZLUNbkbGmvmkYfp8SMpmk0pUj/e4hJFI665+JmZx5p9jSn
+	 YV/YMps4fSvpGyBnJ2r8tz0J4tPp0+KmQ1svnfeQk0qLMqKuWbfwYjyb9rezfsfz/o
+	 7F12oFvJN6sXQ==
+Date: Tue, 02 Sep 2025 08:18:18 -0500
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SI6PR06MB7535.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7d8e37d-b83b-40ae-0aea-08dde9b526fd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2025 00:10:40.8513
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DcV+2j6Kk9z7fZNYuveFZWa8RVifq+ZctQiUIBYNkn14DrRr63TuxqVqHB3cvlg/Ub/sfQowaH4wbKfztksImjqmO9MaCp4DAA3cb/ROFB0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5391
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: soc@lists.linux.dev, Conor Dooley <conor+dt@kernel.org>, 
+ dkodihalli@nvidia.com, Arnd Bergmann <arnd@arndb.de>, 
+ Andrew Jeffery <andrew@codeconstruct.com.au>, 
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
+ nfraprado@collabora.com, linux-arm-kernel@lists.infradead.org, 
+ Will Deacon <will@kernel.org>, Nishanth Menon <nm@ti.com>, 
+ Yuxiao Zhang <yuxiaozhang@google.com>, Joel Stanley <joel@jms.id.au>, 
+ Eric Biggers <ebiggers@google.com>, Taniya Das <quic_tdas@quicinc.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, spuranik@nvidia.com, 
+ Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+ linux-kernel@vger.kernel.org, 
+ Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+ linux-aspeed@lists.ozlabs.org, Rom Lemarchand <romlem@google.com>, 
+ Geert Uytterhoeven <geert@linux-m68k.org>, Mo Elbadry <elbadrym@google.com>, 
+ leohu@nvidia.com, Catalin Marinas <catalin.marinas@arm.com>, 
+ devicetree@vger.kernel.org, William Kennington <wak@google.com>, 
+ wthai@nvidia.com
+To: Ryan Chen <ryan_chen@aspeedtech.com>
+In-Reply-To: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
+References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
+Message-Id: <175678731287.878052.15508784585002236677.robh@kernel.org>
+Subject: Re: [PATCH v5 0/5] Introduce ASPEED AST2700 BMC SoC
 
-PiBTdWJqZWN0OiBSZTogW1BBVENIIHY1IDQvNV0gYXJtNjQ6IGR0czogYXNwZWVkOiBBZGQgQVNU
-MjcwMCBFdmFsdWF0aW9uIEJvYXJkDQo+IA0KPiBPbiAwMS8wOS8yMDI1IDA1OjEzLCBSeWFuIENo
-ZW4gd3JvdGU6DQo+ID4gQVNQRUVEIEFTVDI3MDAgRVZCIGlzIHByb3RvdHlwZSBkZXZlbG9wbWVu
-dCBib2FyZCBiYXNlZCBvbiBBU1QyNzAwDQo+ID4gU09DLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1i
-eTogUnlhbiBDaGVuIDxyeWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+DQo+ID4gLS0tDQo+ID4gIGFy
-Y2gvYXJtNjQvYm9vdC9kdHMvTWFrZWZpbGUgICAgICAgICAgICAgICB8ICAxICsNCj4gPiAgYXJj
-aC9hcm02NC9ib290L2R0cy9hc3BlZWQvTWFrZWZpbGUgICAgICAgIHwgIDQgKysrKw0KPiA+ICBh
-cmNoL2FybTY0L2Jvb3QvZHRzL2FzcGVlZC9hc3QyNzAwLWV2Yi5kdHMgfCAyMg0KPiA+ICsrKysr
-KysrKysrKysrKysrKysrKysNCj4gPiAgMyBmaWxlcyBjaGFuZ2VkLCAyNyBpbnNlcnRpb25zKCsp
-DQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybTY0L2Jvb3QvZHRzL2FzcGVlZC9NYWtl
-ZmlsZQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm02NC9ib290L2R0cy9hc3BlZWQv
-YXN0MjcwMC1ldmIuZHRzDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0
-cy9NYWtlZmlsZQ0KPiA+IGIvYXJjaC9hcm02NC9ib290L2R0cy9NYWtlZmlsZSBpbmRleCBiMDg0
-NDQwNGVkYTEuLjM3MjllN2Q0ODBkYg0KPiAxMDA2NDQNCj4gPiAtLS0gYS9hcmNoL2FybTY0L2Jv
-b3QvZHRzL01ha2VmaWxlDQo+ID4gKysrIGIvYXJjaC9hcm02NC9ib290L2R0cy9NYWtlZmlsZQ0K
-PiA+IEBAIC0zOCwzICszOCw0IEBAIHN1YmRpci15ICs9IHRlc2xhDQo+ID4gIHN1YmRpci15ICs9
-IHRpDQo+ID4gIHN1YmRpci15ICs9IHRvc2hpYmENCj4gPiAgc3ViZGlyLXkgKz0geGlsaW54DQo+
-ID4gK3N1YmRpci15ICs9IGFzcGVlZA0KPiANCj4gDQo+IE1lc3NlZCBvcmRlci4gV2UgYWxyZWFk
-eSBhc2tlZCBpbiBvdGhlciBwYXRjaGVzIHRvIGtlZXAgYWxwaGFiZXRpY2FsIG9yZGVyDQo+IHdo
-ZW4gZXh0ZW5kaW5nIGVudHJpZXMuDQo+IA0KU29ycnksIGl0IGlzIG15IHdyb25nLCB3aWxsIHVw
-ZGF0ZSBpbiBuZXh0IHBhdGNoLg0KQXBwcmVjaWF0ZSB5b3VyIHJldmlldy4NCg0KPiBCZXN0IHJl
-Z2FyZHMsDQo+IEtyenlzenRvZg0KDQo=
+
+On Mon, 01 Sep 2025 11:13:06 +0800, Ryan Chen wrote:
+> This introduces initial support for the Aspeed AST2700 SoC and the AST2700
+> Evaluation Board (EVB) to the Linux kernel. The AST27XX is the 8th
+> generation Baseboard Management Controller (BMC) SoC from Aspeed,
+> featuring improved performance, enhanced security, and expanded I/O
+> capabilities compared to previous generations.
+> 
+> AST27XX SOC Family
+>  - https://www.aspeedtech.com/server_ast2700/
+>  - https://www.aspeedtech.com/server_ast2720/
+>  - https://www.aspeedtech.com/server_ast2750/
+> 
+> Bindings Dependencies:
+> - intc-ic: Documentation/devicetree/bindings/interrupt-controller/aspeed,ast2700-intc.yaml
+> - scu/silicon-id: Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml
+> - gpio: Documentation/devicetree/bindings/gpio/aspeed,ast2400-gpio.yaml
+> - mdio: Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+> 
+> v5:
+> - modify ast27XX 7th generation description to 8th generation.
+> - aspeed.yaml
+>  - modify missing blank line.
+> - Kconfig.platforms
+>  - modify ast27XX 7th generation to 8th generation.
+> 
+> v4:
+> - make CHECK_DTBS=y arch/arm64/boot/dts/aspeed/ fix.
+> - modify commit message remove itemlize.
+> - remove modify aspeed,ast2700-intc.yaml patch.
+> - aspeed.yaml
+>  - Add AST2700 board compatible.
+> - aspeed-g7.dtsi
+>  - modify all size-cells from 1 to 2.
+>  - add serial aliases, gpio, mdio, uart0 ~ 14.
+>  - add firmware for optee, reserved memory for atf and optee.
+>  - modify cpu@0 to cpu0: cpu@0.
+>  - fix intc-ic for yaml dependency.
+> - ast2700-evb.dts
+>  - update stdout-path = "serial12:115200n8";
+> 
+> v3:
+> - https://lore.kernel.org/all/20241212155237.848336-1-kevin_chen@aspeedtech.com/
+> - Split clk and reset driver to other commits, which are in series of
+>   "Add support for AST2700 clk driver".
+> - For BMC console by UART12, add uart12 using ASPEED INTC architecture.
+> 
+> aspeed,ast2700-intc.yaml
+> - Add minItems to 1 to fix the warning by "make dtbs_check W=1".
+> - Add intc1 into example.
+> 
+> Kconfig.platforms
+>   - Remove MACH_ASPEED_G7.
+> 
+> Ryan Chen (5):
+>   dt-bindings: arm: aspeed: Add AST2700 board compatible
+>   arm64: Kconfig: Add Aspeed SoC family (ast27XX) Kconfig support
+>   arm64: dts: aspeed: Add initial AST2700 SoC device tree
+>   arm64: dts: aspeed: Add AST2700 Evaluation Board
+>   arm64: configs: Update defconfig for AST2700 platform support
+> 
+>  .../bindings/arm/aspeed/aspeed.yaml           |   6 +
+>  arch/arm64/Kconfig.platforms                  |   6 +
+>  arch/arm64/boot/dts/Makefile                  |   1 +
+>  arch/arm64/boot/dts/aspeed/Makefile           |   4 +
+>  arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi     | 452 ++++++++++++++++++
+>  arch/arm64/boot/dts/aspeed/ast2700-evb.dts    |  22 +
+>  arch/arm64/configs/defconfig                  |   1 +
+>  7 files changed, 492 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
+>  create mode 100644 arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi
+>  create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
+> 
+> --
+> 2.34.1
+> 
+> 
+> 
+
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/v6.17-rc1 (exact match)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/aspeed/' for 20250901031311.1247805-1-ryan_chen@aspeedtech.com:
+
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@12101b00 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@12101b00 (aspeed,ast2700-intc-ic): interrupts: [[0, 192, 4], [0, 193, 4], [0, 194, 4], [0, 195, 4], [0, 196, 4], [0, 197, 4], [0, 198, 4], [0, 199, 4], [0, 200, 4], [0, 201, 4]] is too long
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@12c02000 (aspeed,ast2700-scu0): #size-cells: 1 was expected
+	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@14c02000 (aspeed,ast2700-scu1): compatible: ['aspeed,ast2700-scu1'] is too short
+	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@14c02000 (aspeed,ast2700-scu1): 'ranges' is a required property
+	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@14c02000 (aspeed,ast2700-scu1): '#address-cells' is a required property
+	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@14c02000 (aspeed,ast2700-scu1): '#size-cells' is a required property
+	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18100 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18100 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 0]] is too short
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18110 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18110 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 1]] is too short
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18120 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18120 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 2]] is too short
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18130 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18130 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 3]] is too short
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18140 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18140 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 4]] is too short
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18150 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18150 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 5]] is too short
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+
+
+
+
+
