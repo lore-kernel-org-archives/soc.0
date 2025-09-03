@@ -1,207 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B22307AE6;
-	Tue,  2 Sep 2025 13:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F652FCC1B
+	for <soc@lists.linux.dev>; Wed,  3 Sep 2025 12:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756819101; cv=none; b=tK6IWICm9za0/q4Uzjsbzyg1ZkGur8qxY2QnD5W60xV/Mw2g/pGonf9HBUt42o3ewzS9RWmnpN62EPw+QZ0ZY6fTY3ft31DSnHetYy1ddAyypx9nyjO0DKwbohoKareJ05nF/3EaQHx5dUqaweeJAwTaZtJtQOMhMFrSkOhGWnI=
+	t=1756902593; cv=none; b=HKTGedBSKxyoYBaK+jvyJSvs1J4OQowQsh/xYG1BDlKzFv66cGPg9r8grHHwvyWH6NiMwBakCNCDZB2Y8oMJbWPjb29t7SC9vhccGtwC87QjD2c0JQSuR/0vp77K/XI+xQxXE4+JRNfdAhc6IwASyVir9f5xLhK1hEeZGctIqOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756819101; c=relaxed/simple;
-	bh=nva1mBFyuVVPLmXTARaBeIiR0B0nMGh017Yl7IN3WDQ=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=f4QcU9J/YTyC5XnD5HqHP+laczDuSuFSzvhvkb//gUzBLxORnFPoLmmn14EdiQ2W0GygvAnLl7nIiNnI5622tX69wsmb/9qpYIVTMhp44fEDcidzNbxU8HK9vv6l27Xuwi6EO2d+cVuxGVzHVx//NTXIv26O5eThBGbaz8avEBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pFPc0Bif; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756902593; c=relaxed/simple;
+	bh=pgeF349PTxS6HjXgpHdUwbd2TKO7EWlg5u43MLQz+88=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AkfGWVN8YiPfSWysnoM6vy1qSDXmPFVT7rv+xQydaXHEpQXQY4Gqplvovrm7IJ3iR9rUXK4BJHJzh5VNzmk1lMx4A0uygs2c5ErIlI8yM34iIvqZbbbV+LUTfbcGV21EU6DmOlWQEINRtaeuo0E2ypKQ21gyLQu1jg+67luhnJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=z3xbhbH6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pFPc0Bif"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C42EC4CEF4;
-	Tue,  2 Sep 2025 13:18:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756819100;
-	bh=nva1mBFyuVVPLmXTARaBeIiR0B0nMGh017Yl7IN3WDQ=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=pFPc0BifN8nXlB5qQF3uMhlUA2pS/cvrdR7LZYW9cfLFnPrqKhQFg8HjdWMjkJSE6
-	 /2DAUy4Ow72fxShmqCwuvTiaivE2iaaYrs3CaRCSLz4MDrEggMLXEoHOdZU7WtVYM4
-	 MEndwIA0vPKw4cTPzji1gUMPgiqc+rB4UpEb+PurhEiWcQ/BVdcLdovRKdc41HaapM
-	 75mA1fV9TJqGmNZF/F2wZLUNbkbGmvmkYfp8SMpmk0pUj/e4hJFI665+JmZx5p9jSn
-	 YV/YMps4fSvpGyBnJ2r8tz0J4tPp0+KmQ1svnfeQk0qLMqKuWbfwYjyb9rezfsfz/o
-	 7F12oFvJN6sXQ==
-Date: Tue, 02 Sep 2025 08:18:18 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="z3xbhbH6"
+Received: by smtp.kernel.org (Postfix)
+	id 17732C4CEF8; Wed,  3 Sep 2025 12:29:53 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 13D0FC4CEF0;
+	Wed,  3 Sep 2025 12:29:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 13D0FC4CEF0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=z/iJHAwqup1jimrIJd7Pc539FvMqXKAbdRBHlv8G210=; b=z3xbhbH6YfVaTYzqFKQ68s21fm
+	YNxMReW+HBzD5ha0264GFI5M2fsc9gxjjiCDU/L7tcsNpO/3Ir/OA7Ttvg8mBpF/E6G9iGNlVK5Gf
+	Oi4jUhx/6VcW/eORD5uRoDjwQa4Ok87g5qqGR64UwbYKFNFEMsM8PcWDm1NRFfsBX2DHmNo6ur02l
+	m7WOFUDGzJvgAThCndaCdgSwGL4J1OuTyvDpaGU1D1QvePaVF9yiAxel+Tr36O73W6n+TS/UyFYI0
+	A53CVj6nx8HIiH7VjABlnoKsJjFV8uUZEXxA5iQhzpScM6Tn2sxenovuSN3/W9TruUktIJpDgZZ2O
+	V6lKYUYQ==;
+Received: from [213.70.40.217] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1utmcY-0001kC-4c; Wed, 03 Sep 2025 14:29:50 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts fixes for 6.17 #1
+Date: Wed, 03 Sep 2025 14:29:49 +0200
+Message-ID: <5909239.Y6S9NjorxK@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: soc@lists.linux.dev, Conor Dooley <conor+dt@kernel.org>, 
- dkodihalli@nvidia.com, Arnd Bergmann <arnd@arndb.de>, 
- Andrew Jeffery <andrew@codeconstruct.com.au>, 
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
- nfraprado@collabora.com, linux-arm-kernel@lists.infradead.org, 
- Will Deacon <will@kernel.org>, Nishanth Menon <nm@ti.com>, 
- Yuxiao Zhang <yuxiaozhang@google.com>, Joel Stanley <joel@jms.id.au>, 
- Eric Biggers <ebiggers@google.com>, Taniya Das <quic_tdas@quicinc.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, spuranik@nvidia.com, 
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
- linux-kernel@vger.kernel.org, 
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
- linux-aspeed@lists.ozlabs.org, Rom Lemarchand <romlem@google.com>, 
- Geert Uytterhoeven <geert@linux-m68k.org>, Mo Elbadry <elbadrym@google.com>, 
- leohu@nvidia.com, Catalin Marinas <catalin.marinas@arm.com>, 
- devicetree@vger.kernel.org, William Kennington <wak@google.com>, 
- wthai@nvidia.com
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-In-Reply-To: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
-References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
-Message-Id: <175678731287.878052.15508784585002236677.robh@kernel.org>
-Subject: Re: [PATCH v5 0/5] Introduce ASPEED AST2700 BMC SoC
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+
+Hi Arnd, Kevin, Olof,
+
+please find a below some Rockchip fixes for the current 6.17 release-cycle.
+
+Please pull
+
+Thanks
+Heiko
 
 
-On Mon, 01 Sep 2025 11:13:06 +0800, Ryan Chen wrote:
-> This introduces initial support for the Aspeed AST2700 SoC and the AST2700
-> Evaluation Board (EVB) to the Linux kernel. The AST27XX is the 8th
-> generation Baseboard Management Controller (BMC) SoC from Aspeed,
-> featuring improved performance, enhanced security, and expanded I/O
-> capabilities compared to previous generations.
-> 
-> AST27XX SOC Family
->  - https://www.aspeedtech.com/server_ast2700/
->  - https://www.aspeedtech.com/server_ast2720/
->  - https://www.aspeedtech.com/server_ast2750/
-> 
-> Bindings Dependencies:
-> - intc-ic: Documentation/devicetree/bindings/interrupt-controller/aspeed,ast2700-intc.yaml
-> - scu/silicon-id: Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml
-> - gpio: Documentation/devicetree/bindings/gpio/aspeed,ast2400-gpio.yaml
-> - mdio: Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
-> 
-> v5:
-> - modify ast27XX 7th generation description to 8th generation.
-> - aspeed.yaml
->  - modify missing blank line.
-> - Kconfig.platforms
->  - modify ast27XX 7th generation to 8th generation.
-> 
-> v4:
-> - make CHECK_DTBS=y arch/arm64/boot/dts/aspeed/ fix.
-> - modify commit message remove itemlize.
-> - remove modify aspeed,ast2700-intc.yaml patch.
-> - aspeed.yaml
->  - Add AST2700 board compatible.
-> - aspeed-g7.dtsi
->  - modify all size-cells from 1 to 2.
->  - add serial aliases, gpio, mdio, uart0 ~ 14.
->  - add firmware for optee, reserved memory for atf and optee.
->  - modify cpu@0 to cpu0: cpu@0.
->  - fix intc-ic for yaml dependency.
-> - ast2700-evb.dts
->  - update stdout-path = "serial12:115200n8";
-> 
-> v3:
-> - https://lore.kernel.org/all/20241212155237.848336-1-kevin_chen@aspeedtech.com/
-> - Split clk and reset driver to other commits, which are in series of
->   "Add support for AST2700 clk driver".
-> - For BMC console by UART12, add uart12 using ASPEED INTC architecture.
-> 
-> aspeed,ast2700-intc.yaml
-> - Add minItems to 1 to fix the warning by "make dtbs_check W=1".
-> - Add intc1 into example.
-> 
-> Kconfig.platforms
->   - Remove MACH_ASPEED_G7.
-> 
-> Ryan Chen (5):
->   dt-bindings: arm: aspeed: Add AST2700 board compatible
->   arm64: Kconfig: Add Aspeed SoC family (ast27XX) Kconfig support
->   arm64: dts: aspeed: Add initial AST2700 SoC device tree
->   arm64: dts: aspeed: Add AST2700 Evaluation Board
->   arm64: configs: Update defconfig for AST2700 platform support
-> 
->  .../bindings/arm/aspeed/aspeed.yaml           |   6 +
->  arch/arm64/Kconfig.platforms                  |   6 +
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  arch/arm64/boot/dts/aspeed/Makefile           |   4 +
->  arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi     | 452 ++++++++++++++++++
->  arch/arm64/boot/dts/aspeed/ast2700-evb.dts    |  22 +
->  arch/arm64/configs/defconfig                  |   1 +
->  7 files changed, 492 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
->  create mode 100644 arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi
->  create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
-> 
-> --
-> 2.34.1
-> 
-> 
-> 
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+are available in the Git repository at:
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.17-rockchip-dtsfixes1
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+for you to fetch changes up to dcc6785caffad27f2ea601fdd2f9782036e1faed:
 
-  pip3 install dtschema --upgrade
+  arm64: dts: rockchip: fix second M.2 slot on ROCK 5T (2025-09-02 08:31:50 +0200)
 
+----------------------------------------------------------------
+The newly added Rock 5T board needed slightly bigger fixes to make the
+PCIe and USB actually work, because the PCIe does share its lanes between
+two ports and the usb needs to toggle a gpio to supply power.
 
-This patch series was applied (using b4) to base:
- Base: attempting to guess base-commit...
- Base: tags/v6.17-rc1 (exact match)
+The other interesting fix is the headphone detection on the Orange Pi 5+.
 
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
+The rest are some added supplies to make the boot log less scary and a
+number of styling fixes.
 
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/aspeed/' for 20250901031311.1247805-1-ryan_chen@aspeedtech.com:
+----------------------------------------------------------------
+Chen-Yu Tsai (1):
+      arm64: dts: rockchip: Add supplies for eMMC on rk3588-orangepi-5
 
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@12101b00 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@12101b00 (aspeed,ast2700-intc-ic): interrupts: [[0, 192, 4], [0, 193, 4], [0, 194, 4], [0, 195, 4], [0, 196, 4], [0, 197, 4], [0, 198, 4], [0, 199, 4], [0, 200, 4], [0, 201, 4]] is too long
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@12c02000 (aspeed,ast2700-scu0): #size-cells: 1 was expected
-	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@14c02000 (aspeed,ast2700-scu1): compatible: ['aspeed,ast2700-scu1'] is too short
-	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@14c02000 (aspeed,ast2700-scu1): 'ranges' is a required property
-	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@14c02000 (aspeed,ast2700-scu1): '#address-cells' is a required property
-	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: syscon@14c02000 (aspeed,ast2700-scu1): '#size-cells' is a required property
-	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18100 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18100 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 0]] is too short
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18110 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18110 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 1]] is too short
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18120 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18120 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 2]] is too short
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18130 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18130 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 3]] is too short
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18140 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18140 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 4]] is too short
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18150 (aspeed,ast2700-intc-ic): #interrupt-cells: 2 was expected
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
-arch/arm64/boot/dts/aspeed/ast2700-evb.dtb: interrupt-controller@14c18150 (aspeed,ast2700-intc-ic): interrupts-extended: [[5, 5]] is too short
-	from schema $id: http://devicetree.org/schemas/interrupt-controller/aspeed,ast2700-intc.yaml#
+Chukun Pan (1):
+      arm64: dts: rockchip: mark eeprom as read-only for Radxa E52C
 
+Kaison Deng (1):
+      arm64: dts: rockchip: fix es8388 address on rk3588s-roc-pc
 
+Krzysztof Kozlowski (3):
+      ARM: dts: rockchip: Minor whitespace cleanup
+      arm64: dts: rockchip: Minor whitespace cleanup
+      arm64: dts: rockchip: Fix Bluetooth interrupts flag on Neardi LBA3368
+
+Maud Spierings (1):
+      arm64: dts: rockchip: Fix the headphone detection on the orangepi 5 plus
+
+Nicolas Frattaroli (2):
+      arm64: dts: rockchip: fix USB on RADXA ROCK 5T
+      arm64: dts: rockchip: fix second M.2 slot on ROCK 5T
+
+Peter Robinson (2):
+      arm64: dts: rockchip: Add vcc-supply to SPI flash on rk3399-pinebook-pro
+      arm64: dts: rockchip: Add vcc-supply to SPI flash on Pinephone Pro
+
+Sebastian Reichel (1):
+      arm64: dts: rockchip: correct network description on Sige5
+
+ arch/arm/boot/dts/rockchip/rk3128-xpi-3128.dts     |  2 +-
+ arch/arm/boot/dts/rockchip/rv1109-relfor-saib.dts  |  6 ++--
+ arch/arm64/boot/dts/rockchip/px30-pp1516.dtsi      |  8 ++---
+ .../rockchip/px30-ringneck-haikou-video-demo.dtso  |  6 ++--
+ .../boot/dts/rockchip/rk3308-sakurapi-rk3308b.dts  |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-lba3368.dts    |  2 +-
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |  1 +
+ .../boot/dts/rockchip/rk3399-pinephone-pro.dts     |  1 +
+ .../rockchip/rk3399-puma-haikou-video-demo.dtso    |  6 ++--
+ .../boot/dts/rockchip/rk3566-bigtreetech-cb2.dtsi  |  4 +--
+ .../boot/dts/rockchip/rk3576-armsom-sige5.dts      |  5 +---
+ arch/arm64/boot/dts/rockchip/rk3582-radxa-e52c.dts |  1 +
+ .../boot/dts/rockchip/rk3588-orangepi-5-plus.dts   |  2 +-
+ .../arm64/boot/dts/rockchip/rk3588-orangepi-5.dtsi |  2 ++
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts    | 35 ++++++++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3588j.dtsi          |  4 +--
+ arch/arm64/boot/dts/rockchip/rk3588s-roc-pc.dts    |  4 +--
+ 17 files changed, 64 insertions(+), 27 deletions(-)
 
 
 
