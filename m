@@ -1,126 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9B42BE02D
-	for <soc@lists.linux.dev>; Thu,  4 Sep 2025 07:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E20A29A307
+	for <soc@lists.linux.dev>; Thu,  4 Sep 2025 09:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756972739; cv=none; b=rLVOlHf5N1VaJCVWCZjzPEZ9hYpqyv4duohvafgrszfOeQ/xacCmvw7VsGuubFEGEI/DAYJmWaSAC3dQBXT3bARpYlJavJaBv+C3TdPHgLJ7cnvQP/UlgyiIISIZ+x2O0xkBe8uQclw32qtc39PZY/qba4R0oe0feSdCs/BxMpM=
+	t=1756979239; cv=none; b=Eiiq/rIX9ELkmqmZNSlU4a4v5pBq+l5QcS5du5F4fSgSEE6l3EXYmcNEBzqWc+Oop0a+xsSH6oVB1aTWjxfFa6jExC1G5dHJedSqLGlY8vjNmnkXi8e2Bcmz1GwAAGKoB0e3+b4mqcH3ieSXEpNb2E6vOsp6pGRIFOwwVKvS2hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756972739; c=relaxed/simple;
-	bh=N6Npsnyc7bgvqYUsjSHBHbabPLRsCgibAzS96LtiKs0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CCHkRfsB0q0wNzEOR03yqcyNsmolJ9JYtg7yDI5o+0mOoPms3rVJrXOq5t4UyPMCRFnxk8/+RT3MABJF+ZXVusgFkGrS1/J7jqo95gpoxDcPE9N16tYamthiAWjv5rulhzyL4Ug7Pqb+WmskBHSnRZH7XTjAu7C/bv/H3uL2r+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=kBZsKGUT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756979239; c=relaxed/simple;
+	bh=Co1V1iVYZyrAxYVz64uRvth7glMtN+0ZaCCb7K2hm94=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=n7VP1UEvtjRAcrhTdv696L9eQTrxtjeldCM7yFNI+iy2SE74jsNVFF8tZViT4UdhHHODHEEbb6F9BhulzCzmIPJYsRXLN/FhBZ+OI4fGqZEVTVeEQKsFBdKuGiWP9RUZcZTtGrsM7fB/r/+KcEIt8VdC5pg1S0n4OywTVMWITJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Bd1UXp99; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="kBZsKGUT"
-Received: by smtp.kernel.org (Postfix)
-	id 5338BC4CEF1; Thu,  4 Sep 2025 07:58:59 +0000 (UTC)
-Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C111CC4CEF0;
-	Thu,  4 Sep 2025 07:58:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C111CC4CEF0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C3FAD1480743;
-	Thu,  4 Sep 2025 09:58:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1756972733; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=+X43dhWbmJe9Xz++Pv2ayZuVgsAdoCm6ORyQ6/XM/ek=;
-	b=kBZsKGUTXh40axdPM+jwNAUPcrKpHtV+eLyOGobFw9fzq5Nw0GoG8Hom5cCSOzzfoCAScQ
-	lBtuzBDJWEPaH6wszhHWWr5kpl5b0/ODwsgRKdY4yU+QR1MyncGvbzcNxSojV0JvcEvQyO
-	upSNBPm85nflPkb7bnlvMw5iWWv3LBJxPyqkyi4yF+WqgEeeqrxJXah1WJyk7pFQbfh+XK
-	S1nPs5MfHrvkX+ZsVT7eMDfjYu45Z3XGB6tIPFArPzFHKVXyo6O3Hp+MRfK/nB9Ewso1m0
-	AbNTKhAQaHJBbu1c75R+cchVAJUg1tdzQuxYonbZ/5qxeMET28GC0Vf+g36UYw==
-Date: Thu, 4 Sep 2025 09:58:50 +0200
-From: Alexander Dahl <ada@thorsis.com>
-To: nicolas.ferre@microchip.com
-Cc: Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org,
-	Linux Kernel list <linux-kernel@vger.kernel.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Vinod Koul <vkoul@kernel.org>, Alexander Dahl <ada@thorsis.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: Re: [GIT PULL] ARM: at91: fixes for 6.17
-Message-ID: <20250904-comply-veal-99d4839588e9@thorsis.com>
-Mail-Followup-To: nicolas.ferre@microchip.com,
-	Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org,
-	Linux Kernel list <linux-kernel@vger.kernel.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>
-References: <20250903173403.113604-1-nicolas.ferre@microchip.com>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Bd1UXp99"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:mime-version:content-type; s=k1; bh=Z94ywxLihlP5imbl3FU1jjKwYYC
+	zYT7fwycWOKoAX7s=; b=Bd1UXp993IfnsYG251n/negH7uTJHbLI7dgi/rjn/GN
+	IUjLMOu0lewDU5/rZkpfTVRSS9HaYcNK3hg6A+ounw3N2mcIv6VKBdNHMKQhdiS1
+	Ima1sNLahAkVTCVRx55o+IjehFgMi78M8wyGnmOFeNrPB/a/Ed0Sz/oEQsev/XYB
+	IbEyG+bCugWaXGS5hi3cEvmpNF3mOU2E2P+R72trHgstDImBXK/mg9N3ycvzwX+s
+	lE7wWbv9Q2UEzOwcUrSIUPSRc169/wDs9osF7OM4A8midxD1pfRnjP1Jgv1btyCc
+	+dpkymv9Z4c3QYn6RcHfn9W9zJjNtu1tm2nDpjDP2vA==
+Received: (qmail 3617510 invoked from network); 4 Sep 2025 11:47:06 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Sep 2025 11:47:06 +0200
+X-UD-Smtp-Session: l3s3148p1@vUWhmvY9xC5tKPNb
+Date: Thu, 4 Sep 2025 11:47:05 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: soc@lists.linux.dev
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: [PULL REQUEST RESEND] i2c-gpio-fixes-for-6.18
+Message-ID: <aLlgGdrFEjh26knK@shikoro>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FVwHWn2AG0eyJRbl"
+Content-Disposition: inline
+
+
+--FVwHWn2AG0eyJRbl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250903173403.113604-1-nicolas.ferre@microchip.com>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hello Nicolas,
+Hi all,
 
-Am Wed, Sep 03, 2025 at 07:33:55PM +0200 schrieb nicolas.ferre@microchip.com:
-> From: Nicolas Ferre <nicolas.ferre@microchip.com>
-> 
-> Dear arm-soc maintainers,
-> 
-> Here are the fixes for 6.17. The addition of the Kconfig symbol is taken from a
-> bigger series by Robert here:
-> https://lore.kernel.org/linux-arm-kernel/20250813174720.540015-1-robert.marko@sartura.hr/
-> It is needed because one patch of this series was taken before that symbols were
-> defined properly (queued for 6.18). You can read the discussion here:
-> https://lore.kernel.org/all/bac5390f-725a-43db-a2b6-17a68d0d733c@tuxon.dev/
-> 
-> Thanks, best regards,
->   Nicolas
-> 
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-> 
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-6.17
-> 
-> for you to fetch changes up to 217efb440933bf97a78ef328b211d8a39f4ff171:
-> 
->   ARM: dts: microchip: sama7d65: Force SDMMC Legacy mode (2025-09-03 18:52:08 +0200)
-> 
-> ----------------------------------------------------------------
-> Microchip AT91 fixes for v6.17
-> 
-> This update includes:
-> - adaptation to the SDHCI capabilities on sama7d65 curiosity board DT as
->   SDHCI quirks are not in place yet. SD/MMC don't work without these
-> - addition of one Kconfig symbol that is already used in DMA tree for
->   6.17. XDMA cannot be selected if not present.
-> 
-> ----------------------------------------------------------------
-> Robert Marko (1):
->       ARM: at91: select ARCH_MICROCHIP
+this is a resend because I used an old address for the SoC mailing list.
+Sorry for the noise!
 
-Tested on SAMA5D2 and SAM9X60 based boards.  Works for me.  Thanks for
-taking care of it. :-)
+Happy hacking,
 
-Greets
-Alex
+   Wolfram
 
-> 
-> Ryan Wanner (1):
->       ARM: dts: microchip: sama7d65: Force SDMMC Legacy mode
-> 
->  arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts | 2 ++
->  arch/arm/mach-at91/Kconfig                              | 4 ++++
->  2 files changed, 6 insertions(+)
-> 
-> -- 
-> Nicolas Ferre
+
+The following changes since commit 1b237f190eb3d36f52dffe07a40b5eb210280e00:
+
+  Linux 6.17-rc3 (2025-08-24 12:04:12 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-gpio-fixes-for-6.18
+
+for you to fetch changes up to ed8c952aee4183ac866a83397e12ceb99493c6ad:
+
+  ARM: dts: stm32: use recent scl/sda gpio bindings (2025-08-28 12:33:26 +0200)
+
+----------------------------------------------------------------
+i2c-gpio-fixes-for-6.18
+
+We have dedictaded bindings for scl/sda nowadays. Switch away from the
+deprecated plain 'gpios' property.
+
+----------------------------------------------------------------
+Wolfram Sang (2):
+      ARM: dts: cirrus: ep7211: use recent scl/sda gpio bindings
+      ARM: dts: stm32: use recent scl/sda gpio bindings
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Linus Walleij (2):
+      (Rev.) ARM: dts: stm32: use recent scl/sda gpio bindings
+      (Rev.) ARM: dts: cirrus: ep7211: use recent scl/sda gpio bindings
+
+ arch/arm/boot/dts/cirrus/ep7211-edb7211.dts | 4 ++--
+ arch/arm/boot/dts/st/ste-nomadik-s8815.dts  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+--FVwHWn2AG0eyJRbl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmi5YBkACgkQFA3kzBSg
+Kbag2hAAqxotRdcs2jDfUxL9ubnQ3k/TfkhqOEeU1mI7gF/zyC/egI96lb496+F6
+Z4eatokRljKjTBvsfZefc8ppw+/JipizoFqZNSyqWeAMj3dXpFTh3KXkIBo7zRxl
+mGcHl5hYkFiR2E+EuCPvMP+CudsqnkWPOMT23JDsWquEmfC+zGEjFbUpx/d1MlPW
+sbsYvlY7Jep5WcNDwjgHVejf+XEnZNgsJnbmZUPuNhyFVXLQOQQheRqV/GyoQthn
+UFQYBQt9ZL/lbR+timthvUuXP+6CGcdeVNk1AzO0DBjNbbyV4UweCiM8KaLFSRa0
+WlOQUSg1sQh2ZPcZ2UURyt1NpvhefA8sw6K7NZZwXn7irkY2skmesElwSfZWcePH
++7wBwlZN+B6U3Lx18oWCrp6TkQhhBkSXpNhXbYSFttOmgsE8iBFPasfwarX1E6A+
+epiPhWLYR+MvamKftL+A5EdA1m3JL2fZcslNQlrdxWC+xMag4+hNzWRvjsVuI58f
+r7EP1IejZ8YZSljzXS/U+onzO7AGoFB3Uktk2r7/ztCW9t9ejEAWpEl92HJVnxyf
+0lr+ZEwAtX9SH0b4D2Bk/QWxBN9k1Es/FtqnCjTsvcK4DiTaz29zYdWQyL+xmBtW
+UblRFgKUZvJ9UCeYC00A+oDPOCVudy4G1FXgTDwANfFt6SRdd+k=
+=1Vdc
+-----END PGP SIGNATURE-----
+
+--FVwHWn2AG0eyJRbl--
