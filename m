@@ -1,117 +1,74 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E20A29A307
-	for <soc@lists.linux.dev>; Thu,  4 Sep 2025 09:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8BF2522A7
+	for <soc@lists.linux.dev>; Thu,  4 Sep 2025 15:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756979239; cv=none; b=Eiiq/rIX9ELkmqmZNSlU4a4v5pBq+l5QcS5du5F4fSgSEE6l3EXYmcNEBzqWc+Oop0a+xsSH6oVB1aTWjxfFa6jExC1G5dHJedSqLGlY8vjNmnkXi8e2Bcmz1GwAAGKoB0e3+b4mqcH3ieSXEpNb2E6vOsp6pGRIFOwwVKvS2hE=
+	t=1757000038; cv=none; b=GjsIjKGaxeVKpy2J09nn8kqcZ5YJFr5B0ZLF7QGSJBOPdYDh3nyBsVTLVkhBVigUIiZEUXyCtB4SP5ZJoL51ruajrwM0OlmtcUQzhrcY+XXVRH26Pt51rvUAUEXFa5nnkpff2lkPzpxBwLn4CAjS4G2S3BsDpyGArPzqQRjKa/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756979239; c=relaxed/simple;
-	bh=Co1V1iVYZyrAxYVz64uRvth7glMtN+0ZaCCb7K2hm94=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=n7VP1UEvtjRAcrhTdv696L9eQTrxtjeldCM7yFNI+iy2SE74jsNVFF8tZViT4UdhHHODHEEbb6F9BhulzCzmIPJYsRXLN/FhBZ+OI4fGqZEVTVeEQKsFBdKuGiWP9RUZcZTtGrsM7fB/r/+KcEIt8VdC5pg1S0n4OywTVMWITJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Bd1UXp99; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Bd1UXp99"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:mime-version:content-type; s=k1; bh=Z94ywxLihlP5imbl3FU1jjKwYYC
-	zYT7fwycWOKoAX7s=; b=Bd1UXp993IfnsYG251n/negH7uTJHbLI7dgi/rjn/GN
-	IUjLMOu0lewDU5/rZkpfTVRSS9HaYcNK3hg6A+ounw3N2mcIv6VKBdNHMKQhdiS1
-	Ima1sNLahAkVTCVRx55o+IjehFgMi78M8wyGnmOFeNrPB/a/Ed0Sz/oEQsev/XYB
-	IbEyG+bCugWaXGS5hi3cEvmpNF3mOU2E2P+R72trHgstDImBXK/mg9N3ycvzwX+s
-	lE7wWbv9Q2UEzOwcUrSIUPSRc169/wDs9osF7OM4A8midxD1pfRnjP1Jgv1btyCc
-	+dpkymv9Z4c3QYn6RcHfn9W9zJjNtu1tm2nDpjDP2vA==
-Received: (qmail 3617510 invoked from network); 4 Sep 2025 11:47:06 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Sep 2025 11:47:06 +0200
-X-UD-Smtp-Session: l3s3148p1@vUWhmvY9xC5tKPNb
-Date: Thu, 4 Sep 2025 11:47:05 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: soc@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PULL REQUEST RESEND] i2c-gpio-fixes-for-6.18
-Message-ID: <aLlgGdrFEjh26knK@shikoro>
+	s=arc-20240116; t=1757000038; c=relaxed/simple;
+	bh=8Mn0Bqa/S93WvN7FTo9NTfYcWfymODH+SAw6GdAU1ug=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DqQZZBR+5kM2QZvGUFKjsSNHGVzWvdN9CHzidTWFdsj4LE9Xzh2MI84DIWHmunArEk4wiX3zxjl8WkBvA+inZDXoNNFbFSsHVaE0Sz7bnCUuvj6yAxbJVRaSy0smHXzTawr8raJVZCojScnPQH0PT81ZN7vXmNzhdra5MngUhy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix)
+	id 472B6C4CEF7; Thu,  4 Sep 2025 15:33:58 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 24615C4CEF1
+	for <soc@kernel.org>; Thu,  4 Sep 2025 15:33:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24615C4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1uuBy8-0003Wb-0f; Thu, 04 Sep 2025 17:33:48 +0200
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller fixes for v6.17
+Date: Thu,  4 Sep 2025 17:33:45 +0200
+Message-ID: <20250904153345.2374313-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FVwHWn2AG0eyJRbl"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
+Dear arm-soc maintainers,
 
---FVwHWn2AG0eyJRbl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-Hi all,
-
-this is a resend because I used an old address for the SoC mailing list.
-Sorry for the noise!
-
-Happy hacking,
-
-   Wolfram
-
-
-The following changes since commit 1b237f190eb3d36f52dffe07a40b5eb210280e00:
-
-  Linux 6.17-rc3 (2025-08-24 12:04:12 -0400)
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-gpio-fixes-for-6.18
+  https://git.pengutronix.de/git/pza/linux.git tags/reset-fixes-for-v6.17
 
-for you to fetch changes up to ed8c952aee4183ac866a83397e12ceb99493c6ad:
+for you to fetch changes up to 9a52827a9bbbabb461e87bb41174a96a82c0e8ae:
 
-  ARM: dts: stm32: use recent scl/sda gpio bindings (2025-08-28 12:33:26 +0200)
-
-----------------------------------------------------------------
-i2c-gpio-fixes-for-6.18
-
-We have dedictaded bindings for scl/sda nowadays. Switch away from the
-deprecated plain 'gpios' property.
+  reset: eyeq: fix OF node leak (2025-08-27 16:40:13 +0200)
 
 ----------------------------------------------------------------
-Wolfram Sang (2):
-      ARM: dts: cirrus: ep7211: use recent scl/sda gpio bindings
-      ARM: dts: stm32: use recent scl/sda gpio bindings
+Reset controller fixes for v6.17
 
+* Fix an OF node reference leak in the EyeQ reset controller driver.
 
-with much appreciated quality assurance from
 ----------------------------------------------------------------
-Linus Walleij (2):
-      (Rev.) ARM: dts: stm32: use recent scl/sda gpio bindings
-      (Rev.) ARM: dts: cirrus: ep7211: use recent scl/sda gpio bindings
+Johan Hovold (1):
+      reset: eyeq: fix OF node leak
 
- arch/arm/boot/dts/cirrus/ep7211-edb7211.dts | 4 ++--
- arch/arm/boot/dts/st/ste-nomadik-s8815.dts  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
---FVwHWn2AG0eyJRbl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmi5YBkACgkQFA3kzBSg
-Kbag2hAAqxotRdcs2jDfUxL9ubnQ3k/TfkhqOEeU1mI7gF/zyC/egI96lb496+F6
-Z4eatokRljKjTBvsfZefc8ppw+/JipizoFqZNSyqWeAMj3dXpFTh3KXkIBo7zRxl
-mGcHl5hYkFiR2E+EuCPvMP+CudsqnkWPOMT23JDsWquEmfC+zGEjFbUpx/d1MlPW
-sbsYvlY7Jep5WcNDwjgHVejf+XEnZNgsJnbmZUPuNhyFVXLQOQQheRqV/GyoQthn
-UFQYBQt9ZL/lbR+timthvUuXP+6CGcdeVNk1AzO0DBjNbbyV4UweCiM8KaLFSRa0
-WlOQUSg1sQh2ZPcZ2UURyt1NpvhefA8sw6K7NZZwXn7irkY2skmesElwSfZWcePH
-+7wBwlZN+B6U3Lx18oWCrp6TkQhhBkSXpNhXbYSFttOmgsE8iBFPasfwarX1E6A+
-epiPhWLYR+MvamKftL+A5EdA1m3JL2fZcslNQlrdxWC+xMag4+hNzWRvjsVuI58f
-r7EP1IejZ8YZSljzXS/U+onzO7AGoFB3Uktk2r7/ztCW9t9ejEAWpEl92HJVnxyf
-0lr+ZEwAtX9SH0b4D2Bk/QWxBN9k1Es/FtqnCjTsvcK4DiTaz29zYdWQyL+xmBtW
-UblRFgKUZvJ9UCeYC00A+oDPOCVudy4G1FXgTDwANfFt6SRdd+k=
-=1Vdc
------END PGP SIGNATURE-----
-
---FVwHWn2AG0eyJRbl--
+ drivers/reset/reset-eyeq.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
