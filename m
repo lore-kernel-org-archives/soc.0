@@ -1,69 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EFE1A3167
-	for <soc@lists.linux.dev>; Mon,  8 Sep 2025 04:07:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5869C3126C6
+	for <soc@lists.linux.dev>; Mon,  8 Sep 2025 17:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757304441; cv=none; b=jvacFLeG3xN6T7hZd6CxDeYk1jhE00nJJFZJt2iDE53dH/qPWGiXA/YNcDO9o9qYVQ++xi6lMm7C1gjIvttMWRbj7WWRDazmSNG8XI/Xt3fQXi/m+aa3V5BQR0gONqrPcN3LQO4GASpyXVrCNVX7r/BdQb1O1c351YV5+n5YlL4=
+	t=1757351530; cv=none; b=Lrn1b8Mb6Ey2V/sTNHzhKg3vyT6v/if4x8N+4tJjYV5JXPpMNxr7KDuBiWtxrbPHt8FP6zlTJSZ7smuv45msBjeTyuSItM7x3MtFWNVdLiDNb9DG5Gv9U9p+QFjslSRMuDPpP8PXJUKYHf4e/iRo1FpfCaJaNgwr1QnKYsTwjok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757304441; c=relaxed/simple;
-	bh=wDex0QqoddNRas0GYZ6VwjGjJz/eOq/MoV1W40db1xc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XF4x5o6mPrLOQ8WhiKs+x6yx2nsLSNwxIwHCz6HL+wQqm/2LFZwJ9bbGiip/Nh9XUT+XzTub4dml1U0JsbSA5haXpppFyd9vAQga0yXxSsKZuaboYMiJ1kezZNQui02XC2iIvGcEF1whi7zHwheCMus1l3JUFVLLX837sdbVoWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tYeYebds; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757351530; c=relaxed/simple;
+	bh=N0Ew5uLxMWlX2hxvzxeMznJDWzQfwf1IVExLfD9g+8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=CWiCbN4vKrqc6ZMWQee+adNZpGdilyOX1l4nIgv7rTUanFbLU4Nh3AGi+87sYtJsFc0aAKiv+tlga30WUlYGnzxy3zlHrtOhWOciXpmghQ521pNmzG/KJlrXRhFX1b04pJ/hT+tgSJ1jA7BVwzVc0f6hBKjJIclvhIrLSTzk70Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZuHq0bgQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tYeYebds"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3BAC4CEF5;
-	Mon,  8 Sep 2025 04:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757304440;
-	bh=wDex0QqoddNRas0GYZ6VwjGjJz/eOq/MoV1W40db1xc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=tYeYebdsvRRhrKJNJFOM++6NRUSpMfw/H81BJGiZCC05+M9rb0ua/Rt+ZSxZ28xhU
-	 +rDU4grYbsWchWAI51eCH+TZMipyAXfjZC8+9hfWPLSLl8IOE2gBDgRqBrykcb2SC+
-	 V5MBrvecv3irmbFLqkzKO5nsnRN1IglsK5zkNOsEKWHjzdyX86/qZ2AUKzcB3U6C1V
-	 +5uUC5cPhZfyyCVReQxjB/4xOxfbuchojVDeKQWjGVdfklF3PKXSJVvOsB3a7ZH7mZ
-	 mHQcFj5Y6j7nJ436puahpjhPisGuoQ3e9nS0Pn/SKDxi5FRHbhEm6NahqsuKxEExeN
-	 Ssnf325jRkh7g==
-From: Dinh Nguyen <dinguyen@kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm64: dts: socfpga: agilex5: updates for v6.18
-Date: Sun,  7 Sep 2025 23:07:18 -0500
-Message-ID: <20250908040718.187857-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.42.0.411.g813d9a9188
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZuHq0bgQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757351527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N0Ew5uLxMWlX2hxvzxeMznJDWzQfwf1IVExLfD9g+8c=;
+	b=ZuHq0bgQveon6kp40mnKKhpBoBWJdfWnY67qlHPz9++SQVij9nh/gwl/t2W/HG+saDFKCf
+	nvUu2YmR1+yWvLYAD9GVp8F/2TrLvwdYw19ooinDxC9ot27Edcn566GZjiykKj8LSVundK
+	qnXN8C67pACLu9F+Y4Rld4u7G6QuGtc=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-383-YvQqMM1-MFSvoeMvdxD3qQ-1; Mon, 08 Sep 2025 13:12:06 -0400
+X-MC-Unique: YvQqMM1-MFSvoeMvdxD3qQ-1
+X-Mimecast-MFC-AGG-ID: YvQqMM1-MFSvoeMvdxD3qQ_1757351526
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4b345aff439so132402121cf.0
+        for <soc@lists.linux.dev>; Mon, 08 Sep 2025 10:12:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757351526; x=1757956326;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N0Ew5uLxMWlX2hxvzxeMznJDWzQfwf1IVExLfD9g+8c=;
+        b=Ht0nsaQh/Je3sMDGzlxfo8O0sjRtPdEV9K6OFyXD+k10eQcy3WSjMGmbA2jZPPDziB
+         pMEDhHuZPMgDuH6i02FexSe7tMs0MTw4Uake4UdQ7b+z7fkXCyclxXKi7eH2U3o86aKN
+         yhommGpP2VEq1mnhK8P9zZMONAyLu3zDTpqATSSVDlUm+YggfTTwnw5H73ciJDrhtibB
+         1We/fjYBGdrTCa9A+S9JBFfxqgJHSwUBe1ml3wPXFf2DyC0OsBRVxiUvr5CQvC9qoDtE
+         3OROPuRwtIMkMnKWvTYddo+BJrX1VLgsDoIvOjz7Slvnzy/XxdzXY4idM+Ut+p8nwtTI
+         Dl+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXKitgAafgRCz6y7sY0mqAA9s0VQMA5371/lh6KgNCQR7j4J57CMc0jP6W05mOy1oncJws=@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywla0K/NrBtIYOkB70vMnUKNx4n+cCV2QjQNaEP76Soh0extQ9h
+	qLtGfCMmTwW0CXaDgqQOiv/UHTi8nd96RchyZ+EP+JO6cOxX3VaULDGWbuzFbrnl+9vzpzkDa31
+	xQm0IZ48bQ7xPcXnAI0TXCUv2QNwCdPHUTZAKuWPmZakyKp6FI5QY2A==
+X-Gm-Gg: ASbGnctBKCUDOsE45esghebkkoUh/vKSgX+VMK0xeJ1e4Or6O2vEms6sizvII0ZUm8M
+	BfdTjTa8ZsvAuKzwn7gD8IQLh1HM5uI4HzQFVUZMVi9xt8lI4H4h2VHhzMKhqOop5sTI1oDmta4
+	6B2nHMO9UoHzjIK3DQ/ckWNKGc9c6hJ2nenE0LDLAo36ADe/YcAoTGrxFquZmh0EiZVHHOFShr6
+	73bZaX3WH5P4XMd6PI9c+S+GtwhmfaKX4rX1qKJTzXDNIeCcpEwy+w7d0/ucwHmF+Ptox9iQFlH
+	uIBdW1PzWKH6t2tWSgn7/j0conlfl/KqoCQfH8JZSzR0D5IxycZ+C2asZ1g=
+X-Received: by 2002:ac8:5a12:0:b0:4b5:d739:6273 with SMTP id d75a77b69052e-4b5f8490345mr93488991cf.75.1757351525386;
+        Mon, 08 Sep 2025 10:12:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFVez0JttMWAhr/EpA5S3LWdvkJoIrJRGLs+fJ0AEeH7TgyS1UoHb0txwN7TUYVZQswHIwQlA==
+X-Received: by 2002:ac8:5a12:0:b0:4b5:d739:6273 with SMTP id d75a77b69052e-4b5f8490345mr93488361cf.75.1757351524739;
+        Mon, 08 Sep 2025 10:12:04 -0700 (PDT)
+Received: from x1 ([2600:382:8507:870e:b6f8:ee72:4f09:a16a])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-80aab5a062fsm1122872785a.48.2025.09.08.10.11.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Sep 2025 10:12:04 -0700 (PDT)
+Date: Mon, 8 Sep 2025 13:11:57 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Yixun Lan <dlan@gentoo.org>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Daniel Palmer <daniel@thingy.jp>,
+	Romain Perier <romain.perier@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Alex Helms <alexander.helms.jy@renesas.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
+	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
+	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
+Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated
+ round_rate() to determine_rate()
+Message-ID: <aL8OXeFC4N-J_kvC@x1>
+References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
+User-Agent: Mutt/2.2.14 (2025-02-20)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: orWO8fzMLd4nrrWGkB0Dy0D4cdHmUCk74E4Z48ueuU8_1757351526
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+On Mon, Aug 11, 2025 at 11:17:52AM -0400, Brian Masney wrote:
+> The round_rate() clk ops is deprecated in the clk framework in favor
+> of the determine_rate() clk ops, so let's go ahead and convert the
+> various clk drivers using the Coccinelle semantic patch posted below.
+> I did a few minor cosmetic cleanups of the code in a few cases.
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+I included a subset of these patches in this pull request to Stephen:
+https://lore.kernel.org/linux-clk/aL8MXYrR5uoBa4cB@x1/T/#u
 
-are available in the Git repository at:
+Brian
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.18
-
-for you to fetch changes up to 9cb76813425956f82cf598c357da0c9f36a1d9a8:
-
-  arm64: dts: socfpga: agilex5: enable gmac2 on the Agilex5 dev kit (2025-08-30 20:27:06 -0500)
-
-----------------------------------------------------------------
-SoCFPGA DTS updates for v6.18
-- Add and enable gmac for Agilex5
-
-----------------------------------------------------------------
-Matthew Gerlach (1):
-      arm64: dts: socfpga: agilex5: enable gmac2 on the Agilex5 dev kit
-
-Mun Yew Tham (1):
-      arm64: dts: Agilex5 Add gmac nodes to DTSI for Agilex5
-
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     | 336 +++++++++++++++++++++
- .../arm64/boot/dts/intel/socfpga_agilex5_socdk.dts |  20 ++
- 2 files changed, 356 insertions(+)
