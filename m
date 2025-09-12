@@ -1,97 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806E83009F1
-	for <soc@lists.linux.dev>; Fri, 12 Sep 2025 11:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B455A305973
+	for <soc@lists.linux.dev>; Fri, 12 Sep 2025 13:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757677110; cv=none; b=ByzQECgzioCxniEFxc3nUEQ0WdrwfgeD09KAqXf+NGco4Gy5pkQExCEkkvDltNDEZY+aX7rV2eg3NF2VTNoM22M4WDzr3DzdjvRWPhoCJZDN5LDFzrFuzjSzl+Klm4M63yQkMkGK74/4+e/w0yNwsg3bV0n88E6uNh6ldhUQ9ws=
+	t=1757685295; cv=none; b=pi4DEvhEpVZIwP5EllvDmdEtVHEu4C95Rv+KKoxkDk1I1r8zRfwO88MX7BqxJ1Pv8UxZjM93MkKJKd2wF2wkPqubrJSXhstQVTo+87oE4jwhMICmqVH8G22KuMIS5XRmSC7xrnMEjaKgu827GhNRPsfAz0rur4FQqsZL90ohKTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757677110; c=relaxed/simple;
-	bh=bOTAwnZl8SNZ0mcxrB4v3Tz5bxoDSVT/zfyxps2tfa8=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=bOM6rTqEHctqTlJom3giHOvBFZCYi3SuEUacxu0IoVh+L5Fp9R9u0xBXJhoNNKWaw8DO6msJ6aQhfGj5b5y1lK61/jMp4y4+b+Uwm9dmQOA0q0T3g6b8R9qdchZ1QWZXr2NurngtDpUmRQ0TplutA4JI2klAHr4QWY9+f24kK0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20230601.gappssmtp.com header.i=@monstr-eu.20230601.gappssmtp.com header.b=qvybtoEN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757685295; c=relaxed/simple;
+	bh=+R3H1ZTHIpjD/7gpvZo0O5OPpiEvSR7fzcYJIZTMjmk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KHWJXFjD+CB1T9YoEXmE9054jy/qftfqMEDLNnE8XZPlKEeh85Bn4lv28bUMWpjeg98NI2ZxNv6d7f6QNPw90FjQBfPsEZJ8MeaXsh4HOqTFAek9ulo0tn18mERibYAw6KSZfDfZ9ugnfSYK/8GBjrre3SV8C1MazBcfduzQUcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DGpDVTGn; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=monstr-eu.20230601.gappssmtp.com header.i=@monstr-eu.20230601.gappssmtp.com header.b="qvybtoEN"
-Received: by smtp.kernel.org (Postfix)
-	id 3B661C4CEF4; Fri, 12 Sep 2025 11:38:29 +0000 (UTC)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 640D3C4CEF1
-	for <soc@kernel.org>; Fri, 12 Sep 2025 11:38:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 640D3C4CEF1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-ea3dbcc5410so414763276.2
-        for <soc@kernel.org>; Fri, 12 Sep 2025 04:38:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DGpDVTGn"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3e753a310a8so261982f8f.0
+        for <soc@lists.linux.dev>; Fri, 12 Sep 2025 06:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20230601.gappssmtp.com; s=20230601; t=1757677105; x=1758281905; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0xCcLz0xeAKx5n/UEUykcuqgh7EdPmjYCEV4CfhEznQ=;
-        b=qvybtoENpTi3M90px+/3V+IAcMkjcs9Es3lw15pgQ1yK0dIf5ScfdEXYrI6BAGaV6C
-         vbBUFMyFN/6OhGonppOe1Q92/iVHvcMn4364uu3Rgqlw8Wu8YvHOtFnSTcHfB8k5P6yD
-         HwtNqquzhry/wGwKAXzJiyvXMJZmLiMQWobTl2UT/XwFjnipNBseo+WQb3VFnywNGn71
-         pkqzWMtb2fLaebNEr1Hj+0l+y7r1vFqoVKP4wmHN7LPSThXRROkMuXQXEmpwbtNyPiwS
-         SUtYetklqB1B7EjnPkOyoXvZUJzEFQp2ul0CQUSW//xggUB7uHhPyfDnNUW9I5BbdBKK
-         N7Hw==
+        d=linaro.org; s=google; t=1757685292; x=1758290092; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3tTGGzjAuGZXQWRu05vrCKimfXwg8uSaYFn3EC8TDkU=;
+        b=DGpDVTGnXN6UO9gjKmYNjLygZnf9kzh/VSjlygAYy7qaP+Kf7IPHX2acZA/HsX6gLM
+         HeLzA8iiUsgWv+Cqr5gdpsvgDdSLZ5ksYkvqDo1GeMVnpcLexPPbgOBoYSeegbgUxR4I
+         1GAAt6VEMSa72PxdQFXI1xvtDhI3RQBiMjOx9gSwZPlMZBisnW7C4vF6px+iaMrfhmxR
+         rVXWJxTUKdlriqTXoVnlFCej2YhAD+2Fumt/UnfI8oBKUmDyh9sKbsJdAL7wOC94N5Vx
+         wRCbAezRbsf4IhdiygZt2PgzswgdCNimpG1w4hQw30yzZ+X8MWWl8lGc4K4frlFcNJm9
+         Y+IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757677105; x=1758281905;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0xCcLz0xeAKx5n/UEUykcuqgh7EdPmjYCEV4CfhEznQ=;
-        b=PG5BTJ76M2vZWEhq8lLLcAhp6R4Nc1A6HDT3n60zmQkW6YXRINob6Q1VzIh/zbdt44
-         QIpIVJG+KQWSoWq3PFDQmW2Dr1G26neV66foidOVi2GDqTDACG5Un3ufYGg+naxeRaps
-         GyxKwBuJO8vb4iiUplKsdrXiIN1j4WqVZvvmt4TQ4DwJdnj6Bz7q0EociKKesVxKijFS
-         AWmRPIUS+D1n9kkR5RvfgGnhaec8JLeC+dChrkNYZYAGiaLr0zKckBNmmAuGCvXMX+l5
-         90O5Cx1+HR25xZmupWEybBiCZTu56gOhyBc72Bg4qU42i1JJ6mqiccWEYEEaDCSyHsQe
-         /fow==
-X-Gm-Message-State: AOJu0Yzegfpapo97npVWqSxbg2pX26ofz0kYjtE0XyoD0cq0krJpH1co
-	weSnFfHi7sRpCmQ6C5gZW0DpnOMs3jy/6wkKy567WSY+gJaT4rcwbNums27LtiYDAqgPioSy7If
-	NYD3vev/RZiFipbCjuXl03Bxmd9onnO0EiyOzEJht5ANKNToWTvr6jhUBLB0=
-X-Gm-Gg: ASbGncvsD6jB1Ge495DQLed5vJ/Waw/HNoV50ilYJoYS02U0HAiCT/66KiuY0yN0Ypy
-	2kBHuScMLPmql0Ljpfwfzu5r2aaLi34gIX/kMNXkcUenEral0Ytdx+RJ2AK/ohEMQISeSJm5EGl
-	3BhI8CpfwFNloWY6Ulx+bZDxq9/qLOUFyJeYy3aSdOo/8Y+V3hSGypT9sGWnxW79jfoFD+8bcDx
-	0Z9/rhF
-X-Google-Smtp-Source: AGHT+IHomt3IVxngq/04+CycevFJTL5UsnTxN3HPA8yQj6kojY+b2IE4luQhzMGXxooXg9gISnBqG/EwWliSr5txeJU=
-X-Received: by 2002:a05:6902:72f:b0:e95:2a4e:6e26 with SMTP id
- 3f1490d57ef6-ea3d9caf3cbmr2422823276.52.1757677104679; Fri, 12 Sep 2025
- 04:38:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757685292; x=1758290092;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3tTGGzjAuGZXQWRu05vrCKimfXwg8uSaYFn3EC8TDkU=;
+        b=hoI5CVRSx9CxPPH36CkF4UBZ9h3MVzFWW+LvgSneCf66Pcc7CD82T3FhouI6tflDTQ
+         VCoprkFoZeRk9+h6gRazIbIcju69IXahGp/BgNB2ec6x+F7Bwa4pf6Gk8zkGT8vsBVP5
+         1boj2Mfi0l4LozQkdq2SqDQazRmzmdqNLshzMPc0f24UWItsq0Rqg/YlwEuOe4/uwnEe
+         yo3RHBSTZSh8GUXXdh0p6nukEfnPGoOwlbirBkjgcGnIK3brG9aUBTcqflITAHjmVi60
+         zUP7Q2oRWt6oj/xaUuvI1O8QKpHsIrMHSL2o2PiCmOvGksWZouKoWuy9g/icqJTJL7TO
+         56mQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUEbnqP07GK9gTA32tsBE3PMwDhsHIGoo+2CFXKrYE6MJOLsnd/TSpfvubQhfL4+YKJ5fU=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw4AzQTKRIsdvwfOIN44DhweTqQqAI0hjPYSm8PUjnQ11YF8W6e
+	VffAeywU8RtPSI/Q9lSOVtAeyoUaXSTr8lFCYS25umQfGDwu+mDky57wnZpHPiPCj0k=
+X-Gm-Gg: ASbGncvQ70/8A3dbpz4mpumQR4+Feq6Cs8QQYxDPCb46HJe5h7VVRPE0dSztVVbn9EM
+	fKEiWifVEaJZhM2IQ5jozcvSNjI1ULSAJny3FB1yKnL2jEM5HD9fn2/HiISTgUM84nFRbRwDswH
+	PjWDjhAfZl7CuZ4ATJMjjwkH90769FsHF6uHg7H1YEjhvxq+Q6Pmam32Xr3oBNfvctca1QVChB2
+	wXgQfarLxcwwZoaw7Bpw+yCPTYdXjeAG4VZONTJJ+hBYMMzjz6S3duzGV6wr/OZcT8w0uLChrp/
+	7Lz+QnrC0H8UFGKEPwnhAA5p217JCXp56ySRy1DlnQO4GNuA5GGVlY3+3JB5l9mNO4HaPM0pBJz
+	2I7yGBPqgZnLo8ckw0UowlvbNtUFv0KWptXItTOEzjWNu
+X-Google-Smtp-Source: AGHT+IHa2d6N+I2Uzmdt0WNUESJkvL2LyjiN5VutHgQP0qs3PTN9Sv+qvKSGg2es7vfBpKw/dNOTtQ==
+X-Received: by 2002:a05:6000:230c:b0:3dc:1473:1a8d with SMTP id ffacd0b85a97d-3e76553700amr1475966f8f.0.1757685291885;
+        Fri, 12 Sep 2025 06:54:51 -0700 (PDT)
+Received: from kuoka.. ([178.197.219.123])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7607cd329sm6749615f8f.31.2025.09.12.06.54.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Sep 2025 06:54:51 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] samsung: drivers for v6.18
+Date: Fri, 12 Sep 2025 15:54:48 +0200
+Message-ID: <20250912135448.203678-2-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Michal Simek <monstr@monstr.eu>
-Date: Fri, 12 Sep 2025 13:38:12 +0200
-X-Gm-Features: Ac12FXz16hCtqAIdxUPmYnu87QdzPPB-ONwoYmQp4XNsW_aV_6Sj1cqQsDx9iZc
-Message-ID: <CAHTX3dK6if9f+-DW5ZEnfSO4=K_Zje-WH-fwysTY77farsSS9g@mail.gmail.com>
-Subject: [GIT PULL RESEND] arm64: ZynqMP DT changes for v6.18
-To: SoC Team <soc@kernel.org>
-Cc: linux-arm <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1629; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=+R3H1ZTHIpjD/7gpvZo0O5OPpiEvSR7fzcYJIZTMjmk=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoxCYo+Pv5PhFkoqL+D2aJfApilJiP0CroSyKj8
+ yHoC5S2/9KJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaMQmKAAKCRDBN2bmhouD
+ 119+D/wNTh8XCX0eJ1D+00tjKjvAUyIG70Ce8hwuspf2+Y/ZmUzzUZi3xCB2ExpCgMZ1SEHF0bS
+ LJmEYKHjPexn37YqQs/O7V84sqOYJoCisxXUk5Gp9JM0SzUJ6yqZ9M4KoeJuq4PVd4x0cCl2DDv
+ oFV+r6qKgwWyh/EVqokjUXqABdJhpGz9M2Wn1sSWRF5n3gujv3K/Sx1TGsbZgvbXxQWIQ58CxrS
+ m/Tey1RNtLzTnrkorRlHcxbEDYt5fojnUgci4ebJIlG7c08f6N7vW+D+LTJYHK/FPy603PsxjwS
+ XMmGu9EzyvflPL0r9IZfExuXIl+cv0FZ/ZWgHcnC8HGYwGOVG1ryDfcfRLo4GBcvx8vUGjBYFzL
+ TU59zS2BkyaxpD6Cqh0Y6vTQdBb1eMjknAhDzouj27ZEETVsl637qEXAsFns6XigH6VVhJ4Nxfv
+ FKTYKG6wNttNaCrQMdChdPHCJGrJhGwZ5gWFmeg9YoubQfFiqFLHASrdVyOSW0Jeu4OaZXO2NM1
+ LHVnFaiNFHCP0JicZ51wIUqzoZCIUzVQwapxAfZaTrzhOurAdWWSSQQlJcijQTd42DZHnWaB2jN
+ ZTImPN0hxyAK5KV3rExKxZoyfMhdIbnw73yrMA8atLu/Fg2x9IQLgmljorXpmViDqRq3698QMod iaNGtFLV2DD+xAQ==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
 
 Hi,
 
-please pull these changes to your tree. Pull request contain description for new
-k24 SOM which is placed on kd240 carrier card. Also new kr260 carrier card which
-is using k26 SOM (as kv260).
-There are a lot of changes in versal-net.dtsi but just because of 16 CPUs and
-cache hierarchy.
+Samsung SoC driver sfor v6.18. This should be my last Samsung pull for this
+merge window.
 
-The rest are small cleanups and fixes.
+Best regards,
+Krzysztof
 
-BTW: I am sending it again via web email interface because the first
-email is visible on lore but it didn't pop up in patchwork
-https://lore.kernel.org/soc/24b47c3c-1cd7-4dda-9abf-5032fcd1d30c@monstr.eu
-Seen that problem in past that's why it's better to send it again.
-Tag/changes are the same with the first one.
-
-Thanks,
-Michal
 
 The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
@@ -99,99 +107,37 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-6.18
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-6.18
 
-for you to fetch changes up to 0e81960419ad186378b4cb55d7939d03c85262ab:
+for you to fetch changes up to 1da4cbefed4a2e69ebad81fc9b356cd9b807f380:
 
-  arm64: versal-net: Describe L1/L2/L3/LLC caches (2025-09-10 15:56:24 +0200)
-
-----------------------------------------------------------------
-arm64: Xilinx DT changes for 6.18
-
-- Fix some issues reported by dtschema
-- Properly mark EMMC devices
-- Update PSCI version
-- Update DP description and enable it on boards
-- Disable DEBUG IPs by default
-
-SOM:
-- Describe usb hubs
-- Fix PWM polarity issue
-- Add support for k24, kr260 and kd240
-
-Versal NET:
-- Describe CPU cache layout
-- Fix RTC calibration value
+  firmware: exynos-acpm: fix PMIC returned errno (2025-09-11 11:27:05 +0200)
 
 ----------------------------------------------------------------
-Harini T (1):
-      arm64: versal-net: Update rtc calibration value
+Samsung SoC drivers for v6.18
 
-Michal Simek (10):
-      arm64: zynqmp: Use generic spi@ name in zcu111-revA
-      arm64: zynqmp: Remove undocumented arasan,has-mdma property
-      arm64: zynqmp: Introduce DP port labels
-      arm64: zynqmp: Enable PSCI 1.0
-      dt-bindings: soc: xilinx: Add support for K24, KR260 and KD240 CCs
-      arm64: zynqmp: Add support for kr260 board
-      arm64: zynqmp: Add support for kd240 board
-      arm64: zynqmp: Describe ethernet controllers via aliases on SOM
-      arm64: zynqmp: Enable DP in kr260/kv260 revA
-      arm64: versal-net: Describe L1/L2/L3/LLC caches
+1. Google GS101:
+   Enable CPU Idle, which needs programming C2 idle hints
+   via ACPM firmware (Alive Clock and Power Manager).  The patch
+   introducing this depends on 'local-timer-stop' Devicetree property,
+   which was merged in v6.17.
 
-Paul Alvin (1):
-      arm64: zynqmp: Add cap-mmc-hw-reset and no-sd, no-sdio property to eMMC
+   Fix handling error codes in ACPM firmware driver when talking to
+   PMIC.
 
-Quanyang Wang (1):
-      arm64: zynqmp: Disable coresight by default
+2. Exynos2200: Add dedicated compatible for serial engines (USI).
 
-Radhey Shyam Pandey (1):
-      arm64: zynqmp: Revert usb node drive strength and slew rate for zcu106
+----------------------------------------------------------------
+Ivaylo Ivanov (1):
+      dt-bindings: soc: samsung: usi: add samsung,exynos2200-usi compatible
 
-Rohit Visavalia (1):
-      arm64: zynqmp: Enable DP for zcu100, zcu102, zcu104, zcu111
+Peter Griffin (1):
+      soc: samsung: exynos-pmu: Enable CPU Idle for gs101
 
-Venkatesh Yadav Abbarapu (1):
-      arm64: zynqmp: Update the usb5744 hub node as per binding
+Tudor Ambarus (1):
+      firmware: exynos-acpm: fix PMIC returned errno
 
-Vishal Patel (1):
-      arm64: zynqmp: Fix pwm-fan polarity
-
- Documentation/devicetree/bindings/soc/xilinx/xilinx.yaml |  81 ++++
- arch/arm64/boot/dts/xilinx/Makefile                      |  24 ++
- arch/arm64/boot/dts/xilinx/versal-net.dtsi               | 410
-+++++++++++++++++-
- arch/arm64/boot/dts/xilinx/zynqmp-sck-kd-g-revA.dtso     | 390
-+++++++++++++++++
- arch/arm64/boot/dts/xilinx/zynqmp-sck-kr-g-revA.dtso     | 455
-+++++++++++++++++++
- arch/arm64/boot/dts/xilinx/zynqmp-sck-kr-g-revB.dtso     | 456
-++++++++++++++++++++
- arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso     |  40 +-
- arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso     |  39 +-
- arch/arm64/boot/dts/xilinx/zynqmp-sm-k24-revA.dts        |  23 +
- arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts        |   7 +-
- arch/arm64/boot/dts/xilinx/zynqmp-smk-k24-revA.dts       |  21 +
- arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts   |   1 -
- arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts   |   1 -
- arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts        |  21 +
- arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts        |  18 +
- arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts        |  18 +
- arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts        |  18 +
- arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts        |  14 +-
- arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts        |  20 +-
- arch/arm64/boot/dts/xilinx/zynqmp.dtsi                   |  18 +-
- 20 files changed, 2046 insertions(+), 29 deletions(-)
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-sck-kd-g-revA.dtso
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-sck-kr-g-revA.dtso
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-sck-kr-g-revB.dtso
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-sm-k24-revA.dts
- create mode 100644 arch/arm64/boot/dts/xilinx/zynqmp-smk-k24-revA.dts
-
-
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+ .../bindings/soc/samsung/exynos-usi.yaml           |   1 +
+ drivers/firmware/samsung/exynos-acpm-pmic.c        |  25 +-
+ drivers/soc/samsung/exynos-pmu.c                   | 276 +++++++++++++++++++--
+ 3 files changed, 275 insertions(+), 27 deletions(-)
