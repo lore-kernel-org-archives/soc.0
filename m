@@ -1,198 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0345D2737E3
-	for <soc@lists.linux.dev>; Fri, 12 Sep 2025 08:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60272DC79E
+	for <soc@lists.linux.dev>; Fri, 12 Sep 2025 09:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757667453; cv=none; b=hXtKcaziHosbOgDD+KVg0659pAvnFsrBwO4iQnpLueGzOAyvyQ+yLl8krtpMcRtQbUPk6Yezmv76d60sdce7Kn1tqUsXjio0/Xl3SAXkypD+IWEAugfb7Lw8uqJfuCyMG0pwKFXSQvxtqfWoSYCClGMDwgsLumzMvGbCoJRlfF0=
+	t=1757668205; cv=none; b=I95N5Henc2F2+8eHZaDQhjJCt6YJj2/qKbGxw40RsigMMLck7TC69FmH5JZpLVmGzfdO3EasE45cCza5XTWx9d8Rge487IkFi+8bSLO459pnnXsfL4lR82c9/OoHijCKxODRFdkqTEn/u7f8BXpKg+H2gShP/Ud8qQOt2R6zV1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757667453; c=relaxed/simple;
-	bh=ZIYDSt04Y1IRNtggUK5RxE83YKlG/z5W58KhYO8o8as=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ck9G8XfvMVIXSiuM1HEzFE6wvqzX4h8DNBX7bz2vYYBXE5MCZcibJ4T5A/A1WkuFC78tiIZ9KMKsND56L02MtXO6DSdkLzsnH1RS1BWhGXB9BbOq6h9bcEVyN4Thr5inlQ8niHmlpEDfXiz2ccIqOC7mRDjyyYfmiPgDZxqs4Ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=dx8eZ1GR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757668205; c=relaxed/simple;
+	bh=8DqyAWrPHCSlw0Pa6kOyFtqUOYpuExdLnT0akgB7Nrk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WFuAsByxGfM0Tk4oqoN77haCMHZTTwUV9zkDQqPoO8AqQhAflPdn7NZZapqrZwz4QYNkvIVnshWkzTH6wydfJ/yITpcdgWOvheDbgpzzqpCLLqtG8zPSB/zsfJh/CMyZjJVStBO6oV6mUTM/YLORm7gS3+ZxgOsAZxSw9/gSCMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IBFJPL6O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="dx8eZ1GR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IBFJPL6O"
 Received: by smtp.kernel.org (Postfix)
-	id 9B72DC4CEF1; Fri, 12 Sep 2025 08:57:32 +0000 (UTC)
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id B8066C4CEFA; Fri, 12 Sep 2025 09:10:05 +0000 (UTC)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 134D5C4CEF7;
-	Fri, 12 Sep 2025 08:57:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 134D5C4CEF7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1757667449;
-	bh=ZIYDSt04Y1IRNtggUK5RxE83YKlG/z5W58KhYO8o8as=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dx8eZ1GRFH4rmvamm7zkNfQA8c7ZbEL7CoKMHnb1FM1odU3jGAQcvvDU6LvK/yavb
-	 QESmSjQ81cxHGMLDBY+He03WwTsn8/GFbH+kdkpeopTRFB1tJbLZMuHvt4EecCkaEn
-	 zyBd29qeDnJS/nSkBt33ltxhFBt1blYmQrmgG6mmMLtFMvnbZ13geDBf//Cl3SebBc
-	 +gr/UneA+XwL7n/qMMm4GnxjH29WnMLE2rY5gAVwqUQdKpEve3WF6YFXPeT3TwDyEC
-	 EnwBu8c3aPtv8ou5BN4b6A0B5K3fJztjXilvoXyQTJuIppH8JxMNn4T9YlBLy2vo/p
-	 10BmOVnNGem+w==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id EB18D17E127C;
-	Fri, 12 Sep 2025 10:57:28 +0200 (CEST)
-Message-ID: <9bb0fb8f-220c-4edb-9896-cc36f669624a@collabora.com>
-Date: Fri, 12 Sep 2025 10:57:28 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id D10FAC4CEF9
+	for <soc@kernel.org>; Fri, 12 Sep 2025 09:10:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D10FAC4CEF9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b0787fa12e2so238762166b.2
+        for <soc@kernel.org>; Fri, 12 Sep 2025 02:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1757668203; x=1758273003; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gdfBB7kobN4wJK8/RorJexdvYFnM7nbQB2ZHPDHvDh8=;
+        b=IBFJPL6ONB9cnzzuneHhqTTbTBJ8+oKPLTykEAEgQhUCTBT/d59GSATxFXnFenzLqU
+         u77Ue/GFowAKVeGoSUYw8XYZfI5J35oC9lUhOmGDkD53Q2m9vyJWC0mi1yELdaEC4Juz
+         5uiT3XDyXxLFavEdSxtsiHf0FMZHbw41q/j2Em9GG/diby2qR/uMA+p1+TZG0XgQz/j3
+         9R82qOyz0xIo2RVo+nEvHG2spavWSFShnTLygv8vVFFtkgMoZzzG4zTqYbGt1BagGFoD
+         ty9MGjkbk+4igwBXOCNkuBHKwgjRAdUT5DTvIT6sJpw/Y5QZMJN4N2ygmU9vHp34eGDb
+         b3Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757668203; x=1758273003;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gdfBB7kobN4wJK8/RorJexdvYFnM7nbQB2ZHPDHvDh8=;
+        b=IZdEIRXq2MGmJ4wHjJTreAq+teAxOUtG1RpLFwe267G7rlCSYYBWnk4+qh/drZwuaw
+         qBqhUebmF33ZSrwKj7tlKy5zcVp5ZLN+7hzGgShDbv2XPGSIv4gM8eUM1pBV2F/EgyeF
+         Ews1pWkVuZeXLlG/bvCDM0lSc5YC8EN4J0PYTUUi/muNjMRVwPRYd/u6T2GLd6K5A1X+
+         slrZw8R/L7pqooqaUsZ+h6Y6k5WNerhpsw8atL3UVYQ5qta1pficoOG6oHXC+RpvzD4B
+         JU0VH+NIXsl69lSeQ0oUWY3FvmcZWpp7GZjeHsvpgoY3eDMgezmv7CsqdJr9jL2005yL
+         2Oow==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ6sM7Hlfo2WStEPGDgFY06bROEQ9mgylx0SU7z2/9K+hvClZjOgZ4dqHRsV6mcYWtJUI=@kernel.org
+X-Gm-Message-State: AOJu0Yzcj30r+vsU8prJFFBpWEgT7KydDahD8YltffejsR+Ecfg5M4sw
+	7y6x/V6kjFTFSVohp00lhpgWT+TL4dX214BloOaShd58AKKAFfngzO8h/h4y7nuy2Dk=
+X-Gm-Gg: ASbGncttvimRs7B9MdPipAMN2p6A40u/EHUHfwrQ+dvoFkLQvm9dacL9LPKGJ60EmGB
+	cnYPkR67Psn0AiiIWqGTaNGAM0miSzmIEyXgwxgXEyaSzR7EvU7KTAGKAs8zJJ9wZ2HjzERKsTJ
+	bPjh3d/fkPIb3j22IuVv1Mokg9vxqmYOGfqHfm2VJ+drRabFWRwYud9BCfAF6bgkgywt058Sc2y
+	yWf2skcqJR3tMjTQT0IUWXtm2wlmQGkEJYrnMqy0m5dkn7aRWhjwoJR5I59J9R6LD2DXEkOjqkj
+	oRYGKxq3YOcJwQAzb4QSnDX1DBDh66l90r13Wqp0h5ienNsQ66HE6Lk0Nl2aO0jrfJLrgpx6QYV
+	aDUejm75EC9SOzwPZBX/HrCE0oFXncAa7T/MexnsyORFU/tZrVmuHkw0IMsdGGaJJ3A0wejp2PG
+	Q=
+X-Google-Smtp-Source: AGHT+IFuuHFceMoZ2ipUeSDV0l2sTDEKnIKxUvMqoFX9PBY3aeszRH7ix8zGbjWkfgqomp+Bhqsb2A==
+X-Received: by 2002:a17:907:e885:b0:b07:c909:ceb0 with SMTP id a640c23a62f3a-b07c909d374mr116578966b.32.1757668203078;
+        Fri, 12 Sep 2025 02:10:03 -0700 (PDT)
+Received: from rayden (h-37-123-177-177.A175.priv.bahnhof.se. [37.123.177.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07c6110c27sm125678266b.66.2025.09.12.02.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Sep 2025 02:10:02 -0700 (PDT)
+Date: Fri, 12 Sep 2025 11:10:00 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] TEE improve sysfs for 6.18
+Message-ID: <20250912091000.GA1441709@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] MediaTek ARM64 DTS updates for v6.18
-To: Matthias Brugger <matthias.bgg@gmail.com>,
- Chen-Yu Tsai <wenst@chromium.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>
-References: <46756067-ca2f-4053-b9e9-bc6e66170b21@gmail.com>
- <CAGXv+5F=uPnzrpDtPXc2ipwp5AhiEwGdxhuhPtjwWhAxWJMc_Q@mail.gmail.com>
- <6037201a-a13f-4a3d-9377-3f9f91e78773@gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <6037201a-a13f-4a3d-9377-3f9f91e78773@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Il 12/09/25 09:11, Matthias Brugger ha scritto:
-> 
-> 
-> On 11/09/2025 07:23, Chen-Yu Tsai wrote:
->> Hi,
->>
->> On Wed, Sep 10, 2025 at 11:04 PM Matthias Brugger
->> <matthias.bgg@gmail.com> wrote:
->>>
->>> Hi Arnd,
->>>
->>> can you please have a look on the following patches.
->>>
->>> Thanks a lot,
->>> Matthias
->>
->> I still have some patches outstanding for some time. Could you perhaps
->> take them as well?
->>
->> [PATCH v2 2/2] arm64: dts: mediatek: mt8188: Change efuse fallback
->> compatible to mt8186
->> https://lore.kernel.org/all/20250610063431.2955757-3-wenst@chromium.org/
-> 
-> Queued now for a possible 2nd pull request.
-> 
->>
->> [PATCH] arm64: dts: mediatek: mt8186-tentacruel: Fix touchscreen model
->> https://lore.kernel.org/all/20250812090135.3310374-1-wenst@chromium.org/
-> 
-> Queued now for a possible 2nd pull request.
-> 
->>
->> [PATCH v2] arm64: dts: mediatek: mt8188-geralt: Enable first SCP core
->> https://lore.kernel.org/all/20250814092510.211672-1-wenst@chromium.org/
->>
-> 
-> Queued now for a possible 2nd pull request.
-> 
+Hello arm-soc maintainers,
 
-Matthias, since you're managing this pull - can you please grab the patches that
-are relevant to our trees from my sanitization series?
-
-https://patchwork.kernel.org/project/linux-mediatek/cover/20250724083914.61351-1-angelogioacchino.delregno@collabora.com/
+Please pull this small patch for the TEE sysbsystem. It updates to use
+sysfs_emit() instead of scnprintf() for buffers passed to userspace.
 
 Thanks,
-Angelo
+Jens
 
-> Thanks for the heads up!
-> Matthias
-> 
->>
->> Thanks
->> ChenYu
->>
->>> ---
->>> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
->>>
->>>     Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
->>>
->>> are available in the Git repository at:
->>>
->>>     https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/
->>> tags/v6.17-next-dts64
->>>
->>> for you to fetch changes up to 12a565af705542c4380e95f4e3a505a2c25ad754:
->>>
->>>     dt-bindings: arm: mediatek: Add grinn,genio-510-sbc (2025-09-10 11:51:16 +0200)
->>>
->>> ----------------------------------------------------------------
->>> mt7988 (bpi r4):
->>> * enable network
->>>
->>> mt7986:
->>> * add dedicated sram node
->>> * add interrupts for RSS to ethernet
->>>
->>> mt7981:
->>> * add thermal sensor and auxadc nodes
->>>
->>> mt8395 (NIO 12L):
->>> * enable UFS
->>> * add gpio keys to the PMIC
->>>
->>> mt8195:
->>> * drop reset for PCIe device
->>>
->>> ----------------------------------------------------------------
->>> Aleksander Jan Bajkowski (1):
->>>         arm64: dts: mediatek: add thermal sensor support on mt7981
->>>
->>> Frank Wunderlich (7):
->>>         arm64: dts: mediatek: mt7986: add sram node
->>>         arm64: dts: mediatek: mt7986: add interrupts for RSS and interrupt names
->>>         arm64: dts: mediatek: mt7988: add basic ethernet-nodes
->>>         arm64: dts: mediatek: mt7988: add switch node
->>>         arm64: dts: mediatek: mt7988a-bpi-r4: add aliases for ethernet
->>>         arm64: dts: mediatek: mt7988a-bpi-r4: add sfp cages and link to gmac
->>>         arm64: dts: mediatek: mt7988a-bpi-r4: configure switch phys and leds
->>>
->>> Guoqing Jiang (1):
->>>         arm64: dts: mediatek: mt8195: Remove suspend-breaking reset from pcie0
->>>
->>> Julien Massot (2):
->>>         arm64: dts: mediatek: mt8395-nio-12l: Enable UFS
->>>         arm64: dts: mediatek: mt8395-nio-12l: add PMIC and GPIO keys support
->>>
->>> Mateusz Koza (2):
->>>         dt-bindings: arm: mediatek: Add grinn,genio-700-sbc
->>>         dt-bindings: arm: mediatek: Add grinn,genio-510-sbc
->>>
->>> Rob Herring (Arm) (1):
->>>         arm64: dts: mediatek: mt8183: Fix out of range pull values
->>>
->>>    .../devicetree/bindings/arm/mediatek.yaml          |   2 +
->>>    arch/arm64/boot/dts/mediatek/mt7981b.dtsi          |  31 ++-
->>>    arch/arm64/boot/dts/mediatek/mt7986a.dtsi          |  20 +-
->>>    .../dts/mediatek/mt7988a-bananapi-bpi-r4-2g5.dts   |  11 +
->>>    .../boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dts  |  19 ++
->>>    .../boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi |  86 +++++++
->>>    arch/arm64/boot/dts/mediatek/mt7988a.dtsi          | 285 ++++++++++++++++++++-
->>>    arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |  14 +-
->>>    arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    |  14 +-
->>>    arch/arm64/boot/dts/mediatek/mt8195.dtsi           |   3 -
->>>    .../boot/dts/mediatek/mt8395-radxa-nio-12l.dts     |  46 ++++
->>>    11 files changed, 508 insertions(+), 23 deletions(-)
->>>
-> 
+The following changes since commit 038d61fd642278bab63ee8ef722c50d10ab01e8f:
 
+  Linux 6.16 (2025-07-27 14:26:38 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-improve-sysfs-for-v6.18
+
+for you to fetch changes up to 1faa0d62a19bb8a4b9022b603472e7127974cb55:
+
+  drivers: tee: improve sysfs interface by using sysfs_emit() (2025-08-04 11:05:23 +0200)
+
+----------------------------------------------------------------
+Use sysfs_emit() for sysfs buffers to userspace
+
+----------------------------------------------------------------
+Akhilesh Patil (1):
+      drivers: tee: improve sysfs interface by using sysfs_emit()
+
+ drivers/tee/optee/core.c | 2 +-
+ drivers/tee/tee_core.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
