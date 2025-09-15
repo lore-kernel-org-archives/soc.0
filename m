@@ -1,58 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2922FB993
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 10:14:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722842D5943
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 12:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757931250; cv=none; b=m/DnaT4K7Rb2dB48sWSdcAeuN5W9sb5iIYI5BzAiPlTnHmnsQxZ53PxYnFO0moi8ZC2I6hxvPEYuc+kdggvgfDVlv0Mddkzg1MY+zj/tg2sZQz0+q5lDaXkzM34VJFtmIW5qOC85Z54vPne1aKWFht0ZzxOs35REzpb3oUTpHKg=
+	t=1757939761; cv=none; b=DaDPI+qLBXIyUHU3HDrnob5RlTtk305+J+BBz5m49YCQrPZCX1UUV23eJazPG7VLvbzNBufitKzCVTLNiBHHTd4inW4A4Fk7fPFo8LG8SqWHA0Gpt1NtIv7w5c10Gr14AbASYJtoGXVzRRXXJBp6Q9kUh/Tez43Jq6mb/JdVTKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757931250; c=relaxed/simple;
-	bh=VcxSv94hNfGkwnA5TtUv7syWOk+2SuRpBucAEQyVuxg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=r3XWYRypDN32/oDzxcEoYth4YoE7aKCzapbi6hS1KFu71Uy/4jdetsd0hKGbO33JWBDmqVbTuskABVxNfN/34CLX5w90WP3qZobFaXiifBAo8stJR9CFj9cpnze0j2VWSDQWJkC2gDrrxsEpNVUgT+00m8acgw5xtrsGK9sibFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757939761; c=relaxed/simple;
+	bh=8WAKX9Yt0aPAj7BPYhrIG/WG5HjmT+BCIgCWmzHGujs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=prK1xbcydnwK9hk78UC3bSnAynzs8rtISJWxCDTnZX4Zp42LqdJRSUdHoGRuKK0NXwB8huSucCBfKlZ0/5naLAZjhnOZNZZeCBH5St8ihltLoxM0H7XmIVkjwo5JbP8Cg/UPbTm9UBRFoRtQuIYtGJqdiFZ4MpiwZDQ/ohQVb74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=linoQn/z; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="linoQn/z"
 Received: by smtp.kernel.org (Postfix)
-	id DA8EBC113CF; Mon, 15 Sep 2025 10:14:09 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 6C394C4CEFE;
-	Mon, 15 Sep 2025 10:14:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6C394C4CEFE
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75A2112FC;
-	Mon, 15 Sep 2025 03:13:59 -0700 (PDT)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6A6383F66E;
-	Mon, 15 Sep 2025 03:14:06 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	arm-scmi@vger.kernel.org,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.18
-Date: Mon, 15 Sep 2025 11:13:41 +0100
-Message-Id: <20250915101341.2987516-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	id 21048C4CEF9; Mon, 15 Sep 2025 12:36:01 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 120DBC4CEF1;
+	Mon, 15 Sep 2025 12:35:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 120DBC4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1757939760; x=1789475760;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8WAKX9Yt0aPAj7BPYhrIG/WG5HjmT+BCIgCWmzHGujs=;
+  b=linoQn/zGOooE2nARukwjlIRbSj/aCZ/p0kSKyGuL8Dhs8V6hiNYre9n
+   TAkMR2cSo9YuOYtGRHIyGDJGoAZ619Psp1MX+DgwpeDpAZJCmP1QZS0kh
+   ww+WlF9d0n9eWagSynEt7uGaBkWWt3fqXrnj7I1abCZY8nz0/3XqgDsYP
+   4uhf9l08Fyzug/Vd9i3PwsJmSH1UekQYgJOzlVuv9fwT6NQ6JV9/kZe9Z
+   LjLcLNrZkTgpr8RXyWTuAppHv99pZ6LuOVGrXC9Uiegi3GHhv4yU3V+lt
+   WZ7hNyq9kcWzkAgmT5ehTZE6MptKq1BWKjp0SFBwtoO1L13pqrYHzic5F
+   A==;
+X-CSE-ConnectionGUID: sq4SIjShQDG3RWVIwKVdaw==
+X-CSE-MsgGUID: c9y2E6emQa6v91bNyc89Pg==
+X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
+   d="scan'208";a="46513138"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Sep 2025 05:35:59 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 15 Sep 2025 05:35:56 -0700
+Received: from ROU-LL-M43238.microchip.com (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 15 Sep 2025 05:35:54 -0700
+From: <nicolas.ferre@microchip.com>
+To: Arnd Bergmann <arnd@arndb.de>, <arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Conor Dooley <conor@kernel.org>, Robert Marko <robert.marko@sartura.hr>,
+	Daniel Machon <daniel.machon@microchip.com>
+Subject: [GIT PULL] ARM: microchip: SoC updates for 6.18 #1
+Date: Mon, 15 Sep 2025 14:35:47 +0200
+Message-ID: <20250915123548.13722-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Organization: microchip
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi ARM SoC Team,
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Please pull !
+Dear arm-soc maintainers,
 
-Regards,
-Sudeep
+Here are the SoC changes for 6.18 which set the Kconfig infrastrucutre for
+addition of the Microchip LAN969x SoC.
 
--->8
+Thanks, best regards,
+  Nicolas
 
 The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
@@ -60,64 +89,41 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.18
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/microchip-soc-6.18
 
-for you to fetch changes up to 2f86054cc1a6792f0812d5f23f271a83848edabb:
+for you to fetch changes up to 38b22cde38aba61eafd752c8a2e43e631014e58a:
 
-  firmware: arm_scmi: Simplify printks with pOF format (2025-09-12 11:32:21 +0100)
-
-----------------------------------------------------------------
-Arm SCMI updates/fixes for v6.18
-
-These SCMI changes bring a mix of improvements, fixes, and cleanups:
-
-1. Device Tree bindings - allow multiple SCMI instances by suffixing
-   node names (Nikunj Kela).
-2. Code hardening - constify both scmi_{transport,voltage_proto}_ops
-   so they reside in read-only memory (Christophe JAILLET).
-3. VirtIO transport initialization - set DRIVER_OK before SCMI probing
-   to prevent potential stalls; while recent rework removes the practical
-   risk, this ensures correctness (Junnan Wu).
-4. Quirk handling - fix a critical bug by preventing writes to string
-   constants, avoiding faults in read-only memory (Johan Hovold).
-5. i.MX SCMI MISC protocol - extend support to discover board info,
-   retrieve configuration and build data, and document the new
-   MISC_BOARD_INFO command; all handled gracefully if unsupported (Peng Fan).
-6. Logging cleanup - simplify device tree node name logging by using
-   the %pOF format to print full paths (Krzysztof Kozlowski).
+  crypto: atmel-aes: make it selectable for ARCH_MICROCHIP (2025-09-09 10:34:22 +0200)
 
 ----------------------------------------------------------------
-Christophe JAILLET (2):
-      firmware: arm_scmi: Constify struct scmi_voltage_proto_ops
-      firmware: arm_scmi: Constify struct scmi_transport_ops
+Microchip ARM64 SoC updates for v6.18:
 
-Johan Hovold (1):
-      firmware: arm_scmi: quirk: Prevent writes to string constants
+This update includes:
+- basic infrastructure support for Microchip LAN969x SoC
+- SoC ARCH symbols (existing SparX-5, new LAN969x) under the
+  ARCH_MICROCHIP hidden symbol (already in use by AT91 in 6.17)
+- addition of that new symbol for drivers that are shared by
+  Microchip SoC-s now and in the future
 
-Junnan Wu (1):
-      firmware: arm_scmi: Mark VirtIO ready before registering scmi_virtio_driver
+----------------------------------------------------------------
+Robert Marko (8):
+      arm64: Add config for Microchip SoC platforms
+      arm64: lan969x: Add support for Microchip LAN969x SoC
+      mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+      tty: serial: atmel: make it selectable for ARCH_MICROCHIP
+      spi: atmel: make it selectable for ARCH_MICROCHIP
+      i2c: at91: make it selectable for ARCH_MICROCHIP
+      char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
+      crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
 
-Krzysztof Kozlowski (1):
-      firmware: arm_scmi: Simplify printks with pOF format
+ arch/arm64/Kconfig.platforms   | 51 +++++++++++++++++++++++++----------
+ drivers/char/hw_random/Kconfig |  2 +-
+ drivers/crypto/Kconfig         |  2 +-
+ drivers/i2c/busses/Kconfig     |  2 +-
+ drivers/mfd/Kconfig            |  2 +-
+ drivers/spi/Kconfig            |  2 +-
+ drivers/tty/serial/Kconfig     |  2 +-
+ 7 files changed, 43 insertions(+), 20 deletions(-)
 
-Nikunj Kela (1):
-      dt-bindings: firmware: arm,scmi: Allow multiple instances
-
-Peng Fan (5):
-      firmware: arm_scmi: Fix function name typo in scmi_perf_proto_ops struct
-      firmware: arm_scmi: imx: Add documentation for MISC_BOARD_INFO
-      firmware: arm_scmi: imx: Discover MISC build info from the system manager
-      firmware: arm_scmi: imx: Support retrieving MISC protocol configuration info
-      firmware: arm_scmi: imx: Discover MISC board info from the system manager
-
- .../devicetree/bindings/firmware/arm,scmi.yaml     |   2 +-
- drivers/firmware/arm_scmi/bus.c                    |  13 ++-
- drivers/firmware/arm_scmi/quirks.c                 |  15 ++-
- drivers/firmware/arm_scmi/transports/mailbox.c     |   7 +-
- drivers/firmware/arm_scmi/transports/optee.c       |   2 +-
- drivers/firmware/arm_scmi/transports/virtio.c      |   3 +
- .../firmware/arm_scmi/vendors/imx/imx-sm-misc.c    | 111 +++++++++++++++++++++
- drivers/firmware/arm_scmi/vendors/imx/imx95.rst    |  25 +++++
- drivers/firmware/arm_scmi/voltage.c                |   2 +-
- include/linux/scmi_protocol.h                      |   2 +-
- 10 files changed, 162 insertions(+), 20 deletions(-)
+-- 
+Nicolas Ferre
