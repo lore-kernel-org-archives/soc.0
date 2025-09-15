@@ -1,36 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529AC30BF60
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8A9334363
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 15:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757946625; cv=none; b=CsX96k1WKPnY1K2s5NVpUKWhKTKGdR3TpfCH+mCMbYjrkhTHt2mDeG/i8kOkhtZxVifyZKuO0JLXhFSZ4WOmbZHtKlNUkn4l8f5sO69nLbCgVQ9B4zQPJgoFKuSKl8Mx7C34ySMx3U7zYiTbH4Zyn5vXnAvSZazOu+8flpeq9zw=
+	t=1757948415; cv=none; b=VgV+YLTWOWN0UMWsJNgaNeZ1EBveZ8tJPxsu1Udv+cwN/4mJJ19jl8681nyunnfODBU2H8TLWTjhx3Q0KNLQMkJvq0+g3mDq8T3gDH9+UA0LUVrWB3hxhVgIhfKQVdLcJ8kJbSFBCVZe8X9zqx/kPGCFyGDNaef/PjpFJ3t7rSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757946625; c=relaxed/simple;
-	bh=rm+bQF++3Z/zsENc9EK4lYGmJUPcJPdau973XUMM2tg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=OrOPVQQTz8yIhPGzVbMcXG+F38l0GQBJS0oq+XPX8hGh1YVrJbTCtR8wsaELF3NpnzhfKJ5QPOjyNWFQfNWCaxMY2kKIayAGIrj5C8qMoKnwrZOqnpP065hy9TB/H4jAuYbPTjjf8SjJmKdbAk0Mz3hJPlVo0CqUWx15XJ/dSo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oxeSNO8H; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757948415; c=relaxed/simple;
+	bh=KlzUIKMGuvi/AgryQVtBDj0rLfhuZ5sKDMvCG5sg57I=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=lLmxbf9uyCeRkc62VoB8aG08vLSnjxAos5UnqqlSiXmoABSJXU4wJ3pbmjEzONqq0ODqnp5LmdZCruX/pHSFV6NQOfuaCroWdfL511dLdpbyhW/I39ytpbRa7/mwZVBvzEaWwCxJecQ+pDdM1SPMxZPtQKYYaK9yIDYS86N3lRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OKKsZ+sH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oxeSNO8H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OKKsZ+sH"
 Received: by smtp.kernel.org (Postfix)
-	id 49BFBC4CEF5; Mon, 15 Sep 2025 14:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 344D5C4CEF1;
-	Mon, 15 Sep 2025 14:30:24 +0000 (UTC)
+	id E27B7C4CEF9; Mon, 15 Sep 2025 15:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCED9C4CEF1
+	for <soc@kernel.org>; Mon, 15 Sep 2025 15:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757946624;
-	bh=rm+bQF++3Z/zsENc9EK4lYGmJUPcJPdau973XUMM2tg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=oxeSNO8HeWQDM885pZO/5Jk46/PpoC5BIBWCLAeRqVyIZFoUfXEbKDINbsdNGkJVq
-	 GMbANLPOeB5KHsD53KvQBAWIa1G8/Jw8ugjrIgG45sb5a7rFGdYkuyy09llGPYs2gr
-	 KxwMHnbzYOOKkc4olycnA/IpqEv9xyAHgCA5Q83qrvUxu8Q5bydcKsvxGZE/oEeVOs
-	 3eza59RiXtafmEdt3svUtmDyMktdTdM4xuWsU7OR3MefImXndaYVshXYS7RQswqC8t
-	 bWF2XOToEKhP13W2PY2j1Hjvd2QjgbBf2dmup/v/Nmn9I3+BZcNEPuSYb7jNbXF8c+
-	 a2DorHnDoRl3g==
+	s=k20201202; t=1757948414;
+	bh=KlzUIKMGuvi/AgryQVtBDj0rLfhuZ5sKDMvCG5sg57I=;
+	h=Subject:From:Date:To:Cc:From;
+	b=OKKsZ+sHv49z0dxivt20SMqgmWMvdof29TsAlaJm2aYOB+Kz07h8dSk+zhERbbdXK
+	 hkSXIUdneEnmtEmnGh6OA+sOsBEHBAu6NZTDrj9j9uYNMFvaPEj+DvtzrOVZsK3zHj
+	 zfrW0DwHPnfmkuXmzrEaJc2wNs6ymTtTLZcy4WWLEhqWXU/TSowXrrd588iOGeEdvg
+	 gybWlfasj4nQS7HZgWcNck+KxBSOBhXgQZ2FuMhKqGPrKRRfxsX3cDW/KOkiASxgYJ
+	 z4dlx3KTMgZJwN94DcmPeVXYfetveF82n8vufQkB3lIFz3dUlRfG+A/v5d+gbIv8sp
+	 AyIth6n8vewBw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAF1039D0C18;
-	Mon, 15 Sep 2025 14:30:26 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 746D339D0C18;
+	Mon, 15 Sep 2025 15:00:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,37 +38,51 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT,PULL] hisilicon: driver updates for v6.18
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175794662548.4799.10254235293637428628.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Sep 2025 14:30:25 +0000
-References: <68C376C4.2030808@hisilicon.com>
-In-Reply-To: <68C376C4.2030808@hisilicon.com>
-To: Wei Xu <xuwei5@hisilicon.com>
+ <175794841594.17822.15387102499853669214.git-patchwork-summary@kernel.org>
+Date: Mon, 15 Sep 2025 15:00:15 +0000
+To: soc@kernel.org
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Fri, 12 Sep 2025 09:26:28 +0800 you wrote:
-> Hi ARM SoC maintainers,
-> 
-> Please consider to pull the following changes.
-> Thanks!
-> 
-> Best Regards,
-> Wei
-> 
-> [...]
+Series: [GIT,PULL,1/4] i.MX DT bindings changes for 6.18
+  Submitter: Shawn Guo <shawnguo2@yeah.net>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1002503
+  Lore link: https://lore.kernel.org/r/20250915132535.253859-1-shawnguo2@yeah.net
+    Patches: [GIT,PULL,1/4] i.MX DT bindings changes for 6.18
+             [GIT,PULL,2/4] i.MX ARM device tree changes for 6.18
+             [GIT,PULL,3/4] i.MX arm64 device tree changes for 6.18
+             [GIT,PULL,4/4] i.MX defconfig change for 6.18
 
-Here is the summary with links:
-  - [GIT,PULL] hisilicon: driver updates for v6.18
-    https://git.kernel.org/soc/soc/c/d88449249152
+Patch: [GIT,PULL] MediaTek soc driver updates for v6.18
+  Submitter: Matthias Brugger <matthias.bgg@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1001018
+  Lore link: https://lore.kernel.org/r/87c8f50b-90a5-47ed-af60-99a4e075a266@gmail.com
 
-You are awesome, thank you!
+Series: [GIT,PULL,1/2] arm/arm64: defconfig for v6.18
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1000654
+  Lore link: https://lore.kernel.org/r/20250909180127.99783-3-krzysztof.kozlowski@linaro.org
+    Patches: [GIT,PULL,1/2] arm/arm64: defconfig for v6.18
+
+Patch: ARM: dts: socionext: Drop "linux,spdif-dit" port node unit-address
+  Submitter: Rob Herring (Arm) <robh@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1001149
+  Lore link: https://lore.kernel.org/r/20250910233740.777077-2-robh@kernel.org
+
+
+Total patches: 7
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
