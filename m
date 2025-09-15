@@ -1,67 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722842D5943
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 12:36:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC8230F815
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 13:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757939761; cv=none; b=DaDPI+qLBXIyUHU3HDrnob5RlTtk305+J+BBz5m49YCQrPZCX1UUV23eJazPG7VLvbzNBufitKzCVTLNiBHHTd4inW4A4Fk7fPFo8LG8SqWHA0Gpt1NtIv7w5c10Gr14AbASYJtoGXVzRRXXJBp6Q9kUh/Tez43Jq6mb/JdVTKI=
+	t=1757942761; cv=none; b=Fm7eamBLl+YK2OvhxNFEHd6//5ph8wnJpPh2BdmvrtCOx7Ju27IzDUa2jOXs6YB9E3V8sXI3S2aZQvJIjiirsvKrrL6W6omS9JgPm9mz+wE0D0PFyZf1ddrsVfLf8AdjpLTJ77+4YLkwvcQK5uSOfDFiDOJx/pRR5MPA0P3L5y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757939761; c=relaxed/simple;
-	bh=8WAKX9Yt0aPAj7BPYhrIG/WG5HjmT+BCIgCWmzHGujs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=prK1xbcydnwK9hk78UC3bSnAynzs8rtISJWxCDTnZX4Zp42LqdJRSUdHoGRuKK0NXwB8huSucCBfKlZ0/5naLAZjhnOZNZZeCBH5St8ihltLoxM0H7XmIVkjwo5JbP8Cg/UPbTm9UBRFoRtQuIYtGJqdiFZ4MpiwZDQ/ohQVb74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=linoQn/z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757942761; c=relaxed/simple;
+	bh=LlUyXshhWjK3wH/3uwjTDM9wHR3qiToIjJCjrFcUftE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pay4mEeQn/GN+5tA4xXeOs1k0rYUgtEn2VeYUGwd0WUwAeQYNW+A7/5EHtZ0WoF+fUj3uIYnDzhRrgJESAfQ23v8PRgKupulePeHHU5K884oVpyalLmleZYex+52anoQAsloHgNZi6gHi9lcMt9vvoDrOomixtUxi465I/6wV1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=PtxAczia; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="linoQn/z"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="PtxAczia"
 Received: by smtp.kernel.org (Postfix)
-	id 21048C4CEF9; Mon, 15 Sep 2025 12:36:01 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	id AEFD0C4CEF7; Mon, 15 Sep 2025 13:26:00 +0000 (UTC)
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 120DBC4CEF1;
-	Mon, 15 Sep 2025 12:35:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 120DBC4CEF1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1757939760; x=1789475760;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8WAKX9Yt0aPAj7BPYhrIG/WG5HjmT+BCIgCWmzHGujs=;
-  b=linoQn/zGOooE2nARukwjlIRbSj/aCZ/p0kSKyGuL8Dhs8V6hiNYre9n
-   TAkMR2cSo9YuOYtGRHIyGDJGoAZ619Psp1MX+DgwpeDpAZJCmP1QZS0kh
-   ww+WlF9d0n9eWagSynEt7uGaBkWWt3fqXrnj7I1abCZY8nz0/3XqgDsYP
-   4uhf9l08Fyzug/Vd9i3PwsJmSH1UekQYgJOzlVuv9fwT6NQ6JV9/kZe9Z
-   LjLcLNrZkTgpr8RXyWTuAppHv99pZ6LuOVGrXC9Uiegi3GHhv4yU3V+lt
-   WZ7hNyq9kcWzkAgmT5ehTZE6MptKq1BWKjp0SFBwtoO1L13pqrYHzic5F
-   A==;
-X-CSE-ConnectionGUID: sq4SIjShQDG3RWVIwKVdaw==
-X-CSE-MsgGUID: c9y2E6emQa6v91bNyc89Pg==
-X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="46513138"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Sep 2025 05:35:59 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Mon, 15 Sep 2025 05:35:56 -0700
-Received: from ROU-LL-M43238.microchip.com (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Mon, 15 Sep 2025 05:35:54 -0700
-From: <nicolas.ferre@microchip.com>
-To: Arnd Bergmann <arnd@arndb.de>, <arm@kernel.org>, <soc@kernel.org>
-CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
-	<linux-kernel@vger.kernel.org>, linux-arm-kernel
-	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Conor Dooley <conor@kernel.org>, Robert Marko <robert.marko@sartura.hr>,
-	Daniel Machon <daniel.machon@microchip.com>
-Subject: [GIT PULL] ARM: microchip: SoC updates for 6.18 #1
-Date: Mon, 15 Sep 2025 14:35:47 +0200
-Message-ID: <20250915123548.13722-1-nicolas.ferre@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id D781CC4CEF1;
+	Mon, 15 Sep 2025 13:25:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D781CC4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
+	Content-Type; bh=MDubKcjXFcDZmhFsHhoftPWfhxVchnljhnPCB4Gn9VQ=;
+	b=PtxAcziaU5LbwAPcmAxPQ191Ku0eU5VcghYyJr8yh569dX5ahSKf1cu7LO6MZ0
+	tX5yQGCwwekl8zJpbnEPN6OicqCeh9PqfzG1yYMKVZT82PkfHXXl+MxoLqAroXgm
+	P15WJQd8qCctKiAXrsXQZH2UisxEEm0SKfzKC67iLL9PE=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgDnjyTaE8ho5MiXBA--.47709S2;
+	Mon, 15 Sep 2025 21:25:47 +0800 (CST)
+From: Shawn Guo <shawnguo2@yeah.net>
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	kernel@pengutronix.de,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/4] i.MX DT bindings changes for 6.18
+Date: Mon, 15 Sep 2025 21:25:28 +0800
+Message-ID: <20250915132535.253859-1-shawnguo2@yeah.net>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -69,19 +51,16 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Organization: microchip
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-CM-TRANSID:Ms8vCgDnjyTaE8ho5MiXBA--.47709S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw1UZr1UtFWDWr1UtF13Jwb_yoW8uFyxpF
+	sxKF93GrykJF17Jr43tr1kCr1rXw18AF13GF45Xw18Aa90vF1jqF1rKwn5Zry7Gry2qr13
+	ZF1jkr4DK34UAw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jfGYdUUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiNhxIrWjIE9wDHwAA38
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-
-Dear arm-soc maintainers,
-
-Here are the SoC changes for 6.18 which set the Kconfig infrastrucutre for
-addition of the Microchip LAN969x SoC.
-
-Thanks, best regards,
-  Nicolas
+From: Shawn Guo <shawnguo@kernel.org>
 
 The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
@@ -89,41 +68,54 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/microchip-soc-6.18
+  https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.18
 
-for you to fetch changes up to 38b22cde38aba61eafd752c8a2e43e631014e58a:
+for you to fetch changes up to f001225088b8736f55dd28a4616cdf1b1bdcdd2e:
 
-  crypto: atmel-aes: make it selectable for ARCH_MICROCHIP (2025-09-09 10:34:22 +0200)
-
-----------------------------------------------------------------
-Microchip ARM64 SoC updates for v6.18:
-
-This update includes:
-- basic infrastructure support for Microchip LAN969x SoC
-- SoC ARCH symbols (existing SparX-5, new LAN969x) under the
-  ARCH_MICROCHIP hidden symbol (already in use by AT91 in 6.17)
-- addition of that new symbol for drivers that are shared by
-  Microchip SoC-s now and in the future
+  dt-bindings: arm: fsl: add TQMa91xx SOM series (2025-09-11 15:37:58 +0800)
 
 ----------------------------------------------------------------
-Robert Marko (8):
-      arm64: Add config for Microchip SoC platforms
-      arm64: lan969x: Add support for Microchip LAN969x SoC
-      mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
-      tty: serial: atmel: make it selectable for ARCH_MICROCHIP
-      spi: atmel: make it selectable for ARCH_MICROCHIP
-      i2c: at91: make it selectable for ARCH_MICROCHIP
-      char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
-      crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
+i.MX DT bindings changes for 6.18:
 
- arch/arm64/Kconfig.platforms   | 51 +++++++++++++++++++++++++----------
- drivers/char/hw_random/Kconfig |  2 +-
- drivers/crypto/Kconfig         |  2 +-
- drivers/i2c/busses/Kconfig     |  2 +-
- drivers/mfd/Kconfig            |  2 +-
- drivers/spi/Kconfig            |  2 +-
- drivers/tty/serial/Kconfig     |  2 +-
- 7 files changed, 43 insertions(+), 20 deletions(-)
+- New board compatibles: TQMa91xx SOM, Ultratronik Ultra-MACH SBC,
+  SolidRun i.MX8MP SoM, i.MX8ULP EVK9, TQMLS1012AL, i.MX91 11x11 EVK,
+  EDM-G-IMX8M-PLUS SOM
+- Update imx95-scmi firmware bindings to allow linux,code for protocol@81
+- Add i.MX53 compatible for fsl,imx-iomuxc-gpr bindings
+- Update fsl,imx7ulp-smc1 bindings to allow clocks and clock-names
 
--- 
-Nicolas Ferre
+----------------------------------------------------------------
+Alexander Stein (2):
+      dt-bindings: firmware: imx95-scmi: Allow linux,code for protocol@81
+      dt-bindings: arm: fsl: add TQMa91xx SOM series
+
+Fabio Estevam (1):
+      dt-bindings: soc: fsl,imx-iomuxc-gpr: Document i.MX53
+
+Frank Li (1):
+      dt-bindings: fsl: fsl,imx7ulp-smc1: Allow clocks and clock-names
+
+Goran Rađenović (1):
+      dt-bindings: arm: imx8mp: Add Ultratronik Ultra-MACH SBC
+
+Josua Mayer (1):
+      dt-bindings: arm: fsl: Add bindings for SolidRun i.MX8MP SoM and boards
+
+Laurentiu Mihalcea (1):
+      dt-bindings: arm: fsl: add i.MX8ULP EVK9 board
+
+Matthias Schiffer (1):
+      dt-bindings: arm: fsl: add TQMLS1012AL
+
+Pengfei Li (1):
+      dt-bindings: arm: fsl: add i.MX91 11x11 evk board
+
+Ray Chang (1):
+      dt-bindings: arm: fsl: Add EDM-G-IMX8M-PLUS SOM and WB-EDM-G carrier board
+
+ .../bindings/arm/freescale/fsl,imx7ulp-pm.yaml     |  8 ++++
+ Documentation/devicetree/bindings/arm/fsl.yaml     | 50 ++++++++++++++++++++++
+ .../bindings/firmware/nxp,imx95-scmi.yaml          | 10 ++++-
+ .../bindings/soc/imx/fsl,imx-iomuxc-gpr.yaml       |  1 +
+ 4 files changed, 67 insertions(+), 2 deletions(-)
+
