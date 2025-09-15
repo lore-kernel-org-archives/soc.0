@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9565732A82A
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E46E32A82A
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757946618; cv=none; b=Z9wreAOoRn6wL9jkxUr57E5ClgYEXDxiAm+qfKfmSJ4xJAllx2zFiyJx079RDdxpL3O5qCXkAErJ3sDaw6ti1RwFqwi/2McKrt2Bx82HRWDPW6k/4PT0VhEemyvbIALSQfAc1WxxunZkNgVSijfA0AkmVoo8QTZ9QvZDgy5rhhA=
+	t=1757946620; cv=none; b=sVdhnRI4Tmz6W4u7RI3djgAKgSfhiZCqbZ8FQjBm1m8RqkB0/lq3y+7/PHvH1EVQTWiJDRRYM70nOYetkzF5pEjgY+pZe0yWBwmxilWOq9C1lRhgo/rbLl/zgHbvVPTDCnE0xjPKa04aOnJpF2RVcJUjBNRtjLGBsqD/WAMM3pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757946618; c=relaxed/simple;
-	bh=oxjg3GC294VZeAqQzOfJ4uuMETDKEDq6Ox7Y1cqeP78=;
+	s=arc-20240116; t=1757946620; c=relaxed/simple;
+	bh=uMCl9x3J65DntC49Q3DAIgQbq71gfDrAT7FfZp60T24=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=K5WSYIclx0bNiEymfzsHu1i6lPAkLVR20Kq8h7icO3DD9EvZlUyCMdZN7ZZA1oxrRvVR5JIy7i5n5uqXUHVZAnMgc1rxieCLNydsYGWMLwS1rNnR+oRmCFUVH9VahfDs5LuclKnldM26aLDWWZTJKoEAjUyqum5koojgMadsS4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nzOA06FL; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=UF7+B2mLbZuVYaFmostKsoib11dXUBE01QnCJOeNNIV8xb+r6HOV6Dho1Bv/XmszPiSPxYixbpbTyqpl317Lp0hm2AeR6LZm1xYSK/mOxvmuhr6dQ2wu2i3oBnit/Kq8jGWfjU9pPCO4he6ILWlmkIAJrBlHmah+d+pgck7UXig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YA+r6Ef6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nzOA06FL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YA+r6Ef6"
 Received: by smtp.kernel.org (Postfix)
-	id 83C72C4CEF5; Mon, 15 Sep 2025 14:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E2B2C4CEF1;
-	Mon, 15 Sep 2025 14:30:18 +0000 (UTC)
+	id 140E9C4CEFB; Mon, 15 Sep 2025 14:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F28D5C4CEF5;
+	Mon, 15 Sep 2025 14:30:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757946618;
-	bh=oxjg3GC294VZeAqQzOfJ4uuMETDKEDq6Ox7Y1cqeP78=;
+	s=k20201202; t=1757946620;
+	bh=uMCl9x3J65DntC49Q3DAIgQbq71gfDrAT7FfZp60T24=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=nzOA06FL46c4C+KXCo5JRa/jLaXDT5l9G6k8TrpMMv82t4J57OdoOzh6IBrS2DFTB
-	 kpekVSNMuk5SLPFQIKDXSYfxqQ4Lw61F6m1zRyFnGQ7EfI/DPTTYMGwKzQ/jiVGfRx
-	 ds9xISH4w3teDuTjDU263913JVrpP5qiSkgo+mirrE6C/sep/jO0FVD++FrGKbszUx
-	 YbzZC2i/DA+PQMSTQyNqu1dkl9UbytC3a2Hu0FaG3mdpyF92Iu1vRXU64ZWft9cDUs
-	 ow5srSnmDocpwiyB2dorxP/HLAHxOJuDLXeg8lBjWDONspCDgJuas6GTSHPVB6AmiT
-	 8nwlFskGRH9IA==
+	b=YA+r6Ef6uMuBQ09O3v8uKYZ88TuuepUm9nUsLUByvEDZfpSLN37Gij8qj9EFO91fg
+	 cj//AUTTHdUn6Y03GxROZUduFji8/I3zfWRa5BGWnFE9u9wUbAurE+vrOM9OYRcimo
+	 jkpDLB4kW1NDFPvUH19xL/32JCR2HkF+tBhTNvHRE6qR5MS1A9Llx694fpDUtDoaZ4
+	 c+lH7ku7+ZoKTYAWq9MigiXwCPVkbJ6eNu77V9X7alFM5wXRMgcbqbpVxmKt0mgkpW
+	 H6ckM8h7amB/lVUy9if4rQKyQLsRco1wS5ry/53JRQT8mVtCs27W2km8oGw/2fyL2d
+	 L7jmweHhc1Trg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BF339D0C18;
-	Mon, 15 Sep 2025 14:30:21 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADC3E39D0C18;
+	Mon, 15 Sep 2025 14:30:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,40 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/4] dt-bindings: Changes for v6.18-rc1
+Subject: Re: [GIT PULL 0/3] Renesas SoC updates for v6.18 (take two)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175794661973.4799.1161342780687613433.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Sep 2025 14:30:19 +0000
-References: <20250914063927.89981-1-thierry.reding@gmail.com>
-In-Reply-To: <20250914063927.89981-1-thierry.reding@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>
+ <175794662123.4799.11033612295635007273.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Sep 2025 14:30:21 +0000
+References: <cover.1757669912.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1757669912.git.geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 14 Sep 2025 08:39:22 +0200 you wrote:
-> Hi ARM SoC maintainers,
+On Fri, 12 Sep 2025 13:13:50 +0200 you wrote:
+> Hi SoC folks,
 > 
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+> This is my second pull request for the inclusion of Renesas SoC updates
+> for v6.18.
 > 
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-> 
-> are available in the Git repository at:
+> It consists of 3 parts:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/4] dt-bindings: Changes for v6.18-rc1
+  - [GIT,PULL,1/3] Renesas driver updates for v6.18 (take two)
+    https://git.kernel.org/soc/soc/c/68454c6fc149
+  - [GIT,PULL,2/3] Renesas DT binding updates for v6.18
     (no matching commit)
-  - [GIT,PULL,2/4] soc/tegra: Changes for v6.18-rc1
-    https://git.kernel.org/soc/soc/c/b7c0fe165451
-  - [GIT,PULL,3/4] ARM: tegra: Device tree changes for v6.18-rc1
-    (no matching commit)
-  - [GIT,PULL,4/4] arm64: tegra: Device tree changes for v6.18-rc1
+  - [GIT,PULL,3/3] Renesas DTS updates for v6.18 (take two)
     (no matching commit)
 
 You are awesome, thank you!
