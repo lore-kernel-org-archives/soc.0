@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF31B1FE44B
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D352015B0FE
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757946622; cv=none; b=qSG74Ly+UeYYT2cfPb1rVZcpQo9NVFU5bTu5p4sdszlO3015a3xph1dhxDuSfPVoBcK+id8dl/P2Zck6HfoQluas3VjLSS2kENe+LsTm9F5cfxiLG7LkYXSqCP+l0R8JtilwUJLsoipK7gm2Y8UOzQnhuLCqgY16FycNeu4K4vE=
+	t=1757946622; cv=none; b=VtK2e+em+1GX/iYrj366VKXiVk3KzeTjzwQhTgBOG5k1DIUsFBHwVoxVV0jSOa6h06N5jsZqFcocdxKP5/CYttCsX4O9gLG+SFblHz2kY383HHeR1hM5nzvQCTWd1q1xhrKbdJBNSjKKSyxvQW26DQqJ3mpIotSDX0sIJ4MocpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757946622; c=relaxed/simple;
-	bh=+paFr+9uwRk6K0BVBPbAkF5M/q5153ZBV4KlJICVaMk=;
+	bh=HgHbhPxi4ZjSplMGtDbP5Bm5mCk+tYApxO3EVBB3VY0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=t2yZG9s1gQwMagSsJvUzrv/wD8qnPUlo4UzIe3lA7ZzKNvuII9+5uKG7SKdmO6Y61TXA0JNkZJMn8fkjJcTitl8WOoz7k4Z17ZTjzB0NRe58CWaxc9iG2azK9cGzC/aFMEadTWq4zYb3u8z0DOiFxoWKFrRt0IjBycrtnzaN264=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pfHpmAaM; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=XlfrSSSwMjGU4oAX0XJ+OTWs+PtBV+GhpnJ2ot37d2w2VMyP94KS0Zv1BB77OngyePLdyRSn8RMXr8cNfPt6OCF/rKMzQY76ZDaIBGHqszRCLhlMlQGatjL982sAxDR7UKOjDON5F3IuUNmeEqFk5BMIN/O8MWk9qJnFu+bNfa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTIloswy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pfHpmAaM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTIloswy"
 Received: by smtp.kernel.org (Postfix)
-	id 9057BC4CEF7; Mon, 15 Sep 2025 14:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD21C4CEF1;
-	Mon, 15 Sep 2025 14:30:21 +0000 (UTC)
+	id C911AC4CEF5; Mon, 15 Sep 2025 14:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3541C4CEF1;
+	Mon, 15 Sep 2025 14:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757946621;
-	bh=+paFr+9uwRk6K0BVBPbAkF5M/q5153ZBV4KlJICVaMk=;
+	s=k20201202; t=1757946622;
+	bh=HgHbhPxi4ZjSplMGtDbP5Bm5mCk+tYApxO3EVBB3VY0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=pfHpmAaMBA1M7zDYGGspFR7vVP1U7dwXS2GnZeKLSMJHM9kw/MxRtutzZTYsv7B1/
-	 ocqPFaSgh/yC1eywSC6UByg09yB9MkUgfTpawDUXtXIQLaBHLIVaojWb96ak/SMIiT
-	 X0hk2HNOeWI24Slhcc5JsvCksQi1SkHi7RlTktrSkD8gPPfEYDBwCHBHRrM82B5H9o
-	 pYplLyU31IXfWt/CbKPLe8RUfaPe9gZ8H2419xLCqR/rDoZE1awbw4HI1jrjQBFw0R
-	 1xkuaMHNWVxX5WdG+7h89fFNZ5F7eeoa9AsBCf0IGdDS6dHaJtZjR7hy+Hh+YzPK0Y
-	 yRzRUH3EsCjig==
+	b=oTIloswyemB+7tvhJWLbqnRGgemS5fPnUmnne543p8etPEPO/8kb0fYdpd9md/+N2
+	 JH9/dtgp6E7eF0p2Rx1TsFyRoY5Qp7D72os+TUPE/fCKKjmeHeddAwggQH8W7U7YRn
+	 yzMtGsb66YJ8sHe+NH4WpKgRmKWt0kpQ4HF9M/4timSUPVGJg6NLnaFronvHoPMl+N
+	 +ljd9KK3ErTp6uUKtOOezSGJyBZ93T8uZWblCH4h166oFbFMqP/jKvy5xr9tvF/5DN
+	 Z0WReim9QujLZ5hY4v6Eie0tMk0/CFsiRb0qP2rZg44OJFzCOPCU1bb3Zu5uI5V3Wl
+	 XCuOAgwJ266Mg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B4839D0C18;
-	Mon, 15 Sep 2025 14:30:24 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70CB039D0C18;
+	Mon, 15 Sep 2025 14:30:25 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] TEE protected DMA-bufs for v6.18
+Subject: Re: [GIT PULL] samsung: drivers for v6.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175794662273.4799.14712774428352130491.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Sep 2025 14:30:22 +0000
-References: <20250912101752.GA1453408@rayden>
-In-Reply-To: <20250912101752.GA1453408@rayden>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+ <175794662423.4799.8688277278318826950.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Sep 2025 14:30:24 +0000
+References: <20250912135448.203678-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250912135448.203678-2-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 12 Sep 2025 12:17:52 +0200 you wrote:
-> Hello arm-soc maintainers,
+On Fri, 12 Sep 2025 15:54:48 +0200 you wrote:
+> Hi,
 > 
-> Please pull this set of patches enabling protected DMA-bufs in the TEE
-> subsystem. There's a brief desciption in the tag below. All patches but
-> "dma-buf: dma-heap: export declared functions" are withing the TEE
-> subsystem. The dma-heap maintainer, Sumit Semwal, has acked the dma-heap
-> patch to be merged via my tree.
+> Samsung SoC driver sfor v6.18. This should be my last Samsung pull for this
+> merge window.
+> 
+> Best regards,
+> Krzysztof
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] TEE protected DMA-bufs for v6.18
-    https://git.kernel.org/soc/soc/c/820429d53bd7
+  - [GIT,PULL] samsung: drivers for v6.18
+    https://git.kernel.org/soc/soc/c/7b1349bd47a2
 
 You are awesome, thank you!
 -- 
