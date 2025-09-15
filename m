@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E46E32A82A
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF31B1FE44B
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757946620; cv=none; b=sVdhnRI4Tmz6W4u7RI3djgAKgSfhiZCqbZ8FQjBm1m8RqkB0/lq3y+7/PHvH1EVQTWiJDRRYM70nOYetkzF5pEjgY+pZe0yWBwmxilWOq9C1lRhgo/rbLl/zgHbvVPTDCnE0xjPKa04aOnJpF2RVcJUjBNRtjLGBsqD/WAMM3pw=
+	t=1757946622; cv=none; b=qSG74Ly+UeYYT2cfPb1rVZcpQo9NVFU5bTu5p4sdszlO3015a3xph1dhxDuSfPVoBcK+id8dl/P2Zck6HfoQluas3VjLSS2kENe+LsTm9F5cfxiLG7LkYXSqCP+l0R8JtilwUJLsoipK7gm2Y8UOzQnhuLCqgY16FycNeu4K4vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757946620; c=relaxed/simple;
-	bh=uMCl9x3J65DntC49Q3DAIgQbq71gfDrAT7FfZp60T24=;
+	s=arc-20240116; t=1757946622; c=relaxed/simple;
+	bh=+paFr+9uwRk6K0BVBPbAkF5M/q5153ZBV4KlJICVaMk=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UF7+B2mLbZuVYaFmostKsoib11dXUBE01QnCJOeNNIV8xb+r6HOV6Dho1Bv/XmszPiSPxYixbpbTyqpl317Lp0hm2AeR6LZm1xYSK/mOxvmuhr6dQ2wu2i3oBnit/Kq8jGWfjU9pPCO4he6ILWlmkIAJrBlHmah+d+pgck7UXig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YA+r6Ef6; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=t2yZG9s1gQwMagSsJvUzrv/wD8qnPUlo4UzIe3lA7ZzKNvuII9+5uKG7SKdmO6Y61TXA0JNkZJMn8fkjJcTitl8WOoz7k4Z17ZTjzB0NRe58CWaxc9iG2azK9cGzC/aFMEadTWq4zYb3u8z0DOiFxoWKFrRt0IjBycrtnzaN264=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pfHpmAaM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YA+r6Ef6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pfHpmAaM"
 Received: by smtp.kernel.org (Postfix)
-	id 140E9C4CEFB; Mon, 15 Sep 2025 14:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F28D5C4CEF5;
-	Mon, 15 Sep 2025 14:30:19 +0000 (UTC)
+	id 9057BC4CEF7; Mon, 15 Sep 2025 14:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD21C4CEF1;
+	Mon, 15 Sep 2025 14:30:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757946620;
-	bh=uMCl9x3J65DntC49Q3DAIgQbq71gfDrAT7FfZp60T24=;
+	s=k20201202; t=1757946621;
+	bh=+paFr+9uwRk6K0BVBPbAkF5M/q5153ZBV4KlJICVaMk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YA+r6Ef6uMuBQ09O3v8uKYZ88TuuepUm9nUsLUByvEDZfpSLN37Gij8qj9EFO91fg
-	 cj//AUTTHdUn6Y03GxROZUduFji8/I3zfWRa5BGWnFE9u9wUbAurE+vrOM9OYRcimo
-	 jkpDLB4kW1NDFPvUH19xL/32JCR2HkF+tBhTNvHRE6qR5MS1A9Llx694fpDUtDoaZ4
-	 c+lH7ku7+ZoKTYAWq9MigiXwCPVkbJ6eNu77V9X7alFM5wXRMgcbqbpVxmKt0mgkpW
-	 H6ckM8h7amB/lVUy9if4rQKyQLsRco1wS5ry/53JRQT8mVtCs27W2km8oGw/2fyL2d
-	 L7jmweHhc1Trg==
+	b=pfHpmAaMBA1M7zDYGGspFR7vVP1U7dwXS2GnZeKLSMJHM9kw/MxRtutzZTYsv7B1/
+	 ocqPFaSgh/yC1eywSC6UByg09yB9MkUgfTpawDUXtXIQLaBHLIVaojWb96ak/SMIiT
+	 X0hk2HNOeWI24Slhcc5JsvCksQi1SkHi7RlTktrSkD8gPPfEYDBwCHBHRrM82B5H9o
+	 pYplLyU31IXfWt/CbKPLe8RUfaPe9gZ8H2419xLCqR/rDoZE1awbw4HI1jrjQBFw0R
+	 1xkuaMHNWVxX5WdG+7h89fFNZ5F7eeoa9AsBCf0IGdDS6dHaJtZjR7hy+Hh+YzPK0Y
+	 yRzRUH3EsCjig==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADC3E39D0C18;
-	Mon, 15 Sep 2025 14:30:22 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B4839D0C18;
+	Mon, 15 Sep 2025 14:30:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,38 +39,35 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/3] Renesas SoC updates for v6.18 (take two)
+Subject: Re: [GIT PULL] TEE protected DMA-bufs for v6.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175794662123.4799.11033612295635007273.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Sep 2025 14:30:21 +0000
-References: <cover.1757669912.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1757669912.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+ <175794662273.4799.14712774428352130491.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Sep 2025 14:30:22 +0000
+References: <20250912101752.GA1453408@rayden>
+In-Reply-To: <20250912101752.GA1453408@rayden>
+To: Jens Wiklander <jens.wiklander@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 12 Sep 2025 13:13:50 +0200 you wrote:
-> Hi SoC folks,
+On Fri, 12 Sep 2025 12:17:52 +0200 you wrote:
+> Hello arm-soc maintainers,
 > 
-> This is my second pull request for the inclusion of Renesas SoC updates
-> for v6.18.
-> 
-> It consists of 3 parts:
+> Please pull this set of patches enabling protected DMA-bufs in the TEE
+> subsystem. There's a brief desciption in the tag below. All patches but
+> "dma-buf: dma-heap: export declared functions" are withing the TEE
+> subsystem. The dma-heap maintainer, Sumit Semwal, has acked the dma-heap
+> patch to be merged via my tree.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] Renesas driver updates for v6.18 (take two)
-    https://git.kernel.org/soc/soc/c/68454c6fc149
-  - [GIT,PULL,2/3] Renesas DT binding updates for v6.18
-    (no matching commit)
-  - [GIT,PULL,3/3] Renesas DTS updates for v6.18 (take two)
-    (no matching commit)
+  - [GIT,PULL] TEE protected DMA-bufs for v6.18
+    https://git.kernel.org/soc/soc/c/820429d53bd7
 
 You are awesome, thank you!
 -- 
