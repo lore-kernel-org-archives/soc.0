@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D789532A3FD
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5821A32ED41
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 14:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757946615; cv=none; b=h/TEivozVmw+nJ+MQYzw3/nXQcYMH2D8D6XgbtFVMAfO+qugQiASmSRptsM4GwgIDQ3AO4bcF9donvmBBRUQV3uRHeU1L4sGJO75NnuTaW04FxYlUIBcECSVHZ/z+pPRIDun9GyizLUAv4RBs+DpluRcrzbAeBFJ9NvzD5voC7s=
+	t=1757946617; cv=none; b=hxeJoVPGJYzyqBBtXCp8dgEftJMJ7ZUE7+2v+Mz9BIcoVhBcJGs/A7aDxCXkUxurwDBA06Ir94gMToroEG/0muSJQ4CvJJ2OBRQNI4Ua727/It6zrIn/rJOOG/4Dh6jQwvd1nqWnYcCZTomoKLd3C9pUPmfYEpjMYQ1ogp6PNmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757946615; c=relaxed/simple;
-	bh=APD9kcOBoyW2s9MBzDWHWa28VVKgNzvKqJPVaAJHEnA=;
+	s=arc-20240116; t=1757946617; c=relaxed/simple;
+	bh=HoWs0lN9BJus+dOgxEx0a5eWFE5eM8c8nzV17mV/4Ww=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=STImDBnrgDyfbxpjUHjUQ6mjEZSNjy+bDbRTzWI4CZIpWdwOmZY8VsLJFwu2vATMBfLSU3w/tQl4300nnmb3moTSpvZUMgun9OxZc16cKhoX1jYr1f8pHlsU9FAUJQVVLgZmwPLCrxMCpNq6VPTjzD+Pk6+6q1CS940twK1FjQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Momwf+Hc; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=hptHrbuDJJAFBrRgFeBtRj1GSrBgsGx6PX32OhVkj344UOWsgYp3JTeGovWL7RUw9uSTMF+K0SyC4ZzhmTDDzRx1vNQtycEf9ZPLCsfMDWGc62Sq+6DNERbaMUJ3sE2807BBrm+NbGiBGodEjPi/R9on9zbeZxuz60PPV8nB2cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FF80S5U4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Momwf+Hc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FF80S5U4"
 Received: by smtp.kernel.org (Postfix)
-	id CE781C4CEF9; Mon, 15 Sep 2025 14:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8CC3C4CEF5;
-	Mon, 15 Sep 2025 14:30:15 +0000 (UTC)
+	id 090E2C4CEF5; Mon, 15 Sep 2025 14:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B16C4CEF1;
+	Mon, 15 Sep 2025 14:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757946615;
-	bh=APD9kcOBoyW2s9MBzDWHWa28VVKgNzvKqJPVaAJHEnA=;
+	s=k20201202; t=1757946616;
+	bh=HoWs0lN9BJus+dOgxEx0a5eWFE5eM8c8nzV17mV/4Ww=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Momwf+Hc+iRHnTI70t6D+xPj+hf8EvtftLEjHxONHAM9nPbTCebq6KB8srYGN+11Z
-	 iqdplNAtsfJGb6IFiql6VLEU3zIelhXBFsX9t7FbLL2Eq/T8zA2OfQ7iXqN2JrOq1x
-	 LBGygsZGEVNKQJj+d/8kpagnDSmG2W0pMfz92Xu59d0JKoEhtPK/mdJMVwJLRpbtpz
-	 ImQNzXokg30EQpiVkn0vK99Tv/w44Wd4eKMxbLq8ck7aNiBJ+LjmHtbEX8pkqgIP7g
-	 NM1Y+iIEv7kWBwwC/S0HqEp0N5lDom40r7mdOOZUQF7Gn33s2psTjZHu2oGOdU9K1D
-	 a5Wy2noKXo0dw==
+	b=FF80S5U4fMCINRk++0CodnSrjZo+l/AsMyBVZO1cpOzkDd2yp7+UvQJHGZCm1XKtT
+	 Ongvjh/rAVokGH2V4YZxMFjJslTH4be7CcaOqSDSfpuPRhMR/ovbLKWhjggumFqTlE
+	 nS4H8pFPESTgP1wNf0Kb7V+h0SlaGZkjlEL/ZJmySet0jN80TAkawLi3dR8ibqiSEp
+	 XK9bGuukgoaKVVkWB6cO5ZdyK3bFCyP8ACf5IGNljdqOTFqG+y0UwP6oAq4RM7fy8S
+	 jUHDopMQd60fbKAxS+UtGIqkUveDg/lpcapOlX73h9gpNwlMVXYOVLNdfBHPpKhavz
+	 ZmOS54ACY7ikA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70B2739D0C18;
-	Mon, 15 Sep 2025 14:30:18 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD8A39D0C18;
+	Mon, 15 Sep 2025 14:30:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] TEE improve sysfs for 6.18
+Subject: Re: [GIT PULL] Reset controller updates for v6.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175794661723.4799.2100251901384785896.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Sep 2025 14:30:17 +0000
-References: <20250912091000.GA1441709@rayden>
-In-Reply-To: <20250912091000.GA1441709@rayden>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+ <175794661848.4799.10467772043768205296.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Sep 2025 14:30:18 +0000
+References: <20250904154135.2385905-1-p.zabel@pengutronix.de>
+In-Reply-To: <20250904154135.2385905-1-p.zabel@pengutronix.de>
+To: Philipp Zabel <p.zabel@pengutronix.de>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 12 Sep 2025 11:10:00 +0200 you wrote:
-> Hello arm-soc maintainers,
+On Thu,  4 Sep 2025 17:41:35 +0200 you wrote:
+> Dear arm-soc maintainers,
 > 
-> Please pull this small patch for the TEE sysbsystem. It updates to use
-> sysfs_emit() instead of scnprintf() for buffers passed to userspace.
+> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 > 
-> Thanks,
-> Jens
+>   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] TEE improve sysfs for 6.18
-    https://git.kernel.org/soc/soc/c/a97c004c9b8f
+  - [GIT,PULL] Reset controller updates for v6.18
+    https://git.kernel.org/soc/soc/c/a4bd33f4a3d9
 
 You are awesome, thank you!
 -- 
