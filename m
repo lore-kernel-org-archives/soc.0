@@ -1,125 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863F425A334
-	for <soc@lists.linux.dev>; Sun, 14 Sep 2025 06:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5303221D5B3
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 02:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757831981; cv=none; b=U9QD8p+o/8a9CpweEmaBSzN69UZdQziMGLcr3EccP+cRCca/2mXVxxRht35+bBiMDwKAfAeVN9RAhH07OC5zfBPbkBFiaKTKDX9TqDenXv/osXjlvDPDUFnAj55/CC45AAOoio1kCOwN9uHGYYEeYcrp8AQjDNjVR9iM/uTiUVM=
+	t=1757902411; cv=none; b=RnEzksM/kzu9e5oi0HmkUHRFwezph6XiOh0s/w7a11nqDHFCAtKvSWK8zl34Zl1FRiN1LqWRTfA3fXyohW24ANoYPERTPkz6zmJER60JbayRX6RSXLKHsxqtIxMNxN3mgme9lD8SfQle76ei1UZLzG5wvzBhTHLnJJho/Tm0UMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757831981; c=relaxed/simple;
-	bh=bsOd8EVRaDr6WTbWAnHzgvTOV9nC656Hbrq4fioi2hs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TheMdY3rp65TJ3cfPZFauDc4kRaosXsD6cCSrAH470KhjteVt/cnvqnMk/zFcxqL3l0MuD053VswU0yXekUcn0Cam0wi0H6CaYIDNupOxAP76tPUB2KMvbqKz0puwtrX91HFuc2At1eZZHBXP5FUQw0nHDk8TuSI4zSMpvHCTDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HiREYR9/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757902411; c=relaxed/simple;
+	bh=SMqAydrRlAWaSLUNJ6U8LSRxn7jkqUpS4uBIprB2vRI=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=c9yJ95bwmaWraIq4/bYzaKbMeVWo7izr2mrIJEMzSj2gHPlpw8GD6qpODRFTB/d7HibyRb5AanEI9RTfCCF6GpqM+c50JAQ7nZAA/zDSxQMS6ck8upT/ibAiwgOP8d07tLPyqidH7ILERwfumBXzIUK10ksRayPNWBnOtqW1g/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=RET7wyI+; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HiREYR9/"
-Received: by smtp.kernel.org (Postfix)
-	id 2D1A4C4CEFB; Sun, 14 Sep 2025 06:39:40 +0000 (UTC)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 48B47C4CEF0
-	for <soc@kernel.org>; Sun, 14 Sep 2025 06:39:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 48B47C4CEF0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3e7622483beso1567096f8f.3
-        for <soc@kernel.org>; Sat, 13 Sep 2025 23:39:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="RET7wyI+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757831977; x=1758436777; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UcBio7jHPm6Tt90nNr36duLDMqdkUZVCgN2oNQY+Gdc=;
-        b=HiREYR9/H4Qdf9yDi8zix+2gbQpyvGQWr/fD+g3xHIF63UiasFVwpNxlBKBzQ8slzA
-         JUi5GTuoIpgaR2QbJrr+dCwtpTC6r9awVRyUMlgJNt+yjov11U4Hwi01LIyDxt8UlVxv
-         fhMiDvAC3irxsXJrBFyQNxDJDI+JvG1Dt/EYZyR70jzvHqZk2Ro3CE1eQNYtJfMcqquB
-         UkwdQ/ka1owlapLIcL+ajWhmNeNbOVBmZorhYpejM4oVwoN3cIKpgN/bA9bagzn7HgKI
-         XWGyPeScGTqlLZB9qM4TGySVFLLm3GqQni2h5J8uLM1Mu/bo/46cZOCfl97NWaSEThsp
-         URtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757831977; x=1758436777;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UcBio7jHPm6Tt90nNr36duLDMqdkUZVCgN2oNQY+Gdc=;
-        b=Fn/z7b6SnC0SeWO7AgKzokr39c39DXzxqlZD/lI7tzGLPUacwLTixD02TpZbvqkmyI
-         wsZqxfzVjy4HB3LsnWFkyaU9ZU8RSvd8JCIHmtF8u/ZsXQUeUbaP0i9zpE7vFOHFZw3P
-         KlZSE85q0ou5IbcY0kGwO0N/9BnFCdeUOBJ5N1VDwJ2j4c1K24iChb7KuIN+cMBafNfr
-         2A5y6GERBYEu4iIA+urOebb00Wz+j63QPf93IfyCPBtChP5t7I/yoSXD+Wy05aJ7NwlV
-         QqKmZpWy71QCPjIYOdNcgUppyVhcFzDQJ1uAayvHyjYCwzucSCy4oSOJnKDts+HHMmLj
-         wWmg==
-X-Forwarded-Encrypted: i=1; AJvYcCVQPtXAJq6I4aHtae+jSLYw6sbPRdWoRiaPqNDlKMNH2z+04mAQq0Jt1aj77UjyLQimSVc=@kernel.org
-X-Gm-Message-State: AOJu0YxNf3WfZ5LA3zLqEffXeXa2RC/eX6IeRrONRUfmW1bMEkcJjDP+
-	g7fUdZSA9Yj4SOK/i9yjPMcBgwWabnXTeFIjPn50QkRdVvokDt/+T6UQ
-X-Gm-Gg: ASbGncsthMHcrKB917Qho7TRW30SEO8RpGxveMpGxVZqXoKep15Ists16EDeEifaG/p
-	hn00ss17waH1HrBClosm4+6Fa1qPAQoFFlhdEH9bpBHuOv/xOe5B9km5fPE5jX6ncIuOFtdUoO+
-	TC9CFC3griJqEOIZRkJujQ8l1qdz0/31u4M3Jdov9N/CxOD3YfldU+yzyHqJSSO4yh5veU7fPsn
-	rnW+afY8NZMvul/CMkPli43c/9D6EqDWkc9E5de5ChethKIBDr8nMbsz5Xfy3S/cvuW+8QDtvMy
-	9G9dTWJy+N2HK8N4XxxSLrwIH+MNmT0ZS6/mxvRY6X8TrNjGJfF1aJaYb3EHm5dIIXBw5xAdQWM
-	WgcPB9y3HXbxZt+6HzaHzeXUQHVyYrp/IBpKcvQXm8XVqeboObvmFaZWB0EcfOuLx6TjyoHc8Uj
-	Pqbu35iQRCZGb7FQ==
-X-Google-Smtp-Source: AGHT+IHymrOL+tTeViZP10RPGLwsdPflgferYQ5FgiwTqzzZ3HJC28XlDRAnkYKailfHPno4A8dELw==
-X-Received: by 2002:a05:6000:40e0:b0:3e9:4fe4:2619 with SMTP id ffacd0b85a97d-3e94fe45cbemr2544297f8f.25.1757831977436;
-        Sat, 13 Sep 2025 23:39:37 -0700 (PDT)
-Received: from localhost (p200300e41f1c4d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:4d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3e82f647b83sm5778948f8f.20.2025.09.13.23.39.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Sep 2025 23:39:36 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/4] arm64: tegra: Device tree changes for v6.18-rc1
-Date: Sun, 14 Sep 2025 08:39:25 +0200
-Message-ID: <20250914063927.89981-4-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250914063927.89981-1-thierry.reding@gmail.com>
-References: <20250914063927.89981-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+	d=codeconstruct.com.au; s=2022a; t=1757902400;
+	bh=6J20VH7voOyYroc7sd9mKpuRhnqygSA4dyoSLLqxRHc=;
+	h=Subject:From:To:Cc:Date;
+	b=RET7wyI+uYL1ZDx+gaIsj+SAAaoN8t4X90mneLv15rom0Fm29zZHh/Ed1WbOlZYV7
+	 gTYGB8UmEQanMKNvTArQ9OfsQ9CxCSzfrOrmHdbI/bX4hENeu/j9/LqyURN1FoqdII
+	 NLw2wYuZ3G8RLQ3k89clt8E2Jxsc4TXhGimVYrwMaxuHZPuKfS1cxgNS411rXFzheA
+	 pkoAZbpn43mt1lnFVDmizzX0YuNBGwD+ASCbyBxvHuLDgcuGOYO76J5R4xRCNfQN70
+	 LY6CgBtsj1zH0p5K+tfGR5wQvNVfJMZhMbOp2c8dI7jb1MAdmMDa6WrzYwASL9Gt2N
+	 eoRxqVgCotlog==
+Received: from [192.168.68.113] (unknown [180.150.112.213])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 25AD7640BB;
+	Mon, 15 Sep 2025 10:13:18 +0800 (AWST)
+Message-ID: <5793039afcedeb28179a3c9909631d8251abc73e.camel@codeconstruct.com.au>
+Subject: [GIT PULL] aspeed: further devicetree changes for v6.18
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: soc <soc@lists.linux.dev>
+Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
+Date: Mon, 15 Sep 2025 11:43:18 +0930
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1-1 
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC maintainers,
+Hello SoC maintainers,
 
-The following changes since commit 04f27a0fda6b6be104531eeb95d07ef1b3a72af8:
+This is a second 6.18 PR for the ASPEED devicetrees, following the
+first at [1].
 
-  dt-bindings: arm: tegra: Add ASUS TF101G and SL101 (2025-09-11 18:28:57 +0200)
+Cheers,
+
+Andrew
+
+[1]: https://lore.kernel.org/soc/cb634cffaf0db9d25fb3062f0eee41e03955321f.c=
+amel@codeconstruct.com.au/
+
+---
+
+The following changes since commit b785b5d88cc27a521ea22b3afd85804c4c321d4a=
+:
+
+  ARM: dts: aspeed: x570d4u: convert NVMEM content to layout syntax (2025-0=
+8-11 09:37:48 +0930)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.18-arm64-dt
+  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed=
+-6.18-devicetree-1
 
-for you to fetch changes up to e1899da95f59240ed2d4a51d7a89c8b77c45ff06:
+for you to fetch changes up to 3708a165a98c23cc83216deda88bc7d64ba85527:
 
-  arm64: tegra: Add I2C nodes for Tegra264 (2025-09-11 18:35:23 +0200)
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-arm64: tegra: Device tree changes for v6.18-rc1
-
-Add I2C nodes for Tegra264. These are currently unused but are needed
-for subsequent audio patches, as well as various monitoring and other
-auxiliary chips.
+  ARM: dts: aspeed: Drop syscon "reg-io-width" properties (2025-09-10 16:20=
+:40 +0930)
 
 ----------------------------------------------------------------
-Kartik Rajput (1):
-      arm64: tegra: Add I2C nodes for Tegra264
+Further ASPEED devicetree updates for v6.18
 
-Thierry Reding (1):
-      Merge branch 'for-6.18/dt-bindings' into for-6.18/arm64/dt
+New platforms:
 
- arch/arm64/boot/dts/nvidia/tegra264.dtsi | 225 +++++++++++++++++++++++++++++++
- 1 file changed, 225 insertions(+)
+- Meta Clemente
+
+  Clemente is a compute-tray platform using an AST2600 SoC
+
+Updated platforms:
+
+- Harma (Meta): Hot-swap controller, power monitoring, GPIO names
+
+There are also some devicetree cleanups from Rob and Krzysztof that touch a
+variety of platforms and the DTSIs. These lead to fewer warnings emitted fo=
+r the
+ASPEED devicetrees.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      ARM: dts: aspeed: Minor whitespace cleanup
+
+Leo Wang (3):
+      dt-bindings: arm: aspeed: add Meta Clemente board
+      ARM: dts: aspeed: Add NCSI3 and NCSI4 pinctrl nodes
+      ARM: dts: aspeed: clemente: add Meta Clemente BMC
+
+Peter Yin (3):
+      ARM: dts: aspeed: harma: add power monitor support
+      ARM: dts: aspeed: harma: revise gpio name
+      ARM: dts: aspeed: harma: add mp5990
+
+Rob Herring (Arm) (3):
+      ARM: dts: aspeed: Fix/add I2C device vendor prefixes
+      ARM: dts: aspeed: Drop "sdhci" compatibles
+      ARM: dts: aspeed: Drop syscon "reg-io-width" properties
+
+ Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml        |    1 +
+ arch/arm/boot/dts/aspeed/Makefile                               |    1 +
+ arch/arm/boot/dts/aspeed/aspeed-bmc-ampere-mtjefferson.dts      |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-arm-stardragon4800-rep2.dts |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-catalina.dts       |    4 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-clemente.dts       | 1283 +++=
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+++++++++
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-harma.dts          |   43 +--
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-minerva.dts        |   36 +--
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-santabarbara.dts   |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-tiogapass.dts      |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-yosemite4.dts      |   12 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-rainier.dts             |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dts                |    8 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-lenovo-hr855xg2.dts         |    4 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-nvidia-gb200nvl-bmc.dts     |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-palmetto.dts            |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-zaius.dts               |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-quanta-s6q.dts              |    4 +-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-vegman.dtsi                 |    2 +-
+ arch/arm/boot/dts/aspeed/aspeed-g4.dtsi                         |    1 -
+ arch/arm/boot/dts/aspeed/aspeed-g5.dtsi                         |    2 -
+ arch/arm/boot/dts/aspeed/aspeed-g6-pinctrl.dtsi                 |   10 +
+ arch/arm/boot/dts/aspeed/aspeed-g6.dtsi                         |    6 +-
+ 23 files changed, 1360 insertions(+), 73 deletions(-)
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-clemente.d=
+ts
+
