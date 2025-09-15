@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798631F4C83
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 13:50:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0DF1F4C83
+	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 13:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757944241; cv=none; b=ab4GIfI2i5H/YaV/WnyakSP9bxmverAUuO/MTmVaasfJQ9UgEpJR0sBZycSR7RKaxs2Wcpiw2amzOxi8vUyp23Ud3yDxu6DLFBvBo56Mr1BJgn8lbJhQtG1VqZxsD2E0dyHGsCtruwxwOvh9OXdGiL1andUiIGKzOHk3sqsN6Gc=
+	t=1757944242; cv=none; b=OWH/SjVZ5ED1H6sxFwmknDmLdzzU1YajuZNeyD7pkrGJIR/BHtwZ8UYuJAOqkcuR8PDIyNYHE2jhwacb5zNTQUfqRf6l7R0Pq0Ed3gKAv9wE/Hcs4wXBEwKMoFwSjDxsk59bL7/CNKo4NSKHYAZsNhkPKyhpKFtp2bZHXxQOgWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757944241; c=relaxed/simple;
-	bh=CWd9xNza2vIEoOXZD5HoNmGTSM8LIPUYsJnn6xs6qbY=;
+	s=arc-20240116; t=1757944242; c=relaxed/simple;
+	bh=7QC0LYpsTkeuIpvDFw2/hIQzebBazNbOJZf6LC9ZEb8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=edDIQQm2si+DFPGI3+1BO67eLismpYa7jDbE06sH339SCpNGoH8I0J3d10f1UInaBuKudr+fRJnTIMqZF3oIdnZZs7ZuxlrS5tl/StRZKZVq69sXGUEml0HK0yGOgTMfTpC/dOpLL+8he9UGXaXAxxz05gYopROf5iD/UA8oLb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAr9frgH; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ivWO4J6t2WGUVz/5yZL4oEAZykwY99KP0PynRkF+ZIJ7dFmvtA/lNPLOyz16zUiQUAFktisV/epMX+ayxJh4YgHQzHAHPXytHz2/5zb6LsyGDDw7jgV/gvPgfJMB7gxTkcuzWTaaa9ODUQs0qJuC3zG2t5YRWcKS+TOvthN2vdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sCwcrDKO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAr9frgH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sCwcrDKO"
 Received: by smtp.kernel.org (Postfix)
-	id 20AF6C4CEF9; Mon, 15 Sep 2025 13:50:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 072DDC4CEF1;
-	Mon, 15 Sep 2025 13:50:41 +0000 (UTC)
+	id 42622C4CEF5; Mon, 15 Sep 2025 13:50:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF07C4CEF1;
+	Mon, 15 Sep 2025 13:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757944241;
-	bh=CWd9xNza2vIEoOXZD5HoNmGTSM8LIPUYsJnn6xs6qbY=;
+	s=k20201202; t=1757944242;
+	bh=7QC0LYpsTkeuIpvDFw2/hIQzebBazNbOJZf6LC9ZEb8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GAr9frgHQJOxjF/MeNAFK5HoMgUVu6fS+MZNBgdXepApN6REMbiIIRNTvW35g+qa3
-	 5/bBRMw7o5V2y5dACVjKH/mDTnjIjp9RwHu2IaAD3XTKZWLheDBLZLNI99debrCQ3h
-	 EC9I2E7g6ogcS4DIO4AazbC7AhnWMDq0LuMyvqnQx6nUye9LsA7ih3si4Cnt0gRaD7
-	 WpOyIpGS+XcLwAdPeyjfCf0DzL9PIq6CHSK4LkdotcFQvNsoSXaaT1oMKsfBr//x4m
-	 8VBGgjBsQmX7uuYGA+0iRcFFJM5gOvGyhIutGFsYZyH9PcVZeryEHZl/rPa2R23tc9
-	 CzCdBJfHe0cXw==
+	b=sCwcrDKO7cRVnhZZck5WWjJMxpsMcursqAtl46ZXJ4fw/00GwuYUxeFaKvNHp3XUA
+	 cEVVSryBpETPt7TnHbek7flIjuR3NchP5b3RNflEs/urlxEEj8WMyjd7lGARQnFOTj
+	 8Rmm2tzAPjoXdgJkQCP7KS0hc451YUbArk93Gtat+q5h/TREYrPsvmscicIgX0y6mC
+	 rV3LFPnQFm0krnlTXW2XOIpsue7t0p8yvFrDc1WMXiH7ujQtEEpTZeC6QlUZJaOy+h
+	 AhH0TfWDnw+yXlpy5piXp1QVigJnyOClPduWloFSijJnvLR8ZPNyQmMOOKWy2yNYRf
+	 0QA9C8D6a75sQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADF3D39D0C19;
-	Mon, 15 Sep 2025 13:50:43 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAE3339D0C18;
+	Mon, 15 Sep 2025 13:50:44 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/4] Broadcom defconfig-arm64 changes for 6.18
+Subject: Re: [GIT PULL] STi DT changes for v6.18 #2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175794424250.4179625.12284555588564912705.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Sep 2025 13:50:42 +0000
-References: <20250910171910.666401-1-florian.fainelli@broadcom.com>
-In-Reply-To: <20250910171910.666401-1-florian.fainelli@broadcom.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
+ <175794424373.4179625.510104772624965309.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Sep 2025 13:50:43 +0000
+References: <4a710c05-aeeb-4421-b3a1-5bfb8230d51d@foss.st.com>
+In-Reply-To: <4a710c05-aeeb-4421-b3a1-5bfb8230d51d@foss.st.com>
+To: Patrice CHOTARD <patrice.chotard@foss.st.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,26 +54,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 10 Sep 2025 10:19:07 -0700 you wrote:
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+On Fri, 12 Sep 2025 17:34:47 +0200 you wrote:
+> Hi
 > 
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+> Please consider this first round of STi DT changes for v6.18 cycle.
 > 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.18/defconfig-arm64
+> Thanks
+> Patrice
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/4] Broadcom defconfig-arm64 changes for 6.18
-    (no matching commit)
-  - [GIT,PULL,2/4] Broadcom devicetree changes for 6.18
-    (no matching commit)
-  - [GIT,PULL,3/4] Broadcom devicetree-arm64 changes for 6.18
-    https://git.kernel.org/soc/soc/c/41d773149b88
-  - [GIT,PULL,4/4] Broadcom drivers changes for 6.18
-    (no matching commit)
+  - [GIT,PULL] STi DT changes for v6.18 #2
+    https://git.kernel.org/soc/soc/c/aa14c3aff06b
 
 You are awesome, thank you!
 -- 
