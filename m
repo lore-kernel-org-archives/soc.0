@@ -1,206 +1,154 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B225B101F2
-	for <soc@lists.linux.dev>; Mon, 15 Sep 2025 17:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1040F2641E3
+	for <soc@lists.linux.dev>; Tue, 16 Sep 2025 13:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757958603; cv=none; b=MKVt6KKPQcLx3DcQVXH1cEHA2R7DrKv1vJYkdAsqpYmzObCrtM507APNIjMLRUy3oh4ij8BN7bfWMBdeV1/4Qk7yv5m7wUbRRoZZE01D8DKQoaj4L2++FsO9I98hZq5PwHgnkrYAc5FxAo6KPPZKW1SUAcwkaUcl0Cvh+FeUqek=
+	t=1758028772; cv=none; b=HbDEvMbPnT/dvxjVjcI+fPrz3F0w6gVaCoXnDugGsCKRaW8FrU6/g/CoVhBVjoSd4S934Dbh/ILU5BnhvRQ+LmehnFLThSW4UemF4Gr2FX2fFDdf7fSh9o9po/h03320tBRE7kRV3aAQQHC6V9nAWaGwiYFD7qq7CRXNiZfH8lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757958603; c=relaxed/simple;
-	bh=X63k7EEPfIbzkbijj+NF+KbsXIHwYBQ6N5O3W/nlNx8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ewDYVFrQp25T22aiCNLZ1xGdsRTzkq5JZAHC26Awx5H5H1PELQFBggPPNSAMKN9kEkplxb2HNS0EZ0j8qOhl3Biy++8YmthPVWqDyclMLEoWnKJNytIzL1vjZdtfCNei3bG9yDlakykyO0gHhWB0vgh3ANW4ah3gKoOrhyWTR2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bIHXxBjW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758028772; c=relaxed/simple;
+	bh=GCqjILCeKyNT+/Gxo+qzeEjfs57+lZtCCEoAb15K/7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YYHvDKxVheLual94LqYi0xZW7psLzqN0rNsnTClJiulE2MHI7alNEc4NkA86c5DtJTVstOGR63MVKeSmX/PKppqE4rJrsxYuDnovedxJ6sUM6pPSM79E8blPKtlVEhhj8fK2022PUn4Q5qpVEYPuQp5C4pSopKs4COAhx0WH3wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=n3zHmSOC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bIHXxBjW"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="n3zHmSOC"
 Received: by smtp.kernel.org (Postfix)
-	id 4EE62C4CEFC; Mon, 15 Sep 2025 17:50:03 +0000 (UTC)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id E7C00C4CEFA; Tue, 16 Sep 2025 13:19:31 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3E8A7C4CEFA
-	for <soc@kernel.org>; Mon, 15 Sep 2025 17:50:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E8A7C4CEFA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-352323389cdso25258401fa.1
-        for <soc@kernel.org>; Mon, 15 Sep 2025 10:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757958600; x=1758563400; darn=kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8nUoHh/QaA/cJemcuKzQ0L0kM7hvamnSwD+AbhFj55I=;
-        b=bIHXxBjWDl7uhjLUK+PjZ/kgoLiloWEuUA0jgAyFSNJ05HiCqztXadoWnOe+NCLaZb
-         DsvA4IVwzVhS6bLduI7Kyx6TAmFAtub7Ab3h7ywB31lWdkxjsDys6rJ2psbHwEeXkRAo
-         DmK13RLnWUKwboyzdEm8MzMfiWn4MleErGRFBoa55877ClTBc4Buo6h8n2YYw/4kACVc
-         dNudxSHSgGp7zkj2pY88dVmO+rw1R5G/kUMSLYnb6cDZZYVW542XurZPpd0qP8qELUoH
-         h3oJkogOcdqKlG1oL5t7vDaEIFoExDPG9DBRHrdoTo/p6+6J0WS3rcwtrE0DXbZ6uCzb
-         +0vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757958600; x=1758563400;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8nUoHh/QaA/cJemcuKzQ0L0kM7hvamnSwD+AbhFj55I=;
-        b=oIL46+xukIcj1aH2RLYNkvhocfVQ0GAUkEGsoZ7jwS9RNTcvbQDqDuEvaJ8f21TA7M
-         dH0tMZgNp/xuij9ZpGMVdbdELFvqMcRst2y4O/PSkj+DcR5l6KtvTwHkf5znaeXkaTu0
-         tupNGwhU4pqFZ09Z3/9wJ8HUm+i2eLExlEEaq1QtU689TRyGAZzp99O0gFNgEfKmWt7m
-         iZ2NuPUvUcuHMO3VaORQFsk6yW2A7dStvNUSXPAgfiPe0QYLifK71yDjXzNB7c59zzUW
-         6IK2h89N/E0QQsVrQ0otL8IodepC5Ii+92VhJnRUX4eD6gASXLRMOQHZXhZtbcmrwwvU
-         U7tw==
-X-Forwarded-Encrypted: i=1; AJvYcCWUzIWqEmZCSv5BwrTPmGwnW2Ki8m7PuWArl1RHn07oTS4jI0/7lux7H/yAo2JVIVD3YPw=@kernel.org
-X-Gm-Message-State: AOJu0Yzh2LHaWcRA1+GT4KHVxz9fAzf1/hZV5NyazGDMveZ8XyTXS52R
-	VmcDFflr5NiARmU2GC7ayeMCBdU6UCSIPca14Ti7atSORvhb96GcKvkpTnp3mQH6fh0=
-X-Gm-Gg: ASbGncvmQjoVGzjzQeQEXEisB2+jWEHUxJ59Qle+m19s0q25ORdM2OatIs/+OdwvSyA
-	j5ZmpbxUfm+hS/HKm4Mmgx0Q9b6cfYr/YBz9+GeRaBO3d23e7buWrrkq1zS/TyGpmwF/p9K1Tqh
-	ygV5U24eQzWFJXxaSt/Skt1NobMohM12JMv6D1Wv/4XPH/g+eW9G/1+LUeKIPllIon+DMg3116x
-	hpJLs0k61rbo5jdXnVyyefntsziuucL+m7/a4CYL2iDOlI198mkAkDH+KBbHuv7mR/nyomfFOfP
-	Z3gzj8tY6OD2binNNAzY6fAVPEVBNErcNTvlIf8zJD0GTa9LUC6Drj63o4tpasKaa1EvFg5ANgg
-	PLaJ+22CrNZp3n9s2UuQvcbghXQx18WFGOqaUxo5iXId9QnBCobXxHiSUnOUv48q6rha9NKN/f8
-	I=
-X-Google-Smtp-Source: AGHT+IHXonlyJsEwptAZtH8gqbNV18Yqqkb2gFcaLd8EoBqiR9uHczu/9wCsppE9vHLym1iN8/0B2Q==
-X-Received: by 2002:a2e:be1c:0:b0:353:dece:550c with SMTP id 38308e7fff4ca-353dece59f4mr29367421fa.37.1757958600095;
-        Mon, 15 Sep 2025 10:50:00 -0700 (PDT)
-Received: from rayden (h-37-123-177-177.A175.priv.bahnhof.se. [37.123.177.177])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-34f1b2a925dsm27634961fa.46.2025.09.15.10.49.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Sep 2025 10:49:59 -0700 (PDT)
-Date: Mon, 15 Sep 2025 19:49:57 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org,
-	Bjorn Andersson <andersson@kernel.org>
-Subject: [GIT PULL] TEE add QCOMTEE driver for v6.18
-Message-ID: <20250915174957.GA2040478@rayden>
+	by smtp.kernel.org (Postfix) with ESMTPS id D0267C4CEEB;
+	Tue, 16 Sep 2025 13:19:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D0267C4CEEB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1758028770; x=1789564770;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GCqjILCeKyNT+/Gxo+qzeEjfs57+lZtCCEoAb15K/7Q=;
+  b=n3zHmSOCT4l074ytm3AL8r+YFjroj0CiAlWgwVZiF2LJb4smkHa4+J7u
+   3WZsCGg9maQsMGRaEdaqATKy9ldVAL7lGvYmEIjeWJYlcBWjVZs7eXv6k
+   D/FRyM9c/FwNjGe2KLEQH5cw6zWyg9WW+62TgASBWjJkraOzgfXGgECgU
+   +dAPzT5G6GbpEiyrCCqYcHOGpMemwULWHpsjG7YmjQdUUb83aDpXyacPX
+   bPyvOaz8d5vDlUCJH18tflQORMCZeI+xxf0JGEce+GwjGeuLZ8pF8683G
+   2ZfeaoeklhRtto0lpBuzr0MscsI6ZgHOGTcaITpWylouBT2GV3/Jk3GHF
+   A==;
+X-CSE-ConnectionGUID: V/byoQjpSTeHg7RE9/pKtQ==
+X-CSE-MsgGUID: IY9Gcb90RGOMWsNzTufLXQ==
+X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
+   d="scan'208";a="52399102"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2025 06:19:28 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Tue, 16 Sep 2025 06:19:15 -0700
+Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Tue, 16 Sep 2025 06:19:12 -0700
+Message-ID: <0695ca65-536c-48d9-ad1b-49452e67a6f9@microchip.com>
+Date: Tue, 16 Sep 2025 15:19:11 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL] ARM: microchip: clk for 6.18 #1
+To: <sboyd@kernel.org>, <mturquette@baylibre.com>,
+	<linux-clk@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, SoC Team
+	<soc@kernel.org>
+CC: Linux Kernel list <linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Conor Dooley <conor@kernel.org>, Claudiu
+ Beznea <claudiu.beznea@tuxon.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<llvm@lists.linux.dev>, kbuild test robot <lkp@intel.com>
+References: <20250916080545.9310-1-nicolas.ferre@microchip.com>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Content-Language: en-US, fr
+Organization: microchip
+In-Reply-To: <20250916080545.9310-1-nicolas.ferre@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello arm-soc maintainers,
+On 16/09/2025 at 10:05, nicolas.ferre@microchip.com wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
+> 
+> Dear clock maintainers,
+> 
+> Here are the first clk changes for 6.18.
+> I don't think they have conflict with changes for the deprecated round_rate()
+> to determine_rate() topic.
+> They are in linux-next for a couple of days.
 
-Please pull this set of patches [1] adding a Qualcomm TEE (QTEE) driver to
-the TEE subsystem as described below. The QTEE patches depend on two
-patches from branch
-'20250911-qcom-tee-using-tee-ss-without-mem-obj-v12-2-17f07a942b8d@oss.qualcomm.com'
-of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux
+But... this series depends on this patch:
+https://lore.kernel.org/r/20250827145427.46819-4-nicolas.ferre@microchip.com
 
-Björn asked me [2] to pull them from his tree.
+Which will be part of a pull-request to-be-sent soon to arm-soc (which 
+is part of linux-next, so the build error doesn't appear there).
 
-This pull request is based on my previous pull request with
-tee-prot-dma-buf-for-v6.18 to avoid a few conflicts when merging.
+Once the pull-request is done, do you prefer that I do an immutable 
+branch between CLK and ARM, that I queue this at91 PM patch into the clk 
+pull-request or that everything goes through arm-soc?
 
-[1] https://lore.kernel.org/op-tee/20250911-qcom-tee-using-tee-ss-without-mem-obj-v12-0-17f07a942b8d@oss.qualcomm.com/
-[2] https://lore.kernel.org/op-tee/mir6lhkj456ra3i6w7def4rrtzw663f66l66cz4s3gxxvueeqk@ils2hjklbp4y/
+Thanks to the kbuild test bot.
+Regards,
+   Nicolas
 
-Thanks,
-Jens
-
-The following changes since commit dbc2868b7b57fb4caa8e44a69e882dcf8e8d59bf:
-
-  optee: smc abi: dynamic protected memory allocation (2025-09-11 11:22:43 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-qcomtee-for-v6.18
-
-for you to fetch changes up to dcc7a571a3665a16581b5b18ca6b113f60a9a41a:
-
-  Documentation: tee: Add Qualcomm TEE driver (2025-09-15 17:34:06 +0200)
-
-----------------------------------------------------------------
-Add Qualcomm TEE driver (QTEE)
-
-This introduces a Trusted Execution Environment (TEE) driver for
-Qualcomm TEE (QTEE).
-
-QTEE enables Trusted Applications (TAs) and services to run securely. It
-uses an object-based interface, where each service is an object with
-sets of operations.
-
-Kernel and userspace services are also available to QTEE through a
-similar approach. QTEE makes callback requests that are converted into
-object invocations. These objects can represent services within the
-kernel or userspace process.
-
-We extend the TEE subsystem to understand object parameters and an ioctl
-call so client can invoke objects in QTEE:
-  - TEE_IOCTL_PARAM_ATTR_TYPE_OBJREF_*
-  - TEE_IOC_OBJECT_INVOKE
-
-The existing ioctl calls TEE_IOC_SUPPL_RECV and TEE_IOC_SUPPL_SEND are
-used for invoking services in the userspace process by QTEE.
-
-The TEE backend driver uses the QTEE Transport Message to communicate
-with QTEE. Interactions through the object INVOKE interface are
-translated into QTEE messages. Likewise, object invocations from QTEE
-for userspace objects are converted into SEND/RECV ioctl calls to
-supplicants.
-
-----------------------------------------------------------------
-Amirreza Zarrabi (11):
-      firmware: qcom: tzmem: export shm_bridge create/delete
-      firmware: qcom: scm: add support for object invocation
-      tee: allow a driver to allocate a tee_device without a pool
-      tee: add close_context to TEE driver operation
-      tee: add TEE_IOCTL_PARAM_ATTR_TYPE_UBUF
-      tee: add TEE_IOCTL_PARAM_ATTR_TYPE_OBJREF
-      tee: increase TEE_MAX_ARG_SIZE to 4096
-      tee: add Qualcomm TEE driver
-      tee: qcom: add primordial object
-      tee: qcom: enable TEE_IOC_SHM_ALLOC ioctl
-      Documentation: tee: Add Qualcomm TEE driver
-
-Jens Wiklander (1):
-      Merge branch '20250911-qcom-tee-using-tee-ss-without-mem-obj-v12-2-17f07a942b8d@oss.qualcomm.com' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux
-
- Documentation/tee/index.rst              |   1 +
- Documentation/tee/qtee.rst               |  96 ++++
- MAINTAINERS                              |   7 +
- drivers/firmware/qcom/qcom_scm.c         | 119 ++++
- drivers/firmware/qcom/qcom_scm.h         |   7 +
- drivers/firmware/qcom/qcom_tzmem.c       |  63 ++-
- drivers/tee/Kconfig                      |   1 +
- drivers/tee/Makefile                     |   1 +
- drivers/tee/qcomtee/Kconfig              |  12 +
- drivers/tee/qcomtee/Makefile             |   9 +
- drivers/tee/qcomtee/async.c              | 182 ++++++
- drivers/tee/qcomtee/call.c               | 820 +++++++++++++++++++++++++++
- drivers/tee/qcomtee/core.c               | 915 +++++++++++++++++++++++++++++++
- drivers/tee/qcomtee/mem_obj.c            | 169 ++++++
- drivers/tee/qcomtee/primordial_obj.c     | 113 ++++
- drivers/tee/qcomtee/qcomtee.h            | 185 +++++++
- drivers/tee/qcomtee/qcomtee_msg.h        | 304 ++++++++++
- drivers/tee/qcomtee/qcomtee_object.h     | 316 +++++++++++
- drivers/tee/qcomtee/shm.c                | 150 +++++
- drivers/tee/qcomtee/user_obj.c           | 692 +++++++++++++++++++++++
- drivers/tee/tee_core.c                   | 127 ++++-
- drivers/tee/tee_private.h                |   6 -
- include/linux/firmware/qcom/qcom_scm.h   |   6 +
- include/linux/firmware/qcom/qcom_tzmem.h |  15 +
- include/linux/tee_core.h                 |  54 +-
- include/linux/tee_drv.h                  |  12 +
- include/uapi/linux/tee.h                 |  56 +-
- 27 files changed, 4410 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/tee/qtee.rst
- create mode 100644 drivers/tee/qcomtee/Kconfig
- create mode 100644 drivers/tee/qcomtee/Makefile
- create mode 100644 drivers/tee/qcomtee/async.c
- create mode 100644 drivers/tee/qcomtee/call.c
- create mode 100644 drivers/tee/qcomtee/core.c
- create mode 100644 drivers/tee/qcomtee/mem_obj.c
- create mode 100644 drivers/tee/qcomtee/primordial_obj.c
- create mode 100644 drivers/tee/qcomtee/qcomtee.h
- create mode 100644 drivers/tee/qcomtee/qcomtee_msg.h
- create mode 100644 drivers/tee/qcomtee/qcomtee_object.h
- create mode 100644 drivers/tee/qcomtee/shm.c
- create mode 100644 drivers/tee/qcomtee/user_obj.c
+> Please pull. Thanks, best regards,
+>    Nicolas
+> 
+> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+> 
+>    Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-microchip-6.18
+> 
+> for you to fetch changes up to e3130c2a9a0c8e549e044e659be6f762a1b1f725:
+> 
+>    ARM: at91: remove default values for PMC_PLL_ACR (2025-09-15 16:24:25 +0200)
+> 
+> ----------------------------------------------------------------
+> Microchip clock updates for v6.18
+> 
+> This update includes:
+> - add one clock for sam9x75
+> - new meaning for MCR register field in clk-master
+> - use force-write to PLL update register to ensure
+>    reliable programming sequence
+> - update Analog Control Register (ACR) management to accommodate
+>    differences across SoCs
+> 
+> ----------------------------------------------------------------
+> Balamanikandan Gunasundar (1):
+>        clk: at91: sam9x7: Add peripheral clock id for pmecc
+> 
+> Cristian Birsan (2):
+>        clk: at91: add ACR in all PLL settings
+>        ARM: at91: remove default values for PMC_PLL_ACR
+> 
+> Nicolas Ferre (1):
+>        clk: at91: clk-sam9x60-pll: force write to PLL_UPDT register
+> 
+> Ryan Wanner (1):
+>        clk: at91: clk-master: Add check for divide by 3
+> 
+>   drivers/clk/at91/clk-master.c      |  3 ++
+>   drivers/clk/at91/clk-sam9x60-pll.c | 82 +++++++++++++++++------------------
+>   drivers/clk/at91/pmc.h             |  1 +
+>   drivers/clk/at91/sam9x60.c         |  2 +
+>   drivers/clk/at91/sam9x7.c          |  6 +++
+>   drivers/clk/at91/sama7d65.c        |  4 ++
+>   drivers/clk/at91/sama7g5.c         |  2 +
+>   include/linux/clk/at91_pmc.h       |  2 -
+>   8 files changed, 59 insertions(+), 43 deletions(-)
+> 
