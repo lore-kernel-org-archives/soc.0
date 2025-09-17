@@ -1,198 +1,223 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83273081B7
-	for <soc@lists.linux.dev>; Wed, 17 Sep 2025 08:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758097156; cv=fail; b=Yk/ErawGRhCZ2txMYpHbVYwFFjvb7n7cIiJ7wR5mwArACglY+k7H5lsoR/PSxBcGtgzIG3JOS2D0c4NxHC88hdMSGjV9FjVodYRcpOfvONvC8LiYGGy7Q9slgpMyA+gkPp8yQmZlGoxaeMhBMo6YTOsGvIVV0If3k1DL8txY+mI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758097156; c=relaxed/simple;
-	bh=S6234mvpAhtADV5YCJlzzgbAoZM7ZbCC9Arg78fJbZw=;
-	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=fWOXEmp2GaU9sxWiPWtYfhEbra6JPOM1iVcMjbTDa7uObwILLeZYLwdQPZsbjK01JhVvnWgg2eLqgmy6TyycGfzgG1cQerCusxDye3TKQCpPC8XSc5BvfYkvyxu5R2OQ79eR0gX9F/bWV9ssS8adBKA7C/kLkP9E5CvBZmt4nKA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=SwK5wO61; arc=fail smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE3B246788
+	for <soc@lists.linux.dev>; Wed, 17 Sep 2025 10:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758104552; cv=none; b=OHTQp4+e6KsEt7G0kA/eZLugaNGkw8drmRfxzrYO5zByWimQen9dQ95zFdnbUh4g3/1OyjE/erH8sNkiWnIcxiVW+thc9PuGtQr9Ygk5RbrQxrnHq3UCVmBUeFcTnfspGJ1yxH0jSbYekUR+oQQJ9nDStuDGrQC03VbGwAIW6jg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758104552; c=relaxed/simple;
+	bh=ChwpnRo4r573MejEB5FcUDNoIX+PZDS6zIF2JexF5Js=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=PhMCpVrMuhNHjJ2SHiURTSSy5JqcI/c9T3x7GtN7Yc87a4Bj+UfA/8jWXoXNEaNPIqznLOPZ8/y3uZ8NLM6B469MPOUi3oCrXDAVz0nTGUROGtKzi+AskTl2wzYmBguE+BKsogw5Tli2WpBCTQksikqY6N49fZ0RQUOlPjGS6E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lHuaJzGC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="SwK5wO61"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lHuaJzGC"
 Received: by smtp.kernel.org (Postfix)
-	id 5AB2AC4CEF9; Wed, 17 Sep 2025 08:19:16 +0000 (UTC)
-Received: from PNZPR01CU001.outbound.protection.outlook.com (mail-centralindiaazolkn19011032.outbound.protection.outlook.com [52.103.68.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 731D0C4CEF5; Wed, 17 Sep 2025 10:22:31 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 02C7BC4CEF0;
-	Wed, 17 Sep 2025 08:19:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 02C7BC4CEF0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CnygESf1J6kzA+4kyiGAs4xpK5F/L3Gz393AfiiP8kPunc7c8ArkyYiGIG4ZBAWG2hyZMM3ovdRfZSaReRScjVp+GdwcMbyidoXvEQO53Ry+W8xaaxuX9VNUcOZXXWxv6qXDh6ECrlHidjez2be0jiTUufIdZmVvJbXz6yLZ0oQwwhmd6wxYIIXEIQHYqDnxAvoRL+kB/ZqRDgsFKWjbu92mEaiX3+DnIHE3efFnwzJDNJaRJFPzgQV5IhL3Eo7weKxfCt1vGteTDRrbg5tIQIGoIsr3bsIsARv7tt4MpFcxecXcO4kK8EKkoGJV5v41ekApbQD/q8spf/+WalHXYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ke6pdNnxKm6nLHnQH/2LpRWTGPQECZwRyCgcCrWv7Io=;
- b=cyVd6/VDsmYxJtzUfkOjlZA7lA4MBgy3M2oBFTuHkORdXqLAhED7d4j0VHcDuvNSkWb9uQWUuvCvxpAvDxjpujER/CKgrVUYgh1dluecl1/HkxnJkDGuH1n+shr+zTg/V1S1W4kQavsJLD2dYMs5QEyBqoeg9+/RIY2FzJKyLN2Bef0bEPUZHasL549kkVJEoiT06zOieG89WXdV83XojG9+AMeBRiyY6jLLOJqV+JlJoksAGKYxNbhvxq7ANroc6OVXytvA1M/yjynyKAUmNUBrqEs8EOOpeet5BtsCergrQhJriAk/uXv8Bo883P4T40JZvREOsN9flfiZhoxrWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ke6pdNnxKm6nLHnQH/2LpRWTGPQECZwRyCgcCrWv7Io=;
- b=SwK5wO61YNqCDopbbqh6zSRbfVq8F1iusbArlC5qlvBe1WVMn5BdWFjwjkXd6XcHE7+GK8M4jaBx+iiNmkNlzUoUiIMpo6b9VwU4fMmAlKSGEFQDhGVahFI0hm4x5Khj0N3wlzpWkYNR6svMSnOVmGDyHk+VXXLEShdk3DydBYD/RmBIH1H5jfnVfHwgTFa+gH/0b3V7rLTw6ceV3L7DFvqkuussAsbTCvHovbjHB+q9ZPzkhO3gHObTlZT3TizKqRywO3XC+HUiGT5iXqrVLRzvc4TYTVDhEK7rvF88tBl45Ok0lGO6zxkT6Vt04pDfCBC4jkiE7qNxPikTvWG9Qw==
-Received: from MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:16f::16) by MA1PPF8BC6B51D4.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a04::9c) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.23; Wed, 17 Sep
- 2025 08:19:10 +0000
-Received: from MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::5dff:3ee7:86ee:6e4b]) by MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::5dff:3ee7:86ee:6e4b%5]) with mapi id 15.20.9115.020; Wed, 17 Sep 2025
- 08:19:09 +0000
-Message-ID:
- <MAUPR01MB11072ABA02A18CC7AA9B88874FE17A@MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM>
-Date: Wed, 17 Sep 2025 16:19:05 +0800
-User-Agent: Mozilla Thunderbird
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
- linux-riscv <linux-riscv@lists.infradead.org>,
- Chen Wang <unicorn_wang@outlook.com>, Han Gao <rabenda.cn@gmail.com>,
- "sophgo@lists.linux.dev" <sophgo@lists.linux.dev>
-From: Chen Wang <unicorn_wang@outlook.com>
-Subject: [GIT PULL] RISC-V Sophgo Devicetrees for v6.18
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2P153CA0020.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:190::19) To MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:16f::16)
-X-Microsoft-Original-Message-ID:
- <a31e67ec-67d6-47b7-963c-b6eda19fb271@outlook.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 47A5EC4CEF0
+	for <soc@kernel.org>; Wed, 17 Sep 2025 10:22:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 47A5EC4CEF0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45df0cde41bso46880595e9.3
+        for <soc@kernel.org>; Wed, 17 Sep 2025 03:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758104548; x=1758709348; darn=kernel.org;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ACPHyaPhJERwEc5kXRghrR5x8oKBJTVDySHHRzag2Bs=;
+        b=lHuaJzGCM5gRDyQ9lNi5WmLlQz2O+dsWDEH8ZxiAtS86QsxKnKma2X/cXWC1F1Yert
+         5ZEfEkYEexhYusFZyaxuVkaxh9XG0fJ/8ttkKXIQL+NtPWfIFAyHh+AYReX/CEydl68y
+         fL0NGyQQK0hvKPQc/xAlU5cK3x8drqOwfYaXMohFKdZM5/9/XThENYbHI49brjHOIssU
+         DTJbHnU/DkltJiAEnfRHJkwlmZllGtYYj7ui94nbXugSu62eomn0tuu7QGbAR1zFW0sK
+         bwtN2BNCvFu0VblwKlvkfc78PssOpuMWYqMHQxFuc9Po+6bJO5mmgG4FD+HGxvW1gZPm
+         xPDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758104548; x=1758709348;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ACPHyaPhJERwEc5kXRghrR5x8oKBJTVDySHHRzag2Bs=;
+        b=VN5OQPyErG7KO3rcOGLkffvPu1Bxu6mNRIkaUpKb1y3mowPpxsnnQiH97WjeeLsuS0
+         F0tokiHOq4BAnswsfxLqhQQcFNjUDa5kzYXDjgq9+tQksWKZml++brCoI4FU3Dl8F+/v
+         Cf8lD0A1UeqLJgSoq/0FF/6yg5xXA2N0U1olc+vp9X48pd13HvE0CvE3f2+8QMcOpYFq
+         jauJQtgGkM7sYSJsYrHAhDK+IWADwJStzHUkGDNf0bCiVPtkuQC7QYoK205obUL4dH0A
+         bM7BX5x/3PgG9i43W/VUnAi5L+eaK0wChXhTnIWcfHBeWEaKKXZV65T0hGSR8SaIdiA/
+         MMVg==
+X-Gm-Message-State: AOJu0YzxXGQTNMH7zpK0MAabKkEZNNOAS5ejTRBAdqKnYwLi8lGzJWr0
+	DXen2zLWv16viBm4fiatzVJvl5bVzZzTMmbF9GqsSV1lPgLUVwn6xn2CrCYc3w==
+X-Gm-Gg: ASbGncvRzQhXdlRfI9LNJeDFczuf5NwBWw77E5d72M27ba+0ZSDhysYzyAQ1aP3ZOOt
+	AnwbCg0IYz82N87mYuipRlWcYUCv9DhmY/f2opE+zA++bZHsTsKFfXbzyaN4t2tTevPPo4ladZ/
+	gx6aaIS4zM3E9xzJCsVokeU8+C4Shl5a3yQ4S1I3QbT37nVj+Me+9czbQSwkHyxCOIE2CUvnD68
+	lT4By4+XuValekxhoXcoy7qy89YSmwcVRx9Flp6fpmWaLJ7uuAcNq8phOYXU3nL/JYkyONte9mf
+	OiX3qaDrAccgr2kSnPbX34EpT1BjTfWaAtQqQUzuYcgcn3qVAk95INl1s+ZFvwBZbjA2l4BVq0L
+	9OXZn5q93T8aqOALulB0XP/HZ8q1L
+X-Google-Smtp-Source: AGHT+IHaqrW1NL1fyFZO67QCgQFhboRnQ+7WLeM8a9dV2PF3TUmmod1ucsnPTxYGdhQoaNaIB7TJNg==
+X-Received: by 2002:a05:6000:288d:b0:3e5:4da4:d87a with SMTP id ffacd0b85a97d-3ecdfa0b667mr1402602f8f.35.1758104547428;
+        Wed, 17 Sep 2025 03:22:27 -0700 (PDT)
+Received: from [192.168.0.24] ([148.3.20.242])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4613e09f879sm30441365e9.19.2025.09.17.03.22.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Sep 2025 03:22:26 -0700 (PDT)
+Message-ID: <c0e2e902-2a10-44a7-9592-491ba7382df0@gmail.com>
+Date: Wed, 17 Sep 2025 12:22:25 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MAUPR01MB11072:EE_|MA1PPF8BC6B51D4:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc7cc647-50f5-4c98-369c-08ddf5c2e090
-X-MS-Exchange-SLBlob-MailProps:
-	Cq7lScuPrnoyTIwSrGph0lItVprk4CpiShduoEPlBfNgtmNiFizWmAK8OrsNXPD9OXhiSly5wfBLVVn0niH+hSVTMOuLBuMFP4Kp4SSIGDWgOLDaDXp/oXE/bpe9qReqQYaRnDeXs5yjgdYemJwtujqRBIJ/i5TDNCVCPXqYkpfFVrZ/WzBR4g17Avikt45RkECvy6P9MP+6qZ8EJykoFYabErqNZ1VWjrWnfEep7lAhFEtPjqGG3qcFoknGPNvR/Km0b4/W+TqMG0DjS39D1vtFcZ31Wf7sQjZXnd6Fo12NPC15UT2Yei32QksJWtVvoPhdHnOk8I/89flubXI443LXJOyCcc/ibjiQSijFAPBK9PHP8/viIchlwem0ngEWzVNgO1aZhFD5S/zgGS26Bezff6Jm+U2+N4PL/uVl7ZYdc/6gucy3tflaIDOugkRtHt2Jf90dDPMjWzSZjr8qioVZ8Hy+trc2jfhTxrmpvo2oDQpIN6Cm7fvPErTtO+dmUnvNTM7HDF/dnXulDKb+bs+zkB+LAkC73rLoWT7bNKnPmXv6BZ2UJNP5U5sghPQzPXL9ivnnEvsNkY4NPIn8GbX1BPs6LnpIvyVdKvx6JXtA0dLQV8H/4bpvBY0gfirLfhdroNfXYRKzfYx/tqDKXgCyHrKMnsypTlsnOexRMI3RUcCmshHQ/pvSD5csD+cD5hiQfa22pgXByKtpH15aJjbe/qnfviv/1krR6z6mPZrRK3gQU0LUqx6TzEX+X0prvykGKcMd/z4=
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|8060799015|6090799003|5062599005|19110799012|461199028|23021999003|5072599009|15080799012|40105399003|52005399003|3412199025|440099028|10035399007|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Y3dGVWtiWW9WTTQrdWNtcll5blhSTlg4OHo5cjR5cVFXYURyNVRhbTdQeElL?=
- =?utf-8?B?Mm0vajBsb0hkSElhaUY2V0ZvakxKN2xXWEE2Z1poQ1BLNkYvZHhIanE5Ynh2?=
- =?utf-8?B?a2ZuRFJrR3FlZG9aZERwNWdXSDJ2Y2Q0WFlIYjhOS2FuNUFFV1dvYTJ5M0RX?=
- =?utf-8?B?MzI0N3hIdEV3c09PSHpVZTRaN1ZYZ3lVc3dYRWc3TzB6c0RDN0tDU2hsbG9P?=
- =?utf-8?B?aUNyRWV1MTFEOU45NTJqamFpZWxnVC9jb24rZ1E2QmQ3cHFyMGRmYW5waXVK?=
- =?utf-8?B?anBhTlRJa1NIRDFpZVQ3QUJwNVFYYXFuS1hlRUIrOVFiV0FaQThMZkxGbUMx?=
- =?utf-8?B?bjgyRnBRUURaUitiZ2FoTlI2RUdsaytjSHhqZmg1YjNjVVRLVGRHekVRY3Uz?=
- =?utf-8?B?WTdYU3F5czB1NkhSVTROWDdYaytYeDR6L1NUa1FYWlVtNW5CbU9kSk9qM1ZS?=
- =?utf-8?B?TkR5eGtDRFdIRDZaUEtlSEtRN2ZpNlV4bWR2WmxaZVlRUUg1YlUzM2V4Vkw2?=
- =?utf-8?B?OWMrNkMveE1wUkRLSCtRRzQ4d3Q2STk5d2I1MHhCM3RVVFU0UnpLRi9HZElH?=
- =?utf-8?B?TXR3OGZPQk90c0dReDkyMkJHS1pNaWRacjdRWnkxRlhJMFF1bWlva0F4aytr?=
- =?utf-8?B?enpvVlZYSGE4UUhpbXVBWjdRYWdnZ2s2SUtzeUt6dDZKbE8yMnFsaktYcTNR?=
- =?utf-8?B?ejIxNktmdEM1dU4xNlhieWd5cDIveTF6S2RMZ3NGdkV6RWc4MGpLVS9WRVVN?=
- =?utf-8?B?VXZtTmgySExyRlB2NkR1alRMeC92WDExSlpkWHlhQ0hxQUdhbjNWYzh1VytQ?=
- =?utf-8?B?MFhQQytkUnBMREJheEFka3NZeDFKcWVLeTJyNHArdlJhUHR3Y2pVbGdDcWFK?=
- =?utf-8?B?OHEyZUo1MWh1Z0xwdEk3MVphdytWdEhXZExlSGlpU25EYnZSZTFyazBPWXQy?=
- =?utf-8?B?QkM4dytXZnBkaW9yTzBJL3V5aDVoMWd1NG5PbWRPdVhZU1lrOTRMZm5QLzQ1?=
- =?utf-8?B?b0kxc01PcmRZOXFhWG5CSy9rRUdkRW5ITmp4enpxODIrenNsSGdHMm5kTVB3?=
- =?utf-8?B?RG5XbGNkbk0wRi8zQ2o0R0Q0K3JKN3kvU2lrV2lpTW16Qm9BbU5vZHF6NVJW?=
- =?utf-8?B?cDNwUDZsMVY1Y0tnYjVteTg3eVd5L2FIc2UyeHpNdkFtNmUvSUxRNE9YN3ZT?=
- =?utf-8?B?RWpKaktWZll6VWVQQVRpcGZsTzVmUk56T3NhYlVlVFc4bzRuWUVwaE5OdXEw?=
- =?utf-8?B?bXNCTFZtcjdwYU5CckxrZTFIRnVxMWxjNHJmUTBKcXZIYU10aFlhZmFKSmxs?=
- =?utf-8?B?MEw4bXhhaHRLdUcvRXlRWDJnUHFnd3MxNHgxRkR1NzUvaDd1S3FpT0xXRjFG?=
- =?utf-8?B?cU84WU9BYW12Qk16SVNTKzdUOU5DamI1RU9ycjhyc3R0eDBoTElGZkpEd2Ix?=
- =?utf-8?B?RC9nakRSNjk2c1RIbFVreEJnTUJxdFdwYldxYlNBZFZkL214WFhpNzQvSzFV?=
- =?utf-8?B?eE54YW5URTZSZ01Zcm5Sc2MvM09CYi95VnpYd2xHdFgwUlFRN3BiQ3RYWVow?=
- =?utf-8?B?TDMxTjZJb3lJc0oyV1BSSWtSMjV3cTl4eHBCTGlXSnFrVUsvRWxLUGhhSFg1?=
- =?utf-8?B?MmxmOFZlSnd1WWJvYUdCTnNlQjcwRCsvb094WDBYbllpdW5uWHRuc3A4QWZo?=
- =?utf-8?B?OWpWekR1a0ZBNG1ubWZHd0g4SUUxWE5zY09sZmZwVThiKy9ZOExQdW5Gc0U3?=
- =?utf-8?B?WUJNemdUYTgwK3M2TFRYd1BDT1MzaDRsQnJZdUYybEY5c2hlYW4rc2NVTnF4?=
- =?utf-8?B?RklGVEVsMTIzbWNSRzd0dz09?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SHlIRkswTWg3SUs2cW5UTk1vWkdtYlU2NTc2K0NZSnlQd0hzNnluTGE3TnFk?=
- =?utf-8?B?RVYxK3VXVGY3OE1BbHpwVUpuUU1FZExwdTNMRnlJaEQxYjB0eCtxRVFmRGZl?=
- =?utf-8?B?QmNneVQ1dnJKT3dyT2g3aW9BdnRlVUc0OWxoMk8xNTQ0RjFPam1WMWdtNWpE?=
- =?utf-8?B?Nzh0WGdDS1ZPYXBpeHNRbHVnS2dxalBHdkZQTjdxRE5IV1ZEZVVxcVVqT3pN?=
- =?utf-8?B?TlBVYjlWV29LOUdlZVc2d1lkTmRRelRFUlRtdUUvUDR6dHJEb3ZjSzFlSzlK?=
- =?utf-8?B?TXBlaXZ1Ry9BWFd2N0diUWd1clRPcDlCd2gxNXdHbUpPTklvbnVzNlZyeWFF?=
- =?utf-8?B?a253RldJOHA5ejNibG5CRm11ZlV3NGZQVWhnN0hxZzdBQXdWOCsxUlBLSHRr?=
- =?utf-8?B?NFdock1SUlBaSGpaMndndDl1YUYrUWEwbmt2ejdDaFBaQmRMbjFpLzNibk9E?=
- =?utf-8?B?WkFvaW9IakJtSUFpQ29GZFBra0xhODFtaHFVQ0lXVEJQSmNLZGQ0RnpFbVpU?=
- =?utf-8?B?QmgyMmk3TjFRcWN3T0RDeGNQOUhITkM2NVRiUDdqTndqNEtyQXR2OTM1UkM4?=
- =?utf-8?B?VU1nVU5QMEJhdUxjWFZ3ZkM4cldqTS9tN3ZXRmdmWG5BVUhiMCtOK3grTWhF?=
- =?utf-8?B?bzYyVjBTekJXWlAvYkYxN2ZLZzluYmMwY0VYbjNYNmpDWjZ0bnRUVUZ2Z0tJ?=
- =?utf-8?B?YzI0WFptQnYrWEdWSU8rc1Q2cmpwWTFvMytUSXZYcWc1MnFFcE1TR1JjWnhz?=
- =?utf-8?B?eTFGZytNSG1VbU5Ya3lxdmsrQ2twamlYM2haOURoWTd0cmNNWDlyT29Tbno1?=
- =?utf-8?B?dEhRK0xVelJORlYxTzdQVFo1TXczNHduZzlRR0JnYmVST0VyOXdYb3ZoTEM3?=
- =?utf-8?B?cnhmcWFMZVNIR01yeE1TN3BKaVhEY1hxQjFDcHV4SWltZjFXeVh6Qm80Qml2?=
- =?utf-8?B?bGxyVFFBZTNZYW9lM2tzYmlKakZhdHBtOHNsOFRmYmRoQnl4MjA3a1h3TVQz?=
- =?utf-8?B?b0U0OGJQNndva0NxdFZINlRkWnZnZWNUcUFwQld1ZXlXVWUxWGEzaXNBWjI3?=
- =?utf-8?B?T2Q4VE8wMFBRR2JOQ0ZmK3dIRGFCSnRIMFAwSmwwZzhCNTNkYlpuRk5jenhW?=
- =?utf-8?B?M3QyQ1lETThuUjlFb2MzUEd5TjVpS3BGMmxhV0lObDZNSWxQQVlnV1c5czlp?=
- =?utf-8?B?Z1JWMWxlMXhyYXVXcC9vdEpkNW9pNlVqS0QrSTEzVGVRYzA5M0l3SDRwQUFE?=
- =?utf-8?B?NW4yZXlpYnl5RDR4NktqOVBOeWhiVkJSRjVuNFA4clM2UTd0OWJTR1ZGWU11?=
- =?utf-8?B?Y0dMcUJ5WHlHbkVkT3BjVmFTWVN0R3JpY0oyZzZONGZmYzNrcnpRemhmMFVJ?=
- =?utf-8?B?TVVVblVQczQvL3A0UTNrc3prSi82VlFBaGYvcHZiMzRNVDNJRW9mQm9YWmNR?=
- =?utf-8?B?b2lZZlA2SnVDV2gvZW0vamdEQlJyejRob29UWEYva2xOMjJ4NElmWkRxQllq?=
- =?utf-8?B?c0pwbjBoanZFVzJSSkJpTkVzNW5jbXc0cWg4VkcyQ3VnV1ZLT0RjSzYvUk1H?=
- =?utf-8?B?WUpHVnRmc25MVUl0cHpVRjN5c0ppZmt6MEg2dk0wSVhNUzlLM3ZoRXlsdWdO?=
- =?utf-8?B?amNQSnJJZE9zbzZXRTI1TWNhS0xiUGJtN1NEdGp5WTY4QTlhSTR3ZHFqTndv?=
- =?utf-8?B?azBUSU1rRU0yM2xENDdYZ0x2ZEVLa0lzZjRERFNxUlVISGxFZVFJOFFJMnpP?=
- =?utf-8?Q?o4UU/iOKbS/om4dgGqTBMupo0Oqm4W16WVyg1r1?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc7cc647-50f5-4c98-369c-08ddf5c2e090
-X-MS-Exchange-CrossTenant-AuthSource: MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2025 08:19:09.9009
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA1PPF8BC6B51D4
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, ca-ES, es-ES
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [GIT PULL] MediaTek ARM64 DTS updates for v6.18 - part two
+Autocrypt: addr=matthias.bgg@gmail.com; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hey Arnd,
+Hi Arnd,
 
-Please pull this dt changes for RISC-V/Sophgo.
+can you please have a look on the following patches.
 
-Thanks,
+Thanks a lot,
+Matthias
 
-Chen
+---
+The following changes since commit 12a565af705542c4380e95f4e3a505a2c25ad754:
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-
-   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+   dt-bindings: arm: mediatek: Add grinn,genio-510-sbc (2025-09-10 11:51:16 +0200)
 
 are available in the Git repository at:
 
-   https://github.com/sophgo/linux.git tags/riscv-sophgo-dt-for-v6.18
+   https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ 
+tags/v6.17-next-dts64.2
 
-for you to fetch changes up to 4d94abded400a5194b929c26b3aa07fb9485fe35:
+for you to fetch changes up to ffe6a5d1dd4d4d8af0779526cf4e40522647b25f:
 
-   dts: sophgo: sg2042: added numa id description (2025-09-17 14:36:19 
-+0800)
-
-----------------------------------------------------------------
-RISC-V Devicetrees for v6.18
-
-Sophgo:
-
-Minor changes here only for SG2042. Enable numa
-and we can see significant performance improvements,
-for example in the STREAM test.
-
-Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
+   arm64: dts: mediatek: mt8516-pumpkin: Fix machine compatible (2025-09-12 
+16:18:04 +0200)
 
 ----------------------------------------------------------------
-Han Gao (1):
-       dts: sophgo: sg2042: added numa id description
+mt8188:
+- change efuse compatible fallback to make GPU DVFS work
+- enable SCP core for video decoding and encoding
 
-  arch/riscv/boot/dts/sophgo/sg2042-cpus.dtsi | 64 
-+++++++++++++++++++++++++++++
-  arch/riscv/boot/dts/sophgo/sg2042.dtsi      | 20 +++++++++
-  2 files changed, 84 insertions(+)
+mt8186:
+- add correct touchscreen compatible for tentacruel and krabby
 
+Fixes of DT warnings for many different SoCs and boards.
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (21):
+       arm64: dts: mediatek: mt6331: Fix pmic, regulators, rtc, keys node names
+       arm64: dts: mediatek: mt6797: Fix pinctrl node names
+       arm64: dts: mediatek: mt6797: Remove bogus id property in i2c nodes
+       arm64: dts: mediatek: mt6795: Add mediatek,infracfg to iommu node
+       arm64: dts: mediatek: mt6795-xperia-m5: Fix mmc0 latch-ck value
+       arm64: dts: mediatek: mt6795-sony-xperia-m5: Add pinctrl for mmc1/mmc2
+       arm64: dts: mediatek: Fix node name for SYSIRQ controller on all SoCs
+       arm64: dts: mediatek: mt7986a: Fix PCI-Express T-PHY node address
+       arm64: dts: mediatek: mt7986a-bpi-r3: Fix SFP I2C node names
+       arm64: dts: mediatek: mt7986a-bpi-r3: Set interrupt-parent to mdio switch
+       arm64: dts: mediatek: acelink-ew-7886cax: Remove unnecessary cells in 
+spi-nand
+       arm64: dts: mediatek: mt8183: Fix pinctrl node names
+       arm64: dts: mediatek: pumpkin-common: Fix pinctrl node names
+       arm64: dts: mediatek: mt8183-pumpkin: Add power supply for CCI
+       arm64: dts: mediatek: mt8183: Migrate to display controller OF graph
+       arm64: dts: mediatek: mt8183-kukui: Move DSI panel node to machine dtsis
+       arm64: dts: mediatek: mt8195: Fix ranges for jpeg enc/decoder nodes
+       arm64: dts: mediatek: mt8195-cherry: Move VBAT-supply to Tomato R1/R2
+       arm64: dts: mediatek: mt8195-cherry: Add missing regulators to rt5682
+       arm64: dts: mediatek: mt8395-kontron-i1200: Fix MT6360 regulator nodes
+       arm64: dts: mediatek: mt8516-pumpkin: Fix machine compatible
+
+Chen-Yu Tsai (3):
+       arm64: dts: mediatek: mt8188: Change efuse fallback compatible to mt8186
+       arm64: dts: mediatek: mt8186-tentacruel: Fix touchscreen model
+       arm64: dts: mediatek: mt8188-geralt: Enable first SCP core
+
+  arch/arm64/boot/dts/mediatek/mt6331.dtsi           |  10 +-
+  arch/arm64/boot/dts/mediatek/mt6755.dtsi           |   2 +-
+  arch/arm64/boot/dts/mediatek/mt6779.dtsi           |   2 +-
+  .../boot/dts/mediatek/mt6795-sony-xperia-m5.dts    |  40 +++-
+  arch/arm64/boot/dts/mediatek/mt6795.dtsi           |   3 +-
+  arch/arm64/boot/dts/mediatek/mt6797.dtsi           |  52 ++---
+  .../dts/mediatek/mt7986a-acelink-ew-7886cax.dts    |   2 -
+  .../boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts  |  11 +-
+  arch/arm64/boot/dts/mediatek/mt7986a.dtsi          |  12 +-
+  .../dts/mediatek/mt8183-kukui-audio-da7219.dtsi    |   4 +-
+  .../dts/mediatek/mt8183-kukui-audio-ts3a227e.dtsi  |   2 +-
+  .../boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi    |  27 +--
+  .../boot/dts/mediatek/mt8183-kukui-kakadu.dtsi     |  43 +++-
+  .../boot/dts/mediatek/mt8183-kukui-kodama.dtsi     |  40 +++-
+  .../boot/dts/mediatek/mt8183-kukui-krane.dtsi      |  40 +++-
+  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     | 101 ++++-----
+  arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    |  12 +-
+  arch/arm64/boot/dts/mediatek/mt8183.dtsi           | 239 ++++++++++++++++++++-
+  .../boot/dts/mediatek/mt8186-corsola-krabby.dtsi   |   8 +-
+  .../mt8186-corsola-tentacruel-sku262144.dts        |   4 +
+  arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi    |  25 +++
+  arch/arm64/boot/dts/mediatek/mt8188.dtsi           |   2 +-
+  .../boot/dts/mediatek/mt8195-cherry-tomato-r1.dts  |   1 +
+  .../boot/dts/mediatek/mt8195-cherry-tomato-r2.dts  |   1 +
+  arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi    |   3 +-
+  arch/arm64/boot/dts/mediatek/mt8195.dtsi           |  30 +--
+  .../dts/mediatek/mt8395-kontron-3-5-sbc-i1200.dts  |  16 +-
+  arch/arm64/boot/dts/mediatek/mt8516-pumpkin.dts    |   2 +-
+  arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi   |  18 +-
+  29 files changed, 549 insertions(+), 203 deletions(-)
