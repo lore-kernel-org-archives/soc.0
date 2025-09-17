@@ -1,52 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEB921579F
-	for <soc@lists.linux.dev>; Wed, 17 Sep 2025 17:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C5334BA4C
+	for <soc@lists.linux.dev>; Wed, 17 Sep 2025 18:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758129596; cv=none; b=Ck4wyXszp4Ah3dyPjZk7NpNQkM6MwBx5SEsEpGzINIEs4g098u2B28qWoEg/sUveQgQMx8ltoxhshzDjvqBXhbCd2Vpvr3yw10tG7AYLCeEaA94cvMJ4bMINjJtrScUxp1cHgec2cmKhq5yL6xkVQqechZYQzYaEvsEULHLNlyk=
+	t=1758133356; cv=none; b=LiPEqEU2hpQH8GE3aMn6fapndeHnoX9qFjCPU1K78busfEsnXaygK9oaeaub75xP04f8F3bvReK7YZlXH4S+OpxcA/3A6nzLcZUjIO72DfqLWgBlguBgGXNW4eXqp4KOnhv+bwezWDRInHibGPMLq4EkDFjdhmm4+PLhsbcHg3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758129596; c=relaxed/simple;
-	bh=PaQc8EUNl7CQtcyysbGlpZNQUgJZzBiTvE4agvsSPa8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EJ947JVBXcEggflKdKPgv7Iil1IaED8r3fiEep3Bl1feq/lTMlhLdu//BOc+44F/gEh/CNaLFhuLfVFbgLikSwyqPc92vckfbPdoasjiOVttUHmph+Wa6EEBQxkg5NbvRlDLsD1SNb921WMNz0NpFW7Nh+GVvmZdTYFwHDO/1qI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R4kufLm3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758133356; c=relaxed/simple;
+	bh=2D1dA8/ICqE22MprhtcMFZ8x2OdHKcVhD8IYrqeaof4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XzDVoJKCu2ai6WnJ9rd0EOvOxL6aIjBVFlq8ZX6BpJTZ5gtL8EmZ8KxQiDCrp45PXKtMqFXBK6yN0HDqj1sazZ2MwZI7cSO8TWWk5y60R6eVjZgGEJS2YUx+gDn2u2IQXY2mlOZeZV5BRS7u36ApdSpPLzgX3SDQGqcBHQfnb7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=nvexkrcR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R4kufLm3"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="nvexkrcR"
 Received: by smtp.kernel.org (Postfix)
-	id 00AB4C4CEF9; Wed, 17 Sep 2025 17:19:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8B5C4CEE7;
-	Wed, 17 Sep 2025 17:19:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758129595;
-	bh=PaQc8EUNl7CQtcyysbGlpZNQUgJZzBiTvE4agvsSPa8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=R4kufLm3DABZvpjbm0zHczD0JiihXYiw4z07kFCIgX0wrm/yZ13NQcOc7ZOcwlQ9n
-	 QOJxC5nD9L/yAnbtJWY/fkcoLbZ/mqotCWfKxP7gUumrj58/lgm5riTHGXI9Qejj9a
-	 uWLzIY2U6noLvIRjSZpIrCof6+7sxvYuBaPQKb/3LDGZlRc22DGnVWiWpqrEgLTjhU
-	 BUxN+z+if1W2BrB6JnBYiuDzNSPdbu1pJXcKT8o54zaO+A007t6U5bN7zDbR1UaTIN
-	 18TTBCLKVOGw5bD10waxcHETpLOGLRXNJrzC8yS657QXwDK8NnEhskRA9Iiv187ZZi
-	 xiW/v9ckPrERg==
-Received: by wens.tw (Postfix, from userid 1000)
-	id 9FF465FDA7; Thu, 18 Sep 2025 01:19:53 +0800 (CST)
-Date: Thu, 18 Sep 2025 01:19:53 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Allwinner Device Tree changes for 6.18
-Message-ID: <aMrtuZg8HlR--TAt@wens.tw>
+	id C4FF0C4CEFB; Wed, 17 Sep 2025 18:22:35 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A05DEC4CEE7;
+	Wed, 17 Sep 2025 18:22:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A05DEC4CEE7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1758133354; x=1789669354;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2D1dA8/ICqE22MprhtcMFZ8x2OdHKcVhD8IYrqeaof4=;
+  b=nvexkrcRRIqp66bACko3fQBXu8bmg/ZWTqf7cX5PtuAFxSr6FJpSvGbN
+   Kd3PbFU3cOD6MJMA3MFRGv6oK3DcM0FNv47r3lxZ5zw7HbLQWwiujpL8k
+   y6WrcfG22rPqz9n1DVTXGlDdjEo5lRA59hArrjkPyltMitVPRd+9lZihw
+   qB1pqUjLAL5sMQ0j3pfDEWWF+xB8JO3DVzI8E+mqRkGFJ6XmbrKfvvhDh
+   ndFkHf4GK38LGrSUNKcMPRoO4gWz+3BzR1efszjsrAK2gBUNaEdxceVMf
+   qP2Uz3+och9/7fV/1vStEVZchV6GCaZ5cojgW+o0nR3Z4xvqKHQCh4Wrg
+   w==;
+X-CSE-ConnectionGUID: 3YgLgpX/TcqRO1W0M7GsWA==
+X-CSE-MsgGUID: nADc49kwQoOhLFWErGL+TQ==
+X-IronPort-AV: E=Sophos;i="6.18,272,1751266800"; 
+   d="scan'208";a="278006773"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Sep 2025 11:22:33 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Wed, 17 Sep 2025 11:22:30 -0700
+Received: from ROU-LL-M43238.microchip.com (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Wed, 17 Sep 2025 11:22:27 -0700
+From: <nicolas.ferre@microchip.com>
+To: <sboyd@kernel.org>, <mturquette@baylibre.com>,
+	<linux-clk@vger.kernel.org>, <arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Conor Dooley <conor@kernel.org>, "Claudiu
+ Beznea" <claudiu.beznea@tuxon.dev>, <arnd@arndb.de>
+Subject: [GIT PULL v2] ARM: microchip: clk for 6.18 #1
+Date: Wed, 17 Sep 2025 20:21:18 +0200
+Message-ID: <20250917182150.93359-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250916080545.9310-1-nicolas.ferre@microchip.com>
+References: <20250916080545.9310-1-nicolas.ferre@microchip.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Organization: microchip
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Dear clock maintainers,
+
+Here are the first clk changes for 6.18.
+I don't think they have conflict with changes for the deprecated round_rate()
+to determine_rate() topic.
+In this v2, I address the issue highlighted by 0-day robot: build issue. I
+added a patch that is already included as well in an pull-request to arm-soc:
+https://lore.kernel.org/linux-arm-kernel/20250916150328.27015-1-nicolas.ferre@microchip.com/
+
+v1 --> v2:
+- addition of the patch "ARM: at91: pm: save and restore ACR during PLL
+  disable/enable" as the first patch of the series to avoid build error if clk
+  tree is merged before arm-soc. Branch bisect-able. Exact same patch
+  in both trees.
+- a new tag (clk-microchip-6.18-2) is created and deployed for this
+  v2 pull-request
+
+Thanks, best regards,
+  Nicolas
 
 The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
@@ -54,88 +104,49 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.18
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-microchip-6.18-2
 
-for you to fetch changes up to cca07ac2b5f7838b8ff612b53b9f82ac8cb58312:
+for you to fetch changes up to 652b08afba69d5d26fe91098eb832b1bcc0f91c2:
 
-  arm64: dts: allwinner: sun55i: Complete AXP717A sub-functions (2025-09-15 00:04:32 +0800)
-
-----------------------------------------------------------------
-Allwinner Device Tree changes for 6.18
-
-This tag contains two DT binding header changes that are shared with
-the clk tree.
-
-In this cycle we gained support for the MCU PRCM clock and reset
-controller on the A523/A527/T527 family of SoCs, the NPU which is a
-Vivante GC9000 IP block, and the NPU clock that was missing. The other
-PRCM clock controller gained default bus clock rate settings. These
-were not configured in the upstream U-boot bootloader, leading to them
-running at slower rates. The assigned rates are from the user manual.
-
-There is also a new board, the NetCube Systems Nagami SoM and two of
-its carrier boards.
-
-The A523 family development boards now have their internal RTC clocks
-configured correctly, so that the RTC does not drift wildly. The missing
-functions for the AXP717 on these boards are added. Missing reset GPIOs
-and delays for Ethernet PHYs are added. Last, the Cubie A5E now has its
-LEDs described and usable.
-
-An overlay for the Orange Pi Zero interface (addon) board was added.
-This can be used with the Orange Pi Zero and Zero Plus 2. Default audio
-routing for these two boards (to be used with the addon) were added to
-complement the overlay.
+  ARM: at91: remove default values for PMC_PLL_ACR (2025-09-17 19:15:32 +0200)
 
 ----------------------------------------------------------------
-Chen-Yu Tsai (13):
-      arm64: dts: allwinner: a527: cubie-a5e: Add LEDs
-      arm64: dts: allwinner: a527: cubie-a5e: Add ethernet PHY reset setting
-      arm64: dts: allwinner: t527: avaota-a1: Add ethernet PHY reset setting
-      dt-bindings: clock: sun55i-a523-ccu: Add missing NPU module clock
-      dt-bindings: clock: sun55i-a523-ccu: Add A523 MCU CCU clock controller
-      Merge branch 'sunxi/shared-dt-headers-for-6.18' into sunxi/dt-for-6.18
-      arm64: dts: allwinner: a523: Add MCU PRCM CCU node
-      arm64: dts: allwinner: a523: Add NPU device node
-      arm64: dts: sun55i: a523: Assign standard clock rates to PRCM bus clocks
-      arm64: dts: allwinner: a527: cubie-a5e: Drop external 32.768 KHz crystal
-      arm64: dts: allwinner: t527: avaota-a1: hook up external 32k crystal
-      arm64: dts: allwinner: t527: orangepi-4a: hook up external 32k crystal
-      arm64: dts: allwinner: sun55i: Complete AXP717A sub-functions
+Microchip clock updates for v6.18
 
-J. Neuschäfer (3):
-      ARM: dts: allwinner: orangepi-zero: Add default audio routing
-      ARM: dts: allwinner: orangepi-zero-plus2: Add default audio routing
-      ARM: dts: allwinner: Add Orange Pi Zero Interface Board overlay
+This update includes:
+- add one clock for sam9x75
+- new meaning for MCR register field in clk-master
+- use force-write to PLL update register to ensure
+  reliable programming sequence
+- update Analog Control Register (ACR) management to accommodate
+  differences across SoCs.
+- ACR management dependency with one ARM PM patch added beforehand
 
-Lukas Schmid (5):
-      dt-bindings: arm: sunxi: Add NetCube Systems Nagami SoM and carrier board bindings
-      riscv: dts: allwinner: d1s-t113: Add pinctrl's required by NetCube Systems Nagami SoM
-      ARM: dts: sunxi: add support for NetCube Systems Nagami SoM
-      ARM: dts: sunxi: add support for NetCube Systems Nagami Basic Carrier
-      ARM: dts: sunxi: add support for NetCube Systems Nagami Keypad Carrier
+----------------------------------------------------------------
+Balamanikandan Gunasundar (1):
+      clk: at91: sam9x7: Add peripheral clock id for pmecc
 
- Documentation/devicetree/bindings/arm/sunxi.yaml   |   8 +
- .../bindings/clock/allwinner,sun55i-a523-ccu.yaml  |  37 ++-
- arch/arm/boot/dts/allwinner/Makefile               |  10 +
- .../dts/allwinner/sun8i-h2-plus-orangepi-zero.dts  |  14 ++
- .../dts/allwinner/sun8i-h3-orangepi-zero-plus2.dts |  14 ++
- .../sun8i-orangepi-zero-interface-board.dtso       |  46 ++++
- .../sun8i-t113s-netcube-nagami-basic-carrier.dts   |  67 ++++++
- .../sun8i-t113s-netcube-nagami-keypad-carrier.dts  | 129 +++++++++++
- .../dts/allwinner/sun8i-t113s-netcube-nagami.dtsi  | 250 +++++++++++++++++++++
- arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi     |  41 ++++
- .../boot/dts/allwinner/sun55i-a527-cubie-a5e.dts   |  46 +++-
- .../boot/dts/allwinner/sun55i-t527-avaota-a1.dts   |  34 +++
- .../boot/dts/allwinner/sun55i-t527-orangepi-4a.dts |  31 +++
- arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  |  48 ++++
- include/dt-bindings/clock/sun55i-a523-ccu.h        |   1 +
- include/dt-bindings/clock/sun55i-a523-mcu-ccu.h    |  54 +++++
- include/dt-bindings/reset/sun55i-a523-mcu-ccu.h    |  30 +++
- 17 files changed, 853 insertions(+), 7 deletions(-)
- create mode 100644 arch/arm/boot/dts/allwinner/sun8i-orangepi-zero-interface-board.dtso
- create mode 100644 arch/arm/boot/dts/allwinner/sun8i-t113s-netcube-nagami-basic-carrier.dts
- create mode 100644 arch/arm/boot/dts/allwinner/sun8i-t113s-netcube-nagami-keypad-carrier.dts
- create mode 100644 arch/arm/boot/dts/allwinner/sun8i-t113s-netcube-nagami.dtsi
- create mode 100644 include/dt-bindings/clock/sun55i-a523-mcu-ccu.h
- create mode 100644 include/dt-bindings/reset/sun55i-a523-mcu-ccu.h
+Cristian Birsan (2):
+      clk: at91: add ACR in all PLL settings
+      ARM: at91: remove default values for PMC_PLL_ACR
+
+Nicolas Ferre (2):
+      ARM: at91: pm: save and restore ACR during PLL disable/enable
+      clk: at91: clk-sam9x60-pll: force write to PLL_UPDT register
+
+Ryan Wanner (1):
+      clk: at91: clk-master: Add check for divide by 3
+
+ arch/arm/mach-at91/pm_suspend.S    |  8 +++-
+ drivers/clk/at91/clk-master.c      |  3 ++
+ drivers/clk/at91/clk-sam9x60-pll.c | 82 +++++++++++++++++------------------
+ drivers/clk/at91/pmc.h             |  1 +
+ drivers/clk/at91/sam9x60.c         |  2 +
+ drivers/clk/at91/sam9x7.c          |  6 +++
+ drivers/clk/at91/sama7d65.c        |  4 ++
+ drivers/clk/at91/sama7g5.c         |  2 +
+ include/linux/clk/at91_pmc.h       |  2 -
+ 9 files changed, 66 insertions(+), 44 deletions(-)
+
+-- 
+Nicolas Ferre
