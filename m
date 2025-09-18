@@ -1,99 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FE72F2910
-	for <soc@lists.linux.dev>; Thu, 18 Sep 2025 21:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BD131E0EF
+	for <soc@lists.linux.dev>; Thu, 18 Sep 2025 22:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758232714; cv=none; b=mnYB6tSw6ojR4HHIBmn3P3OfS54KOjeEbOazFkxGjj9OLfJnWGsUMmL7IrFrn/6PVgPd8PiAJ/0QoKY1Iy3c5qXL7le1fOonDOqg5ORIy5Ua6LWQt8PQUz6XoLbA236dhOVh/L/pXnVvWJonRFaZ2KPSF25EeqsBYeyEa81Fr5I=
+	t=1758235171; cv=none; b=qbkAKhVXUjb6ctUM+1UBxAtvLdwcSlfM0INyQg3Oz01HOgnWZYsy2JmPTPWiND9DPBojUvU8fd1ibDQFW/q7zGq4EW5l6/kvGSq+zkSXpjEQJRO86mkHwORINCZ9AjowHe8pwjUIy2cqSuRUW2v+0PzgaGMuVB/pAXv3FW+a5RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758232714; c=relaxed/simple;
-	bh=0J4k9M3nW/Gn42wRpG6Rt8kBVc8A+C2t6b6WVWYGgmo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gPY4ompIC839bKbAHstYYrgI/RQajZ4EMsbcfTkpvSnF6mBWs+bnE2K3M1spxIsEuETo0xnvQf4o/F5bl2r/E0ZnJD3eGzAWIIz6K/K5yAyjs1U8Z+qyi92xoNnlpFmUwpmpcwH5mlBqyYQCIxB6r8Yn+WSLFponxCtpzPfVrP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758235171; c=relaxed/simple;
+	bh=R2UqKHWz3MxkF20gXnX3FyuZKAkt65J2tOR3erAk+a8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uD7qGhHQ610wseqKTJA1r+X1710vU5/SHzjJdkj9izxGVTu0MnSOLfKR3LiMIfiggp9A6hOtHwJxxlrnbUA2kxKu+2jIR/8olT50QTSRD6slBUPwcxCs7YGf3Sc5cVTiCiaExLqeGMCJuccDKl3XjoSH0y+zI0z2f8gSolCYxB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=nmBvBb8M; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="nmBvBb8M"
 Received: by smtp.kernel.org (Postfix)
-	id A2AA7C4CEF1; Thu, 18 Sep 2025 21:58:33 +0000 (UTC)
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+	id 2F81CC2BCFC; Thu, 18 Sep 2025 22:39:29 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CC60AC4CEF0
-	for <soc@kernel.org>; Thu, 18 Sep 2025 21:58:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC60AC4CEF0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from ofsar (unknown [180.158.240.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id CE0463421AD;
-	Thu, 18 Sep 2025 21:58:29 +0000 (UTC)
-From: Yixun Lan <dlan@gentoo.org>
-To: soc@kernel.org
-Cc: Yixun Lan <dlan@gentoo.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Alex Elder <elder@riscstar.com>,
-	spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org
-Subject: [GIT PULL] RISC-V SpacemiT Devicetrees for v6.18
-Date: Fri, 19 Sep 2025 05:57:59 +0800
-Message-ID: <20250919055525-GYC5766558@gentoo.org>
-X-Mailer: git-send-email 2.50.1
+	by smtp.kernel.org (Postfix) with ESMTPS id A219EC4CEFD;
+	Thu, 18 Sep 2025 22:39:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A219EC4CEFD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=EJL03UeAI2MkW8nRH1TGaiM07JjptxXrtsAZoUIIZvg=; b=nmBvBb8M5yGSFVx9suUCrgqTAE
+	x6taqWnY2oAJF22Ve1ImuWy2ZpBKTS32rP5tcRu3mfRllEUFwt1mfE1bTXHHFqjrZXDdBZ1ivwt+o
+	Jxe/t4akB6OY8ywKPh69Nf+ovMZyswDA6YiksTRDDscmw+xGON/KyYF4XhVPeX00/HYK5tOclWttB
+	l231R2mvJMPoZuxvkYib5w4dS1zgeJEuRPPp1Yc+13FZvXQ71VqNcBzodxKGzE1/kO0ohK6L32EaG
+	Cvf6TDHGTK4tec8wdQnDbKFJkdePbhzH20IQKpRBwsugW86J251dzrXfl8pdSRExOms9kM/CUYXom
+	yjRtb5Pg==;
+Received: from i53875b0a.versanet.de ([83.135.91.10] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1uzNHb-0003zY-6Y; Fri, 19 Sep 2025 00:39:19 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts fixes for 6.17 #2
+Date: Fri, 19 Sep 2025 00:39:18 +0200
+Message-ID: <21709561.0c2gjJ1VT2@diego>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
-Hi Arnd,
+Hi Arnd, Kevin, Olof,
 
-   Please pull SpacemiT's DeviceTree changes for v6.18
+please find a below some more Rockchip fixes for the current 6.17 release-cycle.
 
-Yixun Lan
+Please pull
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+Thanks
+Heiko
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+
+The following changes since commit dcc6785caffad27f2ea601fdd2f9782036e1faed:
+
+  arm64: dts: rockchip: fix second M.2 slot on ROCK 5T (2025-09-02 08:31:50 +0200)
 
 are available in the Git repository at:
 
-  https://github.com/spacemit-com/linux tags/spacemit-dt-for-6.18-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.17-rockchip-dtsfixes2
 
-for you to fetch changes up to 0f084b221e2c5ba16eca85b3d2497f9486bd0329:
+for you to fetch changes up to 0f860eef417df93eb0ae70bbfa8d26cb7e29244d:
 
-  riscv: dts: spacemit: uart: remove sec_uart1 device node (2025-09-04 08:50:29 +0800)
-
-----------------------------------------------------------------
-RISC-V SpacemiT DT changes for 6.18
-
-- Add OrangePi RV2 board support
-- Add reset support to UART driver
-- Add PDMA driver support
-- Remove sec_uart1 node
+  arm64: dts: rockchip: Fix the headphone detection on the orangepi 5 (2025-09-07 19:20:40 +0200)
 
 ----------------------------------------------------------------
-Guodong Xu (2):
-      riscv: dts: spacemit: Add PDMA node for K1 SoC
-      riscv: dts: spacemit: Enable PDMA on Banana Pi F3 and Milkv Jupiter
+Another missing supply and a wrong headphone gpio level.
 
-Hendrik Hamerlinck (3):
-      dt-bindings: riscv: spacemit: Add OrangePi RV2 board
-      riscv: dts: spacemit: Add OrangePi RV2 board device tree
-      riscv: dts: spacemit: add UART resets for Soc K1
+----------------------------------------------------------------
+Jimmy Hon (1):
+      arm64: dts: rockchip: Fix the headphone detection on the orangepi 5
 
-Yixun Lan (1):
-      riscv: dts: spacemit: uart: remove sec_uart1 device node
+Marcin Juszkiewicz (1):
+      arm64: dts: rockchip: Add vcc supply for SPI Flash on NanoPC-T6
 
- .../devicetree/bindings/riscv/spacemit.yaml        |  1 +
- arch/riscv/boot/dts/spacemit/Makefile              |  1 +
- arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts    |  4 +++
- arch/riscv/boot/dts/spacemit/k1-milkv-jupiter.dts  |  4 +++
- arch/riscv/boot/dts/spacemit/k1-orangepi-rv2.dts   | 40 ++++++++++++++++++++++
- arch/riscv/boot/dts/spacemit/k1.dtsi               | 31 +++++++++++------
- 6 files changed, 71 insertions(+), 10 deletions(-)
- create mode 100644 arch/riscv/boot/dts/spacemit/k1-orangepi-rv2.dts
+ arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi   | 1 +
+ arch/arm64/boot/dts/rockchip/rk3588s-orangepi-5.dtsi | 3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+
+
