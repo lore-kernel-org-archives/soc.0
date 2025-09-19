@@ -1,73 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8093124EA81
-	for <soc@lists.linux.dev>; Fri, 19 Sep 2025 07:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CE82E22A6
+	for <soc@lists.linux.dev>; Fri, 19 Sep 2025 07:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758267827; cv=none; b=KTH5VbFnnxF4N6F7cg6xaNLjIZ52FrtX4/QgqRNI+wxeF4tLMJqF5lQuT58/teMAvy9w2un/Iwd0bd90f85hYIQNuRDSCdM4Cn/2Sygq3/MDXJ6ejchlzw4yrmOQ1VZ9xYnle0RZKpaVJW5wiMUiXdFUKEnBZ1G/zv5P23lcfXE=
+	t=1758267969; cv=none; b=ioTpv7dNCUXh06mWjYO6jSLJ9oV8V2qqldYdWawGe4a53akRDw9D/73ac4tyJBEpggHp52JL46kEXU2eGidGYsAQTjhX/tBVu+3d8Pt3nnpgAmYGjC86W37a9JZlJNEY9Ev0lAmwCFLEFzJet2x0kNpgpIm10wIM14Xb1D2Ao/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758267827; c=relaxed/simple;
-	bh=YuLtXzfcyFOWfWJ0Spz8pu50yc44luPWwkUgA8lyHVc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=bi6X19CtVzVgg528pHUq1O/CvCYAZFiTvJbZc3KnbNw79vLg0AI/i8aQPGxnnH8QQXWEKOblSvWHQjlzuPQoM8/WGH05Y4RwqVmlaUMEM+9HZ9gFrmLXiogfsnsQJQEuVBl+6ow2RxhxSsHQ1iVQo3+W+wFQJb7MaBI2/PdVOI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=USpwZw53; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758267969; c=relaxed/simple;
+	bh=PCyLq210rQ8aivMQs4onNBfOrV8Q90v3g6UdwJvBW0Q=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=enJV5oJxvXLC29GNU++R9Bos4sTnVJlDiu6pBiS6t5F2JIa9yx8KSnKwms7XqAe1go/2xd552Irn8PU9z6Wt2GY90a3UzclYNGx/8kWhAzZgXGY21UTbPyj1DApeoxugHHf21Rq2YaISZkzkr29tW6XLTrSzAHVGO3goFq+iJuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZZgTg6oj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="USpwZw53"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZZgTg6oj"
 Received: by smtp.kernel.org (Postfix)
-	id 2D298C4CEF1; Fri, 19 Sep 2025 07:43:47 +0000 (UTC)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	id D7AD1C4CEF1; Fri, 19 Sep 2025 07:46:08 +0000 (UTC)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 22FC5C4CEF0
-	for <soc@kernel.org>; Fri, 19 Sep 2025 07:43:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22FC5C4CEF0
+	by smtp.kernel.org (Postfix) with ESMTPS id 41B14C4CEF0
+	for <soc@kernel.org>; Fri, 19 Sep 2025 07:46:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 41B14C4CEF0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3eebc513678so560265f8f.1
-        for <soc@kernel.org>; Fri, 19 Sep 2025 00:43:45 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-45df0cde41bso10700325e9.3
+        for <soc@kernel.org>; Fri, 19 Sep 2025 00:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758267824; x=1758872624; darn=kernel.org;
+        d=linaro.org; s=google; t=1758267965; x=1758872765; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+s3KzlEou4Arh9IszQHrxspSJWPrDvVkQR1g8Npkl2s=;
-        b=USpwZw53iA2e4mjPdf2DylUxh3C85U9tMnm3yP5P6dwXoe6NyDiewO2NuXvyjhPfcY
-         A73URdFO5Wpt9ZBIKGsm+Uf/1ek2XWgbXZ6bGl9C8uJlK1i85gq985mTM9o2PCKOsCn9
-         rQ/e1PhSKXTjrvEcwBr4G0QCioDOtLEqIr3H2aFMavNOeKHdsPhZdzCthPQa6iCy27Ol
-         gMza9wYqgJvpgHYLrUuR2r0APlwD0zx4TySXAr1V1kl6LCysLZxsfrH1/8IFNr/gXpy2
-         nlNKeUOUWax+8UlCjTp0+sbw/al22S981gmp31liUT3Euuic4bjJa1PpaMO3XjWRD8wq
-         TLZg==
+        bh=Sj//8F4fTHzOhzOgZFY9djcOmaWCzdNmUbED0aVzyoU=;
+        b=ZZgTg6ojntxYe/rli4qIFGQb6PafPsocsvGgKH9sX9CsaETt7J9/POeJF7yb9k4Whu
+         JqJfmHGBlhsldX16NRedIUZb7+Kg2K1yHCQKFTkse42odCUDecrbf6VoYopFmoYf9Sfe
+         iX3T5fXOpacbxuk0MKytmT6QIGFKBRomIEUbtOZc6OiRxNIUbVy6g32pzDVqnL1E7y/w
+         6tGyL3TNZiz/L4DDNxZ2vQwIN+kik01gFQlp+Ns20/gTDQSjxyurElemKrJS/YWDYaUm
+         ssFj+gCRU+rtqI4SWIkyPodEoVpkJvdSqImjVlrpTu9zEkN8MZ/BNIrfgsBc+gkcwL7O
+         IV9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758267824; x=1758872624;
+        d=1e100.net; s=20230601; t=1758267965; x=1758872765;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+s3KzlEou4Arh9IszQHrxspSJWPrDvVkQR1g8Npkl2s=;
-        b=if1JZrFAD9USn9VOlnBFlUHJs4GsBqC5MMB9qy8LVA+CDhpc421pf+Zb6N4gFK3OcV
-         qa/nBpj3N3F4cvH/FVG3/9pLTT23U3ezfyUqDzOV/uHTJwzfFbUeyW3sN8/y95Cck60Q
-         OGSCqC/H8dG/Z3kArQtjxnVAGJbJAhHTxmz+3CS7WrBBilQqXcbWx0PuK2grWRPv1Uk9
-         swYfMgjvxJtJdSgiTiJR76KIV/7JWq+K7ToEQ5+VdjBRgmfnuQIr0C+I1/Y6sxxoKz6d
-         VkGx4J7LmrurraLBvfv2dZNhRHR6G7i+VIs2yhsrAi7v3e6z2y9LallnvvuBxFiPD8nY
-         K19A==
-X-Gm-Message-State: AOJu0Ywe6rJJxVUOPkrNA/rOqkKRxjj/KRUC5/oYYU6B0oKu+MdFdzsX
-	DJ0NkL9pYWBSLpj/GzTYICX7cq6AvJ9tD46s/CMEm70xYwkaNOSn+8P04mWiWiOEEaIg9PshBfk
-	qIXGl
-X-Gm-Gg: ASbGncvTcjVjFYLtPlsjV28Drf7tQuAs3Cd6qhcT+bA/9BO8QqmVOuWZr0nLfKqPCAc
-	FKrpciwh+pwbBah8p55ZuXfQJl5s1p5LozyIqBG7K+yQiR8revxtrzJDVzqIXDpPD4vdD53Le9M
-	7xqGeaaR+4sRtQn1M0WvpSq49x5HzgJ79wNAmN9xds87jHnI9gs6LTQ4dwAV354H2vQQ1yv4jS5
-	mtcP21RgEaG88yHkMk2nm/iKv6H0O87d9cvERt0ey6eRt+Cfm36cud16FLkqOLtWdJQeDDWu6Dw
-	R785zSk3WWtxxoJznCzTdSBEBx/JAyyBH3wutJJS0MphXOMnPPX4aIlw1+hFtlXYmHCaxXWtRvj
-	dxpyThEU32+fTtavu0R2Ftc2Ks49e1kPMuGoHhc/2thsXMNw9OeFLr9di6hp/JmmQ4HzLiUa6
-X-Google-Smtp-Source: AGHT+IHcpJllzu9GwIGxRnbuf2O8B6mLK+lDLJvJu6rm63gNOYwmoqZg+mDrovu4zkhtTeyVh08/AA==
-X-Received: by 2002:a05:6000:2681:b0:3ed:c9c0:73ce with SMTP id ffacd0b85a97d-3ee8407d43cmr1276205f8f.32.1758267824324;
-        Fri, 19 Sep 2025 00:43:44 -0700 (PDT)
+        bh=Sj//8F4fTHzOhzOgZFY9djcOmaWCzdNmUbED0aVzyoU=;
+        b=dIf1ZhUjFfk12i+cr+lUsOQy9Cdhkhz2jPen2zm/ChU/gLw0rxCj4EKWM3m1Yos4cI
+         ZOlLCKzWvfgZ0nUpK1AIERFiAGbxkpXXZvkKujsfjwf9JPKSRNZTBPrQyK9PBzHQ0qo7
+         VQDkKnIpgn8stnpvtTsYh1Bo0g1wxH4YPx6078/UW4vLlCqbnrF9xMHSPyZ+RBjUJPjU
+         xJhd/EDV+6kraLElCK21yfmI7EKvRrs5qpd6U/UrwDYPH5P6+SRx33zVyPA8V1wcCOXY
+         mk7utWmhLbqxKHR0+ZYyOumqYJiQGB1qdRi7Ni08CkhIK2RyVaNDI3gL/fsL4UUc08CW
+         iFiw==
+X-Gm-Message-State: AOJu0YzcpIHmg9VGHPGYx6XKvmDJZG8NhP9N0bVGtCAPckh3cP3QRjh7
+	qy5Oac2I2/5e0nl6u3/yHPpRVNrWr/KgI5rAtGWl0UOX9XJhliDX4aKoFcTO1PLGgnUWXZJ4wKV
+	ftsUHw94=
+X-Gm-Gg: ASbGncuh+zIdRaZEKmvHRVK+I2yfBc/XB5Y5+Yij3h9fnkYQ10kpiCchHqWF5oc7Ydf
+	DtgAlNj76GGZH1F2kl0dtiIiiMKUftGtEWN7SsD8k3Ar8K1NBhdeF3FRMrsHhLHzBYdl10iljAB
+	nEuWXq50u/WnV20FxEEF+n4ewozorXB4vDLeFf5vG4rXcdbswMCl9F4VZZprNv8hZaK+p5cblsg
+	yHdhm2HsqsXALZZB0eB0X7aLywtavULid7Qg8WuL+vavNt9qqkONpkAejKS8wEb2qXjTjnKqYvt
+	/gVdzGSo/TCrcMSUQU+PJ4Ite4La/7iq3h++WIXDOQrdUSZcEW2pb2WY8WUr+VnGUPBP6xz8JjM
+	+Q7hJh9T9P+E3SUl5Zpykst1LvldH3euW22O+dEUCHXJSC4d76IC5Wx0wf5YEOY/B4mlUNbwx
+X-Google-Smtp-Source: AGHT+IF1xyuhwXqnZwy0ko9KlFPIehOGJYLXMgJOucjyGCzOVvKO3TFQuawkjLcp2ZJOEerqdy3ZqA==
+X-Received: by 2002:a05:6000:2dc5:b0:3ec:df85:351e with SMTP id ffacd0b85a97d-3ee7c55272dmr1797890f8f.11.1758267965437;
+        Fri, 19 Sep 2025 00:46:05 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:3d9:2080:77b3:66a:b2a0:c20f? ([2a01:e0a:3d9:2080:77b3:66a:b2a0:c20f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-464f4f9f339sm84730655e9.14.2025.09.19.00.43.43
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee0740841dsm6625247f8f.23.2025.09.19.00.46.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Sep 2025 00:43:43 -0700 (PDT)
-Message-ID: <003cb467-531d-4a8d-a97f-19d59154132f@linaro.org>
-Date: Fri, 19 Sep 2025 09:43:43 +0200
+        Fri, 19 Sep 2025 00:46:05 -0700 (PDT)
+Message-ID: <d40e7e96-4a7c-4e4f-b36f-750c6525b95c@linaro.org>
+Date: Fri, 19 Sep 2025 09:46:05 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -76,7 +76,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] Amlogic drivers updates for v6.18
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.18
 Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
 To: soc@kernel.org, arm@kernel.org
 Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
@@ -111,7 +111,9 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's drivers updates for Amlogic SoCs, 2 non-urgent fixes for the meson_sm driver.
+Here's the Amlogic ARM64 DT changes for v6.18, mainly adding cache properties to all
+ARM cores in Amlogic SoCs, enabling RTC on C3, fixing RTC node layout on C3 and fixing
+long-running issues with SDCard on BananaPi S905x3 boards and the Odroid-C2.
 
 Thanks,
 Neil
@@ -122,22 +124,54 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.18
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.18
 
-for you to fetch changes up to 0454346d1c5f7fccb3ef6e3103985de8ab3469f3:
+for you to fetch changes up to 663bfe77b6f70bcb33b2607e16c94fcb1029580e:
 
-   firmware: firmware: meson-sm: fix compile-test default (2025-09-10 09:31:20 +0200)
-
-----------------------------------------------------------------
-Amlogic Drivers changes for v6.18:
-- device leak at probe in meson_sm
-- fix compile-test default for meson_sm
+   arm64: dts: amlogic: gxbb-odroidc2: remove UHS capability for SD card (2025-09-10 09:32:09 +0200)
 
 ----------------------------------------------------------------
-Johan Hovold (2):
-       firmware: meson_sm: fix device leak at probe
-       firmware: firmware: meson-sm: fix compile-test default
+Amlogic ARM64 DT for v6.18:
+- Add cache information to the Amlogic SoCs
+- Add RTC node for Amlogic C3 SoC
+- Fix PWM node for Amlogic C3 SoC
+- Remove UHS capability for Odroid-C2 SDCard
 
-  drivers/firmware/meson/Kconfig    | 2 +-
-  drivers/firmware/meson/meson_sm.c | 7 ++++++-
-  2 files changed, 7 insertions(+), 2 deletions(-)
+----------------------------------------------------------------
+Anand Moon (11):
+       arm64: dts: amlogic: Add cache information to the Amlogic GXBB and GXL SoC
+       arm64: dts: amlogic: Add cache information to the Amlogic SM1 SoC
+       arm64: dts: amlogic: Add cache information to the Amlogic G12A SoCS
+       arm64: dts: amlogic: Add cache information to the Amlogic AXG SoCS
+       arm64: dts: amlogic: Add cache information to the Amlogic GXM SoCS
+       arm64: dts: amlogic: Add cache information to the Amlogic A1 SoC
+       arm64: dts: amlogic: Add cache information to the Amlogic A4 SoC
+       arm64: dts: amlogic: Add cache information to the Amlogic C3 SoC
+       arm64: dts: amlogic: Add cache information to the Amlogic S7 SoC
+       arm64: dts: amlogic: Add cache information to the Amlogic S922X SoC
+       arm64: dts: amlogic: Add cache information to the Amlogic T7 SoC
+
+Christian Hewitt (1):
+       arm64: dts: amlogic: sm1-bananapi: lower SD card speed for stability
+
+Valerio Setti (1):
+       arm64: dts: amlogic: gxbb-odroidc2: remove UHS capability for SD card
+
+Xianwei Zhao (2):
+       arm64: dts: amlogic: C3: Add RTC controller node
+       dts: arm: amlogic: fix pwm node for c3
+
+  arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi        | 37 +++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi        | 41 +++++++++++-
+  arch/arm64/boot/dts/amlogic/amlogic-s7.dtsi        | 36 +++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        | 74 ++++++++++++++++++++++
+  arch/arm64/boot/dts/amlogic/meson-a1.dtsi          | 15 +++++
+  arch/arm64/boot/dts/amlogic/meson-axg.dtsi         | 21 ++++++
+  arch/arm64/boot/dts/amlogic/meson-g12a.dtsi        | 27 ++++++++
+  arch/arm64/boot/dts/amlogic/meson-g12b.dtsi        | 62 ++++++++++++++++--
+  arch/arm64/boot/dts/amlogic/meson-gx.dtsi          | 27 ++++++++
+  .../arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts |  4 --
+  arch/arm64/boot/dts/amlogic/meson-gxm.dtsi         | 24 +++++++
+  .../arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi |  5 +-
+  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi         | 27 ++++++++
+  13 files changed, 385 insertions(+), 15 deletions(-)
