@@ -1,126 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446722E3B00
-	for <soc@lists.linux.dev>; Fri, 19 Sep 2025 09:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0432BEFE4
+	for <soc@lists.linux.dev>; Fri, 19 Sep 2025 09:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758273915; cv=none; b=bQmsiFR1lbbbqcMFY0nzGZRB+IwCbdm7lwrfYwaEH4kyFUXAfoZZLP2kY4uBzrZ/EOr4V+mHiUA2acmsGkX+H/0hsCRsVO5OpoUZNa4Oc7WkTaWBRQl1BB8Vaq3NK3W9AXGUHGn8vpKuqR+O+QUTwuKZF+bO0sw/0GXSa1M5/Fc=
+	t=1758274240; cv=none; b=kel4/9sDulBppunA1yQl+aPUfe9ZOblJUDImtPNNuENGEKuFB/3vf03t00QM4GK+88gFmbXHQzVJb0dqCax0S/Ky3r62aOyOmytgKiLmNZyd/YYu8PSUHl/Kat+jRrL9xAcq2aSvIuR4LvXEzgmCPOAZyp0ftxVDkSJ1EUOkvQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758273915; c=relaxed/simple;
-	bh=+hQV36ermCg3GTswyjokH750Usr+sQ7Ds8u5SZvEtEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OrbclEgFztPEFPAvZDQOohUZr3HDSkk81LXNF/d4kEBv5XK02/Gzf5GJjSgON9PNINtL12s6j9i+pu9QlRDQFTQG1rq0i3dv1aKQPrff6fDVsSMZcc/K/ULwW0Zs6/XIt0NJ2ljRl2Ly3uiBNzQi2ZcGI9UmkjXaZUgUHbsUXVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758274240; c=relaxed/simple;
+	bh=avDTXxWThbmAjC1QHoBfYODid9NjOrfOHkrQc9E/jS0=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=lvzsjTee2qDCXh/f2BFvIbahAvnw0jIaO1wGUGwG8qAsFoTK/AQAtagdYRTpnWZi+SPKZ5ClGoRB/hk6Yj73Kg/ozPcUhGBT03v1DBc4xTwtyM7zmxtG3OSe4f1e1ghwUC95QUKgcvIP4HOXMT/kDzREmKtt31BSFv03UPkINzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dgp5J7db; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dgp5J7db"
 Received: by smtp.kernel.org (Postfix)
-	id C6682C4CEF7; Fri, 19 Sep 2025 09:25:14 +0000 (UTC)
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id A9026C4CEF7; Fri, 19 Sep 2025 09:30:39 +0000 (UTC)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C60EBC4CEF1;
-	Fri, 19 Sep 2025 09:25:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C60EBC4CEF1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [180.158.240.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 649F03420AB;
-	Fri, 19 Sep 2025 09:25:12 +0000 (UTC)
-Date: Fri, 19 Sep 2025 17:25:07 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Mark Brown <broonie@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: Vivian Wang <wangruikang@iscas.ac.cn>,
-	David Miller <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alex Elder <elder@riscstar.com>,
-	Networking <netdev@vger.kernel.org>,
-	Guodong Xu <guodong@riscstar.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	by smtp.kernel.org (Postfix) with ESMTPS id E6B1AC4CEF0
+	for <soc@kernel.org>; Fri, 19 Sep 2025 09:30:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E6B1AC4CEF0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3ee64bc6b90so394243f8f.0
+        for <soc@kernel.org>; Fri, 19 Sep 2025 02:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758274237; x=1758879037; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=shAUV/4fLe8epMbZhEjkFrhPpzpShVnyKXxo1s/wp4I=;
+        b=Dgp5J7dbIAay4CBAzlG0n1TnJAkiq94JPm0Z7QsCnsL3biQl5eleXACUxJeQkXGMB1
+         2LCT4tWKirQ4b4515TLNuBomTQ7Q9HTZrdA2yMITBMx103ZjvIvPt6bn+bfZ60rXVNMC
+         dZaU4WUbEsTzJFG8wLAAmWYuw734I3PYjeuRCtQQFH7hW5EfWJWuEh7m79aXyubmNIT+
+         1hcIsz+JhT9Mp0DmSt4A2r7fTwnhXVdAYagqoX2F5CFfQTDFzUpYRxf6qo7sZNt4Ozjw
+         fYqMQ4JeH5OhQTfeUfnNKNpqJhHSAOlGmMd1jSs2Sv4DXGg/bA3Z4dfIaUBz6UKYFsHv
+         HmsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758274237; x=1758879037;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=shAUV/4fLe8epMbZhEjkFrhPpzpShVnyKXxo1s/wp4I=;
+        b=ZVFqUrvfVU87BZycdJSq/nDsXWc4D2kFiFq4qZblD57rNXaTsnnoJliEKI1LkJtMSm
+         rC/lhkd9Us7mNqwN9keH0MMc0HS/ECAmXMY3gBop10lgseCx0xXF8d0uhvi8FEr3htQ8
+         VXnKmQxc3MTBGNWlgV93RXh4vayD7KzvmTBPwbInEJuDxVz0uoKXSUS2tAyFLOEzmDoo
+         7Ebjssrt3Odd0WWFfID3AVJzsIcl1Nyu0tGBb/oM2iteAQTApOO1XIHIqKCe88jIfsc4
+         k39XeQILnjZ2N/+9IciZYUjgTaqw2jVz7orufiZ9464RLw37aW/QaPcQ0nS9koZ9epXs
+         ncZw==
+X-Forwarded-Encrypted: i=1; AJvYcCVLs0HD3zoFBU4qn/Mm5TYpUvzCYYD0Xjt0Fjymwd77WG25+O701xSkkIVea7bIBg+w148=@kernel.org
+X-Gm-Message-State: AOJu0YzsKTvPLoVCNz2U+sHNem6rS3ubUoLUdIvDPzqdGNQBtoLbSQ8S
+	v74h5ru0jjbPHa+AmGhK4KvfizQ7LJpe+9zFVd/a7s+oxSmcctSjZsBu
+X-Gm-Gg: ASbGncv48lYZaLqSPzC18xLGZSIvDTYEwSr0DcM2oJjp1C3poa8HsYjjUUO8UTA/aHL
+	XRP4rTrIMm1PsoUvpOJlfQgKZXEd6735VTfZBtnfZNRd4M4mUXq4PG+SWm0McirtUplnMphX98i
+	43PymWw1+6P4aLTmvwXlSkFkACEI8fSjic9XfGzPY/BvRDvyTKNBqfXWpBylVq5usykZfxgB+BL
+	cSKEW+5wI3T4EowSjpSoqE9hXDtZbTo4v6cJ1IGU/Jzt6qiQF1JwgcYPPShQUHpmUF+0+OpUMwU
+	178QaLNsNhrm7ZV8wOq3QQtCT5iTyIU0tUOaqro/BHeI2z2l7LNQHjKYwpHKs8Ut6Ua6wq7AiRm
+	3mbLO1bhngeKURX7OZpC08rSE2PZ2KBhXjmS9jo8bThiNmTvJ50D/nrwrdAHMA1tRgcL11ynUdB
+	zJ+AVOJMIPmo7xgQ==
+X-Google-Smtp-Source: AGHT+IEc2Z9yh5Xo4qu7XSr+O293iGaa2p4oGxQBjn1/Zv3QlzQilSw5ukGaWfDe5r0j6EsTMEOZxQ==
+X-Received: by 2002:a05:6000:1ac9:b0:3e2:b2f0:6e57 with SMTP id ffacd0b85a97d-3ee83da0688mr2182377f8f.36.1758274237120;
+        Fri, 19 Sep 2025 02:30:37 -0700 (PDT)
+Received: from localhost (p200300e41f28f500f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:f500:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3ee0fbc7284sm7083373f8f.33.2025.09.19.02.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Sep 2025 02:30:35 -0700 (PDT)
+From: Thierry Reding <thierry.reding@gmail.com>
+To: arm@kernel.org,
 	soc@kernel.org
-Subject: Re: linux-next: manual merge of the net-next tree with the spacemit
- tree
-Message-ID: <20250919092507-GYA1279412@gentoo.org>
-References: <aMqby4Cz8hn6lZgv@sirena.org.uk>
- <597466da-643d-4a75-b2e8-00cf7cf3fcd0@iscas.ac.cn>
- <76970eed-cb88-4a42-864a-8c2290624b72@sirena.org.uk>
- <20250917123045-GYA1265885@gentoo.org>
- <20250917125947-GYA1266976@gentoo.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] firmware: tegra: Fixes for v6.17
+Date: Fri, 19 Sep 2025 11:30:33 +0200
+Message-ID: <20250919093034.2747884-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.50.0
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917125947-GYA1266976@gentoo.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Paolo, Mark, Arnd
+Hi ARM SoC maintainers,
 
-I'd like to have your attentions, see below
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-On 20:59 Wed 17 Sep     , Yixun Lan wrote:
-> Hi Mark,
-> 
-> On 20:30 Wed 17 Sep     , Yixun Lan wrote:
-> > Hi Mark,
-> > 
-> > On 13:03 Wed 17 Sep     , Mark Brown wrote:
-> > > On Wed, Sep 17, 2025 at 07:48:34PM +0800, Vivian Wang wrote:
-> > > 
-> > > > Just FYI, Yixun has proposed for net-next to back out of the DTS changes
-> > > > and taking them up through the spacemit tree instead [1], resolving the
-> > > > conflicts in the spacemit tree. This would certainly mean less headaches
-> > > > while managing pull requests, as well as allowing Yixun to take care of
-> > > > code style concerns like node order. However, I do not know what the
-> > > > norms here are.
-> > > 
-> > > Thanks.  They're pretty trivial conflicts so I'm not sure it's critical,
-> > > though like you say node order might easily end up the wrong way round
-> > > depending on how the conflict resolution gets done.
-> > 
-> > Thanks for the help and fixing this, but ..
-> > 
-> > If it's possible to revert the DT patch 3-5, then I'd be happy to take,
-> > but if this is too much job, e.g. the net-next's main branch is imuutable
-> > and reverting it will cause too much trouble, then I'm fine with current
-> > solution - carry the fix via net-next tree..
-> > 
-> > But please use commit: 0f084b221e2c5ba16eca85b3d2497f9486bd0329 of
-> > https://github.com/spacemit-com/linux/tree/k1/dt-for-next as the merge
-> > parent, which I'm about to send to Arnd (the SoC tree)
-> > 
-> No matter which way choose to go, I've created an immutable tag here,
-> 
-> https://github.com/spacemit-com/linux/ spacemit-dt-for-6.18-1
-> 
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
-I've sent out the PR of DT changes to SoC tree for inclusion, see 
-https://lore.kernel.org/all/20250919055525-GYC5766558@gentoo.org/
+are available in the Git repository at:
 
-There is a potential conflict with commit from net-next:
- e32dc7a936b11e437298bcc4601476befcbcb88f ("riscv: dts: spacemit: Add Ethernet support for Jupiter")
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.17-firmware-fixes
 
-the conflict itself is quite trivial, and should be easy to fix, and I'm also
-personally fine to have it solved in net-next tree if Arnd has no objection
+for you to fetch changes up to 6131690df4adae33e01c0b51b9b78b3e8ed3b76f:
 
-But if need assistance from my side, just let me know - I can handle it
-- if the ethernet DT patches can be reverted from net-next
-- I can apply them at SpacemiT SoC tree
-- send a incremental v2 PR to the SoC tree
+  firmware: tegra: Do not warn on missing memory-region property (2025-09-15 18:28:09 +0200)
 
-> > BTW, The 'for-next' branch is a merged branch contains clock and DT patches
-> > for SpacemiT SoC tree's which isn't immutable..
-> > 
-> > Let me know what I should proceed, thank you
-> > 
-> 
+Thanks,
+Thierry
 
--- 
-Yixun Lan (dlan)
+----------------------------------------------------------------
+firmware: tegra: Fixes for v6.17
+
+This contains a simple patch to avoid a warning in the case where the
+optional memory-region property is missing.
+
+----------------------------------------------------------------
+Thierry Reding (1):
+      firmware: tegra: Do not warn on missing memory-region property
+
+ drivers/firmware/tegra/bpmp-tegra186.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
