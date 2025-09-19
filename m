@@ -1,75 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571072BD5A1
-	for <soc@lists.linux.dev>; Fri, 19 Sep 2025 21:20:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807E41DEFE8
+	for <soc@lists.linux.dev>; Fri, 19 Sep 2025 21:55:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758316804; cv=none; b=jMzuQ0u1Xc3jgQlCCzWJJYRUOaJLQtexAj+wdqqz0AHb3CenDQpmIgmNKGMjz/mIeTATUqkxhRad1zLybkg6jlArFroW8309c8YyoUrE0/AAZJkDOkTbIgTpbuyt0Vk185nmqMfcG3FCr7FTUXKUbWdxbFIutEGQKD0Qvu2XrN8=
+	t=1758318938; cv=none; b=UHu6fwVhXDCF190CkanysTQ29vAXs+cQH9wpId4m3d5Z92Qa/LmtjMiA4dSH7DTenOhZTuZZg6jvrLAt7+W1flEPKqD/aNzxhKlMoH/p6Kvc4X1GMCdwwc8KNkXwYn75uf6x+Uo+uDYjblfhHFI1FgJnACaBV6QNxAOD5wQ24R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758316804; c=relaxed/simple;
-	bh=7rpTCHq0tg2boyWWPz+AlsNfcsmC/Bi2r7ZhyD96jfU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JwQx9Basu1pdf1Yz8Kmq9bN191S0ygBOvUjR6PFvjFSJBdffuM2SKCBN8iJ1whqSQa9mwQ2nyxSoGX7kE4myW9sm9ogjiB/FuJF00ITGG0JklyY49y6zklVYTtY1742nKyxkrAXS1ASURKw9SenPr9TQPHspgJWz1PsSd15F34M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=GksNX5y4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758318938; c=relaxed/simple;
+	bh=Kfflr/n9x8ObUPUWxY5SiWbDDf6rBC37dCoRqlvYqbA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eoK4ZxSkXjq0Es7YyS8CD7P1azj7ZFlUjkEY/df7l524g3I51aHQ84rFEe7NZj95nE2AhIOWEa4qbFtiUxsOdfeH8530LDK58l2oR8iNCMyE4SJ/0LDZet6qj15IVNRJnabnyaPJi3C/o+poWDjfqy5witeiqef2WnzrjM3Mx38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=o99i2EjX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="GksNX5y4"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="o99i2EjX"
 Received: by smtp.kernel.org (Postfix)
-	id 14562C4CEF7; Fri, 19 Sep 2025 21:20:04 +0000 (UTC)
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	id EDE52C4CEF7; Fri, 19 Sep 2025 21:55:36 +0000 (UTC)
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C9A84C4CEF0
-	for <soc@kernel.org>; Fri, 19 Sep 2025 21:20:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C9A84C4CEF0
+	by smtp.kernel.org (Postfix) with ESMTPS id C7C4EC4CEF0
+	for <soc@kernel.org>; Fri, 19 Sep 2025 21:55:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C7C4EC4CEF0
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-42485372dc6so7312385ab.0
-        for <soc@kernel.org>; Fri, 19 Sep 2025 14:20:01 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-74c7d98935eso1414511a34.1
+        for <soc@kernel.org>; Fri, 19 Sep 2025 14:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758316800; x=1758921600; darn=kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758318934; x=1758923734; darn=kernel.org;
         h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=s92tP4t5WFXZr2GKT9tyo2yphzIt1odXMwCHBG052no=;
-        b=GksNX5y46Gy3Fi1zGSPSUe9u7gVX0N5Hx38ZoGDiX3uavVMeoiTa8oLv0IzcF+JFnw
-         YonZD6mmA7bU/vp5tzD7kstPjK3xARIKj9Cmi/pYS21McRnDNGdt7KO8tCIcDRl95s0N
-         Q+h8g3IOt74AoXUlPjJbOCgyyQYI71FWQ9QD0yO8yaLRE0hq8YxmTkz0eZkplmEYhiG8
-         FNHNsy9MZVDB5APPTfWf22SgapLY1IwR8kVrP9byANgAaWLUgyAhcl6x0DuT+RhyqIQ5
-         jSC7bhXrleVS0hUMuuby4FKmrYJO9yrH7ixHuJrE8l6EsBBDv1raGvCtfJnd+k5He7NP
-         sNFQ==
+        bh=9GhVAJ8zczcdk5RoUmHUOCQ0cenVmOQiaDZXnPFubC0=;
+        b=o99i2EjXcMkFa9PruKUHIuUpSo6gLa0VOO5MeOi3H8TIcdhmRiBeLrGX0L+PKkiF4F
+         8rKAxFZqdTUqJ8o9gSG6vEOfX+djHvzHhtWHBIwXWgiXIkmOtufu/0dTVUAcuDYv4FD9
+         BkOW2v/wIhnu78cRRKDQFnTAHYi4obwveCsRDsVtYbnJd3IcxGgdnt3rxSlpOyLZNvYf
+         aQr2b5goX74S8Tb8GTrxjcMEtGISv2ScasYlM0Ve5EerKCcuZdSlbfzqRE8cawVcfSsA
+         z5wZ5lt9M1HMvfpFDte9sv36qePp+HzDHebP2LW8jA0Obqh9UjlmrfrP3x8w9rfgRAes
+         QE9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758316800; x=1758921600;
+        d=1e100.net; s=20230601; t=1758318934; x=1758923734;
         h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=s92tP4t5WFXZr2GKT9tyo2yphzIt1odXMwCHBG052no=;
-        b=uPbZyaPPa6x82r9ii+zoc9SQJukx6pKrcbgAbl3ZS3iTg5xlc4rwWdfo83ftspRmAV
-         6dj7sCMvczHU+1TzWb4xCmmSnxhD1fk7iIlRdN5xG2YBVeKriwLtpQ7emquWVWuAoW5q
-         t8v/saNtnwBd9VHutYiPTYFdjPIgNVqMhnryR1SpkD7teD87Y2uaH5Vi2ae59/RCRkIB
-         gYiuRexO0OWdsmH0HueXWhII9V5KgjqenEcrDsz80P0nPTrnGg09YSUCLPhz9aj0F0e7
-         KFGBqzxjsYI7gUA2L+s5Gbu9I+nZK+8rLbMmxICapgUlW3nBnD3jYet4qUMNEsmC0Rdj
-         QAHQ==
-X-Gm-Message-State: AOJu0YwfoHir6k+QWX1DXYZvqSM/jzkQMfQbgctInV9uBLsjyW+8yN0i
-	mwyP5+uQEEsJ9KWhi6q82sWsUIzq9oeyyKGS7peTZzWJjs0m0lY7yatle3jUhZOhLfMYHn7ONP0
-	7VuW6YWtLOg==
-X-Gm-Gg: ASbGnct8r/4SpZGmb1EDY6sNPRCKPEfaJ02I6ZlnriT6qkc4/zlF/twGNyEfnQhhd+l
-	Er7ZJNKVW3BXM3U5vOrg2HfpxPyY7VWNtqIpxSJLs9BToiKjelamBBNZTCdfLeHY8vwQi3PNOS1
-	9i0SISCmubuZ1NzmDgI46AsmotYCic3vG2j0uDjk9F+A6WhFK+YE7ywBDcEsboH+f8lsgQaYX2P
-	6UVlcLK+lLiXAyGAVvzsGNscVodsq2MkKKH9t5T4F6cVT/dTr/1Zuzhz6XjyXXj35kBSU5H6J2F
-	JrUTFsMy69/oZen5kFaNIWNytYkeesZIFYjP8wYJ6tCV6pQ6P1QUE/9vciCQc0rmjD0/A9UTC2q
-	ulirKH/FTlQEXqNyA1XhqxDTVu3vOQHSLLF+TtYGasvzZqzRPHCnsAmptWQ==
-X-Google-Smtp-Source: AGHT+IGsqsYnhTXUsNgx0wZHnvpKnyrcoUJXU5jyFCHL/FXVHe31eOcLv4p90MIR2Gxa352P4Ejr1Q==
-X-Received: by 2002:a05:6e02:4813:b0:424:8650:17ba with SMTP id e9e14a558f8ab-424865019f7mr47008285ab.27.1758316800610;
-        Fri, 19 Sep 2025 14:20:00 -0700 (PDT)
+        bh=9GhVAJ8zczcdk5RoUmHUOCQ0cenVmOQiaDZXnPFubC0=;
+        b=f5NzROQkWsp/lWaX7htFJuzfx2Q0Wd4ttBUBz9lPEeMX9lJYh0wlAOtqbF30IHfU+6
+         jeDd4YYpPeIR176uHPDMfjJpgM159vouD2c7f8TVy0XUmrO+1CtAn/JmwonVAFPoSh2j
+         KK5o9RI4I6Yt47aDEGOxBZ5sqyJl27+WPTlLqZJZRWOjmLzZmgIpLPnhy8Ys1i/gOBAq
+         ZQdT/6/Bze+l/x8y6USn+zEa3hU1IyNNr7wFEJANd5AMvQgBiOXAXFxCNavt7ViY+FXw
+         tfm5go3xDNuHIP8NBmGtvcL80b0zmYqxNM7jTCkI50QwO7mMYGPghr1dCVc8DT1ytlXX
+         IckA==
+X-Gm-Message-State: AOJu0YzE8mt2wMkkuqnPDrCMK7bJwbACuOPKH7+Ry8QACl43PfFdppnB
+	W+OxPVqbSKDIZjmDEfBnoCN+F7C5NnlVE5j0+XL08frztOFBgDJGFe7uO7hT1Z/YG27A2jzS59L
+	zARZVdmkLag==
+X-Gm-Gg: ASbGncss3/HlO8s0uu71i5or7dUN/FsjO3Lc+gGrKHcQ68dPmtyedU9+BdIRFP1rvOF
+	htapxDSP2YoOXT+m714MpOhbaPX4SgHx0bLYu0eF5jWzUcPqBd8WZ0ekdNURfIh7d8ge/GhhR8I
+	SlOabXGz+/5wlNMvqpTTvytHiA/FmHKTgYunlnXYG6k0SIDaret5z3Us/WtQ1a7TzNxviKsVaTY
+	c0hnUAwrMOUuGdVoaF1kt0INjr+Raa2RhyVLN1OGWEs88jgaatayCGUdzvYKDms9SPoKOsQfHon
+	UaaHIMc/d3KMqkAau+5ulKC9WMncJ7lZEH8UyUxeNTlUCi/QetztdrOBY26pMFNBb6uO19Yv0yF
+	zXa1l4zLDQsZ240lvJ8JX+eJrikfEe+lh+nFOhZxyIg+HziSY+FCN6D/ORw==
+X-Google-Smtp-Source: AGHT+IEakeFSJ15e4E3+APHquCTiCy/olIvfzEu180a/k/E2WjZFyGY8R305NCwW8HGY7XD5NOI+Hg==
+X-Received: by 2002:a05:6830:6d25:b0:741:3929:31a with SMTP id 46e09a7af769-76f70de94femr2698840a34.12.1758318933696;
+        Fri, 19 Sep 2025 14:55:33 -0700 (PDT)
 Received: from localhost (static-23-234-83-233.cust.tzulo.com. [23.234.83.233])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-53d56e41e3csm2599947173.71.2025.09.19.14.19.59
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7692de28b95sm2926581a34.45.2025.09.19.14.55.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Sep 2025 14:20:00 -0700 (PDT)
+        Fri, 19 Sep 2025 14:55:33 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 To: soc@kernel.org
 Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: dts: ti: omap updates for v6.18
-Date: Fri, 19 Sep 2025 14:19:59 -0700
-Message-ID: <7hbjn6p2bk.fsf@baylibre.com>
+Subject: [GIT PULL] ARM: OMAP: SoC: updates for v6.18
+Date: Fri, 19 Sep 2025 14:55:32 -0700
+Message-ID: <7h7bxup0ob.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -84,44 +84,40 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.18/dt-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.18/soc-signed
 
-for you to fetch changes up to 27322753c8b913fba05250e7b5abb1da31e6ed23:
+for you to fetch changes up to bb676996ed583464504123721195e98a708fbba9:
 
-  ARM: dts: omap: am335x-cm-t335: Remove unused mcasp num-serializer property (2025-09-05 14:37:57 -0700)
-
-----------------------------------------------------------------
-ARM: dts: ti: omap updates for v6.18
+  ARM: OMAP2+: clock: convert from round_rate() to determine_rate() (2025-09-15 16:18:01 -0700)
 
 ----------------------------------------------------------------
-Bruno Thomsen (1):
-      ARM: dts: am33xx-l4: fix UART compatible
+ARM: OMAP: SoC: updates for v6.18
 
-Jihed Chaibi (3):
-      ARM: dts: ti: omap: am335x-baltos: Fix ti,en-ck32k-xtal property in DTS to use correct boolean syntax
-      ARM: dts: ti: omap: omap3-devkit8000-lcd: Fix ti,keep-vref-on property to use correct boolean syntax in DTS
-      ARM: dts: omap: am335x-cm-t335: Remove unused mcasp num-serializer property
+----------------------------------------------------------------
+Alexander Sverdlin (1):
+      ARM: AM33xx: Implement TI advisory 1.0.36 (EMU0/EMU1 pins state on reset)
 
-Krzysztof Kozlowski (4):
-      ARM: dts: ti: omap4: Use generic "ethernet" as node name
-      ARM: dts: omap: dm814x: Split 'reg' per entry
-      ARM: dts: omap: dm816x: Split 'reg' per entry
-      ARM: dts: omap: Minor whitespace cleanup
+Brian Masney (2):
+      ARM: OMAP1: clock: convert from round_rate() to determine_rate()
+      ARM: OMAP2+: clock: convert from round_rate() to determine_rate()
 
- arch/arm/boot/dts/ti/omap/am335x-baltos.dtsi               |  2 +-
- arch/arm/boot/dts/ti/omap/am335x-cm-t335.dts               |  2 --
- arch/arm/boot/dts/ti/omap/am335x-myirtech-myd.dts          |  4 ++--
- arch/arm/boot/dts/ti/omap/am335x-sl50.dts                  |  2 +-
- arch/arm/boot/dts/ti/omap/am33xx-l4.dtsi                   | 20 ++++++++++----------
- arch/arm/boot/dts/ti/omap/am33xx.dtsi                      |  8 ++++----
- arch/arm/boot/dts/ti/omap/am57xx-beagle-x15-common.dtsi    |  2 +-
- arch/arm/boot/dts/ti/omap/dm814x.dtsi                      |  8 ++++----
- arch/arm/boot/dts/ti/omap/dm816x.dtsi                      |  8 ++++----
- arch/arm/boot/dts/ti/omap/dra7-l4.dtsi                     | 14 +++++++-------
- arch/arm/boot/dts/ti/omap/dra71-evm.dts                    | 16 ++++++++--------
- arch/arm/boot/dts/ti/omap/omap3-devkit8000-common.dtsi     |  4 ++--
- arch/arm/boot/dts/ti/omap/omap3-devkit8000-lcd-common.dtsi |  2 +-
- arch/arm/boot/dts/ti/omap/omap3-sbc-t3517.dts              |  4 ++--
- arch/arm/boot/dts/ti/omap/omap4-sdp.dts                    |  2 +-
- arch/arm/boot/dts/ti/omap/omap4-var-om44customboard.dtsi   |  2 +-
- 16 files changed, 49 insertions(+), 51 deletions(-)
+Kuninori Morimoto (1):
+      arm: omap2: use string choices helper
+
+Miaoqian Lin (1):
+      ARM: OMAP2+: pm33xx-core: ix device node reference leaks in amx3_idle_init
+
+Yang Xiuwei (1):
+      ARM: OMAP2+: use IS_ERR_OR_NULL() helper
+
+ arch/arm/mach-omap1/clock.c                  | 19 +++++++++++++------
+ arch/arm/mach-omap2/am33xx-restart.c         | 36 ++++++++++++++++++++++++++++++++++++
+ arch/arm/mach-omap2/board-n8x0.c             |  2 +-
+ arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c | 12 +++++++-----
+ arch/arm/mach-omap2/pm33xx-core.c            |  6 +++++-
+ arch/arm/mach-omap2/powerdomain.c            |  2 +-
+ arch/arm/mach-omap2/voltage.c                | 12 ++++++------
+ arch/arm/mach-omap2/vp.c                     |  4 ++--
+ 8 files changed, 71 insertions(+), 22 deletions(-)
+
+
