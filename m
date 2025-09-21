@@ -1,42 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381B918DB1F;
-	Sat, 20 Sep 2025 12:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3952A149C7B
+	for <soc@lists.linux.dev>; Sun, 21 Sep 2025 02:02:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758371436; cv=none; b=lHnEpVjthv/4S4PVdTQIshvf1r0Ed+q35Gn57hLTgji+l53v8mYMgLaiaDbm1qiNwohtxoEg+U3Qz9XrrK8frYEHhCOIFT47cMXEJFw0O7J8Fp3qXBpnuHsBlR066S2YtimDTMpkYoseaEtTjdhYpKO1uurk9BT8oE7PSCFLspk=
+	t=1758420147; cv=none; b=WlRGmpTAokIoXFQvt+vjhYCCROWeXWCIIve2Ds5sx1/TgX9yieb19JZZM816CrfArvflx4UCQ96FBZ6q7A/KeP3KmQ9Cimf8tDkdMEvaKg4oD/0xFjoglQqRt6xcRqVVj7LGc0E/KBLfQ/+eaB9TlAu+7fAlzrblBaxtC0wcxX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758371436; c=relaxed/simple;
-	bh=azjtBgg9o8jYuuDI1h5t3q803QLZoJl/KPkMwExin3Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cRkeMeCh5ZcoTbI87CI3yHzsqRMXAeuCg+rE0dTUqNJ3I2OgZmZhpISK1SCT9zvWypJNMfYjMkrSiuPfeosb53ZFgpz+6krx9CEsp6vOaiOHqTgWNas+3p4GgZMTGNwk82HFcHLthSyo4C+Suuv2A0Qy7shxy8RIxgPpXeTLxeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WdhGKz7i; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758420147; c=relaxed/simple;
+	bh=Dfj37Sftvqia1c23oR0KQMdwAxSQc1SLZbmSxYfQvmA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fm3hGKHM1ndW9zmWLnHwIJ8LZJLn/KjTvpU07/UbYkgRRHJhmJO9KSseJVRm7C/LMHMNQdwcao1Z6vNvtqZfk/p6yTv37u/JWyLwkkypzSJiooagtq8PaqG/71ULXgCbX5Bcr81sSx0peg1jIcQqn83fr1LIUsTN/aGDUuQ4Gc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGzHDFr7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WdhGKz7i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BCFDC4CEF7;
-	Sat, 20 Sep 2025 12:30:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGzHDFr7"
+Received: by smtp.kernel.org (Postfix)
+	id D2D96C4CEFA; Sun, 21 Sep 2025 02:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331D6C4CEEB;
+	Sun, 21 Sep 2025 02:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758371435;
-	bh=azjtBgg9o8jYuuDI1h5t3q803QLZoJl/KPkMwExin3Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WdhGKz7iOT5/i+kSqRcvVLN0ApfKvwUHjabdMZZkluxpQS4s8a5ZO5IfGeeWreasd
-	 XBBCb6SM3dB/AJGmxHS4IqWdcO7RqRHwnAJnq9zoiuL9qlsMmFIaA8QOJgYx+3v3KD
-	 bNu6qek6IRu5gikpFrHfZSA1WlU5Lnqa2AtqBgrRZRqvhivoPc183l++Q32VkAqGif
-	 0tiVu8KV+8f+DuvrTBQASDuWqmcFmGf5SUj6xBPou5Ev+COuKRQxaC8us+3dtxEcDc
-	 vC37tUxMrNomi4UT/dK5Ya2SF3REei3TlNDUS1VoCYBHlmjR2BKGSuhhy445I8kRrK
-	 khr2nSvs2EmMg==
-From: Sven Peter <sven@kernel.org>
-To: soc@lists.linux.dev
-Cc: asahi@lists.linux.dev,
+	s=k20201202; t=1758420146;
+	bh=Dfj37Sftvqia1c23oR0KQMdwAxSQc1SLZbmSxYfQvmA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aGzHDFr7rErCH6cQma6Tt7rVt9RCdESjDxLkeeX/+dYalAuyZyjM1ScWJkPUGiAbx
+	 QvEgeRJy7syQ8w6OFzAp/Tdljn96Qp86kq5WSRICioUlAbZgRNrTZIKY5nhmMmON+C
+	 Lr1V29qMSYNz88KJ8j9wn7e9hDskVFZt7Z0nWZXPMs8bRuY3kuNy0Qocrd0GTiIKdt
+	 zwa/IzdzSWqtCKIZUBG/8kC8r4wJk4iSVEmP555KpCEo24crRoRrxUp8L0xYGQZEuB
+	 V8pO3wPsJjTzhHiCO81J3xU1SmPqC7r0bStEMU9VwNQyO9xCJAEFwZLlFNbppVxXT1
+	 NbcwZTPg+8BXw==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL 2/2] Apple SoC DTS changes for v6.18
-Date: Sat, 20 Sep 2025 14:30:28 +0200
-Message-Id: <20250920123028.49973-2-sven@kernel.org>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250920123028.49973-1-sven@kernel.org>
-References: <20250920123028.49973-1-sven@kernel.org>
+	Arnd Bergmann <arnd@arndb.de>,
+	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
+	Amirreza Zarrabi <amirreza.zarrabi@oss.qualcomm.com>
+Subject: [GIT PULL] More Qualcomm device driver updates for v6.18
+Date: Sat, 20 Sep 2025 21:02:24 -0500
+Message-ID: <20250921020225.595403-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -45,107 +47,58 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 4379305ffbc2eebe3de673fc965145d441c89b8f:
 
-  arm64: dts: apple: t600x: Add SMC node (2025-08-10 20:21:57 +0200)
+The following changes since commit 3cc9a8cadaf66e1a53e5fee48f8bcdb0a3fd5075:
+
+  firmware: qcom: tzmem: disable sc7180 platform (2025-09-11 16:38:33 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git tags/apple-soc-dt-6.18-part2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.18-2
 
-for you to fetch changes up to 70fa521f4d55127c85d7c2defe8c20be75e29efd:
+for you to fetch changes up to 3f1707306b79cafc5a11350befd5a4081b807760:
 
-  arm64: dts: apple: t8015: Add SPMI node (2025-09-18 21:13:45 +0200)
-
-----------------------------------------------------------------
-Apple SoC DTS updates for 6.18, part 2
-
-- New device trees for all M2 Pro, Max and Ultra models are added.
-  This is responsible for most of the changed lines since we already
-  need 2000+ lines just to describe all the power domains inside
-  t602x-pmgr.dtsi for these SoCs.
-- Missing WiFi properties for t600x are added.
-- Bluetooth nodes are added for all t600x machines.
-- The PCIe ethernet iommu-map was fixed for the Apple M1 iMac
-  to account for a disabled PCIe port.
-- SPMI, NVMe, SART and mailbox nodes for Apple's T2 and A11.
+  serial: qcom-geni: Load UART qup Firmware from linux side (2025-09-17 13:51:08 -0500)
 
 ----------------------------------------------------------------
-Hector Martin (5):
-      arm64: dts: apple: t600x: Add missing WiFi properties
-      arm64: dts: apple: t600x: Add bluetooth device nodes
-      arm64: dts: apple: Add initial t6020/t6021/t6022 DTs
-      arm64: dts: apple: Add J414 and J416 Macbook Pro device trees
-      arm64: dts: apple: Add J180d (Mac Pro, M2 Ultra, 2023) device tree
+More Qualcomm device driver updates for v6.18
 
-Janne Grunau (6):
-      arm64: dts: apple: t8103-j457: Fix PCIe ethernet iommu-map
-      dt-bindings: arm: apple: Add t8112 j415 compatible
-      arm64: dts: apple: Add devicetreee for t8112-j415
-      dt-bindings: arm: apple: Add t6020x compatibles
-      arm64: dts: apple: Add ethernet0 alias for J375 template
-      arm64: dts: apple: Add J474s, J475c and J475d device trees
+Introduce support for loading firmware into the QUP serial engines from
+Linux, which allows deferring selection of which protocol (uart, i2c,
+spi, etc) a given SE should have until the OS loads.
 
-Nick Chan (4):
-      arm64: dts: apple: t8015: Fix PCIE power domains dependencies
-      arm64: dts: apple: t8015: Add NVMe nodes
-      arm64: dts: apple: t8012: Add SPMI node
-      arm64: dts: apple: t8015: Add SPMI node
+Also introduce the "object invoke" interface in the SCM driver, to
+provide interface to the Qualcomm TEE driver.
 
- Documentation/devicetree/bindings/arm/apple.yaml |   41 +-
- arch/arm64/boot/dts/apple/Makefile               |    9 +
- arch/arm64/boot/dts/apple/t6000-j314s.dts        |    8 +
- arch/arm64/boot/dts/apple/t6000-j316s.dts        |    8 +
- arch/arm64/boot/dts/apple/t6001-j314c.dts        |    8 +
- arch/arm64/boot/dts/apple/t6001-j316c.dts        |    8 +
- arch/arm64/boot/dts/apple/t6001-j375c.dts        |    8 +
- arch/arm64/boot/dts/apple/t6002-j375d.dts        |    8 +
- arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi   |   10 +
- arch/arm64/boot/dts/apple/t600x-j375.dtsi        |   11 +
- arch/arm64/boot/dts/apple/t6020-j414s.dts        |   26 +
- arch/arm64/boot/dts/apple/t6020-j416s.dts        |   26 +
- arch/arm64/boot/dts/apple/t6020-j474s.dts        |   47 +
- arch/arm64/boot/dts/apple/t6020.dtsi             |   22 +
- arch/arm64/boot/dts/apple/t6021-j414c.dts        |   26 +
- arch/arm64/boot/dts/apple/t6021-j416c.dts        |   26 +
- arch/arm64/boot/dts/apple/t6021-j475c.dts        |   37 +
- arch/arm64/boot/dts/apple/t6021.dtsi             |   69 +
- arch/arm64/boot/dts/apple/t6022-j180d.dts        |  121 ++
- arch/arm64/boot/dts/apple/t6022-j475d.dts        |   42 +
- arch/arm64/boot/dts/apple/t6022-jxxxd.dtsi       |   38 +
- arch/arm64/boot/dts/apple/t6022.dtsi             |  349 ++++
- arch/arm64/boot/dts/apple/t602x-common.dtsi      |  465 +++++
- arch/arm64/boot/dts/apple/t602x-die0.dtsi        |  575 ++++++
- arch/arm64/boot/dts/apple/t602x-dieX.dtsi        |  128 ++
- arch/arm64/boot/dts/apple/t602x-gpio-pins.dtsi   |   81 +
- arch/arm64/boot/dts/apple/t602x-j414-j416.dtsi   |   45 +
- arch/arm64/boot/dts/apple/t602x-j474-j475.dtsi   |   38 +
- arch/arm64/boot/dts/apple/t602x-nvme.dtsi        |   42 +
- arch/arm64/boot/dts/apple/t602x-pmgr.dtsi        | 2265 ++++++++++++++++++++++
- arch/arm64/boot/dts/apple/t8012.dtsi             |    8 +
- arch/arm64/boot/dts/apple/t8015-pmgr.dtsi        |    1 +
- arch/arm64/boot/dts/apple/t8015.dtsi             |   42 +
- arch/arm64/boot/dts/apple/t8103-j457.dts         |   12 +-
- arch/arm64/boot/dts/apple/t8112-j415.dts         |   80 +
- 35 files changed, 4727 insertions(+), 3 deletions(-)
- create mode 100644 arch/arm64/boot/dts/apple/t6020-j414s.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6020-j416s.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6020-j474s.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6020.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t6021-j414c.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6021-j416c.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6021-j475c.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6021.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t6022-j180d.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6022-j475d.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6022-jxxxd.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t6022.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t602x-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t602x-die0.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t602x-dieX.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t602x-gpio-pins.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t602x-j414-j416.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t602x-j474-j475.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t602x-nvme.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t602x-pmgr.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8112-j415.dts
+----------------------------------------------------------------
+Amirreza Zarrabi (2):
+      firmware: qcom: tzmem: export shm_bridge create/delete
+      firmware: qcom: scm: add support for object invocation
+
+Bjorn Andersson (1):
+      Merge branch '20250911-qcom-tee-using-tee-ss-without-mem-obj-v12-2-17f07a942b8d@oss.qualcomm.com' into drivers-for-6.18
+
+Viken Dadhaniya (6):
+      dt-bindings: qcom: se-common: Add QUP Peripheral-specific properties for I2C, SPI, and SERIAL bus
+      soc: qcom: geni-se: Cleanup register defines and update copyright
+      soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux subsystem
+      i2c: qcom-geni: Load i2c qup Firmware from linux side
+      spi: geni-qcom: Load spi qup Firmware from linux side
+      serial: qcom-geni: Load UART qup Firmware from linux side
+
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml           |   1 +
+ .../bindings/serial/qcom,serial-geni-qcom.yaml     |   1 +
+ .../bindings/soc/qcom/qcom,se-common-props.yaml    |  26 ++
+ .../bindings/spi/qcom,spi-geni-qcom.yaml           |   1 +
+ drivers/firmware/qcom/qcom_scm.c                   | 119 +++++
+ drivers/firmware/qcom/qcom_scm.h                   |   7 +
+ drivers/firmware/qcom/qcom_tzmem.c                 |  63 ++-
+ drivers/i2c/busses/i2c-qcom-geni.c                 |   8 +-
+ drivers/soc/qcom/qcom-geni-se.c                    | 506 ++++++++++++++++++++-
+ drivers/spi/spi-geni-qcom.c                        |   6 +
+ drivers/tty/serial/qcom_geni_serial.c              |   8 +-
+ include/linux/firmware/qcom/qcom_scm.h             |   6 +
+ include/linux/firmware/qcom/qcom_tzmem.h           |  15 +
+ include/linux/soc/qcom/geni-se.h                   |   4 +
+ 14 files changed, 739 insertions(+), 32 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,se-common-props.yaml
