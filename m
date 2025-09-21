@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1022AF03
-	for <soc@lists.linux.dev>; Sun, 21 Sep 2025 02:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78222F2D
+	for <soc@lists.linux.dev>; Sun, 21 Sep 2025 02:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758420374; cv=none; b=TnKs5kAkT8SZ6lB0O2QCOJtYAN2HUEm2Io993Gi4ezf7X7eWEGPHNSomevYB6+WcvDCgq/JYPePBEzV9G3EA1NGGNBkWdJia//0GMZp2lUr0LS1AYYa5Bm2LOnyHrlMwzGpypaodheASGCqWA9ojNoyBNiptf0vLT8wTp+HA5qg=
+	t=1758420467; cv=none; b=ZOcLhz952RXLyskOFvEYBJ5ZTGadaHdXVSCYcexZG7rugcBpBVA9fLMMo4X+tsEf0SoZzBdpHJF7gVP0sjePydjsC2Vg9M7UQ+t9ZlqonNAbNJx7I1amJknJ9y0lCCBQoPslPdrW1XVolp568a+4oC70cY4wgkKF1colFP+/y+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758420374; c=relaxed/simple;
-	bh=XRVEQjw1TfKD68ddI6HdIZfq35WBmMfjMmlYbT5eTks=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OtvzxyfdlBXl0ddMtzv2NWdcOSyAbtGT75XVidRLNlyqBlsIJqXej7gmnr2prFjvFceA8ktDnwH06jitffPs3PpVVcbCxowgsObdhQ2BnEmQih/+VnMvpz1YlVZzkx1spOwqfHEfqwL37Wurh7x1zhlZy8DHzZ9dDAV/eoMKF3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XykrCcVi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758420467; c=relaxed/simple;
+	bh=4yHCd5x3C4wI9aEANtmzNfFgw8YiWpvJqMysyL00Du4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Os9Pg8E4+EHdSJxCBCR700XrhiGh/UJ9w3SbPyjujFZE/f8UiSvtPAKeFKFYGI59lCjC58tBwyQnnA0+1nR1qcYqCeTrmsvEY0n7w4TSekoO7MdMvYqNuGxzL1yKbGI/ytWlG/j7u8vLFpnVrqbhIezak0C6EY3H41U1hoqR9uA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALsnAczY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XykrCcVi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALsnAczY"
 Received: by smtp.kernel.org (Postfix)
-	id 169AEC4CEF1; Sun, 21 Sep 2025 02:06:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DEBDC4CEEB;
-	Sun, 21 Sep 2025 02:06:13 +0000 (UTC)
+	id CDFD7C4CEFA; Sun, 21 Sep 2025 02:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C2DC4CEEB;
+	Sun, 21 Sep 2025 02:07:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758420373;
-	bh=XRVEQjw1TfKD68ddI6HdIZfq35WBmMfjMmlYbT5eTks=;
+	s=k20201202; t=1758420467;
+	bh=4yHCd5x3C4wI9aEANtmzNfFgw8YiWpvJqMysyL00Du4=;
 	h=From:To:Cc:Subject:Date:From;
-	b=XykrCcViqIFvL3D8GoPzc1FlkdTNNd2yNBSZ1tAwiT9BSHoTgihgWMWX6OTOXZJDv
-	 3WmscXJ/je5Zi54mL/COra5VLpYtvwOQZA69FzbdZkUjzk9DRFyH7Swvgym+XtKlJL
-	 2MDX+4PV2eDnavsVDqUNrQPnIBKIWjki2OTB73bqpX0uIBHA0f/CaOkzLzKZwYTzJ6
-	 pkCThA71JmnBaw5CsI+EpDGE3+XcDg8FxXkzgAxNG5NFZkJ7mIegD0xxGV8mmYbrXV
-	 b425PdzjW/t+e3hC8ioYKdSbZg4Gf7y4WQU7GkZBCgCab+HwtxkouEBi56/hcryuV/
-	 FrH8KPTxRvUhQ==
+	b=ALsnAczYl3NlOs92MwF8YkydVva71cmgVowbfCaA5sfYkvyUCyXaFJYD/QGt5APZT
+	 dAAlvxE86qGoBwjCc6JxNd9b6VMzLgma/CrIzREGlva3sotYRh5blRqwAcQvE4bLDs
+	 pf5FmnysbJRbpL9zhOMlrk3GvyIMFnv/A37uuHBw4+tVBd5eZ2Y4bSvpqvxlIuQh90
+	 1vheECRDkmz6tSaoGab1xWvX+dDkpgPeIjPVn5cqbClHJjgpjowbst3z+bJC/ZQyil
+	 dyAkjaQLwqANdEnB+/MWX14J/ULwXy3XMZ/WHQamF9Ko8nOYKqZ4G01huijCaJWArz
+	 HPBN855WGRe5A==
 From: Bjorn Andersson <andersson@kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: linux-arm-msm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Arnd Bergmann <arnd@arndb.de>,
-	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
-	Taniya Das <quic_tdas@quicinc.com>
-Subject: [GIT PULL] Qualcomm Arm64 defconfig updates for v6.18
-Date: Sat, 20 Sep 2025 21:06:11 -0500
-Message-ID: <20250921020612.596098-1-andersson@kernel.org>
+	Petr Vorel <petr.vorel@gmail.com>,
+	Trevor Woerner <twoerner@gmail.com>
+Subject: [GIT PULL] Qualcomm Arm32 defconfig updates for v6.18
+Date: Sat, 20 Sep 2025 21:07:45 -0500
+Message-ID: <20250921020746.596400-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -54,26 +54,24 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.18
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-defconfig-for-6.18
 
-for you to fetch changes up to cf0ed173d27a2a832642aa441eb28a4dca53fd19:
+for you to fetch changes up to 3e23fc50890d3f04ec8e3670c6927eb239930136:
 
-  arm64: defconfig: Enable X1P42100 GPUCC driver (2025-08-18 21:49:51 -0500)
-
-----------------------------------------------------------------
-Qualcomm Arm64 defconfig updates for v6.18
-
-The Qualcomm X Plus platform gained GPU support, enable the required
-clock controller.
-The support for Qualcomm QCS615 platform improved, enable the
-multimedia-related clock controllers.
+  ARM: defconfig: Remove obsolete CONFIG_USB_EHCI_MSM (2025-09-11 16:51:08 -0500)
 
 ----------------------------------------------------------------
-Akhil P Oommen (1):
-      arm64: defconfig: Enable X1P42100 GPUCC driver
+Qualcomm Arm32 defconfig updates for v6.18
 
-Taniya Das (1):
-      arm64: defconfig: Enable QCS615 clock controllers
+Remove a bunch of orphaned options from the defconfigs.
 
- arch/arm64/configs/defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+----------------------------------------------------------------
+Petr Vorel (1):
+      ARM: defconfig: Remove obsolete CONFIG_USB_EHCI_MSM
+
+Trevor Woerner (1):
+      ARM: defconfig: cleanup orphaned CONFIGs
+
+ arch/arm/configs/multi_v7_defconfig | 4 ----
+ arch/arm/configs/qcom_defconfig     | 4 ----
+ 2 files changed, 8 deletions(-)
