@@ -1,93 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91072E401
-	for <soc@lists.linux.dev>; Sun, 21 Sep 2025 17:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1413124BBFD
+	for <soc@lists.linux.dev>; Sun, 21 Sep 2025 21:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758474142; cv=none; b=Xzkeb/cSr4ZqYoelLv3LOXuwRLCthd85HfnvUkHDK8w0rIqeZxOp5/tuqG8SkB3HhZFmcrgqCAY71dcmhgQ8JfRYMHspLk3h+KB0lSMb3rQ7c5D8RYs9cxSDb1wGv2raBvFotYn7KMMOUOvXTf+m2IrYCx2gsp8hTdoTCn/0bzg=
+	t=1758488467; cv=none; b=tSL4b9wt5EgwAG7+PjpsHxvjHvJFOhBtLhP8wNKFILQbs3fXkCOxMSSupj2M9QJe44c5mrE95m9rll+DgD4LGtmsI+3lhbbZViNpFqJbtdBa/8t5QxGmxarwrIdkD6PON9rJX3fnuBkewnHmQQ8h+S3hFORRly4Krc4rrNm9m4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758474142; c=relaxed/simple;
-	bh=GDIRBW2DYpqe0b8KOgrutzQSfAz/bITiNwSGWti6DSc=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=p4SiPpPZRx2EdrQMXNf+nujYJFMEKpTY6XKpW5Sq5vvX8+KSYnVtJ70aWWcHkYkBrnb5YvVn4Kbir8q1YidGQqZryuCIX3eMeAxB+LdL/cNtAoMZIpWH9CFiwVPREOQ2Q3DuLLcXgWvVbKMou4kdi5ORAw+K4axiNInbCtSVqzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LmCLZUUg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758488467; c=relaxed/simple;
+	bh=6ehdH/B3XOBQRQvYkHTdbMbuST/Lx8QaRMXZ/sHFAcQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=etEvhQ4HJlCNklb3q8pFonQz9Z1eaJvs1C6Bxf/3yYaArHslA5k0dLG3XuowzTT+mw9rEHyBIw+n9CaVdrT8oWT/iNZwWUPYbS7Gg28cZ/5g14xr+feLHRU6vbKh60LsKwYLFpZFc4mV1WFjEsi0AfozUPqDYwC9J1ZdOHDfyLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=CUR9LEIG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LmCLZUUg"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="CUR9LEIG"
 Received: by smtp.kernel.org (Postfix)
-	id 85A40C116D0; Sun, 21 Sep 2025 17:02:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 339E8C4CEE7;
-	Sun, 21 Sep 2025 17:02:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758474142;
-	bh=GDIRBW2DYpqe0b8KOgrutzQSfAz/bITiNwSGWti6DSc=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=LmCLZUUgFCdwJZMjC4yFmzfLl65O2lH3474hraDuq10F+wEc60l3nHSAUvtxw5wl+
-	 pUYQHDwswuOXH0FnTcVrEJt0ETKO6vUDlWN7914SxR4/nPMCrhwWfjEjXMRR/dUJe/
-	 YrFSxkr6Nd5DUOGIXd2cilXLG94uDvKoi//dbfKAMcqf9avSbPqDOXjsXoAT7S9v/p
-	 uTjqS2mC5cddVHv8liiT4AZN8unWmvfIj9VzuqaJAp+l65Z1quVE39rG/vAJI0MtU5
-	 CnAVlITmTgmsYALKGih+eiGWn0ha35ifMxOp0AKQQh3YGSyyr04enYprlUOgzTNY29
-	 yDU/x9kZkilQw==
-Content-Type: text/plain; charset="utf-8"
+	id 9DBADC116B1; Sun, 21 Sep 2025 21:01:06 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5447AC4CEE7;
+	Sun, 21 Sep 2025 21:01:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5447AC4CEE7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=nA7SF2fzw7JbesVTWtaZYM0KNv+9N0bkcTooj4MuXe8=; b=CUR9LEIGOG5od/Ii444xVrA7u0
+	f5lSMkYd3dXrhiznr8uzinPBWt0ke7O1cY0AK9gRC/sbruo36Zrg+F3zyYcvqg8QqeQtUH0esrgzT
+	hFG8Jt3b8kOUEDCYI5ZR8gZsrBkw8dXsmrSucpJJYWL7vtlx+zk8YsCIBR0nSHv60VbdNh8vO59nu
+	ZDM3Jfpje+8zdEx2refJdcKO0G+QY9Z53o5vaCZESb8Q4yQ8IoNj5Dlz6I7E/9w5kut1kUzrOvwjD
+	toEQOEgQ5avYGiFelmL2tsklgXV4fMIFPctBAYSlA9v7L2U+qoUL5B16z6eT3HnADM1emq7GVRxbr
+	ypLznwHw==;
+Received: from i53875add.versanet.de ([83.135.90.221] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1v0RB9-0007dH-7u; Sun, 21 Sep 2025 23:01:03 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 6.18 #2
+Date: Sun, 21 Sep 2025 23:01:02 +0200
+Message-ID: <2079092.kXSN5OTJKJ@diego>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250917182150.93359-1-nicolas.ferre@microchip.com>
-References: <20250916080545.9310-1-nicolas.ferre@microchip.com> <20250917182150.93359-1-nicolas.ferre@microchip.com>
-Subject: Re: [GIT PULL v2] ARM: microchip: clk for 6.18 #1
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list <linux-kernel@vger.kernel.org>, linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Conor Dooley <conor@kernel.org>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, arnd@arndb.de
-To: arm@kernel.org, linux-clk@vger.kernel.org, mturquette@baylibre.com, nicolas.ferre@microchip.com, soc@kernel.org
-Date: Sun, 21 Sep 2025 10:02:20 -0700
-Message-ID: <175847414087.4354.17261652271034200852@lazor>
-User-Agent: alot/0.11
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-Quoting nicolas.ferre@microchip.com (2025-09-17 11:21:18)
-> From: Nicolas Ferre <nicolas.ferre@microchip.com>
->=20
-> Dear clock maintainers,
->=20
-> Here are the first clk changes for 6.18.
-> I don't think they have conflict with changes for the deprecated round_ra=
-te()
-> to determine_rate() topic.
-> In this v2, I address the issue highlighted by 0-day robot: build issue. I
-> added a patch that is already included as well in an pull-request to arm-=
-soc:
-> https://lore.kernel.org/linux-arm-kernel/20250916150328.27015-1-nicolas.f=
-erre@microchip.com/
->=20
-> v1 --> v2:
-> - addition of the patch "ARM: at91: pm: save and restore ACR during PLL
->   disable/enable" as the first patch of the series to avoid build error i=
-f clk
->   tree is merged before arm-soc. Branch bisect-able. Exact same patch
->   in both trees.
-> - a new tag (clk-microchip-6.18-2) is created and deployed for this
->   v2 pull-request
->=20
-> Thanks, best regards,
->   Nicolas
->=20
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d5=
-85:
->=20
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-m=
-icrochip-6.18-2
->=20
-> for you to fetch changes up to 652b08afba69d5d26fe91098eb832b1bcc0f91c2:
->=20
->   ARM: at91: remove default values for PMC_PLL_ACR (2025-09-17 19:15:32 +=
-0200)
->=20
-> ----------------------------------------------------------------
+Hi soc maintainers,
 
-Thanks. Pulled into clk-next
+please find below some more Rockchip 64bit dt changes for for 6.18 .
+To go on top of the first set.
+
+
+Please pull.
+Thanks
+Heiko
+
+
+The following changes since commit 07c53a9e970712b1a479dd0ec4adfe184482c22f:
+
+  arm64: dts: rockchip: Enable DP2HDMI for ROCK 5 ITX (2025-09-02 08:32:26 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.18-rockchip-dts64-2
+
+for you to fetch changes up to 93781211e9ad9578787355147c2f28b7289a8ec6:
+
+  arm64: dts: rockchip: Add devicetree for the ROC-RK3588-RT (2025-09-18 20:59:59 +0200)
+
+----------------------------------------------------------------
+One new board the ROC-RK3588-RT, gpu improvements for RK3328, frequency
+scaling for the RK3528 and the very first small steps for camera
+support on the RK3588 - with the CSI-DPHY support, with more hopefully
+to come soon'ish :-) .
+
+And apart from those bigger points, some more individual peripheral work
+on some boards.
+
+----------------------------------------------------------------
+Alex Bee (2):
+      arm64: dts: rockchip: add GPU powerdomain, opps, and cooling to rk3328
+      arm64: dts: rockchip: enable the Mali GPU on RK3328 boards
+
+Chris Morgan (1):
+      arm64: dts: rockchip: Add USB and charger to Gameforce Ace
+
+Chukun Pan (3):
+      arm64: dts: rockchip: Add rk3528 CPU frequency scaling support
+      arm64: dts: rockchip: remove vcc_3v3_pmu regulator for Radxa E52C
+      arm64: dts: rockchip: update pinctrl names for Radxa E52C
+
+Kaison Deng (2):
+      dt-bindings: arm: rockchip: Add Firefly ROC-RK3588-RT
+      arm64: dts: rockchip: Add devicetree for the ROC-RK3588-RT
+
+Marcin Juszkiewicz (1):
+      arm64: dts: rockchip: enable HDMI Receiver on NanoPC T6
+
+Michael Riesch (2):
+      dt-bindings: soc: rockchip: add rk3588 csidphy grf syscon
+      arm64: dts: rockchip: add mipi csi-2 dphy nodes to rk3588
+
+Sebastian Reichel (1):
+      arm64: dts: rockchip: Fix network on rk3576 evb1 board
+
+ .../devicetree/bindings/arm/rockchip.yaml          |    5 +
+ .../devicetree/bindings/soc/rockchip/grf.yaml      |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile              |    1 +
+ arch/arm64/boot/dts/rockchip/rk3328-roc-pc.dts     |    4 -
+ arch/arm64/boot/dts/rockchip/rk3328-roc.dtsi       |    4 +
+ arch/arm64/boot/dts/rockchip/rk3328-rock64.dts     |    4 +
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi           |   40 +-
+ arch/arm64/boot/dts/rockchip/rk3528.dtsi           |   39 +
+ arch/arm64/boot/dts/rockchip/rk3576-evb1-v10.dts   |   38 +-
+ arch/arm64/boot/dts/rockchip/rk3582-radxa-e52c.dts |   26 +-
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      |   34 +
+ arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi |   17 +
+ arch/arm64/boot/dts/rockchip/rk3588-roc-rt.dts     | 1132 ++++++++++++++++++++
+ .../boot/dts/rockchip/rk3588s-gameforce-ace.dts    |  122 +++
+ 14 files changed, 1434 insertions(+), 33 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-roc-rt.dts
+
+
+
