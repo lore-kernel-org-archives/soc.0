@@ -1,82 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C799C27F010
-	for <soc@lists.linux.dev>; Mon, 22 Sep 2025 14:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363243112B6
+	for <soc@lists.linux.dev>; Mon, 22 Sep 2025 17:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758552305; cv=none; b=UMOfz+kNvIJ44PkTDdislT4qQsZABt1n2W59DOW+n1pAvgbJXi+13rvGbGML1yp/u62aYMFz1oBCNZ4uTsv44UvjYTnKNMWW8oRz973v3trSkzKzr/j2ahgupI0G6eWnI1Wv3qUturnoOIA/YNhUDX2/AuAnP4uJ5WUpb+/EvEw=
+	t=1758560658; cv=none; b=mNqWgsJeEBF+yfVzTV0YwWXpHQQ9KcU+/Awh7lv7Bk2aTrNICIFkq1TT4/Xqg8zp6oOAa678Wbb9Tf4X10ScJNAcASLRAuh2CShBLUyePMSWt2zTY8Jhpr+Fpt3vVKjTKRJ1bBLlU026TNM9jPvi8SYbt5OjJetw50v/4zFvVGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758552305; c=relaxed/simple;
-	bh=D+LNgfJNYzCpnFJGwhR+lwXuJ0ILIQoGT35vh4i2XBQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WSasQNjvWcbPQBvItv28Zkwqhe0reBCz0gi0FovuyQJ/4jSh0i0xABfA4uTtyODUEW/V/56fmrLf4q8bYCpfvWpivx+7Q7USVCzsfX7RO09COR6L4mbiiZsL5UYjvxHyRgRnsR4yd2NIoZyLsNUjlMGNomylCNBgfwGUpdkeie4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dbZ8P5og; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758560658; c=relaxed/simple;
+	bh=mA1m6W7VuxwY07ZYn6w/N7eCuR3fCYoMpUyjqB9ZPjQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DbnbNqClUJCchtohwOLlFGv90JOf8K9B1JaMjLTQfUQGLN26Y+XJ4dJOhEFovqerQc0Fh/FOzzdFUrIVWUpxJHL2WxZmHhwScPULl1dQ2/iW61t51+XYxBW/WzXU/R6it9RWmu0n35VikGUbfg8/YBd5wvfo3zIS2bXZui6rk4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=o/R/WOZK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dbZ8P5og"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="o/R/WOZK"
 Received: by smtp.kernel.org (Postfix)
-	id 7A4DBC4CEF7; Mon, 22 Sep 2025 14:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F36C4CEF0;
-	Mon, 22 Sep 2025 14:45:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758552305;
-	bh=D+LNgfJNYzCpnFJGwhR+lwXuJ0ILIQoGT35vh4i2XBQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=dbZ8P5ogAQJxFbT4EfBs9j5q1ngbONMN+GPGjDS72pZp8K5Iu7yqjJzx8x50lU1Vr
-	 PPcpXXiat/SkwL2/JWZ7dflR4RJQBQrwyVKAkh7pJ7K/UmpBgiKcs65+TwIATHeW9t
-	 9MPbNQVtV2sVFRKFdG+9SLw5RPWb7xLiY8Ox8pzArKUr5SRrhkF7WuX6ThVcaGWL3A
-	 /fHW211aJfaIA0Ttx8Lk3nowZIF+aQdUcEIZwWHMXF4rJvWDI+vGhXEuFTZSPJ8I+h
-	 SO7+HOTB9X9vQsoDM1E5KtVw5bYfUyHi22g9eNVL52DROhD2zC277PW8XWd5gDwpTF
-	 odCCKaXxNnU8w==
-Received: by wens.tw (Postfix, from userid 1000)
-	id B2EED5FC15; Mon, 22 Sep 2025 22:45:02 +0800 (CST)
-Date: Mon, 22 Sep 2025 22:45:02 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Allwinner Device Tree changes for 6.18 part 2
-Message-ID: <aNFg7iuBtyWkCZg6@wens.tw>
+	id C673EC113D0; Mon, 22 Sep 2025 17:04:17 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C39A8C4CEF0;
+	Mon, 22 Sep 2025 17:04:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C39A8C4CEF0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1758560656; x=1790096656;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mA1m6W7VuxwY07ZYn6w/N7eCuR3fCYoMpUyjqB9ZPjQ=;
+  b=o/R/WOZK6/2XJBWmJ/cJP0zObFj2Rpz5LtHkaHWME8ttriVrqsqRVKOs
+   jN1YjJxZMH3n0oxScuobkBRIIYVE8APOe4+6vaPdQl/EVpHIO5PkY3GQ/
+   /iMXrIrJTzZaWYhWQEnplIAnyek+TT4zQidGf4tbWR1kXW+RiE44dr4qd
+   aNonZV+Jq7gshRu1zho6g8uKOM9Dr0ttl5Kucslq+7n0wt+9aoUayZ+cF
+   nbklbCLhmw6meq//6N9kjnU6OVgiVpwT7RZ5qRS7XwwcL2+C1D650STEG
+   r0C4QIVp3Nfwjdg9dLfgvD/1R4KmQKPACKMIe6miLLeNqotKgt61ewOCk
+   A==;
+X-CSE-ConnectionGUID: ARBJErZ/SGCcBWIaab2tJw==
+X-CSE-MsgGUID: Dr/xhLz+QTq3bkZGgcAj/g==
+X-IronPort-AV: E=Sophos;i="6.18,285,1751266800"; 
+   d="scan'208";a="52732392"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Sep 2025 10:04:16 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 22 Sep 2025 10:03:55 -0700
+Received: from ROU-LL-M43238.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 22 Sep 2025 10:03:53 -0700
+From: <nicolas.ferre@microchip.com>
+To: Arnd Bergmann <arnd@arndb.de>, <arm@kernel.org>, <soc@kernel.org>
+CC: Ryan Wanner <ryan.wanner@microchip.com>, Dharma B
+	<dharma.b@microchip.com>, Conor Dooley <conor.dooley@microchip.com>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: [GIT PULL] ARM: microchip/at91: dt for 6.18 #1
+Date: Mon, 22 Sep 2025 19:03:45 +0200
+Message-ID: <20250922170346.40876-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Organization: microchip
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi,
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Here's a very late pull request, adding support for another board.
-This is already included in linux-next, and doesn't show any issues.
+Dear arm-soc maintainers,
 
-The following changes since commit cca07ac2b5f7838b8ff612b53b9f82ac8cb58312:
+Here are the first dt changes for 6.18 which contain some little node additions.
+The QSPI node has its bindings accepted and going with the SPI tree:
+https://lore.kernel.org/lkml/20250908-microchip-qspi-v2-0-8f3d69fdd5c9@microchip.com/
 
-  arm64: dts: allwinner: sun55i: Complete AXP717A sub-functions (2025-09-15 00:04:32 +0800)
+Thanks, best regards,
+  Nicolas
+
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.18-2
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.18
 
-for you to fetch changes up to 07c7f4f4e9504da240ef68adfd95a1150d3a6fd4:
+for you to fetch changes up to c656932c3ece3eebe6240bb20e5c1d8aa0d7ecb0:
 
-  arm64: dts: allwinner: h313: Add Amediatech X96Q (2025-09-19 12:37:16 +0800)
-
-----------------------------------------------------------------
-Allwinner Device Tree changes for 6.18 - part 2
-
-A new board, the Amediatech X96Q, was added.
+  ARM: dts: microchip: sam9x7: Add qspi controller (2025-09-22 18:20:34 +0200)
 
 ----------------------------------------------------------------
-J. Neuschäfer (2):
-      dt-bindings: arm: sunxi: Add Amediatech X96Q
-      arm64: dts: allwinner: h313: Add Amediatech X96Q
+Microchip AT91 device tree updates for v6.18
 
- Documentation/devicetree/bindings/arm/sunxi.yaml   |   5 +
- arch/arm64/boot/dts/allwinner/Makefile             |   1 +
- arch/arm64/boot/dts/allwinner/sun50i-h313-x96q.dts | 230 +++++++++++++++++++++
- 3 files changed, 236 insertions(+)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h313-x96q.dts
+This update includes:
+- sama7d65 and curiosity board: addition of gpio, leds and usart3
+- sam9x75: qspi node
+- one cleanup
+
+----------------------------------------------------------------
+Dharma Balasubiramani (1):
+      ARM: dts: microchip: sam9x7: Add qspi controller
+
+Krzysztof Kozlowski (1):
+      ARM: dts: microchip: Minor whitespace cleanup
+
+Nicolas Ferre (1):
+      ARM: dts: microchip: sama7d65: add uart3 definition for flexcom3 peripheral
+
+Ryan Wanner (1):
+      ARM: dts: microchip: sama7d65: Add GPIO buttons and LEDs
+
+ .../boot/dts/microchip/at91-sama7d65_curiosity.dts | 53 +++++++++++++++++++++-
+ arch/arm/boot/dts/microchip/sam9x7.dtsi            | 21 +++++++++
+ arch/arm/boot/dts/microchip/sama7d65.dtsi          | 17 ++++++-
+ 3 files changed, 89 insertions(+), 2 deletions(-)
+
+-- 
+Nicolas Ferre
