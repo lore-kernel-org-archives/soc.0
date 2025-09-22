@@ -1,85 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5783518EB0
-	for <soc@lists.linux.dev>; Sun, 21 Sep 2025 21:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C799C27F010
+	for <soc@lists.linux.dev>; Mon, 22 Sep 2025 14:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758488531; cv=none; b=kTFjhH7povXq4xrvMbHSLs9sN0QAZulgoi81logsYoUor8iEf5J0rb5r09Quv3yFQVdaBuW9GT1Os0J0WsFr4Y+I4/zE1FdVTUpUSkD1qICg/jpuSO6u86/kljtf6pybOq4iF9kmR8zYYUm5eaABG9ngBLMtPlRdGh3qhs+qPDI=
+	t=1758552305; cv=none; b=UMOfz+kNvIJ44PkTDdislT4qQsZABt1n2W59DOW+n1pAvgbJXi+13rvGbGML1yp/u62aYMFz1oBCNZ4uTsv44UvjYTnKNMWW8oRz973v3trSkzKzr/j2ahgupI0G6eWnI1Wv3qUturnoOIA/YNhUDX2/AuAnP4uJ5WUpb+/EvEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758488531; c=relaxed/simple;
-	bh=85MFflyqUV/iSBBFhlXcAS4wuLB4uOljAEpcLajUiy4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=StKjat8p7EkLdO3ZEFUNHukJLVR3KzWREdLQ8SFSbcPnBc1ghtFPiFDcbfXhO2rDdqlWpHJtPyDugry4Iw7cJyQVMpxOK2rmdJPPa/Qtzwc38hUUs9ScvgLU4DWbu+OKQ1GBikrGnDydx332TR3frMEytBN1UpCbh3Z0jYdBUII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=yeMChb36; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758552305; c=relaxed/simple;
+	bh=D+LNgfJNYzCpnFJGwhR+lwXuJ0ILIQoGT35vh4i2XBQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WSasQNjvWcbPQBvItv28Zkwqhe0reBCz0gi0FovuyQJ/4jSh0i0xABfA4uTtyODUEW/V/56fmrLf4q8bYCpfvWpivx+7Q7USVCzsfX7RO09COR6L4mbiiZsL5UYjvxHyRgRnsR4yd2NIoZyLsNUjlMGNomylCNBgfwGUpdkeie4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dbZ8P5og; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="yeMChb36"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dbZ8P5og"
 Received: by smtp.kernel.org (Postfix)
-	id 0571DC116B1; Sun, 21 Sep 2025 21:02:11 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 39CC5C4CEE7;
-	Sun, 21 Sep 2025 21:02:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 39CC5C4CEE7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=gp/wZE0fDakAICLTarIzJLK2I+Hr8K7LrcHSpG0GvCA=; b=yeMChb36K7dkO4z2vnZJtQClrS
-	hGJYFGSy9y2EgFQWXC8jsN1QTAOIIh40d7dK9kj4mdTqOy3aG7s3QrMzUX0MWd6z/tPYCKdtVjCHr
-	lLQ+GwMMoth49XBHM9ORoFnAPquOXEcInzpK/9kPPRUGuQGcDA1qa3dnO2R7Vg1+YbA7T3cmzk6HX
-	3f3hVUBdo8GV5S2SHeT49yuhuOlYw7tPSJVrFPVZyGKT7BrycNoId065KpH2vyXKWNdsBapdbQy0l
-	GUdi+GHO1REIFU9UiSfAXzKSgEE91V0GGQXQietNje7eaC5Mwes0YY6jMv8dqgdKnNKXLwg4Lm+XU
-	29eq05OQ==;
-Received: from i53875add.versanet.de ([83.135.90.221] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1v0RCC-0007dq-GS; Sun, 21 Sep 2025 23:02:08 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip soc32 changes for 6.18 #1
-Date: Sun, 21 Sep 2025 23:02:07 +0200
-Message-ID: <6025175.zQ0Gbyo6oJ@diego>
+	id 7A4DBC4CEF7; Mon, 22 Sep 2025 14:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F36C4CEF0;
+	Mon, 22 Sep 2025 14:45:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758552305;
+	bh=D+LNgfJNYzCpnFJGwhR+lwXuJ0ILIQoGT35vh4i2XBQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dbZ8P5ogAQJxFbT4EfBs9j5q1ngbONMN+GPGjDS72pZp8K5Iu7yqjJzx8x50lU1Vr
+	 PPcpXXiat/SkwL2/JWZ7dflR4RJQBQrwyVKAkh7pJ7K/UmpBgiKcs65+TwIATHeW9t
+	 9MPbNQVtV2sVFRKFdG+9SLw5RPWb7xLiY8Ox8pzArKUr5SRrhkF7WuX6ThVcaGWL3A
+	 /fHW211aJfaIA0Ttx8Lk3nowZIF+aQdUcEIZwWHMXF4rJvWDI+vGhXEuFTZSPJ8I+h
+	 SO7+HOTB9X9vQsoDM1E5KtVw5bYfUyHi22g9eNVL52DROhD2zC277PW8XWd5gDwpTF
+	 odCCKaXxNnU8w==
+Received: by wens.tw (Postfix, from userid 1000)
+	id B2EED5FC15; Mon, 22 Sep 2025 22:45:02 +0800 (CST)
+Date: Mon, 22 Sep 2025 22:45:02 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [GIT PULL] Allwinner Device Tree changes for 6.18 part 2
+Message-ID: <aNFg7iuBtyWkCZg6@wens.tw>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+Hi,
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+Here's a very late pull request, adding support for another board.
+This is already included in linux-next, and doesn't show any issues.
+
+The following changes since commit cca07ac2b5f7838b8ff612b53b9f82ac8cb58312:
+
+  arm64: dts: allwinner: sun55i: Complete AXP717A sub-functions (2025-09-15 00:04:32 +0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.18-rockchip-arm32-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.18-2
 
-for you to fetch changes up to a1b20e062245571c128ec521c4df56ad1bff9bd0:
+for you to fetch changes up to 07c7f4f4e9504da240ef68adfd95a1150d3a6fd4:
 
-  ARM: rockchip: remove REGULATOR conditional to PM (2025-09-18 21:05:39 +0200)
-
-----------------------------------------------------------------
-Commit d1bef995f61a ("ARM: rockchip: force built-in regulator support for PM")
-introduced the REGULATOR if PM dependency for the suspend code, while
-commit d1558dfd9f22 ("ARM: rockchip: Force CONFIG_PM on Rockchip systems")
-later always enabled PM.
-
-So we can simplify the REGULATOR dependency by dropping the if PM.
+  arm64: dts: allwinner: h313: Add Amediatech X96Q (2025-09-19 12:37:16 +0800)
 
 ----------------------------------------------------------------
-Mikko Rapeli (1):
-      ARM: rockchip: remove REGULATOR conditional to PM
+Allwinner Device Tree changes for 6.18 - part 2
 
- arch/arm/mach-rockchip/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+A new board, the Amediatech X96Q, was added.
 
+----------------------------------------------------------------
+J. Neuschäfer (2):
+      dt-bindings: arm: sunxi: Add Amediatech X96Q
+      arm64: dts: allwinner: h313: Add Amediatech X96Q
 
-
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |   5 +
+ arch/arm64/boot/dts/allwinner/Makefile             |   1 +
+ arch/arm64/boot/dts/allwinner/sun50i-h313-x96q.dts | 230 +++++++++++++++++++++
+ 3 files changed, 236 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h313-x96q.dts
