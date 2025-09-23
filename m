@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC7C265CBD
-	for <soc@lists.linux.dev>; Tue, 23 Sep 2025 21:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA31730C372
+	for <soc@lists.linux.dev>; Tue, 23 Sep 2025 21:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758662462; cv=none; b=jO7KayB1ui32dAMu2x4IptgVvqwyGvPNppdNoEl5eT8kQP6RZfh3eUyxsgN/+eAqerHjoVsrDutms/JnJapx5HmTg56H+L6rYD4aMzMVtAjns1oe+9d5afyyY0ajen/8J1TPCLuC//pMSwedPKFesKtsYakKh+2LhmdHcraiQGg=
+	t=1758662463; cv=none; b=N+JEbmpju5ygmPVApZBrmHL2LaXEcLANQaypIDEU8dIFk0UOtpxIRAxdgLDdYSe3mGz23/hut9o0dML4GcZB+UHu/2a2EEpyvgOl3a6qJ84C1D4OevvTj6O+CPqE86kSCAFU3QhmMTv0bOd69SaYy0MCVa2J3ACICu2SH0JNeQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758662462; c=relaxed/simple;
-	bh=PePs9RP93ySfG6QPTkkpBreu7AIWmaDBi/biPvJeDg4=;
+	s=arc-20240116; t=1758662463; c=relaxed/simple;
+	bh=V1Y04OCXBA1oIJir/FIQPKqH0JBlyiiRWx0E5woA3cw=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=A6EvavxbdggQ5TvwdGn7LLv44EMnsJBYldVuDL576AoHuyuuxALU1rXSVZrcUPbCg+9fTl3tlf2WJvll9zGuA5DLnKRqTqNPoBb9xgPSDNXU9vviQp3KkokX6I4zw8V1HwVVmGPkUTqYPTbPoheSZM10RM0A+R278FgCnjsNiHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S4kUS6+6; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=o0PItahux9K1DgBMcqb6uoi4FkxfeIg3kT3vsUmoo4RwR8VrHYKrO2cU+h6H7APLJpGlqcK5Wugk6Dss/FD9Lo6iIzQ3AA8HiXBmoTL5pu3pDLTx6ketjSwjWPKHB849TF5znFDGaY8fYoIMK9f6XS0lkyLgl6bkWYHI2wMGAy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j7dT0W0G; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4kUS6+6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j7dT0W0G"
 Received: by smtp.kernel.org (Postfix)
-	id 55F79C4CEF7; Tue, 23 Sep 2025 21:21:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4086DC4CEF5;
-	Tue, 23 Sep 2025 21:21:02 +0000 (UTC)
+	id D0C55C113D0; Tue, 23 Sep 2025 21:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB538C4CEF5;
+	Tue, 23 Sep 2025 21:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758662462;
-	bh=PePs9RP93ySfG6QPTkkpBreu7AIWmaDBi/biPvJeDg4=;
+	s=k20201202; t=1758662463;
+	bh=V1Y04OCXBA1oIJir/FIQPKqH0JBlyiiRWx0E5woA3cw=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=S4kUS6+6FVXoKqfzHOOWVSsm805gYHI+hf1FjnflUoPnhm2vkG19gOYkZ/17Pu6VK
-	 xyWo83w9E0bOV4Ow8K6MkUTLm7BSWxT1ZrzzeHcU9cuVEr1oa2Ga5awYmsBbBB8Xzq
-	 HUx9IDfSK7ylXtV2Q0K/NKfc+gTKV8iBT2qzrk7H5MTVIW5J1Dfek8QKmVkbAxZnah
-	 nstAKJ88Gc5vg10Z2OCK6GSxWtw4Ruxfmxvb/1AsNTMrmzSRAjp0agzW0ziJdWgyJf
-	 ujxiQuQnPW0LYrGyX23Lzbg1c0PPOYmAFBGUvK6OTk1ILovMjusqImlPcF3UuaKubD
-	 L2JUlcMYBdW4g==
+	b=j7dT0W0GY3h59NQdY3F1Mkf2C6NP/MqtDACSTVJQvjOoVOlCtffThcAObKGQ38QFV
+	 nEzdNR2zlOZna51wtKFJ1/pVQZNGsRWzkSmPFDORqeIp92H5MqE1tppgWND0FIPi1l
+	 Gpvs0ccmkNj8xYu+1K27amlxDVdX2pY0IBL+8roYhODWrSQs9RG4r98VcHGcZRlyjC
+	 8wVW2oKMSKBy5UypwhC2f8ToKaebdVWQkDj8re1+TY7ameK3xMMVjXGQI/wbuX2ZyQ
+	 4gIH7JRSiUkKYuCP9xVNwh3G73/5ztQYyYgkegGl/8PSfjUpCISuu+pcaDy3csQ1My
+	 UtfTBhrF+Tlzg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70AD139D0C20;
-	Tue, 23 Sep 2025 21:21:00 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB04339D0C20;
+	Tue, 23 Sep 2025 21:21:01 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: dts: ti: omap updates for v6.18
+Subject: Re: [GIT PULL] TEE add QCOMTEE driver for v6.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175866245898.1926563.6385031398228627732.git-patchwork-notify@kernel.org>
-Date: Tue, 23 Sep 2025 21:20:58 +0000
-References: <7hbjn6p2bk.fsf@baylibre.com>
-In-Reply-To: <7hbjn6p2bk.fsf@baylibre.com>
-To: Kevin Hilman <khilman@baylibre.com>
+ <175866246048.1926563.2081394797657359676.git-patchwork-notify@kernel.org>
+Date: Tue, 23 Sep 2025 21:21:00 +0000
+References: <20250915174957.GA2040478@rayden>
+In-Reply-To: <20250915174957.GA2040478@rayden>
+To: Jens Wiklander <jens.wiklander@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 19 Sep 2025 14:19:59 -0700 you wrote:
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+On Mon, 15 Sep 2025 19:49:57 +0200 you wrote:
+> Hello arm-soc maintainers,
 > 
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.18/dt-signed
+> Please pull this set of patches [1] adding a Qualcomm TEE (QTEE) driver to
+> the TEE subsystem as described below. The QTEE patches depend on two
+> patches from branch
+> '20250911-qcom-tee-using-tee-ss-without-mem-obj-v12-2-17f07a942b8d@oss.qualcomm.com'
+> of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: dts: ti: omap updates for v6.18
-    https://git.kernel.org/soc/soc/c/26116b98d657
+  - [GIT,PULL] TEE add QCOMTEE driver for v6.18
+    https://git.kernel.org/soc/soc/c/ff0bebab778c
 
 You are awesome, thank you!
 -- 
