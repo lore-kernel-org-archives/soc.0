@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BF6265CBD
-	for <soc@lists.linux.dev>; Tue, 23 Sep 2025 21:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115C9265CBD
+	for <soc@lists.linux.dev>; Tue, 23 Sep 2025 21:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758662475; cv=none; b=ezqzcp23LWSshl0JE3gJN2dLqJeMMx8HotT653TCkCbjKejQe7HxKIegbmTy9nyKz/MzTG9lDejy7q+Z4xn6gECC0aeCULG6Bfm8tE6Y7MSq5lpGtEnLXPH8o27kMOoFdaMd7Vuv9J/84iJSOGmBczV3dUpnn93fmefSpWoJ3wM=
+	t=1758662477; cv=none; b=bIGQ+Fwfp0Y3Zj943lo2t+PjOuQgl/wnZNlo1pwCOCpZrylKzaszWsg7tsoq7pMusM2Q+++cvZC9qTh9S8hP4dGnKE7bmmMb3rrTzcmfB00VA3L7QXgxRNxzLfSjuVn9R+a/38xssrcJKNzaa+9zRTxicf0HxpiOaB86iqXcTsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758662475; c=relaxed/simple;
-	bh=Hg4kDiauohDyOIS44l8N0SOwsuaGekyBXsVuJDM66m8=;
+	s=arc-20240116; t=1758662477; c=relaxed/simple;
+	bh=KB/2F1mwHdCdWf6p7atkTVmULwWR0AoSKjh9TvOt4u4=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=o/ARjXOXvcF4/BR3AkfK3M1RpWv+Ke9R/nuV3QJykTSTmPLfY67I2BPW+JCo1LVcUcH+XMYSHoFZVK5R7t27vD7Eixzn14F0HH/K4uVyonmbLOsHI3u3XXR+SFcSN7jhgXZImcVKMpplyCAADlnReoFWtMuJ8xRhDzqUnZhPGpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K0SwyW37; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=WPB3blDEbxLuYHir8OpPXOQpb5Gzxr6hOVWNdHk7vrKWpoyw9eGrCkFXrkRxVBagvmfEf1S5sydhJ/uwGwnrEK5BGiO+gmuRcEJbRKEg5Y0UR2X0SS660kMfoCQV1fbxS98MdG9S/utXqhRbejUk/SG7HcoJ95IF2pGO0WiLjp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtE+f6+I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K0SwyW37"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtE+f6+I"
 Received: by smtp.kernel.org (Postfix)
-	id 8CBB6C4CEF7; Tue, 23 Sep 2025 21:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77244C4CEF5;
-	Tue, 23 Sep 2025 21:21:15 +0000 (UTC)
+	id 07836C4CEF7; Tue, 23 Sep 2025 21:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E64DAC4CEF5;
+	Tue, 23 Sep 2025 21:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758662475;
-	bh=Hg4kDiauohDyOIS44l8N0SOwsuaGekyBXsVuJDM66m8=;
+	s=k20201202; t=1758662476;
+	bh=KB/2F1mwHdCdWf6p7atkTVmULwWR0AoSKjh9TvOt4u4=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=K0SwyW373kpzZ7RmzaC4M87vTAKhouWW4AoR3fJoj6EeSLL4cxX3ZbTVO8WHDFQ2X
-	 lANfSUc33SfbymsZR/r2f6qqVYg+DOdHC39Sn/snPjb9z5AO0O6mjCKsHGPmZH1lmZ
-	 ph0f27hKBZ2iI1McSfj78Ra0T4BgJNZlXFSNUhBz5BaH8NxeZd6aaJoevWLjMnNKpH
-	 z+lFV7GEtanuLoEs3Wc9NAjP04nWNnEwTCjOxp+H0/CpYx8k9sBBEYWJXoG5Db0ssa
-	 B5u9GXCp699lZDvHIxg6mpMxmL+8OWinyyFwYMHrx1qAtAnTzcXYAqjv1J/hcCxNIX
-	 unQuJLz9PtqZg==
+	b=jtE+f6+If3siVcBDDPti3q2NKXKwXFf7jEcEYeA78rVk+gxF+QgqoA83IjYvC1pgX
+	 8sNClgsd0W27eUKiqU10GCic0torAbLumq6yxaxO41JjFrlxX4BRqrMZF2vlwNTsyl
+	 pcKJKGp6ouukDl1q/LAJO94ltKMOULiaL0uuzeSqJ3HPf/z9CxNpQz1IQLJjiMEuw9
+	 KZVJ+5vdrsQVmp6U33PZakhr80kojN5ZCIZxY2n0fImls4w4+n21rVaJWIt5SHupan
+	 ftPSRSJ2NXzYbRVXmjV0Hi9uR6ssmf3fCKxM+3zSmKcZCfthK9ktodvxWM1RawV/gc
+	 kiUl0O8hKvgAw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADFB139D0C20;
-	Tue, 23 Sep 2025 21:21:13 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33CF739D0C20;
+	Tue, 23 Sep 2025 21:21:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,35 +39,35 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm Arm64 defconfig updates for v6.18
+Subject: Re: [PATCH] arm64: dts: apm-shadowcat: Move slimpro nodes out of
+ "simple-bus" node
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175866247223.1926563.12644120845394378814.git-patchwork-notify@kernel.org>
-Date: Tue, 23 Sep 2025 21:21:12 +0000
-References: <20250921020612.596098-1-andersson@kernel.org>
-In-Reply-To: <20250921020612.596098-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+ <175866247377.1926563.16983535669308264670.git-patchwork-notify@kernel.org>
+Date: Tue, 23 Sep 2025 21:21:13 +0000
+References: <20250919161509.1292227-1-robh@kernel.org>
+In-Reply-To: <20250919161509.1292227-1-robh@kernel.org>
+To: Rob Herring (Arm) <robh@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 20 Sep 2025 21:06:11 -0500 you wrote:
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+On Fri, 19 Sep 2025 11:15:08 -0500 you wrote:
+> The slimpro nodes are not MMIO devices, so they don't belong under a
+> "simple-bus" node. Move them to the top level.
 > 
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.18
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+> I made the same change on storm, but somehow missed shadowcat.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Qualcomm Arm64 defconfig updates for v6.18
-    https://git.kernel.org/soc/soc/c/2136c694a045
+  - arm64: dts: apm-shadowcat: Move slimpro nodes out of "simple-bus" node
+    https://git.kernel.org/soc/soc/c/676af08386e4
 
 You are awesome, thank you!
 -- 
