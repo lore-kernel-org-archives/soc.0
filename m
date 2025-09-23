@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E1630C605
-	for <soc@lists.linux.dev>; Tue, 23 Sep 2025 21:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7025263F38
+	for <soc@lists.linux.dev>; Tue, 23 Sep 2025 21:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758662447; cv=none; b=i3YyVV26iTyOsPFf69xMBApgUTkx0GVsGf/804nK/n56/ITXUZu0JuAEykpBaiw5IrlOC2agZideYqjfSOx337NBYxqQtfexXxNMCwcuiCUn0GWQarpp36aoQLKjRV5CD0OvlBcd8FPfOYa4hQDl0U9bWwbvs4HFyKlhclJD/zE=
+	t=1758662449; cv=none; b=XkJHYfC+bUKWU2MIlNEL/aSpOVFyrJJBCiScqB6DUY/l4IE/LdjzFpzGrMMxiJ9PQV9hg7VXUHqojlt24uY+g4U6GUckgj+XnAYAXpAOWXN/j6hLaj+K4giPdoQVNAC0KWcBrn5jTgaufSQoARWwlyIECkk0r5oN/gMfArRFanc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758662447; c=relaxed/simple;
-	bh=OQDqHA5THBCbcFXiR+iaVcjrEy/iu14YOufPIEaYUf0=;
+	s=arc-20240116; t=1758662449; c=relaxed/simple;
+	bh=t+KVtcjeFnCemJpnsP7pu/ZhPZGZsd/zJc3uFh2KhyY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cZIEW5EaJj8mpFW1BKDtRMUpVweBJPcfmz4u0yU4gFBUyZa45yWdHetqtZIT9F1u7oNY8FcISsVUjbEraAau1WbYv2OuFcU35P+35xfBoEWokpq0F0g73ag5WOxLXxLoD9uCTOfejY4b6p9UbOeK2FW46C3883XNPAH7SYKAwzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gby0WX2w; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=JKtSfpZ7XV9yT6s4grr/T2SAEUseuBFUW0I3in6S17YHWzVhTOAEqfmvVM65fJsLc/Uky9mS3cOCyRNkA84SQADsjneEqUGDaoJIS5iFC7SK58agj73pzz5nPzdHwJhwSQx14gU5Xk9kUm3pNyMX/891AaijpbEVj9N6VnhSY68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VIXjcZ02; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gby0WX2w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VIXjcZ02"
 Received: by smtp.kernel.org (Postfix)
-	id 1B1DFC113D0; Tue, 23 Sep 2025 21:20:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C8FC4CEF5;
-	Tue, 23 Sep 2025 21:20:47 +0000 (UTC)
+	id 994ECC116B1; Tue, 23 Sep 2025 21:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F21BC4CEF5;
+	Tue, 23 Sep 2025 21:20:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758662447;
-	bh=OQDqHA5THBCbcFXiR+iaVcjrEy/iu14YOufPIEaYUf0=;
+	s=k20201202; t=1758662448;
+	bh=t+KVtcjeFnCemJpnsP7pu/ZhPZGZsd/zJc3uFh2KhyY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Gby0WX2wj0pkhKiKl6JEV+WDFov4HUKuL8wE48/IbVTwLU631Cvnwu0T75iDWx9na
-	 P9PyeN6l3wVSuLKzCN2Y52VbB8ioKMicu2NGbFkTL4nc8gUuAzGh1S/+tqRz2BSEZ5
-	 YGhamX6aDaQgnDf/iqCAF8ny6yePV6++MdS3DJOUYa5UnEIIe9hEkayOQRJAsOAeg1
-	 oMYjouerfg1kHZRfKgIOSF+aBZecpnUwTGKpToIRXZyITDRQchotEXDWraE0FeRmiX
-	 oIKM7SdqqTEW8j99OwIbu3Okpaa23WCspbik5a2tBzb742X+NvtVbR028gKdR0St7q
-	 ykdz7sPDfwaYQ==
+	b=VIXjcZ02OLD3vVO6yJSBc3pSXJlTFoNN8uJsVHzSrKeYpSYgrw6ZT3arFRIFED3Dt
+	 HBlaT9LK3AkvsW0V+gU/YJF1+v+zFaMmFwYevuKJW5dspghOYfcBNsy6+Xu9u2vkoY
+	 dTn2iKZyfXg/ODFkd9AyOyCBVGffu47KzxAiQ8k+P2zDLcmeydRITSa7h2TC9UlrZD
+	 yVTDBYN239KGrY4vYYXJpzMq/+epjqemn3Ak/BRxPqK+vW84kxiMGcLMVFJ9s1BVxB
+	 0xwSnfTCaBC3oWglY9kfK5NVTBKKboIW56HtfNuu9YKkBnNLiwa/224fQfs4/n5hSh
+	 A1tJEzJxEe6Qw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C5539D0C20;
-	Tue, 23 Sep 2025 21:20:45 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADC7339D0C20;
+	Tue, 23 Sep 2025 21:20:46 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v6.18
+Subject: Re: [GIT PULL] Qualcomm Arm32 defconfig updates for v6.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175866244398.1926563.15488257988952305002.git-patchwork-notify@kernel.org>
-Date: Tue, 23 Sep 2025 21:20:43 +0000
-References: <d40e7e96-4a7c-4e4f-b36f-750c6525b95c@linaro.org>
-In-Reply-To: <d40e7e96-4a7c-4e4f-b36f-750c6525b95c@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
+ <175866244523.1926563.9668880718308329402.git-patchwork-notify@kernel.org>
+Date: Tue, 23 Sep 2025 21:20:45 +0000
+References: <20250921020746.596400-1-andersson@kernel.org>
+In-Reply-To: <20250921020746.596400-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,21 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 19 Sep 2025 09:46:05 +0200 you wrote:
-> Hi,
+On Sat, 20 Sep 2025 21:07:45 -0500 you wrote:
+> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 > 
-> Here's the Amlogic ARM64 DT changes for v6.18, mainly adding cache properties to all
-> ARM cores in Amlogic SoCs, enabling RTC on C3, fixing RTC node layout on C3 and fixing
-> long-running issues with SDCard on BananaPi S905x3 boards and the Odroid-C2.
+>   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 > 
-> Thanks,
-> Neil
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-defconfig-for-6.18
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] amlogic ARM64 DT updates for v6.18
-    https://git.kernel.org/soc/soc/c/abfbfb98acfe
+  - [GIT,PULL] Qualcomm Arm32 defconfig updates for v6.18
+    https://git.kernel.org/soc/soc/c/4a77e9ed4e27
 
 You are awesome, thank you!
 -- 
