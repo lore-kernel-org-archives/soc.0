@@ -1,39 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DE63043B0
-	for <soc@lists.linux.dev>; Wed, 24 Sep 2025 17:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D28E2FBE05
+	for <soc@lists.linux.dev>; Wed, 24 Sep 2025 17:50:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758736005; cv=none; b=orxdlxqKkwOFwJ02fxVa7JtjtmpsG88YCDXMmh3BIqIRdSArLNo6tGpVs3vGR21g0/dwEpO7+bySNHCbBmO1Z6mel2G2kljOya8hCYnXrOubWxXkuhdPavsIVYbK0HmtHwtR+eGpUtU0YrYy89MNNviZQYhHSfPl3P7i7LX0f0s=
+	t=1758736218; cv=none; b=ld1aN5dDBkzOH7X+JHUcIYsr6yUca00/vSkOGplzHUJW49qP0aHsewt79CEydKyGC8TmJjA06cYLI6iczTws5pMz2EuyzX3EC4s28+Q38Wa08T1yOR2DseOfED0EayKegg4DV7H41ttMTa5TeB1r2ncfKUFY+CZArtYA/5bPBiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758736005; c=relaxed/simple;
-	bh=IN+QAr5tK0RV1rS3R/0YpjGQlOE9FqGg2X6T5EcrTMI=;
+	s=arc-20240116; t=1758736218; c=relaxed/simple;
+	bh=74KN9oh1byEWmXXX9aM096GB/KOeCB7XK8MCfkCFyrI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=B0UZU+YfVcv3qqEi0xTPN/P+3jY7pU8aCleGBFj3kXuNBNxUNb5AqRqwuwsV4oifKfkRpcl2jgFfJZankMKwzO92hwH0XJnEut7wuXacM4Wu/JjNNWIsR0a4FPsh3ZCctHNrMde2fUVfc2XQ8dInTZ8uLJsQJyEytZ8Snn+XG7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uZJuIas5; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=iv/m9pFuewfNTi+qZoE7zbCJUZevO+4v6wh4b08bU3BatX/niPXoF8QUip2IxcYWEya7/nPp8kiyXQ+zcDcW7HssuaJ9jzf+ba8DkeUaDwk/EToOeQkrOObSofq+6pLlJTaO6Fq+i/GtmP1Ldcwp8OVAuvYYaYnRuoi7g6pUKFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/ifURfT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uZJuIas5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/ifURfT"
 Received: by smtp.kernel.org (Postfix)
-	id D7D40C4CEF0; Wed, 24 Sep 2025 17:46:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAE5C4CEE7;
-	Wed, 24 Sep 2025 17:46:43 +0000 (UTC)
+	id 046C5C4CEF0; Wed, 24 Sep 2025 17:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2139DC4CEE7;
+	Wed, 24 Sep 2025 17:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758736004;
-	bh=IN+QAr5tK0RV1rS3R/0YpjGQlOE9FqGg2X6T5EcrTMI=;
+	s=k20201202; t=1758736217;
+	bh=74KN9oh1byEWmXXX9aM096GB/KOeCB7XK8MCfkCFyrI=;
 	h=Date:From:To:Cc:Subject:From;
-	b=uZJuIas5bw2pPmUsPmIqhPhqcFbsi1TUf4DSZRqy0r7bTPxCPeQECcXGruBTe3tbK
-	 W8rsmoTHas+xQkZLKcv6JOYHmvHFrsghaqD/t+brkA+B/LpGWowHhfTN0bRFaSBmRU
-	 IFzdV7yvcaI55/fsuYLzjUMqFoZCmK0BxK1QE09M3Lp6xWy224uvAMzzwqMZzdsvv7
-	 VTiVTzOxvZDhQJe8hY87naKozap5VMsj8MrRdewiTUx5j/g1/9r82EjkVvG4i9reOC
-	 mbo/F+jrHM2xtkyX9Vjrj/ALA8yH5yPq1e27Ky6jbLbewZy2K06EsjGqmXjP4szo0R
-	 LS37hem7dV/3w==
-Date: Wed, 24 Sep 2025 18:46:41 +0100
+	b=A/ifURfTClGY1c+oC0O1OZnLh/WyrNAJZ3byA4Ba4oy0S1gDfG9ZGUvqtIEcytymB
+	 opreyiPg8eO7dXCHrpSR0CL7voY7WE+liGbw6TrUNCPhIEx0CiG3lwhjEuNQXyXBHC
+	 Pqin/wN6gBNQ0R0/ynZq+vnKWuJAGntfbHyiABZrFR2sU7IpXrGfDD4l5R9yRUxNb/
+	 Py19Mrm26PyMlya4XhmV4Jvrbs8TH21JLu62DItjTgRWY6Pb7eMXA8VGZyA3JLWAf9
+	 0WlgE3Top6fLH+nGoSCkW1XGeQ92pxyqJtCl5on3L8PhQsaAxlt1JUI370gcrhkTRp
+	 mxi05Sy0Z7OTQ==
+Date: Wed, 24 Sep 2025 18:50:14 +0100
 From: Conor Dooley <conor@kernel.org>
 To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org, pjw@kernel.org
-Subject: [GIT PULL] RISC-V config for v6.18
-Message-ID: <20250924-unenvied-armful-5fcc80c23d19@spud>
+Cc: conor@kernel.org, linux-riscv@lists.infradead.org
+Subject: [GIT PULL] RISC-V cache drivers for v6.18
+Message-ID: <20250924-relenting-aqua-a4a93b89809e@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -41,20 +41,18 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4hQHISVyvhQW8+UH"
+	protocol="application/pgp-signature"; boundary="HYjhK9UizMWbDT15"
 Content-Disposition: inline
 
 
---4hQHISVyvhQW8+UH
+--HYjhK9UizMWbDT15
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Arnd, Paul,
+Hey Arnd,
 
-Arnd: here's the soc-related config changes I have for v6.18-rc1
-
-Paul: I meant to come to today's call and forgot, so re-mentioning the
-fact that I grabbed the savedefconfig reorder. Pull this if you need to!
+Wee PR here with just two changes, for the standalone cache drivers that I
+look after.
 
 Cheers,
 Conor.
@@ -65,40 +63,45 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-config-for-v6.18
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-cache-for-v6.18
 
-for you to fetch changes up to 3df7ce0e43ad94afce24b6300e7836e2db6dc0ee:
+for you to fetch changes up to 941327ca5ddd45cfc4dd960cbbabed9e2b5cb1b0:
 
-  riscv: defconfig: Enable MMP_PDMA support for SpacemiT K1 SoC (2025-09-14 16:34:42 +0100)
+  cache: sifive_ccache: Optimize cache flushes (2025-09-11 19:13:21 +0100)
 
 ----------------------------------------------------------------
-RISC-V config for v6.18
+RISC-V cache drivers for v6.18
 
-Enable the MMP_PDMA driver as a module in defconfig builds, where it is
-needed by Spacemit K1 boards. This depends on a savedefconfig reorder
-that it'd otherwise conflict with, so that's here too.
+sifive:
+Reduce the number of fences issued while flushing. Samuel reports that
+this is approximately a 15peed-up.
+
+ax45mp:
+Fix the binding so that it permits the cache-sets setting used by the
+recently added QiLai SoC.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Guodong Xu (1):
-      riscv: defconfig: Enable MMP_PDMA support for SpacemiT K1 SoC
+Conor Dooley (1):
+      dt-bindings: cache: ax45mp: add 2048 as a supported cache-sets value
 
-Yixun Lan (1):
-      riscv: defconfig: run savedefconfig to reorder it
+Samuel Holland (1):
+      cache: sifive_ccache: Optimize cache flushes
 
- arch/riscv/configs/defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/cache/andestech,ax45mp-cache.yaml         | 6 +++++-
+ drivers/cache/sifive_ccache.c                                     | 8 ++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
---4hQHISVyvhQW8+UH
+--HYjhK9UizMWbDT15
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaNQugQAKCRB4tDGHoIJi
-0mUDAQCTjVN9vHQTzb1c6eYVg6QN3G1e9arRZtZ7q0DH88BYIwD/TbzFv763VQlb
-pHORqK8dMo8mhkSzAZDc0XvVHBnfjgQ=
-=UJgL
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaNQvVgAKCRB4tDGHoIJi
+0tFTAQDkNSfkghj3zWo4zEHYMGIvZajP2CI9t7HsHZku1aHfTgD/UQjcnHnPzOwZ
+cUJgR9ea40cJtMMcB3zNiViHjX3vdQk=
+=8Nuq
 -----END PGP SIGNATURE-----
 
---4hQHISVyvhQW8+UH--
+--HYjhK9UizMWbDT15--
