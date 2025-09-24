@@ -1,109 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4933128AD
-	for <soc@lists.linux.dev>; Wed, 24 Sep 2025 16:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBC730C36D
+	for <soc@lists.linux.dev>; Wed, 24 Sep 2025 16:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758730836; cv=none; b=RPlXyyBBh+S33GMt7TSRy3BJeAJSkYmWuqK1PiZiIw5sUq8t/LvKRbwpp1mhkVThewgNY2n9rHP/7RnMAnxGTPEd//v2DJf6lNRU6U8lWJGzy6FuPY+yB9mSL4iDbaFBpnB6YY+em4PL6uywxYMTxX0/03JU26atLe+Z70MPMCI=
+	t=1758732779; cv=none; b=Ioxii25M1wNBx0QEPOH0cq0X5bNqyjV5sFPLd0EyKRfn0eXQNih/8ZSD6xhqUaB5hBdqsM0NrzFq4HL2b+xBbclr/fwNNrc+5kRUhKHUkeO4OP46zkum/3BdPjHUSsETqqXWZy306+iN2+QLZIBPlrJLzA4z8ayz1/f3wV1uM24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758730836; c=relaxed/simple;
-	bh=+M9kI5puvs6+L8yEYgsKp+kkZvQcLsagU1dBNyCsDTY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=E/Axqp4kekX44hXYFGIo1cQJq72Yr4Hdn48L8u/PmISxdtVRh5iTWNy2PpwWT94oQ0yeM4sIe8NUdJMMH8dsoislMlU9tSvcxirIGLTrbsZpTFHO20sXOX/NZ0Fn1kiHOe8xozrB+MI57qzh/kjL2aJRv3ZKvvWYkV6DpdHXm/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix)
-	id 40846C4CEF0; Wed, 24 Sep 2025 16:20:36 +0000 (UTC)
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.kernel.org (Postfix) with ESMTP id DF014C4CEE7
-	for <soc@kernel.org>; Wed, 24 Sep 2025 16:20:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF014C4CEE7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4cX1pJ594cz9sSp;
-	Wed, 24 Sep 2025 18:02:48 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2C3WRkuK0BC9; Wed, 24 Sep 2025 18:02:48 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4cX1pB5TL1z9sST;
-	Wed, 24 Sep 2025 18:02:42 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id AD7AF8B763;
-	Wed, 24 Sep 2025 18:02:42 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 0UckyDH9Fa_j; Wed, 24 Sep 2025 18:02:42 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 45BB28B768;
-	Wed, 24 Sep 2025 18:02:42 +0200 (CEST)
-Message-ID: <26615a15-3494-435f-b0c1-861122b4b5e1@csgroup.eu>
-Date: Wed, 24 Sep 2025 18:02:41 +0200
+	s=arc-20240116; t=1758732779; c=relaxed/simple;
+	bh=UrMcgnvepEFw09AKY27xiaGcVJTODrGC0uo1csSp3i0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hhUgv2jqUL2cuZujNYrvuRQKCThZG89wOtK3Pa5HSH2dlX7TNO3x6C6dQ3NqBhW+A1/kKP643Mw+GCzqIbFVHyU0Tv/arvwklkLmNES6gsz6glxsIrmQ956D/7nI+/4mnN4ajEJhhxJv2EWdiFH7OZye9D1DZm8HRRflQ3bexF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GY83kEdd; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GY83kEdd"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45f2acb5f42so7044265e9.1
+        for <soc@lists.linux.dev>; Wed, 24 Sep 2025 09:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758732775; x=1759337575; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GzTtM9WAsK07z8tZ50EdByhyU/vMqn0St2F82RyVOyM=;
+        b=GY83kEddM72ETc7fWTp/uHFrTU3/9fsRPqJNQ7kFwoCBqhRV6jpvlQNPzufs56XXJR
+         vhv3+V05/TSJPq2Wp8Zp4CfVs7fJUbcYNXAhbgADavIh1Tjd5TybPINx2M7K6+sftyMV
+         6sihoy3jBMTpaZYK8rSM/l1fz2bDwha6E9he1Cfr1J92VI5Z6ij2FCVnDeXd4fQt5dUe
+         sGuEv/Yjx959wk93J3LdlLI8hqj0DiBfFCJ6Npzwi9t9p8XEqijVxeaL1/pxf1edz1wZ
+         JusFo6uUbvIaypZPO5hOolJ+2NPlnRiuELBaWuZdtPPlIEPZUj4ji/8Ver09J4k/SM17
+         p5Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758732775; x=1759337575;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GzTtM9WAsK07z8tZ50EdByhyU/vMqn0St2F82RyVOyM=;
+        b=sLCHQgTOsRWkec1U23uMRlWw4JS9UK+KwtR/0Tk7HSEBV4hlzdDjRu9B9DtQqCxmdu
+         RUxSdD/YxN/PmMbRwg+b3NMVsvDN/cZ3yrhlFj0JVTyfeGt0uvGCO1g5AK5u6TOMUEFb
+         NgRwBaoNb2WkHp6zoyol+vbMS61GNxmDXayZeRhwgrwGDW+9RkmYk+tcbox9WeAwP8B1
+         SvhFNusaLd5aCTyWtGz6TOdzcdYXPo9d17UxxbrLybSBBI5l2iRAUz/WTxFlE036KUAx
+         Ue9eA4bUBszYmbpvSoh/YlolzI1240mXoLZq2RDLTYU37ytnz8wZQCLaBLgdgIIfMOGX
+         xM5g==
+X-Gm-Message-State: AOJu0Yxrdj/sHF8RheCBJ9wkzR19HPr6BZ4qWxbbtjlhyiNgEYOZ6l06
+	ZdL2jMF3eGk/JYu3GDjcKqVH3vi1ALr9PR8y77/PM/+RqoymZOpFS0JFt+Lzsagqj5w=
+X-Gm-Gg: ASbGncvqYBB0dMskO8SkQsW8abe3pPPN8QX+qFaG3vNM0jFSE5CxDeZ3PBfg06Xzz3K
+	BJ1bLXYYANQMs/4sD5MUFZNBjZU5n6RGqJF59fcZz8iDoAQFRHTUoIVW+fh0BFqXbu4Di4bFjjk
+	ZcdRQeZ+/v8WJoj2+xTSzIWmwh452p6gIzNLCa9F0NQ7SLGAa6+AzkoofTpwuMylKWvbgAF8MYY
+	+hxYejHSYEIT7t9DcdM+nTzY7olxoIIzC4yLvEMPghk+VpirpaoD96s0d6POXafbI3vSL70mBDS
+	zLnjoNf71DFLVbAVsMEszH64cCzUgAwG7td4vH1pkuFSR+afkv9qLjJl+O2SEMo0jwj7B66I6s4
+	cK67D2cYTfmHvwSVAF+y3aw95/7+yPJjbR0gX7fJVBoadQwFPc431QXAv9V3P7tDoNLJf0mX1iq
+	E57bWDA8vmvw==
+X-Google-Smtp-Source: AGHT+IHV6Of+qXakfqJ0XhbATMb2AIuLl9e0wcQPO7/GLftVgSTayzqBT8eCMUUPgRnR+4vlJm1a1w==
+X-Received: by 2002:a05:600c:45c6:b0:46b:2fd3:b55f with SMTP id 5b1f17b1804b1-46e32c2f45amr3319005e9.4.1758732775255;
+        Wed, 24 Sep 2025 09:52:55 -0700 (PDT)
+Received: from radijator.localnet (93-138-236-234.adsl.net.t-com.hr. [93.138.236.234])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3f02f332c31sm22789020f8f.45.2025.09.24.09.52.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Sep 2025 09:52:54 -0700 (PDT)
+From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <dujemihanovic32@gmail.com>
+To: soc@lists.linux.dev
+Cc: Karel Balej <balejk@matfyz.cz>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje@dujemihanovic.xyz>
+Subject: [GIT PULL] PXA1908 DT changes for 6.18
+Date: Wed, 24 Sep 2025 18:52:52 +0200
+Message-ID: <4685744.LvFx2qVVIh@radijator>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [GIT PULL] SOC FSL for 6.18
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Language: fr-FR
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-Hi Arnd,
+Hi SoC maintainers,
 
-Please pull the following Freescale Soc Drivers changes for 6.18
+Here's the first batch of PXA1908 DT changes for 6.18.
 
-The bus/fsl-mc changes outside soc/fsl tree are acked by maintainer of 
-QORIQ DPAA2 FSL-MC BUS DRIVER.
+Regards,
+Duje
 
-Thanks
-Christophe
+The following changes since commit 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c:
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-
-   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+  Linux 6.17-rc5 (2025-09-07 14:22:57 -0700)
 
 are available in the Git repository at:
 
-   https://github.com/chleroy/linux.git tags/soc_fsl-6.18-1
+  https://gitlab.com/pxa1908-mainline/linux.git tags/pxa1908-dt-for-6.18
 
-for you to fetch changes up to 5498f07842cbddd86c725b960acb8e478684ca45:
+for you to fetch changes up to efab3844c6f18327886c5c2e0e40acccaf976a89:
 
-   soc/fsl/qbman: Use for_each_online_cpu() instead of for_each_cpu() 
-(2025-09-22 21:31:08 +0200)
+  arm64: dts: marvell: samsung,coreprimevelte: Add USB connector (2025-09-2=
+0 14:08:32 +0200)
 
-----------------------------------------------------------------
-FSL SOC Changes for 6.18:
-- Use for_each_online_cpu() instead of for_each_cpu() in qbman
-- Update FSL QUICC ENGINE GPIO driver to a standard platform driver
-and stop using legacy-of-mm-gpiochip.h header
-- Misc fixes on bus/fsl-mc
+=2D---------------------------------------------------------------
+PXA1908 DT changes for 6.18
 
-----------------------------------------------------------------
-Chelsy Ratnawat (1):
-       bus: fsl-mc: Replace snprintf and sprintf with sysfs_emit in 
-sysfs show functions
+Rollup of hardware support which has accumulated since support for the
+SoC and coreprimevelte board was merged. This most notably includes
+eMMC, PMIC, backlight and touchscreen. A few QoL fixes are also
+included.
 
-Christophe Leroy (2):
-       soc: fsl: qe: Change GPIO driver to a proper platform driver
-       soc: fsl: qe: Drop legacy-of-mm-gpiochip.h header from GPIO driver
+=2D---------------------------------------------------------------
+Duje Mihanovi=C4=87 (9):
+      arm64: dts: marvell: samsung,coreprimevelte: Add backlight
+      arm64: dts: marvell: samsung,coreprimevelte: Correct CD GPIO
+      arm64: dts: marvell: samsung,coreprimevelte: Enable eMMC
+      arm64: dts: marvell: pxa1908: Add PWMs
+      arm64: dts: marvell: samsung,coreprimevelte: Add vibrator
+      arm64: dts: marvell: pxa1908: Move ramoops to SoC dtsi
+      arm64: dts: marvell: samsung,coreprimevelte: Drop some reserved memory
+      arm64: dts: marvell: samsung,coreprimevelte: Fill in memory node
+      arm64: dts: marvell: samsung,coreprimevelte: Add USB connector
 
-Fushuai Wang (1):
-       soc/fsl/qbman: Use for_each_online_cpu() instead of for_each_cpu()
+Karel Balej (3):
+      arm64: dts: samsung,coreprimevelte: add PMIC
+      arm64: dts: samsung,coreprimevelte: add touchscreen
+      arm64: dts: samsung,coreprimevelte: add SDIO
 
-Salah Triki (1):
-       bus: fsl-mc: Check return value of platform_get_resource()
+ .../marvell/mmp/pxa1908-samsung-coreprimevelte.dts | 266 +++++++++++++++++=
++---
+ arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi       |  46 ++++
+ 2 files changed, 278 insertions(+), 34 deletions(-)
 
-  arch/powerpc/platforms/Kconfig          |   1 -
-  drivers/bus/fsl-mc/fsl-mc-bus.c         |   9 ++-
-  drivers/soc/fsl/qbman/qman_test_stash.c |   2 +-
-  drivers/soc/fsl/qe/gpio.c               | 139 
-+++++++++++++++++---------------
-  4 files changed, 82 insertions(+), 69 deletions(-)
+
+
