@@ -1,118 +1,63 @@
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D30524679A
-	for <soc@lists.linux.dev>; Wed, 24 Sep 2025 21:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB50224B14;
+	Wed, 24 Sep 2025 21:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758750121; cv=none; b=bmcKZgxOcATI2FLfb/VfKrWu5rZQJjOpis4uUn0VYXz6UVPEA4AcynAsk9xwKeJEa8XFZ63H1N1vxqVGV2T2SS/IeROJWosMeKfi0Gspkozcp1E9eJaZJxB1M3tVTPDQvK6B9CtBWOINkOzMkat3FR2QAna/Ef83cNKx+LPXRL8=
+	t=1758750430; cv=none; b=RtiDRVCikF+Yy8D3Z2ZBvVTibGvghqJ569qJ5LeKGWtpA734THWo7jLHZts6g2NP/iQ0LRHx0nKmuENps217ffevp2I3aQTjl1pAe0nmB30MZJC1paV2u4fLeo4ju9E0RPRgdS1MKxoGfojizupyKGu3BLWd3/SQp65A/zO+6co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758750121; c=relaxed/simple;
-	bh=2ehXYzc97WyICXv7CyLrgbg10pZOL4YT397boIJDc28=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=HPtC4ATVfnNWoFhP5dpcpmxaq1LKccX9fRyyWKQN5QERZ6LHqDQUXkXa4lq6S7JSNDPR+yybRFjQQw6wuETH4AzfNqBsPbApDz7eiBCwPyDuUdvQI91dZuXlJAOyfJnd867uXLOhtLDyulA5JS4ausTgD0QOE6rWHXrQYhuyrLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=MJzCc31p; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ih/yVxHh; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1758750430; c=relaxed/simple;
+	bh=ANND0iRENRaFSgE/hRDoAWTStBO6vYY2JgBulVQWiNY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=aSwHThLfTIpSVuhSHV8WbM8ZfxpgOQIXpG7Hxfx9LB09tH1zWG7CXyjWZqOGUCnzvsHwxsf2zvpXebYNDPY9P2t5zFKrORm+x79yJhq2EFmOCabt0i1DVxOEBfEl4+HKlJpBfnjJWEjFG/M1Z19hkR4CNqL+NvTK4CK4BwzJ8f4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nqc4PNqE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="MJzCc31p";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ih/yVxHh"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id C229FEC0166;
-	Wed, 24 Sep 2025 17:41:58 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Wed, 24 Sep 2025 17:41:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1758750118;
-	 x=1758836518; bh=eV9m1lbbNAGh6h3l1sH9V9DqLA0qIHvnUDzEmR+6feU=; b=
-	MJzCc31pfP6WqYiHGZRDNwdiGIv61wBAFzdRCll0clFjAu6u+AFHfTgyQ0L9ditT
-	shy4TzaGKqX7cz3VKPOGm+RLn91UfRoMbyy+8LxNz361cqA71vBGSScMlrFc5W7P
-	D4sW7SgY1IHsE75YpSsabCcDmspHxqBXIowrpp4iJYN6GwiX3dj/jqsmQnEttMMh
-	M7NnOpj8ozEBfCcZiy7b6e46lL+QVAE03fHTUPh4q6QP0dIYMMw+n3dcn5Qdmaso
-	XjK60u2TWXFrlakQR6TmPOI58Uc2rxCHUhRtvdCReNqQ84fpN77aysgr9wNUS569
-	h3JpQKHJ/CVzZGPrOU0Ypg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758750118; x=
-	1758836518; bh=eV9m1lbbNAGh6h3l1sH9V9DqLA0qIHvnUDzEmR+6feU=; b=I
-	h/yVxHh6EZOciVQB+SokLGJkDt4QvGdJ1qJsYD5wY3tRSxUz+M0mFNH6f5K7oq+E
-	lv+3uuF2iLIwhyzsdkGdfIQqmODQHPjUh7tzPdrIumDlHo7J0/HZLhAt4t1PKbDY
-	HhV2FzcgmaAPVoYJl4xFAMKsnO7PQ3cXp3KvMHyTIul1K2027AsMqUzvajKd8BFx
-	9EBPNeJ89c3WBzzDAtcfpN3ITZMWSzpdeuUphvCg4HKiqKzvwzf0g/LFwxl0a4Kr
-	6eQKWYzViXjc/bx6I/kAaW+JTBHeF8MksCy0K54axPgzYMsRtWjAFswmC4oHPknq
-	FQdOy3GNCb/ltkIz6c4rA==
-X-ME-Sender: <xms:pmXUaABkbcetRg8_mL63nPWzJ-GCGc0aflloz3E-iIvuzyImhEFFhQ>
-    <xme:pmXUaNVn-jyDrKmbBOURmorRs3SYgrJyMzVCxTsiiWOIzSecDq33YYz9FUg9e4bmg
-    hA4s6sM4kqNZfz1Lo8UKBu3kFW2DCiSPsTK_AYzKNSfvWLCzaBeO2k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeigeejvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeipdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopeguuhhjvgesughujhgvmhhihhgrnhhovhhitgdrgiihiidprhgtphhtth
-    hopeguuhhjvghmihhhrghnohhvihgtfedvsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
-    lhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorh
-    hgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthho
-    pegsrghlvghjkhesmhgrthhfhiiirdgtiidprhgtphhtthhopehlihhnuhigqdhkvghrnh
-    gvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:pmXUaIn0VCkiaeulDJrvkImm0TwOVGbsfy407f_dk99be99qoteJuw>
-    <xmx:pmXUaKE4-SdrNlQp01E9yXmdS3eWU5SF0lYvb0dxHVnA1uGZlaRdXw>
-    <xmx:pmXUaI6eraskte5Nqh-p786Q_W4FHrR-sWkkaMF2hwIZwrwQP_OC5A>
-    <xmx:pmXUaKmE9_IwYZEN1N1pi2kUzRDcOi2Y2J22ZczgDb6myy_J_9N_fQ>
-    <xmx:pmXUaMmQ8JIt9Lzebn8H0vliZ4m6aGvM2sI2mhyoX_rVD8CHd6Mv7U-m>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 23A7B700065; Wed, 24 Sep 2025 17:41:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nqc4PNqE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAEBDC4CEE7;
+	Wed, 24 Sep 2025 21:47:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758750429;
+	bh=ANND0iRENRaFSgE/hRDoAWTStBO6vYY2JgBulVQWiNY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Nqc4PNqE6f/vBciuFeJBZkWPKGHKeTbRWqdfvotuXnfU32lKURFDzO0chk4DW7Xta
+	 gL6vvLdE2kZ4O+bxXgMWDPIJSpRDWBW8topiNqc4iIb6f2vhiA3mG9sMEQlWpR+71n
+	 lTuVk63mF64yHFxawcyEsYGQxnNwCqEXSHKSE6d+Fsl8oggdAnzVp9Y1jjV7kj/SR2
+	 kSQDh7lmGZU+IdzrLX4cHDJJ6SyQ1A9WDKIYic4gh/IKkyLlcpC4yIh7beGkYUxbOK
+	 kaYACZh0lvQRUVlWTpL9AKr7hCTIehADa/SpRljtVo5jXOneSYHAVrEVGnjyM8yO1m
+	 LBxztGerNt3Fg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70EF539D0C20;
+	Wed, 24 Sep 2025 21:47:07 +0000 (UTC)
+Subject: Re: [GIT PULL] soc: fixes for 6.17, part 3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <6565e739-19d5-465a-9fb5-d918bcb24b56@app.fastmail.com>
+References: <6565e739-19d5-465a-9fb5-d918bcb24b56@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lists.linux.dev>
+X-PR-Tracked-Message-Id: <6565e739-19d5-465a-9fb5-d918bcb24b56@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.17-3
+X-PR-Tracked-Commit-Id: 13923775d5b0b47656e800bec7baf50a20474aaf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ea78c190810ecd2c9dfb6d22b52fc670a38e8836
+Message-Id: <175875042603.2710061.11952077850560903706.pr-tracker-bot@kernel.org>
+Date: Wed, 24 Sep 2025 21:47:06 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, soc@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-ThreadId: A2mPhEQg0_sB
-Date: Wed, 24 Sep 2025 23:41:17 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <dujemihanovic32@gmail.com>,
- soc@lists.linux.dev
-Cc: "Karel Balej" <balejk@matfyz.cz>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-Message-Id: <c0516d21-16c4-4101-9d9f-a679f7459ef5@app.fastmail.com>
-In-Reply-To: <4685744.LvFx2qVVIh@radijator>
-References: <4685744.LvFx2qVVIh@radijator>
-Subject: Re: [GIT PULL] PXA1908 DT changes for 6.18
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 24, 2025, at 18:52, Duje Mihanovi=C4=87 wrote:
-> Hi SoC maintainers,
->
-> Here's the first batch of PXA1908 DT changes for 6.18.
->
-> The following changes since commit 76eeb9b8de9880ca38696b2fb56ac45ac0a=
-25c6c:
->
->   Linux 6.17-rc5 (2025-09-07 14:22:57 -0700)
+The pull request you sent on Wed, 24 Sep 2025 23:08:56 +0200:
 
-Hi Duje,
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.17-3
 
-It's really late since there are only a few days left before
-the merge window, and you unfortunately based this on -rc5.
-Since my branch is based on -rc4, merging your contents would
-backmerge all of the upstream changes and somewhat mess up
-the git history, which I try to avoid.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ea78c190810ecd2c9dfb6d22b52fc670a38e8836
 
-If you can send an updated pull request based on -rc1, I'll
-try to do find the time to merge that, otherwise please
-rebase on 6.18-rc1 once that is out.
+Thank you!
 
-    Arnd
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
