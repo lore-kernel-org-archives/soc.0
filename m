@@ -1,140 +1,127 @@
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560432E8E0D
-	for <soc@lists.linux.dev>; Thu, 25 Sep 2025 07:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315A284039
+	for <soc@lists.linux.dev>; Thu, 25 Sep 2025 07:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758784039; cv=none; b=DzxB2v7JjXl7JOB9dsiKNtT/r/bDrF18dZzRmwMXx8PmLOM6p/bd49MUmj+vg7Rwg+ckMRBtpFdeJ0sn+vzijWMtYPldHqeFzExcnlNRcnehGk6FLiwskCzBgI7q6genk1GFTc0OrEguPH05yY6Kk9CvAhpd3Y3kOGm9A3TYunY=
+	t=1758784638; cv=none; b=hcY+WCt1C9m4VvjonPkCHaUnab5pr+FvmtYVZA+S8cra1Pq+Bg9eHBbcPxKvsVVQvrDolWmi9kAaQ2PQzqvz4uduyMUd9NxWeHjaXcnvd66PCfqyFJNcCRoicauFxRtiX31VxBXqAqBRbCzaWy200IU3nhF9eGW5H1cFTHbllf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758784039; c=relaxed/simple;
-	bh=g+r5Q5E94/jojgji+RWseyLVvvGLzc3G6w5H7nl4WJQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=itWzzVNglZLN8NASfSUlI3Jp9SUNmqBZBDRGl4pxikpNsQPk/glbWhehiKWlbjMTCOUK+e+X7wFIQv7xapLzCatk3cxExzQq4Byw7OHL8yuTAofEvRydvAByzLWyqeyQ8mEYlgjuWxKd3MMaX6YNXBHFREXjfqIZddYCnaOit9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=w3Ex7jnU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lrcUrojy; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1758784638; c=relaxed/simple;
+	bh=6GVENq/k9h7/EvFAsH73JEtGioL2OOL2HZi4Wy6wl0w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZwnKOYR80M0pYiB6fJHWSub5R80T1J9MJw3rMVmUV2zyUP2BXMDZQXZGtXE7AGOdXwx1vqM3hdHztlTWSnFBo3H9J4xXxIHxt3psmIZYQ+zVy0ZIrQjckz0wuHIZp4LgPoouev/bAlrlCJ2TMfKNqIyAG1JF+Fms+BxPtUHilfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zhZ4F6yg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="w3Ex7jnU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lrcUrojy"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id 4EEC61D00153;
-	Thu, 25 Sep 2025 03:07:16 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 25 Sep 2025 03:07:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1758784036;
-	 x=1758870436; bh=TeIrumQy28sPmYSnm7vU8gqJZj2W4K8gO38cU/gKK3Y=; b=
-	w3Ex7jnUBXWkmKCwAFWnH32PbPYgT6hQ9+nm0NwA26DiUhtQiYT5Lc+PyKOR6tLw
-	Qsv2g6CV8PhnEf+oJJHuJQ+IxmqwVISpjGxBas9FD+lGnU1TByxjLqmOXWK6fSBm
-	TS7sZCk/3H6eltuYwQadCCY4yjZhLdZzbj+Cdg0qzvaMLrl7iM06kvBraAWaxfsS
-	67TBf/MejRUkeRvxz54/aMSvDDQbiRkTUxSvyOIAcbksthMw8FKlpXDvXNoNPJcU
-	tN43Pb0hEAV+nH2k5VlD4/pFBNiYCZ5KL30lAshIlmTf+nBA1vpZMpUqogo6Rc/g
-	Sn7Iq+JX3Z14K2JJycmbng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758784036; x=
-	1758870436; bh=TeIrumQy28sPmYSnm7vU8gqJZj2W4K8gO38cU/gKK3Y=; b=l
-	rcUrojyuUb71wHD2vPR4b/F6wEcxPZlHmWD5RRVHKgLTePmmQnMqMHYR4nimbIf5
-	XC9jb5uX9x210q18nT3jtZf/YOoo4PocqOUP/Ali9IFvjNlfLdZCaoGqUZw6O0Jq
-	AhzgFiUby+d6qNXL+3gM3eAzkXxZl13rUz9R3jfXkqSJW181z4wIMXxGpBTknZRS
-	xkhrVDXwqxefrRgtoBZ3bF1XnaTAEG8S6O2gnxx2PBQRNBIpJI4OjlJAnViHy+eP
-	5Gcl6QSSq5oj4lDKCXeCgdrJdhWDBouOSOdxSx4CxNRuY4LVAlYcbZ+8ugkhu9fo
-	QOYYvsv4ZHsbR14A+Y5uA==
-X-ME-Sender: <xms:IurUaJcOrUmrm2kwDrRAaTlGz4eVGDJMM7R61_2i1b4o7-HUNFkAjw>
-    <xme:IurUaCC0jRrsWJ-UUdNT-WWbC93ST5nAB2Ttx9rWv9e26_uKhCmWP2QQjKTyDiqh0
-    DKYHxJGo5-AZboasELTiyLbO8-n0sk7u-fFRMIx33LL9kt8KWQO-Jg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeiheekhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeekleejudehvdehueegheehvdfggfefhfefueevieeigeduueevjeehgfevudffheen
-    ucffohhmrghinhepsghsthdrrghinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    udeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrdhmrghrih
-    hnrghssegrrhhmrdgtohhmpdhrtghpthhtohepghhorhguohhnrdhgvgessghsthdrrghi
-    pdhrtghpthhtohepsghsthdquhhpshhtrhgvrghmsegsshhtrghirdhtohhppdhrtghpth
-    htoheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomhdprhgtphhtthhopegt
-    ohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgt
-    phhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriiihshiith
-    hofhdrkhhoiihlohifshhkiheslhhinhgrrhhordhorhhg
-X-ME-Proxy: <xmx:IurUaMkt3FNzrr5HiolNmk8y7IHLKox9NIhqNC07gffGXE_2Vg0GKw>
-    <xmx:IurUaMySZkUXc-wcDplhthTrFFPDP2QMcJB7fLHzHKmQNIGMw9njLA>
-    <xmx:IurUaK_OTM_tPVPPHdOcM0rozgw6yfGUDbpTIyf61urUNuRffoeyKQ>
-    <xmx:IurUaHAEOz6W5dfpOnvX12hYr6DZ4TB2D2UlvO9Dj_3fSKqcxd3nyQ>
-    <xmx:JOrUaF3bnAJYdSobaar05uW3kQz6dJ9tv-aka8j6dxOv_nzEky7767xX>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 792C2700069; Thu, 25 Sep 2025 03:07:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zhZ4F6yg"
+Received: by smtp.kernel.org (Postfix)
+	id C3C8FC4CEF7; Thu, 25 Sep 2025 07:17:17 +0000 (UTC)
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CE797C4CEF0
+	for <soc@kernel.org>; Thu, 25 Sep 2025 07:17:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CE797C4CEF0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-30ccea8a199so473362fac.2
+        for <soc@kernel.org>; Thu, 25 Sep 2025 00:17:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758784635; x=1759389435; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IMHhGG8yDDZuE0c3SXXHFpV2/qh92s5YSG1CuMfLsL4=;
+        b=zhZ4F6ygKE57/CR+xJOeWsZAt55zn5Kw9M0aJ9xVWlaeX938oXkMzwKrMv9os76bqD
+         NZ+MMtpQBvAyFH1kW+0xLuoCQZ0KFN4hA8MiMQ0WlAaqX/W4RDVFceSZpqYB5EBJv6sx
+         yS8IEFN1299j/HhzB5LIbbyVcDe5jWj7x1V01EGcqXJawppfAU1HAGLnCVloI3f0cdt1
+         C1mCN0a73VMF5jj3VmOFhYEtM0F4vV+Q2xwbcjqImYMGYQWGOOlnf0nuROo2bUmtW7Uk
+         tvpm2bLZ1xwq0/6QQ5gdIDThK4zseuKFnG7Y/qsVUJGob4Cf5mJWL4fhqV4dPXo+yVhk
+         5bmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758784635; x=1759389435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IMHhGG8yDDZuE0c3SXXHFpV2/qh92s5YSG1CuMfLsL4=;
+        b=NxX2yfiZVXt5NAi39scP8dEC8XRJW4DpIO6WbhbvT0B/pQxdAJ58Qn0jYgqaO35Onr
+         Lx8ENgXzyW/T7fai8V/jIkcsBdimy/NJg2pk+Bwsp+Vz66hd5/XyDg+vKtTF/Cjh5IS1
+         DLDFf6o0DnYHKNiQE60QZ4hIkZeSXdf2JtpnpUKyyxUvHyHDHrlnS6O4hw0AWCDz/Xf/
+         Aa5kRtFiPUeh4kvblwULc9BvvNiQvuGLCsJjTbdq5SHBlxmuwhc5VEP6PR2XN49U9ytf
+         Iocv2KGcEEX9CvMhCHiqPd3jz8yvHGfBV73mbr+yw/jUZUmqFs8sayvB6kIH8k3+deNI
+         s5eg==
+X-Gm-Message-State: AOJu0YwauzXkXUXu0+Ed8IBSVNM8oF6MKbuVbRSIQfmfuHl0QelPC0ue
+	oaZ9pAkqL04U8uMwm/Ij3QzrNgmywdncBEtiKDpYrgl8amQN/OymBgJa/mLc2kHEjjObOkWSg6l
+	/xWwBjrUXb7VhcrToiiKGCDmsLgHWqn0sF6c9QFCEvEz6kDNtz2dZXFnQlQ==
+X-Gm-Gg: ASbGnctTEA7kCuUeXqFsRR8Op7nDFoRM83po2+qUkq9pygsNrNiqbapY0j6HksgbgPX
+	BjA+XfZEUb5KU8wGo4fKbPOJO1L1PQpaDvt5soOL+XCVQQxEH9wndcz49SHDuJty73eUZGU3Hmp
+	UUA63SouWSRkmoYG7bSALhp87haWOtUBhZvBF2/1tb89Obw3gYWHe9snIIxZg6bja639bkJCOIN
+	ehhm+up
+X-Google-Smtp-Source: AGHT+IGSfNdXw9ilvVhBUnW3lwHsR2QZGLh2w5oSAXEm8kT8FRxIbNyBnlzOqe2SycTTqeovZhUNaunBo8UvL5YSGU8=
+X-Received: by 2002:a05:6871:823:b0:31d:8e95:2f0d with SMTP id
+ 586e51a60fabf-35ebec33df3mr1472705fac.2.1758784634761; Thu, 25 Sep 2025
+ 00:17:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AYQZGcjF-1nJ
-Date: Thu, 25 Sep 2025 09:06:54 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "yangzh0906@thundersoft.com" <yangzh0906@thundersoft.com>,
- "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "gordon.ge" <gordon.ge@bst.ai>,
- bst-upstream <bst-upstream@bstai.top>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Ulf Hansson" <ulf.hansson@linaro.org>,
- "Adrian Hunter" <adrian.hunter@intel.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
- soc@lists.linux.dev, "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Message-Id: <09b1318e-21dc-4354-8733-866b70696295@app.fastmail.com>
-In-Reply-To: <20250923-v4-patch-final-v1-0-2283ad7cbf88@thundersoft.com>
-References: <20250923-v4-patch-final-v1-0-2283ad7cbf88@thundersoft.com>
-Subject: Re: [PATCH 0/9] arm64: introduce Black Sesame Technologies C1200 SoC and
- CDCU1.0 board
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20250924083404.GA3747732@rayden> <175875181113.2716298.16465530311161198160.git-patchwork-notify@kernel.org>
+ <4ef734e5-283e-4bc4-84fe-bb6241c69942@app.fastmail.com>
+In-Reply-To: <4ef734e5-283e-4bc4-84fe-bb6241c69942@app.fastmail.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Thu, 25 Sep 2025 09:17:02 +0200
+X-Gm-Features: AS18NWA6vKhg-O43MYrx6lKpU1521TILZc1zYhWLBecV0Xdq-xuxQ5AOBpa_oTc
+Message-ID: <CAHUa44HNcNkuX8e_cuXiz1Qw8Qte93U4tsGM9meE_A7oSdgMTA@mail.gmail.com>
+Subject: Re: [GIT PULL] TEE fix2 for v6.17
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: soc@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 23, 2025, at 08:10, Albert Yang wrote:
-> This patch series introduces comprehensive support for Black Sesame 
-> Technologies
-> (BST) C1200 SoC and CDCU1.0 ADAS 4C2G board. BST is a leading 
-> automotive-grade
-> computing SoC provider focusing on intelligent driving, computer 
-> vision, and AI
-> capabilities for ADAS and autonomous driving applications. You can find 
-> more information
-> about the SoC and related boards at: https://bst.ai
+Hi Arnd,
 
-Hi Albert,
+On Thu, Sep 25, 2025 at 8:45=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Thu, Sep 25, 2025, at 00:10, patchwork-bot+linux-soc@kernel.org wrote:
+> > Hello:
+> >
+> > This pull request was applied to soc/soc.git (for-next)
+> > by Arnd Bergmann <arnd@arndb.de>:
+> >
+> > On Wed, 24 Sep 2025 10:34:04 +0200 you wrote:
+> >> Hello arm-soc maintainers,
+> >>
+> >> Please pull this fix in the TEE subsystem.
+>
+> Hi Jens,
+>
+> I saw this just after I sent what I expected to be my final
+> pull request for 6.17, and that is now merged.
+>
+> I applied it for 6.18 for now as it appears that this is
+> not a recent regressen, but I could still send another
+> pull request with just this one patch if you think it's
+> urgent enough. Can you clarify whether the NULL pointer
+> reference that gets fixed here can normally only be triggered
+> by root-owned processes or also by normal users?
 
-I see you submitted the series to soc@lists.linux.dev, which would
-normally indicate that it has been fully reviewed and is ready
-to be merged.
+It can also be triggered by normal users if they can open the tee
+device. It's expected that users who need to open the tee device
+belong to a special tee-client group or such. This is what it looks
+like in our test setup:
+$ id
+uid=3D102(test) gid=3D104(test) groups=3D103(teeclnt),104(test)
+$ ls -l /dev/tee*
+crw-rw----    1 root     teeclnt   245,   0 Sep 25 06:49 /dev/tee0
+crw-rw----    1 root     tee       245,  16 Sep 25 06:49 /dev/teepriv0
 
-I'd be happy to merge the actual SoC portions in arch/arm64 as they
-do seem to be ready, and for a new SoC support I sometimes merge
-in required driver changes with a subsystem (uart, irqchip, clk, ...)
-maintainer's Ack as well. However the MMC driver portions in patches
-4-6 don't really fall into that category, as there has not been
-any Ack for this version yet, and MMC is not one of the subsystems
-we normally make this exception for.
+Where the test user has enough permissions to run the test suite.
 
-Given the current timing, I would suggest that you respin the
-series for 6.19 once 6.18-rc1 is out and leave out those three
-patches in the submission to soc@lists.linux.dev.
+I don't think it's that urgent.
 
-If the MMC driver gets merged for 6.19, it's ok to keep the
-sdhci device nodes in the dtsi file here, but to make things
-easier, you can also leave out those nodes in the initial
-submission and send this as a follow-up patch to
-soc@lists.linux.dev once the driver is actually merged.
-
-     Arnd
+Cheers,
+Jens
