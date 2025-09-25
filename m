@@ -1,99 +1,128 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4659835940
-	for <soc@lists.linux.dev>; Thu, 25 Sep 2025 20:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E352749C5
+	for <soc@lists.linux.dev>; Thu, 25 Sep 2025 21:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758832250; cv=none; b=I4iHzFeRAULQP0Cf1HKi9eqfJG5HRlonjuiV22E1MbkOT85SvYmHCts/0XiKtPnTXA11+blPk1+x05kynVatuLZYelypFKx6NPh2ANIpV1i15tHJtay8J4TKqY4XixErQofWwu7KZn5c2NvjoQswDkpdBb2xg2ONijkmpXbeiNI=
+	t=1758834419; cv=none; b=VZikY6aUjoak1Ja/jtfEjslGCacKPX7oTRejoCbh2DHd6XIW5ZwYq9xZyzZsdtSKEuBMJZLX0npshMiIIPr2PQlvr/i8Eeff32zNA0Of94GmkrhRXR8Sbkh8JO3SyC0YEd1LBPPD4m33GxnlahI+iDJxMQZAIODdV0+CfLAaYUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758832250; c=relaxed/simple;
-	bh=zdQFlyFtcJGHLR3n1F7B85z1BwCtD76Pv4Q5/J3RMhA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q3abQM5/RMOCgv9OKsI36v5e8VcOfa3g8b8NQVSKSwTw4KkplKFcOf1XCRB5ripJKBL5nM0bEmSSSSgU9+Fbi7JARgbXEuQ85H4m2TuxKTFIRHinblmqQiNzEzE1Mqgcy1RLQrNEfXk+WhkaHNLNNqwc4pX3HAwfeGFF+lZZjZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I6iepp1a; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1758834419; c=relaxed/simple;
+	bh=9Yjg8FlkTWm+qyV90XE6Fy/fOx0UvzL39c73TM+N4k8=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=BSRs2+54umZDDjOaJXpFtfeHB176JUS1XlcslcGfFnPyZfH+WoZh5F8oniYvsMsT6Ue8XImssaNpl68xk16I2rQ1+D6XPTCJryaD4blpDFckn2NK9R9f7tBiwGcXEFOpkqyyFOF0zwDkQG0dsGc+ckji18sTF7yEdad4/gHsMNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Yafvo0Ya; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IQJ+ccjz; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I6iepp1a"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-46e29d65728so9346705e9.3
-        for <soc@lists.linux.dev>; Thu, 25 Sep 2025 13:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758832247; x=1759437047; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RCkZb6qonleX8R/f+hgTPmeir/ympFYBeTfUCEgU1Tk=;
-        b=I6iepp1ac8WcKvypTTWrRlzKHMtKyXgV/IotI09KsIbbG/DYTmzM99K590W6ZLobw4
-         1aesDkyBA+/MuwJEEgAoG+C+FWt0mvFqMYMCp4On8GHCR27ygDou/QoIToB1L5ddgZWn
-         fwXCl5Wz6SMmJZ5RK14XS44ukpvtWeBdf2eNYob7DEYQwq1YRnUlMyPjSsjHJGA/rAnV
-         cHXBvKtxb7CvuGMzUalJaIMcyZ3fX8jx6PZVdE6K1K/5/pWV+/3reMGs0BqGySIgbTv+
-         Uy3hgrY5Hp70OB4qZDRYgNAS0DWvcaZnfkxvRrrnbU0C+4ECOf2rqopyDFhXtNWFCCRF
-         kCag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758832247; x=1759437047;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RCkZb6qonleX8R/f+hgTPmeir/ympFYBeTfUCEgU1Tk=;
-        b=P5IxeU4bOFCCTc1qsxioruD+9Z+tJhN4RNPkqgcvZ7stW+KyCll9X3ivS4U6vQP9kk
-         ippmUfV4GF6Xo0cVeFWYlOkR9CEbdxvAkmkN2dW278jT0IhyqONZQm+gDPUbnWiIS2XW
-         5qz0OOTaVtB+3r7+MsKYLutMHObkU8avFr+T+sJQaoBgl5UttHK7O4kdrkRnwQNIpHSx
-         zVZ+S2MYxezVZHW6yWoAt6VKLKX1f2Zwit01bGV+QwY6U7uxwtpHX95YfJGuPMF8OjzO
-         vBZeOSdgk0uY3Fzn6Oil0QewNSXbmrD/YOVOWmVGcCabkI/9G821Je907B8WkcrWiivl
-         TNeg==
-X-Gm-Message-State: AOJu0YxKNmKjNU+3CVz+dLfd+24MeQQqkLFBDcEGgdBQjpO1Nx0/7ZMR
-	Ep/UZkb4hljPwtF4sntnRaQtw2x2upDJ8Uv2wMYHHxym0ptM7zwepjc+oaTA5853zC0=
-X-Gm-Gg: ASbGncvEZKBOVecaP3I1tq252HFBArN3Dh9Ofb+NxW0eFk+5nDVeNcNO2T6UMARgVtK
-	A5RgV1jVUHRf2QZi3t4slM4ii9vJKdiUM1tBH0398NUGFZPF28zNpiNaIeaujvCX27KmcRM8nMy
-	eEgxPomnukeDuoIJbyVOGq1cs8lucFLip3BpDBarNJ7kr7CWJuMueQ4r3ZerWiHVFtT3nTY8T4a
-	L7oMvJ2vPgDiph8EYicgNcysIpNUASAslSgZUgW28/XLeg/FCArbTDlVfbeL5F3rjEY5ivqLfTy
-	GwhgU+WBdBQcBCBlEY5/SYNtRw++itbv4Z92E07wQeVRxYEDOpn9bzdW2vWAO+AL8JyS4wsl++K
-	ygLiYxQjMrLXKWs0SYDCuq0x8Bhd4qTW59+uvbE1V
-X-Google-Smtp-Source: AGHT+IF7tg4RCzm9amlg/Gw/9ESY2ELu0mfn9+u3GRg5rzK8YPUdHN3cvSLydE0mJdxjQiAumcfhYA==
-X-Received: by 2002:a05:6000:25c3:b0:3ec:6259:5096 with SMTP id ffacd0b85a97d-40e45b8770fmr4070695f8f.21.1758832246817;
-        Thu, 25 Sep 2025 13:30:46 -0700 (PDT)
-Received: from radijator.localnet ([93.140.105.183])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fc82f2ff6sm4137336f8f.56.2025.09.25.13.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 13:30:46 -0700 (PDT)
-From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <dujemihanovic32@gmail.com>
-To: soc@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
-Cc: Karel Balej <balejk@matfyz.cz>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] PXA1908 DT changes for 6.18
-Date: Thu, 25 Sep 2025 22:30:44 +0200
-Message-ID: <2398680.ElGaqSPkdT@radijator>
-In-Reply-To: <c0516d21-16c4-4101-9d9f-a679f7459ef5@app.fastmail.com>
-References:
- <4685744.LvFx2qVVIh@radijator>
- <c0516d21-16c4-4101-9d9f-a679f7459ef5@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Yafvo0Ya";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IQJ+ccjz"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 78A4D1D00065;
+	Thu, 25 Sep 2025 17:06:56 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 25 Sep 2025 17:06:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1758834416;
+	 x=1758920816; bh=o7STaaSUdqKk89dT4N5ZHAL0UyFyXTg+lq1Zkpb4gCY=; b=
+	Yafvo0YaAHCkW4NctUc+cK3rMhcbX7S9jnInNsiWZaXpr/t64DG98NUz6avVhnvo
+	iL6gzs3UFtvgRFMvLG1BKEV5AyDcflBJ8SNY7mhH9Tgu/RoBFdw7okL23iYYIZpq
+	7IJxgrr9ZOn8lGxesWB9NepOneqwqsjihwslOei0DunQk6DRwsVq/Yzp+MQhdp7d
+	NwdvQj8tKvZXh/twO1t7Pai1uN/vBgLUbrgc3byjobcFBk8uic6p6BCpgOacz//3
+	+u2yrBM8bJtGFgmNrhoXIzR1C7H1OvA/bhYu/MNfyfTEu6wg1XygcmiHo94diWck
+	/NHfDi9s/Y+8MpE3vdwXSA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758834416; x=
+	1758920816; bh=o7STaaSUdqKk89dT4N5ZHAL0UyFyXTg+lq1Zkpb4gCY=; b=I
+	QJ+ccjz0ywXJG7p0ZiOXH0RIcEn3pd7PoJXC0mXEqxIFxQ8um7KgQnvpdBaf89Zd
+	Snsp0Nmmszdw3wZx4dGMIE7MKZggoANbde/Mj7ELycES7AISLXAoPu+6IpSY7eI4
+	tFL7/pErAy6VkWGXdiId71KUm08r4RyYjCMtntr3qWUCCYKNi8bOiGN/HB7eAnDr
+	8zh+OzBnTKHxsHh3QJrXxxhinAoCGUoQVuamA3Vw/LJbsHSGxb1NIckOAsd3hg5s
+	AjG3nmRoJGEIs4/G6uebOuPuLj+2zKwjDJcPEHNBZ4N61JhVibnUj0Muk8GGrUHl
+	KCAQpSpITg8eiBjk/qtYg==
+X-ME-Sender: <xms:767VaOnshokvJsrQUBPLrFpdBU7lgxKc2v2BLgOXwq3ESLakD1dHOg>
+    <xme:767VaAoJpxePGlcrgpp1KjgWtVLnif5IYZlBQT5ZhEWpiMtsIMNscT7EVTaTBJapQ
+    j9fEEsUcF-ubhwMfOD2ofEfIhrOVFXFW49F8auhtyUt6MNIx6kH2NY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeijeehvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehpdhmohguvgepshhmthhpohhuthdp
+    rhgtphhtthhopeguuhhjvghmihhhrghnohhvihgtfedvsehgmhgrihhlrdgtohhmpdhrtg
+    hpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggv
+    rggurdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdprh
+    gtphhtthhopegsrghlvghjkhesmhgrthhfhiiirdgtiidprhgtphhtthhopehlihhnuhig
+    qdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:767VaD4t1iHqtoGxZMIEmDaXcn01hTRFoDPUoU7FW9L4uOTllsYlmA>
+    <xmx:767VaMk4cEUPCt75VGIP9jNmU_OcAqsqfVCw27xHceAe6novjIJREg>
+    <xmx:767VaEQe3FOHoTU4q6M2YySfBDv6OUK-jk1583aZpDQdcJm1yVSIAQ>
+    <xmx:767VaLFqhzqArUCTGf_2oxCSZ7IMyWNGiIym--LxFkh_m5waPTxeNA>
+    <xmx:8K7VaPbewnkUfiIq01Y4A8u9VddhV6Zh3VrEt1c2cr89SVv_gZKnF1t5>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A9A19700065; Thu, 25 Sep 2025 17:06:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+X-ThreadId: A2mPhEQg0_sB
+Date: Thu, 25 Sep 2025 23:06:23 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <dujemihanovic32@gmail.com>,
+ soc@lists.linux.dev
+Cc: "Karel Balej" <balejk@matfyz.cz>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <d723fba3-1539-4728-951f-8697ecdf176c@app.fastmail.com>
+In-Reply-To: <2398680.ElGaqSPkdT@radijator>
+References: <4685744.LvFx2qVVIh@radijator>
+ <c0516d21-16c4-4101-9d9f-a679f7459ef5@app.fastmail.com>
+ <2398680.ElGaqSPkdT@radijator>
+Subject: Re: [GIT PULL] PXA1908 DT changes for 6.18
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
+On Thu, Sep 25, 2025, at 22:30, Duje Mihanovi=C4=87 wrote:
+> On Wednesday, 24 September 2025 23:41:17 Central European Summer Time =
+Arnd=20
+> Bergmann wrote:
+>> If you can send an updated pull request based on -rc1, I'll
+>> try to do find the time to merge that, otherwise please
+>> rebase on 6.18-rc1 once that is out.
+>
+> I don't want to rush anything, I'd rather wait until after the v6.18 m=
+erge=20
+> window then unless the merge itself is very trivial.
+>
+> My only question then would be whether I could still target v6.18 or w=
+ould=20
+> that postpone the series for v6.19? I don't really mind the latter, I'=
+d just=20
+> like to know.
 
-On Wednesday, 24 September 2025 23:41:17 Central European Summer Time Arnd 
-Bergmann wrote:
-> If you can send an updated pull request based on -rc1, I'll
-> try to do find the time to merge that, otherwise please
-> rebase on 6.18-rc1 once that is out.
+I meant sending a pull request for 6.19 based on 6.18-rc1.
 
-I don't want to rush anything, I'd rather wait until after the v6.18 merge 
-window then unless the merge itself is very trivial.
+Generally speaking, I need pull requests to be based
+on an -rc release that is no newer than the one I'm
+already using in the tree, so -rc1 is what you can
+use to be on the safe side.
 
-My only question then would be whether I could still target v6.18 or would 
-that postpone the series for v6.19? I don't really mind the latter, I'd just 
-like to know.
+You can also send multiple pull requests during a
+cycle if you either want to add more contents or find
+bugs in the earlier patches. This way you can ensure
+that there is enough time to fix up mistakes if you
+send something at first that for some reason needs
+a rework.
 
-Regards,
---
-Duje
-
-
+      Arnd
