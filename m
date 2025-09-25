@@ -1,127 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315A284039
-	for <soc@lists.linux.dev>; Thu, 25 Sep 2025 07:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E192652AF
+	for <soc@lists.linux.dev>; Thu, 25 Sep 2025 07:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758784638; cv=none; b=hcY+WCt1C9m4VvjonPkCHaUnab5pr+FvmtYVZA+S8cra1Pq+Bg9eHBbcPxKvsVVQvrDolWmi9kAaQ2PQzqvz4uduyMUd9NxWeHjaXcnvd66PCfqyFJNcCRoicauFxRtiX31VxBXqAqBRbCzaWy200IU3nhF9eGW5H1cFTHbllf4=
+	t=1758786637; cv=none; b=Gpknf8iymTjxSlMzCj2XRgnnElKHSIyZEZ4tfUM48h0ouwWBLT4toeudO963DJDJWIAf/+OTguxNqtFs8iZ6VmgDwZY4Q0D5AUqZJpbeQwkgyGV5SOqHTdJG24L/VZvpjmZRWO/c8hx9NLGg3KF2tl69PkO7+YYLV7a3SpG1hPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758784638; c=relaxed/simple;
-	bh=6GVENq/k9h7/EvFAsH73JEtGioL2OOL2HZi4Wy6wl0w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZwnKOYR80M0pYiB6fJHWSub5R80T1J9MJw3rMVmUV2zyUP2BXMDZQXZGtXE7AGOdXwx1vqM3hdHztlTWSnFBo3H9J4xXxIHxt3psmIZYQ+zVy0ZIrQjckz0wuHIZp4LgPoouev/bAlrlCJ2TMfKNqIyAG1JF+Fms+BxPtUHilfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zhZ4F6yg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758786637; c=relaxed/simple;
+	bh=dvpW+SV86ILwcenupEPH+XphYWSpYuS+phA6XOqPzy4=;
+	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=AadbwtUBCJCQhxeEYZLqOrmbO2RMHpaBlU2+4PznikjJIaqugijqEAKmBZthYAnKegehhsNW/nCcQdt4ZcF3GgEY6Q0tAFOEXvNZcLeo2ta7q0qzNhqBMRO9epnEYS0aE213uC+0IXdDEVclyL25xVHmgjzTi0JlRtxZ80b+TtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=pItA3ruZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=F8gtftuP; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zhZ4F6yg"
-Received: by smtp.kernel.org (Postfix)
-	id C3C8FC4CEF7; Thu, 25 Sep 2025 07:17:17 +0000 (UTC)
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CE797C4CEF0
-	for <soc@kernel.org>; Thu, 25 Sep 2025 07:17:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CE797C4CEF0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-30ccea8a199so473362fac.2
-        for <soc@kernel.org>; Thu, 25 Sep 2025 00:17:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758784635; x=1759389435; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IMHhGG8yDDZuE0c3SXXHFpV2/qh92s5YSG1CuMfLsL4=;
-        b=zhZ4F6ygKE57/CR+xJOeWsZAt55zn5Kw9M0aJ9xVWlaeX938oXkMzwKrMv9os76bqD
-         NZ+MMtpQBvAyFH1kW+0xLuoCQZ0KFN4hA8MiMQ0WlAaqX/W4RDVFceSZpqYB5EBJv6sx
-         yS8IEFN1299j/HhzB5LIbbyVcDe5jWj7x1V01EGcqXJawppfAU1HAGLnCVloI3f0cdt1
-         C1mCN0a73VMF5jj3VmOFhYEtM0F4vV+Q2xwbcjqImYMGYQWGOOlnf0nuROo2bUmtW7Uk
-         tvpm2bLZ1xwq0/6QQ5gdIDThK4zseuKFnG7Y/qsVUJGob4Cf5mJWL4fhqV4dPXo+yVhk
-         5bmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758784635; x=1759389435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IMHhGG8yDDZuE0c3SXXHFpV2/qh92s5YSG1CuMfLsL4=;
-        b=NxX2yfiZVXt5NAi39scP8dEC8XRJW4DpIO6WbhbvT0B/pQxdAJ58Qn0jYgqaO35Onr
-         Lx8ENgXzyW/T7fai8V/jIkcsBdimy/NJg2pk+Bwsp+Vz66hd5/XyDg+vKtTF/Cjh5IS1
-         DLDFf6o0DnYHKNiQE60QZ4hIkZeSXdf2JtpnpUKyyxUvHyHDHrlnS6O4hw0AWCDz/Xf/
-         Aa5kRtFiPUeh4kvblwULc9BvvNiQvuGLCsJjTbdq5SHBlxmuwhc5VEP6PR2XN49U9ytf
-         Iocv2KGcEEX9CvMhCHiqPd3jz8yvHGfBV73mbr+yw/jUZUmqFs8sayvB6kIH8k3+deNI
-         s5eg==
-X-Gm-Message-State: AOJu0YwauzXkXUXu0+Ed8IBSVNM8oF6MKbuVbRSIQfmfuHl0QelPC0ue
-	oaZ9pAkqL04U8uMwm/Ij3QzrNgmywdncBEtiKDpYrgl8amQN/OymBgJa/mLc2kHEjjObOkWSg6l
-	/xWwBjrUXb7VhcrToiiKGCDmsLgHWqn0sF6c9QFCEvEz6kDNtz2dZXFnQlQ==
-X-Gm-Gg: ASbGnctTEA7kCuUeXqFsRR8Op7nDFoRM83po2+qUkq9pygsNrNiqbapY0j6HksgbgPX
-	BjA+XfZEUb5KU8wGo4fKbPOJO1L1PQpaDvt5soOL+XCVQQxEH9wndcz49SHDuJty73eUZGU3Hmp
-	UUA63SouWSRkmoYG7bSALhp87haWOtUBhZvBF2/1tb89Obw3gYWHe9snIIxZg6bja639bkJCOIN
-	ehhm+up
-X-Google-Smtp-Source: AGHT+IGSfNdXw9ilvVhBUnW3lwHsR2QZGLh2w5oSAXEm8kT8FRxIbNyBnlzOqe2SycTTqeovZhUNaunBo8UvL5YSGU8=
-X-Received: by 2002:a05:6871:823:b0:31d:8e95:2f0d with SMTP id
- 586e51a60fabf-35ebec33df3mr1472705fac.2.1758784634761; Thu, 25 Sep 2025
- 00:17:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pItA3ruZ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="F8gtftuP"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 501437A0179;
+	Thu, 25 Sep 2025 03:50:33 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 25 Sep 2025 03:50:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1758786633;
+	 x=1758873033; bh=83Nn5b4JSEuoWgZrR/ay70JX8WRfWcMJ9A+FdwfFYxo=; b=
+	pItA3ruZW5T9+PNMdSyjosQHJWW2SIzFRB1T+1RzR7XetYb5u8pq+kAbshCqp/hb
+	CFNDPCk/hLBLyz+H2ZWs8UcaNdg2+zOCRg4++29TjH3JlmivlncDIp3x2zeX+vBG
+	D7QG5D+gm9SgVgUgjgBJ+FMTmm+DsPGr9bUhzqdyqqoNL8fi52jH8/JaQRCTGDw6
+	FHaKU+6MtiCOQ9tjMdscENdigKG4iD1fTydgYzyoz42edBo442pHGC79hqjyPTeM
+	KLrbZIPCADoFDoWyI3qavcmg70ybpiHfptnQAZhImMoeIsR9wzwiEjJn+rQ3CVuD
+	s19XNKOjyD2KuoK1LpTONw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm1; t=1758786633; x=1758873033; bh=8
+	3Nn5b4JSEuoWgZrR/ay70JX8WRfWcMJ9A+FdwfFYxo=; b=F8gtftuPlBTRVn1pa
+	p6m3cdU9OIig8dVcgg67TXV+KxF/F5/oqQuQtWoojwNQFfeWb9lh60R1TFw5At2k
+	ucwafUPANpmkWItrpNtP6w/ecFxZY6orzb8rLkFMPHCaxGenNmbGRjn8cw47yjC3
+	CEM8OQgKbtdagWJTFDLLyttBR68IenIRaa/R5DjkQ4+jtNlvJbpX4YQiVGF9w03f
+	gFhednbXnVH92My128e7yjsMVQWIHnXvGi9sOe62bgP2AXIe49x1Vpxtb1PmgupE
+	G4Qf8kwq1rkfBS7XpfjGFyttT9FbzheIlA1iIJhMEG8AUoi8h7OoslJwdsuXo5Ep
+	4k7iA==
+X-ME-Sender: <xms:R_TUaHKqyXCy2u6drtgXYPqbK830VmCmZRElz_DxuwtMju8m69zJgA>
+    <xme:R_TUaF_Spg3m16H2kIU2QNq19M-W6m_bYrAS-PE379QzEhamyqoaJemZmQQCgCESV
+    qQxXHQ6hkXbx7M93XBEbT1Ud93NJp7l_uBkLfCJI1hbt5dyFRJTNRY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeiheelfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
+    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
+    epfeeilefguedtueetjeekkeegkedtudfhvdetuddtleeihffhuddvhfeufeevlefhnecu
+    ffhomhgrihhnpegrshhpvggvughtvggthhdrtghomhdpkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
+    rhhnuggsrdguvgdpnhgspghrtghpthhtohepvdelpdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthht
+    oheprhihrghnpggthhgvnhesrghsphgvvgguthgvtghhrdgtohhmpdhrtghpthhtohepph
+    hrrggshhgrkhgrrhdrmhgrhhgruggvvhdqlhgrugdrrhhjsegsphdrrhgvnhgvshgrshdr
+    tghomhdprhgtphhtthhopegrnhgurhgvfiestghouggvtghonhhsthhruhgtthdrtghomh
+    drrghupdhrtghpthhtohepnhhfrhgrphhrrgguohestgholhhlrggsohhrrgdrtghomhdp
+    rhgtphhtthhopegvsghighhgvghrshesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvg
+    hlsggrughrhihmsehgohhoghhlvgdrtghomhdprhgtphhtthhopehrohhmlhgvmhesghho
+    ohhglhgvrdgtohhmpdhrtghpthhtohepfigrkhesghhoohhglhgvrdgtohhm
+X-ME-Proxy: <xmx:R_TUaCQNWYf7xcnmutE64H55YDv-wG_GnNWltdQu47-XLEWqRqLfSg>
+    <xmx:R_TUaIOGhz3Vc68QV44f-9EIYj5iy7WDrZlaTmUb0lEw2sqnov865w>
+    <xmx:R_TUaGs6JGuiXFJq0DvGWqw7-yzX8QP7i5v3zM4zrDjbepspj5BVdg>
+    <xmx:R_TUaERxoCYP_AJ0GAgc8B-gPD7Mo9NYBnBevlzOuDiBbh8IvNkT2w>
+    <xmx:SfTUaArooyr620KNVFTum50IpoHqBjBTm12tNgGDbf1of-N0qVf46SKF>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 508FA700069; Thu, 25 Sep 2025 03:50:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250924083404.GA3747732@rayden> <175875181113.2716298.16465530311161198160.git-patchwork-notify@kernel.org>
- <4ef734e5-283e-4bc4-84fe-bb6241c69942@app.fastmail.com>
-In-Reply-To: <4ef734e5-283e-4bc4-84fe-bb6241c69942@app.fastmail.com>
-From: Jens Wiklander <jens.wiklander@linaro.org>
-Date: Thu, 25 Sep 2025 09:17:02 +0200
-X-Gm-Features: AS18NWA6vKhg-O43MYrx6lKpU1521TILZc1zYhWLBecV0Xdq-xuxQ5AOBpa_oTc
-Message-ID: <CAHUa44HNcNkuX8e_cuXiz1Qw8Qte93U4tsGM9meE_A7oSdgMTA@mail.gmail.com>
-Subject: Re: [GIT PULL] TEE fix2 for v6.17
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: ApQpqsW9_EUk
+Date: Thu, 25 Sep 2025 09:50:10 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Ryan Chen" <ryan_chen@aspeedtech.com>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Joel Stanley" <joel@jms.id.au>,
+ "Andrew Jeffery" <andrew@codeconstruct.com.au>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>,
+ "Bjorn Andersson" <bjorn.andersson@oss.qualcomm.com>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Nishanth Menon" <nm@ti.com>,
+ =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>,
+ "Taniya Das" <quic_tdas@quicinc.com>, "Lad,
+ Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ "Kuninori Morimoto" <kuninori.morimoto.gx@renesas.com>,
+ "Eric Biggers" <ebiggers@google.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, soc@lists.linux.dev,
+ "Mo Elbadry" <elbadrym@google.com>, "Rom Lemarchand" <romlem@google.com>,
+ "William Kennington" <wak@google.com>,
+ "Yuxiao Zhang" <yuxiaozhang@google.com>, wthai@nvidia.com,
+ leohu@nvidia.com, dkodihalli@nvidia.com, spuranik@nvidia.com
+Message-Id: <41705e13-c61d-4249-9492-b83f1371d3f9@app.fastmail.com>
+In-Reply-To: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
+References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH v5 0/5] Introduce ASPEED AST2700 BMC SoC
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
-
-On Thu, Sep 25, 2025 at 8:45=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
-:
+On Mon, Sep 1, 2025, at 05:13, Ryan Chen wrote:
+> This introduces initial support for the Aspeed AST2700 SoC and the AST2700
+> Evaluation Board (EVB) to the Linux kernel. The AST27XX is the 8th
+> generation Baseboard Management Controller (BMC) SoC from Aspeed,
+> featuring improved performance, enhanced security, and expanded I/O
+> capabilities compared to previous generations.
 >
-> On Thu, Sep 25, 2025, at 00:10, patchwork-bot+linux-soc@kernel.org wrote:
-> > Hello:
-> >
-> > This pull request was applied to soc/soc.git (for-next)
-> > by Arnd Bergmann <arnd@arndb.de>:
-> >
-> > On Wed, 24 Sep 2025 10:34:04 +0200 you wrote:
-> >> Hello arm-soc maintainers,
-> >>
-> >> Please pull this fix in the TEE subsystem.
->
-> Hi Jens,
->
-> I saw this just after I sent what I expected to be my final
-> pull request for 6.17, and that is now merged.
->
-> I applied it for 6.18 for now as it appears that this is
-> not a recent regressen, but I could still send another
-> pull request with just this one patch if you think it's
-> urgent enough. Can you clarify whether the NULL pointer
-> reference that gets fixed here can normally only be triggered
-> by root-owned processes or also by normal users?
+> AST27XX SOC Family
+>  - https://www.aspeedtech.com/server_ast2700/
+>  - https://www.aspeedtech.com/server_ast2720/
+>  - https://www.aspeedtech.com/server_ast2750/
 
-It can also be triggered by normal users if they can open the tee
-device. It's expected that users who need to open the tee device
-belong to a special tee-client group or such. This is what it looks
-like in our test setup:
-$ id
-uid=3D102(test) gid=3D104(test) groups=3D103(teeclnt),104(test)
-$ ls -l /dev/tee*
-crw-rw----    1 root     teeclnt   245,   0 Sep 25 06:49 /dev/tee0
-crw-rw----    1 root     tee       245,  16 Sep 25 06:49 /dev/teepriv0
+Hi Ryan,
 
-Where the test user has enough permissions to run the test suite.
+Thanks for you submission earlier. I see that you had sent the
+series to several lists including soc@lists.linux.dev, which is
+what I use to keep track of patches that have been successfully
+reviewed and that are ready to be merged through the soc tree.
 
-I don't think it's that urgent.
+Unless you have been told to send it here by Joel and Andrew,
+I assume that they will pick up the series through the "bmc"
+tree once they are happy with it like they do with the 32-bit
+Aspeed SoC (ast24xx/25xx/26xx) patches, and I have dropped
+the series from https://patchwork.kernel.org/project/linux-soc
+now.
 
-Cheers,
-Jens
+For future submission, please send the patches only "to"
+them, with the other people in the "cc" field to avoid this
+confusion, and leave out the "soc@lists.linux.dev"
+recipient. You can add me as arnd@arndb.de to the Cc list
+for reviews though.
+
+Please also add a patch that changes the MAINTAINERS entry
+to reflect the added arch/arm64 contents.
+
+     Arnd
