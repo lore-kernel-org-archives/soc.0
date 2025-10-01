@@ -1,135 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0352D7DEA
-	for <soc@lists.linux.dev>; Wed,  1 Oct 2025 06:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508D01EA65
+	for <soc@lists.linux.dev>; Wed,  1 Oct 2025 22:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759299070; cv=none; b=nz0OmlBaCXTyROX8qPFV+fq0yIWG0dy+D4Rq9YItrkc2EvLQ6ht7AA7Idj2sfgrq/oBjB2pM3ryeR53iFwlstTu79h3dc76blY3sQqrggk5EHwn46brLuuxya3Jk1MNdaIrbpXW33QXXHXnV4wPNPtKlnBS/LQqChSTfTvo/G7A=
+	t=1759357413; cv=none; b=KI5bjqrHWq4sCtvsVW15UV1FQjoPHLKYzLQaGR6CgKh/cQWrTqOI6DBGATAcP6pPktGOt9bPaWxWvYslY8xFJ7k9lXNMaFZMgddoMiybwyPSTduBOwYrSphyygY5x+5dkp/e15Om56gi4G3PF3j0U6xq8gQ+EtZtZSJ9wqPO0r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759299070; c=relaxed/simple;
-	bh=EnMvwwcVnn4TR9RpXMxPSjIROLC6UEQq2D9lZIwgbXE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eHbBeM1IBblhTKs7mXmESbJeSjuPZ0kNL7jpgrC+7mfItIq9MuhQTxby4GrXFuHCZ4jvlnhxJss1QN4c0j98Ydrag7sCru4sFA+dYUHdoDXG1mnmPULbhNOBpSgblFnXnZWN+vMwqCK2eHJhjcBIoM+mly07TM+hEgKP1nhJgtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WU6V4wgz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759357413; c=relaxed/simple;
+	bh=WVHS8uQL5zz8C7+uj8Y6Xy9RME+eWvIITGFJOC9Z43E=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=u+CzAVHccF2BtDd7RtlI9h+lJ2b8iMUAdXQwTCzXuiXow1IjDq0Bmi/z1GuJ5M96l+cyfIREqd+0mv/DHy9+g8qMSd23DbS69fM0NTFLvZjGrxe3DsPAlGDP7nKgs6pT6bJjH+af2Mu5S/DQp2PrDqdQ0Z95rD/LB6uJU+jor0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=WXsD0OBs; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lYApBZuV; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WU6V4wgz"
-Received: by smtp.kernel.org (Postfix)
-	id E3F74C19421; Wed,  1 Oct 2025 06:11:08 +0000 (UTC)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 52BD7C16AAE
-	for <soc@kernel.org>; Wed,  1 Oct 2025 06:11:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52BD7C16AAE
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-57edfeaa05aso7091590e87.0
-        for <soc@kernel.org>; Tue, 30 Sep 2025 23:11:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1759299064; x=1759903864; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VPbUyi3Q3nq8aPmPA0ZDBlB+APZ2KXXf6wjKaFOxmBM=;
-        b=WU6V4wgzb6qWinnsyGDb86yVcB2EKdBodJ6PGzboko9KlRm7Kv6XnpDVUz2Oj0TP+3
-         BMnY/yo2J11neDDK6G6TFjrvzmvlHTr75Fkx/gATi4Wf8Y7NmBKn5Rfk1dS+FeIEuOcB
-         f0ZpurLOdNLdcixEaGQLQZDXfeogQWyPj6jiRYf1NPdAe8w9kvv9IFTibATUaT9X4yoh
-         WAK76gFBI7NArwXFxgH/DJ70pWtsTP5ytv4HQ5SlgNNVEt9aaSYRWurrdo99iT8qy7VC
-         pBOq93ZqPqHdVYqzvhzKL98a1XtzlLQAiAEfAI6iBsxpLpLJFGGJBzVAYCBSo6OfMZEv
-         vFXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759299064; x=1759903864;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VPbUyi3Q3nq8aPmPA0ZDBlB+APZ2KXXf6wjKaFOxmBM=;
-        b=WmY8oRxAhxIlncU5D8a7gzeiDzgRYZEbChQJ5p76SG1YYPoRwM2OMDnsJT+ahn9rVO
-         kJij0V2ewspRJW05CeaJsObgQTJW6l5cFnjpvJZyEL8KC7R3vpBW+E2LFeBlzyy8Dt7j
-         3dT4KN9oXMhHHuzRpJ8Md2HC+094Ti58IANR9xvU40oqcpH3CDBW+TfvU2YR9oSd5mBq
-         wYkcAvkx0lVrSt0V1yqZU+pUbT3wMz+UN7+H9P4Kc6euK220LmeU3ScBy3S3N/9IEHTP
-         3xzvUjwBEyipB1aXZb2psh0Y0Oq5TBWQzwbD+GvjebqZZ6vciqgqES34wf6km+umcI9P
-         18Aw==
-X-Forwarded-Encrypted: i=1; AJvYcCWIhnS2wt3PikeAcpdwTG+tYErHu0as83nH+Pe8vZdrKivZet4qbYJjutjJD7thvaBrtEM=@kernel.org
-X-Gm-Message-State: AOJu0Yz9PnZzvx+RNlMsUpewFZh25nAxSqDOf+D3pQqqPX/A5HPAmaNi
-	5Kv/6jv84QpPNXq8Yx3KgtA0vijcoXU+HZpcT0k6di8sXCT5D8Z1qlynxQMhGvdmUq8=
-X-Gm-Gg: ASbGncu8umd2LDkIzXTp2vEL8Srj+xGfyjz2luNOx7teFVSN64Vq+JwYh1dLc7oDh6P
-	q1viPn4VuG6PQb03hfn5iOiHNrOtjDB4vkE34ibE6qEILl0pD8LPc1jb0I0LPtozPAy3C0RnABC
-	6U09WieJ9JZHfSVKlp1dHV9kWAhIfcqr3aa46jN/oNGrSqe4CA98ZqxTa+F/J6Xp+MQHdbRn8t7
-	qAWb0ECAkAYVi25Mn6UOOPOQVTAsqycfhaZLBJ9NegnfBkVvyPaeHHXAjx3n7rOly3D7Rmf+bMR
-	q0xQDcSFGF6A3pr515ntKsW2z4XKKly4Uc5BRdYA+QE4Fl0WR8GGfcLqXfyiRFsYMYK41MtMu0S
-	wxBTCG+aoaxkYjCWLZWbo4AHu/RfSXF+SEjZO4BG+v/DAVQgE
-X-Google-Smtp-Source: AGHT+IGb9ywHHlzO/N5tYvmZ6pYH+F27XDf42oZw/2wC3QwlBrNCQNAD/c4bdpnGO5yInEix5KS6tQ==
-X-Received: by 2002:a05:6512:ea7:b0:55f:4b01:30ab with SMTP id 2adb3069b0e04-58af9dcee09mr665163e87.0.1759299063818;
-        Tue, 30 Sep 2025 23:11:03 -0700 (PDT)
-Received: from lino.lan ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-58527c6b014sm3984553e87.43.2025.09.30.23.11.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Sep 2025 23:11:03 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Brian Masney <bmasney@redhat.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] ARM: versatile: clock: convert from round_rate() to determine_rate()
-Date: Wed,  1 Oct 2025 08:11:00 +0200
-Message-ID: <20251001061100.372737-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="WXsD0OBs";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lYApBZuV"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 75DB614000E2;
+	Wed,  1 Oct 2025 18:23:30 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Wed, 01 Oct 2025 18:23:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1759357410; x=1759443810; bh=Zs
+	fbxp+KEXrO8+xn7YsbkwYd2udeR00A968c4+JN9Tw=; b=WXsD0OBsPoE6/ZGrcq
+	BuY9HxXsn+b6GWYpbnJehUn7qWQUibZaJsVrItci7/WUnYBk6keVrqVA3LylUGI5
+	dar8Z1juyMeEQ6Snea8eLmqQ1jUGC6JgmjxfUv4Gr04AlBf9bGpHGvmi9EMJzotz
+	NJA5WAj7gWv7CVgFIsonoRJKA9GA7i9JaloeQStdV/BY/YWnGmpT3XZqU0TMNEZe
+	a4mqZF6TLbA+0JO3aQt9930c2EPpRhHhumNmR36ipW/BUTdAEu5gR07AUZY01WkD
+	T0UQUuqvcViIEQitSnzHFIX5fj7tOHJKX5cH4/GHDf+YbRBw9qpP5vyhX2c7SP7V
+	kgnA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1759357410; x=1759443810; bh=Zsfbxp+KEXrO8+xn7YsbkwYd2ude
+	R00A968c4+JN9Tw=; b=lYApBZuVuRfDu0qHcAPIepxZwfkogrD7eWE0V53JE0Y6
+	y9dQTbwimqyHV+jH9J0j50qFlweB70FM7a/HUGRhMyD+joFDpZFc8vBNZ2jb7JW6
+	rzjIN2eKu+IxDX69Mj0n9VNbhUPuGFw8Vc3Pn4Jzym74b/ZuXRfyDtCACAN2L7bx
+	KPHovQ+G9ncvx16wTOWijp6g3yNRYMS33F7W2vJBsd5kd5V7YI73LTF88vlrvumi
+	YHMtaZK3+y4jVXDhzwbnBiywmwKmfbThxEiKYkZZNjVOKHfKnqlL3n7LgQCYeRAt
+	7A4GpnUITcdMqqqph5H4nUuez0YMyJkaj2B4f4YVCA==
+X-ME-Sender: <xms:4qndaFT0-24tG7--hIFleYVpiYywWnTpxyp4hHXtcmQz48vCnzXN0A>
+    <xme:4qndaJlTyY_KNcdM4B5wZpm6FZ81Sb2bCIrHLLDzbSjqZyErrcyf45gjORDCjg9tZ
+    wYtlib08tJaT86zXxcRxGDkRwy1lber2wIdTTMC2EeI1pV-VqC3FTv0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekgeeffecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegv
+    rhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpe
+    ffffffheeugfefhfduvefgleeijeektdfffeeijedthfevgfeiieevjeeuteefvdenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrg
+    hrnhgusgdruggvpdhnsggprhgtphhtthhopeehpdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpd
+    hrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgr
+    uggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhishgtvheslhhishhtshdrih
+    hnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsohgtsehlihhsthhsrdhlihhnuhig
+    rdguvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvg
+    hlrdhorhhg
+X-ME-Proxy: <xmx:4qndaI9JbPrVWotMw4yNZzHewxpQSZWgO1S35f3NxdDu-6CZS6gYOg>
+    <xmx:4qndaKA7859CCHRtPoeAGTxaNjNYh09-1Uz4EPZ0Gv7qAwpcFPZWkg>
+    <xmx:4qndaFTyF8BS-Fn8NS7XnbpQWyHjCsVkry9a1XLC9hbSn-4ZfEm8fg>
+    <xmx:4qndaJvEiRolYvRgriWpb1zmBYmmw4bHJbLF1O02TXWd77FFjGaOyQ>
+    <xmx:4qndaBr_0m4-LwYgZRmUSo7FxL-G8grcFY5yRrUmWTT3HbpUGK5M7Kuu>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 0233A700065; Wed,  1 Oct 2025 18:23:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Thu, 02 Oct 2025 00:23:01 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-riscv@lists.infradead.org, soc@lists.linux.dev
+Message-Id: <54b49f7b-9232-44d7-9ae3-ecc1826f17d7@app.fastmail.com>
+Subject: [GIT PULL 0/5] soc: updates for 6.18
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Brian Masney <bmasney@redhat.com>
+Hi Linus,
 
-The round_rate() clk ops is deprecated, so migrate this driver from
-round_rate() to determine_rate() using the Coccinelle semantic patch
-on the cover letter of this series.
+These are the SoC updates for the 6.18 release on Arm and RISC-V
+platforms. With about 1150 non-merge changesets and 70000 lines
+added,  this is one of the larger sets recently, and a lot of
+that comes from updates for the Qualcomm, NXP/Freescale and Apple
+platforms, which have both a significant number of new machines
+and other updates.
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ARM SoC folks: please apply this patch directly.
----
- arch/arm/mach-versatile/spc.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+There is one new RISC-V chip family in a separate branch, plus
+new SoCs in five existing families.
 
-diff --git a/arch/arm/mach-versatile/spc.c b/arch/arm/mach-versatile/spc.c
-index 790092734cf6..812db32448fc 100644
---- a/arch/arm/mach-versatile/spc.c
-+++ b/arch/arm/mach-versatile/spc.c
-@@ -497,12 +497,13 @@ static unsigned long spc_recalc_rate(struct clk_hw *hw,
- 	return freq * 1000;
- }
- 
--static long spc_round_rate(struct clk_hw *hw, unsigned long drate,
--		unsigned long *parent_rate)
-+static int spc_determine_rate(struct clk_hw *hw, struct clk_rate_request *req)
- {
- 	struct clk_spc *spc = to_clk_spc(hw);
- 
--	return ve_spc_round_performance(spc->cluster, drate);
-+	req->rate = ve_spc_round_performance(spc->cluster, req->rate);
-+
-+	return 0;
- }
- 
- static int spc_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -515,7 +516,7 @@ static int spc_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- static struct clk_ops clk_spc_ops = {
- 	.recalc_rate = spc_recalc_rate,
--	.round_rate = spc_round_rate,
-+	.determine_rate = spc_determine_rate,
- 	.set_rate = spc_set_rate,
- };
- 
--- 
-2.51.0
+We had 291 contributers in total, the ones with the most
+changesets are:
 
+     76 Krzysztof Kozlowski
+     35 Frank Li
+     35 Beleswar Padhi
+     29 Stephan Gerhold
+     29 Janne Grunau
+     27 Lad Prabhakar
+     21 Dmitry Baryshkov
+     21 AngeloGioacchino Del Regno
+     20 Nick Chan
+     18 Chen-Yu Tsai
+     18 Alexander Stein
+     17 Peng Fan
+     15 Rob Herring (Arm)
+     15 Neil Armstrong
+     13 Tao Ren
+     11 Mohammad Rafi Shaik
+     11 E Shattow
+     11 Anand Moon
+     11 Amirreza Zarrabi
+
+Overall dirstat:
+
+   0.6% Documentation/devicetree/bindings/arm/
+   0.1% Documentation/devicetree/bindings/clock/
+   0.2% Documentation/devicetree/bindings/pinctrl/
+   0.1% Documentation/devicetree/bindings/soc/xilinx/
+   0.5% Documentation/devicetree/bindings/
+   0.2% Documentation/tee/
+   0.5% arch/arm/boot/dts/allwinner/
+   4.1% arch/arm/boot/dts/aspeed/
+   0.1% arch/arm/boot/dts/broadcom/
+   0.3% arch/arm/boot/dts/intel/ixp/
+   0.1% arch/arm/boot/dts/microchip/
+   2.7% arch/arm/boot/dts/nvidia/
+   0.7% arch/arm/boot/dts/nxp/imx/
+   0.2% arch/arm/boot/dts/nxp/
+   0.6% arch/arm/boot/dts/qcom/
+   0.7% arch/arm/boot/dts/st/
+   0.1% arch/arm/boot/dts/ti/omap/
+   0.1% arch/arm/boot/dts/
+   0.1% arch/arm/mach-omap2/
+   0.7% arch/arm/
+   0.3% arch/arm64/boot/dts/allwinner/
+   0.4% arch/arm64/boot/dts/amlogic/
+   0.1% arch/arm64/boot/dts/apm/
+   6.5% arch/arm64/boot/dts/apple/
+   0.2% arch/arm64/boot/dts/broadcom/
+   0.1% arch/arm64/boot/dts/cix/
+   0.4% arch/arm64/boot/dts/exynos/axis/
+   2.2% arch/arm64/boot/dts/exynos/
+  15.4% arch/arm64/boot/dts/freescale/
+   0.3% arch/arm64/boot/dts/intel/
+   0.1% arch/arm64/boot/dts/marvell/
+   1.2% arch/arm64/boot/dts/mediatek/
+   0.5% arch/arm64/boot/dts/nuvoton/
+   0.3% arch/arm64/boot/dts/nvidia/
+  24.0% arch/arm64/boot/dts/qcom/
+   3.1% arch/arm64/boot/dts/renesas/
+   4.6% arch/arm64/boot/dts/rockchip/
+   0.5% arch/arm64/boot/dts/st/
+   8.5% arch/arm64/boot/dts/ti/
+   2.0% arch/arm64/boot/dts/xilinx/
+   0.4% arch/riscv/boot/dts/eswin/
+   0.6% arch/riscv/boot/dts/microchip/
+   0.1% arch/riscv/boot/dts/starfive/
+   0.2% arch/riscv/boot/dts/
+   1.1% drivers/clk/
+   0.1% drivers/firmware/arm_scmi/vendors/imx/
+   0.2% drivers/firmware/qcom/
+   0.2% drivers/firmware/
+   0.1% drivers/memory/tegra/
+   0.3% drivers/nvme/host/
+   0.5% drivers/reset/
+   0.1% drivers/soc/apple/
+   0.1% drivers/soc/fsl/qe/
+   0.8% drivers/soc/qcom/
+   0.3% drivers/soc/samsung/
+   0.1% drivers/soc/tegra/fuse/
+   0.1% drivers/soc/
+   1.0% drivers/tee/optee/
+   5.1% drivers/tee/qcomtee/
+   1.1% drivers/tee/
+   0.1% drivers/
+   0.1% include/dt-bindings/memory/
+   0.2% include/dt-bindings/
+   0.3% include/linux/
+   0.1% include/uapi/linux/
+ 1074 files changed, 70723 insertions(+), 17334 deletions(-)
