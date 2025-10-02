@@ -1,78 +1,72 @@
 Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D45846F
-	for <soc@lists.linux.dev>; Thu,  2 Oct 2025 22:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E525F274FCE
+	for <soc@lists.linux.dev>; Thu,  2 Oct 2025 22:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759444877; cv=none; b=bKwmJMT5jVFPKlbQyLlmNZke7jF0QaAccT2EaOzPDWm/C7/UV+cvnv1n6M1Mkg+TGgxODAD34kiu/i/arUKwhCgyCyh11QHA6PCZJcBaVMyrqaDxtwAW7ALD55Hi9WLarRMWm2kYW4DpvdZ7TGNVi6+q2denid6xIJzBEq8xFwk=
+	t=1759445091; cv=none; b=OSM93CL1bx8bRUlSo8VBunsTz0lBfKfS7YVAJxGaenLK2CWjonX3mqGLTSOwUWIabhFDBkXsLnukeH3Bp2J6ykkWj6iO1dKJ4XZpkOlwdDZHJLP6qF5UYqFG5Cj6SjQdJe6/AqptnAjm7UTfVPF+OLL2bj5rk5EbSB9ICY7G6kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759444877; c=relaxed/simple;
-	bh=bMk+6aTQqC3sfhRRa1TBUgfbAJE7XrqWg8LBpHf3yWs=;
-	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=KiL2mpeAhuC8H+k79o60cuglc7f8ep5BCDPSesNJcU2uharunQxOe61Z3prJlA3BTC4J0lSoflFjDhISpnsYDHrvcW5hOPb65z3enktvEi3Ab/PoYl5S7ZCfDgqCfW2+nM5vaHBylrmcABOLau1Wvilp2WechKnoxpFbUhP6tUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=rR2II8h5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DHQCYoqV; arc=none smtp.client-ip=202.12.124.157
+	s=arc-20240116; t=1759445091; c=relaxed/simple;
+	bh=MpznCzUNU/M2yGcJDWDORNDm9k0EdhMFQ0uW/2x9Ex4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=tx6X+NbLr8oodYQAAYehURVQrOh4pVSTmhXzv7wsHWHOcWN1z8wT0zE6duaPI90OoEflNH/rimeR6wCiuCZJrwtPyRFM7gLU2wTyYujeGJ5HpOpEjyVNiPLAQw9t5fVDoE8710dJH0MgosPgiAinN3oehtQ8Le7l1rOJ9GiPBvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fOpDeJPM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WBmOKvJ7; arc=none smtp.client-ip=202.12.124.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="rR2II8h5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DHQCYoqV"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fOpDeJPM";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WBmOKvJ7"
 Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 994D07A007E;
-	Thu,  2 Oct 2025 18:41:14 -0400 (EDT)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 34F247A006D;
+	Thu,  2 Oct 2025 18:44:48 -0400 (EDT)
 Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 02 Oct 2025 18:41:14 -0400
+  by phl-compute-05.internal (MEProxy); Thu, 02 Oct 2025 18:44:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1759444874;
-	 x=1759531274; bh=4hGlKaEF3owGaJz4O+b4FB/WpfLoASBvaTMeTYOloZc=; b=
-	rR2II8h5qGEQ+N3qrO28io3mSYbEZDNSzni4M3uFzc+SC3OxBkJMCLbsISCw8gRo
-	aW7K/HA7nJ62jDjk+OjEtSuVCoseyfkV2PlL1VM7U92QmC30zEB0so6jgtGVq5FU
-	UkwkTYZrV6Mk7OwFtasY/kz7eO49Z4wjCiSqUOSWg7YLxJyXvj9OYDKzK1gcTRBP
-	YFuQLK84PpiDOEJh0ruq9q5J6yTty1qcPCyPYmZ/5UBH23ZuoDh7tKMeg8qlfmqn
-	nQNMSAFSUzlwuwo/GHd39tdRF+tJOd2mIf8CstxtksHlrne5DNSDesTrQSOIIka6
-	cyyV/MLozU/JOG7vD11G7g==
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1759445088; x=1759531488; bh=eT
+	eoUMIRLDbBktgpxFyGT2F1dKdq/G/dsQMMuTFQPm8=; b=fOpDeJPM90LWGxXsRj
+	5j7sLOGCU8wKAox8fuQG7IPoWwoiEPSm/NONJwY0HTkZff2L5EcVafRAmFi5cDZc
+	pjkBTAC5W4bFBmtd8MXZrS2++FNX/nexOE9lDZBRxXc6Z7AGjbAY03cMKvcs7kZ1
+	9QpmJGo7ZJUn/HJKIg6oelt3a3ILGEcykvtvO3dbHmDM+fjyJjGV8mLeolwjIuYw
+	bLvQm+BtKh+kwhutOPf7BmLjcB3k+yyNeSyWkPh4epEbsQcdgFewckGI91BHNt/z
+	c4h8RAIz9ZvhsejG1aWtZcTh6TD0Q+P3wDuMmdk2L0gCRhFI945AdJUMT6fIMPr8
+	w8Vw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1759444874; x=1759531274; bh=4
-	hGlKaEF3owGaJz4O+b4FB/WpfLoASBvaTMeTYOloZc=; b=DHQCYoqVFUx85gU6v
-	slFj/IXlslxekzNbzX2t7cUTqGO6QdU8WtPxzXoF2czC3Egzb5qv938SuoB2+G3o
-	s3bE3Ftpp2KWlTljOf2cPRSNewo8R2JHWJoZwO8QFaMsiq1FVQOA+SIkYQ8m4VmE
-	YlRprSecGGmLx+QIBg/+CnwxqT5kL0QPnPRTgH6vsOIClrIQQyiTWJlLKiKMbRgl
-	pq6zjyheL/EI2oTfTLghrESZoZ1Shu5+pMHwrMwAB+Nr65/b/+2zD0ja+aStDU8S
-	dt+hn4YZhV23dBtKL/PMPboqncgL1r0PxCuxrPmRIhbcm19iAWl+9VQk6BgyXT0U
-	cE2+Q==
-X-ME-Sender: <xms:iv_eaORAfmyx-VrNY1qjojo2ry6eNu_jd6HzWbWeTYEjU_xDIhppBg>
-    <xme:iv_eaOlMzQUBukbXXyBPZaKmAtXPYb1i7cbcNBfyWplkCDXIrZliEB6nxxb7AaJY5
-    V44DQlJnaZH7DI3F_bTauG_PKU3CYtrNB1YEFh0e7pCG5y3rixDDX8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekjedvgecutefuodetggdotefrod
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1759445088; x=1759531488; bh=eTeoUMIRLDbBktgpxFyGT2F1dKdq
+	/G/dsQMMuTFQPm8=; b=WBmOKvJ7ALBV0tX1Xv2QQmFvy01e8wgZ9EuSio8q1RyX
+	jzyzi7gXm592fsLM75I6wG9GsUtX2r9DRkfzMnuOzOWszrfk0ZACSfpxvYLM4n6e
+	bgndCfZgiSJvWDCj857qL9yMOIKkWfZbukFmx7AIjYY5EJCzCtW59YxGuQYJtM/e
+	q32svAgoEvnjKMt525HN0te0H8xkuVWJkEVhoxQ/uM3q4B88nhsUS7/YH3OBYPwd
+	cj1X/eiEuiGvbHzovZPUwC/u/p7+80UnZtbWdMuasgMv2bjXpBVRZOt6HViQ9NJp
+	3c93tTxSB9baTpEGZ+IoAB0U9SnOtkSSZBjY8KHW7w==
+X-ME-Sender: <xms:XwDfaOn9pVkv6RMzMNSBVPB7zWGdC4WLdtiz8YkuBjLCahNDbWHVSg>
+    <xme:XwDfaApGJ0of6COO2bUmupStLapYNIPW0po9j-JoDGHk5cFqKKw2jjx7gkAIrQeJX
+    k9QRRtIA-xoNY7rAoHR5hludytCth7jfdAxH9b-pP82dBre-DBeVw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekjedvhecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
-    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
-    epkeetgfeufefhkefhjeegffefteffveeuhfdvieejtdefvdetheeftdejudffvdehnecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphht
-    thhopeejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehkrhiikheskhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtohepkhhriiihshiithhofhdrkhhoiihlohifshhkiheslhhi
-    nhgrrhhordhorhhgpdhrtghpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunh
-    gurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlhes
-    lhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhigqdhrih
-    hstghvsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhotges
-    lhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlh
-    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:iv_eaN1i_9MEdLYEaN5LmPLsLN4VdWQ5gzqyXtm4S2hdB3FI6ojE8Q>
-    <xmx:iv_eaJQ0iqhekBJG_ZNv4N7eyiZd6qivnqLNQ9d2MVElQqs6DFJQcQ>
-    <xmx:iv_eaOxYPZ981NcrRqq5DjAYYDp97i96adR2uvubuViawKp-w_Y7Tw>
-    <xmx:iv_eaBA1Vg93SANUa7SRpW7_2SDp8UR21x4gNm6WJd3zRTuGfCDkxw>
-    <xmx:iv_eaFi4-HVvRUCQzDfSfHm0IxXHeK_HBVcSXLPGriYfhV1o9UV624s2>
+    hrpefoggffhffvvefkufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegv
+    rhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpe
+    duleeigeekveeugeettdejtddtleeghefhvdfhueehtefhudelffduvdeuleevteenucff
+    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthht
+    ohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhriihksehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhi
+    ohhnrdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdprh
+    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:XwDfaJuuOrK9OMcGlcIs67TCY4E_heIFD2CaJg6n56R2BbDkL2FdzQ>
+    <xmx:XwDfaN7nVUsgITbiyTfaXunVtEBgikrANuqj8p6MxZPZ0BFU9AVvQw>
+    <xmx:XwDfaARBeA5KtPMbIMIEq0v2q7ROdhbPLXcKKyw41xE2072lFb4Big>
+    <xmx:XwDfaEoterbZA_wqkURSqtk2oSfF7t94LCuuL6STbFbBjXyFtA44nA>
+    <xmx:YADfaK6JGpFhlqDaLrCuxh1PI3YogFHgzfAg51uW4ge1hZAAtMQR659U>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 1C7B6700065; Thu,  2 Oct 2025 18:41:14 -0400 (EDT)
+	id B019D700065; Thu,  2 Oct 2025 18:44:47 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -80,69 +74,49 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AXqMPTuZh4v7
-Date: Fri, 03 Oct 2025 00:40:53 +0200
+X-ThreadId: A8Lgby3dhPuR
+Date: Fri, 03 Oct 2025 00:43:59 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Krzysztof Kozlowski" <krzk@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "Linus Torvalds" <torvalds@linux-foundation.org>,
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
- soc@lists.linux.dev
-Message-Id: <a7fa4971-85a3-4435-8728-493acb68ed0d@app.fastmail.com>
-In-Reply-To: 
- <CAJKOXPcRw3teqahDc6RBCz8XvqLt2sHqxrOUxpA84RszcsnGFQ@mail.gmail.com>
-References: <54b49f7b-9232-44d7-9ae3-ecc1826f17d7@app.fastmail.com>
- <d482931b-1779-4b49-9fa2-1c101bdf0929@app.fastmail.com>
- <CAHk-=wjsMPACg__N37EL8Sh=z1wkCpj+FQKpoVPXzyiVpm1i_w@mail.gmail.com>
- <CAGE=qrpygJ4XgtzdnGACj-6KRiD8r57F4ogNYaA3LLMusBV9fg@mail.gmail.com>
- <CAJKOXPcRw3teqahDc6RBCz8XvqLt2sHqxrOUxpA84RszcsnGFQ@mail.gmail.com>
-Subject: Re: [GIT PULL 2/5] soc: dt changes for 6.18
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "Krzysztof Kozlowski" <krzk@kernel.org>
+Message-Id: <417683c6-434e-4ae3-b361-cdf25e01d943@app.fastmail.com>
+Subject: [GIT PULL] soc: build fix for 6.18
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 2, 2025, at 08:26, Krzysztof Kozlowski wrote:
-> On Thu, 2 Oct 2025 at 15:04, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->> On Wed, 1 Oct 2025 at 15:27, Arnd Bergmann <arnd@arndb.de> wrote:
->> >
->> >   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-6.18
->>
->> Bah. I've merged this, but this causes build failures on arm64.
->>
->> I only noticed after already having pushed it out.
->>
->> > SeonGu Kang (1):
->> >       arm64: dts: axis: Add ARTPEC-8 Grizzly dts support
->
->
-> I'm sorry, I should not have trusted contributors from Samsung that
-> they know what they are doing and I think my CI misses allyesconfig on
-> particular branches, because for-next branch did enable this symbol
-> and it was tested by my CI. Also LKP tests each of my branches and
-> didn't report this, I think.
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-This one is on me really, I had the right tooling available and
-I had used it in the past, but I never ran it after I did the
-bulk of the merges in the past few weeks. There is always someone
-who misses a dependency in the DT updates and I rely on that
-check anyway to detect some types of incompatible binding updates
-and I have no excuse for not noticing it myself.
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
-We'll have to refine the process anyway when we start taking turns
-with the soc tree merges.
+are available in the Git repository at:
 
-> Issue will be fixed with commit coming via clk tree - Stephen Boyd:
-> https://lore.kernel.org/linux-samsung-soc/20250825114436.46882-2-ravi.patel@samsung.com/
-> And git pull:
-> https://lore.kernel.org/all/20250909183504.104261-2-krzysztof.kozlowski@linaro.org/
->
-> I understand this won't fix bisectability.
->
-> Arnd,
-> Eventually you can just mark arch-artpec as broken just to fix your branches.
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.18
 
-The missing commit is at the bottom of your branch, so I'm sending
-just that commit as a build fix, that seems easier than marking it
-as broken now and then later reverting that change.
+for you to fetch changes up to 91f98de42310c70f9a23595b3b20aa305717d955:
 
-      Arnd
+  dt-bindings: clock: Add ARTPEC-8 clock controller (2025-08-31 15:22:10 +0200)
+
+----------------------------------------------------------------
+soc: build fix for 6.18
+
+One commit for the dt bindings was missing from the dt branch, this
+one is already pending in the clk tree that contains the corresponding
+device driver.
+
+----------------------------------------------------------------
+
+Linus, please either take this one if the build breakage keeps
+bothering you, or wait for the common-clk tree pull request that
+contains the same 91f98de42310 commit.
+
+Sorry for missing the obvious build failure.
+
+Hakyeong Kim (1):
+      dt-bindings: clock: Add ARTPEC-8 clock controller
+
+ .../bindings/clock/axis,artpec8-clock.yaml         | 213 +++++++++++++++++++++
+ include/dt-bindings/clock/axis,artpec8-clk.h       | 169 ++++++++++++++++
+ 2 files changed, 382 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/axis,artpec8-clock.yaml
+ create mode 100644 include/dt-bindings/clock/axis,artpec8-clk.h
