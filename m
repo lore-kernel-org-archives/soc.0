@@ -1,178 +1,63 @@
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C002FF65C
-	for <soc@lists.linux.dev>; Wed,  1 Oct 2025 22:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81A1487BE;
+	Thu,  2 Oct 2025 01:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759357748; cv=none; b=rncJZeFwYptqqwEHgAcTuBYAGsOtyn0H1NW0VYFep4ES0emL4iek01pnq6QViA5xx9vjvVrxPd1V8cW61qaNuOZT8Opk1hOPhRDrMsDEeEhgUce1FpJvdvlJYQK1ZIjhJ11nKRt7HHtdcdJWTgs0O2uUpHVFNtBG/SWuEu5cGEo=
+	t=1759367430; cv=none; b=DBHabIi9LbraCdUNl79hFHyXRfmmOEREQpFrZig1lFKG60HR6xxsLZ7pc2KKTO5FVskDspHNs/2B6+aQoyU15SuSWBgg4fpG7FHa9q2sZo5GKPHNJza9CWVba+f2xENQHVxu9k+cdZTzBnFy72dhgS1/a6isAEKNU5DSnTAQyLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759357748; c=relaxed/simple;
-	bh=Wh64fq+tKNZmM/q+sbekXpJH9/cYL42z6o8UGVvuzwI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=GllLizIK50Q2qZe5KZfT0yFaWyKpSep34HqlrOMiWCLkl4gUNSaQnhRMSKran/h02vjfm//9GCC4YWElV0Hk3q9XP7788AYjJ+ErR8eZarWyLfr8IHNgbB2MH9c9ZQ54/gFMC8uPtX6n0Gkras2fj3jtU7l4KAom+Fbx8Luv53o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=MBB4CuZk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BOrdYiMJ; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1759367430; c=relaxed/simple;
+	bh=pHTUi2pFN5j1Ger1eF5Kb8j6I/je2tT6wP6Bz4h2hxs=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Thbhp+m7Cb9DaSIkOdM024cBW1Z2DulNMyW2aYbrkZV04rzT9zgesTxbZE8unEoUqlzZJjXcxPk1n5XBWOg0gijLBqdLOBYNDhFv6/XtdTXKGE09uHyRTFPPQsu3CTCLrXQGDr98AV8gFY47OEyE06Ls4xi9wYb6c/35JW0vG0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EhBZ+cpl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="MBB4CuZk";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BOrdYiMJ"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id F0C521400227;
-	Wed,  1 Oct 2025 18:29:04 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Wed, 01 Oct 2025 18:29:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1759357744;
-	 x=1759444144; bh=e80+6vo9buWuYqu+Lf/tDAVDE3/qCFzJ8xmUUjjUM7w=; b=
-	MBB4CuZkuOmZWEShgelqtgsyJkDXYkMndglMB9gqZJ5Yq/inUoS2LAjpV8EWN687
-	WRL7FkvlPLmdMJGc68mNeI5+xv7CQE2+z9vIDSfSlA0uh3/pS0JlogOV6FnficDs
-	giZlACQEd7KE+qQMzkjBjZ3/6/9Zv6We0emrzE5nznwjfv5ii/zVobMxI7Tc+VJn
-	kbLq0/U35dRYrW8dELQn5gtKUN125Y1yFQPn6MbstP2LhuhDFwwc/n1rSIteH4Fh
-	8ANxWL2eLD6hhp/DQWWHSNdj8xJRmpScJteTwajNDz1EhUExPi384ZY0BXcI/YqR
-	kCQA/kql1NEA9a+ZaZhj+Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1759357744; x=
-	1759444144; bh=e80+6vo9buWuYqu+Lf/tDAVDE3/qCFzJ8xmUUjjUM7w=; b=B
-	OrdYiMJw03ebe78oZYysH1NOqGKncnjFJCD9LK/bSIvDDJOYaHq2iLIxc3KwJodY
-	umafGAu34sqe5bNSaydJxZHIdzYGl5bejyeluI8oN61mOAJXG+B0Z1OonmyHScY7
-	6zlz5MM0J/96tCXIuH9gsDLKwlTbgHnlKLeFTvW8SZmk8JtCT+QSI4AejEwWA3tI
-	pA5Tl7wFXY1GLRRGJv1H14JBYXk/iEgR9TmJzIGzqiOZGGpMB+XEBJkeXLMB0ERq
-	lcC1PQMJvYtUU1VEVzfh8R3mOATJ4tgQA+R8XgNoqHsIq6NP62hQDFPhOmiJDAeE
-	tWiXSc/E4FysnBljuE46w==
-X-ME-Sender: <xms:MKvdaBT4cnljR2nmaF5eSB-50ZmfZ61uVTrmiBG1-12ld3xXmfOdxg>
-    <xme:MKvdaFls1OZRgXhzaWuRwaZUvo3pX4CaTLPI76LO3E9QtGt7DfJrhgxv6EXF3QUcS
-    VNBdPKb7zjXZNh2u8dS-2QrTQKT6XHpRJi5l6PHE5JPtAD1-x4--HE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekgeefgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeefhfehteffuddvgfeigefhjeetvdekteekjeefkeekleffjeetvedvgefhhfeihfen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghp
-    thhtohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhorhhvrghlughsse
-    hlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgr
-    rhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtth
-    hopehlihhnuhigqdhrihhstghvsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhr
-    tghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlih
-    hnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:MKvdaE_lIHtHMRznkTd9TW4evKIOAca-wLgTUQFZRJCBeWKslHpChA>
-    <xmx:MKvdaGAMyMUjWIV7Qvt_hlkbpjHR_PFKD14_1BvDv1hKLcrlMtxmVA>
-    <xmx:MKvdaBRUQQAv7WfMUg3QR8z91qjM8yYjiA-Ird6Zg5n3AHopekcnFw>
-    <xmx:MKvdaFvj-jYJvL1_dw1NCxBdp-sE0HRqsJvXmXHQ6RCRGPbbk_J31g>
-    <xmx:MKvdaNpshx1fGS5yHYusXRv8na6nM27uf2EvoDNRY9oOvdBJmdUaNuST>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B32CA700065; Wed,  1 Oct 2025 18:29:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EhBZ+cpl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F58C4CEF1;
+	Thu,  2 Oct 2025 01:10:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759367430;
+	bh=pHTUi2pFN5j1Ger1eF5Kb8j6I/je2tT6wP6Bz4h2hxs=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=EhBZ+cplaUX6OCUZAjQxBzxjiYS4Lk9miro+kugcVJyXLtffr4biXm1qRmGUmZ3th
+	 o8i0E+M+xBLXVV+xzGsgnfx+FT+anwu6Tebm7JfJkjpaz5LBZReubOyZgpjmIkbSzv
+	 MSKU4lErA6yvkpu8cDpflQmGTez3+QJIZ4wl25xq9xg98SUGxGyxeDv1tx7biEH4OX
+	 +gJ5waqMrvpbvZbcDqhzwEZ/LotoJY9HaUOvhmoA/3PvWzkowMg78bNYl0ylGLBvJo
+	 O1r5PRQUO9WZHRfGwOZ8YDuQmZ7oWgQ/a4sy4B1Nx/fn7l31sOcri/xUgrEJ7wnDKC
+	 n9f37hwil5kCg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 39A0739EE03D;
+	Thu,  2 Oct 2025 01:10:24 +0000 (UTC)
+Subject: Re: [GIT PULL 1/5] soc: new SoC support for 6.18
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ce4be3de-eae9-4a73-9d85-e47976ef8372@app.fastmail.com>
+References: <54b49f7b-9232-44d7-9ae3-ecc1826f17d7@app.fastmail.com> <ce4be3de-eae9-4a73-9d85-e47976ef8372@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lists.linux.dev>
+X-PR-Tracked-Message-Id: <ce4be3de-eae9-4a73-9d85-e47976ef8372@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git soc-newsoc-6.18
+X-PR-Tracked-Commit-Id: fee2f45def0379ed140de4db8f998edb1d78e619
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a8253f807760e9c80eada9e5354e1240ccf325f9
+Message-Id: <175936742312.2689671.6180621715040570208.pr-tracker-bot@kernel.org>
+Date: Thu, 02 Oct 2025 01:10:23 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, soc@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-ThreadId: AjqV-Bcf-9VR
-Date: Thu, 02 Oct 2025 00:28:45 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org, soc@lists.linux.dev
-Message-Id: <cf067bf7-5990-43b4-b96c-0700b3d59293@app.fastmail.com>
-In-Reply-To: <54b49f7b-9232-44d7-9ae3-ecc1826f17d7@app.fastmail.com>
-References: <54b49f7b-9232-44d7-9ae3-ecc1826f17d7@app.fastmail.com>
-Subject: [GIT PULL 5/5] ARM: soc updates for 6.18
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-The following changes since commit b320789d6883cc00ac78ce83bccbfe7ed58afcf0:
+The pull request you sent on Thu, 02 Oct 2025 00:24:18 +0200:
 
-  Linux 6.17-rc4 (2025-08-31 15:33:07 -0700)
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git soc-newsoc-6.18
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a8253f807760e9c80eada9e5354e1240ccf325f9
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.18
+Thank you!
 
-for you to fetch changes up to 65d2419f931c08ead6722fbb9d4bd8cecb25a7e3:
-
-  ARM: versatile: clock: convert from round_rate() to determine_rate() (2025-10-01 23:49:09 +0200)
-
-----------------------------------------------------------------
-ARM: soc updates for 6.18
-
-The at91 power management code and the TI AM33 platform each get
-a few updates for robustness, the other changes are just minor
-cleanups.
-
-----------------------------------------------------------------
-Alexander Sverdlin (1):
-      ARM: AM33xx: Implement TI advisory 1.0.36 (EMU0/EMU1 pins state on reset)
-
-Andrew Davis (1):
-      ARM: mach-hpe: Rework support and directory structure
-
-Arnd Bergmann (4):
-      Merge tag 'renesas-arm-soc-for-v6.18-tag1' of https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into soc/arm
-      Merge tag 'at91-soc-6.18' of git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into soc/arm
-      Merge tag 'omap-for-v6.18/soc-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap into soc/arm
-      Merge tag 'v6.18-rockchip-arm32-1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into soc/arm
-
-Brian Masney (3):
-      ARM: OMAP1: clock: convert from round_rate() to determine_rate()
-      ARM: OMAP2+: clock: convert from round_rate() to determine_rate()
-      ARM: versatile: clock: convert from round_rate() to determine_rate()
-
-Geert Uytterhoeven (1):
-      ARM: shmobile: rcar-gen2: Use SZ_256K definition
-
-Kuninori Morimoto (1):
-      arm: omap2: use string choices helper
-
-Miaoqian Lin (1):
-      ARM: OMAP2+: pm33xx-core: ix device node reference leaks in amx3_idle_init
-
-Mikko Rapeli (1):
-      ARM: rockchip: remove REGULATOR conditional to PM
-
-Nicolas Ferre (3):
-      ARM: at91: pm: fix .uhp_udp_mask specification for current SoCs
-      ARM: at91: pm: fix MCKx restore routine
-      ARM: at91: pm: save and restore ACR during PLL disable/enable
-
-Ryan Wanner (1):
-      ARM: at91: pm: Remove 2.5V regulator
-
-Yang Xiuwei (1):
-      ARM: OMAP2+: use IS_ERR_OR_NULL() helper
-
- MAINTAINERS                                  |  1 -
- arch/arm/Kconfig                             |  2 --
- arch/arm/Kconfig.platforms                   | 25 +++++++++++++++++
- arch/arm/Makefile                            |  1 -
- arch/arm/mach-at91/pm.c                      |  2 +-
- arch/arm/mach-at91/pm_suspend.S              | 41 ++++++----------------------
- arch/arm/mach-hpe/Kconfig                    | 23 ----------------
- arch/arm/mach-hpe/Makefile                   |  1 -
- arch/arm/mach-hpe/gxp.c                      | 15 ----------
- arch/arm/mach-omap1/clock.c                  | 19 +++++++++----
- arch/arm/mach-omap2/am33xx-restart.c         | 36 ++++++++++++++++++++++++
- arch/arm/mach-omap2/board-n8x0.c             |  2 +-
- arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c | 12 ++++----
- arch/arm/mach-omap2/pm33xx-core.c            |  6 +++-
- arch/arm/mach-omap2/powerdomain.c            |  2 +-
- arch/arm/mach-omap2/voltage.c                | 12 ++++----
- arch/arm/mach-omap2/vp.c                     |  4 +--
- arch/arm/mach-rockchip/Kconfig               |  2 +-
- arch/arm/mach-shmobile/pm-rcar-gen2.c        |  2 +-
- arch/arm/mach-versatile/spc.c                |  9 +++---
- include/soc/at91/sama7-sfrbu.h               |  7 -----
- 21 files changed, 113 insertions(+), 111 deletions(-)
- delete mode 100644 arch/arm/mach-hpe/Kconfig
- delete mode 100644 arch/arm/mach-hpe/Makefile
- delete mode 100644 arch/arm/mach-hpe/gxp.c
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
