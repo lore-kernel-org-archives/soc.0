@@ -1,122 +1,123 @@
-Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E525F274FCE
-	for <soc@lists.linux.dev>; Thu,  2 Oct 2025 22:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DB12ECD22
+	for <soc@lists.linux.dev>; Fri,  3 Oct 2025 12:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759445091; cv=none; b=OSM93CL1bx8bRUlSo8VBunsTz0lBfKfS7YVAJxGaenLK2CWjonX3mqGLTSOwUWIabhFDBkXsLnukeH3Bp2J6ykkWj6iO1dKJ4XZpkOlwdDZHJLP6qF5UYqFG5Cj6SjQdJe6/AqptnAjm7UTfVPF+OLL2bj5rk5EbSB9ICY7G6kc=
+	t=1759494776; cv=none; b=Y/uinOrx1Eov4p0R3LWRZ+zQ/s3T2uvn3x0rlVWir1GJmOcuDD1oGYSpET2elHSx9FhGIAzSBgrGoyGssVodSR4rwEh4j5U7BKRceUnIuDdJLjUAxG8QCaaRSyDotgD/hVnaJ9MgbrN0UuatxB4nXvHeHBgmAeoiEN4zT1qaYhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759445091; c=relaxed/simple;
-	bh=MpznCzUNU/M2yGcJDWDORNDm9k0EdhMFQ0uW/2x9Ex4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=tx6X+NbLr8oodYQAAYehURVQrOh4pVSTmhXzv7wsHWHOcWN1z8wT0zE6duaPI90OoEflNH/rimeR6wCiuCZJrwtPyRFM7gLU2wTyYujeGJ5HpOpEjyVNiPLAQw9t5fVDoE8710dJH0MgosPgiAinN3oehtQ8Le7l1rOJ9GiPBvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fOpDeJPM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WBmOKvJ7; arc=none smtp.client-ip=202.12.124.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1759494776; c=relaxed/simple;
+	bh=NIwuK7WSwOp7xXgXvN6lArOB3a1rRAMQT3rIRTG4LWc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i8k4pyLrVSaOUBpxQIWBSVYcZu22Qb6G0tjvI6VkeRerSwgjk4r7lQCZ58cGQHWBChhpwZZ29qOh7djA98fnTKg7QheYtQuzNecB+/vJW73Db0YDk33cM88VIqrcEd288g8zo9rU0omHKMW5A86mTvvp6UEOUcBdovERbca3x0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KzaI6Kp8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fOpDeJPM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WBmOKvJ7"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 34F247A006D;
-	Thu,  2 Oct 2025 18:44:48 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 02 Oct 2025 18:44:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm1; t=1759445088; x=1759531488; bh=eT
-	eoUMIRLDbBktgpxFyGT2F1dKdq/G/dsQMMuTFQPm8=; b=fOpDeJPM90LWGxXsRj
-	5j7sLOGCU8wKAox8fuQG7IPoWwoiEPSm/NONJwY0HTkZff2L5EcVafRAmFi5cDZc
-	pjkBTAC5W4bFBmtd8MXZrS2++FNX/nexOE9lDZBRxXc6Z7AGjbAY03cMKvcs7kZ1
-	9QpmJGo7ZJUn/HJKIg6oelt3a3ILGEcykvtvO3dbHmDM+fjyJjGV8mLeolwjIuYw
-	bLvQm+BtKh+kwhutOPf7BmLjcB3k+yyNeSyWkPh4epEbsQcdgFewckGI91BHNt/z
-	c4h8RAIz9ZvhsejG1aWtZcTh6TD0Q+P3wDuMmdk2L0gCRhFI945AdJUMT6fIMPr8
-	w8Vw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1759445088; x=1759531488; bh=eTeoUMIRLDbBktgpxFyGT2F1dKdq
-	/G/dsQMMuTFQPm8=; b=WBmOKvJ7ALBV0tX1Xv2QQmFvy01e8wgZ9EuSio8q1RyX
-	jzyzi7gXm592fsLM75I6wG9GsUtX2r9DRkfzMnuOzOWszrfk0ZACSfpxvYLM4n6e
-	bgndCfZgiSJvWDCj857qL9yMOIKkWfZbukFmx7AIjYY5EJCzCtW59YxGuQYJtM/e
-	q32svAgoEvnjKMt525HN0te0H8xkuVWJkEVhoxQ/uM3q4B88nhsUS7/YH3OBYPwd
-	cj1X/eiEuiGvbHzovZPUwC/u/p7+80UnZtbWdMuasgMv2bjXpBVRZOt6HViQ9NJp
-	3c93tTxSB9baTpEGZ+IoAB0U9SnOtkSSZBjY8KHW7w==
-X-ME-Sender: <xms:XwDfaOn9pVkv6RMzMNSBVPB7zWGdC4WLdtiz8YkuBjLCahNDbWHVSg>
-    <xme:XwDfaApGJ0of6COO2bUmupStLapYNIPW0po9j-JoDGHk5cFqKKw2jjx7gkAIrQeJX
-    k9QRRtIA-xoNY7rAoHR5hludytCth7jfdAxH9b-pP82dBre-DBeVw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekjedvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegv
-    rhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpe
-    duleeigeekveeugeettdejtddtleeghefhvdfhueehtefhudelffduvdeuleevteenucff
-    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthht
-    ohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhriihksehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhi
-    ohhnrdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdprh
-    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:XwDfaJuuOrK9OMcGlcIs67TCY4E_heIFD2CaJg6n56R2BbDkL2FdzQ>
-    <xmx:XwDfaN7nVUsgITbiyTfaXunVtEBgikrANuqj8p6MxZPZ0BFU9AVvQw>
-    <xmx:XwDfaARBeA5KtPMbIMIEq0v2q7ROdhbPLXcKKyw41xE2072lFb4Big>
-    <xmx:XwDfaEoterbZA_wqkURSqtk2oSfF7t94LCuuL6STbFbBjXyFtA44nA>
-    <xmx:YADfaK6JGpFhlqDaLrCuxh1PI3YogFHgzfAg51uW4ge1hZAAtMQR659U>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B019D700065; Thu,  2 Oct 2025 18:44:47 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KzaI6Kp8"
+Received: by smtp.kernel.org (Postfix)
+	id D11D7C4CEFC; Fri,  3 Oct 2025 12:32:55 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E76DAC4CEFB
+	for <soc@kernel.org>; Fri,  3 Oct 2025 12:32:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E76DAC4CEFB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b3b27b50090so405607566b.0
+        for <soc@kernel.org>; Fri, 03 Oct 2025 05:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1759494772; x=1760099572; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=17gCoEjvIQcUQufFQtAKqNf5Qc0ovnSmzCsZHusGb9k=;
+        b=KzaI6Kp8BvXPRXSsl03Vl0dJ11eUPShxJkmBOK6F3U1X5DOE/I37H0WwliaFhGmLQn
+         QzDmZDa80XPJn+EZK0tcbRlPXzTVxifxb1cvbow7VFe5sJkg9X7jDXJ3QzvFx7Vh1R6V
+         8lSVleiXerAHfWuosG9MJe5ORAk4vkaqiHauOjkBLherH6QlD4jFEyfRFKRXALSHXfj3
+         U6OzYfY30+UiEFHtQphceWIvfYZamApVtVYMTMQvD0jrMO7BAMl2ZL/erbcTLR7JYtBa
+         OIvsh2POX7vknij91FYsR69JTZ5CEpW4a8rF7PcsSO6tyyyrvrF93SMqrwToCvc069vM
+         dyQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759494772; x=1760099572;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=17gCoEjvIQcUQufFQtAKqNf5Qc0ovnSmzCsZHusGb9k=;
+        b=uVRVbQ8OPgwL0jVAZmQ/AzFRuxcQ5FVnDw7H7aDLpVCrPvAdsBrGHkgUA5noApZnTi
+         aIokmalTK+WoW6UwwP2njCLwqhDwkLopvLmiOuAtghweKW/PC8zliE7cVH8FwIbcQjXU
+         9Qf0XE1gqwgRE/QDNxlCY/GT7oak67ie8nX5DmD5YRaMvmfQ8H5f0NBmpbebC3QLEbEM
+         gtGMpg8DdeSqsqp4Bh0jTVUZRf6BqoIyYGP0dQRJ9ity5TCtuJofBd2mh5f+X39K9Xep
+         IhFmDfZd4g1s4GnNKBMa0G0yNvIvgMKxEeBaVQbwqmagtXfYhCgMHS+bVOljTiulBK6B
+         7Pcw==
+X-Forwarded-Encrypted: i=1; AJvYcCWHEM+nQ3G58dXXfw3Wcs3SracnTnAC8bcIlPfi14ETykZBwrEgsdRVIusnSnqUHMgUpN0=@kernel.org
+X-Gm-Message-State: AOJu0YyyrwLDtK/FVOKo+5gMQE8ft83j1OJx7aWCVuDe3pTZSNIKKi8j
+	Wl8RaSTssLnT1OQRk7qNv0P+2ml5Zknd1HoDYe1URv5lc9jYdMiuxJkYuR740VnkMbg=
+X-Gm-Gg: ASbGnctszCxldy6ecuh9y89yynG1naw4tYlxzHNAXWawcVdg7q3j1M09c7XVXQS11Dz
+	cvhbbG7RyFwaWXmPAXdoq6lDJDhFr93b2nj3b0te0aXYECPC0oD5VRLeczA50N1Bx2Av852rvJm
+	H3KVPHvqrGGSRPBMd4SbJd3sx4vADLMRqfy9cxnUO4yoaGSAdNfHhpf51xasv3igUiOr4/LgC4C
+	JuSqRnfYubX/1dRqMO1wZuyC2rT5tx485RakQyWBGTUaP1iL8JVgNyTp83/6OZ0l8AS8/wdM4aA
+	KlIFWOhbjGjVAOolgEbnGv5H/JUx2Owbo4nwMOFyIYYEeEheKMXZYJHI4RJpZJM59eCJZG3XTwv
+	Ie7zW3wUDcPzG8G4bNitnZgaNqZ+PPYRlURwo28SSYjECnjoTIpYuRvwJ7oy0ugccOUhB/6Lhf7
+	zm0Z2UFsGOUHYdKx7VQHl1bzHJB7E=
+X-Google-Smtp-Source: AGHT+IEoFFTeRxLCKlCPFN/zmcwyyLcUjEt0wTRNto+jUB9IZ+gep75jgaZbEeIo6QfYakU8Sdy8iw==
+X-Received: by 2002:a17:907:961e:b0:b48:730:dbaf with SMTP id a640c23a62f3a-b49c25514acmr373047366b.25.1759494772108;
+        Fri, 03 Oct 2025 05:32:52 -0700 (PDT)
+Received: from rayden (h-37-123-177-177.A175.priv.bahnhof.se. [37.123.177.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b48652aa62csm427437866b.19.2025.10.03.05.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Oct 2025 05:32:51 -0700 (PDT)
+Date: Fri, 3 Oct 2025 14:32:49 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] TEE QTEE fixes for v6.18
+Message-ID: <20251003123249.GA1063437@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: A8Lgby3dhPuR
-Date: Fri, 03 Oct 2025 00:43:59 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
- "Krzysztof Kozlowski" <krzk@kernel.org>
-Message-Id: <417683c6-434e-4ae3-b361-cdf25e01d943@app.fastmail.com>
-Subject: [GIT PULL] soc: build fix for 6.18
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+Hello arm-soc maintainers,
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+Please pull these small fixes for the TEE QTEE driver introduced in v6.18
+merge window.
+
+Thanks,
+Jens
+
+The following changes since commit dcc7a571a3665a16581b5b18ca6b113f60a9a41a:
+
+  Documentation: tee: Add Qualcomm TEE driver (2025-09-15 17:34:06 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.18
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-qcomtee-fixes-for-v6.18
 
-for you to fetch changes up to 91f98de42310c70f9a23595b3b20aa305717d955:
+for you to fetch changes up to 3b63efa21bc6acc1a0fadd1dd0f0e1988a4c0177:
 
-  dt-bindings: clock: Add ARTPEC-8 clock controller (2025-08-31 15:22:10 +0200)
-
-----------------------------------------------------------------
-soc: build fix for 6.18
-
-One commit for the dt bindings was missing from the dt branch, this
-one is already pending in the clk tree that contains the corresponding
-device driver.
+  tee: QCOMTEE should depend on ARCH_QCOM (2025-10-02 08:31:10 +0200)
 
 ----------------------------------------------------------------
+TEE QTEE fixes for v6.18
 
-Linus, please either take this one if the build breakage keeps
-bothering you, or wait for the common-clk tree pull request that
-contains the same 91f98de42310 commit.
+- Adds ARCH_QCOM dependency for the QTEE driver
+- Fixing return values for copy_from_user() failures
+- Guarding against potential off by one read
 
-Sorry for missing the obvious build failure.
+----------------------------------------------------------------
+Dan Carpenter (2):
+      tee: qcom: prevent potential off by one read
+      tee: qcom: return -EFAULT instead of -EINVAL if copy_from_user() fails
 
-Hakyeong Kim (1):
-      dt-bindings: clock: Add ARTPEC-8 clock controller
+Geert Uytterhoeven (1):
+      tee: QCOMTEE should depend on ARCH_QCOM
 
- .../bindings/clock/axis,artpec8-clock.yaml         | 213 +++++++++++++++++++++
- include/dt-bindings/clock/axis,artpec8-clk.h       | 169 ++++++++++++++++
- 2 files changed, 382 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/axis,artpec8-clock.yaml
- create mode 100644 include/dt-bindings/clock/axis,artpec8-clk.h
+ drivers/tee/qcomtee/Kconfig | 1 +
+ drivers/tee/qcomtee/call.c  | 2 +-
+ drivers/tee/qcomtee/core.c  | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
