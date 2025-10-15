@@ -1,61 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m1973180.qiye.163.com (mail-m1973180.qiye.163.com [220.197.31.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963CD308F07
-	for <soc@lists.linux.dev>; Mon, 13 Oct 2025 17:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7EC31813A
+	for <soc@lists.linux.dev>; Wed, 15 Oct 2025 07:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760376985; cv=none; b=KrN6JYfbhunNQlHBiZubNwdJDyrHFuM09qFCt9p89irUXnTyYYZMuITvNIh6LWX4F+41F7aZ1dSyskM0Cy9IALNj8u/rS7pcIYrVt7R+T8T3I1bWWqepQ/L1itFtOb82xlr3DRZlXf30QfuhtC+1mpK8CSA/5TQAAU9ZEkdXvP0=
+	t=1760513427; cv=none; b=X+ZW3Uxm4PQ/JSgc0jqGXGTIFjjmM56v6hWrHN3KZSqIJ3nfvj5HMwSRXBgd+s+Bvjba7QdXfFyz4kWd6pz4XBPlYB+ObFQbQL4aog0NX3JsX9+2aja6kl2Q3pAW59RHWIgbdHT1ZC0+ZBHOKDKRkRc6Bq7ZkACkM+B+AuySSrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760376985; c=relaxed/simple;
-	bh=YvvcExKYd1+apPlAedYXi8ch9fKDzLoyfkAmUvpTrn8=;
+	s=arc-20240116; t=1760513427; c=relaxed/simple;
+	bh=A4qtzS6/f/pecX6GOgrxPGmVThQldDEiFI2T/BUxuSo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bqDssx06h35ImNV3TMKeG14pvTjmj67HttjwDmVDQxnpQ/L2mDFbqpLuegLzRBf+UbLzM79CD04xl/TuaRBBoHCDeZsidNAHOX/R7B6Mc3HVNUCvlagMnCsLiyGTGD3ATs9KIilkkuAp/OXp2C+0XhKJYIR+PIt1XuZbgztpWms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=FEygW4fG; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Q3noeFR3+1x+RjfSZVDFtcbURz4rM7qvDEeDTh3hVe+QioReA7yj8yrTM2DYaOrnA/H228CfjkJEkknyNqGPVaKH3BaE8GY4d3dC/Uylrs6I94hvvHCyaOw0hGoh0leHy8qxrNOTvCq8nKnTDm5UOmSwbDptD0Wy5R2Twj+L9Sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=DiCuGLGh; arc=none smtp.client-ip=220.197.31.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thundersoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="FEygW4fG"
-Received: by smtp.kernel.org (Postfix)
-	id 44A6DC116D0; Mon, 13 Oct 2025 17:36:25 +0000 (UTC)
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6943BC116C6;
-	Mon, 13 Oct 2025 17:36:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6943BC116C6
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id E34FBC0003DE;
-	Mon, 13 Oct 2025 10:36:16 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com E34FBC0003DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1760376976;
-	bh=YvvcExKYd1+apPlAedYXi8ch9fKDzLoyfkAmUvpTrn8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FEygW4fGY2B1MxdQyeYpasJEaWD4mlIVIn5n+HgIcKAn/SkEns1WbLEcyFIm8FHuv
-	 W3o41d2qcROP/Jak0K/5/ntDl/EozGXbjWwJUsd2cx/gHVPjP0Z9GOhWl4E+7XLUGw
-	 ONTKW2TP6xf5tbibihokHgpxr6+MR600cPMZ07Vo=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 299F118000944;
-	Mon, 13 Oct 2025 10:35:46 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: soc@kernel.org
-Cc: Peter Robinson <pbrobinson@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
+	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="DiCuGLGh"
+Received: from albert-OptiPlex-7080.. (unknown [117.184.129.134])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 25f9bc543;
+	Wed, 15 Oct 2025 15:30:15 +0800 (GMT+08:00)
+From: Albert Yang <yangzh0906@thundersoft.com>
+To: adrian.hunter@intel.com
+Cc: arnd@arndb.de,
+	bst-upstream@bstai.top,
+	catalin.marinas@arm.com,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	gordon.ge@bst.ai,
+	krzk+dt@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 2/2] Broadcom devicetree-arm64 fixes for 6.18
-Date: Mon, 13 Oct 2025 10:35:43 -0700
-Message-ID: <20251013173543.2489346-2-florian.fainelli@broadcom.com>
+	linux-kernel@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	robh@kernel.org,
+	soc@lists.linux.dev,
+	ulf.hansson@linaro.org,
+	will@kernel.org,
+	yangzh0906@thundersoft.com
+Subject: Re: [PATCH 9/9] MAINTAINERS: add Black Sesame Technologies (BST) ARM SoC support
+Date: Wed, 15 Oct 2025 15:30:14 +0800
+Message-ID: <20251015073014.1480709-1-yangzh0906@thundersoft.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251013173543.2489346-1-florian.fainelli@broadcom.com>
-References: <20251013173543.2489346-1-florian.fainelli@broadcom.com>
+In-Reply-To: <57743880-aecb-4300-8386-44d962659921@intel.com>
+References: <57743880-aecb-4300-8386-44d962659921@intel.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -63,29 +49,49 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a99e6c6d7c409cckunme94767a761da4f
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTktMVhpDQhgYHx5CGEkdTlYVFAkWGhdVEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlKSkxVSkNPVUpJQlVKSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSEJVSk
+	tLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=DiCuGLGhn/KPK3GPbkC95HwnBSfdDQSl6wzN48jMYxr4NlDlx1h9TIsyGVqFQu2B6KU5LMb9zWxnuLHsbplmLMloHqzMwPEd43MCvj4YahW/3hpskaFGzLGtta3VEDTY6M1oiDNILtzKjdmVbj1stKUwOG5hChS++4BUT2mfbj0=; c=relaxed/relaxed; s=default; d=thundersoft.com; v=1;
+	bh=O1qaZkX1700g4dn1D/gzvs0pnDtTldETwvN+nCYzCHU=;
+	h=date:mime-version:subject:message-id:from;
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+Hi Adrian,
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+Thank you for the review and feedback!
 
-are available in the Git repository at:
+On Mon, Sep 29, 2025 at 04:29:25PM +0300, Adrian Hunter wrote:
+> On 23/09/2025 09:10, Albert Yang wrote:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.18/devicetree-arm64-fixes
+> > +ARM/BST SOC SUPPORT
+> > +M: Ge Gordon <gordon.ge@bst.ai>
+> > +R: BST Linux Kernel Upstream Group <bst-upstream@bstai.top>
+> > +L: linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> > +S: Maintained
+>
+> Seems like it is "Supported" rather than "Maintained" ?
+>
+>         S: *Status*, one of the following:
+>            Supported:   Someone is actually paid to look after this.
+>            Maintained:  Someone actually looks after it.
+>            Odd Fixes:   It has a maintainer but they don't have time to do
+>                         much other than throw the odd patch in. See below..
+>            Orphan:      No current maintainer [but maybe you could take the
+>                         role as you write your new code].
+>            Obsolete:    Old code. Something tagged obsolete generally means
+>                         it has been replaced by a better system and you
+>                         should be using that.> The status should likely be "Supported" rather than "Maintained"
+> based on the MAINTAINERS guidelines.
 
-for you to fetch changes up to aa960b597600bed80fe171729057dd6aa188b5b5:
+You're absolutely right. "Supported" is more appropriate for this
+vendor-supported hardware. I will update the STATUS field to
+"Supported" in next of the patch series.
 
-  arm64: dts: broadcom: bcm2712: Define VGIC interrupt (2025-10-13 10:31:04 -0700)
+Thanks for pointing this out.
 
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64-based SoCs Device Tree fixes
-for 6.18, please pull the following:
-
-- Peter describes the VGIC interrupt line such that KVM can be used on
-  Raspberry Pi 5 systems.
-
-----------------------------------------------------------------
-Peter Robinson (1):
-      arm64: dts: broadcom: bcm2712: Define VGIC interrupt
-
- arch/arm64/boot/dts/broadcom/bcm2712.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Best regards,
+Albert Yang
