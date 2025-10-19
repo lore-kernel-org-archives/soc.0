@@ -1,76 +1,131 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E3B3370EE
-	for <soc@lists.linux.dev>; Fri, 17 Oct 2025 14:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E9E191F84
+	for <soc@lists.linux.dev>; Sun, 19 Oct 2025 17:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760712515; cv=none; b=mGV06grn5h9TDm4t81yhR/Mt99oj6osn9LDFRu9a4b5qGcpCTCv37jI1pQJko+ilM6UJRpteJg5bw981jVoJG5qGH5dRdPJuwxyl8URue7IeEugIzMrY0Nlxo3DHBzMt2Ur2Db5I1lgUk5pYyF7seqcnB+EwwFyBcFO6Zo82KPU=
+	t=1760894620; cv=none; b=rvetVlk29i6EU5ryNAh83BF383wmVgoFhFV5+e3mn3Qqpi+GfrM8tQz+fDcDsyoOv37pP2d/g/tEvZKPSrFiDl9SFqzjaTGZxgTalsImVtZT90hDmoTu+KAimJlryKHt6dZyHoUc/rQZN1Sj4Twe/I4dpfwaZ57HiXPUYaFp8O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760712515; c=relaxed/simple;
-	bh=pXCOM/wWHuxL4BLo6HN9Dl+tmAWyFQiPDaayQtK7Qi8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=g5zkzWA/XpgDitPGm96cdbP2r6trFYh8TzMmatY32GwuUREt6GL+E9VSk0Nb+dL7qsyv2fRvng+M/2KiHkS3Tooyywh9BY8nWCfILEePTXW4QVfqHzAcTMmcIMgPftuSJavIwbAMw9JqzyLIhTW2tHGAPYEwjpTrh6e8Pe+ALXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ck/I47mY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760894620; c=relaxed/simple;
+	bh=YjwgU07lTttycLobcPqPwzVy5bTSFOQ+Tt11e6IE6kI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=o2Z6iA6k21nrEju0P1RO+TRZUkO3mBdgK/4agCULhAyn3UVwdoAMGlWxeLrDbDbgZE8KkV/wGQ3pOkVQr99fZ3APUFx6qpBLjPgyK993WTGFWr6lTuOPiCGbNue/9OMr1uxPGePof317U1evml2sp7ghYPm/NfUjwto2aeziBY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+gJzz3O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ck/I47mY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+gJzz3O"
 Received: by smtp.kernel.org (Postfix)
-	id 5B4E6C4CEF9; Fri, 17 Oct 2025 14:48:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 455A0C4CEE7;
-	Fri, 17 Oct 2025 14:48:35 +0000 (UTC)
+	id DF887C19421; Sun, 19 Oct 2025 17:23:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D43DC4CEE7;
+	Sun, 19 Oct 2025 17:23:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760712515;
-	bh=pXCOM/wWHuxL4BLo6HN9Dl+tmAWyFQiPDaayQtK7Qi8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Ck/I47mYqLpQjrmZUYmLtPtR4jxwzBMAU4syTLJEm4V4tuJP9TsV7HTgMNHfr+eO0
-	 wTzQ+f3wXT9edtQbfaPwa3TqiicLV2VigAqAQIgpZnFYsOmn3hTbaATS9fXqzh3mNF
-	 vDo8kxOByiI4wzobN3RdaZZazy0RAjbuS910n+vbaA/wToOOESf3NFHRasQlUK4mKL
-	 ufXSICFHw/6pjiQGhO3MEjVL7APgAqy6jZKb03ArXH9YgHSl+0AG+qPrDIjLq1RVVM
-	 /qvE8On79L8zQrJRLdQ7dCsWpin8txM9EhtyS4ck6OJvWpmd2OoB3UesPGKrSuxjEH
-	 EvaEtfCymmBPA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33AF239EF976;
-	Fri, 17 Oct 2025 14:48:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1760894619;
+	bh=YjwgU07lTttycLobcPqPwzVy5bTSFOQ+Tt11e6IE6kI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=N+gJzz3ORVwoPCxEgwHELlWleaV/eXlwHdSDnoyEk7zopJVpmaxB1E5YGu6Jus3+h
+	 9AJmubMDFHMChgLfXt8EWfNcDiqmGO2Kq8EB31+ApECRdM6uYTpQtBzo5nly75ki2h
+	 adHYWL/VaYc2hohr0YtdWNxLWYHLjSyL0tWxKxDFEhBzBChrPjN6NjMTRxwBfUMsip
+	 P55eJGfSzy9PYd87YFuEE4/w+hdAGSl1M/9OL75GYYQJLzpcuVueuCacaGK4NCjf/f
+	 zioopatQIHDhffQmgmUeyVTZGdVihaKhHxQjn69e/xal7azX95SVU1lisSCLpSpvWu
+	 VzMwt7LscrluQ==
+Date: Sun, 19 Oct 2025 10:23:37 -0700
+From: Drew Fustini <fustini@kernel.org>
+To: soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Alexandre Ghiti <alex@ghiti.fr>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Anup Patel <anup@brainfault.org>, Joel Stanley <joel@jms.id.au>,
+	Joel Stanley <jms@oss.tenstorrent.com>,
+	Nicholas Piggin <npiggin@oss.tenstorrent.com>,
+	Michael Neuling <mikey@neuling.org>,
+	Michael Ellerman <mpe@kernel.org>, Andy Gross <agross@kernel.org>,
+	Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Drew Fustini <dfustini@oss.tenstorrent.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: [GIT PULL] RISC-V Tenstorrent Devicetree for v6.19
+Message-ID: <aPUemXdOFZEdkayE@x1>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_scmi: Fixes for v6.18
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <176071249873.2229063.18446677866843367258.git-patchwork-notify@kernel.org>
-Date: Fri, 17 Oct 2025 14:48:18 +0000
-References: <20251016093448.945198-1-sudeep.holla@arm.com>
-In-Reply-To: <20251016093448.945198-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
-Cc: soc@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello:
+Hi Arnd,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Please pull these changes which add Tenstorrent as a vendor and enable
+support for Blackhole. It adds the appropriate entries in MAINTAINERS.
+The changes all come from a single series [1] posted by myself. Joel
+Stanley has reviewed and tested all the patches. Rob acked or reviewed
+all the bindings patches. W=1 dtbs_check and dt_binding_check produce
+no warnings.
 
-On Thu, 16 Oct 2025 10:34:48 +0100 you wrote:
-> Hi ARM SoC Team,
-> 
-> Please pull !
-> 
-> Regards,
-> Sudeep
-> 
-> [...]
+[1] https://lore.kernel.org/linux-riscv/20251013-tt-bh-dts-v3-0-9f058d4bbbda@oss.tenstorrent.com/
 
-Here is the summary with links:
-  - [GIT,PULL] firmware: arm_scmi: Fixes for v6.18
-    https://git.kernel.org/soc/soc/c/b508de521165
+Thanks,
+Drew
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
+are available in the Git repository at:
+
+  git@github.com:tenstorrent/linux.git tags/tenstorrent-dt-for-v6.19
+
+for you to fetch changes up to a71e6e8eea8ae2d624f097911f43357bba06d2a5:
+
+  riscv: defconfig: Enable Tenstorrent SoCs (2025-10-18 10:44:15 -0700)
+
+----------------------------------------------------------------
+Tenstorrent device tree for v6.19
+
+Add Tenstorrent as a vendor and enable support for the Blackhole SoC
+in Blackhole P100 and P150 PCIe cards. The SoC contains four RISC-V
+CPU tiles consisting of 4x SiFive X280 cores.
+
+There is a virtual UART implemented in OpenSBI firmware that allows a
+console program on the PCIe host to communicate through shared memory
+with Linux running on the Blackhole card.
+
+Link: https://github.com/tenstorrent/tt-bh-linux
+Link: https://github.com/tenstorrent/opensbi/
+Signed-off-by: Drew Fustini <fustini@kernel.org>
+
+----------------------------------------------------------------
+Drew Fustini (8):
+      dt-bindings: vendor-prefixes: Add Tenstorrent AI ULC
+      dt-bindings: riscv: Add Tenstorrent Blackhole compatible
+      dt-bindings: riscv: cpus: Add SiFive X280 compatible
+      dt-bindings: timers: Add Tenstorrent Blackhole compatible
+      dt-bindings: interrupt-controller: Add Tenstorrent Blackhole compatible
+      riscv: dts: Add Tenstorrent Blackhole SoC PCIe cards
+      riscv: Kconfig.socs: Add ARCH_TENSTORRENT for Tenstorrent SoCs
+      riscv: defconfig: Enable Tenstorrent SoCs
+
+ .../interrupt-controller/sifive,plic-1.0.0.yaml    |   1 +
+ Documentation/devicetree/bindings/riscv/cpus.yaml  |   1 +
+ .../devicetree/bindings/riscv/tenstorrent.yaml     |  28 ++++++
+ .../devicetree/bindings/timer/sifive,clint.yaml    |   1 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   9 ++
+ arch/riscv/Kconfig.socs                            |   8 ++
+ arch/riscv/boot/dts/Makefile                       |   1 +
+ arch/riscv/boot/dts/tenstorrent/Makefile           |   2 +
+ arch/riscv/boot/dts/tenstorrent/blackhole-card.dts |  14 +++
+ arch/riscv/boot/dts/tenstorrent/blackhole.dtsi     | 108 +++++++++++++++++++++
+ arch/riscv/configs/defconfig                       |   1 +
+ 12 files changed, 176 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/riscv/tenstorrent.yaml
+ create mode 100644 arch/riscv/boot/dts/tenstorrent/Makefile
+ create mode 100644 arch/riscv/boot/dts/tenstorrent/blackhole-card.dts
+ create mode 100644 arch/riscv/boot/dts/tenstorrent/blackhole.dtsi
