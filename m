@@ -1,131 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E9E191F84
-	for <soc@lists.linux.dev>; Sun, 19 Oct 2025 17:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C36720B22;
+	Mon, 20 Oct 2025 06:40:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760894620; cv=none; b=rvetVlk29i6EU5ryNAh83BF383wmVgoFhFV5+e3mn3Qqpi+GfrM8tQz+fDcDsyoOv37pP2d/g/tEvZKPSrFiDl9SFqzjaTGZxgTalsImVtZT90hDmoTu+KAimJlryKHt6dZyHoUc/rQZN1Sj4Twe/I4dpfwaZ57HiXPUYaFp8O4=
+	t=1760942432; cv=none; b=iuXRoLSTtpvVFlYCvfHlHQocsMKK3PEVso1KonjTMcRBCaHxxvjKJReiTpPnyLi3c10K3Mlp3dxlWxi5goicyTOZEzeM9T3ybBxf7eLKatoJ090/sxcnYGOMtgPCHTw/3I7SL4GL7Hr5dEdh80FtLHSrOmzbNafrHLPTrCmbD/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760894620; c=relaxed/simple;
-	bh=YjwgU07lTttycLobcPqPwzVy5bTSFOQ+Tt11e6IE6kI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=o2Z6iA6k21nrEju0P1RO+TRZUkO3mBdgK/4agCULhAyn3UVwdoAMGlWxeLrDbDbgZE8KkV/wGQ3pOkVQr99fZ3APUFx6qpBLjPgyK993WTGFWr6lTuOPiCGbNue/9OMr1uxPGePof317U1evml2sp7ghYPm/NfUjwto2aeziBY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+gJzz3O; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760942432; c=relaxed/simple;
+	bh=UJTlw/pu3vywNn13Ms+E5luWG1v4DvAhkTCP9OzzQOc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=gg44nmC1SrR0RjiQNvsFtIdMjUq/i1u8vZC87M0BWcAx7jE+PGnD9EiZ3OOK1B+yq9qOx4t4RoisWmxqwrrffQyc3eO794h+ydBpJ63vfC5TobDFn93VvR8tXU+eX3g6i/5mttVdc8uZJMZlux+Nt7iYmP1shn3SeokZEh2wX4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BpT25Pxe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+gJzz3O"
-Received: by smtp.kernel.org (Postfix)
-	id DF887C19421; Sun, 19 Oct 2025 17:23:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D43DC4CEE7;
-	Sun, 19 Oct 2025 17:23:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BpT25Pxe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9787FC4CEF9;
+	Mon, 20 Oct 2025 06:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760894619;
-	bh=YjwgU07lTttycLobcPqPwzVy5bTSFOQ+Tt11e6IE6kI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=N+gJzz3ORVwoPCxEgwHELlWleaV/eXlwHdSDnoyEk7zopJVpmaxB1E5YGu6Jus3+h
-	 9AJmubMDFHMChgLfXt8EWfNcDiqmGO2Kq8EB31+ApECRdM6uYTpQtBzo5nly75ki2h
-	 adHYWL/VaYc2hohr0YtdWNxLWYHLjSyL0tWxKxDFEhBzBChrPjN6NjMTRxwBfUMsip
-	 P55eJGfSzy9PYd87YFuEE4/w+hdAGSl1M/9OL75GYYQJLzpcuVueuCacaGK4NCjf/f
-	 zioopatQIHDhffQmgmUeyVTZGdVihaKhHxQjn69e/xal7azX95SVU1lisSCLpSpvWu
-	 VzMwt7LscrluQ==
-Date: Sun, 19 Oct 2025 10:23:37 -0700
-From: Drew Fustini <fustini@kernel.org>
-To: soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Anup Patel <anup@brainfault.org>, Joel Stanley <joel@jms.id.au>,
-	Joel Stanley <jms@oss.tenstorrent.com>,
-	Nicholas Piggin <npiggin@oss.tenstorrent.com>,
-	Michael Neuling <mikey@neuling.org>,
-	Michael Ellerman <mpe@kernel.org>, Andy Gross <agross@kernel.org>,
-	Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>,
-	Paul Walmsley <pjw@kernel.org>,
-	Drew Fustini <dfustini@oss.tenstorrent.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V Tenstorrent Devicetree for v6.19
-Message-ID: <aPUemXdOFZEdkayE@x1>
+	s=k20201202; t=1760942432;
+	bh=UJTlw/pu3vywNn13Ms+E5luWG1v4DvAhkTCP9OzzQOc=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=BpT25Pxe1mhGst83DZD9Z6TJ3ZHdU1xjdlaoh/Zf17hKKYEc+1Nf8GAb05LhVQ2Z7
+	 FgtNhXTr4Q7WYA9muS0+V1kRjtizrKrvKBj7rfN31h6iyCmB7iUC5A+vle0G8m6YWf
+	 jqVP5vI2ET3vRrE3hjXsZB3LwzqUCAGtXkdvA7jRwlLmvL2rQy1SlchjqsI/aR6hSp
+	 D8sr/01r83oweAJBJeWDaSCuII4fZSdtem+jk0QH1qPdD9IfrGY2tdxBs8wwUWl18Y
+	 VxAhUgzVeHpfau1l5rJ+LJMcFG+7osVCsSDQ4evzrZlBzXg/9gY8Nv9Zc1IrwPm/pq
+	 rhsieA9VGUwRw==
+Message-ID: <2eb2d833-03e0-4570-8979-3a28d708b21f@kernel.org>
+Date: Mon, 20 Oct 2025 08:40:23 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 0/5] Introduce ASPEED AST2700 BMC SoC
+To: Ryan Chen <ryan_chen@aspeedtech.com>, Arnd Bergmann <arnd@arndb.de>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>,
+ =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Taniya Das <quic_tdas@quicinc.com>,
+ "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+ Eric Biggers <ebiggers@google.com>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "soc@lists.linux.dev" <soc@lists.linux.dev>, Mo Elbadry
+ <elbadrym@google.com>, Rom Lemarchand <romlem@google.com>,
+ William Kennington <wak@google.com>, Yuxiao Zhang <yuxiaozhang@google.com>,
+ "wthai@nvidia.com" <wthai@nvidia.com>, "leohu@nvidia.com"
+ <leohu@nvidia.com>, "dkodihalli@nvidia.com" <dkodihalli@nvidia.com>,
+ "spuranik@nvidia.com" <spuranik@nvidia.com>
+References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
+ <41705e13-c61d-4249-9492-b83f1371d3f9@app.fastmail.com>
+ <OS8PR06MB7541AEC5560E3445C33009BEF21FA@OS8PR06MB7541.apcprd06.prod.outlook.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <OS8PR06MB7541AEC5560E3445C33009BEF21FA@OS8PR06MB7541.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
+On 25/09/2025 10:00, Ryan Chen wrote:
+>> Subject: Re: [PATCH v5 0/5] Introduce ASPEED AST2700 BMC SoC
+>>
+>> On Mon, Sep 1, 2025, at 05:13, Ryan Chen wrote:
+>>> This introduces initial support for the Aspeed AST2700 SoC and the
+>>> AST2700 Evaluation Board (EVB) to the Linux kernel. The AST27XX is the
+>>> 8th generation Baseboard Management Controller (BMC) SoC from Aspeed,
+>>> featuring improved performance, enhanced security, and expanded I/O
+>>> capabilities compared to previous generations.
+>>>
+>>> AST27XX SOC Family
+>>>  - https://www.aspeedtech.com/server_ast2700/
+>>>  - https://www.aspeedtech.com/server_ast2720/
+>>>  - https://www.aspeedtech.com/server_ast2750/
+>>
+>> Hi Ryan,
+>>
+>> Thanks for you submission earlier. I see that you had sent the series to several
+>> lists including soc@lists.linux.dev, which is what I use to keep track of patches
+>> that have been successfully reviewed and that are ready to be merged through
+>> the soc tree.
+>>
+>> Unless you have been told to send it here by Joel and Andrew, I assume that
+>> they will pick up the series through the "bmc"
+>> tree once they are happy with it like they do with the 32-bit Aspeed SoC
+>> (ast24xx/25xx/26xx) patches, and I have dropped the series from
+>> https://patchwork.kernel.org/project/linux-soc
+>> now.
+>>
+>> For future submission, please send the patches only "to"
+>> them, with the other people in the "cc" field to avoid this confusion, and leave
+>> out the "soc@lists.linux.dev"
+>> recipient. You can add me as arnd@arndb.de to the Cc list for reviews though.
+>>
+>> Please also add a patch that changes the MAINTAINERS entry to reflect the
+>> added arch/arm64 contents.
+>>
+>>      Arnd
+> 
+> Hello Arnd,
+> 	Thanks your notify. I will remove soc@lists.linux.dev, in next patch.
 
-Please pull these changes which add Tenstorrent as a vendor and enable
-support for Blackhole. It adds the appropriate entries in MAINTAINERS.
-The changes all come from a single series [1] posted by myself. Joel
-Stanley has reviewed and tested all the patches. Rob acked or reviewed
-all the bindings patches. W=1 dtbs_check and dt_binding_check produce
-no warnings.
 
-[1] https://lore.kernel.org/linux-riscv/20251013-tt-bh-dts-v3-0-9f058d4bbbda@oss.tenstorrent.com/
+No, this patchset still has known (reported) warnings/bugs, which need
+to be addressed here before merging it.
 
-Thanks,
-Drew
-
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
-
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
-
-are available in the Git repository at:
-
-  git@github.com:tenstorrent/linux.git tags/tenstorrent-dt-for-v6.19
-
-for you to fetch changes up to a71e6e8eea8ae2d624f097911f43357bba06d2a5:
-
-  riscv: defconfig: Enable Tenstorrent SoCs (2025-10-18 10:44:15 -0700)
-
-----------------------------------------------------------------
-Tenstorrent device tree for v6.19
-
-Add Tenstorrent as a vendor and enable support for the Blackhole SoC
-in Blackhole P100 and P150 PCIe cards. The SoC contains four RISC-V
-CPU tiles consisting of 4x SiFive X280 cores.
-
-There is a virtual UART implemented in OpenSBI firmware that allows a
-console program on the PCIe host to communicate through shared memory
-with Linux running on the Blackhole card.
-
-Link: https://github.com/tenstorrent/tt-bh-linux
-Link: https://github.com/tenstorrent/opensbi/
-Signed-off-by: Drew Fustini <fustini@kernel.org>
-
-----------------------------------------------------------------
-Drew Fustini (8):
-      dt-bindings: vendor-prefixes: Add Tenstorrent AI ULC
-      dt-bindings: riscv: Add Tenstorrent Blackhole compatible
-      dt-bindings: riscv: cpus: Add SiFive X280 compatible
-      dt-bindings: timers: Add Tenstorrent Blackhole compatible
-      dt-bindings: interrupt-controller: Add Tenstorrent Blackhole compatible
-      riscv: dts: Add Tenstorrent Blackhole SoC PCIe cards
-      riscv: Kconfig.socs: Add ARCH_TENSTORRENT for Tenstorrent SoCs
-      riscv: defconfig: Enable Tenstorrent SoCs
-
- .../interrupt-controller/sifive,plic-1.0.0.yaml    |   1 +
- Documentation/devicetree/bindings/riscv/cpus.yaml  |   1 +
- .../devicetree/bindings/riscv/tenstorrent.yaml     |  28 ++++++
- .../devicetree/bindings/timer/sifive,clint.yaml    |   1 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |   9 ++
- arch/riscv/Kconfig.socs                            |   8 ++
- arch/riscv/boot/dts/Makefile                       |   1 +
- arch/riscv/boot/dts/tenstorrent/Makefile           |   2 +
- arch/riscv/boot/dts/tenstorrent/blackhole-card.dts |  14 +++
- arch/riscv/boot/dts/tenstorrent/blackhole.dtsi     | 108 +++++++++++++++++++++
- arch/riscv/configs/defconfig                       |   1 +
- 12 files changed, 176 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/riscv/tenstorrent.yaml
- create mode 100644 arch/riscv/boot/dts/tenstorrent/Makefile
- create mode 100644 arch/riscv/boot/dts/tenstorrent/blackhole-card.dts
- create mode 100644 arch/riscv/boot/dts/tenstorrent/blackhole.dtsi
+Best regards,
+Krzysztof
