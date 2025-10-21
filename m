@@ -1,161 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11022110.outbound.protection.outlook.com [52.101.53.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C36720B22;
-	Mon, 20 Oct 2025 06:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760942432; cv=none; b=iuXRoLSTtpvVFlYCvfHlHQocsMKK3PEVso1KonjTMcRBCaHxxvjKJReiTpPnyLi3c10K3Mlp3dxlWxi5goicyTOZEzeM9T3ybBxf7eLKatoJ090/sxcnYGOMtgPCHTw/3I7SL4GL7Hr5dEdh80FtLHSrOmzbNafrHLPTrCmbD/c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760942432; c=relaxed/simple;
-	bh=UJTlw/pu3vywNn13Ms+E5luWG1v4DvAhkTCP9OzzQOc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=gg44nmC1SrR0RjiQNvsFtIdMjUq/i1u8vZC87M0BWcAx7jE+PGnD9EiZ3OOK1B+yq9qOx4t4RoisWmxqwrrffQyc3eO794h+ydBpJ63vfC5TobDFn93VvR8tXU+eX3g6i/5mttVdc8uZJMZlux+Nt7iYmP1shn3SeokZEh2wX4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BpT25Pxe; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369F92882AF
+	for <soc@lists.linux.dev>; Tue, 21 Oct 2025 07:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.110
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761033540; cv=fail; b=NA42Cb2fPzi/u+4NDxQNqneKTU/M6A6d1xcH8FTWBNm1ZIRK6JLMP3jFZqHeOM5kafugL6PhdaWDfl36FdhNcvOXXPo9zeYUg93MBI2i+jkmPU5OJA3+3FC1N9ktQAvvrJpiM9n8HEgRgSTP3zYxpqSBumaokEBpM4xOiNoPy4g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761033540; c=relaxed/simple;
+	bh=M70ntFXqJRxTKImBLckTbQBd6d+J4IS1cOEKdzYw2j8=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=sS6RX9WqoMKdJINwolhH7FuhATapdv3ahL0vL29ztsdJRf6AheTazJ1qWIr8VOqWJco0YWQjaaU62By2uRXL+jFSP1ec1obuO8c8P7KIi30WYpj9VaGMSHkXsRKegllXjHJFis4eHg1K7Tk0RJUzAKdK/i8sFUpiTovQKxY/ZlE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=PzRBJAP1; arc=fail smtp.client-ip=52.101.53.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BpT25Pxe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9787FC4CEF9;
-	Mon, 20 Oct 2025 06:40:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760942432;
-	bh=UJTlw/pu3vywNn13Ms+E5luWG1v4DvAhkTCP9OzzQOc=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=BpT25Pxe1mhGst83DZD9Z6TJ3ZHdU1xjdlaoh/Zf17hKKYEc+1Nf8GAb05LhVQ2Z7
-	 FgtNhXTr4Q7WYA9muS0+V1kRjtizrKrvKBj7rfN31h6iyCmB7iUC5A+vle0G8m6YWf
-	 jqVP5vI2ET3vRrE3hjXsZB3LwzqUCAGtXkdvA7jRwlLmvL2rQy1SlchjqsI/aR6hSp
-	 D8sr/01r83oweAJBJeWDaSCuII4fZSdtem+jk0QH1qPdD9IfrGY2tdxBs8wwUWl18Y
-	 VxAhUgzVeHpfau1l5rJ+LJMcFG+7osVCsSDQ4evzrZlBzXg/9gY8Nv9Zc1IrwPm/pq
-	 rhsieA9VGUwRw==
-Message-ID: <2eb2d833-03e0-4570-8979-3a28d708b21f@kernel.org>
-Date: Mon, 20 Oct 2025 08:40:23 +0200
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="PzRBJAP1"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=na5HTHXAb4zYbrwSzcGiK+5SZuUQD9laJPWfCZnOHuMtFPYh8a3ZJaCoRsLcafqVJdKBZCId4tpj2fS2OVf3KvMmO18yVjJLmrvMHHQTZ5s3s4neIqX6v40gFU+UYD7KAYcOBMojcrtpkAg4IzbYbX/A37ZTwZgloAto4jRQ4a9CrTiVEVEW6lelSZdhWcVGCuzs4hZhkZbOWJ7MGL62eATHgmZ0b0a+LXRuep9MceY+90QVjsHO5ga3tF4NQyFtk3t4XL2g8xthUSCTtwNVxxCZiTt4dcuvULCoTSEYwB6P+6Ge+YMtv8gWu4Lwuky7JdJuwfmMSBl9v6gOW/Ztpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dRCvTWGOl4rtGr/7ywmzZT5k/xz39aVGckb+LebX9Gs=;
+ b=wrOHawFn1Oy/GTiZJNfmD4Dhb4EEq8XAHyWstd6Vg6iYaaLj6F+9vHCcQPn1O03GlBPNsD6rEskPSl8RTAzZcdlsASpuHDd4Wu95ZD8LwatOK60SgA75279O5GgHZuoVtNLMpPp5wR32qXWKfyv2mfKhJLR4YV0jwa0VrfshTcDc8PqSQ4yS0dL+D2tVNpt6xBnUGHq4BdxkL/VUSWWtznLb4SX8yZoAegVrVZOsN3Sp2FqZPBxAV+E89VGclC0+gd4xO1e9wVCKRpiMb5+gDyj7DUwcrULV5D1MizDkoBiw5oWrqRU6vCZJYIaxA0RRbPnuT5NK/UaUU6/kiP90tA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dRCvTWGOl4rtGr/7ywmzZT5k/xz39aVGckb+LebX9Gs=;
+ b=PzRBJAP1OR9HiFoKKwa/VPdP0p01gJ/fsOYI4MUSkK3qUlstSmoiFeHy2NaP2mWdz5z44gIVBLWDXyErzSWS0HFfLQP2mki/UxzpmZDKOKxqRcxQbdmussCitfuErSXNLeq2ECFpufnW3KTzbJ4b//Sn4WwDQ3my/0g27SOfaEg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from PH0PR01MB7975.prod.exchangelabs.com (2603:10b6:510:26d::15) by
+ SJ0PR01MB6208.prod.exchangelabs.com (2603:10b6:a03:29e::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9228.17; Tue, 21 Oct 2025 07:58:55 +0000
+Received: from PH0PR01MB7975.prod.exchangelabs.com
+ ([fe80::6926:a627:118e:8050]) by PH0PR01MB7975.prod.exchangelabs.com
+ ([fe80::6926:a627:118e:8050%4]) with mapi id 15.20.9228.016; Tue, 21 Oct 2025
+ 07:58:54 +0000
+From: Huang Shijie <shijie@os.amperecomputing.com>
+To: catalin.marinas@arm.com,
+	will@kernel.org
+Cc: patches@amperecomputing.com,
+	cl@linux.com,
+	Shubhang@os.amperecomputing.com,
+	linux-arm-kernel@lists.infradead.org,
+	krzysztof.kozlowski@linaro.org,
+	geert+renesas@glider.be,
+	arnd@arndb.de,
+	linux-kernel@vger.kernel.org,
+	peterz@infradead.org,
+	soc@lists.linux.dev,
+	Huang Shijie <shijie@os.amperecomputing.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH v2] arm64: defconfig: Remove the redundant SCHED_MC/SCHED_SMT
+Date: Tue, 21 Oct 2025 15:57:04 +0800
+Message-Id: <20251021075704.527626-1-shijie@os.amperecomputing.com>
+X-Mailer: git-send-email 2.40.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0223.apcprd06.prod.outlook.com
+ (2603:1096:4:68::31) To PH0PR01MB7975.prod.exchangelabs.com
+ (2603:10b6:510:26d::15)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/5] Introduce ASPEED AST2700 BMC SoC
-To: Ryan Chen <ryan_chen@aspeedtech.com>, Arnd Bergmann <arnd@arndb.de>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>,
- =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Taniya Das <quic_tdas@quicinc.com>,
- "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Eric Biggers <ebiggers@google.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "soc@lists.linux.dev" <soc@lists.linux.dev>, Mo Elbadry
- <elbadrym@google.com>, Rom Lemarchand <romlem@google.com>,
- William Kennington <wak@google.com>, Yuxiao Zhang <yuxiaozhang@google.com>,
- "wthai@nvidia.com" <wthai@nvidia.com>, "leohu@nvidia.com"
- <leohu@nvidia.com>, "dkodihalli@nvidia.com" <dkodihalli@nvidia.com>,
- "spuranik@nvidia.com" <spuranik@nvidia.com>
-References: <20250901031311.1247805-1-ryan_chen@aspeedtech.com>
- <41705e13-c61d-4249-9492-b83f1371d3f9@app.fastmail.com>
- <OS8PR06MB7541AEC5560E3445C33009BEF21FA@OS8PR06MB7541.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <OS8PR06MB7541AEC5560E3445C33009BEF21FA@OS8PR06MB7541.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR01MB7975:EE_|SJ0PR01MB6208:EE_
+X-MS-Office365-Filtering-Correlation-Id: 17c77389-ede7-497b-ff12-08de1077ae37
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|52116014|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?+gQBX2TrzU2trwvTtXHGTJMCXdWtBTGEHbwFMozOAubZz5+PjfMaUlZhccmC?=
+ =?us-ascii?Q?ZUSoqPo6PySzJtJ4x3+6dSzA4Q5pzHeggCW3vTsKMIp8ioLTod0N70ePSrPJ?=
+ =?us-ascii?Q?DQfs1DcN4mQG9vCqIrEDZ8zh1RkUaPDUWANqhDcYaVZqqHIhY00E1On7mj6l?=
+ =?us-ascii?Q?I3K0v9PUSb1MnHL1N5MmgrhbzWdFvETqRFJtoeVQgNsc4yt3d5KOVLpjIcXR?=
+ =?us-ascii?Q?3GDhGvJ9t2KwIOmIk6uuN00kqksuqAbg7qPP41kUYslZEKeCPt4wkJkH4egz?=
+ =?us-ascii?Q?BbksUA4zEctiPhd+4gijNi/b9KLeUHu6T9P8KPOjeZjJ/TfxhKrCT0un0ECG?=
+ =?us-ascii?Q?LJ/xdg8IFKHRvjierK80T6exTVHCCGCQj4SGnQ5RIPRr9+FSPw9gNkpUg6/E?=
+ =?us-ascii?Q?5mtuP879YM95wjopt8C6SX3o3eq6LfM2Ao/L2ot0kupu8CqDHok4t1R9kbJG?=
+ =?us-ascii?Q?OcsqXgPhfde1GLlWj3tH52rbgjNLqWq/UzuilwBVS+EK42ZGPPIuJj2pC44s?=
+ =?us-ascii?Q?gTGMdRWxb33xTN/zESYJolJpz9mlI38BM4aMo1zr7b79+xLdlTanF2CVQPRt?=
+ =?us-ascii?Q?AC3wWayv9TWkhzvwNVVg1ot5kXBRIcQFp6QiK4fzBDZe7ELaexmu6nnIZPOX?=
+ =?us-ascii?Q?4as7N9nmrV2ELpDRuAaEkaGFvQuREJNJvkdRa3JzUjMnv2aOaiKDaDkb+/xt?=
+ =?us-ascii?Q?4FSwGqjPaY1J2YqmBDlAQaOz2QgRIdYbL6leCsUQ2OU2E27x+LbJ79c4gLNv?=
+ =?us-ascii?Q?D6/Wquj1o5jLdajuVc66HdM+4+q7OM6eMnAGHUeVjIoFH8mNppJjivsm24qh?=
+ =?us-ascii?Q?kgkFZbB9w6wM506oH01vYtUaS0gmDvA0Yd87f93O9e9tRyg6uZ72Qz49vHJc?=
+ =?us-ascii?Q?T21LGWJpliuj1A27tKxDmqt8hA8EuNzm6+ca+gpQRxCOoQ87iOjpxgDAV8lZ?=
+ =?us-ascii?Q?rd6l+vCgDYGW3dtYyT8OLKAJtut0pi/5oEnnAnWsY6sr+JDfZxULLyNwG9K6?=
+ =?us-ascii?Q?JgnD+XqGTNJcCWvHTwuT1tXlzYMKRYd7lJKw6eY8bG0SzAQFhAHvnmwH/w+9?=
+ =?us-ascii?Q?ZB0I5oqJ0zn+lMQl/BT+m8Y2tzdFtfUUvK+BGPi6nPhtn98a+6aro7x4vm+g?=
+ =?us-ascii?Q?kGxGbzZAeZU8hz4xXZDIuUZNkgFenDFw8e06Z75ZVM+fq9/bqEeZ7wTTT7Zj?=
+ =?us-ascii?Q?hCBBLC8IrH1+wikLTU7ZuIy2Wl2dRAsuO3hdlULHkNX1Jcsqal2Xfq2+JgqQ?=
+ =?us-ascii?Q?KK2m+EGhy1FKcuCoYTceoCWY9KFY3SwOOQxcAudxYt/87SOeWdwB6LZzl0lk?=
+ =?us-ascii?Q?KDnNXcSUn4fbX+P3KrhhMXWZ2o/gDIcxxQU91KPxgCy/pxvFydLbvC0KJ8Qt?=
+ =?us-ascii?Q?eb8xFCf/8mypUCmGNOkfItzZeW5HUNIB42ysQhWNPiVRlp1rL/V5jn3UVd8t?=
+ =?us-ascii?Q?+eZbLnrjaJGDpC4pkS7xNO9ONNoJPDKo97wsnAWBxkf8fkYqQf8SeJyPTZFF?=
+ =?us-ascii?Q?CqCXrGDOfPgk1zoaIsUnvWUQgVeNtHUvTYca?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7975.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(52116014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?u2+pjrP8Ovjl17TwBaAm21ZZShJBPcXRv5B4cNsjsNtpaFNTVJA7w2/wlJU1?=
+ =?us-ascii?Q?cTSeTgH9Xu/hS8JRsp4nEGOzpxMds7BCBDDVz5J79ZU/Bj2etAoIpsQ/n6y5?=
+ =?us-ascii?Q?YxZ6Lf78RqUs/ySxISYyDXyRcTHIV5hV95Ey5EbXqNoHlzrtbmZi/jMKTiMu?=
+ =?us-ascii?Q?xNYBR535KACHmGp8R4B2m1qrTb2waAOOzos5WPFa3aub5J4neaegRsUjNYdm?=
+ =?us-ascii?Q?fTw9uIFGGP4uJzkONlR8SkYw+16yeJlbTKSrXKnEN4dFfZo8NyZjqDKJifiU?=
+ =?us-ascii?Q?xiF2tVRlbP0wzn1s4jEhLhrUM7Xbb8vOZtqOZb2QyRGz+ebPCUkUFj7WWJPO?=
+ =?us-ascii?Q?RpZiyWcWdvxF8P0Binte+kdnqGQ9+iLBuhC8kI/GRBVcLtYo2fM2nM5VRM89?=
+ =?us-ascii?Q?paCRckVb+Nmx9Vf4eh03vrVmGPITvR3iiRNCYxDQkXyCnehbB9D8BIS5Hjb5?=
+ =?us-ascii?Q?YWipwVijzs4M/PLR/i/0WxZCn0tlpCyLZAIuaQg5WWh1L1Q8kgq7wXWkgCrO?=
+ =?us-ascii?Q?OOdDd1RiYuM8iApr8HX8ZEFzWtJXp8cJKblO4pOS87/3wVUoqW/ptkRKOYYL?=
+ =?us-ascii?Q?UTpz7MZIXOiqYzOuIgyqQNLGSpv/fuc0mrJsukwle/sz3A/IM/Z3JElm6LsK?=
+ =?us-ascii?Q?6HTJZZ40MefIzkBROF6RBAmDVMr5eenAJQqhlM+8CDsqAQFlwyzbs64ugFJH?=
+ =?us-ascii?Q?TN88kYaAo5P4qj42FkzI0TNvUMHyG+3iYC8GpTXZNWrrjHs1Xtgx0xwWXtWa?=
+ =?us-ascii?Q?t3yjPtx7/l4//L9wHl9BHQT4Uy86rAj8zdkJuUKTMAEhmk8j9qwtDVAnCLTh?=
+ =?us-ascii?Q?k2+kGCW3aNxsLfKcUYSMiM1a0hC9ruGYNsZq+fBYbYsb6KGjl9Q1Rn50aBna?=
+ =?us-ascii?Q?iLEXaOxZI3XKXg8jRrFjUAmkWmOCIBiR33dkRqvyP/d9axDGLjibTktlIay4?=
+ =?us-ascii?Q?gfwjcv2f9AV1921ojz/xplGDuOWzJHP8AMyiDvtKLddHG3bFdfsB+1RIKmKo?=
+ =?us-ascii?Q?wF9qWSN3D73lrAG6TVUmcDtf8zE/0wQESLYdqJLyiHBEU4I0ZT8A2Bihhjig?=
+ =?us-ascii?Q?FSnjyscTYgpWJtLrvqDYtEhF0IwWYGstNr2jC3Do0034hkA9N8GDmPSRc6ue?=
+ =?us-ascii?Q?gbE+DtZoTqA3Al8+xXy+NWMBLLiIe0HesXAdjBikBXt43cy2zz14lVdct7OH?=
+ =?us-ascii?Q?O+/B+Ve/WQQI2pVAmaXzDLxvGgmIjcQGt5Jw7pnVtkBBaZwf0g8H/XQyOEcd?=
+ =?us-ascii?Q?VcLyUiYpTeA/8xPDo49bLDdCcfPvBexHdykR/v+vXynxAB4lFVFW4sBWkETu?=
+ =?us-ascii?Q?klZh0u8K0mJn7sTowvUEdYJ/fDHJ9b4uCd+Emn4HfmM3AGt9LU5KSw/FBCfh?=
+ =?us-ascii?Q?My9qCMahpufgnpDD6c0AR/XTRYQVFp6mkNPxFyWr5tkYv82jUsmoEHaV4pDt?=
+ =?us-ascii?Q?7xFQmk6NTVsaZH0O9xLcbMn0/+7q1Hz8pHLTE+KrwCSwaGLaHotx1VkF/bzP?=
+ =?us-ascii?Q?h/sDOK0yePMHEgdt2PMg+lJ+g/SvKepSoZlSxZ+SlH48D/sTr34jzD+2zBex?=
+ =?us-ascii?Q?8erjZnPYfOaYXyCdt58rqMfzcgmqtwFRZiynxoTgGvUtBjGcs0ZUzXvoSZ4X?=
+ =?us-ascii?Q?nRedyhtjdKg4C/PP0d/nZ0k=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17c77389-ede7-497b-ff12-08de1077ae37
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7975.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2025 07:58:54.8573
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FH+tkjR1KSJL2G+Cjcr5uWugJTnWaWeqCES2qQ/iMgMsV6ilttkG+2u1ZXChRke2XkeiFYtQqunUCBFfNoPxiWKmyM6Ca0vpJJVTc8Q7HbCVgMe75ovwgkPHvuBYXbq6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB6208
 
-On 25/09/2025 10:00, Ryan Chen wrote:
->> Subject: Re: [PATCH v5 0/5] Introduce ASPEED AST2700 BMC SoC
->>
->> On Mon, Sep 1, 2025, at 05:13, Ryan Chen wrote:
->>> This introduces initial support for the Aspeed AST2700 SoC and the
->>> AST2700 Evaluation Board (EVB) to the Linux kernel. The AST27XX is the
->>> 8th generation Baseboard Management Controller (BMC) SoC from Aspeed,
->>> featuring improved performance, enhanced security, and expanded I/O
->>> capabilities compared to previous generations.
->>>
->>> AST27XX SOC Family
->>>  - https://www.aspeedtech.com/server_ast2700/
->>>  - https://www.aspeedtech.com/server_ast2720/
->>>  - https://www.aspeedtech.com/server_ast2750/
->>
->> Hi Ryan,
->>
->> Thanks for you submission earlier. I see that you had sent the series to several
->> lists including soc@lists.linux.dev, which is what I use to keep track of patches
->> that have been successfully reviewed and that are ready to be merged through
->> the soc tree.
->>
->> Unless you have been told to send it here by Joel and Andrew, I assume that
->> they will pick up the series through the "bmc"
->> tree once they are happy with it like they do with the 32-bit Aspeed SoC
->> (ast24xx/25xx/26xx) patches, and I have dropped the series from
->> https://patchwork.kernel.org/project/linux-soc
->> now.
->>
->> For future submission, please send the patches only "to"
->> them, with the other people in the "cc" field to avoid this confusion, and leave
->> out the "soc@lists.linux.dev"
->> recipient. You can add me as arnd@arndb.de to the Cc list for reviews though.
->>
->> Please also add a patch that changes the MAINTAINERS entry to reflect the
->> added arch/arm64 contents.
->>
->>      Arnd
-> 
-> Hello Arnd,
-> 	Thanks your notify. I will remove soc@lists.linux.dev, in next patch.
+The patch "7bd291abe2d sched: Unify the SCHED_{SMT,CLUSTER,MC} Kconfig"
+has enabled the SCHED_MC/SCHED_SMT by default for arm64.
 
+So remove the redundant code in defconfig.
 
-No, this patchset still has known (reported) warnings/bugs, which need
-to be addressed here before merging it.
+Reviewed-by: Zenghui Yu <yuzenghui@huawei.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
+---
+v1-->v2:
+    Fix a typo.
 
-Best regards,
-Krzysztof
+    v1:
+---
+ arch/arm64/configs/defconfig | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index e3a2d37bd104..f089ec615b90 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -82,8 +82,6 @@ CONFIG_ARCH_VEXPRESS=y
+ CONFIG_ARCH_VISCONTI=y
+ CONFIG_ARCH_XGENE=y
+ CONFIG_ARCH_ZYNQMP=y
+-CONFIG_SCHED_MC=y
+-CONFIG_SCHED_SMT=y
+ CONFIG_NUMA=y
+ CONFIG_XEN=y
+ CONFIG_COMPAT=y
+-- 
+2.40.1
+
