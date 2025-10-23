@@ -1,145 +1,117 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE4C34CFB3
-	for <soc@lists.linux.dev>; Thu, 23 Oct 2025 20:13:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5323617A2FA
+	for <soc@lists.linux.dev>; Thu, 23 Oct 2025 20:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761250432; cv=none; b=FdeyJzOavOVB65HBOpgDf958My5u1SHh4HY+63zzinjlnqq3/ZLfWwzKfo8bMIwMxOYyZBVzptxBm0WaT8cYTLGmN+HTbFMsAheDpQwE6+zNelhhI40ztf3p6EmaCfswSJPa7RvrzL8sMiOvsNSzispf6ksfVVZ2zCvjnztFjoE=
+	t=1761252464; cv=none; b=bUrHJHbowMo32dJgg3tXqSxGpV1E5QVZwbX/sHkBO4ZSe/tpLNxXjzTGS3NnJuG9mDc1uJ10rO3PczWGEP1fXpo9BJhHM9M5s9LvvHm1RUgJSRMItGMnoHCgAd3Vh1VQtrjhYndWT4zS29kgM3pKfVfmgS5titwiu+bxJLpWedA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761250432; c=relaxed/simple;
-	bh=i5rElNkVQHLPkzIXomnKwWEfC78FAMj4OakO3rUsQtI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=egLWtnLnEDt3nj/KhdDFEo1vlXTfhE5KGMfWcZvzhXcRN7IuWeWjjcFPS00LjZSRtvGO6BTcNX7vv3GJDcVewu41flD9PAZMdZxaCD+L8cF2SnDsF5fp53rflIHjmjAk23L1RV5jKuqXsE1AsK2aUClleGX7BBgp6nsdW1ATIWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IdbWO+xj; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761252464; c=relaxed/simple;
+	bh=Q0y+6QYfTowSA4vqK/C6vw8uOX4gIsc8BCMMveDUpzc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gGgVEElv0M9CrWvEMIjLess3ZzPG5NA90bs1Sx8kAIXwclfs4DhJSI4eOXf5m4tNeZqt9xLcWxeP2eG8VEdo+sQpLxfYcVyILeWYzAiPPSdg88BfoKDt5UvdnG6hvOsVtc49emBIig6xkFtQmUPnRTQup0uco25mizCKHO1Vlc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sy/ZeT8B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IdbWO+xj"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3ed20bdfdffso1194486f8f.2
-        for <soc@lists.linux.dev>; Thu, 23 Oct 2025 13:13:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sy/ZeT8B"
+Received: by smtp.kernel.org (Postfix)
+	id 34C79C113D0; Thu, 23 Oct 2025 20:47:44 +0000 (UTC)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 30CC8C4CEE7
+	for <soc@kernel.org>; Thu, 23 Oct 2025 20:47:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30CC8C4CEE7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-3652d7800a8so10670241fa.0
+        for <soc@kernel.org>; Thu, 23 Oct 2025 13:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761250428; x=1761855228; darn=lists.linux.dev;
-        h=content-transfer-encoding:autocrypt:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=V2hwEhUqYfYT/qHtg7r3dYTALVK2W+Pk3Q38aU4IIw0=;
-        b=IdbWO+xjsJF/nSZOtpsJgEzsHhH/mPIjeYAsSOORp1hBSVXSn5/k0l8TcBHPgLpSyW
-         GRzcd0tSdJM61WUWf52OSPmBQNiNykyDQa4GxL9WAPZGY8PV8JBs+f/iM1a+w5zlTUVb
-         Mws77ArF/LIFUPZ0lH1msNR4sIP/RNS9pwYtj7LPOpztVz3X793otZcHX9SGutq74+iw
-         TpNxHx392pxhYTUie6Q9++FuNFRRDEHacn0mFHTj6yjofel2gDOi0B9R7HqKMXbytMTU
-         4jwh8LAhaRPVf0ASOBG2kJleU7zM9zKRcMMdfwDvZlFGcakuczVwMuOKc4SnIhuS1G74
-         Eplw==
+        d=linaro.org; s=google; t=1761252461; x=1761857261; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xEk7uZCFAnf2fCrMP41kRvRzNCAghPwQmRf+38mmwD0=;
+        b=sy/ZeT8BGVwDjViQZ3Ov9EnIjquqEK47I46FDlTKhgUreouYmbPv31sHdKkBykxjqm
+         rKAdbFN9ZZsZqUwl70+akDWH9l9Ty0SnrvOC/jQx3Pc4bMrtmAuMu51q8y+gJJlC0Vm7
+         ydeJqGqzcuPiZ/z6Fv5WZ9Zlv0+/ukoKCyAdeyyGLwtb07Iy3PmhkpzQbWTEA0XOfECh
+         DxKWw6cgcWip58tS9iw4/SmEKYuN3VhWzwB1ErpnBSTsf5CbwzJPAqc+08sIh8kOrrUW
+         aWsDDn9HdElkTEAlNjoIZzzsQYT76aKNzzppHEm1ByKXtYOEz0pxK/HMlNgOOhs/HQF/
+         S4bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761250428; x=1761855228;
-        h=content-transfer-encoding:autocrypt:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V2hwEhUqYfYT/qHtg7r3dYTALVK2W+Pk3Q38aU4IIw0=;
-        b=TA2nGk7aFgxVXNqCIn2W3hFeCQGH0HOmTv+7KDaP/IwvoWG68RJygJ7pHSd/HAo3oq
-         dxql5+xuzlp0C0u6xmNkD9IJWPAKXUPuf7wEJVcgzp9qPP3325OIiwd4nguPQKGOzNUp
-         sGbvx+yCmw96KXtN7p2Nuf4xKTLPSRUBgm/UK27BctX9H1z7mv6OW91etDL+uNq9QRDe
-         jqsVmBxwofDEGphd8OnjzsKanuKNgxijMzoNhMLg4taTQ0eJ8qSkzTGbdiuDUlmz3CUO
-         j7nue89M4ECcrcghpVgm2qBBjR2W55bboCBXWQ33tqqiuDrhkSohO8Y50ZeaVYxLU4OS
-         c4bw==
-X-Gm-Message-State: AOJu0YxSimmHH/WsG83ZKMKVJz22F082QJpA4qLgzuj3XBnzdEMA6UZe
-	S7TrGDTpQmNtBgdfAn3/4bZsy5OlH//B6ZWTKwXlse7Kki3smIGuJ7cO8SWdeg==
-X-Gm-Gg: ASbGnctMwBYqswyQE5e/cAUz1gZYdosx1rT3AgD8vGT5CvUJehfBzW9CTlk3DgXABWQ
-	qY2RhKrwLQhspagqKlsnFdSKjYLFW+PuBFk5YtbpjdqoUz41jgIlBVuWjw1BHn9vnkms1WMiGGB
-	0aTL1lri2vA2nFtkx/iBE1WwvdJIat6Gp7GZBiKwySv7MTVIExfezyj6v5WCjgrz3WBYlujY6Ci
-	/Nn+QcGxFnqE663dbB06edAA91kICdach9Hzt/WIX8ZVD1YetIleeQpzwaZSRj+KkKv8BraUDYw
-	rr9tq+DrLagqtwRmY/6vTSmBUuBBGoUxPmbwYeqqYNLPXu3HvcT6+uhOMY7LI17iyjPQVLqoKVn
-	LHtJ1T0leIOq5LTBwecrb6QOk9rEY3YhiAU1zGdtKPk1Tw0SiZCWxrNH+zEZBCkc5qKxeyfNHeb
-	1geAUjcjzQ4MjEJ52hV6Yd0AVxGoyHSH/M36dOgKkpmPzJ7rmaf+IYzKtwj46HC5SUJ6vw
-X-Google-Smtp-Source: AGHT+IEKK+zOGpZATsQyS1d6e2LRz9SXFTQ+r2qeVseai2EiIfrVWnlXizPcB3r0/oW+AW+IxfnYVA==
-X-Received: by 2002:a05:6000:2dc9:b0:428:476e:e0ad with SMTP id ffacd0b85a97d-428476ee1dfmr10606701f8f.18.1761250428146;
-        Thu, 23 Oct 2025 13:13:48 -0700 (PDT)
-Received: from radijator.localnet (93-138-224-9.adsl.net.t-com.hr. [93.138.224.9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429898adf99sm5889072f8f.28.2025.10.23.13.13.46
+        d=1e100.net; s=20230601; t=1761252461; x=1761857261;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xEk7uZCFAnf2fCrMP41kRvRzNCAghPwQmRf+38mmwD0=;
+        b=VEROQMTt3MMok2+RQ2hnBNmds/CODF5Zil7cjmA0ZFLRo25oXQibH20+ZvT+UeVJm+
+         R3wahiOjtbN0YG6A2KWA7d6o9Y+Ksd3cA4lpvXl8OC0BNwrNEQqIIzXKFF1x8xPdDlzq
+         lWpzL4L1BR00l2Zc9lZWFTlYJUNRv/NUFP4V/iukk75XY6Br7TpIXIid4lms7g15K1Wu
+         cbcrb7LbcYC8RvkxLt7W60G3p8zRPMz5LtWUqI7ethy89yUNaKlr1qpGbkJFKl8nqU0b
+         OedOaYomlHdUx2U88cQ+KzNIjnvq6RC6MIVg91j+HNRqwy8e69h8SsNBeTfw6XJon5YJ
+         qDIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVN27m1FDBklfxY+NktdrrY+QjWFJS84R1OPUsl5O9jGXuvSxo9uXbhaq/l3JxQYbHdE28=@kernel.org
+X-Gm-Message-State: AOJu0Yzv5Jw7zkWKTNBauXd2dhMhbHbsns6NFo0aokebjd6Xk6r8NBDA
+	P/FTZX1WqUkNbuD5YfPGNjcXvXqJbM8eY1nxyFhvu15XzOwZ80Xp7Q3Lto/LfwuO6y/E7BJSEeg
+	QR/p1MDc=
+X-Gm-Gg: ASbGnctyagNwcA1hBUJRrQCqdCDoI8mcToSoq66afRXf0fVl7I3zuc+CO1U9migz3Ta
+	ZMgg2KIC4di900g3Gz2BRviPsInSbnpATW+LpbSRoodRXtwJcLdZQHzjpOs1kLkvESjFLGOAfXl
+	oPFWwYPVFUT6Q/aJg31UJPuIQxb8rsyRsPf9a9zAHU79gZMQXjC7IOhB4VtD05lAHPPEn3KgW+u
+	mAFwWRe2yynHnFGAKZ/jP80WqHDjBFnlVT3pvCLudOEOXeK85Lbao+lQwmDx7lBh3kMLzif0TRP
+	5amT+hu7g0LV72MBi5CkFPNC3iY+gw/bJR/N0qEi0cPfvZ8yaP1+wty11pCwNT2Kr6+97hDOHNJ
+	1wUxxhwQlKad0fBeC1zSQHn61BPZfL0M2k4BxTG0U1E1YEB7YziDHJZZGPWwQrY1OKCcUAn4U8B
+	CSf6jmEt+7INxPgQ3ZDECfYZdiAjsxmFk+KATWV9/gb7gA4xOW1OUB
+X-Google-Smtp-Source: AGHT+IGwMXfXE5hsO4xGJFgsfpmTmf3rqNSdzlSbMAQn2rllgBG9um9BMBNyoSRoIN9+Fl8DD+8JTw==
+X-Received: by 2002:a05:651c:988:b0:36d:1f0e:1be7 with SMTP id 38308e7fff4ca-37797958af5mr76613181fa.22.1761252461080;
+        Thu, 23 Oct 2025 13:47:41 -0700 (PDT)
+Received: from Fecusia.lan (c-92-34-217-190.bbcust.telenor.se. [92.34.217.190])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-378d67dc34bsm6575461fa.42.2025.10.23.13.47.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Oct 2025 13:13:47 -0700 (PDT)
-From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <dujemihanovic32@gmail.com>
-To: soc@lists.linux.dev
-Cc: Karel Balej <balejk@matfyz.cz>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje@dujemihanovic.xyz>
-Subject: [GIT PULL] PXA1908 DT changes for 6.19
-Date: Thu, 23 Oct 2025 22:13:45 +0200
-Message-ID: <5048490.31r3eYUQgx@radijator>
+        Thu, 23 Oct 2025 13:47:40 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Julia Lawall <Julia.Lawall@inria.fr>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] ARM: gemini: fix typos in comments
+Date: Thu, 23 Oct 2025 22:47:37 +0200
+Message-ID: <20251023204737.2716443-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Autocrypt: addr=dujemihanovic32@gmail.com;
- keydata=
- mDMEZokhzhYJKwYBBAHaRw8BAQdAWJZ0hsI/ytTqHGFV8x6tzd5sB596cTeeDB4CQsTf+wC0KUR
- 1amUgTWloYW5vdmnEhyA8ZHVqZS5taWhhbm92aWNAc2tvbGUuaHI+iJkEMBYKAEEWIQRt/0HWDf
- MUtbdrpjCtMZNSRY+tAwUCaJ5XkSMdIEFkZHJlc3MgYm91bmNlcyBhcyBvZiB+MzEvMDgvMjAyN
- QAKCRCtMZNSRY+tA/N/AQDth3Xl3wNcETvWPqqfYfyw4BFqbOD05A/W0/G0ZIjFzgD+PZVts3sN
- p5WuEwIxUrWxwavWJQBJwhXeWdru5ol82gmImQQTFgoAQRYhBG3/QdYN8xS1t2umMK0xk1JFj60
- DBQJmiSH/AhsDBQkJZgGABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJEK0xk1JFj60Dlw
- 8A/i4lPOL7NaYoYePDql8MaJaR9qoUi+D+HtD3t0Koi7ztAQCdizXbuqP3AVNxy5Gpb1ozgp9Xq
- h2MRcNmJCHA1YhWAbQoRHVqZSBNaWhhbm92acSHIDxkdWplQGR1amVtaWhhbm92aWMueHl6PoiZ
- BBMWCgBBFiEEbf9B1g3zFLW3a6YwrTGTUkWPrQMFAmaJIc4CGwMFCQlmAYAFCwkIBwICIgIGFQo
- JCAsCBBYCAwECHgcCF4AACgkQrTGTUkWPrQPUYAEAlVKitl0w6Wun+hC0JIf8bnc0TnrH8kcDxV
- f5lAF38fcA/j8RxR/p558NTFUyHZt2Sa5AqxVkaA4aJekySytWe1YGuDgEZokhzhIKKwYBBAGXV
- QEFAQEHQMRz0l4Dnk6Vl9YqC+ZGDDpr8SkFDyYOXqdBMGad3VccAwEIB4h+BBgWCgAmFiEEbf9B
- 1g3zFLW3a6YwrTGTUkWPrQMFAmaJIc4CGwwFCQlmAYAACgkQrTGTUkWPrQMbkwD+K6jiXYYMRnV
- l/5dpL//wXB1cM72ceR9tXYweMXg1lfABAOugzMF0xypW9zwYAEWVNOAaPsqtEPPYfBY3IXxl6m
- sB
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi SoC maintainers,
+From: Julia Lawall <Julia.Lawall@inria.fr>
 
-Here's the first batch of PXA1908 DT changes for 6.19.
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-Regards,
-Duje
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Hi SoC folks, please apply this patch directly for
+non-urgent fixes.
+---
+ arch/arm/mach-gemini/board-dt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
-
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
-
-are available in the Git repository at:
-
-  https://gitlab.com/pxa1908-mainline/linux.git tags/pxa1908-dt-for-6.19
-
-for you to fetch changes up to 0e53b0bcad00107ce82968e86ca11a23f8a91f48:
-
-  arm64: dts: marvell: pxa1908: Add power domains (2025-10-13 12:11:38 +020=
-0)
-
-=2D---------------------------------------------------------------
-PXA1908 DT changes for 6.19
-
-Rollup of hardware support which has accumulated since support for the
-SoC and coreprimevelte board was merged. This most notably includes
-eMMC, PMIC, backlight and touchscreen. A few QoL fixes are also
-included.
-
-=2D---------------------------------------------------------------
-Duje Mihanovi=C4=87 (10):
-      arm64: dts: marvell: samsung,coreprimevelte: Add backlight
-      arm64: dts: marvell: samsung,coreprimevelte: Correct CD GPIO
-      arm64: dts: marvell: samsung,coreprimevelte: Enable eMMC
-      arm64: dts: marvell: pxa1908: Add PWMs
-      arm64: dts: marvell: samsung,coreprimevelte: Add vibrator
-      arm64: dts: marvell: pxa1908: Move ramoops to SoC dtsi
-      arm64: dts: marvell: samsung,coreprimevelte: Drop some reserved memory
-      arm64: dts: marvell: samsung,coreprimevelte: Fill in memory node
-      arm64: dts: marvell: samsung,coreprimevelte: Add USB connector
-      arm64: dts: marvell: pxa1908: Add power domains
-
-Karel Balej (3):
-      arm64: dts: samsung,coreprimevelte: add PMIC
-      arm64: dts: samsung,coreprimevelte: add touchscreen
-      arm64: dts: samsung,coreprimevelte: add SDIO
-
- .../marvell/mmp/pxa1908-samsung-coreprimevelte.dts | 267 +++++++++++++++++
-+---
- arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi       |  51 +++-
- 2 files changed, 283 insertions(+), 35 deletions(-)
-
-
+diff --git a/arch/arm/mach-gemini/board-dt.c b/arch/arm/mach-gemini/board-dt.c
+index fbafe7475c02..2bba617e4d54 100644
+--- a/arch/arm/mach-gemini/board-dt.c
++++ b/arch/arm/mach-gemini/board-dt.c
+@@ -34,7 +34,7 @@ static void gemini_idle(void)
+ {
+ 	/*
+ 	 * Because of broken hardware we have to enable interrupts or the CPU
+-	 * will never wakeup... Acctualy it is not very good to enable
++	 * will never wakeup... Actually it is not very good to enable
+ 	 * interrupts first since scheduler can miss a tick, but there is
+ 	 * no other way around this. Platforms that needs it for power saving
+ 	 * should enable it in init code, since by default it is
+-- 
+2.51.0
 
