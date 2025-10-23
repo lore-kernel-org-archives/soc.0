@@ -1,174 +1,145 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11022086.outbound.protection.outlook.com [40.93.195.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC86291C13
-	for <soc@lists.linux.dev>; Tue, 21 Oct 2025 08:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761033867; cv=fail; b=KvuVx19TAcn4LgEgzazQ8cBYfzrYztRdt+GgHYSnPSooIcxMyRj33RnMfoeq96Z+Dh07zUH00Oq8UcmcDDn4eCwQSqF0GP9bKeSTzr94sAGMZckUz1393q6qaybcyk28vjCy6Xgrk+a87IRMv+vXFALc3wyevqK6W03a6Av6P30=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761033867; c=relaxed/simple;
-	bh=6p6M9+mj1bCzQjv3ZzTP6vPJphyIv1o4K3D3hOISwaE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ptRGPHbvTSubHkN7rixcFO4Xvc4dVCnkCvZ60Xa27AFzpEyImihdkYV0nCa9uvuMBytPhdVrtcx3k+8UN8XjV9Bl8G+CCtR2rnHvffLc4yT9OSqJS0lmooH2q3nfAdi+CF1y+2cSHQAL0gyFlU4VgTuOmxUgi+K5YuVYS6xmewY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=7x8U75it reason="key not found in DNS"; arc=fail smtp.client-ip=40.93.195.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE4C34CFB3
+	for <soc@lists.linux.dev>; Thu, 23 Oct 2025 20:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761250432; cv=none; b=FdeyJzOavOVB65HBOpgDf958My5u1SHh4HY+63zzinjlnqq3/ZLfWwzKfo8bMIwMxOYyZBVzptxBm0WaT8cYTLGmN+HTbFMsAheDpQwE6+zNelhhI40ztf3p6EmaCfswSJPa7RvrzL8sMiOvsNSzispf6ksfVVZ2zCvjnztFjoE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761250432; c=relaxed/simple;
+	bh=i5rElNkVQHLPkzIXomnKwWEfC78FAMj4OakO3rUsQtI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=egLWtnLnEDt3nj/KhdDFEo1vlXTfhE5KGMfWcZvzhXcRN7IuWeWjjcFPS00LjZSRtvGO6BTcNX7vv3GJDcVewu41flD9PAZMdZxaCD+L8cF2SnDsF5fp53rflIHjmjAk23L1RV5jKuqXsE1AsK2aUClleGX7BBgp6nsdW1ATIWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IdbWO+xj; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="7x8U75it"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WJqB58/H7BHKIqCRaoxbe6JgAgIMGfZVhEyue+AQ09CgYyovCnO7qerrqC/vLFGUzgwgOuZw+MAO24cJm05zLQfudO4/rdD+1SdvMslExNHgZdMPYJhn/ZIY2IE7JESquBtGcn9RE39lkdRvXwhsgYhdk8fjKNFGvSUryNW65Hii7bkaoe3qnfUUiSBMwkRKTaAomCzNVhhDw2JbKXLoVZn+DDpxh5k6Pgb2Jxd76XgKg+OgNcqaFOoQu+pVxpwBT7LEHILxUaxhB6LQwOafFTv66bcJ5RxICCjimIGpyCvwvEfNOrc/LAYevoHv6dWnLJBw69h/M4wrl5aYVHanOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uEXwil3WjDXgaUp7smTGBc1QnFNf/v1EKSAEkTz5Qio=;
- b=go74DceKcMNDLAbhnzUOul5tYkD02ODa/6c5/eIHXjysgaO+Isc9pNibYQ0oEHzUsYhg1CA7g5k7grQfPvyBCqQGbdfiPzjYdWLKOnP2b9aPpezemnKf0vVdu555ebzKMB30BISgTbgOGO5dcaWM/4RNcmjOBxynJuKJfbUs6bajlJ499G4nZvPlWBqTeEqlM6BwG7tB48nNYZl7iypRn+BP2Jj4plWKXke+KC/GKzjOKYRpxSdAkkG5qxBjlOPTgHsN1uiu5UJsWT/meuoSdPjSzH/ObTpBX9oCXL28heWsa6TsgbbajKFXnQxA4TBluXBZTcEThVlvUfsTUnLQLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IdbWO+xj"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3ed20bdfdffso1194486f8f.2
+        for <soc@lists.linux.dev>; Thu, 23 Oct 2025 13:13:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uEXwil3WjDXgaUp7smTGBc1QnFNf/v1EKSAEkTz5Qio=;
- b=7x8U75itSeLuG003HT15PSOI6yWO5kda7kp3HnD/jSS1f6yl5GfWf9NjZg7dH7JLmVQhDTBKFSFtMdkySHSAiujrmYXIOj1jmJ/fdneWFRDVERSZjTtWmBYrwPlwtIeQaO3iFzC2KSf5Lu2sowYH71vk2sJ4qixWD79IYpWGNjQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from PH0PR01MB7975.prod.exchangelabs.com (2603:10b6:510:26d::15) by
- PH0PR01MB6588.prod.exchangelabs.com (2603:10b6:510:90::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9228.17; Tue, 21 Oct 2025 08:04:21 +0000
-Received: from PH0PR01MB7975.prod.exchangelabs.com
- ([fe80::6926:a627:118e:8050]) by PH0PR01MB7975.prod.exchangelabs.com
- ([fe80::6926:a627:118e:8050%4]) with mapi id 15.20.9228.016; Tue, 21 Oct 2025
- 08:04:21 +0000
-Message-ID: <8098c2ed-ea9c-4a91-88a3-e59d57423748@amperemail.onmicrosoft.com>
-Date: Tue, 21 Oct 2025 16:04:05 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] arm64: defconfig: Remove the redundant
- SCHED_MC/SCHED_SMT
-Content-Language: en-GB
-To: Huang Shijie <shijie@os.amperecomputing.com>, catalin.marinas@arm.com,
- will@kernel.org
-Cc: patches@amperecomputing.com, cl@linux.com,
- Shubhang@os.amperecomputing.com, linux-arm-kernel@lists.infradead.org,
- krzysztof.kozlowski@linaro.org, geert+renesas@glider.be, arnd@arndb.de,
- linux-kernel@vger.kernel.org, peterz@infradead.org, soc@lists.linux.dev,
- Zenghui Yu <yuzenghui@huawei.com>
-References: <20251021075704.527626-1-shijie@os.amperecomputing.com>
-From: Shijie Huang <shijie@amperemail.onmicrosoft.com>
-In-Reply-To: <20251021075704.527626-1-shijie@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0084.apcprd02.prod.outlook.com
- (2603:1096:4:90::24) To PH0PR01MB7975.prod.exchangelabs.com
- (2603:10b6:510:26d::15)
+        d=gmail.com; s=20230601; t=1761250428; x=1761855228; darn=lists.linux.dev;
+        h=content-transfer-encoding:autocrypt:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V2hwEhUqYfYT/qHtg7r3dYTALVK2W+Pk3Q38aU4IIw0=;
+        b=IdbWO+xjsJF/nSZOtpsJgEzsHhH/mPIjeYAsSOORp1hBSVXSn5/k0l8TcBHPgLpSyW
+         GRzcd0tSdJM61WUWf52OSPmBQNiNykyDQa4GxL9WAPZGY8PV8JBs+f/iM1a+w5zlTUVb
+         Mws77ArF/LIFUPZ0lH1msNR4sIP/RNS9pwYtj7LPOpztVz3X793otZcHX9SGutq74+iw
+         TpNxHx392pxhYTUie6Q9++FuNFRRDEHacn0mFHTj6yjofel2gDOi0B9R7HqKMXbytMTU
+         4jwh8LAhaRPVf0ASOBG2kJleU7zM9zKRcMMdfwDvZlFGcakuczVwMuOKc4SnIhuS1G74
+         Eplw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761250428; x=1761855228;
+        h=content-transfer-encoding:autocrypt:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V2hwEhUqYfYT/qHtg7r3dYTALVK2W+Pk3Q38aU4IIw0=;
+        b=TA2nGk7aFgxVXNqCIn2W3hFeCQGH0HOmTv+7KDaP/IwvoWG68RJygJ7pHSd/HAo3oq
+         dxql5+xuzlp0C0u6xmNkD9IJWPAKXUPuf7wEJVcgzp9qPP3325OIiwd4nguPQKGOzNUp
+         sGbvx+yCmw96KXtN7p2Nuf4xKTLPSRUBgm/UK27BctX9H1z7mv6OW91etDL+uNq9QRDe
+         jqsVmBxwofDEGphd8OnjzsKanuKNgxijMzoNhMLg4taTQ0eJ8qSkzTGbdiuDUlmz3CUO
+         j7nue89M4ECcrcghpVgm2qBBjR2W55bboCBXWQ33tqqiuDrhkSohO8Y50ZeaVYxLU4OS
+         c4bw==
+X-Gm-Message-State: AOJu0YxSimmHH/WsG83ZKMKVJz22F082QJpA4qLgzuj3XBnzdEMA6UZe
+	S7TrGDTpQmNtBgdfAn3/4bZsy5OlH//B6ZWTKwXlse7Kki3smIGuJ7cO8SWdeg==
+X-Gm-Gg: ASbGnctMwBYqswyQE5e/cAUz1gZYdosx1rT3AgD8vGT5CvUJehfBzW9CTlk3DgXABWQ
+	qY2RhKrwLQhspagqKlsnFdSKjYLFW+PuBFk5YtbpjdqoUz41jgIlBVuWjw1BHn9vnkms1WMiGGB
+	0aTL1lri2vA2nFtkx/iBE1WwvdJIat6Gp7GZBiKwySv7MTVIExfezyj6v5WCjgrz3WBYlujY6Ci
+	/Nn+QcGxFnqE663dbB06edAA91kICdach9Hzt/WIX8ZVD1YetIleeQpzwaZSRj+KkKv8BraUDYw
+	rr9tq+DrLagqtwRmY/6vTSmBUuBBGoUxPmbwYeqqYNLPXu3HvcT6+uhOMY7LI17iyjPQVLqoKVn
+	LHtJ1T0leIOq5LTBwecrb6QOk9rEY3YhiAU1zGdtKPk1Tw0SiZCWxrNH+zEZBCkc5qKxeyfNHeb
+	1geAUjcjzQ4MjEJ52hV6Yd0AVxGoyHSH/M36dOgKkpmPzJ7rmaf+IYzKtwj46HC5SUJ6vw
+X-Google-Smtp-Source: AGHT+IEKK+zOGpZATsQyS1d6e2LRz9SXFTQ+r2qeVseai2EiIfrVWnlXizPcB3r0/oW+AW+IxfnYVA==
+X-Received: by 2002:a05:6000:2dc9:b0:428:476e:e0ad with SMTP id ffacd0b85a97d-428476ee1dfmr10606701f8f.18.1761250428146;
+        Thu, 23 Oct 2025 13:13:48 -0700 (PDT)
+Received: from radijator.localnet (93-138-224-9.adsl.net.t-com.hr. [93.138.224.9])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429898adf99sm5889072f8f.28.2025.10.23.13.13.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Oct 2025 13:13:47 -0700 (PDT)
+From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <dujemihanovic32@gmail.com>
+To: soc@lists.linux.dev
+Cc: Karel Balej <balejk@matfyz.cz>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje@dujemihanovic.xyz>
+Subject: [GIT PULL] PXA1908 DT changes for 6.19
+Date: Thu, 23 Oct 2025 22:13:45 +0200
+Message-ID: <5048490.31r3eYUQgx@radijator>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR01MB7975:EE_|PH0PR01MB6588:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5415b7a2-359c-4440-6891-08de10787115
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aDdiajRRbTg3TkxHR3U3a2Z2cDdnMVI0OEZOczJMYUNXTm0xS2dReUtCUW5s?=
- =?utf-8?B?YXh5WWg0c3Vsam9UeFBVeGpXRE5oZFI1Sm9rMnc1SUVTSjVSb3B5ZjFLUXhR?=
- =?utf-8?B?bEFQY2pUUyt5UUxSZUhGZ0NqRmFueEQ0UjNobkpxQXJLQWo0c0NuUE83U2xL?=
- =?utf-8?B?L3gxU2pRa3FtYVkvaEdnUEJ3Q2dqUjEyMThCRUVSeG1XaHJJSHhqbnNmTW53?=
- =?utf-8?B?RzRUek42V1Q3MUpLaE5McVVpVVoydlE4UFhrbEJ2NjRBZzQ4L0dxWUlibURk?=
- =?utf-8?B?REs4OXAxdFlidHJRVURwUUVGd1JWZXBiR0YxMmZIWTJnVXFDWmZBeHFuZXBw?=
- =?utf-8?B?eW5mbUFuZFdKOGd4U1V1U3lsYWZVMTlQUGt5cTRNdHB2K3luZ0JydmtyREZh?=
- =?utf-8?B?MTdVbEhzWjRmZGlzWUxVNHlVNTdrd1E5WVBYakNHMGNTOStUM2JaZlQ0bWFY?=
- =?utf-8?B?b3NFMTNGeSszUU9VQUxybjVYL1FGZDFybmc3dmpQdUZFR3FCT2M2REdnZk1D?=
- =?utf-8?B?c3NjZTdEWHlPQ1VuUUJqNTdmNFZMRDIyb2ZRREJFZUhTQm5FOWxmanRFN0kw?=
- =?utf-8?B?N0c1KzNhQnFVT3N2dXloMEI2MU9hU1VVd1JUZGxwQVI0MCtIZ3pzckIyd21P?=
- =?utf-8?B?K0FTTlYxaXQ5d2MxWi96THowMzVoeEN3YlBKczlCeDdnUzBFQTUydmZrczAy?=
- =?utf-8?B?Q3RNd3pXODQ4MlovN29uZE5MRnRVbm51bDMzVEZFSThueGg1KzFZcGRLMFZ6?=
- =?utf-8?B?bDNqeG1GYWpiMHpWSnowY3hpSzk4MHh2alppblA0QTRmTktUZFRCelhvbEtN?=
- =?utf-8?B?WDNVZy9PY1N6T2haK2E4TTVXbnY4S2ViemFGYnZaeEZTNVhIcmpWbVZGd1NW?=
- =?utf-8?B?SFQrbnF1dFhyVGVNeVhNSjdybzFJeld6Nng3NkVVcDZ1L2NmMFMvRkJJN2lV?=
- =?utf-8?B?TnFzS3A4d25LQlJDanY4blNYbldPU0ZjeUtMLzdHSEVzU2ZJSU9pWC82d3E0?=
- =?utf-8?B?dkpKMWdoa0pLOWUxb2xjY044T2JlRnNTTSt5bFFMdEFhWkxvSVA5Tk1GRnZE?=
- =?utf-8?B?NTl1dTJ3TXpnb2NwK0lLdWVHdk1UdEpnR0l3Mm1lZjhFVlUremo3QWJBN0Jp?=
- =?utf-8?B?aTN3REUvV1FQL0xtRk9RMDk5d0xqYnkwZXByMzJlcmV0N1hVajl6N2xlQXRJ?=
- =?utf-8?B?Z0E1Zkk0R2ljaXY3czlmS1pkcEV5SVVzZU04dUp5Q0M0TERubE5ZbElwV0wz?=
- =?utf-8?B?Z3ZoTWNSNnVnNkhYWWlSK2E2NlBjZjRFMlpIbGNKNWxRUUp6UTZITWNPTE9E?=
- =?utf-8?B?VnZyZlltTkNFTUloczNEKzhnQ0RnZXorVHJGeUhyWFpGZzlYSHE3Z2lYRk83?=
- =?utf-8?B?ekJtNXZMMk43UENZMnVNeEVWQ1JpZDVqSDVnVWFJOGVyT2g0TG1qd2x4emxn?=
- =?utf-8?B?VTU3YmVQck9iZUdEaFFocXEvZDlqeEFpSjhUMjVoTGt1QW1VWTdDQUlDMEJ5?=
- =?utf-8?B?TVh4RWZTSHczMDVsOTNRRW83NTFIYlFGbEgzNXdHM0IxNFpMZG16a0xaalNU?=
- =?utf-8?B?UGpyTGtLeG5xNW1SL1kzR2svVi9uZ3pBS3dwQmpHS2ZkNFVjRDJsTWhycTA4?=
- =?utf-8?B?Vy9nTlZyRWp4V2xsZHN2UGt0UHNVcktPb2xZTVB2Tk40NDFneHZaN3JaMldL?=
- =?utf-8?B?UFMxMXE5dDJDNG8xVXlqbkxJUC9KZTZ3UmhtNUVadmxmZzlIbFFERVVBMW5y?=
- =?utf-8?B?Q2Y5MkpWc0huN0NjVEh5UFl4R0VkU1JmN1RtWjQ1QUs0Qjlyd3hXYmF1Sld4?=
- =?utf-8?B?YjBsTGJHTzJYenBFRkpmNmsrU1FZUmx4djNwQVdyT1k5MlVXaklUWmZxMTN3?=
- =?utf-8?B?QWxPT0R3SExJZWovdFQ5aENYUXA4eXBZaGNFem5NOGVWbVFVUU5ENDQ5NUVz?=
- =?utf-8?B?Z0JNc3hjbnJwQllPaGF1ajBNWEQ4VFpKaGZUbXd4TDVxbzVEWjgzRDk3QjJk?=
- =?utf-8?B?WmdzTkZCSm5RPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7975.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?azZQd1poQU9xR1ZtWFhPbEordzZ1bDluZFBOMXpNNnRXQVhzZHFpSC9yc29l?=
- =?utf-8?B?dk1IendWbEtteFZ4WXJyUVJTSW82ajl5RFRZZndvVlJqWGNoL2RVWWdEbURH?=
- =?utf-8?B?R2ZvZ0UrNVBjbTM1MXF2YzB0S2J5UUhJNFBlb2dpcktYeU1ya3BkMm8wb1Qr?=
- =?utf-8?B?WUg0RHRLeHZ4bk5nY0ttYjUxN25ZOTBoK2g4dHo1dnI0aXRYc3NHSjByNnYr?=
- =?utf-8?B?KzJoK2RUblptRWRHY1R4K1pjcXd0NzdUQndhelFac1NpSXcvUUduRjZadTlN?=
- =?utf-8?B?cW5QYXZSWGlueGZ2WUFXOVZoTkFUSEFsSmh6REZaT0RacmZ3NGZ2dnNaTWI1?=
- =?utf-8?B?S2VXRHJXOHBkVmVoeGcvVERKajFXQXlyYWZYUElibmphSTRpRWZpRDIwQjhV?=
- =?utf-8?B?STdqbjh0ME04RExQKy9lVGRPZDRVR2hLbWphMlg0TWdQMzBTWmxzVUtPamI0?=
- =?utf-8?B?ZXlhZkZNWWFlK1hyYlp1WFFLQnpoUE5wU2pmd0hJQ0FtV0JlbVZwdXBiZkFN?=
- =?utf-8?B?TkxKdG1Hd3JaVzc1N2FFNFJ0RXNyWk8wM3ViVk1hMDZFeEd4MVdOMHE5TUg3?=
- =?utf-8?B?NWh6NjErcWlQWjlhUk4rc3hIcUoxWk0rMFpJcjUxazJmQzY0dnJkMHFIOERt?=
- =?utf-8?B?dHBMbzVmczdVV2NUMVlYWDdqN0NVWjNjY3hFUVJwbUhkdlRBRXhCakpGdHMz?=
- =?utf-8?B?dG4zdldsYytVdjUxT0hqdEt4RGYzWVRsaUtOUmNJeUZkOGJtTTMyZlVzOFlj?=
- =?utf-8?B?NFBMQzFIcHFidFBSYmw4YXd4ZStPa0RmZkg3dWRHbEZzZGtRdWM5SVY1WGtT?=
- =?utf-8?B?MkZNV1FOS1A5N0U4dTBpTDJTZGJ4VnZ2VVNZMWY2VHBmSzVRZlRYUkNXL0ty?=
- =?utf-8?B?RVRNOW5ueWJEQ2IzWDF0Vy9xR0FjeEZWc1VZTHVTVVlkeFZDcUZ3YXY0TGor?=
- =?utf-8?B?YkdiV2JqT29PZFBjY1hjSUtrMU02Z3VIa1hKN1hYRjNqUGtKMllEQ094dDNE?=
- =?utf-8?B?Y3R5anYzQjBURm1KbXNhTWZQRzdHczJtZG9SVVJTUmZBcDNtVkNZUzN5eWh4?=
- =?utf-8?B?b1hoZWZLa3haQnBpNi9MVy9YZnNucHZ4UjVIUFRJMGtWcytsYXEvWDFmUWg3?=
- =?utf-8?B?Y2wrUStYYXMrVTVHd2ljam5MZmI4ZU92NkY2Y1dVeFg4eVBUc3lkZ1RWMlY2?=
- =?utf-8?B?VEdQMmk2ZzN5VDhmM2NuRUpLa2gwcDArQklhMUhpWHVkRlZPQVMxMGgyOTQ5?=
- =?utf-8?B?aUVmMGw3NjN1R1ZUV3JZeW9NTW1LckdPcVE4VXR0UzVWVURYaWQvVk4xOEt3?=
- =?utf-8?B?YXJFS3lnZFpuaUdOd01zN1NiUVNjVEVaL1pZVU5YVXU3TE1JV2krcHlsblFR?=
- =?utf-8?B?bnVhUmJYb08wRnRjbzhoUlg3SXVObzgyb3NWVllGRnFjV0xLLzlabjFCVkN0?=
- =?utf-8?B?RWdYR215UEZKT3F4UlpiMTc0NG9PYmdGbUJnZjNVSlVWWXpBVkh4RU1FR29E?=
- =?utf-8?B?YXRTV1NxcVZKcUZmbXJIckR4Z0hpVExRRG8yZm9jWGt6UVczWmRyUG5TSlJ1?=
- =?utf-8?B?K1BJSlN0a2N3MkVUNjhNSEhwWTFqa1ltMXJ0WkVpTjRHbEhRRjlhQ1lYU3cy?=
- =?utf-8?B?M3F6QnV5MUorejJYZkhNeFd4WU82ZVNYZThOZnB3ZEtZQnpDUXFLTG11aXhT?=
- =?utf-8?B?YXV2NC9BOS9tNnpWVTFuaU02RysrR0EwbkU2V1VsRE1tZU9vc1RwWWk1VklP?=
- =?utf-8?B?UWM4Z3RMWCtqZlV4S3FaRkVhRVdKZnZXVER4Tmw2UjViYVdrdnVkMUloU1ds?=
- =?utf-8?B?OEVNdlozN0dsOEJDcXVqZXcyVUJINWZFZ3VaOENROTU0a0lYY2JWZStNeHdL?=
- =?utf-8?B?U3ExK0t6K2FJRGxHQ3V1MktMQ0t2MlZ5RXg5UmFVM2Eyd0U1QjlxeldMM1Bm?=
- =?utf-8?B?cmNPQ0ZnSG9tUW00aDE1aENrdjFuUVhmVnpGK0EyKzVqK0RtQnZwZ082THl6?=
- =?utf-8?B?UWdKbDI5YitlZVFSeFhMTHdOV0lITzFGU1FJSHlSMVZid3FyckFUeGtRSVlt?=
- =?utf-8?B?cEdSSTBBK3JwcnNWME53cTdDaTh5QXMvUW9ZUjdXNmNBNEt5dUhMM1JXNWc0?=
- =?utf-8?B?R0xJUzlWV1NkNDNhay82MGhXdmlyR1dNaTVJRWVLdlB3cjdLdE02M3hHQkNs?=
- =?utf-8?Q?5INzfm5+KnHg/hFw3DLxYCE=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5415b7a2-359c-4440-6891-08de10787115
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7975.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2025 08:04:21.6716
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ALR9kTlA6/zW6cREY6dSJD/VNgalcPXQAgwsyR/qya3P7/51TEAby3gQOVU5tyGMjeE2gvi0IJmDaUyH7pQYnnPB9xgWHJj1Qe0tyBbzYwg1sSY5F9EBD4VncDxVKEyg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6588
+Autocrypt: addr=dujemihanovic32@gmail.com;
+ keydata=
+ mDMEZokhzhYJKwYBBAHaRw8BAQdAWJZ0hsI/ytTqHGFV8x6tzd5sB596cTeeDB4CQsTf+wC0KUR
+ 1amUgTWloYW5vdmnEhyA8ZHVqZS5taWhhbm92aWNAc2tvbGUuaHI+iJkEMBYKAEEWIQRt/0HWDf
+ MUtbdrpjCtMZNSRY+tAwUCaJ5XkSMdIEFkZHJlc3MgYm91bmNlcyBhcyBvZiB+MzEvMDgvMjAyN
+ QAKCRCtMZNSRY+tA/N/AQDth3Xl3wNcETvWPqqfYfyw4BFqbOD05A/W0/G0ZIjFzgD+PZVts3sN
+ p5WuEwIxUrWxwavWJQBJwhXeWdru5ol82gmImQQTFgoAQRYhBG3/QdYN8xS1t2umMK0xk1JFj60
+ DBQJmiSH/AhsDBQkJZgGABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJEK0xk1JFj60Dlw
+ 8A/i4lPOL7NaYoYePDql8MaJaR9qoUi+D+HtD3t0Koi7ztAQCdizXbuqP3AVNxy5Gpb1ozgp9Xq
+ h2MRcNmJCHA1YhWAbQoRHVqZSBNaWhhbm92acSHIDxkdWplQGR1amVtaWhhbm92aWMueHl6PoiZ
+ BBMWCgBBFiEEbf9B1g3zFLW3a6YwrTGTUkWPrQMFAmaJIc4CGwMFCQlmAYAFCwkIBwICIgIGFQo
+ JCAsCBBYCAwECHgcCF4AACgkQrTGTUkWPrQPUYAEAlVKitl0w6Wun+hC0JIf8bnc0TnrH8kcDxV
+ f5lAF38fcA/j8RxR/p558NTFUyHZt2Sa5AqxVkaA4aJekySytWe1YGuDgEZokhzhIKKwYBBAGXV
+ QEFAQEHQMRz0l4Dnk6Vl9YqC+ZGDDpr8SkFDyYOXqdBMGad3VccAwEIB4h+BBgWCgAmFiEEbf9B
+ 1g3zFLW3a6YwrTGTUkWPrQMFAmaJIc4CGwwFCQlmAYAACgkQrTGTUkWPrQMbkwD+K6jiXYYMRnV
+ l/5dpL//wXB1cM72ceR9tXYweMXg1lfABAOugzMF0xypW9zwYAEWVNOAaPsqtEPPYfBY3IXxl6m
+ sB
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
+Hi SoC maintainers,
 
-On 21/10/2025 15:57, Huang Shijie wrote:
->     v1:
+Here's the first batch of PXA1908 DT changes for 6.19.
 
-The v1 link: 
-https://lists.infradead.org/pipermail/linux-arm-kernel/2025-October/1069661.html
+Regards,
+Duje
+
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+
+are available in the Git repository at:
+
+  https://gitlab.com/pxa1908-mainline/linux.git tags/pxa1908-dt-for-6.19
+
+for you to fetch changes up to 0e53b0bcad00107ce82968e86ca11a23f8a91f48:
+
+  arm64: dts: marvell: pxa1908: Add power domains (2025-10-13 12:11:38 +020=
+0)
+
+=2D---------------------------------------------------------------
+PXA1908 DT changes for 6.19
+
+Rollup of hardware support which has accumulated since support for the
+SoC and coreprimevelte board was merged. This most notably includes
+eMMC, PMIC, backlight and touchscreen. A few QoL fixes are also
+included.
+
+=2D---------------------------------------------------------------
+Duje Mihanovi=C4=87 (10):
+      arm64: dts: marvell: samsung,coreprimevelte: Add backlight
+      arm64: dts: marvell: samsung,coreprimevelte: Correct CD GPIO
+      arm64: dts: marvell: samsung,coreprimevelte: Enable eMMC
+      arm64: dts: marvell: pxa1908: Add PWMs
+      arm64: dts: marvell: samsung,coreprimevelte: Add vibrator
+      arm64: dts: marvell: pxa1908: Move ramoops to SoC dtsi
+      arm64: dts: marvell: samsung,coreprimevelte: Drop some reserved memory
+      arm64: dts: marvell: samsung,coreprimevelte: Fill in memory node
+      arm64: dts: marvell: samsung,coreprimevelte: Add USB connector
+      arm64: dts: marvell: pxa1908: Add power domains
+
+Karel Balej (3):
+      arm64: dts: samsung,coreprimevelte: add PMIC
+      arm64: dts: samsung,coreprimevelte: add touchscreen
+      arm64: dts: samsung,coreprimevelte: add SDIO
+
+ .../marvell/mmp/pxa1908-samsung-coreprimevelte.dts | 267 +++++++++++++++++
++---
+ arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi       |  51 +++-
+ 2 files changed, 283 insertions(+), 35 deletions(-)
+
 
 
