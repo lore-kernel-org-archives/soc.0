@@ -1,165 +1,106 @@
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA87342151
-	for <soc@lists.linux.dev>; Fri, 24 Oct 2025 17:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158942C3274
+	for <soc@lists.linux.dev>; Mon, 27 Oct 2025 14:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761325712; cv=none; b=bWZc646QjlC7PvPSVFBnRK3bsYCwlWHmyiy8xv7gBBXgqPnjCzPf0SqF/jD0REGi9t5pS/bpyxbB1i7/UvFVgbDB6c+9VyA1S42TETzRR59vUHsAa+1T8Lvg6Kjix0vtvT17y7Cwzaqxz9b7RAjNX8rEC63RQ/Id0qHJ/Hngw/4=
+	t=1761576611; cv=none; b=nv8UYJWOye0UX86VDkxwZ173aUGHd+4K9iVqXZB6PCVYS9cUCsLpzH11iAPRl+o2mYRiMrjZLQ+Unpsxdh5UMSF7b6oKpTe6tki/ZwkZOxGm1qyTgAwXcDmDA6EXDrhWOxpha22QelK9kX/w/nHudXRTLiQx8XojdY8FfS+LxE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761325712; c=relaxed/simple;
-	bh=hsau8RmM3UijJFz3mwMqBheQZY+/ajDxhfZ/KewC+hY=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=mxxZKJ+Iue2KhqozfM6aaQNLx8p9+1zUzmI9kticz74tDdmjkbvHoa+MgY09vaB/ZHcf3s8QoSG2CoPQ4dlkB4d8UGbCzmiQxiyxNQIPn5Ksan7pTnWfhXqpgwzmou35+59hXcrI/q9yGsITww7uuLQMMB8nGacfdj7I5tN/AKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cDycCcnT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gJyRWPD6; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1761576611; c=relaxed/simple;
+	bh=FE3hWpfbYIAESQkCdu8paBkJdZ3DdO9pXcI6pCl6tOo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nHNsvAhQG62OqAb4rXAXYaDLCcqheC+e0vYJAAdx7QHsTP3VuYvE6CVMn/O2/T4KdsYPIRexFnjgcCImYSnDu3uQ1WyFiguuGXEySAI2v0+l2LganqWgO8/nu5BQFdiJd+1Ae0t82ZqHYCWClIXFv/QLQPW6ys/BmRkzVle3wVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IcalxHsv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cDycCcnT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gJyRWPD6"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id BB6C11D001A4;
-	Fri, 24 Oct 2025 13:08:29 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Fri, 24 Oct 2025 13:08:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1761325709; x=1761412109; bh=WO
-	uNrW310/87AuysnVn8f56bmg1dUBIWWmh8D5BQhSw=; b=cDycCcnTveLKfv1w1x
-	Xkv+qnoZBCS+B1c/CeVxcJ8vIJMhayLgHrOYLrW7/u0MAjfPxcG62fmI4uPs7Y5P
-	cVczG+g8wjcgDQY4c6GJlyLluA8oYMsgrJr9b4WSN1sUD0CH6EDd1V1TviU+9Wzl
-	c3OqKY+hAC5I1GaBQeBHzYbtH0NZt6vC5WSZwz2Cf0ORqaKggRph4gn7kiNGp3yK
-	IiS/ap0bHyTezdGlZ2DTXJQCqfD2n4291a+l6E8ioxox0DHLK+GE5N3kbCbw9F1e
-	j9DqUWJ5b+sFznKK4OM1nXO3YF5nOHUAxvyiq9o615fI2F5XMsCzwN4sxf1p7Z78
-	rLNQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1761325709; x=1761412109; bh=WOuNrW310/87AuysnVn8f56bmg1d
-	UBIWWmh8D5BQhSw=; b=gJyRWPD6+oGVY21VPy8PjdK4Dbg5lgU14jSYxp0YcjUH
-	5PeSLcrv/qB+18HwIbPPga8pWag1uWlpJFfjyvVugTz7jCkuXHzMDh7WY/hzDwWj
-	ZSRi21Nl053CbEMPXTScu8EVrsHEShrwxapl3SxzRgvkaFVDhTveuKexGHOdhCGG
-	kLfOb5QwrtRa864ZdZGm4GSiZCfC4n7KmU7UldDfuPka6lmYoABNUgZ8q5uya4t8
-	vVkiYbVqZ+MYSWbolW4hEvywpSMUWUOk/3tyxbFePhV6MEDF3ugLM+PRtq1Y6obW
-	a77uWJczOY57LAGit1beflm/IO/JMOkn1JdcCtEQ8Q==
-X-ME-Sender: <xms:jLL7aMNxLqujDZs0DRQxDY8glzgBegewYb7Vs3yQ4wryvGCzPHSkpg>
-    <xme:jLL7aNx1TnKODg7qudhJxda0jwkUIp-1RWMdfD-55unCw20HcnP-6ZY3MtZx7O25I
-    IGTNrEIo5qJ8HRR5lxtYLMR75b99dLfcNR0o3AQ6j3Bx5PzzL69Ubo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddugeelledtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkffutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
-    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
-    epudfgfeeuheelheehfeeigeeigeeiveevheelteelleeijeeikeekvddthfejieffnecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggs
-    rdguvgdpnhgspghrtghpthhtohepkedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
-    eprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphht
-    thhopehfuhhsthhinhhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikheskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhushdrfigrlhhlvghijheslhhinhgr
-    rhhordhorhhgpdhrtghpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurg
-    htihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhi
-    shhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsohgtsehlihhsthhsrd
-    hlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdr
-    khgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:jbL7aA-cUy09bl4q7zOl26a3hICbbw3yEDZOXVG2fqa58xGeYjkRQw>
-    <xmx:jbL7aLTMVn34Eoq1e8cwii0SbZ17f3dDoLrbGpdTPD62XTeWuk3Eyg>
-    <xmx:jbL7aJq17K67lAffy5_jbJ98Ij0P_lvWqgGVJPmhqtlXnw7k1LLmrw>
-    <xmx:jbL7aAlkdikE5Q0TU5KGYBVzfwu3ctKQ5WwQWM0ipUflI5geuzUz8Q>
-    <xmx:jbL7aEFVULMdq-1_XLE-oZWZ5thWPLTKsYIsNLLlc2KO_vmmekcXkv9G>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id DC0C9700063; Fri, 24 Oct 2025 13:08:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IcalxHsv"
+Received: by smtp.kernel.org (Postfix)
+	id BD797C4CEF1; Mon, 27 Oct 2025 14:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A201C4CEFF;
+	Mon, 27 Oct 2025 14:50:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761576610;
+	bh=FE3hWpfbYIAESQkCdu8paBkJdZ3DdO9pXcI6pCl6tOo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IcalxHsvXSgErORlqVI3RUUOSmgY9D3IyGJsIkB4moAiYgwYmTxPHLwPtfUk0n2OL
+	 5y6rtH7GtfFFSxXxdDuioyGhvOXmZpKWhXUnXpGTvN6etosNcams+0KeNaSIKqnOEE
+	 GzxpYkPoVskissdwGhNd8AZMSf24d0wQR+ZmUYqw9HVcp47S3nkz6z4kHPxN/9k7G+
+	 uJ3n30FUUr18ng60PjJvBufjo7kKFr1XhS+xjtRI5yTy7IAZus4DbgBPUuNlNnq3F5
+	 vo1LNJj3vrcdYS+JfWKnbvBCGBDIYuvV1uzP6bkRk7I646+/i2DendFjoeUdpjbAfw
+	 P61k8Iw3Bcjqw==
+Date: Mon, 27 Oct 2025 14:50:04 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Melissa Wen <mwen@igalia.com>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Stephen Boyd <sboyd@kernel.org>, kernel-dev@igalia.com,
+	kernel-list@raspberrypi.com, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, soc@kernel.org
+Subject: Re: [PATCH] ARM: dts: broadcom: rpi: Switch to V3D firmware clock
+Message-ID: <2458083f-25a9-41a5-a2a6-2343e7402701@sirena.org.uk>
+References: <20251005113816.6721-1-wahrenst@gmx.net>
+ <9ebda74e-e700-4fbe-bca5-382f92417a9c@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Fri, 24 Oct 2025 19:08:08 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev, "Krzysztof Kozlowski" <krzk@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Drew Fustini" <fustini@kernel.org>
-Message-Id: <a51522e4-61d3-4d8d-8850-678f7fc410db@app.fastmail.com>
-Subject: [GIT PULL] soc: fixes for 6.18, part 2
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uyIigU5Jew+IUWXr"
+Content-Disposition: inline
+In-Reply-To: <9ebda74e-e700-4fbe-bca5-382f92417a9c@sirena.org.uk>
+X-Cookie: How do I get HOME?
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+--uyIigU5Jew+IUWXr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+On Tue, Oct 21, 2025 at 01:09:49PM +0100, Mark Brown wrote:
+> On Sun, Oct 05, 2025 at 01:38:16PM +0200, Stefan Wahren wrote:
+> > Until commit 919d6924ae9b ("clk: bcm: rpi: Turn firmware clock on/off
+> > when preparing/unpreparing") the clk-raspberrypi driver wasn't able
+> > to change the state of the V3D clock. Only the clk-bcm2835 was able
+> > to do this before. After this commit both drivers were able to work
+> > against each other, which could result in a system freeze. One step
+> > to avoid this conflict is to switch all V3D consumer to the firmware
+> > clock.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.18-2
+> I'm seeing the GPU start to fail probing on the Raspberry Pi 4 in
+> today's pending-fixes:
 
-for you to fetch changes up to b0cd17fd31a86b55dcec3eb64b9d2a17c1c01e6a:
+> # # v3d fec00000.gpu: probe with driver v3d failed with error -110
+> # not ok 1 +platform:fec00000.gpu=20
+>=20
+> which bisects to this commit.  I'm not sure if that's just a preexisting
+> issue which is now being properly detected or if it's an actual issue,
+> I'm not testing the GPU at all so I couldn't tell you if it was actually
+> working.
 
-  soc: officially expand maintainership team (2025-10-23 22:30:48 +0200)
+This issue is now present in mainline.
 
-----------------------------------------------------------------
-soc: fixes for 6.18, part 2
+--uyIigU5Jew+IUWXr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The main change this time is an update to the MAINTAINERS file,
-listing Krzysztof Kozlowski, Alexandre Belloni, and Linus Walleij as
-additional maintainers for the SoC tree, in order to go back to a group
-maintainership.  Drew Fustini joins as an additional reviewer for the
-SoC tree.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks to all of you for volunteering to help out.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmj/hpsACgkQJNaLcl1U
+h9AMdAf/aU3Ii257L2u1kqcyUERQx4ZKdMtKxsYKCxqla7DPkzrEMiqFMlwLsBj0
+KdRyRCklCX1o0DXb/evMro0kMjmVDKVFnUvofZqAzNn2yXNTmtl0sNtmDC6cP4cR
+UhvDkCpM/eWE/A84r4i0SvX/cATbGIQ8u7dfGb6HWc2vNwuu1GpQMf/brOqkGEbB
+84ELNH+hsji1BYetV+1cuE+7K6RnhfLkRtiArRuSQK2XcIv1SNmMzCgILY73b56Y
+xdzjnCjFWpemIWP1ONuZEtttzqSn3YuEOashCmYPofVZB0TLeQTaSSUEBSNXsjfJ
+hReuwEPZTI4FOERo3wcqn9roGDmdsA==
+=vhsL
+-----END PGP SIGNATURE-----
 
-On the actual bugfixes, we have a few correctness changes for firmware
-drivers (qtee, arm-ffa, scmi) and two devicetree fixes for Raspberry Pi.
-
-----------------------------------------------------------------
-Arnd Bergmann (6):
-      Merge tag 'tee-qcomtee-fixes-for-v6.18' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
-      Merge tag 'ffa-fix-6.18' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
-      Merge tag 'scmi-fixes-6.18' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
-      Merge tag 'arm-soc/for-6.18/devicetree-fixes' of https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'arm-soc/for-6.18/devicetree-arm64-fixes' of https://github.com/Broadcom/stblinux into arm/fixes
-      soc: officially expand maintainership team
-
-Artem Shimko (1):
-      firmware: arm_scmi: Fix premature SCMI_XFER_FLAG_IS_RAW clearing in raw mode
-
-Cristian Marussi (3):
-      firmware: arm_scmi: Account for failed debug initialization
-      include: trace: Fix inflight count helper on failed initialization
-      firmware: arm_scmi: Skip RAW initialization on failure
-
-Dan Carpenter (2):
-      tee: qcom: prevent potential off by one read
-      tee: qcom: return -EFAULT instead of -EINVAL if copy_from_user() fails
-
-Geert Uytterhoeven (1):
-      tee: QCOMTEE should depend on ARCH_QCOM
-
-Peter Robinson (1):
-      arm64: dts: broadcom: bcm2712: Define VGIC interrupt
-
-Stefan Wahren (1):
-      ARM: dts: broadcom: rpi: Switch to V3D firmware clock
-
-Sudeep Holla (1):
-      firmware: arm_ffa: Add support for IMPDEF value in the memory access descriptor
-
- MAINTAINERS                                        |  4 ++
- arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi        |  8 +++
- arch/arm/boot/dts/broadcom/bcm2835-rpi-common.dtsi |  9 ++++
- arch/arm64/boot/dts/broadcom/bcm2712.dtsi          |  2 +
- drivers/firmware/arm_ffa/driver.c                  | 37 ++++++++++----
- drivers/firmware/arm_scmi/common.h                 | 32 +++++++++---
- drivers/firmware/arm_scmi/driver.c                 | 59 ++++++++--------------
- drivers/tee/qcomtee/Kconfig                        |  1 +
- drivers/tee/qcomtee/call.c                         |  2 +-
- drivers/tee/qcomtee/core.c                         |  2 +-
- include/linux/arm_ffa.h                            | 21 +++++++-
- 11 files changed, 119 insertions(+), 58 deletions(-)
+--uyIigU5Jew+IUWXr--
