@@ -1,106 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158942C3274
-	for <soc@lists.linux.dev>; Mon, 27 Oct 2025 14:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331AE2848A8
+	for <soc@lists.linux.dev>; Thu, 30 Oct 2025 19:20:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761576611; cv=none; b=nv8UYJWOye0UX86VDkxwZ173aUGHd+4K9iVqXZB6PCVYS9cUCsLpzH11iAPRl+o2mYRiMrjZLQ+Unpsxdh5UMSF7b6oKpTe6tki/ZwkZOxGm1qyTgAwXcDmDA6EXDrhWOxpha22QelK9kX/w/nHudXRTLiQx8XojdY8FfS+LxE8=
+	t=1761852014; cv=none; b=uQyGiT43yPQT0amwXYfooqJcHprEeY0ZXzITPBJKPiC7hLzEh5P7qy13dDoq37sbl0Iln0LdcadRiJm8JwOW0u86XAHwSK6nPZfBZie9iXWZMHpztLDS6QNnB1lGeDSgETFyRiVxmeIy19bXsU3FMpvL5RQYy/7ZFdoW9QeQIMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761576611; c=relaxed/simple;
-	bh=FE3hWpfbYIAESQkCdu8paBkJdZ3DdO9pXcI6pCl6tOo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nHNsvAhQG62OqAb4rXAXYaDLCcqheC+e0vYJAAdx7QHsTP3VuYvE6CVMn/O2/T4KdsYPIRexFnjgcCImYSnDu3uQ1WyFiguuGXEySAI2v0+l2LganqWgO8/nu5BQFdiJd+1Ae0t82ZqHYCWClIXFv/QLQPW6ys/BmRkzVle3wVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IcalxHsv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761852014; c=relaxed/simple;
+	bh=uvGLWAD7YvNIuJ0MvRPzwUPKzwhryoM8bP/baMyhO9U=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=jwOLDHktl+gAZf9FhFC9oUddQhosI4oPfgnQ59dfbRRGwEVDE/83WgFMoSjvorrZUkGgTDMb2sEtcH7kgeWjBIAEwCBEEqkL7g7zAWYP+uwBBUUapvf6dB1GisbHn9smAhhNGfv1ucUSixYvGyqOqkSnZXRDsQfN7mLD52n3OPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CRI0V+f/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IcalxHsv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CRI0V+f/"
 Received: by smtp.kernel.org (Postfix)
-	id BD797C4CEF1; Mon, 27 Oct 2025 14:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A201C4CEFF;
-	Mon, 27 Oct 2025 14:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761576610;
-	bh=FE3hWpfbYIAESQkCdu8paBkJdZ3DdO9pXcI6pCl6tOo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IcalxHsvXSgErORlqVI3RUUOSmgY9D3IyGJsIkB4moAiYgwYmTxPHLwPtfUk0n2OL
-	 5y6rtH7GtfFFSxXxdDuioyGhvOXmZpKWhXUnXpGTvN6etosNcams+0KeNaSIKqnOEE
-	 GzxpYkPoVskissdwGhNd8AZMSf24d0wQR+ZmUYqw9HVcp47S3nkz6z4kHPxN/9k7G+
-	 uJ3n30FUUr18ng60PjJvBufjo7kKFr1XhS+xjtRI5yTy7IAZus4DbgBPUuNlNnq3F5
-	 vo1LNJj3vrcdYS+JfWKnbvBCGBDIYuvV1uzP6bkRk7I646+/i2DendFjoeUdpjbAfw
-	 P61k8Iw3Bcjqw==
-Date: Mon, 27 Oct 2025 14:50:04 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Melissa Wen <mwen@igalia.com>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Stephen Boyd <sboyd@kernel.org>, kernel-dev@igalia.com,
-	kernel-list@raspberrypi.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, soc@kernel.org
-Subject: Re: [PATCH] ARM: dts: broadcom: rpi: Switch to V3D firmware clock
-Message-ID: <2458083f-25a9-41a5-a2a6-2343e7402701@sirena.org.uk>
-References: <20251005113816.6721-1-wahrenst@gmx.net>
- <9ebda74e-e700-4fbe-bca5-382f92417a9c@sirena.org.uk>
+	id C78E9C4CEF8; Thu, 30 Oct 2025 19:20:13 +0000 (UTC)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0D163C4CEF1
+	for <soc@kernel.org>; Thu, 30 Oct 2025 19:20:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0D163C4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4270a3464bcso1107468f8f.2
+        for <soc@kernel.org>; Thu, 30 Oct 2025 12:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761852011; x=1762456811; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0cyBTO8M8YFuORRFk75Qrt/oRKDykE19qoN11SVtGXc=;
+        b=CRI0V+f/fSgBOsZGxeAQ/AARzRKpO5e6vmVICML4h2dSkZq1KELv3xWcJci8j4a1V0
+         VcTjx7hzdfK8sZnCJHUj0cIxmXHczk/OD4YCC5+BDlfZDRKwaJK947IyfgcC8vlNfFpW
+         0/ingfY10tTY8yHkjt8t+u24RoAPUHl6s7cLfsKHLAhUkE6LkKaBhhDFS6JEQ88HKnEa
+         xtdBu9HauVJcsqpfFtHIQQ9bL5YK0rni+FLLRLU+rZCvozzLJ8VUC0OHD5nhioBBvIt5
+         Rn8C/3Sj5qPAVgwvwAX25X6E5Q2E5YBhMNYMEIp5Bsy64WwOuSi2EcshUCosSQDB+I6k
+         dRVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761852011; x=1762456811;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0cyBTO8M8YFuORRFk75Qrt/oRKDykE19qoN11SVtGXc=;
+        b=M/qZKqsRe97e9dhyZRg6DY68FQNixnbBbDytDHXrciuCD+BjIkVG1DU1nUbfBqB7rf
+         N5rcVZjwcOV1n2YeB62xxxWnM+zFLDzACuwKJCDUEWrwoIbjdh5rMKpIiwCbkEtzQK9q
+         2pKNlIca7pRVNc/usqE+vhkryftO+LM/bVCoBET5UIYCresKNPLKi0MRSG7j4/kEEu70
+         rCKwu7oZX+6HqMzS3YSPEkA7zkdqMcPyxlzjoqTGmhNkdRIT9ppF0vx/WQkb6T16f0NX
+         BBXJMt8qW4PSRYk9Agpu9619795E1rjzJWAJF61lQd6JNpgv2VZlY9ju/QJzdMXlzpc5
+         0H7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXAVi58G8BFkTiSBgg7cTrkkkmX80XCkh11GTtTXi+G3hc77sGPOtx42GlCc4ZhAh4S1So=@kernel.org
+X-Gm-Message-State: AOJu0Yx2+uYAz3UOFOrlzGZP5DcIuCt93jaDbLscokStpGvjW/DAKF7Y
+	qMZaeNdablBW8mbe+IxZu73kaZPWFHlIeMDoYDO6elBKbH2A8nQWK4cj
+X-Gm-Gg: ASbGncvc5bblxkoDD3kGnrGw6qSqsMquwn6Uj1xXWLPPIwvz8kD+Tag9sR4LypmmaV/
+	Pta9dD4aEazm+eyINVIXh7pCfgG4yqMSrIvZPBsfDnYA75YI8+tWdqgH/TBaL9iCOpftG47kUPg
+	VpdKo+yc035BUvGfm9+kPkcrSWxjWVqvYGaugtrMlTHb3s6XBO2YdmzOFGEwh7VjE3YO9+slf05
+	iV45bbNItjkEGXtGf7XAlxV5Bc86QUI9fsDpTnrrcEHAVzro5MfywfbKKanlcPMmSrQKS13y1sD
+	Ct8L3TvQNMWSxUkTrNYmuwbMFRBYH4bmRGAGSH5SGS2+FF8Q+xIwkEekXuYEsE3mhcPl4JM7VTX
+	7uYUaBpEPXCpos2Aq2sSAPxhVhpCyRIo34wR//dBWcY+87bxd89wQeSiViyppGpRmlqoucPhiyc
+	yNKsdQ1bAOy02HF2rpLovujFVmbYLL7RThO9XWROnLUIsMXRn2RwwWMNmQu5ifF3XiZAtIbF6nc
+	q3DPqg=
+X-Google-Smtp-Source: AGHT+IEpSsbR8IVq5Rq4mjP5qqKpcNZKCRQg0psZEZaYxRf2iVNkAiJuhW6XE1AiPQEiDp8LTtGU9A==
+X-Received: by 2002:a5d:5f87:0:b0:428:55f2:be4b with SMTP id ffacd0b85a97d-429bd6a4c29mr760402f8f.38.1761852011071;
+        Thu, 30 Oct 2025 12:20:11 -0700 (PDT)
+Received: from localhost (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-429952df473sm33477601f8f.42.2025.10.30.12.20.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Oct 2025 12:20:09 -0700 (PDT)
+From: Thierry Reding <thierry.reding@gmail.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] arm64: tegra: Device tree fixes for v6.18
+Date: Thu, 30 Oct 2025 20:20:02 +0100
+Message-ID: <20251030192007.682116-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.51.0
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uyIigU5Jew+IUWXr"
-Content-Disposition: inline
-In-Reply-To: <9ebda74e-e700-4fbe-bca5-382f92417a9c@sirena.org.uk>
-X-Cookie: How do I get HOME?
+Content-Transfer-Encoding: 8bit
 
+Hi ARM SoC maintainers,
 
---uyIigU5Jew+IUWXr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
-On Tue, Oct 21, 2025 at 01:09:49PM +0100, Mark Brown wrote:
-> On Sun, Oct 05, 2025 at 01:38:16PM +0200, Stefan Wahren wrote:
-> > Until commit 919d6924ae9b ("clk: bcm: rpi: Turn firmware clock on/off
-> > when preparing/unpreparing") the clk-raspberrypi driver wasn't able
-> > to change the state of the V3D clock. Only the clk-bcm2835 was able
-> > to do this before. After this commit both drivers were able to work
-> > against each other, which could result in a system freeze. One step
-> > to avoid this conflict is to switch all V3D consumer to the firmware
-> > clock.
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
-> I'm seeing the GPU start to fail probing on the Raspberry Pi 4 in
-> today's pending-fixes:
+are available in the Git repository at:
 
-> # # v3d fec00000.gpu: probe with driver v3d failed with error -110
-> # not ok 1 +platform:fec00000.gpu=20
->=20
-> which bisects to this commit.  I'm not sure if that's just a preexisting
-> issue which is now being properly detected or if it's an actual issue,
-> I'm not testing the GPU at all so I couldn't tell you if it was actually
-> working.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.18-arm64-dt-fixes
 
-This issue is now present in mainline.
+for you to fetch changes up to ce121914f38aaa59504e20a1a625e5988fc6ead4:
 
---uyIigU5Jew+IUWXr
-Content-Type: application/pgp-signature; name="signature.asc"
+  arm64: tegra: Mark Jetson Xavier NX's PHY as a wakeup source (2025-10-16 11:49:08 +0200)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+arm64: tegra: Fixes for v6.18
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmj/hpsACgkQJNaLcl1U
-h9AMdAf/aU3Ii257L2u1kqcyUERQx4ZKdMtKxsYKCxqla7DPkzrEMiqFMlwLsBj0
-KdRyRCklCX1o0DXb/evMro0kMjmVDKVFnUvofZqAzNn2yXNTmtl0sNtmDC6cP4cR
-UhvDkCpM/eWE/A84r4i0SvX/cATbGIQ8u7dfGb6HWc2vNwuu1GpQMf/brOqkGEbB
-84ELNH+hsji1BYetV+1cuE+7K6RnhfLkRtiArRuSQK2XcIv1SNmMzCgILY73b56Y
-xdzjnCjFWpemIWP1ONuZEtttzqSn3YuEOashCmYPofVZB0TLeQTaSSUEBSNXsjfJ
-hReuwEPZTI4FOERo3wcqn9roGDmdsA==
-=vhsL
------END PGP SIGNATURE-----
+This contains a simple fix to mark the Ethernet PHY on Jetson Xavier NX
+as a wakeup source so the device can support WoL.
 
---uyIigU5Jew+IUWXr--
+----------------------------------------------------------------
+Russell King (Oracle) (1):
+      arm64: tegra: Mark Jetson Xavier NX's PHY as a wakeup source
+
+ arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
