@@ -1,71 +1,74 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0427A31A068
-	for <soc@lists.linux.dev>; Fri, 31 Oct 2025 13:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDAA13431F0
+	for <soc@lists.linux.dev>; Fri, 31 Oct 2025 13:50:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761918557; cv=none; b=rNCvqV+ZiN/3RCxa/1yh+H/JGLpCDTXRN3mEeYNbbmKqi80iccGZs2GmbPduxKeFGK92seePHMACKPEU8Jo9GpBJ9ksUez2bfwEfxrPqQBpmcr6o981smO/37qJurnDoKYw5wtac+tTB/RMbKIaS/WgPPPARX1Rsw2OlWMXoR8w=
+	t=1761918655; cv=none; b=e2eje5eNtnlojn3RGEvCNMM1atADFItmQXFcQHUD5Ak2rxaQNdx/RcwIdibGmtP2VnFDRzZxT0mxGp353GYCgnGcjmS2hhUHdodDlioKyEPjY/i8jnaLhoJGrSoBubKcTM6XZrgNc2rZTknmi5pv8rVf+TzpSN6QGdUBES1Oqyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761918557; c=relaxed/simple;
-	bh=QUnsDuWKLCpT6qFwsNJkL5H60TzXRS9KLIMiUwqkVK8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sh/EarH/SgQ1zli7BbebMpVExw7/LoUjqLJkoqaaFZPUWBWUGnrKv/Efnyg78alPlDUOZwicR2+nnkge08YvRmItYjCdLtXVTL0tadY0inpTe2l61k/XIwVC1lV8KZxz+ujmlPxDMkznKC+/uDtQvkYB9U3HCNFVnHCZEtF+lwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R2JmqxC3; arc=none smtp.client-ip=209.85.218.47
+	s=arc-20240116; t=1761918655; c=relaxed/simple;
+	bh=SmfR1ZQDKDR/gPIplrtS+9dHdS1dhkdiyMyQwkEDbCI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p72CPlKb+hpQ/wVmWVnKWxz8FQb+2fXCaXpskK+tcTIw2J7KhsApwXxagTM99WHsF92p3Or5/0xw1e1yjNNy8cYrLZtFCJoLgjxJqTb6pzJa45Rn/JhJEjQBmNHtP9E/aT3/XGxrhpod6IKvv1LfqOwcxWQf/miQa3k/82mC7is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v/+n+UnY; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R2JmqxC3"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b6d4e877915so31489666b.0
-        for <soc@lists.linux.dev>; Fri, 31 Oct 2025 06:49:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v/+n+UnY"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-63c21bbdcceso424204a12.1
+        for <soc@lists.linux.dev>; Fri, 31 Oct 2025 06:50:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761918554; x=1762523354; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1761918652; x=1762523452; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o3u8UJxL7hbAI0py1rq0T8SxfElVkW8XQp+cNXon94o=;
-        b=R2JmqxC32uIPJ7acqvZddxUmwbPQvdo7OP3iN22iRW+4NXsK9stjVMXM+kVYk9taV8
-         Uc4y3SVj6r7PQsmUIaq/YT3Cqr4xzOIS9Xy9Eflf92w1+tzZP7w1sAQ4vQaDNFSzmplQ
-         BK4YfDhw/30AxOtFV01Z9yv3RId11vzyo6qFy7aBSLmzH8C0ULrJwR3Li8+c87XT7COO
-         3Hg9IEpLglXSEi0fuEKX5LWxZG+gJ6p6PkNGip3WTKzzRYOajaYpPcCk4DVIRjuYbdQ2
-         wI46vIYJ8831Z5MQbfZTbMsa8EZcTaDt95aGOlmR2RBwh9yaOVYAQwuARMjCuoPDoITs
-         V+uA==
+        bh=MqCRP9/Mbai8FOF4N9IAH1BiG9vM0x9aR5MB26eKXF8=;
+        b=v/+n+UnYhH7nBZYMtOVjVxzSCgDyuqaEo+HbF42VzutmZbYxMtv0mNRCvER/KynL6n
+         yfS7tbsOEdiyYc/4EDZNGzzbJvBdi7DaDBbeiXODLa6fiH9CwV/H0GY713KO2tAJYpf8
+         hOogiOmfcCCuRvR6x1C1VohxZ8YIPP2G10kNjpcWUYo4cpHMStrFSZIUIZWMuIehys3M
+         xLZQaTnxtinpXDyRcvxnAJCEjjtTZ0y61aOixNpWsTLfMRdShOwUg0FYP4jawnXoSDk3
+         +FutFyX2Ciyq4YNG5u7fqbVctuKFRpH1obnU+NfS7GyfXIvLiz/jwHb+DcaAFHOdnrSn
+         rG3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761918554; x=1762523354;
+        d=1e100.net; s=20230601; t=1761918652; x=1762523452;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=o3u8UJxL7hbAI0py1rq0T8SxfElVkW8XQp+cNXon94o=;
-        b=Q0rG2wljcTnVHVu/58p1Ap5C+EBFAnRmkjLJTA5BIBjoRmuKwgZjJ8my1Z+EODlF4J
-         Nc6/PQxcwGjBSdAQtzauTCElkU4tgh9dKPL11E5w2gnh8WmI21O/cWPObkRmEwdYyNLN
-         MoF4jzKIRY4kf8sfmAJgxjWJq+/TCIBJSuLrbGKS4XPFHXgn4+sn2CHjcdZgvlKeCoRk
-         /iiTJCe1poF08t+M5JBRqEIDx8w+4PR1fKNqhqNrxqkV385tmH/BB59bSaXVGy3VW21/
-         6oY/jGYFhlRTlpzcpOkV4iiaIKg+vtzDi580VmD5Su8rhCLF16Tsxf6IjWopVpTsc6DR
-         B6sw==
-X-Forwarded-Encrypted: i=1; AJvYcCUD7MSNJbrPQDhdjyEm+XLrxJlxCI1eKJs3YDr+mjv/ZFAluaVX22li5OhdxciSSywbVYY=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzdfGBwkwi3XBPouYj3JleJfiiMR5pxaJ+O3evAGsds4aOa69iF
-	EhRwb44xC0XQ0s+rNn3lb+xO1p9DVWI/vUyd1S3rD8vOqxAcMVli/pUE5y4y6lWK57s=
-X-Gm-Gg: ASbGncu/FTDznoz1YHSUJXNuvqz6IZoFIxhqC0T/nkaUWCnmDPb9jELRRjlvnFktgyl
-	xWjtVDpobNp8mwIYU6fCf9e27tpSIvU4y5uliNKCpnmfxjPrs9ta0ZlfC0qBU0BCOYXUQ3AlS1p
-	v7R7wzvTfR6B4aYUoCm/ID1RTIlJM8bITMoHHOtTyAc5ymTfV7azxFXh2ftONLP8A/jxhYVyoo9
-	3Ux6vDxVhfPFcOSkc2PNBSu/7oRxTiOYsCZzShTBkPDoUg8uVuWJYz/WX1FvnWuRAh1zLfiWeQ9
-	veOo+exluOV6aIg5cjSZE7ljdHET913/fUS6jzBHim1IfAiwVcaFPl6ti0Bhxi7VUmB6qoM7WtG
-	HXQjUEn3diRPol7HKxBCOL92Qt4sIW54bkQkwet1SGGVyFKcnbI4gKPID2evxjQlbkA5UyQxpDD
-	9wyTsiw7CibL8=
-X-Google-Smtp-Source: AGHT+IG0OL8ArPHlD3301rEU8kKZy5QIsDov88Yb4tzvBo6k8wxPmeV+jV10ivubyNsVrg8xH97iKQ==
-X-Received: by 2002:a17:907:3e0c:b0:b6d:6d44:d255 with SMTP id a640c23a62f3a-b70700af393mr198476266b.1.1761918554309;
-        Fri, 31 Oct 2025 06:49:14 -0700 (PDT)
+        bh=MqCRP9/Mbai8FOF4N9IAH1BiG9vM0x9aR5MB26eKXF8=;
+        b=HLiF9WJZisOxQwwDNdnH5TAMWRPYIZJxNA/2TtgijdEko/JNLu5pIVXKiKwaaO16mZ
+         vCc39Rc2iyDCi8kKN54tZPZhQ8cacuFhX6axMgd3NX7zvqR+yfq403mz/5rnwk0ostL8
+         htTbI+an3WkZZLIzQ1v8hgYanswGrOMgyipMhJKSCcQtgqneVj3aJQ14NPTdvtAFY/QO
+         RcBK4FW4UiBJHHB4JoNkn6DhadrfQbyORp+SeAhC3ei4dW0RmsAezXVbm9ATsXc+uV6u
+         xkExLovEPip0eX+Fbq/+xph5FJxwQWApdZ4/kKmh9q82DtKUOmsibmH4GQFDG4xavdLD
+         tAJA==
+X-Forwarded-Encrypted: i=1; AJvYcCW2xOa3UbzS3MXIca/hz98vsjFS5wihYHMac74/bN1SwpnHYvE+c2mmlwtH4P649tUZtEU=@lists.linux.dev
+X-Gm-Message-State: AOJu0YyPHzisteu/CVu0Ki1LyWZmsQoywqwg+Bv1HZxjHdaR/91Tmr70
+	WVkN3+lcSfYHvCb/ULmM5+66eENB6zgVfUBW+jMHQMlJbd3npQTx42ETnQKByvlS07s=
+X-Gm-Gg: ASbGnctZaJBK1Tu22vwRcefKNOC/pm9d+FEHPOd64QCrJiZwTcLMRiKJ+iUyFlbwB2i
+	GS+zgMAcJ7gAMcE7DNnv3h/YEM2wPrGc1jxjR48/17NkbDHTaRwTfn32bsKXUdXV4kKlubsnM/b
+	MA/YtxlpcHxk545xmtN06j1kUG8yQsiajkYr12LnX6kUnZ/PfjXoP+dkbbstjtKGZUOa5Hl73PS
+	vxOPaLGP0nlWed0LCr+oUy1TrSTfFiGFKSx5ut0Ztdt0ifZcAEaJygf9oukFJrx8ozMDwgzxCGv
+	rzcnE+6ufQ9q0VqngvjAVROw+3vMsLURftUKlGPlzv6/zBmRWSseH3zkxmoEhpYi1g5ZKsaF3y1
+	CaKBUBXeCVOFUOx0Vw1ZhK7VEdoZ214QkTTT94zQbu/pr0aRzVFwfVSUjCGWnxPqslNQ7KeyT5T
+	Rt08C5xDbc59A=
+X-Google-Smtp-Source: AGHT+IG4ALcuZ2ZkrRAVrLeUPvJuTLghF2aRSPyjEkOrlsMOO2oZQiqthEsk9HuFzyEGo/NHGSB7Vw==
+X-Received: by 2002:a05:6402:2812:b0:637:e5dd:ef81 with SMTP id 4fb4d7f45d1cf-640770412e2mr1525778a12.8.1761918652041;
+        Fri, 31 Oct 2025 06:50:52 -0700 (PDT)
 Received: from kuoka.. ([178.197.219.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7077cda5e5sm183600266b.61.2025.10.31.06.49.13
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6407b438ca4sm1647724a12.29.2025.10.31.06.50.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Oct 2025 06:49:13 -0700 (PDT)
+        Fri, 31 Oct 2025 06:50:51 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	soc@lists.linux.dev
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: fixes: dirvers for v6.18
-Date: Fri, 31 Oct 2025 14:49:10 +0100
-Message-ID: <20251031134910.78436-2-krzysztof.kozlowski@linaro.org>
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>
+Subject: [PATCH fixes] MAINTAINERS: Update Krzysztof Kozlowski's email
+Date: Fri, 31 Oct 2025 14:50:39 +0100
+Message-ID: <20251031135041.78789-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -73,43 +76,68 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=910; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=QUnsDuWKLCpT6qFwsNJkL5H60TzXRS9KLIMiUwqkVK8=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpBL5WMNsVRWrNbqHB4hSwVTILtueIUeqAdFGBa
- 4uOS5ZBmDSJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaQS+VgAKCRDBN2bmhouD
- 13atD/9SFFi/FAgy2mkN5UhtQV2EmHcGQEGzGWg5mTrKf3xXH4WzZPlvqQVq+05pBtQCx53LQs6
- bLk0TIkVaNs1WX5hIqXbqdWK/yMmJavEUeVSLxeXHjf1KTj6SEqFLyNFa7Dw0b2ELQzG97DzyoD
- CUHvKG8iXy7qMPDFhT0jE7+cFitrWCKIiVtV1Y3UrqeVt5SuhmqSmGuCEFP+NjlThU4jv0eY7cr
- S0u4a3KVZEcPaKxuChogazVBHJLPy1Vy94wzL0tho4gIa+zJe62TeDWDslCBy0EfV/skUb9qFum
- vrMO8QIAc1yYnBKMOrucQJLdTSjZR0T0hxHXjRiJYHkB/8YWEzvLFw/ZV4BhKY7PkH+CUl6RlPt
- gFcrwWtBkBXb2v6PkttSDbPnZlkrRDbMi1vX+wn1qZJBS129CJyyZvGrELMpOEIr2abPHqEfZ1w
- xdcx+7HqHrGvjHAYjj+M59UmXy3qQZOtKZCU0WPBFdyI6wpXoxKQfwntqmxfDLQjFQ32ebCqvPv
- Zyxp08YG1yuImb1IL27zla0eOvJhh3ovQ6nM/vxxl18bRGvk7t8yZOeua2Dt1nC7C9TQpK3ZipE
- WawEzzBfc6OrJOjuJA+gDL/oz7X+ECR3OJSk26plSph6c9nPwTlg6MUH4pextDz9+5rmw8LFnUK KzXujlZs+tVSiWQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1959; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=SmfR1ZQDKDR/gPIplrtS+9dHdS1dhkdiyMyQwkEDbCI=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpBL6xj/1/uZGgWmRCMjhesc0s7ijjyTpdGyik9
+ o3dmzeDDMCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaQS+sQAKCRDBN2bmhouD
+ 10xWD/0VNvesF6NpXo8GEMwtCDZGsmu1Ez1bxfGh4Wcx8onnFQYnJNNM0nZS4Wra8wGmIXEs2yw
+ ++O7yRYY32m3kWy7wl1tJONc8eJPqu77N1N1J0jeXL4Cz8FHBNH31WAsiSIVY+apYXuoOxs42dP
+ kOzCCOelWYKPetbG0HTVRPbUFz4woOj0T4iP7DHfedmRhvm/8hyEnMNlOLa03C5ui0vSu+b/tBw
+ Z9qHcDlE+VzHsmLdEPH9Xlin29uUzxZHrbUfEZMJU/TKfF+Zkwch+U1LP9hm+6ba0ac9RWRD9NA
+ aqa7RJMb9S4Z3gDXjntdUxKqOwhj/GJaRlfbtR3tkBo5fCwDA3/qDEg49bIefrWNoIddZAC8VLI
+ +Gs8ExA/Wfsg/INK6QdWmSK+MHsaVW4o7MMnt5112zF691VElnAGnu1ALJryqz3IDqvy9juiYXr
+ kRrKPAt9w6gQ8PTEj5yr2hV1SRIc5PFxNbO+txUTBigl0D4Q0TVxNCJYOh5kSMQCB6/Ly7fF4Qh
+ tDKuudpRKh4mic+mjJ/9K+j8+PlO1KszRubCHAMKbfOZ1T0iLvjK42x66Zw2Og3puPRWwAN9x52
+ JoK8EpG7tYRyyWk9lpcG8I44Puhr/v/k/8cmmzeuc1m17fRq8s6uOXfcdah9P+nX3W9/b1dsbhv iBSYSdgq8bvnv0A==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+Update Krzysztof Kozlowski's email address in mailmap to stay reachable.
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+Link: https://patch.msgid.link/20251021095426.86549-2-krzysztof.kozlowski@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Patch for current cycle please.
 
-are available in the Git repository at:
+ .mailmap    | 1 +
+ MAINTAINERS | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-fixes-6.18
+diff --git a/.mailmap b/.mailmap
+index d2edd256b19d..9811c2a979cf 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -435,6 +435,7 @@ Krishna Manikandan <quic_mkrishn@quicinc.com> <mkrishn@codeaurora.org>
+ Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski.k@gmail.com>
+ Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski@samsung.com>
+ Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@canonical.com>
++Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@linaro.org>
+ Krzysztof Wilczyński <kwilczynski@kernel.org> <krzysztof.wilczynski@linux.com>
+ Krzysztof Wilczyński <kwilczynski@kernel.org> <kw@linux.com>
+ Kshitiz Godara <quic_kgodara@quicinc.com> <kgodara@codeaurora.org>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 46126ce2f968..811a89d61b87 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16186,7 +16186,7 @@ MEMORY CONTROLLER DRIVERS
+ M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+-B:	mailto:krzysztof.kozlowski@linaro.org
++B:	mailto:krzk@kernel.org
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git
+ F:	Documentation/devicetree/bindings/memory-controllers/
+ F:	drivers/memory/
+@@ -21148,7 +21148,7 @@ F:	Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+ F:	drivers/i2c/busses/i2c-qcom-cci.c
+ 
+ QUALCOMM INTERCONNECT BWMON DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+-- 
+2.48.1
 
-for you to fetch changes up to 6f37469a933030692741710db809722076f71973:
-
-  memory: tegra210: Fix incorrect client ids (2025-10-23 15:32:21 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers - fixes for v6.18
-
-Correct incorrect ID used for the memory controller client IDs in
-Tegra210 Memory Controller driver, introduced in v6.18-rc1.
-
-----------------------------------------------------------------
-Aaron Kling (1):
-      memory: tegra210: Fix incorrect client ids
-
- drivers/memory/tegra/tegra210.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
