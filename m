@@ -1,143 +1,110 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDAA13431F0
-	for <soc@lists.linux.dev>; Fri, 31 Oct 2025 13:50:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314D734D39B
+	for <soc@lists.linux.dev>; Sun,  2 Nov 2025 01:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761918655; cv=none; b=e2eje5eNtnlojn3RGEvCNMM1atADFItmQXFcQHUD5Ak2rxaQNdx/RcwIdibGmtP2VnFDRzZxT0mxGp353GYCgnGcjmS2hhUHdodDlioKyEPjY/i8jnaLhoJGrSoBubKcTM6XZrgNc2rZTknmi5pv8rVf+TzpSN6QGdUBES1Oqyk=
+	t=1762046172; cv=none; b=Z/i5OyYp81w35sUj43e39K9cIMtjUYCzg+l5Br//9Yt51C4Pb1UJstHYeIGJFJPIe3cqZeMoh2KcbA4OI9reJstBRSHvn6ise9/N9VvBddJYin2EqPaLvMOMO4ZhmcmZj74eleNG4VIZ9TVf/wCcp/HlQN3PgSV6OFZ5YiUzXzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761918655; c=relaxed/simple;
-	bh=SmfR1ZQDKDR/gPIplrtS+9dHdS1dhkdiyMyQwkEDbCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p72CPlKb+hpQ/wVmWVnKWxz8FQb+2fXCaXpskK+tcTIw2J7KhsApwXxagTM99WHsF92p3Or5/0xw1e1yjNNy8cYrLZtFCJoLgjxJqTb6pzJa45Rn/JhJEjQBmNHtP9E/aT3/XGxrhpod6IKvv1LfqOwcxWQf/miQa3k/82mC7is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v/+n+UnY; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1762046172; c=relaxed/simple;
+	bh=5haLsaAB5+Dt1jog+Tyy3aRUvPmxkpKhR5q+8+mwLP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WupWiWS1M+IJlp0ZMSXazNKkmdxCM+LaA9nxYK0APc51voAteVVfK2cVrDR8jg/0whHWyNrBeaHisKqe9RJeMJk0kU//IJni6A2QWjTU6lX8iRa2IUTQtyYolMsc1iYc+tuXGbrrKpJzMVXFz7RObTNxrr4qLVZ4ueAztdi5QGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=G/iJR6a3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v/+n+UnY"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-63c21bbdcceso424204a12.1
-        for <soc@lists.linux.dev>; Fri, 31 Oct 2025 06:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761918652; x=1762523452; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MqCRP9/Mbai8FOF4N9IAH1BiG9vM0x9aR5MB26eKXF8=;
-        b=v/+n+UnYhH7nBZYMtOVjVxzSCgDyuqaEo+HbF42VzutmZbYxMtv0mNRCvER/KynL6n
-         yfS7tbsOEdiyYc/4EDZNGzzbJvBdi7DaDBbeiXODLa6fiH9CwV/H0GY713KO2tAJYpf8
-         hOogiOmfcCCuRvR6x1C1VohxZ8YIPP2G10kNjpcWUYo4cpHMStrFSZIUIZWMuIehys3M
-         xLZQaTnxtinpXDyRcvxnAJCEjjtTZ0y61aOixNpWsTLfMRdShOwUg0FYP4jawnXoSDk3
-         +FutFyX2Ciyq4YNG5u7fqbVctuKFRpH1obnU+NfS7GyfXIvLiz/jwHb+DcaAFHOdnrSn
-         rG3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761918652; x=1762523452;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MqCRP9/Mbai8FOF4N9IAH1BiG9vM0x9aR5MB26eKXF8=;
-        b=HLiF9WJZisOxQwwDNdnH5TAMWRPYIZJxNA/2TtgijdEko/JNLu5pIVXKiKwaaO16mZ
-         vCc39Rc2iyDCi8kKN54tZPZhQ8cacuFhX6axMgd3NX7zvqR+yfq403mz/5rnwk0ostL8
-         htTbI+an3WkZZLIzQ1v8hgYanswGrOMgyipMhJKSCcQtgqneVj3aJQ14NPTdvtAFY/QO
-         RcBK4FW4UiBJHHB4JoNkn6DhadrfQbyORp+SeAhC3ei4dW0RmsAezXVbm9ATsXc+uV6u
-         xkExLovEPip0eX+Fbq/+xph5FJxwQWApdZ4/kKmh9q82DtKUOmsibmH4GQFDG4xavdLD
-         tAJA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2xOa3UbzS3MXIca/hz98vsjFS5wihYHMac74/bN1SwpnHYvE+c2mmlwtH4P649tUZtEU=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyPHzisteu/CVu0Ki1LyWZmsQoywqwg+Bv1HZxjHdaR/91Tmr70
-	WVkN3+lcSfYHvCb/ULmM5+66eENB6zgVfUBW+jMHQMlJbd3npQTx42ETnQKByvlS07s=
-X-Gm-Gg: ASbGnctZaJBK1Tu22vwRcefKNOC/pm9d+FEHPOd64QCrJiZwTcLMRiKJ+iUyFlbwB2i
-	GS+zgMAcJ7gAMcE7DNnv3h/YEM2wPrGc1jxjR48/17NkbDHTaRwTfn32bsKXUdXV4kKlubsnM/b
-	MA/YtxlpcHxk545xmtN06j1kUG8yQsiajkYr12LnX6kUnZ/PfjXoP+dkbbstjtKGZUOa5Hl73PS
-	vxOPaLGP0nlWed0LCr+oUy1TrSTfFiGFKSx5ut0Ztdt0ifZcAEaJygf9oukFJrx8ozMDwgzxCGv
-	rzcnE+6ufQ9q0VqngvjAVROw+3vMsLURftUKlGPlzv6/zBmRWSseH3zkxmoEhpYi1g5ZKsaF3y1
-	CaKBUBXeCVOFUOx0Vw1ZhK7VEdoZ214QkTTT94zQbu/pr0aRzVFwfVSUjCGWnxPqslNQ7KeyT5T
-	Rt08C5xDbc59A=
-X-Google-Smtp-Source: AGHT+IG4ALcuZ2ZkrRAVrLeUPvJuTLghF2aRSPyjEkOrlsMOO2oZQiqthEsk9HuFzyEGo/NHGSB7Vw==
-X-Received: by 2002:a05:6402:2812:b0:637:e5dd:ef81 with SMTP id 4fb4d7f45d1cf-640770412e2mr1525778a12.8.1761918652041;
-        Fri, 31 Oct 2025 06:50:52 -0700 (PDT)
-Received: from kuoka.. ([178.197.219.123])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6407b438ca4sm1647724a12.29.2025.10.31.06.50.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Oct 2025 06:50:51 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Peter Griffin <peter.griffin@linaro.org>
-Subject: [PATCH fixes] MAINTAINERS: Update Krzysztof Kozlowski's email
-Date: Fri, 31 Oct 2025 14:50:39 +0100
-Message-ID: <20251031135041.78789-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.48.1
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="G/iJR6a3"
+Received: by smtp.kernel.org (Postfix)
+	id A897AC4AF09; Sun,  2 Nov 2025 01:16:09 +0000 (UTC)
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B39EEC4CEF1;
+	Sun,  2 Nov 2025 01:16:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B39EEC4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=f8iBdMTYM8add2wHtraFxMsoOR1Rfz8Ac9Ii3lBw+1g=;
+	b=G/iJR6a31RtVvkPkhUHo2zBInVOCT0kg8KmhXCSQDThUtD02BIm/R8do2JmOGE
+	RkonRU9THFcD19yJ8vxsUdLa9YJ4AQ/7cjkmtIcraiNJNeajNOtT0hy2yVhtcnZD
+	1gb6IgSktZGgaqwezvVyazzYhFod3ILORO/XS++SCBAyo=
+Received: from dragon (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id M88vCgDnr6_IsAZp2dEiAQ--.53065S3;
+	Sun, 02 Nov 2025 09:15:54 +0800 (CST)
+Date: Sun, 2 Nov 2025 09:15:52 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	kernel@pengutronix.de, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 6.18
+Message-ID: <aQawyJZbMn52EKk_@dragon>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1959; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=SmfR1ZQDKDR/gPIplrtS+9dHdS1dhkdiyMyQwkEDbCI=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpBL6xj/1/uZGgWmRCMjhesc0s7ijjyTpdGyik9
- o3dmzeDDMCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaQS+sQAKCRDBN2bmhouD
- 10xWD/0VNvesF6NpXo8GEMwtCDZGsmu1Ez1bxfGh4Wcx8onnFQYnJNNM0nZS4Wra8wGmIXEs2yw
- ++O7yRYY32m3kWy7wl1tJONc8eJPqu77N1N1J0jeXL4Cz8FHBNH31WAsiSIVY+apYXuoOxs42dP
- kOzCCOelWYKPetbG0HTVRPbUFz4woOj0T4iP7DHfedmRhvm/8hyEnMNlOLa03C5ui0vSu+b/tBw
- Z9qHcDlE+VzHsmLdEPH9Xlin29uUzxZHrbUfEZMJU/TKfF+Zkwch+U1LP9hm+6ba0ac9RWRD9NA
- aqa7RJMb9S4Z3gDXjntdUxKqOwhj/GJaRlfbtR3tkBo5fCwDA3/qDEg49bIefrWNoIddZAC8VLI
- +Gs8ExA/Wfsg/INK6QdWmSK+MHsaVW4o7MMnt5112zF691VElnAGnu1ALJryqz3IDqvy9juiYXr
- kRrKPAt9w6gQ8PTEj5yr2hV1SRIc5PFxNbO+txUTBigl0D4Q0TVxNCJYOh5kSMQCB6/Ly7fF4Qh
- tDKuudpRKh4mic+mjJ/9K+j8+PlO1KszRubCHAMKbfOZ1T0iLvjK42x66Zw2Og3puPRWwAN9x52
- JoK8EpG7tYRyyWk9lpcG8I44Puhr/v/k/8cmmzeuc1m17fRq8s6uOXfcdah9P+nX3W9/b1dsbhv iBSYSdgq8bvnv0A==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:M88vCgDnr6_IsAZp2dEiAQ--.53065S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFykCw47Kw4rCryDtFWDJwb_yoW8ZFW3pF
+	4fCrsxGr4kGryrGrnrXrs2y3yFyFn7Jr43Jr1UX348Xry3Z3W8Xrs8Krsa9ryUAFyxZw4F
+	vr18GryDKw129F7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j2PfQUUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiIQw7oGkGsMykygAA3L
 
-Update Krzysztof Kozlowski's email address in mailmap to stay reachable.
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
-Link: https://patch.msgid.link/20251021095426.86549-2-krzysztof.kozlowski@linaro.org
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Patch for current cycle please.
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
- .mailmap    | 1 +
- MAINTAINERS | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+are available in the Git repository at:
 
-diff --git a/.mailmap b/.mailmap
-index d2edd256b19d..9811c2a979cf 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -435,6 +435,7 @@ Krishna Manikandan <quic_mkrishn@quicinc.com> <mkrishn@codeaurora.org>
- Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski.k@gmail.com>
- Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski@samsung.com>
- Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@canonical.com>
-+Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@linaro.org>
- Krzysztof Wilczy≈Ñski <kwilczynski@kernel.org> <krzysztof.wilczynski@linux.com>
- Krzysztof Wilczy≈Ñski <kwilczynski@kernel.org> <kw@linux.com>
- Kshitiz Godara <quic_kgodara@quicinc.com> <kgodara@codeaurora.org>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 46126ce2f968..811a89d61b87 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16186,7 +16186,7 @@ MEMORY CONTROLLER DRIVERS
- M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
--B:	mailto:krzysztof.kozlowski@linaro.org
-+B:	mailto:krzk@kernel.org
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git
- F:	Documentation/devicetree/bindings/memory-controllers/
- F:	drivers/memory/
-@@ -21148,7 +21148,7 @@ F:	Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
- F:	drivers/i2c/busses/i2c-qcom-cci.c
- 
- QUALCOMM INTERCONNECT BWMON DRIVER
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
--- 
-2.48.1
+  https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.18
+
+for you to fetch changes up to 6504297872c7a5d0d06247970d32940eba26b8b3:
+
+  arm64: dts: imx8mp-kontron: Fix USB OTG role switching (2025-10-28 17:01:42 +0800)
+
+----------------------------------------------------------------
+i.MX fixes for 6.18:
+
+- Enable ext4 support explicitly in imx_v6_v7_defconfig to fix a regression
+  caused by commit d6ace46c82fd ("ext4: remove obsolete EXT3 config options")
+- Correct report-rate-hz setting for imx6ull-engicam-microgea-rmm board
+- Fix MSI mapping for i.MX95 PCIe endpoint device nodes
+- Fix USB OTG role switching for imx8mp-kontron board
+- Fix a dt-schema warning caused by audmux node for imx51-zii-rdu1 board
+- Avoid gpio0_mipi_csi GPIOs being deferred for i.MX8 img subsystem
+
+----------------------------------------------------------------
+Andreas Kemnade (1):
+      arm: imx_v6_v7_defconfig: enable ext4 directly
+
+Dario Binacchi (1):
+      ARM: dts: imx6ull-engicam-microgea-rmm: fix report-rate-hz value
+
+Frank Li (1):
+      arm64: dts: imx95: Fix MSI mapping for PCIe endpoint nodes
+
+Frieder Schrempf (1):
+      arm64: dts: imx8mp-kontron: Fix USB OTG role switching
+
+Jihed Chaibi (1):
+      ARM: dts: imx51-zii-rdu1: Fix audmux node names
+
+Jo„o Paulo GonÁalves (1):
+      arm64: dts: imx8-ss-img: Avoid gpio0_mipi_csi GPIOs being deferred
+
+ arch/arm/boot/dts/nxp/imx/imx51-zii-rdu1.dts       |  4 ++--
+ .../dts/nxp/imx/imx6ull-engicam-microgea-rmm.dts   |  2 +-
+ arch/arm/configs/imx_v6_v7_defconfig               |  6 +++---
+ arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi     |  2 --
+ .../boot/dts/freescale/imx8mp-kontron-bl-osm-s.dts | 24 +++++++++++++++++-----
+ arch/arm64/boot/dts/freescale/imx95.dtsi           |  3 ++-
+ 6 files changed, 27 insertions(+), 14 deletions(-)
 
