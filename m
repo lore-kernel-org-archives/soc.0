@@ -1,102 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CB71E5B63
-	for <soc@lists.linux.dev>; Sun,  9 Nov 2025 17:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B3B30E82E
+	for <soc@lists.linux.dev>; Mon, 10 Nov 2025 12:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762709760; cv=none; b=PzyMKla6HpyY3B7uglsOm0VqIzylqVSXHffM1BhLupJcIbJ306HNl5zsyRLMujg3S2NBbK1RY5GyTt2NaqfljSuxAz8qWACrs8nJu29ZSu6tF9QJi90WMchQ3Ta0Hjw9rTa2pHmMtngIVJfd8tjPbTgNLPWfmKzI/HBGQJi2TtQ=
+	t=1762776840; cv=none; b=PKnv3ia9kKxSgkMB8dKaCCBQMkp/pHKsnoa/+VhRfFV9w3Ht34GtJwFDA12fyPVKgcLK0EarFOVPgeNUjjbH1nUARE4oUY367KCShhiyLZunHYjTG+xGTY5a5Xm+c9WIFon5577ZMEjqnwI3Z1h5uJbjlXv7OPWfLEakecRsuDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762709760; c=relaxed/simple;
-	bh=VeXIMFby4++o7k2a7+34n+EeWMLXw+AohCFf3biSWHg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HjxjINZXPRMdM0WUzh+G2ge2hh0dZtflyPqKKOTuTVSJmL0SHIe7qtJwMLVwhesxM7wVRt8a8nAhDah7/iuYyA76NN/qCumBpIb+jWwMzEYeIkgDvtdlCppBDjNM/vSqqPZyuyS74xRwqzs/jq+xVYwCVo4cyUdNEzBJeG5C6yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nzcRUXNT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762776840; c=relaxed/simple;
+	bh=/iPfwbC+FC8ePlc+R2aZlBP8mfESEoHeMp2+5WX8iC4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J8WfxVk8Jj+2bzkl2jtr5THrt+kebU+AHCutMtWEwD/Yb5k1wTWHNQLrAKSUSsxooWUCodJAHkI3X0H4arca3N5QiyDA30Z8gg4DhWi9e8hu0chp4kSNASaXLf615lud8aB7FwFcTLdI+zK3Jinr6DVMDXsMV4N2fUTuXxGhiik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lbtt25mn; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nzcRUXNT"
-Received: by smtp.kernel.org (Postfix)
-	id BB77CC4CEF7; Sun,  9 Nov 2025 17:35:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EE07C16AAE;
-	Sun,  9 Nov 2025 17:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762709759;
-	bh=VeXIMFby4++o7k2a7+34n+EeWMLXw+AohCFf3biSWHg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nzcRUXNT9/f1tDKe4T6F42zpttJ/aX9MBiZ0jM74+dveROq+XbwX3UtiMCATmeKTf
-	 pjIXycds0QVgTvGCxyvIZsP4VATkS9eUX5UIEl0DHKGQhP6x9aRQORyAaRUMcpuD7y
-	 ymjXrKjvsPZV/l8CjSLfxXAGJ/3k1EXYUZR+EHFeM0nzpKdDlZ8Hcm0QED+Wd4p1XY
-	 UdYW5sG8XF3PsxYz1WECWTZWMIvVHok7/eH6feKhJNQ/bTwZrsE1SSVvjpus/BxHsl
-	 6MCMvLVfDQKMBSCjN2+mmAFDMbF5WiaTpPkInR3dcTYqhXlnvyJUdltoiZfs4E0JoW
-	 TW4t8VSHrHxQQ==
-Date: Sun, 9 Nov 2025 09:35:58 -0800
-From: Drew Fustini <fustini@kernel.org>
-To: soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Jisheng Zhang <jszhang@kernel.org>,
-	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michal Wilczynski <m.wilczynski@samsung.com>,
-	Yao Zi <ziyao@disroot.org>, Han Gao <rabenda.cn@gmail.com>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] RISC-V T-HEAD Devicetrees for v6.19
-Message-ID: <aRDQ/sam60PIc557@x1>
-References: <aRDFOnmcW6GIJ6bt@x1>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lbtt25mn"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4777a96d817so487745e9.2
+        for <soc@lists.linux.dev>; Mon, 10 Nov 2025 04:13:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1762776835; x=1763381635; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WjmbME1436pSDYkp3aIgIG33gCEKBJTvr+5GarnqYuM=;
+        b=lbtt25mn3S6lyc8dNMQrM71TwvG2fi1P/8zLBuJfxCNAPlgvbf0+zIkqaZP+Y/Ibpq
+         WBzN4lmt1NYA1u5zxjiOZOwmwOZqCz0KjW2aW1ZpROQicX0T3I7NAdkvqwbFMNNf2xRV
+         1treAQnp6EE6sLTreQ6UxgOdVbvOVPrjA84H1Hor6d4zmW+UuvX4HF3CpUTXxiDMLr8Y
+         7wGEECl/c4uif3i7tGx/Gqrl2C53wQrbQfhxldiYzxy6ch/bBKT9dFtlJMBbXhYmKQ8p
+         HH3B7g1fukUqDUtXB2jJMVGSIfM2jtNMWgqu7eLLpx3tRzDSBUNX+t+yFLu1gO5x7E9G
+         FOyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762776835; x=1763381635;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WjmbME1436pSDYkp3aIgIG33gCEKBJTvr+5GarnqYuM=;
+        b=w0q5sTUw0rzAjgMlkVsUsJkMYaejDmQjWo8qrwj35Ol6l1LE0sV0Zq/2UGNPe9Frdp
+         c1ZE2SevAavZmU5GXMRnCn5VE/7UmRFNN7WWHDp5gKhAf6TcAtyQdXiLvxmk8ty0BCXb
+         sh6Xw6p3f4rVKaTIdNk/bEU4HlrJbfVyUNGW8h16swalI6euaAPopYBJ89xEOLwSdmNj
+         W0rOtFZK+8rVr3Jq9vh5MGaNF4ypjofycuNvj+gGelpG55AB/kXyMO+vmxO5leqpt/4O
+         kq+WWwNlNg9MFgHTkz5ANrMCw7DiqpdtxOndXX34qC0yYU6aRn2jpIG+uOeqnlG1dykD
+         mXPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUrRp/YQcEfyenUaKS3Nm1DqlgW9Fjf8hFwuhZhi2FsYiVbSJ3qfeZdcGxOfiLU/Fp5Cbk=@lists.linux.dev
+X-Gm-Message-State: AOJu0YymsPGI9dbacGhigM/kvsJMSGxoLqJi4+goLXyBtMuafe5cuZhp
+	3lkmOpaLKGiy5hC6MP3zrNHzcVrey/U+VeYKsMiPH5sN8ymi5AxEFHA1v72ARdoD+rQ=
+X-Gm-Gg: ASbGncuT3juI5XIH9AMLGzNrt1OPRuzqPUk1CBLQ7G+x6QTx/HtrFpjBZgmDYuWgXTR
+	NXnYTXs04hDxT9mhEct318q097JlsT/xCH0SjKb1/4vgGbTx0l3W3yHTWmTklL8ZxrZWy3/JoZa
+	x9ho6BGhCZZy+hp/tUIMLSCb6n8c+xlRcn+Y8tdBIulipZYRkiN+Vj2ro0T4YUdYAmVzT9BpkTM
+	4KaEyj3yeqr8UYuREWgoZJKhCk4Qhv015QMzufTTuX8I+LPtVVvS9HVUDXM0pFryHAy1V6vKS2O
+	sY/2aumk5eRSJ9Pskz4nPsIN+Q5DVqWAh4YOijB4je6QtAh3XvP6pppKxpSx8OQTg3lW7wES6SN
+	6RPXCcjPTjxPd1WqfxazLCokARQyODSKvul0Mvi9EuNEp5hAiHjXVBFB8noYDNimYTTCWPZ8oHM
+	Bwr/qp63dJxsXGBSnYqUZwSg==
+X-Google-Smtp-Source: AGHT+IHbNuArn8C9DWSTKYZ7LhUSvorI++lgVify2RunMzFZSAkl92QQgyKvse2NSni9jyc11HIbCw==
+X-Received: by 2002:a05:600c:4f89:b0:477:563a:fc9c with SMTP id 5b1f17b1804b1-47773236215mr36141105e9.1.1762776835461;
+        Mon, 10 Nov 2025 04:13:55 -0800 (PST)
+Received: from kuoka.. ([178.197.219.123])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac6794f6esm24922667f8f.41.2025.11.10.04.13.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Nov 2025 04:13:54 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@lists.linux.dev
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/4] arm64: defconfig: enable Exynos ACPM clocks
+Date: Mon, 10 Nov 2025 13:13:39 +0100
+Message-ID: <20251110121344.120785-5-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aRDFOnmcW6GIJ6bt@x1>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1015; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=1RuGJhko7Tg/2IZzsHP76G8AT+Tj/AWNxpQIu6+goLI=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpEdb46cR755V6vYrD6XaAJ+OSnAKc6fvm/6jTB
+ xiiJhbvE0OJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaRHW+AAKCRDBN2bmhouD
+ 10KaEACDLPQR0FrZpAjYo5Og1ep/uckTjcjFC+xCzOXqOEdkrzcpDl037REM1q5jViFkjhTPpXN
+ SrcT8a/d5hhSfjHToiBEaoYwnPfJ9jRk8xdAeQotkzc3dCqUznEibLkng8olbmhebHJFB8Ry+Vk
+ BPdygN/QaIjOVtyQ8CzlIFatPlF5AFkr/3lOUvqukBIXmWG0Iis/flbwcTR2/cRSBh1KCrx//WT
+ 8vaBkth4y9WjLiYCCqbheWjzD7HbUAkfV5t6ysaq9OBpOhHzjluW1fqFWr98jJXzda6FiDRWlD1
+ TdhDDLfTWyrRTPwum+lUHGJrHjPNbcO+1npr5MfE5tOntgnu4hCeKrxRnoipk1eRrB1/MBWU1zP
+ GFQjaz1w8dVPenwryczUMq3vNTVpAFmbPzGkvJWSuW3X9fh+7Al8vvsiURFB2ZuYf8pvS/IUZjx
+ TDH9rq9EH5rf6nzBP7+wdNxIQ4rHsVY183B82SmCHrknOBF4KA043+Klx4m6FSgj2cogLngqZl0
+ K1Hb8lOSiJ+jphwHeHFiIr8qeSzpJWmITsaO3uA+pN+Cx5y0fBUJy3kKtOd7BnAoxK9QG+bIGkU
+ Yyt+4Kddltq1mXkDymUIjL7HnCxfeqMKLnxxQ5XJWeWHpRTrRg9qPy8G3QQ4als6oTKvOzSW72H AYWsXO6gNunbeBQ==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 09, 2025 at 08:45:46AM -0800, Drew Fustini wrote:
-> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
-> 
->   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/thead-dt-for-v6.19
-> 
-> for you to fetch changes up to d8a174babf649346b6dad6784ae1e9bc8417af71:
-> 
->   riscv: dts: thead: Add reset controllers of more subsystems for TH1520 (2025-10-31 10:17:11 +0000)
-> 
-> ----------------------------------------------------------------
-> T-HEAD Devicetrees for v6.19
-> 
-> Add PWM controlled fan and it's associated thermal management for the
-> Lichee Pi 4A board.
-> 
-> Enable additional ISA extenstions supported by the T-Head C910 cores:
-> Zfh, Ziccrse, XTheadvector.
-> 
-> Add reset controllers of more TH1520 subsystems: AP, AO, DSP, MISC, VI.
-> 
-> Signed-off-by: Drew Fustini <fustini@kernel.org>
-> 
-> ----------------------------------------------------------------
-> Han Gao (3):
->       riscv: dts: thead: add xtheadvector to the th1520 devicetree
->       riscv: dts: thead: add ziccrse for th1520
->       riscv: dts: thead: add zfh for th1520
-> 
-> Michal Wilczynski (2):
->       riscv: dts: thead: Add PWM controller node
->       riscv: dts: thead: Add PWM fan and thermal control
-> 
-> Yao Zi (1):
->       riscv: dts: thead: Add reset controllers of more subsystems for TH1520
-> 
->  arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts | 67 +++++++++++++++++++++
->  arch/riscv/boot/dts/thead/th1520.dtsi             | 72 ++++++++++++++++++++---
->  2 files changed, 131 insertions(+), 8 deletions(-)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-I forgot to cc mailing lists...
 
-+linux-riscv +devicetree +linux-kernel
+Enable the Exynos ACPM clocks driver. Samsung Exynos platforms
+implement ACPM to provide support for clock configuration, PMIC
+and temperature sensors.
 
-Thanks,
-Drew
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+Tested-by: Peter Griffin <peter.griffin@linaro.org> # on gs101-oriole
+Link: https://patch.msgid.link/20251010-acpm-clk-v6-5-321ee8826fd4@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index e3a2d37bd104..646097e94efe 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1458,6 +1458,7 @@ CONFIG_CLK_GFM_LPASS_SM8250=m
+ CONFIG_SM_VIDEOCC_8450=m
+ CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
+ CONFIG_CLK_RENESAS_VBATTB=m
++CONFIG_EXYNOS_ACPM_CLK=m
+ CONFIG_CLK_SOPHGO_CV1800=y
+ CONFIG_HWSPINLOCK=y
+ CONFIG_HWSPINLOCK_OMAP=m
+-- 
+2.48.1
+
