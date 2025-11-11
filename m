@@ -1,47 +1,62 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCF12D8790;
-	Mon, 10 Nov 2025 17:36:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B122EDD72
+	for <soc@lists.linux.dev>; Tue, 11 Nov 2025 09:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762796198; cv=none; b=KLiKgCnjDOS0VKD2mzuXlKmtUDzSn4R1+T2/yfmaexTluGL91nxaySEfrLW6wCp2egblW/qEjqavFV9N0w3FbFtLEZXJ+v7zj4nqdh5QLmgSDbLbC81lo+7SWBFBw6untXxtPzjBs+ehyXQmYLZDnDKP2+dJ4ZzldGClWdk3Zo0=
+	t=1762854953; cv=none; b=cWcux+/NV9FNBg6BJS4vlpaE8lIk0mCeSlflFJNU6NhPl29Glm/dkduWq26Eh1AdqR0zyFABvDTjuZnwlh+Dhvh3ew1GCbjV6qjZpDRO5AMzMQL0x/ha8Z7p6vmxL83n59s0RU83W/pi7In768vxLn79ae+KapN2OoOrlyNgiWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762796198; c=relaxed/simple;
-	bh=1uZvx82C8D5WpkTJImvmsYLYSmOYGhbdYZ0x4PHMAIk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DImszNOPB7vFaKmYxqwzFyx250VF6+QqqVqTFgiY+Hnsd5YK6vb9/HKUbeKi0rbhCw47qaZqozGb0jl8IP4XZLH3m6FxXXsnPkOm70HUpSH7o/BgQu7QD7mEoEH9rUya6VnvVLopRc/ZKg+gobnWsVJGy7U0fID3gODr179P+98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f7qCZy7q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762854953; c=relaxed/simple;
+	bh=taqJ88tgrMmaM/VXubOrq+GZSJDLUZiefDWipANLyKE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k3pr/w6G0PVtZhCYlkOlMqZvrckyQiiY6GLcarwX6QSyubM+YHwUM7XFb88apartMlZkQGq785NbGcWXcfLNIN9Tk8/6hfj6ucwNZttrc29jEmdAcSHy9uHMQJJp/uxdlK5NEAm3TxNnlgxe7JS2tMgO3wUE6B8XhZTGQRDd8gI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=DCv/dtCZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f7qCZy7q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E108EC16AAE;
-	Mon, 10 Nov 2025 17:36:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762796198;
-	bh=1uZvx82C8D5WpkTJImvmsYLYSmOYGhbdYZ0x4PHMAIk=;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DCv/dtCZ"
+Received: by smtp.kernel.org (Postfix)
+	id B89D5C16AAE; Tue, 11 Nov 2025 09:55:52 +0000 (UTC)
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 1F66DC4CEF7;
+	Tue, 11 Nov 2025 09:55:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1F66DC4CEF7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762854949;
+	bh=taqJ88tgrMmaM/VXubOrq+GZSJDLUZiefDWipANLyKE=;
 	h=From:To:Cc:Subject:Date:From;
-	b=f7qCZy7qNzgNHfr9c5Gcjsn0ZR4c/UoNHslz23HK3vpkLXVRycRTWZx+6HeCbyUuK
-	 SIaBptJjvSLJJvweCdfJ5eyjlW86+2jngdSqhNPcbuZx3+UptcEvxPB914jbaMoQHT
-	 DCDc9V9p9c7r5p/AP7pS+kgVPFcBB478DucXSMChOQWZq4MvgZXS85wx8JrlF5YsrF
-	 7FcMQoqQFknqsP1KiGZVVRr1BpeQFaI7r0evyUAEqGhj/1Kb1YGDCieHiFpZpHB+G5
-	 ZDdrQhtR4VU705Bo9aQonhX35+gDjpv60XGzjY5rdKA6ZlbTBudLJILaZQmscoCxfz
-	 tCrn6wvbuvDHQ==
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memory: drivers for v6.19
-Date: Mon, 10 Nov 2025 18:36:24 +0100
-Message-ID: <20251110173624.3127-2-krzk@kernel.org>
-X-Mailer: git-send-email 2.48.1
+	b=DCv/dtCZRxcj7lR8ewssFjoHh89wj/51YqeF0kLDFqy670u7JocDna67GU7DR5bW6
+	 tjnYrAyVlQ68mnakzipsmM5ekJ3LAqdnHyBO21VVPfqOt7RHDbgecdwC69YaU/CHzL
+	 vzwBZUk1uybmClxTxv3C1WLaPmoyvA9eqjKIiCCZs5hLPBxsnDbsl0HH+T1193Kmk5
+	 ZCA4dGkx1S15IpB6xCkr0ezhH6z0Rq7pJzwxuzW3G7RtN8sMI7qBh1Ld3fFc6ys/6j
+	 jc0H4Gnr1cD8GuXF11W84qUa8NJQr21FxJ9vRdwJZkXjKWgtbjpbExbO5k24R62NZQ
+	 LthG1SlvY3bhA==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id EDD1517E130A;
+	Tue, 11 Nov 2025 10:55:48 +0100 (CET)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: matthias.bgg@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [GIT,PULL,1/5] MediaTek ARM32 mach updates for v6.19
+Date: Tue, 11 Nov 2025 10:55:36 +0100
+Message-ID: <20251111095542.13958-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3148; i=krzk@kernel.org; h=from:subject; bh=1uZvx82C8D5WpkTJImvmsYLYSmOYGhbdYZ0x4PHMAIk=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpEiKYhRrNlNcX+dXOOyQnco1YXMVo1rSdS1taZ DIRgMehD5WJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaRIimAAKCRDBN2bmhouD 1+j0EACNkqA8V9RPyV7MhI2DMYr7THG++Aw/HwvTajsmjoZFqSFsgrf6fDvyAWUOddT4XnTcuEr V3a1XsNVm4n+RlMgHW3KDOBouxgOJGZWg7InjdwmCZPxrIB70ePkDfRh1l5qWVCRsFiRjeKx0ga 9Yv6/76PUM59eqVSa2K5NWPinBuoPyMjeeBQY5o4e/eHgPkTZgSilSGw6L0YYln7VhuMRf0ILyi 9a+QAX/Te/BZ1r7Aybwg4mfSiNkv+qkXSq1b6QH+hG9Cu4wzvwPfACJaBFkpCyFRCM0QIY1LW7M 96VNpB2Q0uZi79reTE8TcKFwDOuZAoZ+9MhKhs03dDVLqOIZ4s365nPTX+B+Bkg20TiBbT3vMH0 3zriTMHrqiTqvJTQ3+RYoWJqwP4OlF9t/Xtrjd6pKSQ2lTK4AJQ4UKGk3EptR/1NiCHje9Jic5X WmYs+9jflyc6LeXtXp3XalMpj0rNTFPE5bMjlfBZhpZHaps6ElIgie7IDdE543kL4tlBUgb5+tI hIQP5fM+Oe5DUYDhi4XD2xNtki1c/Qjl8e1TLeHGhYSP2vT3T9feMWrz/PmGBrbHdYBRmtOlxHn AMtfsaUnNTBtPB9pG5GC6V1iGSiByEK/3oNjasavPtOtSN0x5LcYizpIVI6h6GmQZVGzTSpY9Av GzVXpjLomBWAmrg==
-X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
@@ -50,62 +65,26 @@ The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.19
+  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-arm32-for-v6.19
 
-for you to fetch changes up to 8728bdd648f1b0f48ddfdb57bf6d9e7515e02518:
+for you to fetch changes up to 7f637d718752f1b821f90170bf841c4d924b382b:
 
-  memory: tegra186-emc: Fix missing put_bpmp (2025-11-07 16:24:13 +0100)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.19
-
-1. Tegra drivers:
- - Several cleanups (dev_err_probe(), error messages).
- - Tegra186, Tegra194 and Tegra210: Add interconnect scaling.
-
-2. Renesas RPC IF: Add system suspend support.
+  ARM: mediatek: add MT6582 smp bring up code (2025-10-13 11:46:58 +0200)
 
 ----------------------------------------------------------------
-Aaron Kling (6):
-      dt-bindings: memory: tegra186-mc: Add dummy client IDs for Tegra186
-      dt-bindings: memory: tegra194-mc: Add dummy client IDs for Tegra194
-      memory: tegra186-emc: Support non-bpmp icc scaling
-      memory: tegra186: Support icc scaling
-      memory: tegra194: Support icc scaling
-      memory: tegra210: Support interconnect framework
+MediaTek mach ARM32 updates
 
-Biju Das (1):
-      memory: renesas-rpc-if: Add suspend/resume support
+This adds support for the MT6582 SoC and its SMP bringup code.
+This SoC is found in old smartphones and tablets from various
+manufacturers.
 
-Jon Hunter (1):
-      memory: tegra186-emc: Fix missing put_bpmp
+----------------------------------------------------------------
+Cristian Cozzolino (2):
+      ARM: mediatek: add board_dt_compat entry for the MT6582 SoC
+      ARM: mediatek: add MT6582 smp bring up code
 
-Krzysztof Kozlowski (13):
-      memory: tegra124-emc: Simplify return of emc_init()
-      memory: tegra124-emc: Do not print error on icc_node_create() failure
-      memory: tegra186-emc: Do not print error on icc_node_create() failure
-      memory: tegra20-emc: Do not print error on icc_node_create() failure
-      memory: tegra30-emc: Do not print error on icc_node_create() failure
-      memory: tegra30-emc: Simplify and handle deferred probe with dev_err_probe()
-      memory: tegra20-emc: Simplify and handle deferred probe with dev_err_probe()
-      memory: tegra186-emc: Simplify and handle deferred probe with dev_err_probe()
-      memory: tegra124-emc: Simplify and handle deferred probe with dev_err_probe()
-      memory: tegra124-emc: Add the SoC model prefix to functions
-      memory: tegra186-emc: Add the SoC model prefix to functions
-      memory: tegra20-emc: Add the SoC model prefix to functions
-      memory: tegra30-emc: Add the SoC model prefix to functions
+ arch/arm/mach-mediatek/Kconfig    | 4 ++++
+ arch/arm/mach-mediatek/mediatek.c | 1 +
+ arch/arm/mach-mediatek/platsmp.c  | 1 +
+ 3 files changed, 6 insertions(+)
 
- drivers/memory/renesas-rpc-if.c          |  56 +++++--
- drivers/memory/tegra/Kconfig             |   1 +
- drivers/memory/tegra/tegra124-emc.c      | 140 ++++++++--------
- drivers/memory/tegra/tegra186-emc.c      | 167 ++++++++++++++++---
- drivers/memory/tegra/tegra186.c          |  48 ++++++
- drivers/memory/tegra/tegra194.c          |  59 ++++++-
- drivers/memory/tegra/tegra20-emc.c       | 150 ++++++++---------
- drivers/memory/tegra/tegra210-emc-core.c | 269 ++++++++++++++++++++++++++++++-
- drivers/memory/tegra/tegra210-emc.h      |  23 +++
- drivers/memory/tegra/tegra210.c          |  81 ++++++++++
- drivers/memory/tegra/tegra30-emc.c       | 119 +++++++-------
- include/dt-bindings/memory/tegra186-mc.h |   4 +
- include/dt-bindings/memory/tegra194-mc.h |   6 +
- 13 files changed, 868 insertions(+), 255 deletions(-)
