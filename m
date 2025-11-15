@@ -1,74 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B15D1FF7C7
-	for <soc@lists.linux.dev>; Sat, 15 Nov 2025 09:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F2D246768
+	for <soc@lists.linux.dev>; Sat, 15 Nov 2025 09:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763197266; cv=none; b=cUjLNA7jEOaULXAFzP5tJilgeWgA8UQFz+Wo1wvKfqT2I4Zo1lzYJUFOl66B5lIFywLxmzbOyHjJgE0yVVNLXivJWHSbSi7p1v4HG8PAnfFR+Yh8UpVx0WnhUh3frskol0G0N4X8xtBHZmElyxHmEOvJK59f75ugCxGsf5KsRGs=
+	t=1763197267; cv=none; b=DLVpn/QyOaZTyvpuPmq4rQs5kuMsi6b5z8tRn6M7TPgOXVIxZkBEYHs6VukB6l+9Vo+17hnk9znfT/6XVCUU7SLYKCH7f5gyjnX6dCrS45lNib51POyNwUnwubXW+ACF7dEResRnHge/tMQlela4S67K20ZNq/hyGKMiePM/Jqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763197266; c=relaxed/simple;
-	bh=vu7pUM0IdDTF+L7kgMryB8EWa5oji4ICNd2+NfLgJxA=;
+	s=arc-20240116; t=1763197267; c=relaxed/simple;
+	bh=zv+maFz1rZ05C01gYlLfTBLLNcYvksJP/DD9r2XuRq0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fyWR++3CwU2dc/uyYyQ0sgleu4PjYIButm2pbP+uXnyEMMKB24QUHOySE4hHolfTg7Bdnv3PKFLDWIxqK/chNRXTMCmBCvSn2sEwDhlXkxGHL3Cn8AeKcA3JS0kRec8N1sWPDiDKo0enf/G+x56AOzzkSM71MoyDwmzUmSHPPP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CiV54lIr; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:MIME-Version; b=C4flcJTd1vi7nq9BKAO9cD4rn8irT/jwlisgf2GrhO9CUm4dDjBPdn1j7Gs8dmxFAwsp3tiThhN6ap6VGGr5QPIo+Q3yJlflxO+Jy+Y/Sac01GXlpFo78eCma4X3ZIiKj/Da0UNXFtzlfqok9gOUZWWUNHqjFV1eWih73/g8YHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SX76DXzd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CiV54lIr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SX76DXzd"
 Received: by smtp.kernel.org (Postfix)
-	id 16F59C4CEF8; Sat, 15 Nov 2025 09:01:06 +0000 (UTC)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	id 74F3EC116B1; Sat, 15 Nov 2025 09:01:07 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D00FBC2BC9E
-	for <soc@kernel.org>; Sat, 15 Nov 2025 09:01:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D00FBC2BC9E
+	by smtp.kernel.org (Postfix) with ESMTPS id BC013C4CEF8
+	for <soc@kernel.org>; Sat, 15 Nov 2025 09:01:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BC013C4CEF8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-477770019e4so32230765e9.3
-        for <soc@kernel.org>; Sat, 15 Nov 2025 01:01:04 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42b2a0c18caso1484528f8f.1
+        for <soc@kernel.org>; Sat, 15 Nov 2025 01:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763197263; x=1763802063; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1763197265; x=1763802065; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6NmPq2vIfN4PvbOp0GMu+PlVPyVQhuun4x+h09lqtVM=;
-        b=CiV54lIryCAH9frBp0mM9P/QfgwYzkcZuoppksjtUwZE0PDqGnWZqAUQVAP0PNSIS/
-         KPKTCrNdV+XRU8oc0b8kPYbrd8qdB11ZxwqDQkElFBXKurNhVrY5sNUXBIS6JAM9qmwI
-         ch8e0z1mXhiZCReBgQeM7QfenWtIIwluDWh99rhcEZG9zObh1q4zsNG8MJguW0VGXBXW
-         TSRVCHGnLJVpH8I4aHI2WRqS6xpyp6P8eVkusejmNvJ0RVz9yzWlIOcNp5X9cVBZSo7f
-         WOyFo9G1QNdDaXHvHhoOc2QYodPrVxQEEfRwku2WxLeAEz8Q3v9MisvDykmzMWrP/75E
-         KJkA==
+        bh=Q0ZwHP0w/ZzXX9CPFHfzkBVRDrGDiIy2mewdqadHPqo=;
+        b=SX76DXzdCdmKY2H+nwOAH3eFaH/gN0HwWZfGjcvmBAYS63ysfnM2GyhDn7I/2bjQ9L
+         DmaGVXyFEfNvyygjdoXajW39zu6f/XRGMwPEV4jvRjbeTJuluMxven3AashJoKWDeTOX
+         YXt89GqcQ5mqFUXuQfgp+Eeg2kXKlrBYlVp4Aukp8RO2hYcr4iJdXRyVao/7ghO9jVk6
+         UZdEOhEkS19YKQZStLRUfwzJAz3QwK2afefvViOZyjNF9srT9P904cfEgh2bzHRSroA/
+         ekjr+9gbS73vzyOhDqwnnlAnf+4TTX0afvbklTSWIpuLKeMf3Kzv+n5kog5TXxmoDI1w
+         cr5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763197263; x=1763802063;
+        d=1e100.net; s=20230601; t=1763197265; x=1763802065;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6NmPq2vIfN4PvbOp0GMu+PlVPyVQhuun4x+h09lqtVM=;
-        b=o/sY4jl5780OroIZ2bn9OVLT3OP0MBCZKst7t45BVH5IOktAKrkhs6FvTV2Uje0m1y
-         H3mCGD/JEmtLU+iUpOTDj1OT3uPfwdv3+wWBaInwhaCqWMT1WprUC5ZtNPyR4hZ+gRH7
-         szXVzdIqXORKF6ol/jqAZcv+RRUKM3tZDZwYDnLNuQK7g5RhPO8kmyuRY6Hp3Q2NPF4U
-         0SuTTOqH7HLytyDlrFDjK9zUzfyS8F0Qy72yHFnipeOPHLfS1hilHquftCdIjrN+O2uf
-         kRzyWaliuZ34XLvQeI6H6S2W+NP30j2uEvmU50kZQyIS9w2pH5CyR+NJI9Ely+UBoblE
-         igfA==
-X-Forwarded-Encrypted: i=1; AJvYcCXSxuXUKqOuJrKYiDu/avpQk+172sZ4E0K1/W4lFM8CHYumiVvOxpcdWtoDImhO0S1JfKg=@kernel.org
-X-Gm-Message-State: AOJu0YxBeZshtOwyIrkbIaQfsMG/2giMIxLext6s6pNn7GPqdsxjlK8p
-	+JctHoe9BeS3Wnd5Todbl1cNQqWqZf2eiMXipVZ38ef5Hm+AHfKE4DPO
-X-Gm-Gg: ASbGnctTm/b6eUB5GoWBEKlejPAkW89Jb8+ps3WIcgE4d8RD6pQz9pT/yDbUBakvQAM
-	z9fuKJRtTGFJDakvU//q7wbUN1vwVRr8Yl39GiuGRXPJRmoeWWhl2Jlsfvrmn7YZPiQRPkFCiwF
-	66rqOlSDk1+3j9ZNiWDjK95jmoZVypMLjvmm8wVXjyopUdcYOOuO7on1R2eBi6KKVRmoyDkU0g5
-	cbTonsarc2mA5/YpQ09Kjhfz+pCPaloGyk4GgYCsmjBKJDJMGAqvlwHDSTe2BQUmZmksK9rq1O0
-	raHT3xHksIZunw2Sn1JzpnZf7OVnCcZtL1g+9hbQzv+fklYx36a8+X+2b/yDQo8OGfuyi/3JNAz
-	8R2ltHpOb40dKZV7qQdG2cCWbiiGwQ+So5siv+hJmRBRwQ2vsyItT5CqDSBVAbw/BVPr/IEv0yu
-	AGNScf0D0Ya317MRpJMufZjr0B9SVxYNzbQCkJGkA3KmiZ1AIlB/fvMDdElAMkXWBgMnKNLV80r
-	o8lZ90=
-X-Google-Smtp-Source: AGHT+IHYtVjjbV83ei1n6TC4jPxlxk2Cr9Io5XeSyAGj/Ci1P0LZPNejeCahGUTN0PRdBl+3ZD2IMA==
-X-Received: by 2002:a05:600c:3546:b0:477:1326:7b4b with SMTP id 5b1f17b1804b1-4778fe7973amr54525965e9.19.1763197262830;
-        Sat, 15 Nov 2025 01:01:02 -0800 (PST)
+        bh=Q0ZwHP0w/ZzXX9CPFHfzkBVRDrGDiIy2mewdqadHPqo=;
+        b=k2mh+VHmFUNgbgZD6GBGzrkhguVKJcwJijqs/6w/xRI/QJ9OzhtCRKVofRG6huWKwR
+         c+AEW1dYglsQLhCIj6D5JW4yd+Kjnm1cl0H0aIQmFNCfLBniiIY1qRfXuuT1Vpr/K2dM
+         V0nQevxkUo4g05of1xleEDGbQHNT5z/ebroJnLWMewXRYGysQkBJSx1p9PBa5z+9WtHg
+         SL3+q3iIFmxIaRq3kJCNs7DABzR0kd2rvlCCm7XyeI7PuM0t+y7F3mYawfSisKUIm6Mp
+         BjSs5tSSKq5xEYBzImU2pH1ENrCMllxEQW9cWOV0knxELELKgmLTa8/ewXR87SDNd3BY
+         bjRA==
+X-Forwarded-Encrypted: i=1; AJvYcCWy/lIcWht5zHjgZ+n7aSVr6OQ/13vaKUSSeO7Q5QeIsWcEvVdNVhzvy90wXLzyqXq8Z0g=@kernel.org
+X-Gm-Message-State: AOJu0YwHMrQIpqgTzP+Ns7h3o+TFIQaSsF4QvwqWDexOA+iGsm8Q6hB9
+	BXNCGt0gqafzqMGSJ4o9YCKWG0IjVwofETzUBvlFwbPkNxA6kapPv59l
+X-Gm-Gg: ASbGncsaPn0TFwHgUE7dRD10/gQ5+7PoG5qIP/kf3SM5wnWYaUDIp1JgZ5dtcYjhpbi
+	yTUiln+AWyWEye0X/gHKPyVM8SonW4fpxu30AKopPXpRv0GAHr4KDKiAI3N0UYSpEHpFQQQyPwp
+	mcjOzS8JJqWgemYyGqR7pe859rsMs3PDVKBSi4TlmC5UQkNQtBZExNH3N+jhGMegxtiHgw524aL
+	UhTRPQrytfk9B0DogVqjlIpZPJ8ke6+ryiDzKKWM11uYS5xctIdFCGBkOUvaTcsdu65LpLRVePV
+	CRj6jau9U12DYPb1Xd1CeHnjOUK7Cuu8q6I2LxNYpQ2URDENtTVLNGsnpdSz5FGKXccJpzNlwnF
+	Oxm/NT1MqB7iapf0eQETgUd5Zvll4qd5/uRaPqj7t8ueE84mQRqlkrZvmUMQDtrODonJewy3cr9
+	PGlSliZqa/HNHzX1SSv+85k7OE+GClA543/I2vtQrBCLXGWCuEObaLuWECROZySceh16mv
+X-Google-Smtp-Source: AGHT+IHaz8rnAcDH+Ih4GXwMyi1IntfGLPFhdJ3V0CaIhnOCXB9/ZniCGlMvXD6/h8Eah1krdyuflQ==
+X-Received: by 2002:a05:6000:310b:b0:3eb:9447:b97a with SMTP id ffacd0b85a97d-42b595b8004mr5910070f8f.54.1763197264994;
+        Sat, 15 Nov 2025 01:01:04 -0800 (PST)
 Received: from localhost (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47787e8e6acsm200553165e9.9.2025.11.15.01.01.01
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53e7b12asm15080566f8f.10.2025.11.15.01.01.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 01:01:01 -0800 (PST)
+        Sat, 15 Nov 2025 01:01:03 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: arm@kernel.org,
 	soc@kernel.org
@@ -76,9 +75,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 7/8] arm64: tegra: Device tree changes for v6.19-rc1
-Date: Sat, 15 Nov 2025 10:00:42 +0100
-Message-ID: <20251115090044.3140331-7-thierry.reding@gmail.com>
+Subject: [GIT PULL 8/8] arm64: tegra: Default configuration changes for v6.19-rc1
+Date: Sat, 15 Nov 2025 10:00:43 +0100
+Message-ID: <20251115090044.3140331-8-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20251115090044.3140331-1-thierry.reding@gmail.com>
 References: <20251115090044.3140331-1-thierry.reding@gmail.com>
@@ -93,103 +92,29 @@ Content-Transfer-Encoding: 8bit
 
 Hi ARM SoC maintainers,
 
-The following changes since commit ccec1069246ad121c1cbb6494d75140d512a9b5b:
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
-  dt-bindings: arm: tegra: Document Jetson Nano Devkits (2025-10-30 20:29:47 +0100)
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.19-arm64-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.19-arm64-defconfig
 
-for you to fetch changes up to 0936fa80150ef9121c6a4340fa2369bc9f16a520:
+for you to fetch changes up to 145cde94a5435920cb9f78aacfe91bea6795efaf:
 
-  arm64: tegra: Remove OTG ID GPIO from Jetson TX2 NX (2025-11-14 22:55:12 +0100)
+  arm64: defconfig: Enable NVIDIA VRS PSEQ RTC (2025-11-14 16:29:44 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree changes for v6.19-rc1
+arm64: tegra: Default configuration changes for v6.19-rc1
 
-This contains a bunch of additions and improvements for older devices.
-Tegra210 devices now have empty reserved-memory nodes to improve inter-
-operability with certain bootloaders. These chips now also support more
-multimedia engines. A new variant of the Jetson Nano is also added.
-
-Jetson TX2 sees some improvements. PCI endpoint mode is improved for
-Tegra234 so that reset interrupts are properly routed.
-
-A new RTC device is added starting with Orin.
-
-Rounding things off is a flurry of small fixes for DT validation and USB
-OTG mode.
+Enable the new driver for the VRS PSEQ RTC found on Tegra234 and later.
 
 ----------------------------------------------------------------
-Aaron Kling (10):
-      arm64: tegra: Add Tegra186 pin controllers
-      arm64: tegra: Add NVIDIA Jetson Nano 2GB Developer Kit support
-      arm64: tegra: Add ACTMON on Tegra210
-      arm64: tegra: Add interconnect properties for Tegra210
-      arm64: tegra: Add OPP tables on Tegra210
-      arm64: tegra: Enable NVDEC and NVENC on Tegra210
-      arm64: tegra: Add reserved-memory node for P3450
-      arm64: tegra: Add reserved-memory node for P2180
-      arm64: tegra: Set USB Micro-B port to OTG mode on P3450
-      arm64: tegra: Remove OTG ID GPIO from Jetson TX2 NX
-
-Diogo Ivo (2):
-      arm64: tegra: Add Tegra210 NVJPG power-domain node
-      arm64: tegra: Add NVJPG node for Tegra210 platforms
-
-Haotien Hsu (1):
-      arm64: tegra: Add interrupts for Tegra234 USB wake events
-
-Krzysztof Kozlowski (4):
-      arm64: tegra: Add default GIC address cells on Tegra132
-      arm64: tegra: Add default GIC address cells on Tegra186
-      arm64: tegra: Add default GIC address cells on Tegra194
-      arm64: tegra: Add default GIC address cells on Tegra210
-
-Niklas Cassel (1):
-      arm64: tegra: Add pinctrl definitions for pcie-ep nodes
-
-Nino Zhang (1):
-      arm64: tegra: Fix APB DMA controller node name
-
-Russell King (Oracle) (1):
-      arm64: tegra: Mark Jetson Xavier NX's PHY as a wakeup source
-
 Shubhi Garg (1):
-      arm64: tegra: Add device-tree node for NVVRS RTC
+      arm64: defconfig: Enable NVIDIA VRS PSEQ RTC
 
-Svyatoslav Ryhel (2):
-      arm64: tegra: Drop redundant clock and reset names from TSEC node
-      arm64: tegra: Move avdd-dsi-csi-supply into CSI node
-
-Thierry Reding (2):
-      Merge branch 'for-6.19/dt-bindings' into for-6.19/arm64/dt
-      arm64: tegra: Move HDA into the correct bus
-
-sheetal (1):
-      arm64: tegra: Add Tegra264 audio support
-
- arch/arm64/boot/dts/nvidia/Makefile                |    2 +
- arch/arm64/boot/dts/nvidia/tegra132.dtsi           |    3 +-
- .../dts/nvidia/tegra186-p3509-0000+p3636-0001.dts  |    1 -
- arch/arm64/boot/dts/nvidia/tegra186.dtsi           |   13 +
- arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi     |    1 +
- arch/arm64/boot/dts/nvidia/tegra194.dtsi           |    1 +
- arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi     |    6 +
- arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |    4 +-
- arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |   12 +-
- arch/arm64/boot/dts/nvidia/tegra210-p3541-0000.dts |   59 +
- .../boot/dts/nvidia/tegra210-peripherals-opp.dtsi  |  135 +
- arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   90 +-
- arch/arm64/boot/dts/nvidia/tegra234-p3701.dtsi     |   11 +
- arch/arm64/boot/dts/nvidia/tegra234-p3767.dtsi     |   15 +
- arch/arm64/boot/dts/nvidia/tegra234.dtsi           |   72 +-
- arch/arm64/boot/dts/nvidia/tegra264-p3971.dtsi     |  108 +
- arch/arm64/boot/dts/nvidia/tegra264.dtsi           | 3190 ++++++++++++++++++++
- 17 files changed, 3708 insertions(+), 15 deletions(-)
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra210-p3541-0000.dts
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra210-peripherals-opp.dtsi
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
