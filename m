@@ -1,74 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD2A1B7F4
-	for <soc@lists.linux.dev>; Sat, 15 Nov 2025 09:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71709C2E0
+	for <soc@lists.linux.dev>; Sat, 15 Nov 2025 09:00:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763197255; cv=none; b=OOadbiZdJNEM0Wof3js6NcPQuNmQcteHgO7cckzeeLFbi7dEVuTfCISwtbZq5lOjz1durWWoKCo5YNhL0ZL+BSQIqIzBEbNdtLczai0NQRUnqho7KEGBzaV5ya8lliWbJcbeYrtyQVfKHrCRZ1i8hJ7Ps/4wtHR5cobDZsX+SFU=
+	t=1763197257; cv=none; b=rdrJsXDm6iW/HB3QEPzYstmRmNfgUyRkz5mAKZTbKMka29edq1NE4c7NC2TD9cGwjfiDkLJxDXOZ5LEWXKyc3w1CA+TdsOw7NIpWPbcNdh4qpAgMxKnoHrZidxILcOt3ScWEWUf+usouKtEh4sZ76V4EdVFEXLGa9dXSmLNPiF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763197255; c=relaxed/simple;
-	bh=Z1mPo+ebBiIP0/K905Xag3aOH9G6gGBxOg0SUmGsa8k=;
+	s=arc-20240116; t=1763197257; c=relaxed/simple;
+	bh=4Lq/BDtaeJtbfXdVh5QgCiqIE8bUeV5zVhjBbFWgtQA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cy3Tsez9gknQkRP/PS7LtkNVvyUxVi1M+Pv9Oddl/bNUc7k/NPtgE1uFOHHJSfuNU5UTp/SAeqbtX9lWsxVWNWZ2Zl+6x4660lFaRGyCdkRdR860qs8MqTqj6NZQeDvH7TAY3fvW7k/w/8Go2OTqbD9Z4PUT5Zzi0pznyK5NQa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DaMAVAUv; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:MIME-Version; b=NnNWGGiI7PfFTvNS87dvJSU3NRcw3czmkYRVf2Wz9oSsNiHspD50kWGlLoOvOKfx8i8sRLx26NbU5q0fBccSfA2fmIG4WewSoGF0r2YeRjXLrnnWQy1IjfjF7BIk0NOwUqXup5eaGx1aufFo5jc98ShIr42VgUxx/ZkMPlYoqQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aS4d7BDl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DaMAVAUv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aS4d7BDl"
 Received: by smtp.kernel.org (Postfix)
-	id 0E4D1C19422; Sat, 15 Nov 2025 09:00:55 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	id 2C83AC4CEF5; Sat, 15 Nov 2025 09:00:57 +0000 (UTC)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1B353C4CEF5
-	for <soc@kernel.org>; Sat, 15 Nov 2025 09:00:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1B353C4CEF5
+	by smtp.kernel.org (Postfix) with ESMTPS id 4F68AC19425
+	for <soc@kernel.org>; Sat, 15 Nov 2025 09:00:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4F68AC19425
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-429c8632fcbso1895418f8f.1
-        for <soc@kernel.org>; Sat, 15 Nov 2025 01:00:53 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4775ae77516so30040555e9.1
+        for <soc@kernel.org>; Sat, 15 Nov 2025 01:00:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763197252; x=1763802052; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1763197254; x=1763802054; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WYu6Ww6258/C+IrhaH6QoljlvoHD6unsroBSoJrAUys=;
-        b=DaMAVAUveJmz56y6FoXR7WyZ8+m1mQysAJsRe8kEy1b9nr7p1uhr9C15VRPcW7Kxfm
-         nxDPxVKtKkmRYwsRvaJfuuk2GS2z3EROhLLefmRPVqF14yoL+aGNACSdQV+YCutvdpno
-         kRUjqdwgCn3FxnCQ3dmIASkvSGv/jkobd3IjlqHPluHliutw3v7VF6c7rsP/KpGf+IAx
-         XTMfSbCFcJvtP9bsaOUJSQrtK5FbHOHQtzQLftUI4v2JPplisArey692DA/7Ms98sH7p
-         mNA5Svr++N7Tzb5MEV0r4e8Ug6W7NS11gcSR4UfbaprF1ws+rlY5pmgCDfmstOSQyZsl
-         5xig==
+        bh=d6wDKFHjzRV7Jb9Tke0SbxVpJZc5zoZKHJ9dk74LvD0=;
+        b=aS4d7BDl8MV+HB4EuR5IyLVSHmohNsxcE9LvBazGILJY9kSQTS4YlUoNIZ4NziUNHD
+         xXvog+G5yiUlXJ0SbKWN1+ZEBgIjXvOb8u6abVak/ZTKz/n/HJdrF1LQWseqhCamowby
+         7kIGeGQH5skIXwLvioo+FuU45YxQyk/uveocbDD0PmJZWhslzr5+VInmyLRJQRgSD/ab
+         5Pq7wbre+yKl8qER66tK9BKRnrdXUHSU2bAr9OQkSJGjvjwcbbWJitrvLiQDXUDfVSdT
+         E8WcqkQDI2f7s9gc3He5pTQl8kCOLKb4JyS2FPuUjwCKkGgeO+sup3C8NlT3GV409yZ5
+         I+mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763197252; x=1763802052;
+        d=1e100.net; s=20230601; t=1763197255; x=1763802055;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WYu6Ww6258/C+IrhaH6QoljlvoHD6unsroBSoJrAUys=;
-        b=VS6C1lv7WS49OzT4MtsMqoqlyIpxqdA9YVUT/12vukw6rdPNp/5dSvnNi9uj8HqaGP
-         hfsDCziMmB/+clKcFNLsszm2WrfQE2XayWaJ3zqmyL2TXVzSwhXoKneSAO3/xwFp8rRf
-         XI301cIApZrnN8h+TjkOf/Wlb9SZLjwClUIixKH8lgdjTfVk5Y/YuS8iDS7IfERS8eGf
-         7i+hNIkm7OBLFCKmYAR5iLzDtJRjUGAZoE/sKT8lmllgwt/aX0rIU7RFm5J2dOxK4Woi
-         jxuh+0sV9kP9Qj7MDoJhhvpdnN7bVtUjEOqGBRR9kJaBQPKrExmDF9U2jQWpLcDO8zC4
-         Kn6A==
-X-Forwarded-Encrypted: i=1; AJvYcCX40dy+bDfvUrZ2vi3nUQ5RbMny4AwlNmth21htzOBhL7+QkqaI4Egpy5K+XiWMo2RHc3w=@kernel.org
-X-Gm-Message-State: AOJu0YwVh6ETmKpohNar5/YrLrwhCLqbH4rVywgj8DwHFmBgXnWA7HNV
-	PdS24XsAl1AEfHL7+j3rZpn9eVjfspDQr7uX/fwNGQLtPPtAmkqBoXSi
-X-Gm-Gg: ASbGncupru13RSzDq/DgrZ7/OhTrnTQ4KiQngbIZ49i81dB6Lplj9WI8auWBSbLugi7
-	DqCRFAanwagpBJLE+hP4EXwBLaiYKHuWQsH8QtipBstk8KSsJ61hXCvJE5BShpBz/8j8SWMEBHx
-	Lcv4KZrp+vFVEtj1SgBN2v+yejhud9zxIAW3SZbZtqM+ewEaEqX0Y9aWk4ly4SYYOt+7Agf8Htk
-	/J6PlhfkvPwEaHnRhVv68aeuTWa+9N8SmkHOYo6xeJoVDFgc8OlY9YfbsE6k2BpjWpcdNEXvMnF
-	OLztD8rgZBsSf5bLgB2If8+jBImzXlbL8FhgBYtrjEp+GqQxrlnxz8TMC9wAKTjBcilDsFqIpc5
-	nxcu9t1TACUnUafO+vF7nYngysBqPRXu3wXsNf45US7b2UsixVs2JX65PbMHXJV9BtPRWXDJbwf
-	WEZ5xZsCXTksO+S5te/nr6oz+aoEJ9H4ZauNDPEHykgxLLGrGtfhxhmL9U5WHo691rsrfG7Bxcs
-	laQw4o=
-X-Google-Smtp-Source: AGHT+IFdVfK+Shdttqb57lRCPUmJfMS313dD54S7D51C4gzOhgy2szla9wVkVMN99ItzkzULbuEs8Q==
-X-Received: by 2002:a05:6000:430e:b0:42b:39d0:6386 with SMTP id ffacd0b85a97d-42b5936796fmr4919296f8f.31.1763197252125;
-        Sat, 15 Nov 2025 01:00:52 -0800 (PST)
+        bh=d6wDKFHjzRV7Jb9Tke0SbxVpJZc5zoZKHJ9dk74LvD0=;
+        b=eRPcm07UM90Q4jGGDRFpvZ2PAgC9Ks2TVosepYQgm5KDQEc897jljXNehFr2G9AiPR
+         3JjMfFJM/OJ45qtNeEb1gpx1bPpKhIOfqgq1R9rwEddvdwtKJpiSMqmImY905eub1jc6
+         l4I3maTi72tNWXH4QUkJOlUvedyrcTS3wI1+/YXmptoeYyS7qnivbpEdi2TjKE+imvZX
+         eabtKLaL+2AAuC/JUwH5U7NLHPzHqbiHzPXXJs+l/DJT3rc73qtfmdkBrq0s4+dhKuYM
+         gvplLmcR/Pgn/wlyfT2LlIlVsq/+QCijIoajDs8nOkwWViWynGFnRnx814e2J1cYfLpg
+         iKyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWwnGlc8G6oldl4oLarOGp+EDUpjksAigJjzwvSuStbBr+IPQkBVeuVwzQ3mGo4895Yw2U=@kernel.org
+X-Gm-Message-State: AOJu0YzqqUome1U8OUfIer/W5gf3nnlwQeB9Rh4oqRmDY1bfexGWqs+/
+	uf5m/7Ix4x7r0dFSAlG6AAVFAt4fGGFhZV/Z6mgZ/lSA5a9aTEGcXyVz
+X-Gm-Gg: ASbGncu3OSYFey6FrSBCqZz5+SbZzxouCy7h2LxLRtnduCDh/PL+uHxEIX9fjeTZUm/
+	fGD4eumuex3+vERaO6lJUU3HhAlP+PnF+ckmLct5UbP9od76MlBRoipM39ymzD8Lh7ASASJZZDE
+	iZ8SeKbYWGWcZ79Sl2PrJXSVpXuKuQiMqyd9ZMmouzL8qWKABE0jqCMdpI4pv3eMfKcJviUoexB
+	gZFDOGHUPb9rfu4snlzdWpW8LCDqw671SjhM9erhlkCl8MGfGcWs96W27Ei3h/6lXgynC/IsQ3T
+	XaEhE8KTCLVb3eOtOzz6RzcfCd8nIp9QKLfyrHSoX3lvck5Dud+DR4tUWTg/0bEYIyqu4VfZxTu
+	my6kH+OZms52n1WxFW8ATW7MTOIpgsMuhYE0i+SVFTJbFHXn9KT+W9ShDY8OA/9LYhtGRh9q96A
+	xSPfe4EIbiWMZPTmWK5am8JS2mxoYTwGRBs6hBKTE3roH5q7o5K+ADoTL52nQAHHk4/KNLwdQG4
+	HWJVvc=
+X-Google-Smtp-Source: AGHT+IGbQ/s7KX7f/xqyB1QpfckUbUgWDGGjMrr2y1kPsnMSCp8R/Hg3hnEJQs9ahhQaY0z1VQA8wQ==
+X-Received: by 2002:a05:600c:4685:b0:477:8b77:1575 with SMTP id 5b1f17b1804b1-4778fe5dcbfmr55442485e9.12.1763197254489;
+        Sat, 15 Nov 2025 01:00:54 -0800 (PST)
 Received: from localhost (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f0b617sm14666449f8f.31.2025.11.15.01.00.50
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b5ce849ddsm8331095f8f.14.2025.11.15.01.00.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 01:00:51 -0800 (PST)
+        Sat, 15 Nov 2025 01:00:53 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: arm@kernel.org,
 	soc@kernel.org
@@ -76,9 +76,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/8] dt-bindings: Changes for v6.19-rc1
-Date: Sat, 15 Nov 2025 10:00:37 +0100
-Message-ID: <20251115090044.3140331-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/8] amba: Fixes for v6.19-rc1
+Date: Sat, 15 Nov 2025 10:00:38 +0100
+Message-ID: <20251115090044.3140331-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20251115090044.3140331-1-thierry.reding@gmail.com>
 References: <20251115090044.3140331-1-thierry.reding@gmail.com>
@@ -99,47 +99,26 @@ The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.19-dt-bindings
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.19-core
 
-for you to fetch changes up to 905f0dcc38f8078f0641c5cf855f420d78f10ea7:
+for you to fetch changes up to 500e1368e46928f4b2259612dcabb6999afae2a6:
 
-  dt-bindings: usb: Add wake-up support for Tegra234 XUSB host controller (2025-11-14 19:31:10 +0100)
+  amba: tegra-ahb: Fix device leak on SMMU enable (2025-11-14 17:49:12 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v6.19-rc1
+amba: Fixes for v6.19-rc1
 
-Document various new IPs on older chips, as well as some existing
-developer kits that were missing compatible strings. Add power domain
-IDs on Tegra264 and wake-up support for the XUSB controller on Tegra234.
+Fix a device leak. Could go into v6.18 as a fix, but since this problem
+has existed for a long time and nobody has reported it before it doesn't
+seem critical enough and sufficient to get it into 6.19 and then
+backported.
 
 ----------------------------------------------------------------
-Aaron Kling (2):
-      dt-bindings: arm: tegra: Document Jetson Nano Devkits
-      dt-bindings: devfreq: tegra30-actmon: Add Tegra124 fallback for Tegra210
+Johan Hovold (1):
+      amba: tegra-ahb: Fix device leak on SMMU enable
 
-Haotien Hsu (1):
-      dt-bindings: usb: Add wake-up support for Tegra234 XUSB host controller
-
-Svyatoslav Ryhel (2):
-      dt-bindings: display: tegra: document EPP, ISP, MPE and TSEC for Tegra114+
-      dt-bindings: display: tegra: Document Tegra20 and Tegra30 CSI
-
-Thierry Reding (1):
-      dt-bindings: power: Add power domain IDs for Tegra264
-
- Documentation/devicetree/bindings/arm/tegra.yaml   |   5 +
- .../bindings/devfreq/nvidia,tegra30-actmon.yaml    |  13 +-
- .../display/tegra/nvidia,tegra114-tsec.yaml        |  68 ++++++++++
- .../bindings/display/tegra/nvidia,tegra20-csi.yaml | 138 +++++++++++++++++++++
- .../bindings/display/tegra/nvidia,tegra20-epp.yaml |  14 ++-
- .../bindings/display/tegra/nvidia,tegra20-isp.yaml |  15 ++-
- .../bindings/display/tegra/nvidia,tegra20-mpe.yaml |  18 ++-
- .../bindings/usb/nvidia,tegra234-xusb.yaml         |  31 ++++-
- include/dt-bindings/power/nvidia,tegra264-bpmp.h   |  24 ++++
- 9 files changed, 306 insertions(+), 20 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-tsec.yaml
- create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-csi.yaml
- create mode 100644 include/dt-bindings/power/nvidia,tegra264-bpmp.h
+ drivers/amba/tegra-ahb.c | 1 +
+ 1 file changed, 1 insertion(+)
