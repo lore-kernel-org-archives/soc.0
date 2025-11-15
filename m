@@ -1,74 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71709C2E0
-	for <soc@lists.linux.dev>; Sat, 15 Nov 2025 09:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F0423B63C
+	for <soc@lists.linux.dev>; Sat, 15 Nov 2025 09:00:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763197257; cv=none; b=rdrJsXDm6iW/HB3QEPzYstmRmNfgUyRkz5mAKZTbKMka29edq1NE4c7NC2TD9cGwjfiDkLJxDXOZ5LEWXKyc3w1CA+TdsOw7NIpWPbcNdh4qpAgMxKnoHrZidxILcOt3ScWEWUf+usouKtEh4sZ76V4EdVFEXLGa9dXSmLNPiF8=
+	t=1763197259; cv=none; b=AXds0OUO+aSjsuJ5WnB3bCsyZRAsybfrQgUS5cY5WdvPZ4obe3eliCsDd4QcMxLBJXezc4gjW1ihEFoBgcGRVTP+kVtOvGAdozPVTc/xPg6+KG4yaphG569eNEpmPyIJ/ywyI3YBPsbMEqyB9gyeOTiLztk2xfAhzLnr+pDiWC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763197257; c=relaxed/simple;
-	bh=4Lq/BDtaeJtbfXdVh5QgCiqIE8bUeV5zVhjBbFWgtQA=;
+	s=arc-20240116; t=1763197259; c=relaxed/simple;
+	bh=aRsqKglc10I3GhHgrrpGNuTdBDyQwTu/Vued++Rw1PE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NnNWGGiI7PfFTvNS87dvJSU3NRcw3czmkYRVf2Wz9oSsNiHspD50kWGlLoOvOKfx8i8sRLx26NbU5q0fBccSfA2fmIG4WewSoGF0r2YeRjXLrnnWQy1IjfjF7BIk0NOwUqXup5eaGx1aufFo5jc98ShIr42VgUxx/ZkMPlYoqQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aS4d7BDl; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:MIME-Version; b=jheLSIjRF3W9K2ip30VUR39lGv5LVHpUr9fv0I97SlAy71jq4EVvq/MviBhqu0kYJSAQEohVdFyt3XbiWKVB5St/dzQizzXSJtYuszajXipUyHU0ZKiVVLeDNO6anvfRYQcGeuWs/C1wnqsPprBfZLIhBa4YWOGU904lJBeNoyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L+/9otGE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aS4d7BDl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L+/9otGE"
 Received: by smtp.kernel.org (Postfix)
-	id 2C83AC4CEF5; Sat, 15 Nov 2025 09:00:57 +0000 (UTC)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	id 4CE3BC4CEF8; Sat, 15 Nov 2025 09:00:59 +0000 (UTC)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4F68AC19425
-	for <soc@kernel.org>; Sat, 15 Nov 2025 09:00:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4F68AC19425
+	by smtp.kernel.org (Postfix) with ESMTPS id 7DC9FC116D0
+	for <soc@kernel.org>; Sat, 15 Nov 2025 09:00:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7DC9FC116D0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4775ae77516so30040555e9.1
-        for <soc@kernel.org>; Sat, 15 Nov 2025 01:00:56 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-47796a837c7so2718435e9.0
+        for <soc@kernel.org>; Sat, 15 Nov 2025 01:00:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763197254; x=1763802054; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1763197257; x=1763802057; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d6wDKFHjzRV7Jb9Tke0SbxVpJZc5zoZKHJ9dk74LvD0=;
-        b=aS4d7BDl8MV+HB4EuR5IyLVSHmohNsxcE9LvBazGILJY9kSQTS4YlUoNIZ4NziUNHD
-         xXvog+G5yiUlXJ0SbKWN1+ZEBgIjXvOb8u6abVak/ZTKz/n/HJdrF1LQWseqhCamowby
-         7kIGeGQH5skIXwLvioo+FuU45YxQyk/uveocbDD0PmJZWhslzr5+VInmyLRJQRgSD/ab
-         5Pq7wbre+yKl8qER66tK9BKRnrdXUHSU2bAr9OQkSJGjvjwcbbWJitrvLiQDXUDfVSdT
-         E8WcqkQDI2f7s9gc3He5pTQl8kCOLKb4JyS2FPuUjwCKkGgeO+sup3C8NlT3GV409yZ5
-         I+mA==
+        bh=fx2ts+fHPLoBy7RLDZLOGCht+3l+lrN74DzhJ0vF3ag=;
+        b=L+/9otGE3xehYvaI7xe5rvGFMfh+ycqIuFBj32vbVPX+64zOWLyV/uTWUzJP8J5V35
+         VFCSEWOng+S11j2p9CiQdoShMF9KDzF6LkB2VxKfTzomNxCZlEcmliZiLVEGyom/iNle
+         eU6SWwFRNt2HIn4YUmj5/hVSvVWeTzkiS2LQv/fgL8rsgh1ueBSdNIXJles34v3OSoWC
+         1BWs3adWG29xYFSDqcnmGupo28CC2ohiZ6G+zlWdiLFYgovLoS3HUhysp8AN7QmbMSWE
+         ctD93etPhVKt/vXIwG55DdzKcaoVsa8ggZI/P372P0wzZHlDgjE6uEDwbYxi3gLhLCzu
+         TeXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763197255; x=1763802055;
+        d=1e100.net; s=20230601; t=1763197257; x=1763802057;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=d6wDKFHjzRV7Jb9Tke0SbxVpJZc5zoZKHJ9dk74LvD0=;
-        b=eRPcm07UM90Q4jGGDRFpvZ2PAgC9Ks2TVosepYQgm5KDQEc897jljXNehFr2G9AiPR
-         3JjMfFJM/OJ45qtNeEb1gpx1bPpKhIOfqgq1R9rwEddvdwtKJpiSMqmImY905eub1jc6
-         l4I3maTi72tNWXH4QUkJOlUvedyrcTS3wI1+/YXmptoeYyS7qnivbpEdi2TjKE+imvZX
-         eabtKLaL+2AAuC/JUwH5U7NLHPzHqbiHzPXXJs+l/DJT3rc73qtfmdkBrq0s4+dhKuYM
-         gvplLmcR/Pgn/wlyfT2LlIlVsq/+QCijIoajDs8nOkwWViWynGFnRnx814e2J1cYfLpg
-         iKyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWwnGlc8G6oldl4oLarOGp+EDUpjksAigJjzwvSuStbBr+IPQkBVeuVwzQ3mGo4895Yw2U=@kernel.org
-X-Gm-Message-State: AOJu0YzqqUome1U8OUfIer/W5gf3nnlwQeB9Rh4oqRmDY1bfexGWqs+/
-	uf5m/7Ix4x7r0dFSAlG6AAVFAt4fGGFhZV/Z6mgZ/lSA5a9aTEGcXyVz
-X-Gm-Gg: ASbGncu3OSYFey6FrSBCqZz5+SbZzxouCy7h2LxLRtnduCDh/PL+uHxEIX9fjeTZUm/
-	fGD4eumuex3+vERaO6lJUU3HhAlP+PnF+ckmLct5UbP9od76MlBRoipM39ymzD8Lh7ASASJZZDE
-	iZ8SeKbYWGWcZ79Sl2PrJXSVpXuKuQiMqyd9ZMmouzL8qWKABE0jqCMdpI4pv3eMfKcJviUoexB
-	gZFDOGHUPb9rfu4snlzdWpW8LCDqw671SjhM9erhlkCl8MGfGcWs96W27Ei3h/6lXgynC/IsQ3T
-	XaEhE8KTCLVb3eOtOzz6RzcfCd8nIp9QKLfyrHSoX3lvck5Dud+DR4tUWTg/0bEYIyqu4VfZxTu
-	my6kH+OZms52n1WxFW8ATW7MTOIpgsMuhYE0i+SVFTJbFHXn9KT+W9ShDY8OA/9LYhtGRh9q96A
-	xSPfe4EIbiWMZPTmWK5am8JS2mxoYTwGRBs6hBKTE3roH5q7o5K+ADoTL52nQAHHk4/KNLwdQG4
-	HWJVvc=
-X-Google-Smtp-Source: AGHT+IGbQ/s7KX7f/xqyB1QpfckUbUgWDGGjMrr2y1kPsnMSCp8R/Hg3hnEJQs9ahhQaY0z1VQA8wQ==
-X-Received: by 2002:a05:600c:4685:b0:477:8b77:1575 with SMTP id 5b1f17b1804b1-4778fe5dcbfmr55442485e9.12.1763197254489;
-        Sat, 15 Nov 2025 01:00:54 -0800 (PST)
+        bh=fx2ts+fHPLoBy7RLDZLOGCht+3l+lrN74DzhJ0vF3ag=;
+        b=KX6BAXZ3tnBFaUaJ7ytyrJmPnNWoFKSEoD158GZlHXs7sJ82uTFweNpxUovAheE8Cc
+         ZRWOoxsLqy8NjK79QppQ3fmmHeBEOsikAbQS5Olfho8hXkwS/Efc0j5CBKlH/vg13oKV
+         xbsCdpyxBJQRG6e3qVP9inscopu19oBFcKAZcO2MiFKWqzcTsnoKyQMT0xIcCgIDJjgr
+         O02LFRiYLYTMNrzygajeYrq7m+UGCy8n+5IQ9GLTUiK+CEmlYV+EBwnUGV3qbmd9zi9T
+         3qwQDEmhCsr4GPMppQwsR+lQnnYpq56nDgb+l2oeVcwT4QubfAin56JVRFOMeSJKbwGP
+         N1nw==
+X-Forwarded-Encrypted: i=1; AJvYcCVsRfB1KYj0eKDbAa9ygQWoKOj1wuFBhW1mKkNMRsi230NRyr5zZvMOkSuZhJx+fVThuho=@kernel.org
+X-Gm-Message-State: AOJu0YzfVgUEcyKXbnYbxE7xVzDJhQufNsol4u1h51u0jVrHLVP1dccS
+	w0O3VYkULt9lE0lzq5rjr1a/y0DhH+hhSOsD51OTNwLdFat4C0A8hocS
+X-Gm-Gg: ASbGncuxmSzSlzwCcuwikYw8QeeDMgjx7uhhDNBuEQtq4l90lmQsWquS0aJs9ZnPsSi
+	YMIVbZP/WlVGcFv4J6q1Emm6H/Xu57LYxXpmcMhnyQ3g9ca8D9XbXmHOP7crEINw1hKGNYLdft2
+	dVYr0g95sPz575UZXdDe75TTULSe7XU5gk7yiZjMrxVQFHQeqIYIfD607h7YskXt2T9u0wlZaqg
+	PO3YYy5HHgzXUu7xks4NGpsi5Br2jsqPVaNyLbE0laAXMkGNpa85vp3pH4KOBDwDn+fKJLrJ0zl
+	YNKjEGo9bC8OfFXev5oZgQI6o7qyWCWT+2C+0zdWJNkY27uoUdmEQczvYOCCM19rpHIsspQFsu0
+	L8YCrUfB/Kn4NhFr5yLuHUxQ3BQCnWtfzRgswzdd+wmXcmBaz5W9fa+pgaHW5V7IEV9ZB9OQRsd
+	k5hvlwm4bzZq2en7OSLBAcUzwChih2EqOnubTl+eOAYb2KMYyz/+FliIYi2lsU86rToJI2
+X-Google-Smtp-Source: AGHT+IGyB/RQW9MTVswcGv4cxhGmARlI02larXZ725dOtFz0GZlaFld4CKIv8l5sOZoudOnpPEm27A==
+X-Received: by 2002:a05:600c:35c9:b0:475:dc98:4489 with SMTP id 5b1f17b1804b1-4778feb568amr61956635e9.33.1763197256667;
+        Sat, 15 Nov 2025 01:00:56 -0800 (PST)
 Received: from localhost (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b5ce849ddsm8331095f8f.14.2025.11.15.01.00.53
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53e7b14bsm14443659f8f.9.2025.11.15.01.00.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 01:00:53 -0800 (PST)
+        Sat, 15 Nov 2025 01:00:55 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: arm@kernel.org,
 	soc@kernel.org
@@ -76,9 +75,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 3/8] amba: Fixes for v6.19-rc1
-Date: Sat, 15 Nov 2025 10:00:38 +0100
-Message-ID: <20251115090044.3140331-3-thierry.reding@gmail.com>
+Subject: [GIT PULL 4/8] soc/tegra: Changes for v6.19-rc1
+Date: Sat, 15 Nov 2025 10:00:39 +0100
+Message-ID: <20251115090044.3140331-4-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20251115090044.3140331-1-thierry.reding@gmail.com>
 References: <20251115090044.3140331-1-thierry.reding@gmail.com>
@@ -99,26 +98,46 @@ The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.19-core
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.19-soc
 
-for you to fetch changes up to 500e1368e46928f4b2259612dcabb6999afae2a6:
+for you to fetch changes up to dd03d34d6d8e7a3f62450fb7a1408d86fb35487c:
 
-  amba: tegra-ahb: Fix device leak on SMMU enable (2025-11-14 17:49:12 +0100)
+  soc/tegra: pmc: Add USB wake events for Tegra234 (2025-11-14 19:29:50 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-amba: Fixes for v6.19-rc1
+soc/tegra: Changes for v6.19-rc1
 
-Fix a device leak. Could go into v6.18 as a fix, but since this problem
-has existed for a long time and nobody has reported it before it doesn't
-seem critical enough and sufficient to get it into 6.19 and then
-backported.
+A couple of small fixes across the board: ACPI support on FUSE no longer
+exposes duplicate SoC information, speedo IDs for Tegra210 are updated,
+some comments see typo fixes or kerneldoc additions. Finally, support
+for USB wake events is added on Tegra234, which allow these systems to
+resume from suspend on USB activity.
 
 ----------------------------------------------------------------
-Johan Hovold (1):
-      amba: tegra-ahb: Fix device leak on SMMU enable
+Aaron Kling (2):
+      soc/tegra: fuse: speedo-tegra210: Update speedo IDs
+      soc/tegra: fuse: speedo-tegra210: Add SoC speedo 2
 
- drivers/amba/tegra-ahb.c | 1 +
- 1 file changed, 1 insertion(+)
+Bruno Sobreira França (1):
+      soc/tegra: Resolve a spelling error in the tegra194-cbb.c
+
+Haotien Hsu (1):
+      soc/tegra: pmc: Add USB wake events for Tegra234
+
+Kartik Rajput (1):
+      soc/tegra: fuse: Do not register SoC device on ACPI boot
+
+Prathamesh Shete (1):
+      soc/tegra: pmc: Don't fail if "aotag" is not present
+
+Thierry Reding (1):
+      soc/tegra: pmc: Document tegra_pmc.syscore field
+
+ drivers/soc/tegra/cbb/tegra194-cbb.c     |  2 +-
+ drivers/soc/tegra/fuse/fuse-tegra.c      |  2 --
+ drivers/soc/tegra/fuse/speedo-tegra210.c | 57 +++++++++++++++++++++++---------
+ drivers/soc/tegra/pmc.c                  | 21 ++++++++++--
+ 4 files changed, 60 insertions(+), 22 deletions(-)
