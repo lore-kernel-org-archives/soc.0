@@ -1,74 +1,67 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A03304BB7
-	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 17:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8163148BC
+	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 19:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763400628; cv=none; b=jTwPn3RVlUgSFU/OuXCytWdJqFgnWr0tAb0ZNyyogXpzp8tDKZIH3NmfOmP9utUrzMhnEULfIivyaesUeUyfdNW62ZpbTcZOp5EAqo9m95wQvQOZTgp7hnCc2XU8bApKGCL6/2TsJpGECQoqTs+8E2mg7DrjRbxyc2T8F8kWW9Y=
+	t=1763409338; cv=none; b=lJ05bhjqR+mKziax7FKFXzPSxX1LfmEkn0xvXHan46BSCepn/8CQ50vsEF4S7oZDJESIo8TTUACoZILCXTONf9E1IcwFjaGZL7BhpILV6ugFEut7IQiQqNpfblQ3sL6tWCbbL4TpzDfCcsY+ggPy5sWGI0ks8q1O+Q66RNx84Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763400628; c=relaxed/simple;
-	bh=qEs+o5CIyHf0ZNKyaxJr3YN9Ls7Oi8fYy8iYSoqh0w0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kMUjjl/i7//fHJJdCCnoxjFn1j8xGhBf811Ll6Ac0SpkiUFzRNBrilYhBIMN5IqI9iiDrdDTL/OZJzQHyLw4f9/7tPQwbdpnaOdPYSm+B7pMuQ/XdXkn7x+cGumTipsgNx/HTVJJqOhtifEvZFzuGfecejT+yshzFHvr9FcYRWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=wV13ty9Z; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1763409338; c=relaxed/simple;
+	bh=5NYv7IhXQWWcpLL+EOWuBkb9pQPJESIJu5lfgINYai8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sFI4lqsZbOVc40swKDUD8uCuJjmlb5Ece8W+xmjA2czxz23Qet26Evr03Xi6/SqWIyLsi/XSbA8dVSs4a1+9/Ea8YAOwUDVaMSVRNuVIByh5GMSSezy3g56RDS6Lu/mp9qgfRa+Co4W+49GQ+MTHttkh201CnnBqxs4cRXyI4K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SbIqvnS4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="wV13ty9Z"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7ba49f92362so3366439b3a.1
-        for <soc@lists.linux.dev>; Mon, 17 Nov 2025 09:30:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1763400625; x=1764005425; darn=lists.linux.dev;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BByjwH6DP+Z4+u9FvWdxBfSB14chnUdtzQgKngoILck=;
-        b=wV13ty9Zga/yT/p2/O4fc39iOqXmXelyl26xX5W0trSumb//ZMc+EJsW0yvgGkNIuy
-         5TdSYgtxiglyMb188GcBj5DDMnwTa9DYkEkQIZIzOyFSDUDRosJgIvg9wgKYnapCSkh/
-         mLoqIRcYIFRNbPAORQUIrc7gjjXg9M597lUjWEl/y9KNJoOG1AdzNMxbunKypFK2O7W4
-         apY8mrLmdfz14kjMHsCDiIP+lgY27F0R4yzXT6u6dPhbR+kOx4ehq/kRTMJ887heNWvg
-         7DRzklT+HwahneNFft2m7xcScD7H4MxLTL/vL0MmvUTU1lJ2GMSMcJM3vUCQdiaYySpC
-         RC0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763400625; x=1764005425;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BByjwH6DP+Z4+u9FvWdxBfSB14chnUdtzQgKngoILck=;
-        b=dHeQattvkEjLeoH6M86lPQtb4s+4DQY5VeLZnG9Kcte95u4DeEkVJQ1D97KniXdW5f
-         zr9E0hEyanp48fPqxn6feNagnbOype2j262vRmgm+FInqzd87xxRLSWduYJ9JDIactpS
-         iVChlzKdTeN3Gp0WX6/ZjTUhwA29kv/BCuvwNzSIGGvgO5OiXuSQmRYwU2rqoqLo/+Av
-         wgOwDg+en2lQD1i/nnybHZY0yfLNGdKreY79tE77IQPIvq9guGG3Fe5tmSE2Cqx1fHia
-         E/yUqxJo6eF4pIlY/oY1qDs5McXF9NnekEdueCC+mBo/DuNc4bkr71LGk7JlafQP3+dv
-         E7uQ==
-X-Gm-Message-State: AOJu0YyxFAdeRIs6g0OfAol2ODKSQPm9EbFIJj1Oep41dO4VeFPbqnbg
-	/smj+nI9d6qxXyieKDolc43qGjKM0Ah1mZ/jdn38rMT/8wGz3zAxHkGDSQUFKh7tyGcPM6K/Tf3
-	b/2L99DI=
-X-Gm-Gg: ASbGncusN3q4W1ojY8oetc1JOJSLpY7LJE+qArUSGm1kEamOWeKlgNNCWQOto4yh2kh
-	ulkBSII1OfYOt0bdBgrUtVEDJgLxd2Ec4bmlM1Vc+zTuLjc8g7fsx0KodLVAJduBATIiEXmosfd
-	jQbcVqJUjKAKtxv/ZixFa9C8j/5PzJVQawezq3mTEV4bI3nr1kNxU77nS72K/73i+E2MV+SC87N
-	FIRIp1iD3zXto0u+vm8IgcF4wyOB758tMwM37Dlql4SATixRpiPOJzCB6DrOr3Sc9xN02LO7BJ3
-	86gkrtcNeB9S4+KtTlM+zvQSD/RdVpNgehTTnQaCIDO6ZFpQWlL3eWjHQ1ewiqAxjWi82LS0OgX
-	B9nQDNjYlKdl8786oiuXd/BJdLECAel34QIIt4KgyKpYSJRs+Trql+Fu+S+C3gYIB9kaPLIInj0
-	G5JF7CGEW9h6u1BGJ/XRw=
-X-Google-Smtp-Source: AGHT+IHbbc4k5mrkfMylyT8qgfnNnq3tN3oQVQf2oywmj0nq47cgWECuGlPIaeZHCeK9mw/C6man6A==
-X-Received: by 2002:a05:6a20:12c6:b0:35d:6b4e:91f9 with SMTP id adf61e73a8af0-361171ca5b7mr161369637.24.1763400623631;
-        Mon, 17 Nov 2025 09:30:23 -0800 (PST)
-Received: from localhost ([71.212.208.158])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc36f61bea9sm12609123a12.14.2025.11.17.09.30.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 09:30:22 -0800 (PST)
-From: Kevin Hilman <khilman@baylibre.com>
-To: soc@lists.linux.dev
-Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] soc/maintainers: OMAP updates for v6.19
-Date: Mon, 17 Nov 2025 09:30:22 -0800
-Message-ID: <7hqztwk1n5.fsf@baylibre.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SbIqvnS4"
+Received: by smtp.kernel.org (Postfix)
+	id C7F4DC2BC9E; Mon, 17 Nov 2025 19:55:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B096C2BC86;
+	Mon, 17 Nov 2025 19:55:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763409337;
+	bh=5NYv7IhXQWWcpLL+EOWuBkb9pQPJESIJu5lfgINYai8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SbIqvnS4+ghe1JRWib/V+hwCkB40FtAWp7of4kJ2Yi56O/km3W6+p215vYD7+e4lN
+	 BYGurIMvo1CnhkHjy/YvnmcqenT9kd8IMfcoJ78RIBh+ycW5WonNf/XSanW9+4IbjL
+	 MZX+obPMMudSNeyRNWTt/0g1vUahVyg4ZeF+UiE/cZcxn1iec+pgl+WadS2R4lpv/n
+	 At/Tf4Xvm8Lsd/lbMfGgsUyRAVM1ejZKVBppG4Z2muxVVEH9/rPIpy1nSJSnvh5UXC
+	 hZ4p+QfIim3LBPLr5skvWxt8yG+J/Nq87IFCrCPbE6cO5vY0XOyvM9pN/7sWXYlKVw
+	 +nnuxkQNejkRg==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Gabor Juhos <j4g8y7@gmail.com>,
+	Haotian Zhang <vulab@iscas.ac.cn>,
+	Johan Hovold <johan@kernel.org>,
+	Komal Bajaj <komal.bajaj@oss.qualcomm.com>,
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+	Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>,
+	Neeraj Soni <neeraj.soni@oss.qualcomm.com>,
+	Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
+	Prasad Kumpatla <prasad.kumpatla@oss.qualcomm.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Sibi Sankar <sibi.sankar@oss.qualcomm.com>,
+	Yongxing Mou <yongxing.mou@oss.qualcomm.com>
+Subject: [GIT PULL] Qualcomm driver updates for v6.19
+Date: Mon, 17 Nov 2025 13:59:54 -0600
+Message-ID: <20251117200001.3169354-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+
 
 The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
@@ -76,18 +69,124 @@ The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.19/maintainers-signed
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.19
 
-for you to fetch changes up to 517d066dc080fc297f1ab5e8c6fda7c59d48ef8d:
+for you to fetch changes up to 186b8f8fcc86949eaf0c3bd11a47048ec4c78b5b:
 
-  MAINTAINERS: Add entry for TQ-Systems AM335 device trees (2025-11-17 08:53:39 -0800)
-
-----------------------------------------------------------------
-MAINTAINERS: Add entry for TQ-Systems AM335 device trees
+  soc: qcom: mdt_loader: rename 'firmware' parameter of qcom_mdt_load() (2025-11-11 09:48:57 -0600)
 
 ----------------------------------------------------------------
-Alexander Stein (1):
-      MAINTAINERS: Add entry for TQ-Systems AM335 device trees
+Qualcomm driver updates for v6.19
 
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Support for hardware-keymanager v1 support for wrapped keys is introduce
+in the ICE driver.
+
+Support for the new Kaanapali mobile platform is added to last-level
+cache controller, pd-mapper, and UBWC drivers.
+
+UBWC driver gains support for the Monaco and Glymur platforms.
+
+The PMIC GLINK driver is extended to handle the differences found in
+targets where the related firmware runs on the SoCCP.
+
+Support for running on targets without initialized SMEM is provided, by
+reworking the SMEM driver to differentiate between "not yet probed" and
+"probed but there was no SMEM". An unwanted WARN_ON() that triggered if
+clients asked for a SMEM item beyond the currently running system's
+limit, was removed, to allow new use cases to gracefully fail on old
+targets.
+
+The Qualcomm socinfo driver is extended with support for version 20
+through 23 and support for providing version information about more than
+32 remote processors. Identifiers for QCS6490 and SM8850 are also added.
+
+Additionally, a number of smaller bug fixes and cleanups in PBS, OCMEM,
+GSBI, TZMEM, and MDT-loader are included.
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      soc: qcom: ubwc: Add configuration Glymur platform
+
+Akhil P Oommen (1):
+      soc: qcom: ubwc: Add config for Kaanapali
+
+Anjelique Melendez (1):
+      soc: qcom: pmic_glink: Add support for SOCCP remoteproc channels
+
+Christian Marangi (2):
+      err.h: add INIT_ERR_PTR() macro
+      soc: qcom: smem: better track SMEM uninitialized state
+
+Gabor Juhos (2):
+      soc: qcom: mdt_loader: merge __qcom_mdt_load() and qcom_mdt_load_no_init()
+      soc: qcom: mdt_loader: rename 'firmware' parameter of qcom_mdt_load()
+
+Haotian Zhang (2):
+      soc: qcom: gsbi: fix double disable caused by devm
+      soc: qcom: smem: fix hwspinlock resource leak in probe error paths
+
+Jingyi Wang (6):
+      dt-bindings: cache: qcom,llcc: Document the Kaanapali LLCC
+      soc: qcom: llcc-qcom: Add support for Kaanapali
+      dt-bindings: arm: qcom,ids: Add SoC ID for SM8850
+      soc: qcom: socinfo: Add SM8850 SoC ID
+      dt-bindings: soc: qcom,aoss-qmp: Document the Kaanapali AOSS channel
+      dt-bindings: firmware: qcom,scm: Document SCM on Kaanapali SOC
+
+Johan Hovold (2):
+      soc: qcom: ocmem: fix device leak on lookup
+      soc: qcom: pbs: fix device leak on lookup
+
+Kathiravan Thirumoorthy (4):
+      soc: qcom: socinfo: arrange the socinfo_image_names array in alphabetical order
+      soc: qcom: socinfo: add the missing entries to the smem image table
+      soc: qcom: smem: drop the WARN_ON() on SMEM item validation
+      soc: qcom: socinfo: add support to extract more than 32 image versions
+
+Komal Bajaj (2):
+      dt-bindings: arm: qcom,ids: Add SoC ID for QCS6490
+      soc: qcom: socinfo: Add SoC ID for QCS6490
+
+Mukesh Ojha (2):
+      soc: qcom: socinfo: Add support for new fields in revision 20
+      soc: qcom: socinfo: Add reserve field to support future extension
+
+Neeraj Soni (1):
+      soc: qcom: ice: Add HWKM v1 support for wrapped keys
+
+Pankaj Patil (1):
+      dt-bindings: firmware: qcom,scm: Document Glymur scm
+
+Prasad Kumpatla (1):
+      soc: qcom: pd-mapper: Add Kaanapali compatible
+
+Randy Dunlap (1):
+      firmware: qcom: tzmem: fix qcom_tzmem_policy kernel-doc
+
+Sibi Sankar (1):
+      dt-bindings: soc: qcom,aoss-qmp: Document the Glymur AOSS side channel
+
+Yongxing Mou (1):
+      soc: qcom: ubwc: Add QCS8300 UBWC cfg
+
+ .../devicetree/bindings/cache/qcom,llcc.yaml       |   2 +
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |   3 +
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |   2 +
+ drivers/soc/qcom/ice.c                             |  81 +++--
+ drivers/soc/qcom/llcc-qcom.c                       | 373 +++++++++++++++++++++
+ drivers/soc/qcom/mdt_loader.c                      |  52 ++-
+ drivers/soc/qcom/ocmem.c                           |   2 +-
+ drivers/soc/qcom/pmic_glink.c                      |   9 +-
+ drivers/soc/qcom/qcom-pbs.c                        |   2 +
+ drivers/soc/qcom/qcom_gsbi.c                       |   8 -
+ drivers/soc/qcom/qcom_pd_mapper.c                  |  10 +
+ drivers/soc/qcom/smem.c                            |  33 +-
+ drivers/soc/qcom/socinfo.c                         | 102 +++++-
+ drivers/soc/qcom/ubwc_config.c                     |  24 ++
+ include/dt-bindings/arm/qcom,ids.h                 |   2 +
+ include/linux/err.h                                |   8 +
+ include/linux/firmware/qcom/qcom_tzmem.h           |  15 +-
+ include/linux/soc/qcom/llcc-qcom.h                 |   7 +
+ include/linux/soc/qcom/socinfo.h                   |   4 +
+ include/linux/soc/qcom/ubwc.h                      |   1 +
+ 20 files changed, 645 insertions(+), 95 deletions(-)
