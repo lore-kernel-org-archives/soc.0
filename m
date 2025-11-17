@@ -1,206 +1,435 @@
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011047.outbound.protection.outlook.com [52.101.52.47])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8D027EC7C
-	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 14:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F1C3346BB
+	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 14:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763388736; cv=fail; b=hP7lj29o0Yayym7ywDIVW07j/TdkTbWnaiwROivHQTSd14AGdodSkgjXKaPL0cD1VEJJrPOKKm5rOHgzxQ/MXY3m/EX1Bil2JBDYayzMo3onwClFi0lpLoIh4yj2g+/Meu5+ZEK7ryByKHYN8jRV9b2dbHYkagmAKAnLrGrAHBI=
+	t=1763389739; cv=fail; b=lHOz0k8jt+b36Bfh+z2ruhxKR+0a7+UVYmRxS7r3vzTd4ak0NKC/1DseLJL6ItfXBKUq/v4mx26y1Ifzor3RE2Tl1amy8CCLf87NFIoyl3nb6dhzl9YCseUbKViK93RzXQUADb3mBTv4njrshr4cZ8fQbNF4WulmYtwEVmQJ+1I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763388736; c=relaxed/simple;
-	bh=WosB49BGcOWLE8WsdnppmqZF6DHjRhAPdvENUeJyu5g=;
-	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mBwbNW5LCx6auCuOdzXTL9bu5srGITVdOfKsBRIaupobT+gK0IHjuyKIP9caEkRLltKqzeWBkR+95gDThnO2r8sa8v3d7R1yxxE3zu5IJt7w8fwBXCdgoyW2dsJdrfPLlEQ6JuRL+28Is/tjXeaV6sJk88ErTKBZQ5+wiSDA4Vg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=s1ZEL4GQ; arc=fail smtp.client-ip=52.101.52.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1763389739; c=relaxed/simple;
+	bh=9edQASphUDDkThLVhKGUI7F/qz+84tHjuiaKo67I35k=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:Content-Type; b=Un+dMomXv05ZoLiN0KF47gHYbEK7Uu9JAo8h/oKBn6cVThXgFzxzk27yGBHzeYiV/dpvwPcvOyuZnZgQzXMgOt4vl5+/uusGDg66S762+yrmebLh7eiyUA5N4X1wLte/6c22AspDZ3m6agr45X1kuQcUcbIiH1cmgfIEonjfOx8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=NbKFe3Ne; arc=fail smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="s1ZEL4GQ"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="NbKFe3Ne"
+Received: by smtp.kernel.org (Postfix)
+	id E4AA9C19425; Mon, 17 Nov 2025 14:28:57 +0000 (UTC)
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013034.outbound.protection.outlook.com [40.93.201.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 524D6C116B1;
+	Mon, 17 Nov 2025 14:28:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 524D6C116B1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VnKs51Vw2qNFP1CAOTfUVV+s4uARYUl+Aey3slLJAkXZCYVFf3o8FkNLtxZymiVORhu43rbxYxwL8De1kkcyaQunBmxjH6S7yvwdbJjtx3oXI+fIfOqryiKSTkTijOigGRcGAsjJxyctamUxvyDQBtpwoBW/IuoRHEiTd0eY7kn/UGOG95MqYqi6hVk0niwGw2N3CCKzlHyAIauYZExKGN7Az9vClX7BHAZfyKdAHCiNKFkynilyy74UduL5jEgrx3IP+Nz9EBmYU/5o1wRNgSq9QpSjWcNf9KiAa9cBl1FKwVNe0jLgoRndXjEjbb26HyTp1s+5ng7gSu2wh0hZjQ==
+ b=dtNb+0GKf8EjbqfjZmNZyi+qOpXblG2O6DiepR7K4F8gnez1K/j9kmZoPMZLqHjJVkLIcUSfe0n4Dr4nxhub0QarH5WWQohbPXsnOyw1nslpZHGY/ecJ7+fIUbSoXm+f8Rm32D/f5oQfmudgvpJfCfUPXkXjzsPtjgPiSz2GhBOjGTH53vf8qIIuoc8G4YmkHAMEwMqv71NXg9pAOnfI/rdiQ4qBqy4jgQ/6Vr4xHUH4LyZfv90aZwgGOPxg0fpRsSY01kCbOoYyzVIeJK7vCJPOIVutMO8eUZ+WsfWaqxBPhBKQOGNtjqeCV69JP6xcvECCmDSZTRNh7EfMJ55icw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QTEL6Izch0K5ZAgdjedJYC59oup2Y9TdQVDCw4sXrt4=;
- b=ELQhvSN0EhAHrR/Po4kYCj7iBwcnRNdNjc6ywbBDGhgdTiOhMz5+bUl+Oz+EZ4LYt+AbbDLHSR/RI3YrJ0y+9geq1sjm/9UHbdE3RHAIMWPMdMVcYH30rSWeR48/PmRaack/QEMk1WztrYkMhj950M3YB3LtB2ihS+5UZsStL+0R1uFdtCGgKOGJVdvXvcZoujbAAGD6KQfFa8KBuV3u7GsH2tA+EhqcMnh5C6utUqLOMSAgpkq4HJWOOZK572zmtavTrfJr2lusp/iEeEVHiesenugk2fodTo+yIhdZ+P9SyyqIRwaCvUb/eEMI62Syx0Dpnp2YuyMCPBQsoLny/Q==
+ bh=d6hTEmjcVBW5jTOhWh8piVYhgK6MkJlpuMDcxnEqSi0=;
+ b=D5pxo8qAuh6zSMTicG+fu+YUk7nrRgXgCRqSKbpiWgBJHglS9zl5RhKyabPuVhnsW36HCK1tCTqv2EMB+i8hosF/g14C9hWUw6VgzU2bbZU32+Q50vY2yawQVPZPul1NLewWu26tQcpvgQFFIzbuTT308p+cMjEM/p0CF/U+DlYDuA3kkF3oCCHSRVCAmSJdQvZR9np5B2sEcIIN69SSwbNFPjBzFnRzntqSUKd9M3+uzx4QYO1b9y6wrNI9oxZbPaIryav1q2djkxhSmVdE72xkzQ5K/y0NEDtwf6okRRBY+eh1jn5l4IN4jwToEgSIHQGp0r9HN4t8GOFkOrwzuw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.194) smtp.rcpttodomain=atomide.com smtp.mailfrom=ti.com; dmarc=pass
- (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
- (message not signed); arc=none (0)
+ 198.47.21.194) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QTEL6Izch0K5ZAgdjedJYC59oup2Y9TdQVDCw4sXrt4=;
- b=s1ZEL4GQEjFu+C1Gzrl3vqy5j8JkSp1u7XTrObHzrRW/UiPBn4vSoYRI+tarn7cIHPzgIGqgT/4gXdwE/wnHITToY/+YQ8P+HCnCCAttReGrO7SJsaMSyLe5fQRCDEu8O2KY/LU4uA4ZpQqOLCoNnWVRD6q/+4ob+PtQfqh+Orw=
-Received: from SJ0PR03CA0262.namprd03.prod.outlook.com (2603:10b6:a03:3a0::27)
- by SA6PR10MB8037.namprd10.prod.outlook.com (2603:10b6:806:442::10) with
+ bh=d6hTEmjcVBW5jTOhWh8piVYhgK6MkJlpuMDcxnEqSi0=;
+ b=NbKFe3NeUUXawnUF6kMWJCzjGAXoF3BoAqnuVk1jhwZfYwSApDsbV0lo28iZDKaRu3oZpBTZubAPcTjVFHA4+t2d+N7p7isHNwl1+V2RDiQjQprqSObH1hb1a75VBUap6YBNuA9UmDG3WWYr2WtuqsWvezF9xECG0JNTapwQ52g=
+Received: from PH7P221CA0066.NAMP221.PROD.OUTLOOK.COM (2603:10b6:510:328::29)
+ by SA1PR10MB7829.namprd10.prod.outlook.com (2603:10b6:806:3ab::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.21; Mon, 17 Nov
- 2025 14:12:10 +0000
-Received: from SJ5PEPF000001F2.namprd05.prod.outlook.com
- (2603:10b6:a03:3a0:cafe::69) by SJ0PR03CA0262.outlook.office365.com
- (2603:10b6:a03:3a0::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.22; Mon, 17 Nov
+ 2025 14:28:51 +0000
+Received: from CY4PEPF0000FCC5.namprd03.prod.outlook.com
+ (2603:10b6:510:328:cafe::a3) by PH7P221CA0066.outlook.office365.com
+ (2603:10b6:510:328::29) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.22 via Frontend Transport; Mon,
- 17 Nov 2025 14:12:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
+ 17 Nov 2025 14:28:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
  smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
  action=none header.from=ti.com;
 Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
-Received: from lewvzet200.ext.ti.com (198.47.23.194) by
- SJ5PEPF000001F2.mail.protection.outlook.com (10.167.242.70) with Microsoft
+ 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
+Received: from flwvzet200.ext.ti.com (198.47.21.194) by
+ CY4PEPF0000FCC5.mail.protection.outlook.com (10.167.242.107) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9343.9 via Frontend Transport; Mon, 17 Nov 2025 14:12:09 +0000
-Received: from DLEE200.ent.ti.com (157.170.170.75) by lewvzet200.ext.ti.com
- (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9343.9 via Frontend Transport; Mon, 17 Nov 2025 14:28:49 +0000
+Received: from DFLE211.ent.ti.com (10.64.6.69) by flwvzet200.ext.ti.com
+ (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 17 Nov
- 2025 08:12:06 -0600
-Received: from DLEE200.ent.ti.com (157.170.170.75) by DLEE200.ent.ti.com
- (157.170.170.75) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 08:28:47 -0600
+Received: from DFLE205.ent.ti.com (10.64.6.63) by DFLE211.ent.ti.com
+ (10.64.6.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 17 Nov
- 2025 08:12:06 -0600
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE200.ent.ti.com
- (157.170.170.75) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 08:28:47 -0600
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE205.ent.ti.com
+ (10.64.6.63) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 17 Nov 2025 08:12:06 -0600
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AHEC6V92618964;
-	Mon, 17 Nov 2025 08:12:06 -0600
-Date: Mon, 17 Nov 2025 08:12:06 -0600
-From: Nishanth Menon <nm@ti.com>
-To: SoC <soc@kernel.org>, <arm@kernel.org>
-CC: SoC list <soc@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
-	"Tony Lindgren" <tony@atomide.com>, Vignesh Raghavendra <vigneshr@ti.com>
-Subject: [GIT PULL] soc: ti: Driver updates for v6.18
-Message-ID: <20251117141206.pqjzjzegxajziyof@resort>
+ Transport; Mon, 17 Nov 2025 08:28:47 -0600
+Received: from [172.24.233.103] (uda0132425.dhcp.ti.com [172.24.233.103])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AHESj6W2596310;
+	Mon, 17 Nov 2025 08:28:45 -0600
+Message-ID: <a07364c1-5a4c-474f-be21-96f38bfe9130@ti.com>
+Date: Mon, 17 Nov 2025 19:58:44 +0530
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cvve6pb4a3vhlaqm"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+From: Vignesh Raghavendra <vigneshr@ti.com>
+Content-Language: en-US
+Subject: [GIT PULL] arm64: dts: ti: K3 updates for v6.19
+To: arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
+CC: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, <soc@lists.linux.dev>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature";
+	boundary="------------dtNL3jqcK4DD96wqKk3SL0Kp"
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F2:EE_|SA6PR10MB8037:EE_
-X-MS-Office365-Filtering-Correlation-Id: e7509da9-5d26-4f55-352e-08de25e34c15
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC5:EE_|SA1PR10MB7829:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6dfd7bf-2816-4f31-d8bd-08de25e5a025
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
+	BCL:0;ARA:13230040|376014|1800799024|82310400026|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?xCObZZIYH4i7eSbreSU90Jsl7/d2Ag0lEkgUQnGfMzUcFjNRkT5FnsleOFsj?=
- =?us-ascii?Q?BB7P7kPkn4d9Nvkvt7TCl536mlKBweSTMqmxviJv2oLq4/bCCRGd7P58kkiN?=
- =?us-ascii?Q?aXanf5xxmVZGT2jZ0cUCB7TsiKZgzr+xK0sFPtm3eT8xDGGslAppgTvFjZAs?=
- =?us-ascii?Q?KPzCcM/1Qp6Nn8gUGapI+UlRG7YVmd1iWueOHx6ZgCRmjYBZhNagdcYsd41q?=
- =?us-ascii?Q?rlCpWdK0m79Wd9qYfiT+Rqj04UdFUr7bw0SRqKk5ndq0oHWu/ZXfVCeoyM37?=
- =?us-ascii?Q?fqARhN73AduKZhUdUW/yhUWcoTzxEI6+q4wH6z6f38ldaM7IZzEJxLQ2j9sg?=
- =?us-ascii?Q?q4BFfjlMO2QlTt8i+9+hZzKUy62C2ae80rhQU2gkbrpMejA+jGniqmSSbDZj?=
- =?us-ascii?Q?SNaJpjfOqb2kKWwPuBaMAEUcH9ZRS+/e+eduk63yO9SSiw+N0E4/SkbkvsR7?=
- =?us-ascii?Q?7bxO7TL5Ebw+AF7e2iNmcjUDjljgOMT/FU8OGY0fYHbE8QMx9lxvSDQJPTn1?=
- =?us-ascii?Q?O1UNgMAanlBjES+eXFQmKwtlKJlN7bOQGy+QBeUxeeN3Botwi01lOUclrToC?=
- =?us-ascii?Q?F7WoHynW2kLxLapF6TLqgFRIFl/opIXIcMScc9akLBqco43MclNV+mFmEipo?=
- =?us-ascii?Q?p9vqDBuuA7ZMvLars36eXT+GOzMle9YQN9QoU39S1d1S47il8SISWye8XS93?=
- =?us-ascii?Q?EuTFLbmfNNrebyox/SnlLAPbRBtNlz0W/ZM7LQSULmAfArGMgZPr5J2YHVqz?=
- =?us-ascii?Q?44ITfjlvBShDvkmySAy51iIjkLzbYbNr/KIHkrX27OGSTHX/sHDv2UUJ7aKv?=
- =?us-ascii?Q?NKSH/lSCbuKRBRj7B/SODoSjMaf+o+lggPosCakota0HCUv1yipZIeSHLvKQ?=
- =?us-ascii?Q?q1cMXMIJ7pZ7Pg7Jcu13Q2KjvJY1vp4/qn8F6i1IDi54TJeOIWG8u8Ouv0/V?=
- =?us-ascii?Q?EJhajYkeEM9vArWLIIKUqoXVyWu/PbwjHEdB5M5uq72pMETT0LuZ2D2h4H9O?=
- =?us-ascii?Q?T+gmPoKMgt8UPvqTq60zDVxcFwWYgOvXmiXP+0dav7ue2yoTjwazZ7DsXKKb?=
- =?us-ascii?Q?zG9n02rFR/lZBQGSyNH7vNUuWXmP7kntMS9FYLoMCr3/SG3TFgumVN77j9mE?=
- =?us-ascii?Q?WNBW23VLnJiAzuGsjGvIK/lUrzE/sff/untH9s+Sl4tUeJ9Lv5uQQy1auvQ2?=
- =?us-ascii?Q?0YPR4SQBbXYklDT+v1DDhHZOLdzShNXxACt1PxWClPy5b4JMgkCkXT4kLtvz?=
- =?us-ascii?Q?y4WdKRg1uWaJ1ALSqvu/2vf+s0F+ExqVVoHqY8xd9Rn3YaL/gN1i3tSaF+UL?=
- =?us-ascii?Q?twRV7+udf5WfHadr8wd6UohRKroVaPrXiPhxUGiyq+PP6JvspYWKfBod8/D+?=
- =?us-ascii?Q?iW5qTmUqc8tzGCwdZT1184fiYxIwIkEuCmv38gWqsfANBTQbgBpmzWyEK4Fg?=
- =?us-ascii?Q?W5XHi9qtor0vRzp2ErUMXonQdWMuvUiEZ3jmYRMhVQAqUCqSGilExE2yhWWZ?=
- =?us-ascii?Q?spZD2iud7bV4D5jR7i0lKF+NoElWZoJMrXxs+9rt3d80ODW14/nPP7gmqTvn?=
- =?us-ascii?Q?Z0KufmjeTLjrxJvlEEI=3D?=
+	=?utf-8?B?WU5scmNtWlhLQVJtWWxkY0dxN1NFN0taRkVSNnRDT2ZwdXlXUzdRNkcyRVVh?=
+ =?utf-8?B?WjYvWFBuMTdrQm1qa0QwWFk0dUNKQ2pHZjBpRkRCWjRnc1RURWZIQkg0VWhS?=
+ =?utf-8?B?ZWVHbnp4TGIzejMrMnhIN1ZsNUM3d3h5d0JQWVJVMm5laGNYRW1xYURrYTVx?=
+ =?utf-8?B?aW10RFZIcnY5emVRMXFsUVdEVUxacHVkME1LS2ZCbDk2MXkxWkJMdWRNRFk4?=
+ =?utf-8?B?dFBxTlRGZXI3TUo2d3F2RlUzY2ZDalYxWnFCR3VlUjhvcXBTOFJ1RDhCUFY5?=
+ =?utf-8?B?YWJEaXVWU0FBUDcvM21NV2RNUS83a0lDVUE5VHZWNzIzeE9YU3ZWT1dkZlNj?=
+ =?utf-8?B?WVRwQ1hvZVZDeDVmQmJ5WVpTM2ZkRFBUQ3VUcDNzTWI5bFpWNGdFOUI0ZjJp?=
+ =?utf-8?B?V3VRdnE1dGVNempoYjFUczNqckNFcHVxa2huWFdXdmFGZ1FwT21DaW5WVGxP?=
+ =?utf-8?B?QVk1U1pHSXM4U1EvbGk0dUFzaU9aWmN2MmxyUWxoZU1sOURPQXJqTWtqSWdq?=
+ =?utf-8?B?bHJUckpoRkdlT1FJQndBbjN2Q3hTUHh5TzRQNHpGQ29vRU9UZUxjeDVwSFRZ?=
+ =?utf-8?B?aEgwTnlpL2tFcHhyc29ZNVhTT2lxbTlreTZaRWhuZ1hHZjd1UTNTdmhqZlh2?=
+ =?utf-8?B?c1hSZDJsc29KWmo4SXhwRHk1RXRJU0g2emRjSHF4QmY4RGp0cUtuWWdyYlNW?=
+ =?utf-8?B?NHorc3ArMTRiMzRKQkE5YWRNTW5DN2doai9jTVB2cWZ0ZHFhWGhQTEpMa1RY?=
+ =?utf-8?B?dllEcGNUa1d1SVRCUDgxT1BXREk2R0VTMWYwOW5WeXk1TkFNeVFGUTcrVUtl?=
+ =?utf-8?B?Vld6bmgxRGR6Nk03YXgwTjRHSDlqdi8xTzJNaWlKbEd1YVF4aiszRVJDSUpU?=
+ =?utf-8?B?VWxDaXA5YmZ1S2E5TVRhV2c3dkdsclVzZzFrWStGYmdsOGsyVzNBbDllWVdn?=
+ =?utf-8?B?dC9MQTRON0tXUFlkbitNN3Jtc1laQmxFcFgvejg4eHMzRU02K0x1MVk3MVlz?=
+ =?utf-8?B?R0dWNlRWSlZUUGpnS05FQXRkdFc1ZFB5czlsbnd6elFtem9oa2djWG9UbUtZ?=
+ =?utf-8?B?alkyQ3dIbEVSYXpGWXZjdVJCNGtOOVZncjEwQWZ5MityZzZwcU1HcG5NTytq?=
+ =?utf-8?B?L3NFK2V5Q2VQdGgwS2Nobnhra1VqWVBYc0ZzZkRzNmJac2dnK2tsaTcvZmxU?=
+ =?utf-8?B?aURSRnJSbzE1dFd1WVJMbGpSSU1sOHh4S1Y2WUdUdGg1MWRROXJaQWdubEFC?=
+ =?utf-8?B?YTdnRlJOaHo0ZjJ1UmZzOWVtRFgwZUJwc1ZNZ2ROWXhtZzM3dGJXRVdDL29Z?=
+ =?utf-8?B?bjltQ01QVG44dnlMemxrdGVhNHNlUlJ3STdFRHo5NzVEeXFlMW1QcitLMWRW?=
+ =?utf-8?B?ZzNXWnpRRzlqMlVrR1BXaThRdWJUUWg2c0hJZHRpRzNwamp0VHFMUnN3Zmsw?=
+ =?utf-8?B?bXRraDBJalZtc251a1pqVy9JRkpCenZNYURwcW9SQURhT0VFUi9YU0Z2eVNI?=
+ =?utf-8?B?R2JKODRKc3RPR3RFYXhOTCtGY2ZrcEl5OVdHMHNSclR0SjM0SkFlTFhzWXpz?=
+ =?utf-8?B?cGpIVUgrTTdTRXIrVnpNOVVwSGRDSkhXemNyS1NtL3FKTXB5UWJ1K3NkY2wr?=
+ =?utf-8?B?cVNKcG1EdERLN3owemJNdmxVZkNYSlFoQ1dkS1FvVlRsL2N1cjdDT3lWeGlP?=
+ =?utf-8?B?REdlYXBFeHJGeG1kT3ZHblNFcm5qU09vR2JIdlZLTjFjb0pOUWdFdXpjSU04?=
+ =?utf-8?B?bUxzb3FuZkRVck5zRndxMUxMQkpkVmxhVmwyK2ZNUlI5dkQ0cHhlUThkazJK?=
+ =?utf-8?B?QVhOSldZb3o2KzNHVzNFd3gxQmJ5Q2UvYW4rTlYyNWU5d0Q1V3lWS0x3elNj?=
+ =?utf-8?B?UzhJTXJ1Yk1aMUM4SjVmOWhpeEtoNEM0d0xCVjNMOWNSU2FWcE9hZ0M2TFEr?=
+ =?utf-8?B?T2JMMDVGRU5yTTR0NC9wWnZHNkhzUkRRL0QyRkZQK3BreWZwak8reDZKdFh2?=
+ =?utf-8?B?MU1oWGEyS2NER2QwV2VVeVVaRnlQcTBPM2RSYmVPWmIzOUVFMTRQbVVQdDJ1?=
+ =?utf-8?B?SldSWmJ0anByUWMwU2s5UHlGY2YrYVdzU2I0YjNTS01ZZFA5aS9nb2RuOENX?=
+ =?utf-8?Q?4ZIo=3D?=
 X-Forefront-Antispam-Report:
-	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(376014)(1800799024)(82310400026)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2025 14:12:09.6707
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2025 14:28:49.6914
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7509da9-5d26-4f55-352e-08de25e34c15
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6dfd7bf-2816-4f31-d8bd-08de25e5a025
 X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001F2.namprd05.prod.outlook.com
+	CY4PEPF0000FCC5.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR10MB8037
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB7829
 
---cvve6pb4a3vhlaqm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--------------dtNL3jqcK4DD96wqKk3SL0Kp
+Content-Type: multipart/mixed; boundary="------------mxb51hmjg1uoDvUuS2fG0T0t";
+ protected-headers="v1"
+From: Vignesh Raghavendra <vigneshr@ti.com>
+To: arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
+Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, soc@lists.linux.dev
+Message-ID: <a07364c1-5a4c-474f-be21-96f38bfe9130@ti.com>
+Subject: [GIT PULL] arm64: dts: ti: K3 updates for v6.19
+
+--------------mxb51hmjg1uoDvUuS2fG0T0t
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Please pull
-
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df567=
+87:
 
   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
-er-soc-for-v6.19
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
+-dt-for-v6.19
 
-for you to fetch changes up to e0431ff998bd32dcc1e591a45b4e156fcb0325a3:
+for you to fetch changes up to 00fb4c73b67d36783c5ab95a830f0cf0142b9fc3:
 
-  firmware: ti_sci: Partial-IO support (2025-11-13 13:03:55 -0600)
-
-----------------------------------------------------------------
-TI SoC driver updates for v6.19
-
-- ti_sci: Add Partial-IO poweroff support and sys_off handler integration
-- ti_sci: Gate IO isolation programming on firmware capability flag
-- ti_sci: cleanup by replacing ifdeffery in PM ops with pm_sleep_ptr() macro
+  arm64: dts: ti: k3-am62l: add initial reference board file (2025-11-13 =
+22:01:07 +0530)
 
 ----------------------------------------------------------------
-Markus Schneider-Pargmann (TI.com) (2):
-      firmware: ti_sci: Support transfers without response
-      firmware: ti_sci: Partial-IO support
+TI K3 device tree updates for v6.19
 
-Thomas Richard (TI.com) (2):
-      firmware: ti_sci: Replace ifdeffery by pm_sleep_ptr() macro
-      firmware: ti_sci: Set IO Isolation only if the firmware is capable
+Generic fixes and cleanups:
+* Multiple SoCs: Disable CPSW in SoC files and
+  enable them in board files for better board-level control
+* Replace rgmii-rxid with rgmii-id for CPSW ports across multiple boards
 
- drivers/firmware/ti_sci.c | 155 ++++++++++++++++++++++++++++++++++++++----=
-----
- drivers/firmware/ti_sci.h |   7 +++
- 2 files changed, 135 insertions(+), 27 deletions(-)
+New Boards/SoM:
+* AM62L SoC and basic support for EVM
+* Toradex Aquila AM69 board support
+* Kontron SMARC-sAM67 module and ADS2 carrier board support
+
+Platform wide:
+* Define possible system states amd wakeup-source (AM62/AM62A/AM62P)
+
+SoC/EVM specific changes:
+AM62:
+* Add RNG node
+* Add OLDI support
+
+AM62P:
+* Move audio_refclk to common main dtsi (k3-am62p-j722s-common-main)
+* Fix memory ranges for GPU
+
+AM62D2:
+* Enable PMIC support on EVM
+* Misc fixes
+
+AM64:
+* Add DMA support for TSCADC on EVM
+
+AM69:
+* Add Aquila board support with Clover variant
+
+J722S:
+* Fix audio refclk source in main dtsi
+* Explicitly use PLL1_HSDIV6 audio refclk for EVM
+
+J784S4/J742S2:
+* Add bootph-all tag to support PCIe boot
+
+Variscite VAR-SOM-AM62P:
+* Add support for ADS7846 touchscreen
+* Add support for WM8904 audio codec
+
+----------------------------------------------------------------
+Aniket Limaye (1):
+      arm64: dts: ti: k3-j784s4: Fix I2C pinmux pull configuration
+
+Aradhya Bhatia (2):
+      arm64: dts: ti: k3-am62: Add support for AM625 OLDI IO Control
+      arm64: dts: ti: k3-am625: Add OLDI support
+
+Bryan Brattlof (1):
+      dt-bindings: arm: ti: Add binding for AM62L SoCs
+
+Dominik Haller (1):
+      arm64: dts: ti: k3-am68-phycore-som: Add pmic label
+
+Hrushikesh Salunke (3):
+      arm64: dts: ti: k3-j784s4-evm-pcie0-pcie1-ep: Add boot phase tag to=
+ "pcie1_ep"
+      arm64: dts: ti: k3-j784s4-j742s2-evm-common: Add bootph-all tag to =
+SERDES0
+      arm64: dts: ti: k3-j784s4-j742s2-evm-common: Add bootph-all tag to =
+"pcie1_ctrl"
+
+Jo=C3=A3o Paulo Gon=C3=A7alves (2):
+      dt-bindings: arm: ti: add Toradex Aquila AM69
+      arm64: dts: ti: am69-aquila: Add Clover
+
+Markus Schneider-Pargmann (TI.com) (6):
+      arm64: dts: ti: k3-am62: Define possible system states
+      arm64: dts: ti: k3-am62a: Define possible system states
+      arm64: dts: ti: k3-am62p: Define possible system states
+      arm64: dts: ti: k3-am62-lp-sk: Set wakeup-source system-states
+      arm64: dts: ti: k3-am62a7-sk: Set wakeup-source system-states
+      arm64: dts: ti: k3-am62p5-sk: Set wakeup-source system-states
+
+Matthias Schiffer (1):
+      arm64: dts: ti: k3-am642-tqma64xxl: add boot phase tags
+
+Michael Walle (6):
+      arm64: dts: ti: k3-j722s-evm: explicitly use PLL1_HSDIV6 audio refc=
+lk
+      arm64: dts: ti: k3-j722s-main: fix the audio refclk source
+      dt-bindings: arm: ti: Add Kontron SMARC-sAM67 module
+      arm64: dts: ti: Add support for Kontron SMARC-sAM67
+      arm64: dts: ti: sa67: add overlay for the ADS2 carrier
+      arm64: dts: ti: k3-am62p-j722s-common-main: move audio_refclk here
+
+Paresh Bhagat (4):
+      arm64: dts: ti: k3-am62d2-evm: Fix regulator properties
+      arm64: dts: ti: k3-am62d2-evm: Fix PMIC padconfig
+      arm64: dts: ti: k3-am62d2-evm: Enable PMIC
+      arm64: dts: ti: k3-am62d2-evm: Remove unused ospi0 chip select pins=
+
+
+Parth Pancholi (1):
+      arm64: dts: ti: Add Aquila AM69 Support
+
+Randolph Sapp (1):
+      arm64: dts: ti: k3-am62p: Fix memory ranges for GPU
+
+Sai Sree Kartheek Adivi (1):
+      arm64: dts: ti: k3-am642-evm: Add DMA support for TSCADC
+
+Shiva Tripathi (1):
+      arm64: dts: ti: k3-am62: Add RNG node
+
+Siddharth Vadapalli (6):
+      arm64: dts: ti: k3-*: Replace rgmii-rxid with rgmii-id for CPSW por=
+ts
+      arm64: dts: ti: k3-am62: disable "cpsw3g" in SoC file and enable in=
+ board file
+      arm64: dts: ti: k3-am65: disable "mcu_cpsw" in SoC file and enable =
+in board file
+      arm64: dts: ti: k3-j7200: disable "mcu_cpsw" in SoC file and enable=
+ in board file
+      arm64: dts: ti: k3-j721e: disable "mcu_cpsw" in SoC file and enable=
+ it in board file
+      arm64: dts: ti: k3-j721s2: disable "mcu_cpsw" in SoC file and enabl=
+e in board files
+
+Stefano Radaelli (3):
+      arm64: dts: ti: var-som-am62p: Refactor IPC configuration into comm=
+on dtsi
+      arm64: dts: ti: var-som-am62p: Add support for WM8904 audio codec
+      arm64: dts: ti: var-som-am62p: Add support for ADS7846 touchscreen
+
+Vignesh Raghavendra (2):
+      arm64: dts: ti: k3-am62l: add initial infrastructure
+      arm64: dts: ti: k3-am62l: add initial reference board file
+
+ Documentation/devicetree/bindings/arm/ti/k3.yaml             |   15 +
+ arch/arm64/boot/dts/ti/Makefile                              |   15 +
+ arch/arm64/boot/dts/ti/k3-am62-lp-sk.dts                     |   64 +
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi                     |   64 +
+ arch/arm64/boot/dts/ti/k3-am62-phycore-som.dtsi              |    3 +-
+ arch/arm64/boot/dts/ti/k3-am62-verdin-dev.dtsi               |    2 +-
+ arch/arm64/boot/dts/ti/k3-am62-verdin-ivy.dtsi               |    2 +-
+ arch/arm64/boot/dts/ti/k3-am62-verdin.dtsi                   |    2 +-
+ arch/arm64/boot/dts/ti/k3-am62.dtsi                          |   22 +
+ arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts               |    3 +-
+ arch/arm64/boot/dts/ti/k3-am625-sk-common.dtsi               |    4 +-
+ arch/arm64/boot/dts/ti/k3-am62a-main.dtsi                    |   10 +
+ arch/arm64/boot/dts/ti/k3-am62a-phycore-som.dtsi             |    2 +-
+ arch/arm64/boot/dts/ti/k3-am62a.dtsi                         |   27 +
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts                      |   71 +-
+ arch/arm64/boot/dts/ti/k3-am62d2-evm.dts                     |  103 +-
+ arch/arm64/boot/dts/ti/k3-am62l-main.dtsi                    |  580 +++
+ arch/arm64/boot/dts/ti/k3-am62l-wakeup.dtsi                  |  141 +
+ arch/arm64/boot/dts/ti/k3-am62l.dtsi                         |  118 +
+ arch/arm64/boot/dts/ti/k3-am62l3-evm.dts                     |  361 ++
+ arch/arm64/boot/dts/ti/k3-am62l3.dtsi                        |   67 +
+ arch/arm64/boot/dts/ti/k3-am62p-j722s-common-main.dtsi       |   18 +
+ arch/arm64/boot/dts/ti/k3-am62p-main.dtsi                    |   20 -
+ arch/arm64/boot/dts/ti/k3-am62p-verdin-dev.dtsi              |    2 +-
+ arch/arm64/boot/dts/ti/k3-am62p-verdin-ivy.dtsi              |    2 +-
+ arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi                  |    2 +-
+ arch/arm64/boot/dts/ti/k3-am62p.dtsi                         |   29 +-
+ arch/arm64/boot/dts/ti/k3-am62p5-sk.dts                      |   73 +-
+ arch/arm64/boot/dts/ti/k3-am62p5-var-som.dtsi                |  148 +-
+ arch/arm64/boot/dts/ti/k3-am62x-phyboard-lyra.dtsi           |    2 +-
+ arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi               |    2 +-
+ arch/arm64/boot/dts/ti/k3-am64-phycore-som.dtsi              |    2 +-
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts                      |    7 +-
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts                       |    4 +-
+ arch/arm64/boot/dts/ti/k3-am642-tqma64xxl-mbax4xxl.dts       |   20 +-
+ arch/arm64/boot/dts/ti/k3-am642-tqma64xxl.dtsi               |   15 +-
+ arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi           |    4 -
+ arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi                      |    2 +
+ arch/arm64/boot/dts/ti/k3-am654-base-board.dts               |    3 +-
+ arch/arm64/boot/dts/ti/k3-am67a-beagley-ai.dts               |    2 +-
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-ads2.dtso       |  146 +
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts        | 1091 ++++=
+++
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso       |   26 +
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gpios.dtso      |   61 +
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso |   31 +
+ arch/arm64/boot/dts/ti/k3-am68-phyboard-izar.dts             |    3 +-
+ arch/arm64/boot/dts/ti/k3-am68-phycore-som.dtsi              |    4 +-
+ arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts             |    3 +-
+ arch/arm64/boot/dts/ti/k3-am69-aquila-clover.dts             |  451 +++
+ arch/arm64/boot/dts/ti/k3-am69-aquila-dev.dts                |  576 +++
+ arch/arm64/boot/dts/ti/k3-am69-aquila.dtsi                   | 1840 ++++=
+++++++
+ arch/arm64/boot/dts/ti/k3-am69-sk.dts                        |   10 +-
+ arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts        |    3 +-
+ arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi              |    2 +
+ arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts           |    3 +-
+ arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts        |    3 +-
+ arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso      |    8 +-
+ arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi              |    2 +
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts                       |    3 +-
+ arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts       |    3 +-
+ arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso     |    2 +-
+ arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi             |    2 +
+ arch/arm64/boot/dts/ti/k3-j722s-evm.dts                      |    7 +-
+ arch/arm64/boot/dts/ti/k3-j722s-main.dtsi                    |   18 -
+ arch/arm64/boot/dts/ti/k3-j784s4-evm-pcie0-pcie1-ep.dtso     |    1 +
+ arch/arm64/boot/dts/ti/k3-j784s4-j742s2-evm-common.dtsi      |   18 +-
+ arch/arm64/boot/dts/ti/k3-pinctrl.h                          |    2 +
+ 67 files changed, 6203 insertions(+), 149 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62l-main.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62l-wakeup.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62l.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62l3-evm.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62l3.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-ads2.dts=
+o
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts=
+
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dts=
+o
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gpios.dt=
+so
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv82=
+63.dtso
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am69-aquila-clover.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am69-aquila-dev.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am69-aquila.dts
+
 --=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
+Regards
+Vignesh
 https://ti.com/opensource
 
---cvve6pb4a3vhlaqm
-Content-Type: application/pgp-signature; name="signature.asc"
+
+--------------mxb51hmjg1uoDvUuS2fG0T0t--
+
+--------------dtNL3jqcK4DD96wqKk3SL0Kp
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmkbLS8ACgkQ3bWEnRc2
-JJ2rZg/6AysHiSYmTwvTLPODcudRC/vh928BfHENSjGBjAbmSpdUE8Xntw4cqVJ0
-mtwg4bKFdymYynUfItyIfvxaIYLIi/p0YOcp51I/mcvmAAELUlGYQTaV1SeXY8Px
-UiIUDXVpHbNi+r1wWJi6cteiXsJzWJg4Sj/uCxU6g/oR8LcMEjBoczkSyOZKJScX
-q0Z6cJhio9yUpTuXm2mB0PWlZDmXOQWaCen3w0iZRQP8u6v8OwkliI083dQa/GX/
-9QFIuhfV5PD9jWtI3zcH5fL3wcOCxagLypN2E9t3luC8Y/2mzVtVZvw7iiISy9D8
-8XmF8X98bYNEn3xu5y3c/NHus7W5OwuXr3OkwaZ18WJEet5z4ghsIIRh2//M/9+N
-c6huWLQqGs/NoPV8+eTwFZjxjl1YynC1gNEqWYKLgyeZyn1qshHRgMeQRqVReQPH
-Bpyc09yAA7MXB1UzIqzR/ktWmN87jXa2679cE3ody/AHB40GxNJPeXsJxkWueJ9Y
-zEVFfy75TFR8vU+qmFIzJq/H4DrvW7PCH0NlWIf3PoDHg3m7LvvkVG67i2akjbDO
-QacDitTVdZ1cZfXGdBISlnkY91Mc5H2wxPbQHyT6u89CsLcHJdzEixxaC8ofIXOe
-TlQvawDEcna0y75Tv6pnVQs+fIvOGDX/Mzro5qePBaRvCdYQQsY=
-=rCGs
+wnsEABYIACMWIQRQBrqaOmQ441h4YbUDQj8NV+8d1wUCaRsxHAUDAAAAAAAKCRADQj8NV+8d1xFv
+AP0Xvo0MSNNX4H88goSGgCaKXlaapSzkVq2hcdljOU5XywD9GR0SeA4wI60lZl+Qd9jfZFl3ET5A
+ZGKamUqca7zIbgE=
+=1Quq
 -----END PGP SIGNATURE-----
 
---cvve6pb4a3vhlaqm--
+--------------dtNL3jqcK4DD96wqKk3SL0Kp--
