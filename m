@@ -1,96 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CDE2877F1
-	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 09:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D34724503F
+	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 12:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763372837; cv=none; b=l2gJJUNgwcRwNSx9cN7LEohMA+LSQg5T5fEojJwGyPbarN/9X1yre+RO22xnn644q52B+wlCVOpCqJYgirehI0Luyg7DDmfPqfzKjrD+mbvVXZzIcKDAJwZt66+mT8EdFpFYO26tALrXSxZOnI7trxC+FNo+zDwU0r7Er6+ZzyE=
+	t=1763382872; cv=none; b=rUO3bxz5Y4hxVu9dZlvnyK15+my/UkF0gUh2L7PimBq8GsdZLuTbUkxu/kFZAzzA92HJH5TaCFYaL12QqE7lCNfr6JvBE+fvwbOqP1xiwyKkRB8SrA448TRfhP4IDR0Vnqa+uuEJ49/JUjULpXQDU3XEnVrm4KrWGHefOtEGJQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763372837; c=relaxed/simple;
-	bh=+0YMguNTagE0IsLyb/xDRjwxwVqW0+dmAXOtxCTVloM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UVxav7I14cEJdGcuAXCkRLzs6fykRjDFBUa3n9Uws+cvKJtNPmFKcGNumDdZyNH13O2SF//LoJgFK2kutHzlpGi5s3emc0Ig8ECtQhws81ur3jDwRkwH9batwc/bGnncWAMnfDYnSrMiGkTnCfCmovOo5e91k3GT3rSjzLVdErI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xbitLj3I; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763382872; c=relaxed/simple;
+	bh=VS/nBQnf4uQUduPccd0qUnNmWQ65DpTT5x0xj4MjBuc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MEmEdHpBYqQBUW1hakiBPOwY0UEDOcIcNckIyxutHzENsuO+z7QlEtdO6YKXkHJF8+l5Sasg7hyIt1xgwqFOS2/iS6oW5mlWAkA2WT1vB9l8MLidIsMNFFuARH/K5mmEBtH5+lFJoJSeh4a5fb+I8VCoM0pha0REJZJaA9CaqPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=K6GXJqVm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xbitLj3I"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="K6GXJqVm"
 Received: by smtp.kernel.org (Postfix)
-	id 46AC4C2BCAF; Mon, 17 Nov 2025 09:47:17 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 33C80C2BC87; Mon, 17 Nov 2025 12:34:32 +0000 (UTC)
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3B38BC4CEF5
-	for <soc@kernel.org>; Mon, 17 Nov 2025 09:47:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B38BC4CEF5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b7291af7190so579868366b.3
-        for <soc@kernel.org>; Mon, 17 Nov 2025 01:47:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763372834; x=1763977634; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7YX6kr6+19XslUofmNeGq4cx7X1qn7tZjzeeGnGtGTw=;
-        b=xbitLj3IsdpUGup1kUN4s4vHPYKdKNPeztZ2HO9v6UrtuIAGgRMfWfD4aKj7Kb7+P6
-         6pTZWgW5+2u2wOyPahMrKqxgTkopqLWD9v3uVZRphAoNxHl1NjRf2pUEcamwyAYkBvE8
-         qxMUM/fqVMP5Dg3DojDmPLcykrqWI6IsaIOPe1JulL4wDZccKx38JucAYIvIXPgCbqZM
-         NlPFIIOnzyjQAEiAtDswn+fySwTLjbo960V6wonZq2ZPVFhuAO6lYRNRInkuLDIDDLzr
-         QyJmWxNmbOEax3kcTqbJLqEVmz44T/WF6qhc5TUQYc7s7OfU7jGNbActAb0XDK2p1p8E
-         JMrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763372834; x=1763977634;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7YX6kr6+19XslUofmNeGq4cx7X1qn7tZjzeeGnGtGTw=;
-        b=U/4WTGsNCtlBOEIOv4CPDvGqnm3OSPkwUvR1PO7SMvf+r7eSXm6ucgryVMMgUodsOs
-         w9/ffZ9FU9xVI94SObiZQNNskMJQi3v0R7YZHFbj0Vk57gO+2GR4FueZI6pdq6Z78war
-         5++T6/PDNFcPDTIG+ZOAHU2fSAmjmdxt6LaTmup6dq1fSOVJYLfwpsgBhzhv8KO6LA1T
-         4szNgi8OsK219+OfCA0EhZtsI5YEDKB8we747oqVX29n7L7Qms3uXfHp7KhJEfVYyoZT
-         FbcNmIo9a7p9vgogJpnqCO4FlI/MqEi47QDh5FUAZGuf4lXGWTwPoetPCuEbW8f1ltN6
-         oKng==
-X-Forwarded-Encrypted: i=1; AJvYcCUgM44rJ9hmC0cM1MS4rKOx9YoT5fFnuKqNmbJUUd8cEOhKyWpEUY5IJ+Csk8mKuw1fHjI=@kernel.org
-X-Gm-Message-State: AOJu0YzCTdXpGXB9cv2A5cTb/tGX3Eev1wts83F2/RqLB6wv6r74nGom
-	wRxaoZVE4ViDI5ukraY0fwC1neG/NTCYvlun3wxZGqAogThTf2dCqxb85WrpUJ8tJfFuJGjS4jk
-	G7gCa
-X-Gm-Gg: ASbGncsdvKBqpdC42wCridJAVbRGOEEEEst+MXziQknCbIWBXnr8uM5ZvX55ctatMyc
-	4mdRj2BjFpqRx9iRH3azPCRer6ZJ8u2DTJWuQ+0EZeP9b9gosT1nkHrNOXWYrPDXx2eHFlxZdeP
-	UZA0Gh7e1lW8JVFE8URURTT9DakMspahxnwxfYecq8tW/nnvwZto2bjxhncikGjUfiLWMLdhcOo
-	EV8LmQNHb2uYQL/bb13Kq7T5c2rtj1GPFp6hP8ZMDWP4V5VYbDiI4TjSViZjzvZey0yTgiBy6hA
-	n3hShto05l17nrAvjtDCOivxr9LyEDVL9OZUxj6GDKNWqvRqmcRkPsJs7Fre8FIifV/gkYzDIVX
-	lZoHLaPkeUtnmyrbTzLEIfpWpKXVLVdg7IVH4vaByCMRBimFLEe+8DVJucY2Ucd44Pxeg04BWew
-	K32X7Xt5sUgVxzuPnCsNMiysEYviWH3sZyXpRqnF5UaSSPAEk=
-X-Google-Smtp-Source: AGHT+IF2HhVKUCA/YV7sJ/UAv1rFG5dvGnJkrWqXvb2Eo4NtlDORIZmywkF9DCiaEbJydYdXVpovPQ==
-X-Received: by 2002:a17:907:25cb:b0:b49:5103:c0b4 with SMTP id a640c23a62f3a-b736796a66fmr1326019066b.56.1763372834471;
-        Mon, 17 Nov 2025 01:47:14 -0800 (PST)
-Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fd809d2sm1048448866b.42.2025.11.17.01.47.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 01:47:13 -0800 (PST)
-Date: Mon, 17 Nov 2025 10:47:12 +0100
-From: Jens Wiklander <jens.wiklander@linaro.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] QCOMTEE fixes2 for v6.18
-Message-ID: <20251117094712.GA1518418@rayden>
+	by smtp.kernel.org (Postfix) with ESMTPS id 997CDC4CEFB;
+	Mon, 17 Nov 2025 12:34:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 997CDC4CEFB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=MN
+	YAu/5xfoUe1Cd1Dk6SgiXruma2zPCXXBEcXxRe+VA=; b=K6GXJqVmPJ+itrIt00
+	QIH+G/A1nkcI98HHFunoPjZGdnPJh12iqG8SaPxREHEjfMc0KIZgq57WQ8UXeVs/
+	ghBHGAxBsxxTvfJqr84xljuqaZ4yFjA1QpWiIwRo++UNVo+/p6Gq7J4DCR7MpuJ8
+	0HWXNxlUOEMHcvxPm0EAcDQnM=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id M88vCgAnXIhOFhtpoZUoAg--.8347S2;
+	Mon, 17 Nov 2025 20:34:22 +0800 (CST)
+From: Shawn Guo <shawnguo2@yeah.net>
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	kernel@pengutronix.de,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/5] i.MX drivers update for 6.19
+Date: Mon, 17 Nov 2025 20:33:47 +0800
+Message-ID: <20251117123358.2009662-1-shawnguo2@yeah.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:M88vCgAnXIhOFhtpoZUoAg--.8347S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFykCw43Aw1UZw4kZr1fJFb_yoW8GFykpF
+	43JFWayw48GF4fXryfJw4UuF13Xwn5GrWYkF47Aa1kZF45Awn7Jr1Dtw48XFW8Jry8JF43
+	KF17JF1kGF1UCr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j-Ef5UUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiNBG6IGkbFlETowAA36
 
-Hello arm-soc maintainers,
-
-Please pull these two small fixes for the QCOMTEE driver in the TEE
-subsystem.
-
-Thanks,
-Jens
+From: Shawn Guo <shawnguo@kernel.org>
 
 The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
@@ -98,25 +67,29 @@ The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/qcomtee-fixes2-for-6.18
+  https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-6.19
 
-for you to fetch changes up to e19d7f7e92e061707252eab2b71d2c3be09b2e96:
+for you to fetch changes up to 97a07dd2b559d149598cd49574ce50614752211a:
 
-  tee: qcomtee: initialize result before use in release worker (2025-11-17 10:19:29 +0100)
-
-----------------------------------------------------------------
-QCOMTEE fixes2 for v6.18
-
-- initialize result before use in in error path
-- fix uninitialized pointers with free attribute
+  firmware: imx: scu: Use devm_mutex_init (2025-10-27 14:43:48 +0800)
 
 ----------------------------------------------------------------
-Ally Heev (1):
-      tee: qcomtee: fix uninitialized pointers with free attribute
+i.MX drivers update for 6.19:
 
-Amirreza Zarrabi (1):
-      tee: qcomtee: initialize result before use in release worker
+- A series from Peng Fan to to improve i.MX SCU firmware drivers
 
- drivers/tee/qcomtee/call.c | 2 +-
- drivers/tee/qcomtee/core.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+----------------------------------------------------------------
+Peng Fan (8):
+      firmware: imx: scu-irq: fix OF node leak in
+      firmware: imx: scu-irq: Free mailbox client on failure at imx_scu_enable_general_irq_channel()
+      firmware: imx: scu-irq: Init workqueue before request mbox channel
+      firmware: imx: scu-irq: Set mu_resource_id before get handle
+      firmware: imx: scu-irq: Remove unused export of imx_scu_enable_general_irq_channel
+      firmware: imx: scu: Update error code
+      firmware: imx: scu: Suppress bind attrs
+      firmware: imx: scu: Use devm_mutex_init
+
+ drivers/firmware/imx/imx-scu-irq.c | 32 +++++++++++++++++---------------
+ drivers/firmware/imx/imx-scu.c     | 11 +++++++----
+ 2 files changed, 24 insertions(+), 19 deletions(-)
+
