@@ -1,69 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3560130C63A
-	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 12:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E631DF27D
+	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 12:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763382884; cv=none; b=FyVoU6o5LWuFd5yrIqFJjqsvzS0aq+yzDRgKRcZWqJUuJE9pbhM6qJBPjqqVIc+iXYeK8pj/dlDEd31RBYrNvSY2n/1smteXh2VNL7E+GSdsgG4woB7Hin3BD73STfa2xNZ+9QuNFe5YmtPNkJ2IX2CjuZ4S/VerNEsOR7Ko0Uo=
+	t=1763384014; cv=none; b=rG0tMTDKGgkdo8LZxkEKg1sKoWeXWSPLnJ3HkT5KFrBj0rRHJbw96kCBh4wBrx1uNMyea7dhEfNfySBoEshKOnnv4fZFHdzXjDxM1TC5nJfn1yBE4lzoWf/GdFVYDQw6KDUQIMFsCkdPoPJynL9D+x96he+DiQ+2eVpVHdDv11s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763382884; c=relaxed/simple;
-	bh=Hs0+pzdIsc2CTUurCKC/uNj9G92cRh/a1R6B1Gj4jkM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KxYf5wceeFvDlFWF2tBJaii0ncZVfejOj91e3rLXuEGqgkWPVhgQuYiqxiabhAwlgwzYy8psk73xjHcLkvLS+RLP92PfxTUsADypX5Rke7pEh4rC73AfFv3fuVWjc747cY6uPUt4pgarXHG39lqcmHOvCViR8SgMTMA373Hqas4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=Gt9cEIXX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763384014; c=relaxed/simple;
+	bh=vTlFSXL5C/aWINfpBdSRXsDpIpVWuHNUtGuY/3CzWKU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nr5o+iKr1Bz85xt2l0JImk9O70KbuU7OV2UnQJZkQjTK1rZ0H31YK420n7VJNnS2Emz6n04rRE+pvY6+qaacl6PjOZH/OWUZvMDzETJccGL0X+nwcs+lWWsJ7y8X/j55ClDGxs6+Wg+ITul6waSQn35a0xXYMayn+zjWbqCZ6TI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JIdNq+it; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="Gt9cEIXX"
-Received: by smtp.kernel.org (Postfix)
-	id B67B3C19421; Mon, 17 Nov 2025 12:34:43 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.16])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8E3E8C113D0;
-	Mon, 17 Nov 2025 12:34:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E3E8C113D0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
-	Content-Type; bh=bh8dLTPRq5GmDDingsp0mLUaVtDUMMMNXv+e5vlVPjo=;
-	b=Gt9cEIXXn7Pb62rJ0Z9X9wNNClC+ER90m2uhnCpyS7ldKPL0EUhaiohfxqPKpK
-	9VN6XeZ18AGJyWktlHF1wQOXhlVH5atKJQRcuzrHq48StKm5tEdW34e3kOrPeVND
-	009OgP0088iLkwPktNLXipogI6fzUUWka5ANETsllPUxg=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgAnXIhOFhtpoZUoAg--.8347S5;
-	Mon, 17 Nov 2025 20:34:26 +0800 (CST)
-From: Shawn Guo <shawnguo2@yeah.net>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	kernel@pengutronix.de,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/5] i.MX arm64 device tree changes for 6.19
-Date: Mon, 17 Nov 2025 20:33:50 +0800
-Message-ID: <20251117123358.2009662-4-shawnguo2@yeah.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251117123358.2009662-1-shawnguo2@yeah.net>
-References: <20251117123358.2009662-1-shawnguo2@yeah.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JIdNq+it"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D249C4CEF1;
+	Mon, 17 Nov 2025 12:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763384014;
+	bh=vTlFSXL5C/aWINfpBdSRXsDpIpVWuHNUtGuY/3CzWKU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=JIdNq+it2Pszavsm9zuM33PUXh0wvJGvGE0DHncYhfcZF4ZzBP9k8ljOZzW4mkNbQ
+	 d7F4MOtZMm4TWxmHUwiRxTeqgaeIH1i1zK2GrENy26MSeOZWCSGcKmzzfypO4V37cu
+	 WIWN/SSKXfoIRu4Ip8WB9YbstRQ29yff1V4hIwU6qwuDni2C+2LcoFsroqzRXGJMyh
+	 iEyMwPXkTbka6MGKPbOv3Q6AOlX3XEusW85KwqZTrnjmrev66qAPx05n9Cbrzd9Fqy
+	 3VmNP7nvWut7gWESclJdI+Jd6Yzyqk4WozHWfgqq8OVFarSXJ3tji2TU67x7j14yiB
+	 wOE9wjh+dfApA==
+From: Dinh Nguyen <dinguyen@kernel.org>
+To: linux-arm-kernel@lists.infradead.org,
+	soc@lists.linux.dev
+Cc: dinguyen@kernel.org
+Subject: [GIT PULL] arm/arm64: dts: socfpga: updates for v6.19
+Date: Mon, 17 Nov 2025 06:53:31 -0600
+Message-ID: <20251117125331.381114-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.42.0.411.g813d9a9188
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:M88vCgAnXIhOFhtpoZUoAg--.8347S5
-X-Coremail-Antispam: 1Uf129KBjvAXoW3Aw45Wr48Jw4rZw43WFyUKFg_yoW8Aw47Go
-	WfAFWrA3y0kr4UGF4avryqkw1Fq3WkWr1IqFWUXFWrKw45XF13Z3srZF4Y9rWrJa4UCFyk
-	W3W7Gr1YyF47Wryxn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU2oGQDUUUU
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiNhK6IGkbFlIfHAAA3L
-
-From: Shawn Guo <shawnguo@kernel.org>
 
 The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
@@ -71,334 +47,171 @@ The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt64-6.19
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.19
 
-for you to fetch changes up to 90bbe88e0ea61bf3ab2376b0497bacf42b66e4a9:
+for you to fetch changes up to 38eff72f2d3a83475d70ac3a1280b5051d1e46b0:
 
-  arm64: dts: freescale: add Toradex SMARC iMX95 (2025-11-17 16:39:27 +0800)
-
-----------------------------------------------------------------
-i.MX arm64 device tree changes for 6.19:
-
-- New board support: Protonic PRT8ML, Toradex SMARC iMX95, Skov Rev.C
-  HDMI, i.MX 95 Verdin Evaluation KitPHYTEC phyBOARD-Segin-i.MX91 board,
-  Skov i.MX8MP variant
-- A series from Alexander Stein to clean up and improve imx95-tqma9596sa
-  board support
-- Add MicIn routing support for mba8mx boards
-- A couple of patch sets from Frank Li to clean up dt-schema warnings
-  and add more device support for imx8dxl and imx8qxp boards
-- A series from Ioana Ciornei to add FPGA based GPIO controller and SFP+
-  cages for layerscape boards
-- A change from Jan Petrous to add GMAC Ethernet for S32G2 EVB, RDB2 and
-  S32G3 RDB3 boards
-- A series from Markus Niebel to improve imx95-tqma9596sa board support
-- A couple of changes from Martin Kepplinger-Novaković to enable cpuidle
-  cooling device support for imx8mp
-- A series from Max Krummenacher to clean up todo and add thermal
-  support for imx8-apalis board
-- A series from Primoz Fiser to add USB vbus regulators, jtag and
-  pwm-fan overlay for imx93-phyboard
-- A couple of series from Richard Zhu to add supports-clkreq property
-  and vpcie3v3aux regulator for PCIe M.2 device
-- A series from Stefano Radaelli to add WiFi, BT, PMIC, WM8904 audio,
-  and ADS7846 touchscreen support for imx93-var-som
-- A series from Tim Harvey to make some cleanups for imx8mm-venice
-  boards
-- A change from Xu Yang to add DDR Perf Monitor support for i.MX94
-- Other small and random changes
+  arm64: dts: socfpga: agilex5: update qspi partitions for 013b board (2025-11-17 05:37:59 -0600)
 
 ----------------------------------------------------------------
-Alexander Stein (19):
-      arm64: dts: tqma8mpql-mba8mpxl: Add MicIn routing
-      arm64: dts: imx95-tqma9596sa: reduce maximum FlexSPI frequency to 66MHz
-      arm64: dts: imx95-tqma9596sa: increase flexspi slew rate
-      arm64: dts: imx95-tqma9596sa: move flexcan pinctrl to SOM
-      arm64: dts: imx95-tqma9596sa: move lpspi3 pinctrl to SOM
-      arm64: dts: imx95-tqma9596sa: move sai config to SOM
-      arm64: dts: imx95-tqma9596sa: move pcie config to SOM
-      arm64: dts: imx95-tqma9596sa: update pcie config
-      arm64: dts: imx95-tqma9596sa: remove superfluous pinmux for flexspi
-      arm64: dts: imx95-tqma9596sa: remove superfluous pinmux for i2c
-      arm64: dts: imx95-tqma9596sa: remove superfluous pinmux for usdhci
-      arm64: dts: imx95-tqma9596sa: add gpio bus recovery for i2c
-      arm64: dts: imx95-tqma9596sa: whitespace fixes
-      arm64: dts: imx95-tqma9596sa-mb-smarc-2: Add MicIn routing
-      arm64: dts: imx95-tqma9596sa-mb-smarc-2: mark LPUART1 as reserved
-      arm64: dts: mba8mx: Add MicIn routing
-      arm64: dts: mba8xx: Add MicIn routing
-      arm64: dts: mb-smarc-2: Add MicIn routing
-      arm64: dts: freescale: tqma9352: Add vcc-supply for spi-nor
+SoCFPGA DTS updates for v6.19
+- Add 4-bit SPI bus width(n5x, stratix10, agilex and agilex5)
+- Agilex5 updates:
+	- Add GMAC0 for NAND daughter card
+	- Add SMMU support
+	- Add VGIC maintenance interrupt
+	- Add L2 and L3 cache
+	- Add support for the 013b board
+	- Add I3C support
+- Add support for the Enclustra Mercury+ SA1 SoM based on Cyclone5
+- Add support for Agilex3 board(a variant of the Agilex5 board)
+- dt-bindings update:
+	- Document iommu in cdns,hp-nfc, snps,dw-axi-dmac and Agilex5
+	- Document Enclustra Mercury SA1 and AA1 boards
+	- Document Agilex5 013b board
+	- Document Agilex3 board
+- Fix dtbs_check warnings:
+	- stratix10-swvp
+	- Agilex(NAND and Clock manager)
+	- Move sdmmc-ecc to base DTSI file(Stratix10)
 
-Frank Li (23):
-      arm64: dts: fsl-lx2160a: include rev2 chip's dts
-      arm64: dts: layerscape: add dma-coherent for usb node
-      arm64: dts: imx8dxl-evk: add bt information for lpuart1
-      arm64: dts: imx8dxl-evk: add state_100mhz and state_200mhz for usdhc
-      arm64: dts: imx8-ss-conn: add fsl,tuning-step for usdhc1 and usdhc2
-      arm64: dts: imx8-ss-conn: add missed clock enet_2x_txclk for fec[1,2]
-      arm64: dts: imx8dxl-ss-conn: delete usb3_lpcg node
-      arm64: dts: imx8: add vdd-supply and vddio-supply for fsl,mpl3115
-      arm64: dts: imx8qm-mek: add state_100mhz and state_200mhz for usdhc
-      arm64: dts: imx8qm-mek: assign double SD bus frequency for usdhc1
-      arm64: dts: imx8qm-mek: add lpuart1 and bluetooth node
-      arm64: dts: imx8qm: add label thermal_zones
-      arm64: dts: imx8qm-mek: add pmic thermal-zones
-      arm64: dts: imx8qm-mek: add usbotg1 and related nodes
-      arm64: dts: imx8qm-mek: replace space with tab
-      arm64: dts: imx8qxp: add MAC address in ocotp
-      arm64: dts: imx8qxp: add wakeup source for power-key
-      arm64: dts: imx8qxp-mek: add state_100mhz and state_200mhz for usdhc
-      arm64: dts: imx8qxp-mek: update usdhc1 clock to 400Mhz
-      arm64: dts: imx8qxp-mek: add flexspi and flash
-      arm64: dts: imx8qxp-mek: add phandle ocotp mac-address for fec
-      arm64: dts: imx8qxp-mek: add fec2 support
-      arm64: dts: imx8qxp-mek: change space with tab
+----------------------------------------------------------------
+Adrian Ng Ho Yin (3):
+      arm64: dts: socfpga: agilex5: Add L2 and L3 cache
+      arm64: dts: socfpga: agilex5: Add SMMU-V3-PMCG nodes
+      arm64: dts: intel: agilex5: Add Altera compatible for I3C controllers
 
-Haibo Chen (1):
-      arm64: dts: imx: correct the flexspi compatible string to match with yaml
+Boon Khai Ng (1):
+      arm64: dts: agilex5: Add GMAC0 node for NAND daughter card
 
-Ioana Ciornei (4):
-      arm64: dts: lx2160a-rdb: describe the QIXIS FPGA and two child GPIO controllers
-      arm64: dts: ls1046a-qds: describe the FPGA based GPIO controller
-      arm64: dts: lx2160a-rdb: fully describe the two SFP+ cages
-      arm64: dts: ls1046a-qds: describe the two on-board SFP+ cages
+Dinh Nguyen (5):
+      arm64: dts: socfpga: move sdmmc-ecc to the base DTSI file
+      arm64: dts: socfpga: stratix10-swvp: fix dtbs_check warnings swvp
+      arm64: dts: socfpga: agilex: fix dtbs_check warning for clock manager
+      arm64: dts: socfpga: agilex: fix dtbs_check warning for NAND
+      arm64: dts: socfpga: agilex5: fix CHECK_DTBS warning for NAND
 
-Jan Petrous (OSS) (1):
-      arm64: dts: freescale: Add GMAC Ethernet for S32G2 EVB and RDB2 and S32G3 RDB3
+Fong, Yan Kei (4):
+      arm64: dts: socfpga: n5x: Add 4-bit SPI bus width
+      arm64: dts: socfpga: stratix10: Add 4-bit SPI bus width
+      arm64: dts: socfpga: agilex: Add 4-bit SPI bus width
+      arm64: dts: socfpga: agilex5: Add 4-bit SPI bus width
 
-Jan Remmet (5):
-      arm64: dts: imx8mm-phyboard-polis: Use GPL-2.0-or-later OR MIT
-      arm64: dts: imx8mm-phyboard-polis: move mipi bridge to som
-      arm64: dts: imx8mm-phyboard-polis-peb-av-10: reorder properties to match dts coding style
-      arm64: dts: imx8mm-phyboard-polis-peb-av-10: split display configuration
-      arm64: dts: imx8mm-phyboard-polis-peb-av-10-ph128800t006
+Khairul Anuar Romli (5):
+      dt-bindings: mtd: cdns,hp-nfc: Add iommu property
+      dt-bindings: dma: snps,dw-axi-dmac: Add iommu property
+      arm64: dts: socfpga: agilex5: Add SMMU nodes
+      dt-bindings: firmware: svc: Add IOMMU support for Agilex5
+      arm64: dts: socfpga: Add Agilex5 SVC node with memory region
 
-Jonas Rebmann (1):
-      arm64: dts: add Protonic PRT8ML board
+Lothar Rubusch (11):
+      ARM: dts: socfpga: add Enclustra boot-mode dtsi
+      ARM: dts: socfpga: add Enclustra base-board dtsi
+      ARM: dts: socfpga: add Enclustra Mercury SA1
+      dt-bindings: altera: add Enclustra Mercury SA1
+      ARM: dts: socfpga: add Enclustra Mercury+ SA2
+      dt-bindings: altera: add binding for Mercury+ SA2
+      ARM: dts: socfpga: add Mercury AA1 variants
+      dt-bindings: altera: add Mercury AA1 variants
+      ARM: dts: socfpga: removal of generic PE1 dts
+      dt-bindings: altera: removal of generic PE1 dts
+      ARM: dts: socfpga: add Enclustra SoM dts files
 
-Joy Zou (2):
-      arm64: dts: imx95-15x15-evk: add fan-supply property for pwm-fan
-      arm64: dts: imx8: add edma error interrupt support
+Niravkumar L Rabara (6):
+      arm64: dts: socfpga: agilex5: add VGIC maintenance interrupt
+      dt-bindings: intel: Add Agilex5 SoCFPGA 013b board
+      arm64: dts: socfpga: agilex5: add support for 013b board
+      dt-bindings: intel: Add Agilex3 SoCFPGA board
+      arm64: dts: socfpga: add Agilex3 board
+      arm64: dts: socfpga: agilex5: update qspi partitions for 013b board
 
-Kieran Bingham (1):
-      arm64: dts: freescale: debix-som-a-bmb-08: Enable HDMI output
-
-Laurent Pinchart (2):
-      arm64: dts: imx8mp: Specify the number of channels for CSI-2 receivers
-      arm64: dts: imx8mp-debix-model-a: Fix ethernet PHY address
-
-Laurentiu Mihalcea (2):
-      arm64: dts: imx8mp: convert 'aips5' to 'aipstz5'
-      arm64: dts: imx8mp: make 'dsp' node depend on 'aips5'
-
-Marco Felsch (1):
-      arm64: dts: imx8mp-skov: add Rev.C HDMI support
-
-Marek Vasut (2):
-      arm64: dts: freescale: add initial support for i.MX 95 Verdin Evaluation Kit (EVK)
-      arm64: dts: imx8mp: Add missing LED enumerators for DH electronics i.MX8M Plus DHCOM on PDK2
-
-Markus Niebel (5):
-      arm64: dts: imx95-tqma9596sa: fix TPM5 pinctrl node name
-      arm64: dts: imx95-tqma9596sa: move USDHC2 config to SOM
-      arm64: dts: imx95-tqma9596sa: add EEPROM pagesize
-      arm64: dts: imx95-tqma9596sa-mb-smarc-2: remove superfluous line
-      arm64: dts: imx95-tqma9596sa-mb-smarc-2: add aliases for SPI
-
-Martin Kepplinger-Novaković (2):
-      arm64: dts: imx8mp: add idle cooling devices to cpu core
-      arm64: dts: imx8mp: add cpuidle cooling device to the alert trip point
-
-Mathew McBride (1):
-      arm64: dts: ten64: add board controller binding
-
-Max Krummenacher (5):
-      arm64: dts: imx8-apalis: cleanup todo
-      arm64: dts: imx8-apalis: add thermal nodes
-      arm64: dts: imx8-apalis: specify adc reference voltage regulator
-      arm64: dts: imx8qm-apalis: add pwm used by the backlight
-      arm64: dts: freescale: add Toradex SMARC iMX95
-
-Primoz Fiser (5):
-      arm64: dts: freescale: imx93-phyboard-nash: Add USB vbus regulators
-      arm64: dts: freescale: imx93-phyboard-segin: Add USB vbus regulators
-      arm64: dts: freescale: Add phyBOARD-Segin-i.MX91 support
-      arm64: dts: freescale: imx93-phyboard-nash: Add jtag overlay
-      arm64: dts: freescale: imx93-phyboard-nash: Add pwm-fan overlay
-
-Richard Zhu (14):
-      arm64: dts: imx95-15x15-evk: Add supports-clkreq property to PCIe M.2 port
-      arm64: dts: imx95-19x19-evk: Add supports-clkreq property to PCIe M.2 port
-      arm64: dts: imx8mm-evk: Add supports-clkreq property to PCIe M.2 port
-      arm64: dts: imx8mp-evk: Add supports-clkreq property to PCIe M.2 port
-      arm64: dts: imx8mq-evk: Add supports-clkreq property to PCIe M.2 port
-      arm64: dts: imx8qm-mek: Add supports-clkreq property to PCIe M.2 port
-      arm64: dts: imx8qxp-mek: Add supports-clkreq property to PCIe M.2 port
-      arm64: dts: imx8dxl-evk: Add vpcie3v3aux regulator for PCIe M.2 connector
-      arm64: dts: imx8mp-evk: Add vpcie3v3aux regulator for PCIe M.2 connector
-      arm64: dts: imx8mq-evk: Add vpcie3v3aux regulator for PCIe M.2 connector
-      arm64: dts: imx8qm-mek: Add vpcie3v3aux regulator for PCIe M.2 connector
-      arm64: dts: imx8qxp-mek: Add vpcie3v3aux regulator for PCIe M.2 connector
-      arm64: dts: imx95-15x15-evk: Add vpcie3v3aux regulator for PCIe M.2 connector
-      arm64: dts: imx95-19x19-evk: Add vpcie3v3aux regulator for PCIe[0,1]
-
-Shengjiu Wang (2):
-      arm64: dts: imx8mp: Add hdmi parallel audio interface node
-      arm64: dts: imx8mp-evk: enable hdmi_pai device
-
-Shenwei Wang (1):
-      arm64: dts: imx8: add default clock rate for usdhc
-
-Sherry Sun (1):
-      arm64: dts: imx8qxp-mek: Add lpuart1 to support the M.2 PCIE9098 bluetooth
-
-Stefan Eichenberger (2):
-      arm64: dts: imx8-apalis: rename wifi regulator
-      arm64: dts: imx8-apalis: use startup-delay-us for wifi regulator
-
-Stefano Radaelli (4):
-      arm64: dts: freescale: imx93-var-som: Add WiFi and Bluetooth support
-      arm64: dts: freescale: imx93-var-som: Add PMIC support
-      arm64: dts: freescale: imx93-var-som: Add support for WM8904 audio codec
-      arm64: dts: freescale: imx93-var-som: Add support for ADS7846 touchscreen
-
-Steffen Trumtrar (1):
-      arm64: dts: imx8mp-skov: support new 10" panel board
-
-Teresa Remmet (3):
-      arm64: dts: imx8mm-phyboard-polis-rdk: Add USB1 OC pin configuration
-      arm64: dts: imx8mm-phygate-tauri-l: Update pad ctl for USB OC pin
-      arm64: dts: imx8mm-phyboard-polis-peb-av-10: Fix audio codec reset pin ctl
-
-Tim Harvey (7):
-      arm64: dts: freescale: imx8mp-venice-gw7905-2x: remove duplicate usdhc1 props
-      arm64: dts: imx8m{m,n,p}-venice: disable unused clk output for TI PHY
-      arm64: dts: imx8mp-venice-gw702x: reduce RGMII CLK drive strength
-      arm64: dts: imx8mm-venice-gw700x: reduce RGMII CLK drive strength
-      arm64: dts: imx8mm-venice-gw72xx: remove unused sdhc1 pinctrl
-      arm64: dts: imx8mp-venice-gw702x: remove off-board uart
-      arm64: dts: imx8mp-venice-gw702x: remove off-board sdhc1
-
-Xu Yang (1):
-      arm64: dts: imx94: add DDR Perf Monitor node
-
-Yannic Moog (4):
-      arm64: dts: im8mp-phy{board,core}: update license
-      arm64: dts: imx8mp pollux: add display overlays
-      arm64: dts: imx8mp pollux: add expansion board overlay
-      arm64: dts: imx8mp pollux: add displays for expansion board
-
- arch/arm64/boot/dts/freescale/Makefile             |   32 +
- arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |    3 +-
- arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |    8 +-
- arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi     |    9 +-
- arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts  |   52 +
- arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |    9 +-
- .../arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts |    4 +
- arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi     |    8 +-
- arch/arm64/boot/dts/freescale/fsl-lx2160a-qds.dts  |    2 +-
- arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dts  |   80 +-
- arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi     |    8 +-
- arch/arm64/boot/dts/freescale/fsl-lx2162a-qds.dts  |    2 +-
- .../arm64/boot/dts/freescale/imx8-apalis-eval.dtsi |    5 +-
- .../boot/dts/freescale/imx8-apalis-ixora-v1.1.dtsi |    5 +-
- .../boot/dts/freescale/imx8-apalis-ixora-v1.2.dtsi |    5 +-
- .../arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi |   51 +-
- arch/arm64/boot/dts/freescale/imx8-ss-audio.dtsi   |    6 +-
- arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi    |   20 +-
- arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi     |    6 +-
- arch/arm64/boot/dts/freescale/imx8dxl-evk.dts      |   14 +-
- arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi |    9 +-
- arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi |    1 +
- arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi      |    1 +
- ...8mm-phyboard-polis-peb-av-10-etml1010g3dra.dtso |   44 +
- ...x8mm-phyboard-polis-peb-av-10-ph128800t006.dtso |   44 +
- .../freescale/imx8mm-phyboard-polis-peb-av-10.dtsi |  189 ++++
- .../freescale/imx8mm-phyboard-polis-peb-av-10.dtso |  234 +---
- .../imx8mm-phyboard-polis-peb-eval-01.dtso         |    3 +-
- .../dts/freescale/imx8mm-phyboard-polis-rdk.dts    |   11 +-
- .../boot/dts/freescale/imx8mm-phycore-som.dtsi     |   28 +-
- .../boot/dts/freescale/imx8mm-phygate-tauri-l.dts  |    2 +-
- .../boot/dts/freescale/imx8mm-venice-gw700x.dtsi   |    3 +-
- .../boot/dts/freescale/imx8mm-venice-gw72xx.dtsi   |   11 -
- .../boot/dts/freescale/imx8mm-venice-gw7902.dts    |    1 +
- .../boot/dts/freescale/imx8mn-venice-gw7902.dts    |    1 +
- arch/arm64/boot/dts/freescale/imx8mp-aipstz.h      |   33 +
- .../boot/dts/freescale/imx8mp-debix-model-a.dts    |    4 +-
- .../dts/freescale/imx8mp-debix-som-a-bmb-08.dts    |   47 +
- .../arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts |    4 +
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |    6 +
- .../imx8mp-phyboard-pollux-etml1010g3dra.dtso      |   44 +
- ...mp-phyboard-pollux-peb-av-10-etml1010g3dra.dtso |   45 +
- ...8mp-phyboard-pollux-peb-av-10-ph128800t006.dtso |   45 +
- .../imx8mp-phyboard-pollux-peb-av-10.dtsi          |  198 ++++
- .../imx8mp-phyboard-pollux-peb-av-10.dtso          |    9 +
- .../imx8mp-phyboard-pollux-ph128800t006.dtso       |   45 +
- .../dts/freescale/imx8mp-phyboard-pollux-rdk.dts   |   52 +-
- .../boot/dts/freescale/imx8mp-phycore-som.dtsi     |    3 +-
- arch/arm64/boot/dts/freescale/imx8mp-prt8ml.dts    |  504 +++++++++
- .../boot/dts/freescale/imx8mp-skov-revc-hdmi.dts   |    8 +
- .../imx8mp-skov-revc-jutouch-jt101tm023.dts        |   79 ++
- .../dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dts    |    7 +
- .../boot/dts/freescale/imx8mp-venice-gw702x.dtsi   |   54 +-
- .../boot/dts/freescale/imx8mp-venice-gw72xx.dtsi   |   11 -
- .../boot/dts/freescale/imx8mp-venice-gw74xx.dts    |    1 +
- arch/arm64/boot/dts/freescale/imx8mp.dtsi          |   81 +-
- arch/arm64/boot/dts/freescale/imx8mq-evk.dts       |    3 +
- .../boot/dts/freescale/imx8qm-apalis-v1.1.dtsi     |   10 +-
- arch/arm64/boot/dts/freescale/imx8qm-apalis.dtsi   |    2 -
- arch/arm64/boot/dts/freescale/imx8qm-mek.dts       |  156 ++-
- arch/arm64/boot/dts/freescale/imx8qm-ss-audio.dtsi |    6 +-
- arch/arm64/boot/dts/freescale/imx8qm-ss-dma.dtsi   |    3 +-
- arch/arm64/boot/dts/freescale/imx8qm.dtsi          |    2 +-
- arch/arm64/boot/dts/freescale/imx8qxp-mek.dts      |  176 ++-
- arch/arm64/boot/dts/freescale/imx8qxp.dtsi         |    9 +
- .../boot/dts/freescale/imx91-phyboard-segin.dts    |  345 ++++++
- .../boot/dts/freescale/imx91-phycore-som.dtsi      |  304 ++++++
- arch/arm64/boot/dts/freescale/imx91_93_common.dtsi |    2 +-
- .../dts/freescale/imx93-phyboard-nash-jtag.dtso    |   31 +
- .../dts/freescale/imx93-phyboard-nash-pwm-fan.dtso |   75 ++
- .../boot/dts/freescale/imx93-phyboard-nash.dts     |   24 +
- .../boot/dts/freescale/imx93-phyboard-segin.dts    |   24 +
- arch/arm64/boot/dts/freescale/imx93-tqma9352.dtsi  |    1 +
- arch/arm64/boot/dts/freescale/imx93-var-som.dtsi   |  332 +++++-
- arch/arm64/boot/dts/freescale/imx94.dtsi           |    6 +
- arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts  |    3 +
- arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts  |    3 +
- .../boot/dts/freescale/imx95-19x19-verdin-evk.dts  |  695 ++++++++++++
- .../boot/dts/freescale/imx95-toradex-smarc-dev.dts |  277 +++++
- .../boot/dts/freescale/imx95-toradex-smarc.dtsi    | 1155 ++++++++++++++++++++
- .../dts/freescale/imx95-tqma9596sa-mb-smarc-2.dts  |   75 +-
- .../arm64/boot/dts/freescale/imx95-tqma9596sa.dtsi |  153 ++-
- arch/arm64/boot/dts/freescale/imx95.dtsi           |    2 +-
- arch/arm64/boot/dts/freescale/mba8mx.dtsi          |    7 +
- arch/arm64/boot/dts/freescale/mba8xx.dtsi          |    7 +
- arch/arm64/boot/dts/freescale/s32g2.dtsi           |   58 +-
- arch/arm64/boot/dts/freescale/s32g274a-evb.dts     |   18 +-
- arch/arm64/boot/dts/freescale/s32g274a-rdb2.dts    |   16 +
- arch/arm64/boot/dts/freescale/s32g3.dtsi           |   58 +-
- arch/arm64/boot/dts/freescale/s32g399a-rdb3.dts    |   18 +-
- .../boot/dts/freescale/tqma8xxs-mb-smarc-2.dtsi    |    7 +
- 91 files changed, 5687 insertions(+), 567 deletions(-)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-peb-av-10-etml1010g3dra.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-peb-av-10-ph128800t006.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-peb-av-10.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-aipstz.h
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-etml1010g3dra.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-etml1010g3dra.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-ph128800t006.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-ph128800t006.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-prt8ml.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-skov-revc-hdmi.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-skov-revc-jutouch-jt101tm023.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx91-phyboard-segin.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx91-phycore-som.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx93-phyboard-nash-jtag.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx93-phyboard-nash-pwm-fan.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx95-19x19-verdin-evk.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx95-toradex-smarc-dev.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx95-toradex-smarc.dtsi
-
+ Documentation/devicetree/bindings/arm/altera.yaml  |  24 +++-
+ .../devicetree/bindings/arm/intel,socfpga.yaml     |   7 +
+ .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml  |   3 +
+ .../bindings/firmware/intel,stratix10-svc.yaml     |  15 +++
+ .../devicetree/bindings/mtd/cdns,hp-nfc.yaml       |   3 +
+ arch/arm/boot/dts/intel/socfpga/Makefile           |  25 +++-
+ .../intel/socfpga/socfpga_arria10_mercury_aa1.dtsi | 143 ++++++++++++++++----
+ .../socfpga_arria10_mercury_aa1_pe1_emmc.dts       |  16 +++
+ .../socfpga_arria10_mercury_aa1_pe1_qspi.dts       |  16 +++
+ .../socfpga_arria10_mercury_aa1_pe1_sdmmc.dts      |  16 +++
+ .../socfpga_arria10_mercury_aa1_pe3_emmc.dts       |  16 +++
+ .../socfpga_arria10_mercury_aa1_pe3_qspi.dts       |  16 +++
+ .../socfpga_arria10_mercury_aa1_pe3_sdmmc.dts      |  16 +++
+ .../socfpga_arria10_mercury_aa1_st1_emmc.dts       |  16 +++
+ .../socfpga_arria10_mercury_aa1_st1_qspi.dts       |  16 +++
+ .../socfpga_arria10_mercury_aa1_st1_sdmmc.dts      |  16 +++
+ .../intel/socfpga/socfpga_arria10_mercury_pe1.dts  |  55 --------
+ .../socfpga/socfpga_cyclone5_mercury_sa1.dtsi      | 143 ++++++++++++++++++++
+ .../socfpga_cyclone5_mercury_sa1_pe1_emmc.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa1_pe1_qspi.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa1_pe1_sdmmc.dts     |  16 +++
+ .../socfpga_cyclone5_mercury_sa1_pe3_emmc.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa1_pe3_qspi.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa1_pe3_sdmmc.dts     |  16 +++
+ .../socfpga_cyclone5_mercury_sa1_st1_emmc.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa1_st1_qspi.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa1_st1_sdmmc.dts     |  16 +++
+ .../socfpga/socfpga_cyclone5_mercury_sa2.dtsi      | 146 +++++++++++++++++++++
+ .../socfpga_cyclone5_mercury_sa2_pe1_qspi.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa2_pe1_sdmmc.dts     |  16 +++
+ .../socfpga_cyclone5_mercury_sa2_pe3_qspi.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa2_pe3_sdmmc.dts     |  16 +++
+ .../socfpga_cyclone5_mercury_sa2_st1_qspi.dts      |  16 +++
+ .../socfpga_cyclone5_mercury_sa2_st1_sdmmc.dts     |  16 +++
+ .../socfpga_enclustra_mercury_bootmode_emmc.dtsi   |  12 ++
+ .../socfpga_enclustra_mercury_bootmode_qspi.dtsi   |   8 ++
+ .../socfpga_enclustra_mercury_bootmode_sdmmc.dtsi  |   8 ++
+ .../socfpga/socfpga_enclustra_mercury_pe1.dtsi     |  33 +++++
+ .../socfpga/socfpga_enclustra_mercury_pe3.dtsi     |  55 ++++++++
+ .../socfpga/socfpga_enclustra_mercury_st1.dtsi     |  15 +++
+ arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  |   9 ++
+ .../boot/dts/altera/socfpga_stratix10_socdk.dts    |  15 +--
+ .../dts/altera/socfpga_stratix10_socdk_nand.dts    |  13 --
+ .../boot/dts/altera/socfpga_stratix10_swvp.dts     |   3 -
+ arch/arm64/boot/dts/intel/Makefile                 |   2 +
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |   1 +
+ .../arm64/boot/dts/intel/socfpga_agilex3_socdk.dts | 132 +++++++++++++++++++
+ arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     | 115 +++++++++++++++-
+ .../arm64/boot/dts/intel/socfpga_agilex5_socdk.dts |   2 +
+ .../boot/dts/intel/socfpga_agilex5_socdk_013b.dts  | 126 ++++++++++++++++++
+ .../boot/dts/intel/socfpga_agilex5_socdk_nand.dts  |  18 +++
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |   2 +
+ .../boot/dts/intel/socfpga_agilex_socdk_nand.dts   |   2 +-
+ arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |   2 +
+ 54 files changed, 1410 insertions(+), 111 deletions(-)
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe1_emmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe1_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe1_sdmmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe3_emmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe3_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe3_sdmmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_st1_emmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_st1_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_st1_sdmmc.dts
+ delete mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_pe1.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1.dtsi
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe1_emmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe1_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe1_sdmmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe3_emmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe3_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe3_sdmmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_st1_emmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_st1_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_st1_sdmmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2.dtsi
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_pe1_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_pe1_sdmmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_pe3_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_pe3_sdmmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_st1_qspi.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_st1_sdmmc.dts
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_bootmode_emmc.dtsi
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_bootmode_qspi.dtsi
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_bootmode_sdmmc.dtsi
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_pe1.dtsi
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_pe3.dtsi
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_st1.dtsi
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex3_socdk.dts
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_013b.dts
