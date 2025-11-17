@@ -1,217 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E631DF27D
-	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 12:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DBA727602F
+	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 12:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763384014; cv=none; b=rG0tMTDKGgkdo8LZxkEKg1sKoWeXWSPLnJ3HkT5KFrBj0rRHJbw96kCBh4wBrx1uNMyea7dhEfNfySBoEshKOnnv4fZFHdzXjDxM1TC5nJfn1yBE4lzoWf/GdFVYDQw6KDUQIMFsCkdPoPJynL9D+x96he+DiQ+2eVpVHdDv11s=
+	t=1763384178; cv=none; b=DgZ+Xti32jYVqpbehT9hxOimwrJFc+2UPewH8VGSV+JFB1nAanj9tZe9TfYJ9Zy4kQYSvAi1yBCUQESEN6grCYN7c4fTTHbjZ4uh2dJXR5XLtKWdFCJfvY33H5Wwd1lPHLp4w+BwbHV3Az524fZ29L+0sr+sqUEFEgQT5/MwWgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763384014; c=relaxed/simple;
-	bh=vTlFSXL5C/aWINfpBdSRXsDpIpVWuHNUtGuY/3CzWKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nr5o+iKr1Bz85xt2l0JImk9O70KbuU7OV2UnQJZkQjTK1rZ0H31YK420n7VJNnS2Emz6n04rRE+pvY6+qaacl6PjOZH/OWUZvMDzETJccGL0X+nwcs+lWWsJ7y8X/j55ClDGxs6+Wg+ITul6waSQn35a0xXYMayn+zjWbqCZ6TI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JIdNq+it; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763384178; c=relaxed/simple;
+	bh=D8JKevJhdf2pIaGBDhah2ObNrwU9TQx5FS+7oH7yFQU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JJYD1to+X8qNWmFc9o534yyoxQJJ1UaTjCEkEf/IMylUorO/CYEpQ9PGhP31yN3iU1w8Lean4EqUYlEXcvDo3PA3+InEg0dG4jMsgpgPPKBdR+N3HEA/UL9ijjv6ydjBFVbd5rgFQLrQ1UMr2WdW8FKY8b2K0YPXT080ZCbr7I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iq81HJx2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JIdNq+it"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D249C4CEF1;
-	Mon, 17 Nov 2025 12:53:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763384014;
-	bh=vTlFSXL5C/aWINfpBdSRXsDpIpVWuHNUtGuY/3CzWKU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=JIdNq+it2Pszavsm9zuM33PUXh0wvJGvGE0DHncYhfcZF4ZzBP9k8ljOZzW4mkNbQ
-	 d7F4MOtZMm4TWxmHUwiRxTeqgaeIH1i1zK2GrENy26MSeOZWCSGcKmzzfypO4V37cu
-	 WIWN/SSKXfoIRu4Ip8WB9YbstRQ29yff1V4hIwU6qwuDni2C+2LcoFsroqzRXGJMyh
-	 iEyMwPXkTbka6MGKPbOv3Q6AOlX3XEusW85KwqZTrnjmrev66qAPx05n9Cbrzd9Fqy
-	 3VmNP7nvWut7gWESclJdI+Jd6Yzyqk4WozHWfgqq8OVFarSXJ3tji2TU67x7j14yiB
-	 wOE9wjh+dfApA==
-From: Dinh Nguyen <dinguyen@kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm/arm64: dts: socfpga: updates for v6.19
-Date: Mon, 17 Nov 2025 06:53:31 -0600
-Message-ID: <20251117125331.381114-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.42.0.411.g813d9a9188
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iq81HJx2"
+Received: by smtp.kernel.org (Postfix)
+	id B6B94C19422; Mon, 17 Nov 2025 12:56:17 +0000 (UTC)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id EEC06C19421
+	for <soc@kernel.org>; Mon, 17 Nov 2025 12:56:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EEC06C19421
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-477a1c28778so13058505e9.3
+        for <soc@kernel.org>; Mon, 17 Nov 2025 04:56:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763384175; x=1763988975; darn=kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UtQClQj27s6zv9IA4AhMxU7/PHrcAy8OI38mRHxa9s8=;
+        b=iq81HJx2pzIuT8OdjdYWP/OzMUEWaQmu6rPRD1vhLxxijzTbbCRJ+P+o1RwT8hFo4m
+         0sD6SPNPYHVUuR0Ndl8F1eOoCe6JQLkYHlxhs4jMPAeFNvQ7+bV+zMKysabSqlQ1V2BS
+         RIQJvB70UwrpMMLZPIUy9Nggkw56DCYw9O6AnaVSfDLL2rqqSQk2JjUjVVKhqgUbd3rr
+         126yoL1iDx+lQzAq6hZajDi9yoIO0Lmh6BN1/l2TCrId4HpPEGDEMr8+WT/Dk/R8c74x
+         vu9AYY6mXOAq3tFreHTr4XThxM7FCFeh+rE8TqDJgEYjBwRSBdMxZanTyXtfREyzgFc6
+         1tJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763384175; x=1763988975;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UtQClQj27s6zv9IA4AhMxU7/PHrcAy8OI38mRHxa9s8=;
+        b=gY3cHSit9vOOlhy2wXBEQY1WCB1COm2kmRs7IUDqq/Ure0LO4SH8W14rQtXWj6AWqa
+         HHUixpWpPGDvempe/EoKZO7ek/L+BBfbph6MTYPiBZVXwQE0nAqGNUf8AV3dUkszfRTI
+         J3O8YZVJ+zEm1/EtQnOJ6tv0V1gfMQE7UN2z1En2031c4E0tSHSxG2L6PA2DKibkg+hH
+         mp9epHv+ShrkcyysfFBXVbvyTKqAApqbrPgjyvWqtTyWep/H1OJIxnC9z5c8/2rWYeEO
+         8vuXEQvI0rI2DYdovTzsSEvAoaQ/ibnkfakOaMJK4cZWoXfA4xEORZb0POxVxfipOyl3
+         NScg==
+X-Forwarded-Encrypted: i=1; AJvYcCV115ocReOFSPkPHspcdOvqEujvSOGrb/OWWuCJfGDJ5vs5aghUxo4QMt8rxanmZGrvMBo=@kernel.org
+X-Gm-Message-State: AOJu0Yxomkkpnb6tN8PjacYBRTo45R+KN4FSBBfSjLWt9L27EruA67mZ
+	9cf3N/73FeCHw7rEh4M2Zq+TX0PTlGB9QytZYaRlHOtAtnxh1OpczdGM
+X-Gm-Gg: ASbGncuOde4GS2qYNpSTGMn2diydZTSc5aWmyflt6zq/0tUJbQmfmmTgrsFH34rvte+
+	mS4CqDQ062TPOfqB3PwsSRUDjvcchG/ysxmfUjvKJhR181z/x+n7p2aDRgkuYb8xfyC9h54vkkB
+	/y4NF+PnpdeMbDnFgRGDIZv4BpPHy4iJBb9rVlMYGtbEteXS9F67pdYAsxeGtcn/k8k+3ynhZz/
+	XUv6qMukzkbyHzU4i91lm+zVPp6eZOtK7quyVYvRoDC22x82Mp2WZ6ii1hE/sQGOUAMc6IaK04n
+	GmMT4w14BBvA0UR/f7RleVLIHL6T5L9lP82L+vYsAWHyQnnsCwM1Ngp3r+XoFzwO0FbkX5wteEt
+	/ClLTruG5d7uSkSUFSKmfHromHaTa2kZXE/DD1QVk7U6umDSWLlznm5gpxT5ZiVeiLFWERppbHP
+	EVJzPtJZGWKN6+ULU79fno7fOVnbz9lWK9iiGGIfHWokS8PpefKvSo/EQHfnvmfzuEUQWecun7K
+	A==
+X-Google-Smtp-Source: AGHT+IH57ecXdIuEBtdHqbof8FxE77BlxQn90vBWkhWWPRNuN2jxvquiJGk+VRf0FNachim8KEymaA==
+X-Received: by 2002:a05:600c:6052:b0:477:9986:5e6b with SMTP id 5b1f17b1804b1-47799866420mr47099985e9.28.1763384174937;
+        Mon, 17 Nov 2025 04:56:14 -0800 (PST)
+Received: from orome (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477969b3c12sm141496285e9.13.2025.11.17.04.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Nov 2025 04:56:13 -0800 (PST)
+Date: Mon, 17 Nov 2025 13:56:11 +0100
+From: Thierry Reding <thierry.reding@gmail.com>
+To: arm@kernel.org, soc@kernel.org
+Cc: Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL 6/8] ARM: tegra: Default configuration changes for
+ v6.19-rc1
+Message-ID: <la6n4yiqekpykfkt2d5kdt2px6vnz5djge7hstjs5mu7jnved6@6tdr4yggfkmx>
+References: <20251115090044.3140331-1-thierry.reding@gmail.com>
+ <20251115090044.3140331-6-thierry.reding@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sberisgpriyevh74"
+Content-Disposition: inline
+In-Reply-To: <20251115090044.3140331-6-thierry.reding@gmail.com>
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+--sberisgpriyevh74
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [GIT PULL 6/8] ARM: tegra: Default configuration changes for
+ v6.19-rc1
+MIME-Version: 1.0
 
-are available in the Git repository at:
+On Sat, Nov 15, 2025 at 10:00:41AM +0100, Thierry Reding wrote:
+> Hi ARM SoC maintainers,
+>=20
+> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df567=
+87:
+>=20
+>   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegr=
+a-for-6.19-arm-defconfig
+>=20
+> for you to fetch changes up to 23a29a81b44e3a7a139fee4d3eada5f299d8985e:
+>=20
+>   ARM: tegra: Enable EXT4 for Tegra (2025-11-14 18:05:14 +0100)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.19
+Looks like a fix for this is already in Linus' tree, so you can ignore
+this pull request.
 
-for you to fetch changes up to 38eff72f2d3a83475d70ac3a1280b5051d1e46b0:
+Thierry
 
-  arm64: dts: socfpga: agilex5: update qspi partitions for 013b board (2025-11-17 05:37:59 -0600)
+--sberisgpriyevh74
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-SoCFPGA DTS updates for v6.19
-- Add 4-bit SPI bus width(n5x, stratix10, agilex and agilex5)
-- Agilex5 updates:
-	- Add GMAC0 for NAND daughter card
-	- Add SMMU support
-	- Add VGIC maintenance interrupt
-	- Add L2 and L3 cache
-	- Add support for the 013b board
-	- Add I3C support
-- Add support for the Enclustra Mercury+ SA1 SoM based on Cyclone5
-- Add support for Agilex3 board(a variant of the Agilex5 board)
-- dt-bindings update:
-	- Document iommu in cdns,hp-nfc, snps,dw-axi-dmac and Agilex5
-	- Document Enclustra Mercury SA1 and AA1 boards
-	- Document Agilex5 013b board
-	- Document Agilex3 board
-- Fix dtbs_check warnings:
-	- stratix10-swvp
-	- Agilex(NAND and Clock manager)
-	- Move sdmmc-ecc to base DTSI file(Stratix10)
+-----BEGIN PGP SIGNATURE-----
 
-----------------------------------------------------------------
-Adrian Ng Ho Yin (3):
-      arm64: dts: socfpga: agilex5: Add L2 and L3 cache
-      arm64: dts: socfpga: agilex5: Add SMMU-V3-PMCG nodes
-      arm64: dts: intel: agilex5: Add Altera compatible for I3C controllers
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmkbG2sACgkQ3SOs138+
+s6FuihAAws7+fjys36vJMOzOHFLEBas9dF7S+5AuTIaZGhZtxTmjaILVyWTycZJ5
+PeWB56yTkpRPkHFw5aIuF6nvy8rOp6vYRCmMRZPdVADBCkclFdnDyKjb628QAPz/
+pda88AkbCre4nHZWPXvOy4cuw10c9aERK+8C2RD9BFft03kX/hqMuzdo9NbCCq2j
+puNPW620/Xd/lu4tEHqNeaEejbV06J5yrbvxRU7Yw3Im1KsVmKrzSlLm9eE4tfFp
+eRV2T/aUqXEVKUJNEXaTYWyCg7GIrsW41ZgLLRNOVj6acFZb5VPHfD9dB+QB4oSg
+JdeYssNwytIh8lS0cLBcIQVUAPuSUR/mTsa4XVzo5dh0/HqZIXTg4g23/5yoLkxs
+tGjWtY6iWDBenFSTbis8yDkNhX/4b8XD8G6adfAGU9u9qxYHucc8fLD2GSDWA2en
+gN1gYCD4hTj9g2rrZpF+oaNoFmHl3kaojZ+n1C8kj4M/WMxy2ngMlxA6eGM4ysHA
+ywehnhP7c3iRQV9Zfn54cUyjpU6sx/gekSzZC2qvBYq0N+Koss0VvgES6ENaUNi6
+k4LgS9RGWL7BGCmBF7dmXCVexn0CkppspJl2Lzz254COJYUxbxEhddjb3RHmfYbY
+esCZlyqtLcg76ccZxmAHwSMEIPNyN4jSqSQWIAYUkP3Fjj0cIM4=
+=k0z1
+-----END PGP SIGNATURE-----
 
-Boon Khai Ng (1):
-      arm64: dts: agilex5: Add GMAC0 node for NAND daughter card
-
-Dinh Nguyen (5):
-      arm64: dts: socfpga: move sdmmc-ecc to the base DTSI file
-      arm64: dts: socfpga: stratix10-swvp: fix dtbs_check warnings swvp
-      arm64: dts: socfpga: agilex: fix dtbs_check warning for clock manager
-      arm64: dts: socfpga: agilex: fix dtbs_check warning for NAND
-      arm64: dts: socfpga: agilex5: fix CHECK_DTBS warning for NAND
-
-Fong, Yan Kei (4):
-      arm64: dts: socfpga: n5x: Add 4-bit SPI bus width
-      arm64: dts: socfpga: stratix10: Add 4-bit SPI bus width
-      arm64: dts: socfpga: agilex: Add 4-bit SPI bus width
-      arm64: dts: socfpga: agilex5: Add 4-bit SPI bus width
-
-Khairul Anuar Romli (5):
-      dt-bindings: mtd: cdns,hp-nfc: Add iommu property
-      dt-bindings: dma: snps,dw-axi-dmac: Add iommu property
-      arm64: dts: socfpga: agilex5: Add SMMU nodes
-      dt-bindings: firmware: svc: Add IOMMU support for Agilex5
-      arm64: dts: socfpga: Add Agilex5 SVC node with memory region
-
-Lothar Rubusch (11):
-      ARM: dts: socfpga: add Enclustra boot-mode dtsi
-      ARM: dts: socfpga: add Enclustra base-board dtsi
-      ARM: dts: socfpga: add Enclustra Mercury SA1
-      dt-bindings: altera: add Enclustra Mercury SA1
-      ARM: dts: socfpga: add Enclustra Mercury+ SA2
-      dt-bindings: altera: add binding for Mercury+ SA2
-      ARM: dts: socfpga: add Mercury AA1 variants
-      dt-bindings: altera: add Mercury AA1 variants
-      ARM: dts: socfpga: removal of generic PE1 dts
-      dt-bindings: altera: removal of generic PE1 dts
-      ARM: dts: socfpga: add Enclustra SoM dts files
-
-Niravkumar L Rabara (6):
-      arm64: dts: socfpga: agilex5: add VGIC maintenance interrupt
-      dt-bindings: intel: Add Agilex5 SoCFPGA 013b board
-      arm64: dts: socfpga: agilex5: add support for 013b board
-      dt-bindings: intel: Add Agilex3 SoCFPGA board
-      arm64: dts: socfpga: add Agilex3 board
-      arm64: dts: socfpga: agilex5: update qspi partitions for 013b board
-
- Documentation/devicetree/bindings/arm/altera.yaml  |  24 +++-
- .../devicetree/bindings/arm/intel,socfpga.yaml     |   7 +
- .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml  |   3 +
- .../bindings/firmware/intel,stratix10-svc.yaml     |  15 +++
- .../devicetree/bindings/mtd/cdns,hp-nfc.yaml       |   3 +
- arch/arm/boot/dts/intel/socfpga/Makefile           |  25 +++-
- .../intel/socfpga/socfpga_arria10_mercury_aa1.dtsi | 143 ++++++++++++++++----
- .../socfpga_arria10_mercury_aa1_pe1_emmc.dts       |  16 +++
- .../socfpga_arria10_mercury_aa1_pe1_qspi.dts       |  16 +++
- .../socfpga_arria10_mercury_aa1_pe1_sdmmc.dts      |  16 +++
- .../socfpga_arria10_mercury_aa1_pe3_emmc.dts       |  16 +++
- .../socfpga_arria10_mercury_aa1_pe3_qspi.dts       |  16 +++
- .../socfpga_arria10_mercury_aa1_pe3_sdmmc.dts      |  16 +++
- .../socfpga_arria10_mercury_aa1_st1_emmc.dts       |  16 +++
- .../socfpga_arria10_mercury_aa1_st1_qspi.dts       |  16 +++
- .../socfpga_arria10_mercury_aa1_st1_sdmmc.dts      |  16 +++
- .../intel/socfpga/socfpga_arria10_mercury_pe1.dts  |  55 --------
- .../socfpga/socfpga_cyclone5_mercury_sa1.dtsi      | 143 ++++++++++++++++++++
- .../socfpga_cyclone5_mercury_sa1_pe1_emmc.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa1_pe1_qspi.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa1_pe1_sdmmc.dts     |  16 +++
- .../socfpga_cyclone5_mercury_sa1_pe3_emmc.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa1_pe3_qspi.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa1_pe3_sdmmc.dts     |  16 +++
- .../socfpga_cyclone5_mercury_sa1_st1_emmc.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa1_st1_qspi.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa1_st1_sdmmc.dts     |  16 +++
- .../socfpga/socfpga_cyclone5_mercury_sa2.dtsi      | 146 +++++++++++++++++++++
- .../socfpga_cyclone5_mercury_sa2_pe1_qspi.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa2_pe1_sdmmc.dts     |  16 +++
- .../socfpga_cyclone5_mercury_sa2_pe3_qspi.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa2_pe3_sdmmc.dts     |  16 +++
- .../socfpga_cyclone5_mercury_sa2_st1_qspi.dts      |  16 +++
- .../socfpga_cyclone5_mercury_sa2_st1_sdmmc.dts     |  16 +++
- .../socfpga_enclustra_mercury_bootmode_emmc.dtsi   |  12 ++
- .../socfpga_enclustra_mercury_bootmode_qspi.dtsi   |   8 ++
- .../socfpga_enclustra_mercury_bootmode_sdmmc.dtsi  |   8 ++
- .../socfpga/socfpga_enclustra_mercury_pe1.dtsi     |  33 +++++
- .../socfpga/socfpga_enclustra_mercury_pe3.dtsi     |  55 ++++++++
- .../socfpga/socfpga_enclustra_mercury_st1.dtsi     |  15 +++
- arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  |   9 ++
- .../boot/dts/altera/socfpga_stratix10_socdk.dts    |  15 +--
- .../dts/altera/socfpga_stratix10_socdk_nand.dts    |  13 --
- .../boot/dts/altera/socfpga_stratix10_swvp.dts     |   3 -
- arch/arm64/boot/dts/intel/Makefile                 |   2 +
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |   1 +
- .../arm64/boot/dts/intel/socfpga_agilex3_socdk.dts | 132 +++++++++++++++++++
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     | 115 +++++++++++++++-
- .../arm64/boot/dts/intel/socfpga_agilex5_socdk.dts |   2 +
- .../boot/dts/intel/socfpga_agilex5_socdk_013b.dts  | 126 ++++++++++++++++++
- .../boot/dts/intel/socfpga_agilex5_socdk_nand.dts  |  18 +++
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |   2 +
- .../boot/dts/intel/socfpga_agilex_socdk_nand.dts   |   2 +-
- arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |   2 +
- 54 files changed, 1410 insertions(+), 111 deletions(-)
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe1_emmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe1_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe1_sdmmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe3_emmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe3_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_pe3_sdmmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_st1_emmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_st1_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_aa1_st1_sdmmc.dts
- delete mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_arria10_mercury_pe1.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1.dtsi
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe1_emmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe1_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe1_sdmmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe3_emmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe3_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_pe3_sdmmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_st1_emmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_st1_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa1_st1_sdmmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2.dtsi
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_pe1_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_pe1_sdmmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_pe3_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_pe3_sdmmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_st1_qspi.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_mercury_sa2_st1_sdmmc.dts
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_bootmode_emmc.dtsi
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_bootmode_qspi.dtsi
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_bootmode_sdmmc.dtsi
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_pe1.dtsi
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_pe3.dtsi
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_enclustra_mercury_st1.dtsi
- create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex3_socdk.dts
- create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_013b.dts
+--sberisgpriyevh74--
