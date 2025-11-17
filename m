@@ -1,83 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011047.outbound.protection.outlook.com [52.101.52.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DBA727602F
-	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 12:56:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763384178; cv=none; b=DgZ+Xti32jYVqpbehT9hxOimwrJFc+2UPewH8VGSV+JFB1nAanj9tZe9TfYJ9Zy4kQYSvAi1yBCUQESEN6grCYN7c4fTTHbjZ4uh2dJXR5XLtKWdFCJfvY33H5Wwd1lPHLp4w+BwbHV3Az524fZ29L+0sr+sqUEFEgQT5/MwWgM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763384178; c=relaxed/simple;
-	bh=D8JKevJhdf2pIaGBDhah2ObNrwU9TQx5FS+7oH7yFQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JJYD1to+X8qNWmFc9o534yyoxQJJ1UaTjCEkEf/IMylUorO/CYEpQ9PGhP31yN3iU1w8Lean4EqUYlEXcvDo3PA3+InEg0dG4jMsgpgPPKBdR+N3HEA/UL9ijjv6ydjBFVbd5rgFQLrQ1UMr2WdW8FKY8b2K0YPXT080ZCbr7I4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iq81HJx2; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8D027EC7C
+	for <soc@lists.linux.dev>; Mon, 17 Nov 2025 14:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763388736; cv=fail; b=hP7lj29o0Yayym7ywDIVW07j/TdkTbWnaiwROivHQTSd14AGdodSkgjXKaPL0cD1VEJJrPOKKm5rOHgzxQ/MXY3m/EX1Bil2JBDYayzMo3onwClFi0lpLoIh4yj2g+/Meu5+ZEK7ryByKHYN8jRV9b2dbHYkagmAKAnLrGrAHBI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763388736; c=relaxed/simple;
+	bh=WosB49BGcOWLE8WsdnppmqZF6DHjRhAPdvENUeJyu5g=;
+	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mBwbNW5LCx6auCuOdzXTL9bu5srGITVdOfKsBRIaupobT+gK0IHjuyKIP9caEkRLltKqzeWBkR+95gDThnO2r8sa8v3d7R1yxxE3zu5IJt7w8fwBXCdgoyW2dsJdrfPLlEQ6JuRL+28Is/tjXeaV6sJk88ErTKBZQ5+wiSDA4Vg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=s1ZEL4GQ; arc=fail smtp.client-ip=52.101.52.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iq81HJx2"
-Received: by smtp.kernel.org (Postfix)
-	id B6B94C19422; Mon, 17 Nov 2025 12:56:17 +0000 (UTC)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EEC06C19421
-	for <soc@kernel.org>; Mon, 17 Nov 2025 12:56:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EEC06C19421
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-477a1c28778so13058505e9.3
-        for <soc@kernel.org>; Mon, 17 Nov 2025 04:56:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763384175; x=1763988975; darn=kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtQClQj27s6zv9IA4AhMxU7/PHrcAy8OI38mRHxa9s8=;
-        b=iq81HJx2pzIuT8OdjdYWP/OzMUEWaQmu6rPRD1vhLxxijzTbbCRJ+P+o1RwT8hFo4m
-         0sD6SPNPYHVUuR0Ndl8F1eOoCe6JQLkYHlxhs4jMPAeFNvQ7+bV+zMKysabSqlQ1V2BS
-         RIQJvB70UwrpMMLZPIUy9Nggkw56DCYw9O6AnaVSfDLL2rqqSQk2JjUjVVKhqgUbd3rr
-         126yoL1iDx+lQzAq6hZajDi9yoIO0Lmh6BN1/l2TCrId4HpPEGDEMr8+WT/Dk/R8c74x
-         vu9AYY6mXOAq3tFreHTr4XThxM7FCFeh+rE8TqDJgEYjBwRSBdMxZanTyXtfREyzgFc6
-         1tJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763384175; x=1763988975;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UtQClQj27s6zv9IA4AhMxU7/PHrcAy8OI38mRHxa9s8=;
-        b=gY3cHSit9vOOlhy2wXBEQY1WCB1COm2kmRs7IUDqq/Ure0LO4SH8W14rQtXWj6AWqa
-         HHUixpWpPGDvempe/EoKZO7ek/L+BBfbph6MTYPiBZVXwQE0nAqGNUf8AV3dUkszfRTI
-         J3O8YZVJ+zEm1/EtQnOJ6tv0V1gfMQE7UN2z1En2031c4E0tSHSxG2L6PA2DKibkg+hH
-         mp9epHv+ShrkcyysfFBXVbvyTKqAApqbrPgjyvWqtTyWep/H1OJIxnC9z5c8/2rWYeEO
-         8vuXEQvI0rI2DYdovTzsSEvAoaQ/ibnkfakOaMJK4cZWoXfA4xEORZb0POxVxfipOyl3
-         NScg==
-X-Forwarded-Encrypted: i=1; AJvYcCV115ocReOFSPkPHspcdOvqEujvSOGrb/OWWuCJfGDJ5vs5aghUxo4QMt8rxanmZGrvMBo=@kernel.org
-X-Gm-Message-State: AOJu0Yxomkkpnb6tN8PjacYBRTo45R+KN4FSBBfSjLWt9L27EruA67mZ
-	9cf3N/73FeCHw7rEh4M2Zq+TX0PTlGB9QytZYaRlHOtAtnxh1OpczdGM
-X-Gm-Gg: ASbGncuOde4GS2qYNpSTGMn2diydZTSc5aWmyflt6zq/0tUJbQmfmmTgrsFH34rvte+
-	mS4CqDQ062TPOfqB3PwsSRUDjvcchG/ysxmfUjvKJhR181z/x+n7p2aDRgkuYb8xfyC9h54vkkB
-	/y4NF+PnpdeMbDnFgRGDIZv4BpPHy4iJBb9rVlMYGtbEteXS9F67pdYAsxeGtcn/k8k+3ynhZz/
-	XUv6qMukzkbyHzU4i91lm+zVPp6eZOtK7quyVYvRoDC22x82Mp2WZ6ii1hE/sQGOUAMc6IaK04n
-	GmMT4w14BBvA0UR/f7RleVLIHL6T5L9lP82L+vYsAWHyQnnsCwM1Ngp3r+XoFzwO0FbkX5wteEt
-	/ClLTruG5d7uSkSUFSKmfHromHaTa2kZXE/DD1QVk7U6umDSWLlznm5gpxT5ZiVeiLFWERppbHP
-	EVJzPtJZGWKN6+ULU79fno7fOVnbz9lWK9iiGGIfHWokS8PpefKvSo/EQHfnvmfzuEUQWecun7K
-	A==
-X-Google-Smtp-Source: AGHT+IH57ecXdIuEBtdHqbof8FxE77BlxQn90vBWkhWWPRNuN2jxvquiJGk+VRf0FNachim8KEymaA==
-X-Received: by 2002:a05:600c:6052:b0:477:9986:5e6b with SMTP id 5b1f17b1804b1-47799866420mr47099985e9.28.1763384174937;
-        Mon, 17 Nov 2025 04:56:14 -0800 (PST)
-Received: from orome (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477969b3c12sm141496285e9.13.2025.11.17.04.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 04:56:13 -0800 (PST)
-Date: Mon, 17 Nov 2025 13:56:11 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: arm@kernel.org, soc@kernel.org
-Cc: Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 6/8] ARM: tegra: Default configuration changes for
- v6.19-rc1
-Message-ID: <la6n4yiqekpykfkt2d5kdt2px6vnz5djge7hstjs5mu7jnved6@6tdr4yggfkmx>
-References: <20251115090044.3140331-1-thierry.reding@gmail.com>
- <20251115090044.3140331-6-thierry.reding@gmail.com>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="s1ZEL4GQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VnKs51Vw2qNFP1CAOTfUVV+s4uARYUl+Aey3slLJAkXZCYVFf3o8FkNLtxZymiVORhu43rbxYxwL8De1kkcyaQunBmxjH6S7yvwdbJjtx3oXI+fIfOqryiKSTkTijOigGRcGAsjJxyctamUxvyDQBtpwoBW/IuoRHEiTd0eY7kn/UGOG95MqYqi6hVk0niwGw2N3CCKzlHyAIauYZExKGN7Az9vClX7BHAZfyKdAHCiNKFkynilyy74UduL5jEgrx3IP+Nz9EBmYU/5o1wRNgSq9QpSjWcNf9KiAa9cBl1FKwVNe0jLgoRndXjEjbb26HyTp1s+5ng7gSu2wh0hZjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QTEL6Izch0K5ZAgdjedJYC59oup2Y9TdQVDCw4sXrt4=;
+ b=ELQhvSN0EhAHrR/Po4kYCj7iBwcnRNdNjc6ywbBDGhgdTiOhMz5+bUl+Oz+EZ4LYt+AbbDLHSR/RI3YrJ0y+9geq1sjm/9UHbdE3RHAIMWPMdMVcYH30rSWeR48/PmRaack/QEMk1WztrYkMhj950M3YB3LtB2ihS+5UZsStL+0R1uFdtCGgKOGJVdvXvcZoujbAAGD6KQfFa8KBuV3u7GsH2tA+EhqcMnh5C6utUqLOMSAgpkq4HJWOOZK572zmtavTrfJr2lusp/iEeEVHiesenugk2fodTo+yIhdZ+P9SyyqIRwaCvUb/eEMI62Syx0Dpnp2YuyMCPBQsoLny/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.194) smtp.rcpttodomain=atomide.com smtp.mailfrom=ti.com; dmarc=pass
+ (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QTEL6Izch0K5ZAgdjedJYC59oup2Y9TdQVDCw4sXrt4=;
+ b=s1ZEL4GQEjFu+C1Gzrl3vqy5j8JkSp1u7XTrObHzrRW/UiPBn4vSoYRI+tarn7cIHPzgIGqgT/4gXdwE/wnHITToY/+YQ8P+HCnCCAttReGrO7SJsaMSyLe5fQRCDEu8O2KY/LU4uA4ZpQqOLCoNnWVRD6q/+4ob+PtQfqh+Orw=
+Received: from SJ0PR03CA0262.namprd03.prod.outlook.com (2603:10b6:a03:3a0::27)
+ by SA6PR10MB8037.namprd10.prod.outlook.com (2603:10b6:806:442::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.21; Mon, 17 Nov
+ 2025 14:12:10 +0000
+Received: from SJ5PEPF000001F2.namprd05.prod.outlook.com
+ (2603:10b6:a03:3a0:cafe::69) by SJ0PR03CA0262.outlook.office365.com
+ (2603:10b6:a03:3a0::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.22 via Frontend Transport; Mon,
+ 17 Nov 2025 14:12:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
+Received: from lewvzet200.ext.ti.com (198.47.23.194) by
+ SJ5PEPF000001F2.mail.protection.outlook.com (10.167.242.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9343.9 via Frontend Transport; Mon, 17 Nov 2025 14:12:09 +0000
+Received: from DLEE200.ent.ti.com (157.170.170.75) by lewvzet200.ext.ti.com
+ (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 17 Nov
+ 2025 08:12:06 -0600
+Received: from DLEE200.ent.ti.com (157.170.170.75) by DLEE200.ent.ti.com
+ (157.170.170.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 17 Nov
+ 2025 08:12:06 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE200.ent.ti.com
+ (157.170.170.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Mon, 17 Nov 2025 08:12:06 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AHEC6V92618964;
+	Mon, 17 Nov 2025 08:12:06 -0600
+Date: Mon, 17 Nov 2025 08:12:06 -0600
+From: Nishanth Menon <nm@ti.com>
+To: SoC <soc@kernel.org>, <arm@kernel.org>
+CC: SoC list <soc@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
+	"Tony Lindgren" <tony@atomide.com>, Vignesh Raghavendra <vigneshr@ti.com>
+Subject: [GIT PULL] soc: ti: Driver updates for v6.18
+Message-ID: <20251117141206.pqjzjzegxajziyof@resort>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -85,59 +81,126 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sberisgpriyevh74"
+	protocol="application/pgp-signature"; boundary="cvve6pb4a3vhlaqm"
 Content-Disposition: inline
-In-Reply-To: <20251115090044.3140331-6-thierry.reding@gmail.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F2:EE_|SA6PR10MB8037:EE_
+X-MS-Office365-Filtering-Correlation-Id: e7509da9-5d26-4f55-352e-08de25e34c15
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?xCObZZIYH4i7eSbreSU90Jsl7/d2Ag0lEkgUQnGfMzUcFjNRkT5FnsleOFsj?=
+ =?us-ascii?Q?BB7P7kPkn4d9Nvkvt7TCl536mlKBweSTMqmxviJv2oLq4/bCCRGd7P58kkiN?=
+ =?us-ascii?Q?aXanf5xxmVZGT2jZ0cUCB7TsiKZgzr+xK0sFPtm3eT8xDGGslAppgTvFjZAs?=
+ =?us-ascii?Q?KPzCcM/1Qp6Nn8gUGapI+UlRG7YVmd1iWueOHx6ZgCRmjYBZhNagdcYsd41q?=
+ =?us-ascii?Q?rlCpWdK0m79Wd9qYfiT+Rqj04UdFUr7bw0SRqKk5ndq0oHWu/ZXfVCeoyM37?=
+ =?us-ascii?Q?fqARhN73AduKZhUdUW/yhUWcoTzxEI6+q4wH6z6f38ldaM7IZzEJxLQ2j9sg?=
+ =?us-ascii?Q?q4BFfjlMO2QlTt8i+9+hZzKUy62C2ae80rhQU2gkbrpMejA+jGniqmSSbDZj?=
+ =?us-ascii?Q?SNaJpjfOqb2kKWwPuBaMAEUcH9ZRS+/e+eduk63yO9SSiw+N0E4/SkbkvsR7?=
+ =?us-ascii?Q?7bxO7TL5Ebw+AF7e2iNmcjUDjljgOMT/FU8OGY0fYHbE8QMx9lxvSDQJPTn1?=
+ =?us-ascii?Q?O1UNgMAanlBjES+eXFQmKwtlKJlN7bOQGy+QBeUxeeN3Botwi01lOUclrToC?=
+ =?us-ascii?Q?F7WoHynW2kLxLapF6TLqgFRIFl/opIXIcMScc9akLBqco43MclNV+mFmEipo?=
+ =?us-ascii?Q?p9vqDBuuA7ZMvLars36eXT+GOzMle9YQN9QoU39S1d1S47il8SISWye8XS93?=
+ =?us-ascii?Q?EuTFLbmfNNrebyox/SnlLAPbRBtNlz0W/ZM7LQSULmAfArGMgZPr5J2YHVqz?=
+ =?us-ascii?Q?44ITfjlvBShDvkmySAy51iIjkLzbYbNr/KIHkrX27OGSTHX/sHDv2UUJ7aKv?=
+ =?us-ascii?Q?NKSH/lSCbuKRBRj7B/SODoSjMaf+o+lggPosCakota0HCUv1yipZIeSHLvKQ?=
+ =?us-ascii?Q?q1cMXMIJ7pZ7Pg7Jcu13Q2KjvJY1vp4/qn8F6i1IDi54TJeOIWG8u8Ouv0/V?=
+ =?us-ascii?Q?EJhajYkeEM9vArWLIIKUqoXVyWu/PbwjHEdB5M5uq72pMETT0LuZ2D2h4H9O?=
+ =?us-ascii?Q?T+gmPoKMgt8UPvqTq60zDVxcFwWYgOvXmiXP+0dav7ue2yoTjwazZ7DsXKKb?=
+ =?us-ascii?Q?zG9n02rFR/lZBQGSyNH7vNUuWXmP7kntMS9FYLoMCr3/SG3TFgumVN77j9mE?=
+ =?us-ascii?Q?WNBW23VLnJiAzuGsjGvIK/lUrzE/sff/untH9s+Sl4tUeJ9Lv5uQQy1auvQ2?=
+ =?us-ascii?Q?0YPR4SQBbXYklDT+v1DDhHZOLdzShNXxACt1PxWClPy5b4JMgkCkXT4kLtvz?=
+ =?us-ascii?Q?y4WdKRg1uWaJ1ALSqvu/2vf+s0F+ExqVVoHqY8xd9Rn3YaL/gN1i3tSaF+UL?=
+ =?us-ascii?Q?twRV7+udf5WfHadr8wd6UohRKroVaPrXiPhxUGiyq+PP6JvspYWKfBod8/D+?=
+ =?us-ascii?Q?iW5qTmUqc8tzGCwdZT1184fiYxIwIkEuCmv38gWqsfANBTQbgBpmzWyEK4Fg?=
+ =?us-ascii?Q?W5XHi9qtor0vRzp2ErUMXonQdWMuvUiEZ3jmYRMhVQAqUCqSGilExE2yhWWZ?=
+ =?us-ascii?Q?spZD2iud7bV4D5jR7i0lKF+NoElWZoJMrXxs+9rt3d80ODW14/nPP7gmqTvn?=
+ =?us-ascii?Q?Z0KufmjeTLjrxJvlEEI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2025 14:12:09.6707
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7509da9-5d26-4f55-352e-08de25e34c15
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001F2.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR10MB8037
 
-
---sberisgpriyevh74
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+--cvve6pb4a3vhlaqm
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [GIT PULL 6/8] ARM: tegra: Default configuration changes for
- v6.19-rc1
-MIME-Version: 1.0
 
-On Sat, Nov 15, 2025 at 10:00:41AM +0100, Thierry Reding wrote:
-> Hi ARM SoC maintainers,
->=20
-> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df567=
-87:
->=20
->   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegr=
-a-for-6.19-arm-defconfig
->=20
-> for you to fetch changes up to 23a29a81b44e3a7a139fee4d3eada5f299d8985e:
->=20
->   ARM: tegra: Enable EXT4 for Tegra (2025-11-14 18:05:14 +0100)
+Hi,
 
-Looks like a fix for this is already in Linus' tree, so you can ignore
-this pull request.
+Please pull
 
-Thierry
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
---sberisgpriyevh74
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
+er-soc-for-v6.19
+
+for you to fetch changes up to e0431ff998bd32dcc1e591a45b4e156fcb0325a3:
+
+  firmware: ti_sci: Partial-IO support (2025-11-13 13:03:55 -0600)
+
+----------------------------------------------------------------
+TI SoC driver updates for v6.19
+
+- ti_sci: Add Partial-IO poweroff support and sys_off handler integration
+- ti_sci: Gate IO isolation programming on firmware capability flag
+- ti_sci: cleanup by replacing ifdeffery in PM ops with pm_sleep_ptr() macro
+
+----------------------------------------------------------------
+Markus Schneider-Pargmann (TI.com) (2):
+      firmware: ti_sci: Support transfers without response
+      firmware: ti_sci: Partial-IO support
+
+Thomas Richard (TI.com) (2):
+      firmware: ti_sci: Replace ifdeffery by pm_sleep_ptr() macro
+      firmware: ti_sci: Set IO Isolation only if the firmware is capable
+
+ drivers/firmware/ti_sci.c | 155 ++++++++++++++++++++++++++++++++++++++----=
+----
+ drivers/firmware/ti_sci.h |   7 +++
+ 2 files changed, 135 insertions(+), 27 deletions(-)
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+https://ti.com/opensource
+
+--cvve6pb4a3vhlaqm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmkbG2sACgkQ3SOs138+
-s6FuihAAws7+fjys36vJMOzOHFLEBas9dF7S+5AuTIaZGhZtxTmjaILVyWTycZJ5
-PeWB56yTkpRPkHFw5aIuF6nvy8rOp6vYRCmMRZPdVADBCkclFdnDyKjb628QAPz/
-pda88AkbCre4nHZWPXvOy4cuw10c9aERK+8C2RD9BFft03kX/hqMuzdo9NbCCq2j
-puNPW620/Xd/lu4tEHqNeaEejbV06J5yrbvxRU7Yw3Im1KsVmKrzSlLm9eE4tfFp
-eRV2T/aUqXEVKUJNEXaTYWyCg7GIrsW41ZgLLRNOVj6acFZb5VPHfD9dB+QB4oSg
-JdeYssNwytIh8lS0cLBcIQVUAPuSUR/mTsa4XVzo5dh0/HqZIXTg4g23/5yoLkxs
-tGjWtY6iWDBenFSTbis8yDkNhX/4b8XD8G6adfAGU9u9qxYHucc8fLD2GSDWA2en
-gN1gYCD4hTj9g2rrZpF+oaNoFmHl3kaojZ+n1C8kj4M/WMxy2ngMlxA6eGM4ysHA
-ywehnhP7c3iRQV9Zfn54cUyjpU6sx/gekSzZC2qvBYq0N+Koss0VvgES6ENaUNi6
-k4LgS9RGWL7BGCmBF7dmXCVexn0CkppspJl2Lzz254COJYUxbxEhddjb3RHmfYbY
-esCZlyqtLcg76ccZxmAHwSMEIPNyN4jSqSQWIAYUkP3Fjj0cIM4=
-=k0z1
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmkbLS8ACgkQ3bWEnRc2
+JJ2rZg/6AysHiSYmTwvTLPODcudRC/vh928BfHENSjGBjAbmSpdUE8Xntw4cqVJ0
+mtwg4bKFdymYynUfItyIfvxaIYLIi/p0YOcp51I/mcvmAAELUlGYQTaV1SeXY8Px
+UiIUDXVpHbNi+r1wWJi6cteiXsJzWJg4Sj/uCxU6g/oR8LcMEjBoczkSyOZKJScX
+q0Z6cJhio9yUpTuXm2mB0PWlZDmXOQWaCen3w0iZRQP8u6v8OwkliI083dQa/GX/
+9QFIuhfV5PD9jWtI3zcH5fL3wcOCxagLypN2E9t3luC8Y/2mzVtVZvw7iiISy9D8
+8XmF8X98bYNEn3xu5y3c/NHus7W5OwuXr3OkwaZ18WJEet5z4ghsIIRh2//M/9+N
+c6huWLQqGs/NoPV8+eTwFZjxjl1YynC1gNEqWYKLgyeZyn1qshHRgMeQRqVReQPH
+Bpyc09yAA7MXB1UzIqzR/ktWmN87jXa2679cE3ody/AHB40GxNJPeXsJxkWueJ9Y
+zEVFfy75TFR8vU+qmFIzJq/H4DrvW7PCH0NlWIf3PoDHg3m7LvvkVG67i2akjbDO
+QacDitTVdZ1cZfXGdBISlnkY91Mc5H2wxPbQHyT6u89CsLcHJdzEixxaC8ofIXOe
+TlQvawDEcna0y75Tv6pnVQs+fIvOGDX/Mzro5qePBaRvCdYQQsY=
+=rCGs
 -----END PGP SIGNATURE-----
 
---sberisgpriyevh74--
+--cvve6pb4a3vhlaqm--
