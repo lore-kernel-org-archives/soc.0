@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20AB3702EE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C353702EE
 	for <soc@lists.linux.dev>; Tue, 18 Nov 2025 21:50:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763502641; cv=none; b=J8HXxDVPE4jyucLISrcdPXOwq2IpxBVESvsTbQ2u5f2tS7vw70mnEF2/l7KPEOYd+IsKeCAb3hYkQKNzdfzAEYJHivifdqQzXZIrBhRQgNk/p7UmAOVZkL4iEbBbZ3jM7IHSEfqUsJUYLibo8coj32PrBpYyAhfkGoNl0fhNSRY=
+	t=1763502642; cv=none; b=rK8wvk/l81Z9rynfslSZ286rSxxd3TZXwoEDwIut6snF1nWvn/xR0WHg7IkS0mA8g1HXYSqHazszqQe5SL7EoB6SyCQ9gM/jZWm2LOaS0JUBNZlldmF1IT8prOIIr3Y4Ce3ELsaOBfSV80c0kRkYi4vJvJIR/UCde1510sSfu4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763502641; c=relaxed/simple;
-	bh=o541+7TIBwzOHZm3yfbQuaPOMJM5zjc0/94xdnvlItw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=har/c6AifZ1UvFwHVM6wvTkPHvqxxIdYximaVf3cSShfIeEixkrLOV+l1mOmeLkvstLTZiNVha4gjL57G/wYDJfFk6+dQ/Qb9TRsFWlkfTC1yXqYNaVcpWYpBU9pmCdQGtlM0ZXSQ+FSy3k1eCZ/yhifTIxgRo7Zj3SInNNxTpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ObDCIbft; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763502642; c=relaxed/simple;
+	bh=pvwY9FZJ9EfUE3NaIqqJsS2VShZC2xVW1ghnzcZvhvY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ox/W4pXuIU0EU6IVgVVpLUwqJCDkXjGVzYMGpPTjJ306Jjjp70eIP0NUgC9UCOVtYIm0rVbj3qCUeEodqSH0lR7KbF51E3W0MTJ8pDv5yKLABnjHR2eNkHoLCXf8z2IaDD9d+FpxkhYYBlT6Nb0VENBWQpeUl42SBIHF0SrN5dA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vMbIBevo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ObDCIbft"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vMbIBevo"
 Received: by smtp.kernel.org (Postfix)
-	id 06CA4C4CEFB; Tue, 18 Nov 2025 21:50:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC396C16AAE
-	for <soc@kernel.org>; Tue, 18 Nov 2025 21:50:40 +0000 (UTC)
+	id 9BF56C2BCB0; Tue, 18 Nov 2025 21:50:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E15C2BC86;
+	Tue, 18 Nov 2025 21:50:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763502640;
-	bh=o541+7TIBwzOHZm3yfbQuaPOMJM5zjc0/94xdnvlItw=;
-	h=Subject:From:Date:To:Cc:From;
-	b=ObDCIbft2quoTNmtZIUL+aQMbhgXopzgkYHBCK1kHNCi8CHr04E+VzgAb5KadFLwq
-	 LHDp/kWAT98LVb9uY252wOa0gIfJwKpMIljsqjeAMMdbJcEAEGSVCkNJrT7X1/Cnnv
-	 I7TeAkT5kuyvMn45Ju4jf03qQPeZ0C8Gma8H8nGgymIE7AOyGlMtnZsdgtXol42txx
-	 yk8oUVYHvYm+k4pCvgYwwaKhYF9Y2RZ/Kg/WMtiJNPKqxBOgMc5Ky9jTkw6ddIfmYC
-	 VgbyhWmyB2xU71s2RRUp5JlTWxejo7R7i2isyhpA92xqbkEsDLD8McljMFd4VabM7u
-	 FvX9NuIjeX71A==
+	s=k20201202; t=1763502641;
+	bh=pvwY9FZJ9EfUE3NaIqqJsS2VShZC2xVW1ghnzcZvhvY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=vMbIBevoCvDiR1j60aIJTAjlS3hVz80MN8nOEeBOKH/3DmjP7aZ+dL2L3Vy7/oP0Y
+	 O+/075BeNuRmUCIbTeEf3wxpUj/sAJEc55ALkgvVxL5w5xf0NkShuwRi0KhQscN8+f
+	 JIj76VoBEAMsCrTZ0xw8vpbCiZogR5zXUvafczR9MqhTjni1VX2aAL2khm3hJ+dYYd
+	 P2Gj/+oqEBFbn+1sIJxuey+E0B+WqxLAysEaRtaRcFA8ox+lNwWgG/nDcYTxp/J3Mu
+	 /7lrsxbYNIYASCX7CkTnLKFDlUkVPLRmrXcBGh9A4oaKeNUky18yuaYq7QbcOkZuMx
+	 ZP+7lkN61Rq+g==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 37F0C380A948;
-	Tue, 18 Nov 2025 21:50:07 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C0C380A949;
+	Tue, 18 Nov 2025 21:50:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,34 +39,38 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Rockchip dts fixes for 6.18 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176350260574.116847.13718548636126396817.git-patchwork-summary@kernel.org>
-Date: Tue, 18 Nov 2025 21:50:05 +0000
-To: soc@kernel.org
+ <176350260726.116847.13791349161958969470.git-patchwork-notify@kernel.org>
+Date: Tue, 18 Nov 2025 21:50:07 +0000
+References: <1901272.VLH7GnMWUR@phil>
+In-Reply-To: <1901272.VLH7GnMWUR@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Rockchip dts fixes for 6.18 #1
-  Submitter: Heiko Stuebner <heiko@sntech.de>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024547
-  Lore link: https://lore.kernel.org/r/1901272.VLH7GnMWUR@phil
+On Mon, 17 Nov 2025 23:18:32 +0100 you wrote:
+> Hi SoC maintainers,
+> 
+> please find a below some Rockchip fixes for the current 6.18 release-cycle.
+> 
+> Please pull
+> 
+> Thanks
+> Heiko
+> 
+> [...]
 
-Patch: MAINTAINERS: sync omap devicetree maintainers with omap platform
-  Submitter: Kevin Hilman <khilman@baylibre.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1025009
-  Lore link: https://lore.kernel.org/r/20251118192652.316198-1-khilman@baylibre.com
+Here is the summary with links:
+  - [GIT,PULL] Rockchip dts fixes for 6.18 #1
+    https://git.kernel.org/soc/soc/c/c10519c8c886
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
