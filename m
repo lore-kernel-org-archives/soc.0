@@ -1,164 +1,229 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80DA731ED84
-	for <soc@lists.linux.dev>; Wed, 19 Nov 2025 06:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB25F314D0B
+	for <soc@lists.linux.dev>; Wed, 19 Nov 2025 07:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763533598; cv=fail; b=VcnAjYw4a8pI3ajsBqcHDKrYoQuzSV2qszs5gzbiNdWkgYJOySJy7OF84Nm1B2GRGS33JdasLJTrNljlAy9hK4iOoNdOq+VWLgIEzw+pOaMPegNha+vaPxkvgdQZLv6lSkYFmG60HuXpd7eyLeff6TeGKtHlH8rjy/5dyc9o3Ss=
+	t=1763537088; cv=fail; b=Qe5fWnLy1qLpNJDGB2d5faWKJUuUcJpd2frDhKC4p7I80f1JHJ713cwwebgxJivuJx6MEmNsfynrgZTcRLpJo25SRzM/gLWk5Udh1wgk5sIie8JscPf6J/DGwzXJITL/+blKxcn23iq8Rv/mqfP/WZH2bzGNJLvt9Kqd7pxiZlk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763533598; c=relaxed/simple;
-	bh=jJe4FzNMtNLABnanxA4HDVtgHbNCXWe7VKIoxyS72/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GoHtOXpFtWN77kdv05iVaIl5WJg8my99jWTEaE/7zpiQYuEMYI4BMGety29mhRqAc6zJhJoCiIpUffv/r/3ADXZGfq+Rj4n4jRLpjqwE5HBw0XNnuVoQCE9HphSfmCvsXGSYCpTptZHjgsY5lqU8k5i8tR4DpPUlYKXQpKBN+28=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763537088; c=relaxed/simple;
+	bh=pyTqrMeh5RmutztYV1666FZwAZXlFhLXZTKG8jYiVgA=;
+	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=XQW7C6jhlwzdbEwaNGRNzGb0Ks3qGR6OfRu4jz1HPJYOqb/ouGLzaF+muLFjQXpWsIYGwdNURCe2ShauHQ6DbotslgrSGTOYQza1R/kyboQ4RRgXby9aS9gxLRNAJNoxUj70P28kGJKFE25iXSW63F9UMcaPeRul64DF+OKLpMg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=l6sBQMKV; arc=fail smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="l6sBQMKV"
 Received: by smtp.kernel.org (Postfix)
-	id 1DDE0C2BC87; Wed, 19 Nov 2025 06:26:38 +0000 (UTC)
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023106.outbound.protection.outlook.com [52.101.127.106])
+	id 6827AC116B1; Wed, 19 Nov 2025 07:24:47 +0000 (UTC)
+Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazolkn19010001.outbound.protection.outlook.com [52.103.68.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9FF87C4CEF5;
-	Wed, 19 Nov 2025 06:26:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9FF87C4CEF5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cixtech.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 8DF6EC19421;
+	Wed, 19 Nov 2025 07:24:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8DF6EC19421
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SLQiDLy4GsSqHgrWt9pOIbOvhcliU6PaeePIAEtjJFPzbG9dMhzclUAYIbuQ9ZRNQb1nt2GohJWFeif5KmyggJsM9ES6HTI3Oh/SAOhjK7rCSZ+uUIttfLXxsnk31fP3cD7FOBLPTs/gyxROKHiOAXQ+cVUDklvIZS7wZvfAYYjFZu4HD+6wgJybLX3Hhup+j4IE1AyiSEpXhOQXYu+aSS82OUTAnL5h8S4w9OH2QgFO92YG4o+aLhhBrH+zNI1DeQYW07wEzSJQlJC42TFX+MIJ1nn2ZXSgqFxDnSScoBDR/Y3a8khHEuz8o8vVIEL3JRP+1PpmLBloAdH+lxexJQ==
+ b=rtpDoJhWzdGtjmQkk7Cxl+wUPehOWfSJCgOOY82zg5XdIpW5KUk1A40XEhiEaEjGAwSzM3P9zmxTUK5tjvHOqC+SRWGkiFBXiSlFsYVa9jezaE0dVFLP2HXiQvc/7J1gBNU8L6qNWVdz3WMSl6CKSSLlQYw0Re2iGjza0wwTTkYrLW4ViPo1r0/Etmro9eKTTdimXe+WVMGpzUY+wIcbvOb7Gs5O0yumeYUfy6GWEpQ+/k9dpG+Iw0pkR7U8OuLMwmsARolWCHVkOgUe+wwNOBgZ1CjEnNxRH/prAUaThWyL9FalAnSmgzzfWyCK4aBYqRMzjQop+AUpnuxsLt6g/w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eHy/G1KGhWalQRN2W5qPAd7XbtTI3iZJoEAQQoNMARc=;
- b=Zec3/5qyY8Y4+oHygzhRvCSnls1d1WYRRlXtAv3wNJzAjy46ITl/HPSV9runJujmgxQ0vRYgoewEDrNXe8ZJyRQef8H/UoYACeF6TrukRJj/Kt44TWs3TzezrIklPIxb+/DahLOAj5xxP0Wuqu3bZ00ZgT4GTdXpvSxASpAPYtk/mZ+is9jmDIej/18H7ylkrqbPxj41cAb2B0u75w5QE97u/ISjyzscHCmS3GShl0cK/ABEevf7/mF2a368J+mx5An1OEhiNJ61TeKNo9C6I66paQF7FaAHX5yrCbuJBCmqfJsyR+mcg+ZTrsceoZV1uAmVzzldoQMdTw5glnKxOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 222.71.101.198) smtp.rcpttodomain=cixtech.com smtp.mailfrom=cixtech.com;
- dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
- not signed); arc=none (0)
-Received: from TY4PR01CA0058.jpnprd01.prod.outlook.com (2603:1096:405:370::9)
- by TYZPR06MB6859.apcprd06.prod.outlook.com (2603:1096:405:1c::7) with
+ bh=BNuL44HrdXqSmIvmgOa3V+FD29y+sTIIOAioBM2ycKE=;
+ b=naDgCJi9n26GgWMjenKFyW6+q8bs8nLZL4i4pZbM1I//NpeiMv0Z7kDKM08OiVl+xk4JQXq5MbqUUWZEcNs/V478ulUoNOM4gxhHLT6/rB3Hmk+r8H1hw6dk0PcRL9pZZGUr80pZjqgR9AXzhzy4baf5/ccNpbcolwfoLYBg2okeMUp60PCTaZPYVzzeMK+vlBDUzXDZ2rsewLdbjbfSDx72WqzSHc/0DajuHA2ooK0eRp/bhi4c4X9H0JwLGGId26sFNOMVbft5GiNBAE7Kb0HGoYzvkCVI+pujRuvMTOFoJe94hZfs7fvgL5/Jg2Kk8hLURJ8pZHmoPW3Fd3ZsaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BNuL44HrdXqSmIvmgOa3V+FD29y+sTIIOAioBM2ycKE=;
+ b=l6sBQMKVCwLT0caErztjFOnhY05zswqO+X2urRFE91mf/pI+sp/MmnMiZSAl679/JOIri5HC0zrFOsaBkXxMkZlg/WgSAeB9EtjdR+clIjgGuApZLjMfB7fYCwcus/uTCwOGA8jFhPjtJ2hQ1NrYBfVQHhFx2jb4jR7bE3ntVVJpmWpg686miZpeHDFX83We3f0hMkWMiMTeVXbDZjmP55spEhbq/d77HMTfDItotpMglXcJo2zXi8E+EjZd6NxRPOC4ExEpSkb30qp766MatcSN+lkbL5/MUIynWSm/jehNr91kMn6Or/NKS4K92QbinMD38lqHBtYrXavCcINTLg==
+Received: from PN6PR01MB11717.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:2f1::8)
+ by PNXPR01MB7057.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:c1::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.18; Wed, 19 Nov
- 2025 06:26:21 +0000
-Received: from TY2PEPF0000AB87.apcprd03.prod.outlook.com
- (2603:1096:405:370:cafe::97) by TY4PR01CA0058.outlook.office365.com
- (2603:1096:405:370::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.10 via Frontend Transport; Wed,
- 19 Nov 2025 06:26:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
- smtp.mailfrom=cixtech.com; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
-Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
- 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
-Received: from smtprelay.cixcomputing.com (222.71.101.198) by
- TY2PEPF0000AB87.mail.protection.outlook.com (10.167.253.6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9343.9 via Frontend Transport; Wed, 19 Nov 2025 06:26:21 +0000
-Received: from nchen-desktop (unknown [172.16.64.25])
-	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 102DA41604E0;
-	Wed, 19 Nov 2025 14:26:20 +0800 (CST)
-Date: Wed, 19 Nov 2025 14:26:14 +0800
-From: Peter Chen <peter.chen@cixtech.com>
-To: soc@kernel.org, arm@kernel.org
-Cc: fugang.duan@cixtech.com, linux-arm-kernel@lists.infradead.org,
-	cix-kernel-upstream@cixtech.com
-Subject: [GIT PULL] CIX dts changes for v6.19-rc1
-Message-ID: <aR1jBv4cL0P5u8Pp@nchen-desktop>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Wed, 19 Nov
+ 2025 07:24:24 +0000
+Received: from PN6PR01MB11717.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::bae0:5b38:5068:9ec0]) by PN6PR01MB11717.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::bae0:5b38:5068:9ec0%5]) with mapi id 15.20.9343.009; Wed, 19 Nov 2025
+ 07:24:24 +0000
+Message-ID:
+ <PN6PR01MB1171757716F06749DD0AED288FED7A@PN6PR01MB11717.INDPRD01.PROD.OUTLOOK.COM>
+Date: Wed, 19 Nov 2025 15:24:20 +0800
+User-Agent: Mozilla Thunderbird
+To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
+ "sophgo@lists.linux.dev" <sophgo@lists.linux.dev>,
+ linux-riscv <linux-riscv@lists.infradead.org>,
+ Chen Wang <unicorn_wang@outlook.com>, Zixian Zeng
+ <sycamoremoon376@gmail.com>, Longbin Li <looong.bin@gmail.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+Subject: [GIT PULL] RISC-V Sophgo Devicetrees for v6.19
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2PR04CA0204.apcprd04.prod.outlook.com
+ (2603:1096:4:187::16) To PN6PR01MB11717.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:2f1::8)
+X-Microsoft-Original-Message-ID:
+ <93615a35-2989-4162-9f1c-dcbdd4671c6a@outlook.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-EOPAttributedMessage: 0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PEPF0000AB87:EE_|TYZPR06MB6859:EE_
-X-MS-Office365-Filtering-Correlation-Id: 45632ee8-90cc-4220-a903-08de27348e65
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
+X-MS-TrafficTypeDiagnostic: PN6PR01MB11717:EE_|PNXPR01MB7057:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5285d9fe-bf9d-44e0-1359-08de273caa44
+X-MS-Exchange-SLBlob-MailProps:
+	YfhX3sd/0TWnHr2aTc7oye/bilYJDP7yfsIDR2Wg9EZ1PUFgVmNwRWXoo6HLAnUuN1zc0CkZbj7jOE6wAI3Fq0jgSut+ZLTARY3+FBnsVcHYnwB+o9hGOBjFcQcxvsJTdnQC+QdpBe9/f2+2kOiYxyk8NCkTJrF32Zqqm4u9zS13+GCRFzYMWsiZQnu3NpmvbOR0aE4xdJ0ENvS559V8SqtPNkq+ojWZHaYG9B4WxIIw0Gjyytux3UO0FSuqCe3yZMwdzByPbPaII19nyQhDP/46IZiuqZTn+xsO8QEq45XxFfembNwz4wOYEJWuc2d1qaui2ov/7mJshZERsfhpD4fUEKkbetQi6PN5mnuAZ6rBLP/3UId8+BKo8zCOxNw4efdn34ETIWLjYpbCK1hWDVn+DyuW8cBAjRpWAZrm+CGyVQSALELqrFizO3wIrxFHpPosc+hcpflrx9obJcr6DnxZSmi6BB3B/I0eTbWCVeoxyaDUAEUWIBMMELH8iVh2Pu7jGzMw8HhYrKjXA7DAhw2lV4yL11BqP/yncjWMabI2qOPYHhKtyN4TgTZLujGz0pGas4aO1jPdKOgq6kZFaRtDwpAxYY/26p7+Py0hUL27YMyowpptkeGOlnehidengZmjoUPj2lNWbDf8o+SMMF3oSKTajGHuJvS/+J7Q9jqBz6gPxKv8H5fFhA4W2muuLa2RafuDVmyBh+7wJTYXtL6G3G01DgSqKzG8N+9gSYa49NQRi6I2T8XQiX6xldLtUg2nyPzmDqdO1oLciBkPgBZ7ajU24Qw0Qh130qUkss4=
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
+	BCL:0;ARA:14566002|23021999003|5062599005|19110799012|8060799015|15080799012|5072599009|6090799003|461199028|52005399003|40105399003|440099028|3412199025|10035399007|1710799026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?syp8RWona3Jo423TlAZ+Cw5dRrmN44zSpmKXrIxAf58XlImEd+/fVKRkQdjZ?=
- =?us-ascii?Q?Yeh1KZrfJaQUJjvqs4nb0cHTxn+6q9calTr4K6qZytCYUy6pqt/YGZFtWKbv?=
- =?us-ascii?Q?4FReZ4iIj44o012ml0n/CbXngAQJK/+/uQwDFGVTWswxhFVlStfV18846KtE?=
- =?us-ascii?Q?4Rc9tqeM26fSVBTxfiSSvJzEZU8/ZJ+b7AVTEQ9x934uyMNZ9vO1xbMbk3VE?=
- =?us-ascii?Q?UHmKaK5AwM28Kha/IaEFboDhwbCEeznTHPokLH7zGhQQIAMKAkEkOpX68+UB?=
- =?us-ascii?Q?4zwECQ5EKl9d6Bsl4vBEbc6PRomY6bpmy9/8Yy/lBbhjNFi4nanbcqHe771M?=
- =?us-ascii?Q?P6HxssaXA/1Jsui7F205twJWFNqpQsjJQIUS4dqBjgL4/eX2SyLEAdC1s3Wg?=
- =?us-ascii?Q?Ki6tJWAIqaE5Lx0BbSHqpyBjPais3Oe4eutXtpmJ81P4k0QwP555iRJC/VlJ?=
- =?us-ascii?Q?+7kGjHrj/4W9e40f4O1cCe+WMSkqodl9bEP+wpm3LhEaxHZQuSkRPTxfIc1F?=
- =?us-ascii?Q?fAjxOU18312xB7mUt4oKjsTkP8L3cJoLnAyQL/VpDchFLFT/RjE8jp/UhbwB?=
- =?us-ascii?Q?dXFiYz/gHHXfNiuVwaO9/j1VJ/ObWyuVsm3mL5HpVvtGHKtBHBiGehc/LmBH?=
- =?us-ascii?Q?RfSQWrXe2iVILHN8uBDEOs3VTCAKpHkDsJ9H4qVozw1Mjl2+b03TwRTeyBpH?=
- =?us-ascii?Q?TwYXLwAIqhO/hveRYOiMvQAaRU/cpigFvUn9gVVsi6gipj+6R1tGbU6TUcMt?=
- =?us-ascii?Q?xdPFj0qQzhMoyRXtQpQS65oFkJzYUzpXuO23UlEe+CgETWFvWexFh0Zv4GVn?=
- =?us-ascii?Q?agP3R33mMkjNwkJzWUGGHRjyjJd1vfm9gxyanB5UNxGKK/xU0DG2Q8jhl/cW?=
- =?us-ascii?Q?p9QiROWVknIsgBN9GOBC+0zscpo7Go86014WCfzzhcVO30WoUFBnjFbLIjGE?=
- =?us-ascii?Q?qOZVu3iye8lnQv7O3Qkv8W9HfRpqqjCBV0M16uZ8gjfdyel9j6zskVrMINYz?=
- =?us-ascii?Q?i3RYzlKFAKV2iI59MMYxifXFoC8nuBmLI5SW6bSV+VoRQY1KOvrjf5OuusXP?=
- =?us-ascii?Q?q3Si6Y85RQ1rU5D4K+16/1UxBXa+B7RLtGoUm8lVkEthPgYwGPzePOi0VW5j?=
- =?us-ascii?Q?XlNDG4d5P0B0MjuTTGsagaGnuDml2u0l4Gyg37FT/11WEH/eCyIecO+4NL6g?=
- =?us-ascii?Q?KriP39I4BVZL891NpgIMQIKBzOxlcCUrceTbUHlsGh1RB7bdZTwhhuEQ88NY?=
- =?us-ascii?Q?4kP8tYuV5SNYJ6JCT3rLgzZFVXC293O1ULF8XUl5Xc1kVLWNfr47Tvzoz6Ah?=
- =?us-ascii?Q?4uji9HoJmxm/xOcsbrwbUPDceU1BqbnanTG442VIHzB29/v9gvCJOzN8U214?=
- =?us-ascii?Q?sSXR38oWkEj2yiRzyNMH0hbK8gBuMhCbNuGK+BxdQRmxPT01jjDFPp5Ak8LZ?=
- =?us-ascii?Q?OmQ2lw3lNKldTcLkq59eE8J3FZcPczSfNLz2DUpg7bnC/4/i8q3icLO1TWr/?=
- =?us-ascii?Q?zPk5AeIb/b/mBcmWrMY1VK9MKIQOHiK66o/nhQHcNpcVnKHnqGuZg1AtMFoH?=
- =?us-ascii?Q?uFFCxr/FjbwTmBQQ/sk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1102;
-X-OriginatorOrg: cixtech.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 06:26:21.1910
+	=?utf-8?B?QVVxRzFFYS9xaGVUR3lEcVVoR1RDYktSdHFaWm42WURjY0FUMm9MNVJ6OTIv?=
+ =?utf-8?B?YTNrQTc3VkVLOTBZQWJ2cGN4UDRmSEMwR0lEK0RIck95MTgxMDJEY01SQXFB?=
+ =?utf-8?B?WDVVUElmR1p2T2lLV0dkZlBHcDI3dCtYNGcwVTh3L1lHMy9SUEQxb3JxbGpr?=
+ =?utf-8?B?Rk14TU80UngvM3VYUHNsTmpxTGNnTkpoNnM3Z3l0VHRCdWE3c3lSYTFvQ1ox?=
+ =?utf-8?B?aFh2ekdmeG5zWHg2c3oxRFZRV0VCbHlTQkN0L1R1YzAvdnFNcy92WWpaSWpS?=
+ =?utf-8?B?SGVLalFZaWpBMUI3a1F2bUVuR3MzbGxET1lkb04zOGNyTHl6TGpPb24vRWtm?=
+ =?utf-8?B?Mk9VLzNYZkRId2VCZy9CNXZ5dWNibTBlMmd6c3dTeHk3Um8vQ0hxdlN1N245?=
+ =?utf-8?B?a2c4enE5Y3BXd0YwM1FnM3V1WlY0S1c4UHM2S2JSTzBydEFLOG5nSGFsYnI5?=
+ =?utf-8?B?S0M1cFhIb3orZFlranI4UkRSNFlEajdxcTlDc0F6RjNaaWFLTFNNYzlHN2g3?=
+ =?utf-8?B?Z1d4L1B2aEszbDVkbi94Wkp2Q2s0OWFhZ1VsRUpZL0pZRmd5RmNDdHhoam9T?=
+ =?utf-8?B?d0pWRHpVNXdqeTM2WXFzczhsY3VEdFJwangyUEtsK1haS0NGaHE5cHFkSTNT?=
+ =?utf-8?B?RkgxQmlBL0hvbXJlMTg4UE9Od1Y4YlVIYlVFVlVYd0FMRjJXNXBUSTNFaHAw?=
+ =?utf-8?B?d3JZY1lIdEZSSWdYRmY5R3ZiMkVQd0lZaVh6dWpsSFRkUEdxaHFPUDBqc0Ni?=
+ =?utf-8?B?YU1Va0tlVnQwaXU5bDVjaGlwOUpRc0tZd1FMbEEzWFhnVHVYeTNvUmtjNXIy?=
+ =?utf-8?B?QVdaNnVZVjBIdnJlUUpwNm1mUVhpZ3NRVEI3cUZaT2N6amx1R3U4S0JyYVNP?=
+ =?utf-8?B?aFdyaFF4UG5XVWJVZHJURkE5QXZibFJra0VUcFdSdjJPeGkwV1I3ZGJzUjNQ?=
+ =?utf-8?B?YUZOVkxXWEVxUkpMNzhzTW1NblpIYkJ1K0k4T2cvaXZwL2J2cDF5Qmx1REZL?=
+ =?utf-8?B?ZWZ5MTdGMC90L0R4a0VNb3N6UFNoVXNUUE9iYUNyYmVMMVhoYlBVaEtwYThn?=
+ =?utf-8?B?NGUvMWxEWFFPKzIzLzFzMldrWklvS3VhcnFVN1VrWm5mOGJCU0p4NVpabmRM?=
+ =?utf-8?B?NWtaL3JQdkJ3cVNUVjlES3diOW1HSlRCdXNqby91eStUWHFNM2xJRCs2eHF3?=
+ =?utf-8?B?R1FoWVNLQnRub0tlZG1leDlSRzZsd0ticEZNUGdMTS9lRlZ0dmU1aXJSZUk2?=
+ =?utf-8?B?ZnRUelNzZkNSWm13bHJTTnNNbVg2NHJvK1BOWmRWeFF0TFZlcGRNZDBrdzVP?=
+ =?utf-8?B?MzdZWlVNaWJVa3U0ZkpVaEhIN0RIK3RCY3Vwdnl0TkNtODJZdDEzbGhoTytN?=
+ =?utf-8?B?NjE1TE1RWXZCYU5uaDA3UTRuVEwyWUY4VVdBSkJpME55aExEQkczMVRhOXJY?=
+ =?utf-8?B?SEZYWUlpRTNvSW45N1NaazVQMXZzSGh0QzZ2TWJ1OTZPZzZheFp2Mlo3SVc5?=
+ =?utf-8?B?dGozSzhFVXRQNHVVcDlmUTFUZXR2SkpjeHlwVXJZVlMzYmRyZ1BqQzN4Z0hO?=
+ =?utf-8?B?M2lZTVNwWTZQWThRQmdzSVp6SllJRkRMY1NvYk1FRVR1dWNRWUVTckFua0ho?=
+ =?utf-8?B?YjlRYktWdlBURUhuZnRoNnkvdVFLZ0oxeWZSQVRFNjNuS0hRcU1SZExsZDMw?=
+ =?utf-8?B?OU9DbkJBSmRnUFZBSjYwbEVJaWJwV0lVcytHdTBNNGgrdGVFeFFLUzlhL3lp?=
+ =?utf-8?Q?DZG+uIj27PeVqeLxSM=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?em5ZdXZ4YitGa2ZqQU0rRUJwdWpTUm92NGl3WVJDV2dQb21FUllQNkJwa3kw?=
+ =?utf-8?B?WVh2RytaZmhQcldhcCt5czhESDJkNi9zbkF0TUx1aWhOQWZ6aDZ6RXN6OFBh?=
+ =?utf-8?B?WkhNR24yVHV3RjcyTkZLemNmdU9Hb29XNGQzdDhUQ1VCQ0ZDTlVTOEZ2bXll?=
+ =?utf-8?B?S3plOVZMcmJEcFo1K3VWdWhHdXppRms2cmZtN3NMeU5tVGNlVk9GUHByY3U3?=
+ =?utf-8?B?Y01WZm5ic0pXRWFZenFub2tnV0tmbDZLTVI2bW9jc0h6NndYQWxNcGQ1SVNv?=
+ =?utf-8?B?K3hwMjlJQ1RFYVZGMHl0VFI5Y3FiS0FaVVZmSjJEVWxBWFZ6MWVhTXB5NStM?=
+ =?utf-8?B?aytKNi8zSFpPT2oyYWZFa3ZjbnROQlkxVGRneExhYmFYck5CT1hRZTIzMG5n?=
+ =?utf-8?B?dk04L2NTa3hpYmVHY3NkMS9xcDJCbDFaQ3puNnpOUFNRYTFGTlZ0eGRtL2pG?=
+ =?utf-8?B?emNIMC9CQ1J5YXFwVnozK29qZ0xheHFkTHRCWHhkODg1b0hIT3cydnhpRmd0?=
+ =?utf-8?B?ZC9PS0hkeGlHQUxZd0kxS0RDOENnMGc2NzNIWE44elhBTjJnTWwwVDdWTm1Q?=
+ =?utf-8?B?aGNlK0tGQ1VidGpjSW1GSTNkcXl5RldOUlVzZm5PWWc5L3VsaHBaNnVCTFg1?=
+ =?utf-8?B?VFlZVTc1alB6OUF3SzYzU1kvRlZwbWVXTVQyZ1ZhN1RENUswOXBaU2tIeWdH?=
+ =?utf-8?B?aXlYUUJiNFJlc0d6YTQwOXVSMjZYRFg5aGZycjgzL3FDTDNJVXc1U1NCMXJG?=
+ =?utf-8?B?Tk5EbkVUWUlHNHFGMDJEcFJTakxFUkNmVUN2YXZObUpkVkQrelRncFdCVm5O?=
+ =?utf-8?B?UEJJcm9NajdtcmdhNlFDbkFSdm9RcVRYVlpYOG5XSFN0QW45TXlLMmVYKzd1?=
+ =?utf-8?B?M2JhZExzd3FCYUp3S1JXM3VpSzhxdDZJMUJwTzdrZGJMdzc0UkczeWx3czZP?=
+ =?utf-8?B?NkFGWURPVXl4VHdXTHJ3LzJETkU5RWxVU3lmakpSWlNFb0RDU1h3MEdRMU9h?=
+ =?utf-8?B?SzNQcDVkYVNGUEUya0xxaDNkdk4vRTBPTVdVUnJGcklTQ0VVYnNWQ05HSDhh?=
+ =?utf-8?B?cTB0WmxSc255L1BKdHZ2VmN0MERWdTMzS0FHUTVITnV6WVRtdjFaUzJWdWEx?=
+ =?utf-8?B?dlphQnZ6cWlWUTJ1N2VvQUlPVFMvRC9uZGNNRTFiZ2J6c2lyRWh0bkxyOUZS?=
+ =?utf-8?B?OW1UOWZZTm0wdVJaMTN6bHZab0dFM05KR2RhQTRBcW1hS3pCYi9aZ0hENlJu?=
+ =?utf-8?B?SnQvbHdFZjljbUpsb2tBbmxtT1NueDZEelZHSmpsbkl0MmtGRnp1allheDZ3?=
+ =?utf-8?B?WkNPVG9ybldLQ3owdTFkc0RmRnoyV25WcGV3cUlsQUNvQ2paMHpQZ3o5WTRi?=
+ =?utf-8?B?YnlZcVg3WFlET21UaU5BWWg3WUN6RzdNellsczNLN0tLdm02bnlPSHdPYmFa?=
+ =?utf-8?B?K0I2Qit5NkNMTjYvUXhJNTNuTDhkNllvQUphWGV6WjJneG45N0VmRjNaK3E4?=
+ =?utf-8?B?eU4zT2hWMkoyTnlzZ3hRaEllVVBoNEFKNEVJWGVsRnZnM2lWN09mOXZkYm9V?=
+ =?utf-8?B?OEFKbWNEQ1gwbUFFMGZ3TlAyc0twYzBJZ1NlNUZXN0VrVUFCd01URzE3cER3?=
+ =?utf-8?B?anR0SzBJN0JkclVJZVhiV2lrT0IvNFpCN3hqcGFVYmFrWU96WUxqSVNvWncv?=
+ =?utf-8?B?MkpWZ1pxbi96L0c3NjFFZHI2QWtCcTNDTUw3bk1UZDhxSG9XWG1oMTdLZDJq?=
+ =?utf-8?Q?pumz1aDtf6APwq733JyIumDXsJnZdtw28shX3gk?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5285d9fe-bf9d-44e0-1359-08de273caa44
+X-MS-Exchange-CrossTenant-AuthSource: PN6PR01MB11717.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 07:24:24.5141
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45632ee8-90cc-4220-a903-08de27348e65
-X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	TY2PEPF0000AB87.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6859
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNXPR01MB7057
 
-The following changes since commit 211ddde0823f1442e4ad052a2f30f050145ccada:
+Hey Arnd,
 
-  Linux 6.18-rc2 (2025-10-19 15:19:16 -1000)
+Please pull this dt changes for RISC-V/Sophgo.
+
+Thanks,
+
+Chen
+
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+
+   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/cix.git/ tags/cix-dt-v6.19-rc1
+   https://github.com/sophgo/linux.git tags/riscv-sophgo-dt-for-v6.19
 
-for you to fetch changes up to 7dfe67ab5a830083d28a072d262c5f6d3df6b39f:
+for you to fetch changes up to af5eb17ff893bf6e52680a31059e1816749c2d20:
 
-  arm64: dts: cix: add a compatible string for the cix sky1 SoC (2025-11-17 12:51:05 +0800)
-
-----------------------------------------------------------------
-CIX device tree changes for v6.19-rc1, add below new components support:
-- PCIe
-- Pinctrl
-- SPI
+   riscv: dts: sophgo: Enable SPI NOR node for SG2042_EVB_V2 (2025-11-18 
+09:17:55 +0800)
 
 ----------------------------------------------------------------
-Gary Yang (1):
-      arm64: dts: cix: Add pinctrl nodes for sky1
+RISC-V Devicetrees for v6.19
 
-Hans Zhang (2):
-      arm64: dts: cix: Add PCIe Root Complex on sky1
-      arm64: dts: cix: Enable PCIe on the Orion O6 board
+Sophgo:
 
-Jun Guo (2):
-      arm64: dts: cix: add DT nodes for SPI
-      arm64: dts: cix: add a compatible string for the cix sky1 SoC
+For CV18xx serials:
+Add top syscon device related DTS change, the top system
+controller provides register access to configure some
+misc modules, such as usb2 phy and a dma multiplexer.
 
- arch/arm64/boot/dts/cix/sky1-orion-o6.dts |  52 ++++
- arch/arm64/boot/dts/cix/sky1-pinfunc.h    | 401 ++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/cix/sky1.dtsi         | 156 ++++++++++++
- 3 files changed, 609 insertions(+)
- create mode 100644 arch/arm64/boot/dts/cix/sky1-pinfunc.h
+For SG2042:
+There are two changes. The first one is to add DTS
+definition for PCIe controllers for SoC SG2042 and
+boards such as Pioneerbox/EVB_V1/EVB_V2 uses SG2042.
+The second one is to add DTS to support SPI-NOR flash
+controllers for this SoC and the same for related boards.
 
--- 
+Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
 
-Best regards,
-Peter
+----------------------------------------------------------------
+Chen Wang (4):
+       riscv: sophgo: dts: add PCIe controllers for SG2042
+       riscv: sophgo: dts: enable PCIe for PioneerBox
+       riscv: sophgo: dts: enable PCIe for SG2042_EVB_V1.X
+       riscv: sophgo: dts: enable PCIe for SG2042_EVB_V2.0
+
+Longbin Li (3):
+       dt-bindings: soc: sophgo: add TOP syscon for CV18XX/SG200X series SoC
+       riscv: dts: sophgo: Add syscon node for cv18xx
+       riscv: dts: sophgo: Add USB support for cv18xx
+
+Zixian Zeng (4):
+       riscv: dts: sophgo: Add SPI NOR node for SG2042
+       riscv: dts: sophgo: Enable SPI NOR node for PioneerBox
+       riscv: dts: sophgo: Enable SPI NOR node for SG2042_EVB_V1
+       riscv: dts: sophgo: Enable SPI NOR node for SG2042_EVB_V2
+
+  .../soc/sophgo/sophgo,cv1800b-top-syscon.yaml      |  80 +++++++++++++++
+  arch/riscv/boot/dts/sophgo/cv1800b-milkv-duo.dts   |   5 +
+  arch/riscv/boot/dts/sophgo/cv180x.dtsi             |  42 ++++++++
+  arch/riscv/boot/dts/sophgo/cv1812h-huashan-pi.dts  |   5 +
+  .../boot/dts/sophgo/sg2002-licheerv-nano-b.dts     |   5 +
+  arch/riscv/boot/dts/sophgo/sg2042-evb-v1.dts       |  36 +++++++
+  arch/riscv/boot/dts/sophgo/sg2042-evb-v2.dts       |  24 +++++
+  .../riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts |  36 +++++++
+  arch/riscv/boot/dts/sophgo/sg2042.dtsi             | 112 
++++++++++++++++++++++
+  9 files changed, 345 insertions(+)
+  create mode 100644 
+Documentation/devicetree/bindings/soc/sophgo/sophgo,cv1800b-top-syscon.yaml
+
