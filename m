@@ -1,111 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6590B3081BC
-	for <soc@lists.linux.dev>; Wed, 19 Nov 2025 23:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125E927AC57
+	for <soc@lists.linux.dev>; Thu, 20 Nov 2025 07:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763596473; cv=none; b=GnPnUBy3cB6wrxrzjg+oNolY5iWdUNQ+mtCniwYFYP499R6ntttZ4qxYjC1LR+3USVJ+Z8hw05Uia3NidIooFX6XeJ4RacaAoGRok8X/oJT52XkLLy0LWGhGMvDPqjKbqUXRSM5EmG5eeMAuLWKv8UaOoIJh0m33P9AYlg8MHjs=
+	t=1763625436; cv=none; b=A1t9gmIWVQwR1XYhyYHfHXrSeTxe0HjlcF5miz2PecbbCcrsLWuG+GepuegMkAO/Y22JNzynrQ8X+YynIZmrRZXouHb1v4UD3VtU2Ze8QEtFi6s1XHbTvnEW93i62IjS1t5pwqWi0WSsPecH//RP7uqvkbevGSVbCoT0xBFiGX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763596473; c=relaxed/simple;
-	bh=glopRIxhFvs1C5Gwoz0NsdQFCbUEjMJ/gzaW4Xyet6o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bgquqFh0f1UIKzqj+baC5JGZZj32GeHxAHELfVgWFN2WCo+7m8S3VOxNKQfaryhXMC5TrBRyOcp34Zxn83U7UxlSw0o5piCnSGnz7dcSPhtgVtLAz4i+un+yR9gjFI6FI6Pr4DiWQsW67djPsNkKN7JYPpTtxYKIROtfSDTmrf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ofi6PAvF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763625436; c=relaxed/simple;
+	bh=nGXT4V0USEwybvSYE5mT02kTqiv1b0Ij4hOZ+xqcZUo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RXPKBIWsLpli4aq4OIB4QN1NdkexLqBT6PlIq0bt2c6VjlT6keJdKwzZClOacpXzdUXEeXNTGCYiyGiHouPt6ibv3WRavw9fLnqZEu0TOlDtULEOFep56lsfBy6lXEoS7r9BAg+KYpY1cZo2hVVO95l1IX/MsDTahZligUAlQJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pXp37duz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ofi6PAvF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pXp37duz"
 Received: by smtp.kernel.org (Postfix)
-	id 253F6C116D0; Wed, 19 Nov 2025 23:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF8AC4CEF5;
-	Wed, 19 Nov 2025 23:54:32 +0000 (UTC)
+	id C7252C116B1; Thu, 20 Nov 2025 07:57:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1011C4CEF1;
+	Thu, 20 Nov 2025 07:57:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763596473;
-	bh=glopRIxhFvs1C5Gwoz0NsdQFCbUEjMJ/gzaW4Xyet6o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ofi6PAvFCXbF6so0h1O51AmzQHsjAcZgU2QNrvcO2i/dQGAb0+XKsXTszws8Q+Hgu
-	 7wlI4mIjnG16CFAcDCIU5Q0NtO1kvfdaXr5GSgw+Raw4yVm2SkjeJrnqZ5vUivlqYU
-	 9depToi+a54loCkgU1jIdsFgtcbd8o67chSZ4qf17X6vCm2L7h2PpvgDtSvZAVBIkp
-	 jCeC3R9CcIZ0XFFfWtroy/uzpUaJkQ5FZ6ngdyylNjnYuID1lK4/OXnWAqarAS13KZ
-	 V02nrijT8R1j8XjpFH4BF0rtopIuTcMO2AchaJYeKbBdMUAW9mm/AC1/xpcIqD+CCm
-	 thc+a10T0NfsQ==
-Date: Wed, 19 Nov 2025 15:54:31 -0800
-From: Drew Fustini <fustini@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>,
-	Joel Stanley <joel@jms.id.au>,
-	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
-	Drew Fustini <dfustini@oss.tenstorrent.com>,
-	Himanshu Chauhan <hchauhan@ventanamicro.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Paul Walmsley <pjw@kernel.org>
-Subject: Re: linux-next: manual merge of the risc-v tree with the
- tenstorrent-dt tree
-Message-ID: <aR5Yt2x2JRx7gK/r@x1>
-References: <20251120102925.57ab2fe7@canb.auug.org.au>
+	s=k20201202; t=1763625435;
+	bh=nGXT4V0USEwybvSYE5mT02kTqiv1b0Ij4hOZ+xqcZUo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=pXp37duz7aNJvEQZRK1tATItSsj/6U9SYIpOFa7Ec2qvYabMnLFOue9XYAietrX6E
+	 lH+JtojRWQbmZbLhap6K/e10pz7Rsom7nxqeLGf18bRm6pHCw8Q/y/afqFXMtksLW8
+	 3f+1el2gmttJ2P47SFHzttjJ8RnIGRb4//2NTwO3W5Cl+Fj9OUW4/3t+WdzUmI4lWP
+	 c8KQUl8Mp/mFSjY1oG0iiCM70NM/bu5ijdId3mpbvBjXiTTF8ht1ECfBgl2KqVteI3
+	 mmwQDCyIhwViU06BztNsQgCZRjLiu1SKL1iAxeEo/2ZQPjoPIcAAHe731z8juXmNc/
+	 pdOGIPdBBVOqQ==
+From: Michael Walle <mwalle@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: soc@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Michael Walle <mwalle@kernel.org>
+Subject: [PATCH] arm64: defconfig: make TPS6594 support build-in
+Date: Thu, 20 Nov 2025 08:55:39 +0100
+Message-ID: <20251120075656.2396371-1-mwalle@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="U0gUBaz4YRthsKQe"
-Content-Disposition: inline
-In-Reply-To: <20251120102925.57ab2fe7@canb.auug.org.au>
+Content-Transfer-Encoding: 8bit
 
+The Kontron SMARC-sAM67 module needs the TPS6594 regulator driver to
+boot from SD card, i.e. for its root filesystem.
 
---U0gUBaz4YRthsKQe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Michael Walle <mwalle@kernel.org>
+---
+Arnd, the PR from TI [1] (which contains the device trees for this
+board) is already out, so I'm sending this to the soc ML directly. 
+Let me know if this can still be applied, if not, I'll have to wait
+for the next window.
 
-On Thu, Nov 20, 2025 at 10:29:25AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the risc-v tree got a conflict in:
->=20
->   MAINTAINERS
->=20
-> between commits:
->=20
->   4de28f1edcfb ("dt-bindings: riscv: Add Tenstorrent Blackhole compatible=
-")
->   8e88602e99a7 ("riscv: dts: Add Tenstorrent Blackhole SoC PCIe cards")
->=20
-> from the tenstorrent-dt tree and commit:
->=20
->   5ffe60d26107 ("drivers: firmware: add riscv SSE support")
->=20
-> from the risc-v tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+[1] https://lore.kernel.org/linux-arm-kernel/a07364c1-5a4c-474f-be21-96f38bfe9130@ti.com/
 
-Thank you for fixing it up. The resolution looks correct to me. The
-Tenstorrent MAINTAINERS patch is in the tag tenstorrent-dt-for-v6.19 [1]
-that I used for the 6.19 pull request [2].
+ arch/arm64/configs/defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Drew
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index f8bcae89c260..e29a41c54b8f 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -824,7 +824,7 @@ CONFIG_RZ_MTU3=y
+ CONFIG_MFD_TI_AM335X_TSCADC=m
+ CONFIG_MFD_TI_LP873X=m
+ CONFIG_MFD_TPS65219=y
+-CONFIG_MFD_TPS6594_I2C=m
++CONFIG_MFD_TPS6594_I2C=y
+ CONFIG_MFD_ROHM_BD718XX=y
+ CONFIG_MFD_STM32_LPTIMER=m
+ CONFIG_MFD_STM32_TIMERS=m
+-- 
+2.47.3
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/tag/?=
-h=3Dtenstorrent-dt-for-v6.19
-[2] https://lore.kernel.org/all/aPUemXdOFZEdkayE@x1/
-
---U0gUBaz4YRthsKQe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSy8G7QpEpV9aCf6Lbb7CzD2SixDAUCaR5YsgAKCRDb7CzD2Six
-DNQ7AQCVz9RjfUOW0yaz4OZyzr3R5T89AB+v9IDPWXk4el5kxwD+OUhs6bdj5a8C
-cphsXr7tQuu+SPcdBtwbOf4DK83N6QE=
-=VQEk
------END PGP SIGNATURE-----
-
---U0gUBaz4YRthsKQe--
