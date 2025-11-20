@@ -1,108 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47E833C527
-	for <soc@lists.linux.dev>; Thu, 20 Nov 2025 13:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515F3369963
+	for <soc@lists.linux.dev>; Thu, 20 Nov 2025 16:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763646710; cv=none; b=FXwtkD3Tta6LZe77/Q1Y7Kh50+IBxJpp5fEGDAdW4WmRBg5RF53INXbAlB15S15Ao8e+XhcbM6NKvKxJ4vjcNsDiztZMw5Yk2VQAdl8VRn5RSTDY50htpr2kHmvb0jBTmmaBt6qmwY4FFyvN/m21vOyTHKWDCrfi6Xm/K7LgJjs=
+	t=1763656401; cv=none; b=JB5EW0tpBQqL7l47qg8OOkprXaxSy0tAwi/4CuHEqR/NtLNWMybjpwAmpd9H69gKZOrPPUFvWtHEM2Hc3xy0vrcqsvFKwCKsWpOBQE93IxyWHzDP1/gY5Te/aYIZkK+rlGTNsNiARYTP1q28BYE9l8hr2Eyt+d8QhOym4M+Og14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763646710; c=relaxed/simple;
-	bh=GSyXKGStHpZRd7raftOiugaXMKkLqHWMEEIAoU5UpMY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GyAJA+0ojUgPhP+tynXRy0FaQSxEtMw8ad8Vm+ClCcwGqj1XgUnasPH4fXgcGfaL8cNVoRQN0cpqUWhstbwr+dURGXKHn4fXjeY1rvnUvxOZa96Jxie+/2eQSzHGhQPzDvLBf2FUjfyj6m0gKlzt7fwCtDcbL9399b/Qvu7nnU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZOl0dTMG; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZOl0dTMG"
+	s=arc-20240116; t=1763656401; c=relaxed/simple;
+	bh=BymrWDzm1aaf+ik9dAyehkuDPweXjS+gzZgWHshEw34=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F/ww/d1+q7Vc373oPf8u9oy4yx4SKag+//FixTbnADLOOcFxPpLjpY+tbWhJNeUNISy46kNcGnUQwQ3ZIgzawl7SsdVxTdYZllDJeq19Prua1gwH1YtM51l/Qpz5VJstpFIDa6+VlYUg4idKbWoq6uebZdaUW3IpaX3TRFWRTRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 7F802C113D0; Thu, 20 Nov 2025 13:51:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDE7C4CEF1;
-	Thu, 20 Nov 2025 13:51:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763646710;
-	bh=GSyXKGStHpZRd7raftOiugaXMKkLqHWMEEIAoU5UpMY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZOl0dTMGo0DrKKykIa+p7cEcSp/sZCLI+Jvlva9xQ/B+HYZP+c/IXD0Eg9rDXzyRG
-	 aWQ5bxQB2j3ZPhxiUjlmYqxOLCNmEK0jpCtYq8ZOyjJ1Ee/6YcNMUdzvZwCJcWLRmU
-	 KdQK7uGGIYRL4/0dtTBR0dM5Tngr82qJGssyJ7014YigggLQSMvk0hzXaeg0ueTQRE
-	 xCxi6iYBCsiZfprJkbog0RzbWJFwV1bloHEFViF1D11DlGqzgmRtCLST4b7vIBHrFX
-	 LnSWe/ZDpaH+6xBwDBw41FDmrCGOwIYhx574Ty3VL4wcJAY2ycOuILlQJnw/GVuk78
-	 wFI87WZoANpRg==
-Message-ID: <0d6e055a-d71b-443f-83c8-6365a88ad9b6@kernel.org>
-Date: Thu, 20 Nov 2025 14:51:47 +0100
+	id A6613C116C6; Thu, 20 Nov 2025 16:33:20 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 86609C16AAE
+	for <soc@kernel.org>; Thu, 20 Nov 2025 16:33:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86609C16AAE
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vM7av-0004dB-QA; Thu, 20 Nov 2025 17:33:17 +0100
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: soc@kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	David Rhodes <david.rhodes@cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-gpio@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset/GPIO/swnode changes for v6.19
+Date: Thu, 20 Nov 2025 17:32:52 +0100
+Message-ID: <20251120163252.34760-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] arm64: defconfig: make TPS6594 support build-in
-To: Michael Walle <mwalle@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: soc@kernel.org, linux-kernel@vger.kernel.org
-References: <20251120075656.2396371-1-mwalle@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251120075656.2396371-1-mwalle@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-On 20/11/2025 08:55, Michael Walle wrote:
-> The Kontron SMARC-sAM67 module needs the TPS6594 regulator driver to
-> boot from SD card, i.e. for its root filesystem.
-> 
-> Signed-off-by: Michael Walle <mwalle@kernel.org>
-> ---
-> Arnd, the PR from TI [1] (which contains the device trees for this
-> board) is already out, so I'm sending this to the soc ML directly. 
-> Let me know if this can still be applied, if not, I'll have to wait
-> for the next window.
-> 
+Dear arm-soc maintainers,
 
-Why it cannot go via TI tree? It should...
+The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c:
 
-Best regards,
-Krzysztof
+  Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
+
+are available in the Git repository at:
+
+  https://git.pengutronix.de/git/pza/linux.git tags/reset-gpio-for-v6.19
+
+for you to fetch changes up to 5fc4e4cf7a2268b5f73700fd1e8d02159f2417d8:
+
+  reset: gpio: use software nodes to setup the GPIO lookup (2025-11-20 16:51:49 +0100)
+
+This tag is separated from reset-for-v6.19 because it may also be merged
+into the driver core, GPIO or SPI trees, if needed.
+It contains a single series [1] with changes to swnode, gpio, and reset
+code.
+It is based on v6.18-rc5, which includes the prerequisite commit
+e5d527be7e69 ("gpio: swnode: don't use the swnode's name as the key for
+GPIO lookup").
+
+[1] https://lore.kernel.org/all/20251120-reset-gpios-swnodes-v7-0-a100493a0f4b@linaro.org/
+
+----------------------------------------------------------------
+Reset/GPIO/swnode changes for v6.19
+
+* Extend software node implementation, allowing its properties to reference
+  existing firmware nodes.
+* Update the GPIO property interface to use reworked swnode macros.
+* Rework reset-gpio code to use GPIO lookup via swnode.
+* Fix spi-cs42l43 driver to work with swnode changes.
+
+----------------------------------------------------------------
+Bartosz Golaszewski (8):
+      software node: read the reference args via the fwnode API
+      software node: increase the reference of the swnode by its fwnode
+      software node: allow referencing firmware nodes
+      gpio: swnode: allow referencing GPIO chips by firmware nodes
+      reset: order includes alphabetically in reset/core.c
+      reset: make the provider of reset-gpios the parent of the reset device
+      reset: gpio: convert the driver to using the auxiliary bus
+      reset: gpio: use software nodes to setup the GPIO lookup
+
+Charles Keepax (1):
+      spi: cs42l43: Use actual ACPI firmware node for chip selects
+
+ drivers/base/swnode.c         |  30 +++++++--
+ drivers/gpio/gpiolib-swnode.c |   3 +-
+ drivers/reset/Kconfig         |   1 +
+ drivers/reset/core.c          | 146 ++++++++++++++++++++++++------------------
+ drivers/reset/reset-gpio.c    |  19 +++---
+ drivers/spi/spi-cs42l43.c     |  40 +++---------
+ include/linux/property.h      |  13 +++-
+ 7 files changed, 141 insertions(+), 111 deletions(-)
