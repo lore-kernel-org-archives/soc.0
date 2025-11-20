@@ -1,157 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2CE272E45
-	for <soc@lists.linux.dev>; Thu, 20 Nov 2025 09:51:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47E833C527
+	for <soc@lists.linux.dev>; Thu, 20 Nov 2025 13:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763632313; cv=none; b=BEJTWf6O74zRzBXYmHSnLaf1C7JzhYCKUuG7Z/mHIaJt9kWylZl0RkzJ6yYkY4vhM3Hal/PuRgOBiOjWhrODobtK4DO6IZwzy4FhwjivXwcSuK9BzkUMLToOnSNJ/WRxSWXXvtcCwwRQRoKohF/Mj6fKj03+k0Pvo9EMWd1tmHs=
+	t=1763646710; cv=none; b=FXwtkD3Tta6LZe77/Q1Y7Kh50+IBxJpp5fEGDAdW4WmRBg5RF53INXbAlB15S15Ao8e+XhcbM6NKvKxJ4vjcNsDiztZMw5Yk2VQAdl8VRn5RSTDY50htpr2kHmvb0jBTmmaBt6qmwY4FFyvN/m21vOyTHKWDCrfi6Xm/K7LgJjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763632313; c=relaxed/simple;
-	bh=sEpJLTV9MKyd27FDIefRAGQrW40CCfL3T35VbEh3anQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ujq97gKWXFmrWRKhVPHsnDqNxZplcTb4dOJJkOJvhJ6d3w1MN0qomMfs2dvImrCC4EmHyAT5+0J8ThP25F5BoHphtlOEYLY/E8PZGKDAfyy9ip7WbNEe1PucvL+EusuGCwbKcOsax9Rwy/VNtLoN+/OQQplhM+b8Ihzpmo0LW64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UTgU9e0S; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763646710; c=relaxed/simple;
+	bh=GSyXKGStHpZRd7raftOiugaXMKkLqHWMEEIAoU5UpMY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GyAJA+0ojUgPhP+tynXRy0FaQSxEtMw8ad8Vm+ClCcwGqj1XgUnasPH4fXgcGfaL8cNVoRQN0cpqUWhstbwr+dURGXKHn4fXjeY1rvnUvxOZa96Jxie+/2eQSzHGhQPzDvLBf2FUjfyj6m0gKlzt7fwCtDcbL9399b/Qvu7nnU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZOl0dTMG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UTgU9e0S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZOl0dTMG"
 Received: by smtp.kernel.org (Postfix)
-	id BBF08C116D0; Thu, 20 Nov 2025 09:51:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA13AC4CEF1;
-	Thu, 20 Nov 2025 09:51:51 +0000 (UTC)
+	id 7F802C113D0; Thu, 20 Nov 2025 13:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDE7C4CEF1;
+	Thu, 20 Nov 2025 13:51:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763632312;
-	bh=sEpJLTV9MKyd27FDIefRAGQrW40CCfL3T35VbEh3anQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UTgU9e0S+dVLxImb0b5aulkU7kKgiOztOI3jsNxqkGC0/pS57P+KvC3sj8U35Aq19
-	 oxi5usaC/SNDCblomUgrygwOo2Vi/+8JbXjSwaArsfuZVLVi/ZGhai8lNvwAfZxc8s
-	 MGt9pZ3/mz1bMdTHxhjAW6jQvVhNkJEbZGSDMasejZvif9lZEg3Rs/hDT+y0+eTgNw
-	 Pkt/eMG9IxbhbeWDeLG+EdjTMmKcXXGpAcPmFUH+Dgy95wZE4B8h1BJEB/yrkqd+EN
-	 U2j+ZJAexVPIlcRPY2F8g7vCM2yyT6WW/F3jN13eqPlL2M68YrVW3OA/nIL5P4FccT
-	 k9i+CInjPxzVQ==
-Date: Thu, 20 Nov 2025 09:51:49 +0000
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org
-Cc: linux-riscv@lists.infradead.org, junhui.liu@pigmoral.tech
-Subject: Re: [GIT PULL] Anlogic Platform Initial Support
-Message-ID: <20251120-neglector-helpless-a199ca774354@spud>
-References: <20251119-sprinkled-setup-ad77396635c9@spud>
+	s=k20201202; t=1763646710;
+	bh=GSyXKGStHpZRd7raftOiugaXMKkLqHWMEEIAoU5UpMY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZOl0dTMGo0DrKKykIa+p7cEcSp/sZCLI+Jvlva9xQ/B+HYZP+c/IXD0Eg9rDXzyRG
+	 aWQ5bxQB2j3ZPhxiUjlmYqxOLCNmEK0jpCtYq8ZOyjJ1Ee/6YcNMUdzvZwCJcWLRmU
+	 KdQK7uGGIYRL4/0dtTBR0dM5Tngr82qJGssyJ7014YigggLQSMvk0hzXaeg0ueTQRE
+	 xCxi6iYBCsiZfprJkbog0RzbWJFwV1bloHEFViF1D11DlGqzgmRtCLST4b7vIBHrFX
+	 LnSWe/ZDpaH+6xBwDBw41FDmrCGOwIYhx574Ty3VL4wcJAY2ycOuILlQJnw/GVuk78
+	 wFI87WZoANpRg==
+Message-ID: <0d6e055a-d71b-443f-83c8-6365a88ad9b6@kernel.org>
+Date: Thu, 20 Nov 2025 14:51:47 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="C5c7hLVB7Z8yap+V"
-Content-Disposition: inline
-In-Reply-To: <20251119-sprinkled-setup-ad77396635c9@spud>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] arm64: defconfig: make TPS6594 support build-in
+To: Michael Walle <mwalle@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: soc@kernel.org, linux-kernel@vger.kernel.org
+References: <20251120075656.2396371-1-mwalle@kernel.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <20251120075656.2396371-1-mwalle@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 20/11/2025 08:55, Michael Walle wrote:
+> The Kontron SMARC-sAM67 module needs the TPS6594 regulator driver to
+> boot from SD card, i.e. for its root filesystem.
+> 
+> Signed-off-by: Michael Walle <mwalle@kernel.org>
+> ---
+> Arnd, the PR from TI [1] (which contains the device trees for this
+> board) is already out, so I'm sending this to the soc ML directly. 
+> Let me know if this can still be applied, if not, I'll have to wait
+> for the next window.
+> 
 
---C5c7hLVB7Z8yap+V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Why it cannot go via TI tree? It should...
 
-On Wed, Nov 19, 2025 at 07:41:34PM +0000, Conor Dooley wrote:
-> Hey folks,
->=20
-> This is my first PR for 6.19, and it's a wee bit in advance of the
-> others just in case there's some objection that needs reworking.
-> Krzysztof is probably already aware of what's going on here, but I threw
-> the toys of the pram over the behaviour of the vendor here, and so
-> appointed myself maintainer after the submitter decided they were not
-> comfortable doing so any more. You can read the context here if you like:
-> https://lore.kernel.org/all/20250922-dr1v90-basic-dt-v2-0-64d28500cb37@pi=
-gmoral.tech/
-> I'm only there as Odd Fixes, and I hope that I can eventually hand this
-> over to someone who cares about it specifically.
-> I consider what's here to otherwise be a bit on the premature side, with
-> no clock, reset or pinctrl drivers, but the submitter of the initial supp=
-ort
-> is currently working on that and I figured sorting out the maintainer
-> thing made sending it at this point worthwhile.
-
-Stephen pointed out last night that the MAINTAINERS entry was in the
-wrong place. Here's an updated PR:
-
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
-
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/anl=
-ogic-initial-6.19-v2
-
-for you to fetch changes up to d5c3f49b75832553ba0dafabc2d394a885106498:
-
-  MAINTAINERS: Setup support for Anlogic tree (2025-11-20 09:48:13 +0000)
-
-----------------------------------------------------------------
-Initial Anlogic Platform Support
-
-Add bindings for the serial and timer peripherals, and a basic soc dtsi
-for the Anlogic dr1v90 SoC. The Milianke MLKPAI FS01 is the first board
-for this SoC. Add myself as maintainer for this platform for the time
-being.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-----------------------------------------------------------------
-Conor Dooley (1):
-      MAINTAINERS: Setup support for Anlogic tree
-
-Junhui Liu (9):
-      dt-bindings: vendor-prefixes: Add Anlogic, Milianke and Nuclei
-      dt-bindings: riscv: Add Nuclei UX900 compatibles
-      dt-bindings: riscv: Add Anlogic DR1V90
-      dt-bindings: timer: Add Anlogic DR1V90 ACLINT MTIMER
-      dt-bindings: serial: snps-dw-apb-uart: Add Anlogic DR1V90 uart
-      riscv: Add Anlogic SoC famly Kconfig support
-      riscv: dts: Add initial Anlogic DR1V90 SoC device tree
-      riscv: dts: anlogic: Add Milianke MLKPAI FS01 board
-      riscv: defconfig: Enable Anlogic SoC
-
- Documentation/devicetree/bindings/riscv/anlogic.yaml                  |  2=
-7 +++++++++++++++++++++++++++
- Documentation/devicetree/bindings/riscv/cpus.yaml                     |   =
-1 +
- Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml        |   =
-1 +
- Documentation/devicetree/bindings/timer/thead,c900-aclint-mtimer.yaml |  1=
-7 +++++++++++------
- Documentation/devicetree/bindings/vendor-prefixes.yaml                |   =
-6 ++++++
- MAINTAINERS                                                           |   =
-8 ++++++++
- arch/riscv/Kconfig.socs                                               |   =
-5 +++++
- arch/riscv/boot/dts/Makefile                                          |   =
-1 +
- arch/riscv/boot/dts/anlogic/Makefile                                  |   =
-2 ++
- arch/riscv/boot/dts/anlogic/dr1v90-mlkpai-fs01.dts                    |  2=
-8 ++++++++++++++++++++++++++++
- arch/riscv/boot/dts/anlogic/dr1v90.dtsi                               | 10=
-0 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++
- arch/riscv/configs/defconfig                                          |   =
-1 +
- 12 files changed, 191 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/riscv/anlogic.yaml
- create mode 100644 arch/riscv/boot/dts/anlogic/Makefile
- create mode 100644 arch/riscv/boot/dts/anlogic/dr1v90-mlkpai-fs01.dts
- create mode 100644 arch/riscv/boot/dts/anlogic/dr1v90.dtsi
-
---C5c7hLVB7Z8yap+V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaR7ktQAKCRB4tDGHoIJi
-0nZHAP410x65+ecLgKt6N6zoSnjw5sxyLfsk76rG1tVJq0aNEQD/cm54KR8F6bax
-hsJz1WR3VzjNYvbB7UIRhQ/T9ttVAgY=
-=GLrs
------END PGP SIGNATURE-----
-
---C5c7hLVB7Z8yap+V--
+Best regards,
+Krzysztof
