@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3472D130B
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2E7272E6E
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763756546; cv=none; b=vBu+z+pzb9+BEpxt1aK3q0gVGyiEcjqRJr8UMcZnSsX7Fpq9Y+CG/7Zc2Q5oshhyfM5f0D+EmvxiS8XiLqDks0E7houd/pyJE4+rveTI8LVKuNN4DQSFuPAavszAi9AQ6mXXkirl+kuh/WwzYmpF8qth1RZgkey3lMskkR3Gkbw=
+	t=1763756547; cv=none; b=O7HJrTiQIg0N3TbbA+w49tqFcjWoKhB4h8Ogul1pI2qvaWCB0AEXM7JjdF5nBOIrNvw/yT7Xn6d9mlF6b5TzM+8sOgwytkqzebOuWnok3KO0hB1mH7TUIh9QoTZ4a0mwFsbt/cFUqBNEX6s2M2wTojcqt/DJBcgsHbP/xbt5qLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763756546; c=relaxed/simple;
-	bh=X62byRnOytp2JbGxgsxBP+pB7JLIkkEoSKoNrWQWcu4=;
+	s=arc-20240116; t=1763756547; c=relaxed/simple;
+	bh=jN8Dd14Begc+Et0JIdiMLsbbB9JBMs7YsP7WQAL4WXI=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=iwrP/Bv2FO2sTFyGBFd9CCFaPk9GSag2NxST42afKEd6ppJhrWj4c3mdBN6aSv5uirYGmdnSHDphWze22swUOtBUjSLNDgFkXDSjdZNBJWS6oFwqj21ym8oA/7+qmlf934Yt5GOqrxC883EHrXnLO2wEKztQFejLImeTvXuidts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GadKcoW0; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=iP3l6APQ+hL22XzkUHTSHWox+EuwoJwfrhZIvBobJkhOfVyr3QaDuwk9MNkcBf3os08Bd8r7qScBEmAyUx5cGl44CuYRjfRQzU24FVNvW35ejzEPy7VBPZVfKNYi5EJmrW0s43yVwVTlCyPJ44HnIZBx+zU98AULR78Zfok0sFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUzHPMKD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GadKcoW0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUzHPMKD"
 Received: by smtp.kernel.org (Postfix)
-	id 02CD5C116C6; Fri, 21 Nov 2025 20:22:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1452C4CEF1;
-	Fri, 21 Nov 2025 20:22:25 +0000 (UTC)
+	id C021CC113D0; Fri, 21 Nov 2025 20:22:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA274C4CEF1;
+	Fri, 21 Nov 2025 20:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763756545;
-	bh=X62byRnOytp2JbGxgsxBP+pB7JLIkkEoSKoNrWQWcu4=;
+	s=k20201202; t=1763756547;
+	bh=jN8Dd14Begc+Et0JIdiMLsbbB9JBMs7YsP7WQAL4WXI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GadKcoW0Wrny2RSp3DUAC0wdXZG4VQY5GmtDJf5lcN2mBQrCysdNiI+DU7j0wZiHZ
-	 nearQhlW0ba0CovBRafvh6FZtDInlWGlqFBqhAWhYfJHL6U9EqrLihQtXmIshiOHKo
-	 AbzsZ6vt2Z3TKx0Lq9kPpb75H0q2hDYilEiceRn6tbpfo6kpJ4vkBTbX0dMFvME7QD
-	 jmGHohn2AT4Iyn7UHPY8jzmyTkjSlb3uWWouh5FcFv9SeX2xhOHLQBQBCJrH81gIf5
-	 RCJx8nnp6YOltn9ewC3EhcuZcPif3XerzKoR0ew8uDwIwu1xABYORIQQtcUhEcRjnG
-	 YGZhW8+Qmgp3A==
+	b=AUzHPMKDkq2fLAbJIIvIWOVju4Vbqd18DNGA2eA4ZE7KZMt1yKUtQcQipVotF6FTy
+	 aP8bC1McZcgIrmGL1juO1q086yRUW2inK/xctC5cXflG/GUd4h+Ic+GqwNcQA0KKUA
+	 g2Z88KUErpZZQe2xD5pL/qOHN9mBZFoZotpvDcE8MTctq1iukn6Age9QHGmdy7zCQU
+	 s9yKDZ4zM/wxioadr+QE0ewzKiBulR70tTGxnOtK+frtJkCk+eRfHiPiVtmKgiaN0/
+	 3Y5QIBiUO7NnFrxqjVCdywnF3Q7VzpIli8ZAfoBe1DFV7d20ZOnSOgxwiMUANO5eRt
+	 JgySHzj9dRmiw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADC323A78A68;
-	Fri, 21 Nov 2025 20:21:51 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D043A78A68;
+	Fri, 21 Nov 2025 20:21:53 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree updates for v6.19
+Subject: Re: [GIT PULL] arm64: dts: ti: K3 updates for v6.19 part2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176375651024.2571237.1581859869695934884.git-patchwork-notify@kernel.org>
-Date: Fri, 21 Nov 2025 20:21:50 +0000
-References: <20251117223345.3192497-1-andersson@kernel.org>
-In-Reply-To: <20251117223345.3192497-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+ <176375651195.2571237.18342929678348209955.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Nov 2025 20:21:51 +0000
+References: <7ad1ef51-e56f-44b2-acbf-70bc1f43dce9@ti.com>
+In-Reply-To: <7ad1ef51-e56f-44b2-acbf-70bc1f43dce9@ti.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 17 Nov 2025 16:33:37 -0600 you wrote:
-> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+On Fri, 21 Nov 2025 22:06:36 +0530 you wrote:
+> Hi
 > 
->   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+> This follow on PR for TI K3 DT updates contains few late fixes mostly around unapplied overlays
+> which now lead to build time warnings and couple of non urgent fixes.
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.19
+> The following changes since commit 00fb4c73b67d36783c5ab95a830f0cf0142b9fc3:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Qualcomm Arm64 DeviceTree updates for v6.19
-    https://git.kernel.org/soc/soc/c/c1ce3348ae08
+  - [GIT,PULL] arm64: dts: ti: K3 updates for v6.19 part2
+    https://git.kernel.org/soc/soc/c/287df51938b2
 
 You are awesome, thank you!
 -- 
