@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6212919B5A7
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB5E2D77EA
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763756540; cv=none; b=JFtqddjQoYJgjRVEOwVZycEugc+JdE/xUywElX25ss+arK+ODa2q0I6LWANH6LhSc0MriosjBtNALTolVcxtc8Vc65Ulr0PXXWWJ+8u1zxPu+g3z+D0BjOVNFyrXVQ97q4ngTCXtmlSWxXQm3nVnz3i1O70KRN5hzBatAG1YXek=
+	t=1763756541; cv=none; b=e4czQVu8atKT5nVE12qOaz4//1wd0w6XGAWh3FFU0qsx2GjsZN7D7qiu9iCHnEiOLBjZv5vUBykvPM+2mcZkNWWgqckrSSr0+AxW2uRqYHSV6wRolu+eNPu32Mc+gvPLocI5QwmL+UfIvlF32jmUDsx3BrtdXn862J2SEbqV+QA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763756540; c=relaxed/simple;
-	bh=rYifa/dsQv7b6vEssm5BpcTmkSNK1wgYjgbQ/AUgheM=;
+	s=arc-20240116; t=1763756541; c=relaxed/simple;
+	bh=N0fWqoDNjh2afFeHlxsiytex3eNonZprxSMxoI0fRfQ=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ohRuF+/tn9XbXWry8BLjKxXSlepH48yAFZqwoFDS+wPmw3yMWFl4jeNARXAdWcsWs/8NBu4TOmmAFNXcdG1YGQJoosdo9QzuM/kltDwnSCtOoYqL5spp7wp8Fmz0u3rMh//kr3doIHuPJu3fvBY1kztIOQsaZDjNcLr27mUHTJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVaacyz0; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ertKKe/PgduQ9UaA02Lr/kI6t3zlv8+30wye0+fhwptX9iBLQhTN8KlX6wR1NaAQSjblFK7jVuixpLuMEQUrzQmGt5yVxHFYL+37spOj7FwvGIFeoITBpjOhCiW1qMDP6+QeevPGVN7MRSIvOTWbAbbCEedt/zhL7YBgesQfcpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pw5nUv9a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVaacyz0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pw5nUv9a"
 Received: by smtp.kernel.org (Postfix)
-	id E9F42C113D0; Fri, 21 Nov 2025 20:22:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D489FC4CEF1;
-	Fri, 21 Nov 2025 20:22:19 +0000 (UTC)
+	id 6F885C116C6; Fri, 21 Nov 2025 20:22:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A77C4CEF1;
+	Fri, 21 Nov 2025 20:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763756539;
-	bh=rYifa/dsQv7b6vEssm5BpcTmkSNK1wgYjgbQ/AUgheM=;
+	s=k20201202; t=1763756541;
+	bh=N0fWqoDNjh2afFeHlxsiytex3eNonZprxSMxoI0fRfQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gVaacyz0XM5JyB0ysCrMAEs/bsS9b42RU3Hmhgg2GCtCUdvCWQcvZaJvlBQ82g0zB
-	 OPNwo1PuJz3Nn9FZ31zGBa81IXiTUEJDkdab/P799q/ujG1I0nk9Sozj09tgAtPvle
-	 iP5I/zI7y5pEJ+pZnNcdoLewWFuKPGnvOZk801bwWNLltiWSk+poTcdOZ6b221fE2f
-	 KGpUmfs+m87Zg6zcb/24gMFcil8ZTEUG2QhU9mWOM/LEXTJxzJjXKBjddaMGSKVEfL
-	 skR+v7g9FKs63/ULh7Bh1FPzqyTObmqvs2PJ+dRFTa7igwc2OXU8h6OsJVUP61PxkV
-	 CDXHHkBICPG0g==
+	b=pw5nUv9a6NKHxJPYuumoUaFfcpv68A+oMSNNaEoRUE1M5gC+DqkYoQCrLaaJ0bche
+	 zdTo9HYP1f1YSinonzRiew7cMnvzXXlDZDWKRQemKP/9kGnR68aQDZEkHUlclPItlO
+	 lcFrYhBZ74t3flh7zWBEnBJ8BSwceZfdPTSQ9oJ5oS0t2o1Qz+p0wApWHruJUbEtQ9
+	 /l+NOxPfzNrTGo6Ya9ekhx7s5gdJFqhfE5udatAu78yCLMipgXJqMiI2i8BMOVQlGJ
+	 JpzppddgCcY6qkmlYDA7U5AKDNhXvBRi9t7PpiMVU9Ms3UcowyP9QlT1ME1OUdvRp0
+	 KQnIT38NmupHA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD9D3A78A68;
-	Fri, 21 Nov 2025 20:21:45 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D553A78A68;
+	Fri, 21 Nov 2025 20:21:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/5] i.MX drivers update for 6.19
+Subject: Re: [GIT PULL 1/8] syscore: Changes for v6.19-rc1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176375650415.2571237.7681001270899067010.git-patchwork-notify@kernel.org>
-Date: Fri, 21 Nov 2025 20:21:44 +0000
-References: <20251117123358.2009662-1-shawnguo2@yeah.net>
-In-Reply-To: <20251117123358.2009662-1-shawnguo2@yeah.net>
-To: Shawn Guo <shawnguo2@yeah.net>
+ <176375650574.2571237.14139049319747524199.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Nov 2025 20:21:45 +0000
+References: <20251115090044.3140331-1-thierry.reding@gmail.com>
+In-Reply-To: <20251115090044.3140331-1-thierry.reding@gmail.com>
+To: Thierry Reding <thierry.reding@gmail.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,8 +54,8 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 17 Nov 2025 20:33:47 +0800 you wrote:
-> From: Shawn Guo <shawnguo@kernel.org>
+On Sat, 15 Nov 2025 10:00:36 +0100 you wrote:
+> Hi ARM SoC maintainers,
 > 
 > The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 > 
@@ -66,15 +66,21 @@ On Mon, 17 Nov 2025 20:33:47 +0800 you wrote:
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/5] i.MX drivers update for 6.19
+  - [GIT,PULL,1/8] syscore: Changes for v6.19-rc1
     (no matching commit)
-  - [GIT,PULL,2/5] i.MX dt-bindings update for 6.19
+  - [GIT,PULL,2/8] dt-bindings: Changes for v6.19-rc1
+    https://git.kernel.org/soc/soc/c/5d5b665e3e12
+  - [GIT,PULL,3/8] amba: Fixes for v6.19-rc1
     (no matching commit)
-  - [GIT,PULL,3/5] i.MX ARM device tree changes for 6.19
-    https://git.kernel.org/soc/soc/c/e5060380e063
-  - [GIT,PULL,4/5] i.MX arm64 device tree changes for 6.19
-    https://git.kernel.org/soc/soc/c/976e33268c41
-  - [GIT,PULL,5/5] i.MX defconfig changes for 6.19
+  - [GIT,PULL,4/8] soc/tegra: Changes for v6.19-rc1
+    (no matching commit)
+  - [GIT,PULL,5/8] ARM: tegra: Device tree changes for v6.19-rc1
+    https://git.kernel.org/soc/soc/c/17aaeb67e115
+  - [GIT,PULL,6/8] ARM: tegra: Default configuration changes for v6.19-rc1
+    (no matching commit)
+  - [GIT,PULL,7/8] arm64: tegra: Device tree changes for v6.19-rc1
+    https://git.kernel.org/soc/soc/c/252f83d5474c
+  - [GIT,PULL,8/8] arm64: tegra: Default configuration changes for v6.19-rc1
     (no matching commit)
 
 You are awesome, thank you!
