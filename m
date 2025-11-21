@@ -1,151 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DF82FD68D
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5142119B5A7
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:50:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763758209; cv=none; b=Rop+formIE1UKjKUgL/xMVWFPuoUheBr90huvCwz9DU5b6FE2RZr2sLDM6h7EJRevfj7GIRQ8CS4KP9VihOuAWsgENXuDeahakrWqKV0RVez2h9S5axv7GVijH0NuP40+qhWREJeFVj16msQTQ0dZrPIuFA974pPKyGAGintx60=
+	t=1763758245; cv=none; b=KI4LQYHXzTmLPwBP8yVueBR1bADbDGOXgcSBijsVsvdCH31wZUMk5v3hXtwB40INFMwlg6/nu3enHQDMqvDf9iCnuSQpTsGszsLuQeA4Vv8w371F+Hq9mkApXNIww3CchJMgAp0iEAy9zYraPGaxyUAKjLAfXoCfUBKIbxMvvBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763758209; c=relaxed/simple;
-	bh=GtNafWVTYEieoiBrYcjjoxiUxAQAu22x4zjHBxSpNcs=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Gg272Ph43VbSIGkhFzcp3B4SsVZjsjrqPD6IVCfLd04dvkvjLWBrT4uTKaCtLmd7hgLGluWaPbKmeqEn6tDjdGJOy9PHqFYpimDrjD4ZfB8PwyE7i1R3i8dVr39OsDRvRXWs01WjPw5LvXHgg0zR6CLJHOWvdr6slXhDy56kjNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=O5ltxRqc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Safd8epi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763758245; c=relaxed/simple;
+	bh=kbVNUBEFhyvnkr6guRU2O7SOkn3jCpNQIK4+/x4fuhI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=qPHz+W0i/w/WGRvGN5sM9ARc/gHBswNB0WvHyM9gB460I3LHm8aeeeuNXqiWEM01fxFUaXjHv48Myvh5LpdwEIJZG63UsCVEiTShhy8h6kecP5gU08B93/NsKkfdE00rcoIOvlozpU/SIHllFnPqZ7cIh2YzacWa5kJwOtUh86E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sMKJX22J; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="O5ltxRqc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Safd8epi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sMKJX22J"
 Received: by smtp.kernel.org (Postfix)
-	id 01480C116C6; Fri, 21 Nov 2025 20:50:09 +0000 (UTC)
-Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D7EA7C4CEF1;
-	Fri, 21 Nov 2025 20:50:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D7EA7C4CEF1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id CE2591380196;
-	Fri, 21 Nov 2025 15:50:05 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 21 Nov 2025 15:50:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1763758205;
-	 x=1763765405; bh=+MroMTBYaN1V2eG9itTrxK/f1uqlPkCiqSCWwUjIE9g=; b=
-	O5ltxRqc5dJDMWd4sbZLbyKjKRz5o1GvP6BLxCsToeHUmUlf+PBDvMV+FNMZa4s0
-	Tf25Pw7jfs+jGn7F0/Kavhmmvp0knHIyfHSK9AfZzoRlA0EfsdRMUSVmIoUwMk2I
-	UMBF4nnUgPpK5m8oFW3dA7eL07i3jhktPQqXB7tkpDHat3GyGXyFL9ae4GxHGF+N
-	vSxTXBcoIgl3cZw0JP4AXE5LUv1awPVSPhnOjEb/L9s9PCOGus33eCOpp7qrcqlI
-	ex7MbjJf8AHSug8xPjh+JAxTd69beA5UPS8M/ca4U9sgUmJ9Er+wNxFLyBFUQ4ag
-	WuuTr7LKtRW7GAtG/hPbhA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763758205; x=
-	1763765405; bh=+MroMTBYaN1V2eG9itTrxK/f1uqlPkCiqSCWwUjIE9g=; b=S
-	afd8epibNDnHKhKSDD2vJejEb+SNKuGTTpzYedBw6s2jtIJToX8Jt9P/LUIank3A
-	A0JzLY2C7f7RjST7Oevcyy5qZe7/QQ9YE1ok9TCoMNyVavUSNYVnX9vN+mab7SqZ
-	bIb5Xu5kwE+q+4Kvgv5m05KcNioUW8kQIe7BZq884Z33ZB68ZMGz4qjXkHbSXhTL
-	KMi59pGA8afGr7mLB/aINDkLTRRC76S1hqXhUyJoSWjRfc1sl1GHrtDFUmsq2dIf
-	DVBo2ut+lN3FNvhNc/IH1gBqrYt7wQfrzlybscV5LyWv1lqywF1YDamiAdVANxgE
-	tgnimsBT/Wm0E+lSqzeGQ==
-X-ME-Sender: <xms:fNAgaUV0LAtKpbUKZyZ_RpasTARkplipVapUh3RwSGTrIL75R1qHLQ>
-    <xme:fNAgaTZTjpNyyUGJTxuL64GHZyZdpEbawGSd44ll82lFMBRVEQ77s6jXcD-CWfymk
-    h3TaMzY3pv3Y710aXtlUsC76-aCyn8PXBAKZ5dIj45FfDRgpcj96og>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfedtleejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepuedvvdffiedvjeevtdfftdelgedvvdejiedtfeeltddutefgjeeuheegheduteef
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpuhhrlhhfohhrghhithhpuhhllhdrhi
-    houhdpghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
-    pehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvd
-    egpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhuphessghrrghinhhfrghu
-    lhhtrdhorhhgpdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtg
-    hpthhtoheprghlvgigsehghhhithhirdhfrhdprhgtphhtthhopehjohgvlhesjhhmshdr
-    ihgurdgruhdprhgtphhtthhopegrghhrohhssheskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehfuhhsthhi
-    nhhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehmphgvsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:fNAgac5B7JMb2Wbeg6MbD54hOsoDJn_QhuutkmPMK6Uy--bkgh6vbQ>
-    <xmx:fNAgabt1C5FfsJ2aczJRPhKSOzCHN0giQ39OMqbjmzQkkVy9kV4yOw>
-    <xmx:fNAgacWh7eCV8dv5w9yFF1_vxrISn_rECFyZKMkWyaot0g5Xj35cXg>
-    <xmx:fNAgacHl-JL9eUkwSB_oJXUbaB2brXOMG8xXx2D-FU24o838k_EFjw>
-    <xmx:fdAgaW_GV8y0zNR2CNTwknlinigSU75zqYhIN6tre3Xyq6Sf1t6wiDY9>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 564A5700054; Fri, 21 Nov 2025 15:50:04 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	id E67E8C116C6; Fri, 21 Nov 2025 20:50:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D08D4C4CEF1
+	for <soc@kernel.org>; Fri, 21 Nov 2025 20:50:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763758244;
+	bh=kbVNUBEFhyvnkr6guRU2O7SOkn3jCpNQIK4+/x4fuhI=;
+	h=Subject:From:Date:To:Cc:From;
+	b=sMKJX22JXgZXlYSVtbmhCI6UDUyqIKfnooWCeicVb9bzrqad+Z/h9JG5kK36S0LIV
+	 Fq5PWNBko3IcfyLtQ+1LN0zZqsa+AGu5nvQ/6esXlzuz/S/BpzFPP7Yodp8bVRBBSd
+	 FLQzAtx2YKvF1iv+YS5pBhCunxhNeJez67yy6qKJ5RgvTOB+Su2/Y0KyIbB8ksZdli
+	 BrOTruUJj/3245RIX0v7T8k9YeJg0oBz8GKWy5vN3Fg62RySvoe5luFA6hz4eVtToq
+	 hXfFzrL2H9ikNuD5ETznBvzJFbeEIQpYMPiDw0eFu4f4Ma8/WLUWVV2EqMxByvc4/o
+	 WL+NUNaMxZNYQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 756BF3A78A68;
+	Fri, 21 Nov 2025 20:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AxHevFwGHmhV
-Date: Fri, 21 Nov 2025 21:49:42 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Drew Fustini" <fustini@kernel.org>, soc@kernel.org
-Cc: "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Alexandre Ghiti" <alex@ghiti.fr>,
- "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Samuel Holland" <samuel.holland@sifive.com>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Anup Patel" <anup@brainfault.org>,
- "Joel Stanley" <joel@jms.id.au>, "Joel Stanley" <jms@oss.tenstorrent.com>,
- "Nicholas Piggin" <npiggin@oss.tenstorrent.com>,
- "Michael Neuling" <mikey@neuling.org>, "Michael Ellerman" <mpe@kernel.org>,
- "Andy Gross" <agross@kernel.org>,
- "Anirudh Srinivasan" <asrinivasan@oss.tenstorrent.com>,
- "Paul Walmsley" <pjw@kernel.org>,
- "Drew Fustini" <dfustini@oss.tenstorrent.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Message-Id: <920f8f04-92dc-464f-807b-d09cc77c5532@app.fastmail.com>
-In-Reply-To: <aPUemXdOFZEdkayE@x1>
-References: <aPUemXdOFZEdkayE@x1>
-Subject: Re: [GIT PULL] RISC-V Tenstorrent Devicetree for v6.19
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <176375820903.2580769.5900734280421015674.git-patchwork-summary@kernel.org>
+Date: Fri, 21 Nov 2025 20:50:09 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-On Sun, Oct 19, 2025, at 19:23, Drew Fustini wrote:
-> Hi Arnd,
->
-> Please pull these changes which add Tenstorrent as a vendor and enable
-> support for Blackhole. It adds the appropriate entries in MAINTAINERS.
-> The changes all come from a single series [1] posted by myself. Joel
-> Stanley has reviewed and tested all the patches. Rob acked or reviewed
-> all the bindings patches. W=1 dtbs_check and dt_binding_check produce
-> no warnings.
->
-> [1] 
-> https://lore.kernel.org/linux-riscv/20251013-tt-bh-dts-v3-0-9f058d4bbbda@oss.tenstorrent.com/
->
-> Thanks,
-> Drew
->
-> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
->
->   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
->
-> are available in the Git repository at:
->
->   git@github.com:tenstorrent/linux.git tags/tenstorrent-dt-for-v6.19
->
+Hello:
 
-I pulled this one manually as you had the wrong URL here, please
-use an https:// url for git pull. You can do this e.g. by adding
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-[url "https://github.com"]
-    insteadOf = git@github.com:
+Patch: [GIT,PULL] Qualcomm Arm64 defconfig updates for v6.19
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024500
+  Lore link: https://lore.kernel.org/r/20251117205341.3177221-1-andersson@kernel.org
 
-to your .gitconfig.
+Series: [GIT,PULL,1/5] MediaTek ARM32 mach updates for v6.19
+  Submitter: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1021971
+  Lore link: https://lore.kernel.org/r/20251111095542.13958-1-angelogioacchino.delregno@collabora.com
+    Patches: [GIT,PULL,1/5] MediaTek ARM32 mach updates for v6.19
+             [GIT,PULL,5/5] MediaTek defconfig updates for v6.19
 
-       Arnd
+Patch: [GIT,PULL] Microchip AT91 defconfig updates for v6.19
+  Submitter: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024387
+  Lore link: https://lore.kernel.org/r/20251117163533.209608-1-claudiu.beznea@tuxon.dev
+
+Series: [GIT,PULL,1/5] i.MX drivers update for 6.19
+  Submitter: Shawn Guo <shawnguo2@yeah.net>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024307
+  Lore link: https://lore.kernel.org/r/20251117123358.2009662-1-shawnguo2@yeah.net
+    Patches: [GIT,PULL,1/5] i.MX drivers update for 6.19
+             [GIT,PULL,5/5] i.MX defconfig changes for 6.19
+
+Patch: [GIT,PULL] soc/defconfig: OMAP updates for v6.19
+  Submitter: Kevin Hilman <khilman@baylibre.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024436
+  Lore link: https://lore.kernel.org/r/7hv7j8k1og.fsf@baylibre.com
+
+Series: [GIT,PULL,1/8] syscore: Changes for v6.19-rc1
+  Submitter: Thierry Reding <thierry.reding@gmail.com>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1023813
+  Lore link: https://lore.kernel.org/r/20251115090044.3140331-1-thierry.reding@gmail.com
+    Patches: [GIT,PULL,1/8] syscore: Changes for v6.19-rc1
+             [GIT,PULL,6/8] ARM: tegra: Default configuration changes for v6.19-rc1
+             [GIT,PULL,8/8] arm64: tegra: Default configuration changes for v6.19-rc1
+
+Series: [1/4] arm64: defconfig: enable Exynos ACPM clocks
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1021545
+  Lore link: https://lore.kernel.org/r/20251110121344.120785-5-krzysztof.kozlowski@linaro.org
+    Patches: [1/4] arm64: defconfig: enable Exynos ACPM clocks
+
+Patch: [v2] arm64: defconfig: Remove the redundant SCHED_MC/SCHED_SMT
+  Submitter: Huang Shijie <shijie@os.amperecomputing.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1013897
+  Lore link: https://lore.kernel.org/r/20251021075704.527626-1-shijie@os.amperecomputing.com
+
+Patch: [GIT,PULL] Rockchip defconfig64 changes for 6.18 #1
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024548
+  Lore link: https://lore.kernel.org/r/2101096.usQuhbGJ8B@phil
+
+Series: Renesas SoC updates for v6.19
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1018147
+  Lore link: https://lore.kernel.org/r/cover.1761905410.git.geert+renesas@glider.be
+    Patches: [GIT,PULL,1/3] Renesas ARM defconfig updates for v6.19
+
+
+Total patches: 14
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
