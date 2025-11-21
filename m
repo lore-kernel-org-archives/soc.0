@@ -1,105 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504711DC985
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 21:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6672C221F1C
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 21:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763759783; cv=none; b=syys7OUqNLw5EF+qpvl8WzALV5ijgb9m7a78wmaRUv+7hmyfIvAwzKbeIh6OxoQsqmYugRAvk7jWoZfGndW/z2mTY3RvVnuI2GeMbUhsgXdTeHA5DKD/rQ35c/tie/jVDc3vImKyz4QHGhNPXesCLMAeis55pvVg5m21T54FPaI=
+	t=1763761842; cv=none; b=a8/Cv05/dnOgMc/C1UaaWzVgdYTo8w7IJ0Dw2ZYZcAYaH1wlWWGldPcfiP881mAuZf4s3BuPT/Nd9iyt/xhDX00kwfY8hCD7IYPqAMNkrA/VjbVgNiwl4sQUnFHKDvKjJ6CQDclKTZc5YfstVmRaWk7wnqH1ih4jkDOH8ykZqww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763759783; c=relaxed/simple;
-	bh=FiypYvKf6VpX/fvafcOV0jwDzIXIP9N1G7YUY78Mgto=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rgRZVPVSPOiWY5wpFanqDW4wes/2rMRi4CslI7oClfcIPeQaI17DWEGwtRdurUF68ZIwl9eHHwkidaYcLcAgF8hjT4qtGgM5befSll/ltoy3Kbnj3f032fxj7YsBh8Ya5Ymc8K3ZqPyKLI6FJ/DaEidOvWlHpI/xsz//3zqJo1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EeZF7r54; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763761842; c=relaxed/simple;
+	bh=2rHW4dVXxmlCCmLJze23+a7QjM+P6SJZ+FpIjN55Ic8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=Vti/XQaB6TYmuu6T240g32bJb7o9nL7pMFiLmouv0s5XwWx5Eb2XiHurKR8mAJW12XQ2WRWZN0+TxDL6a17IFA6+dfphLaZ9kV5ogKPxQOKtAZ+n1yEz94SikWRR60NtCqWLMKVBDX+RkWlK/4Jq7Dg8J1ITFMsTOMP69J+pCmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EmNjijwa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EeZF7r54"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EmNjijwa"
 Received: by smtp.kernel.org (Postfix)
-	id 0477FC19424; Fri, 21 Nov 2025 21:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82571C4CEF1;
-	Fri, 21 Nov 2025 21:16:22 +0000 (UTC)
+	id E42BEC116C6; Fri, 21 Nov 2025 21:50:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8ECC4CEF1
+	for <soc@kernel.org>; Fri, 21 Nov 2025 21:50:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763759782;
-	bh=FiypYvKf6VpX/fvafcOV0jwDzIXIP9N1G7YUY78Mgto=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EeZF7r54BGm0ZwkzOfmMxiXjjvXXjgi8kjBuGCvx6FfJmz5IuUkElZmWMDFRioEBN
-	 eNh7m8pYVvU2bKzA6IRZzDCclPgoY3SV2B+5SKe/ITnjjNE7n2RPCBUHO+J7xMOunz
-	 ePaHzkX/wjfAfdM6UGtSXo5zoGn08giuehOto+pPoxtw2DK2FlWk9r//72uRliXIKE
-	 YSXxilLFiklFM5UWSEolAtTtjkyMgGNXi1nZZV6D/tf9VwwadIJbWI8hYP+fOVbJmW
-	 +2+C/wfQjj2Uhd8iOQvy3M8uVTRfpxbsPZWKKNXTr0vbpxFEFUS5rL39jYAYSnwPTD
-	 9GLGkjRjFQx0w==
-Date: Fri, 21 Nov 2025 13:16:21 -0800
-From: Drew Fustini <fustini@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Anup Patel <anup@brainfault.org>, Joel Stanley <joel@jms.id.au>,
-	Joel Stanley <jms@oss.tenstorrent.com>,
-	Nicholas Piggin <npiggin@oss.tenstorrent.com>,
-	Michael Neuling <mikey@neuling.org>,
-	Michael Ellerman <mpe@kernel.org>, Andy Gross <agross@kernel.org>,
-	Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>,
-	Paul Walmsley <pjw@kernel.org>,
-	Drew Fustini <dfustini@oss.tenstorrent.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [GIT PULL] RISC-V Tenstorrent Devicetree for v6.19
-Message-ID: <aSDWpcjVT+pt1R7I@x1>
-References: <aPUemXdOFZEdkayE@x1>
- <920f8f04-92dc-464f-807b-d09cc77c5532@app.fastmail.com>
+	s=k20201202; t=1763761841;
+	bh=2rHW4dVXxmlCCmLJze23+a7QjM+P6SJZ+FpIjN55Ic8=;
+	h=Subject:From:Date:To:Cc:From;
+	b=EmNjijwa50Xejqfi4hX9q1U2MomqSvFCufs9twErKiRe7SHWAzeJJM4Gkg3WaDSXH
+	 5z1UYbJoQXt7qnxXc1k/Hty0e3G4tUobpbi4KJ1Ba049uXJrBVUAt+YUHgaWXqOMyS
+	 OakJf0JxFhuVbjM6fM1m+S0KZMfxyhavS7F4dAhyx547YhtBQHHNC7yUS1uKZc+YN/
+	 yQF51e8T+ZbNsboUaTqUaXMDbA/PCI6EzKNuGETu86vInzi1pTLztnVE7q6/0eZf0T
+	 lOESWJHOWSUrj3BWlxL5HwERI5Dv6RO98v1SDLWDu3NSBqUogwuKlgN6O6sjcRiwkg
+	 dVE0GabKX6Xow==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 753643A78A72;
+	Fri, 21 Nov 2025 21:50:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <920f8f04-92dc-464f-807b-d09cc77c5532@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <176376180613.2598359.12555114717124678834.git-patchwork-summary@kernel.org>
+Date: Fri, 21 Nov 2025 21:50:06 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-On Fri, Nov 21, 2025 at 09:49:42PM +0100, Arnd Bergmann wrote:
-> On Sun, Oct 19, 2025, at 19:23, Drew Fustini wrote:
-> > Hi Arnd,
-> >
-> > Please pull these changes which add Tenstorrent as a vendor and enable
-> > support for Blackhole. It adds the appropriate entries in MAINTAINERS.
-> > The changes all come from a single series [1] posted by myself. Joel
-> > Stanley has reviewed and tested all the patches. Rob acked or reviewed
-> > all the bindings patches. W=1 dtbs_check and dt_binding_check produce
-> > no warnings.
-> >
-> > [1] 
-> > https://lore.kernel.org/linux-riscv/20251013-tt-bh-dts-v3-0-9f058d4bbbda@oss.tenstorrent.com/
-> >
-> > Thanks,
-> > Drew
-> >
-> > The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
-> >
-> >   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
-> >
-> > are available in the Git repository at:
-> >
-> >   git@github.com:tenstorrent/linux.git tags/tenstorrent-dt-for-v6.19
-> >
-> 
-> I pulled this one manually as you had the wrong URL here, please
-> use an https:// url for git pull. You can do this e.g. by adding
-> 
-> [url "https://github.com"]
->     insteadOf = git@github.com:
-> 
-> to your .gitconfig.
-> 
->        Arnd
+Hello:
 
-Sorry about that. I will make sure I give the correct url next time.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-Thanks,
-Drew
+Patch: [GIT,PULL] soc: omap: updates for v6.19
+  Submitter: Kevin Hilman <khilman@baylibre.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024426
+  Lore link: https://lore.kernel.org/r/7h7bvolgd4.fsf@baylibre.com
+
+Patch: ARM: gemini: fix typos in comments
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1015196
+  Lore link: https://lore.kernel.org/r/20251023204737.2716443-1-linus.walleij@linaro.org
+
+Series: [GIT,PULL,1/5] i.MX drivers update for 6.19
+  Submitter: Shawn Guo <shawnguo2@yeah.net>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024307
+  Lore link: https://lore.kernel.org/r/20251117123358.2009662-1-shawnguo2@yeah.net
+    Patches: [GIT,PULL,1/5] i.MX drivers update for 6.19
+             [GIT,PULL,2/5] i.MX dt-bindings update for 6.19
+
+
+Total patches: 4
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
