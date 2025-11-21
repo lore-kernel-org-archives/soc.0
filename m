@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC0619B5A7
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453562D77EA
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:50:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763758254; cv=none; b=VJWAo1uspnZ1UEioctI3QQuYA4eFIVmUTb6sTWakDCazZHsgsNPwnR+sWC54gTJbQbzZbaPidpYc1TKa2CgQ2U+tqKB6diPfOoR4XGAS4HDoOU91kjaWLTYLYOstOpLZFCg9bjutt6rCiUPCbr3yOxM6BZ0wvZ5EmDRhZuY/jvk=
+	t=1763758256; cv=none; b=QYBcleAa0skeiFYUvw8VRrWR5U81OwKp3U/HlqAFSrMnznFjJzSd4S/H85rrqzXEamwJ1AOmoZ5VCq6i8IaNtnTf6LHmz6SedLT60a7+fvuf93VwO30U3uury3uuCxcMwtO4p+GKFRDxc95bRtZdIdsoKZCHe/5YRT5qw0FqhhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763758254; c=relaxed/simple;
-	bh=GZGlkI/PArIOFQYpxZ/O70D8HRAskNUfWt4RhKBeqPo=;
+	s=arc-20240116; t=1763758256; c=relaxed/simple;
+	bh=keL1ffxPAQyJidA7OMBI7ZJKeXkc2iI9udC8c4Pv/XA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=VbPDKgO3BYdXWHaKCDUhvYl8NJ7/hnjx7uHEtJ6E+awTuRKG2VaRNtKIUk78X6yko+06CD0LwSMkv0diIA6SRrNLL0aHxpukanZ8ap43JJLQJEil8cPeI7tTHvoIxpDleFQX6HoBTX3RoqbH8rWCUAOH7JLx1En+rx29NpY80aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4uOUDYk; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=PSI1V40GFSJuaKD6TBppdjqewRFTs31JBp67jXZZcg5uoM5k1Qtlthtv7l6243IZhClZ9SPQ5FRwA5Q8t6Sclf3yTjMLOvlzOw33wFfW3T8FxX/17/jDT8d+khBq/fHlDCnukqckTzlrycM4w5PSbvlRs4bAzI35MF5THs10dsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q4ZHMkEX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4uOUDYk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q4ZHMkEX"
 Received: by smtp.kernel.org (Postfix)
-	id 79CC1C116C6; Fri, 21 Nov 2025 20:50:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64458C4CEF1;
-	Fri, 21 Nov 2025 20:50:54 +0000 (UTC)
+	id E7DC7C116C6; Fri, 21 Nov 2025 20:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27C1C4CEF1;
+	Fri, 21 Nov 2025 20:50:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763758254;
-	bh=GZGlkI/PArIOFQYpxZ/O70D8HRAskNUfWt4RhKBeqPo=;
+	s=k20201202; t=1763758255;
+	bh=keL1ffxPAQyJidA7OMBI7ZJKeXkc2iI9udC8c4Pv/XA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=X4uOUDYkM5sg19NQh2A1qUc0QXLZ3sBRnv23sJUTsInoj7ZjnXXUZ9uFyZ6V98hNc
-	 heHpPn7ydxw215iZ1WWTtlAdbi3umXYkyL8Lqcgp/naGwr490muIUgCE0BP1S0/FZ/
-	 2zfTqJQCXmgrgm5dnJwIw+rj33JP6Xy04BRB3ZYw4bkzfP9SreLa5tNZk1T81mq1qT
-	 SWB33lIhlsGN6I8lT79MXA/wwkV32ruQ978Fx5mVP78rYU4xWGiTzwuiAhDKvKdXzh
-	 MHHbFJJwydI19HLh98/oWDnLOE3xl2LD+3FvZt/dcvnPl+crNbtG8eF8wNpA3ghxkK
-	 j84ShyGCAs+ew==
+	b=Q4ZHMkEXpVR4C3galWObaCfAwOUhjikbTE4iU6Ug9HHBiFnDgqzQOWX/DUsuKxpx0
+	 nCoGbnmerz28q1me3BV6xW0q4g8sbVD4RFQO7wqfoGrmsaNr6Fq5zwpLxI+9R2sfsj
+	 RzzVvC0azK1lRqHz3rVXDNkHJsTPdAK20LFmgnR23lx9SpA7aeLJwh+OhJz2ZaKDb1
+	 yyXOVGACU2xJTRpux1uleS5twBhFDu657UtEZ5x1htUj9hemSXg93zHZufirR4SqUW
+	 Xe3xVtAeLtEOMt9D09nQAiRLoQaQk4Cqq0hNRzJJcSP+el4enj7Y0rbo4usPGcuwDv
+	 Innp/EY0rbCMQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 340603A78A68;
-	Fri, 21 Nov 2025 20:50:20 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADCA43A78A68;
+	Fri, 21 Nov 2025 20:50:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,38 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/4] arm64: defconfig: enable Exynos ACPM clocks
+Subject: Re: [PATCH v2] arm64: defconfig: Remove the redundant
+ SCHED_MC/SCHED_SMT
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176375821874.2580769.3344112334245105428.git-patchwork-notify@kernel.org>
-Date: Fri, 21 Nov 2025 20:50:18 +0000
-References: <20251110121344.120785-5-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20251110121344.120785-5-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <176375822024.2580769.6069215055403895488.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Nov 2025 20:50:20 +0000
+References: <20251021075704.527626-1-shijie@os.amperecomputing.com>
+In-Reply-To: <20251021075704.527626-1-shijie@os.amperecomputing.com>
+To: Huang Shijie <shijie@os.amperecomputing.com>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 10 Nov 2025 13:13:39 +0100 you wrote:
-> From: Tudor Ambarus <tudor.ambarus@linaro.org>
+On Tue, 21 Oct 2025 15:57:04 +0800 you wrote:
+> The patch "7bd291abe2d sched: Unify the SCHED_{SMT,CLUSTER,MC} Kconfig"
+> has enabled the SCHED_MC/SCHED_SMT by default for arm64.
 > 
+> So remove the redundant code in defconfig.
 > 
-> Enable the Exynos ACPM clocks driver. Samsung Exynos platforms
-> implement ACPM to provide support for clock configuration, PMIC
-> and temperature sensors.
+> Reviewed-by: Zenghui Yu <yuzenghui@huawei.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [1/4] arm64: defconfig: enable Exynos ACPM clocks
-    https://git.kernel.org/soc/soc/c/38c8787f1b81
-  - [GIT,PULL,2/4] samsung: drivers for v6.19
-    (no matching commit)
-  - [GIT,PULL,4/4] arm64: dts: samsung: DT for v6.19
-    (no matching commit)
+  - [v2] arm64: defconfig: Remove the redundant SCHED_MC/SCHED_SMT
+    https://git.kernel.org/soc/soc/c/04392a1e8145
 
 You are awesome, thank you!
 -- 
