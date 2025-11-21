@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D30B2EA749
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 08:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F2F2F6920
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 08:11:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763712607; cv=none; b=rWfDyPqVF3oHeKDqqeYXX85tXb7yn1/nwNXHQkFtSVPm+980TTINHAmJaKc1suhPW39HVYKEYxbmv6jJ1Sgrnx3hGWiomdFFzg0CylY8X1sn5YQhwidoTnck0WStCceuNsFfBynqi74AAzzSRJw3qs9hPPTg2jQtGWO1Mnmn+GM=
+	t=1763712713; cv=none; b=r2uESRmkqk4a9Hsbzv2JUZz3MfsArIn2/DhaTf1i8hSceMPLcEY3g6SeWlWmFyePz0XQjLH4DEoM1j/569fGW6a4xI7ck9HNB0wPElO9EdkUojnRwar8AiGqHKSlesTu6tstwj1H9+06Yau1XPTUx+KNWyJQDSMyM1C13yyKYdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763712607; c=relaxed/simple;
-	bh=9ox/Rz6M/Duube33w05U9UwkFIMovXlrMiY8Ws2MCk8=;
+	s=arc-20240116; t=1763712713; c=relaxed/simple;
+	bh=f/iEhqYlRHEO3Vu7zqsYVpcUBMIwOvuKdWWkmgLVEw4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jzSi1pnUuHu7y23K8Pby/iBtaxSu1DDpRF2EkvsFSsclnVUkfV/XA1APmcxwljqztUeIEnA8rBKg38yuNeLZdBqoAT7//42ItzZ6pW76C2Urk2azyqS+JBVP7Ph71uExYGaQoJUcSAMd3SyhWHf4d7leLA1XVyi4X2KdrO4Tqog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qJ9fok5O; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=b2354ECJ37Cy7vnAOw7xq7pQhk/Owi33S+xwm2QFnRepxMQkLcBovMOzY3YfDcIfjwmO1bijbKJsZHuboZvqGomfBl4yoTaDu+UFmfPUSIl/LdpwEJzx0dJZm0EuX9kvkd9LQUGASnZiTIwMhSwMrULmqYJITgQqM5NkdHRCVJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8boYpju; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qJ9fok5O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8boYpju"
 Received: by smtp.kernel.org (Postfix)
-	id 406EFC113D0; Fri, 21 Nov 2025 08:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF40C4CEF1;
-	Fri, 21 Nov 2025 08:10:05 +0000 (UTC)
+	id 5EBE8C116D0; Fri, 21 Nov 2025 08:11:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34FCBC4CEF1;
+	Fri, 21 Nov 2025 08:11:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763712607;
-	bh=9ox/Rz6M/Duube33w05U9UwkFIMovXlrMiY8Ws2MCk8=;
+	s=k20201202; t=1763712713;
+	bh=f/iEhqYlRHEO3Vu7zqsYVpcUBMIwOvuKdWWkmgLVEw4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qJ9fok5O8OlwVzNOnXO/nty7Fb3SrdKfkpz3Gp/mRDZa8Vk5EOj1CthVCWDWvpnqV
-	 VVYYCObFMX70+gi+wlRui2l5EVaYcx7yyhWWMrIX2/PiE4x+efidDOSHvyOwXxdZKD
-	 BlII9a/VbROgEPUcaSSrnG9rXcdupJnlnpuoAH31tdQmTq6XknsJckcCy4tXiS8ZxY
-	 Z4qTjz28ncOeRLvHixmxsmySpwHACI/ZTEi5S9bBuA/7wiKerYkSF9Le7y1ZpJnjjF
-	 F0yLcU7j6naNH6ZWTBMwyNBUt+ZUfAtj5Dwnvir4TtifqbNGlsf9CqTMjS+hgxI1y1
-	 HXHS5XQg2deyQ==
-Message-ID: <c55c87ea-01a1-4200-8fed-e629d7d068ec@kernel.org>
-Date: Fri, 21 Nov 2025 09:10:04 +0100
+	b=j8boYpjuLqME2RozP/bd49XCkyvLiqBTDWYZQFH1qQFGTis7BPYW104ILQn13OD7x
+	 S7hSYwKk/kA6p/pTbeO1fK8Z90yksDfFWszr6RKEHzCIQ28eR/gW/yxKingYT7nhZO
+	 NwDVgdKOe3A9OZ3qTodym5kQLtp5U931yBLeE/4Vy/yTaLM4JdWMb75oE9Dxa9745K
+	 6WYM2IbuGTA6wjh6rW87x/vM9nzKqvK2+Xe2Qjd/okrEzFLMSEYlUMd/7LcV+wuKU9
+	 HsYDFAfbD4kx5KkU/BaVpkrMNbPtjiXZFdgHTrnTfGTdAfgcf/ksF0Q7HYv0sHXiQ+
+	 SHZN68UU6FKHw==
+Message-ID: <785582bc-faef-473b-8e5b-c387c6050d4f@kernel.org>
+Date: Fri, 21 Nov 2025 09:11:50 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -93,28 +93,14 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 21/11/2025 08:42, Michael Walle wrote:
-> On Thu Nov 20, 2025 at 2:51 PM CET, Krzysztof Kozlowski wrote:
->> On 20/11/2025 08:55, Michael Walle wrote:
->>> The Kontron SMARC-sAM67 module needs the TPS6594 regulator driver to
->>> boot from SD card, i.e. for its root filesystem.
->>>
->>> Signed-off-by: Michael Walle <mwalle@kernel.org>
->>> ---
->>> Arnd, the PR from TI [1] (which contains the device trees for this
->>> board) is already out, so I'm sending this to the soc ML directly. 
->>> Let me know if this can still be applied, if not, I'll have to wait
->>> for the next window.
->>>
->>
->> Why it cannot go via TI tree? It should...
 > 
-> As explained above it can of course, but I've missed the time window
-> as the PR from the TI tree to the soc tree was already sent out.
+> For why I'm sending this to the soc ML, Arnd once told me to send
+> defconfig changes to the soc ML (commit 066f5f4c7967 for example).
 
-This alone would justify for anyone to send directly to soc@ when they
-miss their upstream maintainer timeframes, so sorry, but that's the way.
-Time window in TI can still take it. If they cannot, then for sure soc@
-cannot, because soc@ takes from TI.
+That's a non-platform specific patch, so a completely different rule.
+Which SoC tree would take it? None. So your only chances was via soc@.
+Which SoC tree should take TI-related patch? TI.
+
 
 Best regards,
 Krzysztof
