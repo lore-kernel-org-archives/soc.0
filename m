@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453562D77EA
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:50:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB751B4F2C
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763758256; cv=none; b=QYBcleAa0skeiFYUvw8VRrWR5U81OwKp3U/HlqAFSrMnznFjJzSd4S/H85rrqzXEamwJ1AOmoZ5VCq6i8IaNtnTf6LHmz6SedLT60a7+fvuf93VwO30U3uury3uuCxcMwtO4p+GKFRDxc95bRtZdIdsoKZCHe/5YRT5qw0FqhhM=
+	t=1763758257; cv=none; b=AmckltqOpfguYLONOIiDxnQopE7hG31ovTDw1kBppMOTAEqp2sUblI04EnHAHNNikVOFT+KL6qlb5/Ql6SqTIrPS9nIPDSr7VykFIp49JtqUzSKEjZVtmAWozDKpziDoLbZsKlqSHAJRvwerlP419w/1Mh7Z26Y0XwUuWaYi52E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763758256; c=relaxed/simple;
-	bh=keL1ffxPAQyJidA7OMBI7ZJKeXkc2iI9udC8c4Pv/XA=;
+	s=arc-20240116; t=1763758257; c=relaxed/simple;
+	bh=RvL2zaYmxj2N2koUfgCRy5fk8k8/fgOMskYVmxYngvA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PSI1V40GFSJuaKD6TBppdjqewRFTs31JBp67jXZZcg5uoM5k1Qtlthtv7l6243IZhClZ9SPQ5FRwA5Q8t6Sclf3yTjMLOvlzOw33wFfW3T8FxX/17/jDT8d+khBq/fHlDCnukqckTzlrycM4w5PSbvlRs4bAzI35MF5THs10dsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q4ZHMkEX; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=IbGzEzfByzKm+CCyX++i/LODV3k7k3UHf5ebGAOo+U2fhMlLrLQ3JJcsCSWbIXzN945UGkhria3nsDJk3r91qOuP9LxTiyjJ1oWXL01K9WNSDzJ85r/Kv0pXcqq+I61fxoJMqWh4PEMTbehneyoHZGAiutJKyWdb/zTAiQtvjYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6/+PlPg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q4ZHMkEX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6/+PlPg"
 Received: by smtp.kernel.org (Postfix)
-	id E7DC7C116C6; Fri, 21 Nov 2025 20:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27C1C4CEF1;
-	Fri, 21 Nov 2025 20:50:55 +0000 (UTC)
+	id 794F6C116C6; Fri, 21 Nov 2025 20:50:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C50C4CEF1;
+	Fri, 21 Nov 2025 20:50:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763758255;
-	bh=keL1ffxPAQyJidA7OMBI7ZJKeXkc2iI9udC8c4Pv/XA=;
+	s=k20201202; t=1763758257;
+	bh=RvL2zaYmxj2N2koUfgCRy5fk8k8/fgOMskYVmxYngvA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Q4ZHMkEXpVR4C3galWObaCfAwOUhjikbTE4iU6Ug9HHBiFnDgqzQOWX/DUsuKxpx0
-	 nCoGbnmerz28q1me3BV6xW0q4g8sbVD4RFQO7wqfoGrmsaNr6Fq5zwpLxI+9R2sfsj
-	 RzzVvC0azK1lRqHz3rVXDNkHJsTPdAK20LFmgnR23lx9SpA7aeLJwh+OhJz2ZaKDb1
-	 yyXOVGACU2xJTRpux1uleS5twBhFDu657UtEZ5x1htUj9hemSXg93zHZufirR4SqUW
-	 Xe3xVtAeLtEOMt9D09nQAiRLoQaQk4Cqq0hNRzJJcSP+el4enj7Y0rbo4usPGcuwDv
-	 Innp/EY0rbCMQ==
+	b=T6/+PlPgpTX2NvzPnwi29X7kwgmQf9n4U+Jn8RAWpNEBBsWn/H26Fhve8Gp1An6Ye
+	 zL/yXG+dQ+h1WDPHXCqqE9+32D57bOVERhipsesPpcT9qIOi4c/zxfN/TOaRRfYrTi
+	 hxchZhC6qTVFloQydIDj72E9hYMf+LPZN0KRVZHWEQEERO/UoQg9rgQdU6+5nUlh+c
+	 5J/OPScQVgUa5T62XihCokYKUjBzhf+vDlo+9q+5R3sFZdC1DecHOXSJ8GkIGHURUb
+	 lhdw8bHYxesqDqKlIcMeZFq0E7/U+bO8YVsMRqDskTNRjN17/uCRKnFFlea5cUwD8y
+	 5CBEfdVb9m2LQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADCA43A78A68;
-	Fri, 21 Nov 2025 20:50:21 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BD53A78A68;
+	Fri, 21 Nov 2025 20:50:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,37 +39,35 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] arm64: defconfig: Remove the redundant
- SCHED_MC/SCHED_SMT
+Subject: Re: [GIT PULL] Rockchip defconfig64 changes for 6.18 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176375822024.2580769.6069215055403895488.git-patchwork-notify@kernel.org>
-Date: Fri, 21 Nov 2025 20:50:20 +0000
-References: <20251021075704.527626-1-shijie@os.amperecomputing.com>
-In-Reply-To: <20251021075704.527626-1-shijie@os.amperecomputing.com>
-To: Huang Shijie <shijie@os.amperecomputing.com>
+ <176375822174.2580769.17651379264495241963.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Nov 2025 20:50:21 +0000
+References: <2101096.usQuhbGJ8B@phil>
+In-Reply-To: <2101096.usQuhbGJ8B@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 21 Oct 2025 15:57:04 +0800 you wrote:
-> The patch "7bd291abe2d sched: Unify the SCHED_{SMT,CLUSTER,MC} Kconfig"
-> has enabled the SCHED_MC/SCHED_SMT by default for arm64.
+On Mon, 17 Nov 2025 23:19:30 +0100 you wrote:
+> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 > 
-> So remove the redundant code in defconfig.
+>   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 > 
-> Reviewed-by: Zenghui Yu <yuzenghui@huawei.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.19-rockchip-defconfig64-1
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] arm64: defconfig: Remove the redundant SCHED_MC/SCHED_SMT
-    https://git.kernel.org/soc/soc/c/04392a1e8145
+  - [GIT,PULL] Rockchip defconfig64 changes for 6.18 #1
+    https://git.kernel.org/soc/soc/c/1a263d3a70b9
 
 You are awesome, thank you!
 -- 
