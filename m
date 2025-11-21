@@ -1,103 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580FE33BBAA
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 09:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF89239085
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 14:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763715744; cv=none; b=rEoq385b0nvOWfridR7K/db7j61KzcBeYqtqLpOREoQ6KkRjqLKil6USQt4G2OxyvSNuTP6ee6wRgLdoCLAYzj0ykXlDT1NU7Ibwd1M0YhaHEJu5eHJXa3MFYHzhVqUI7IXBCzfh4LlLe7LCrfRj1bm3iuqBIFbqoXnPGMtMmgI=
+	t=1763735435; cv=none; b=q6JRk2aF4r21TE+hdsJgEN31YtppuJCw+XwCVVLkLJp3gwTLsqsxPl3oA5vlCrrqhJ1LxetLQDG8u4wiXQwof5oVZFV36UtBcixmfO1dPf9jNzDvTi24X/MqUjLn8C1JzgbsqdXz23cqjR2jj6jOvLWGFLHO2dawzQUYm3AKLVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763715744; c=relaxed/simple;
-	bh=VmlepT8gIZCzlgAkrSuubfJzaekK6ugVPr5Z6RUGnL0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
-	 References:In-Reply-To; b=bMN7UMbpW3vyxIakWBt97tNwWMzP23tliqHJKfYj19WtkWrozDspJE5N3J49tUUcRW7LHrb//+IDTczV7NRIvH3CT8iag0UjiYcK1z6K9d7Es+8VCG7Gw5v7l/w/Zlp+ex12PzyAkSnc0rQa2aE612SHcJyESbJFMH0nd5jCjQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZ4bOgBI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763735435; c=relaxed/simple;
+	bh=iY6nxMmyjeOYh6NjhQa6c9dQOXl+wBVun4hbZxdQPcw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=l+XPtiyvznOpgJQcc3boEDaE7KlhKnVnEOxZwAo/Pd3OotmHvMHsXSenBQ5AeIEoVksp723QE58nxhclSGbshOixP794rvDuvC+lDitNE00u+7708mOw4I4gswme3/ThbPp1ZeD7zorna2hulfRsk8viaaNR9e+dl2j04v+TaJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fpk4Q6Lj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZ4bOgBI"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fpk4Q6Lj"
 Received: by smtp.kernel.org (Postfix)
-	id 13189C113D0; Fri, 21 Nov 2025 09:02:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C2BC4CEF1;
-	Fri, 21 Nov 2025 09:02:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763715744;
-	bh=VmlepT8gIZCzlgAkrSuubfJzaekK6ugVPr5Z6RUGnL0=;
-	h=Date:To:Subject:Cc:From:References:In-Reply-To:From;
-	b=jZ4bOgBImnFhGvdlurVDtrpUnwZdstUo4uOAQE63wOTROnH7u/IjFbep8YHWn9lUP
-	 UP9YUjUKmvaV7NiXCF6aixO78Wa1lRiH2m1T2cuOXOhkXRqx++jWruknUZNysHSF+r
-	 07UtSs/Da1sfNbP5RpcvwnlkGa28WTxeZzK+gzBYXb3NJMjIf/zH4af7EMxVcAgUg5
-	 oXuY+S3nx4BUopGz22jwbs64jLkdp9AsNH+hKmZf+D+u8cif95D9czNS6Tv5yQUpNf
-	 9a+5bPUavwJRf7Wy2thC83050zpdrf+t3PfZv8xktRUc3FthTe9HTsTiE9Ey2oR1a1
-	 eWtf++WKxgw+Q==
+	id B29F8C4CEF1; Fri, 21 Nov 2025 14:30:34 +0000 (UTC)
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 780A3C116D0
+	for <soc@kernel.org>; Fri, 21 Nov 2025 14:30:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 780A3C116D0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 55A191A1C60;
+	Fri, 21 Nov 2025 14:30:24 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 2498360719;
+	Fri, 21 Nov 2025 14:30:24 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5FB0C10371423;
+	Fri, 21 Nov 2025 15:30:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1763735423; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=Z+2FHPGQ8KaHgRzQ0SvKKUa0fA+0J0N8zKFskoR7lVE=;
+	b=fpk4Q6LjG5CoMlbRdpEao0czinLXrrOXCQyFuF8KqtwsadIMZyV6DpUzA2Cy5YxuZmBZIH
+	ggVdpdRa1+wEpq2efvNzV1EeqclYrZKvkiAfLkYqM+rg9suw9GHQUZiqmahP6ZN72dYZQM
+	YgsV7YOccdBwSppoNXAnnnV4H9PG019ME/e8JHMhtQu0oJ2fmfD2BKlDiCOyk53zfHIcUL
+	LZYxlAeaeGvFtdQRjVlEQnWRIo8quM8VF0WF3F/ZSpzQK292rGykhJNkDAclsx2S8ntERx
+	h23iYXwqMvi1yD5gSG8HV53O8QpTpDPIYFk+F3I076dj/rQmK4ETjBxHL6Zzew==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Arnd Bergmann <arnd@arndb.de>,  <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v6.19 (#1)
+Date: Fri, 21 Nov 2025 15:30:21 +0100
+Message-ID: <87ikf3a26a.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=391db8165047b94910b5ccebb5ad2599ee27cea92c5ec45c34608959c9dd;
- micalg=pgp-sha384; protocol="application/pgp-signature"
-Date: Fri, 21 Nov 2025 10:02:15 +0100
-Message-Id: <DEE91R7LQ6X5.2TJ5HTFJVC7O@kernel.org>
-To: "Krzysztof Kozlowski" <krzk@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>
-Subject: Re: [PATCH] arm64: defconfig: make TPS6594 support build-in
-Cc: <soc@kernel.org>, <linux-kernel@vger.kernel.org>
-From: "Michael Walle" <mwalle@kernel.org>
-X-Mailer: aerc 0.20.0
-References: <20251120075656.2396371-1-mwalle@kernel.org>
- <0d6e055a-d71b-443f-83c8-6365a88ad9b6@kernel.org>
- <DEE7CKFYFS69.2R2RADO7WNTFS@kernel.org>
- <c55c87ea-01a1-4200-8fed-e629d7d068ec@kernel.org>
-In-Reply-To: <c55c87ea-01a1-4200-8fed-e629d7d068ec@kernel.org>
-
---391db8165047b94910b5ccebb5ad2599ee27cea92c5ec45c34608959c9dd
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri Nov 21, 2025 at 9:10 AM CET, Krzysztof Kozlowski wrote:
-> On 21/11/2025 08:42, Michael Walle wrote:
->> On Thu Nov 20, 2025 at 2:51 PM CET, Krzysztof Kozlowski wrote:
->>> On 20/11/2025 08:55, Michael Walle wrote:
->>>> The Kontron SMARC-sAM67 module needs the TPS6594 regulator driver to
->>>> boot from SD card, i.e. for its root filesystem.
->>>>
->>>> Signed-off-by: Michael Walle <mwalle@kernel.org>
->>>> ---
->>>> Arnd, the PR from TI [1] (which contains the device trees for this
->>>> board) is already out, so I'm sending this to the soc ML directly.=20
->>>> Let me know if this can still be applied, if not, I'll have to wait
->>>> for the next window.
->>>>
->>>
->>> Why it cannot go via TI tree? It should...
->>=20
->> As explained above it can of course, but I've missed the time window
->> as the PR from the TI tree to the soc tree was already sent out.
->
-> This alone would justify for anyone to send directly to soc@ when they
-> miss their upstream maintainer timeframes, so sorry, but that's the way.
+Hi,
 
-Fair point. Sorry for the noise.
+Here is the first pull request for dt64 for mvebu for v6.19.
 
--michael
+Gregory
 
-> Time window in TI can still take it. If they cannot, then for sure soc@
-> cannot, because soc@ takes from TI.
->
-> Best regards,
-> Krzysztof
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
---391db8165047b94910b5ccebb5ad2599ee27cea92c5ec45c34608959c9dd
-Content-Type: application/pgp-signature; name="signature.asc"
+are available in the Git repository at:
 
------BEGIN PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-dt64-6.19-1
 
-iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCaSAqlxIcbXdhbGxlQGtl
-cm5lbC5vcmcACgkQEic87j4CH/hFdgGA54e+abaNcVXcxXx4rvJGQxgtcE/qvqg5
-3zNSi1wMyZ427vLiED2prUkqjUr+N7ohAYDXCK3z25Q7dPnjcxRWk9SieLRBpy5a
-351hpfKi9utNFX5tFAG3616sLjbGuR/HOaE=
-=hkOc
------END PGP SIGNATURE-----
+for you to fetch changes up to f0e6bc0c3ef4b4afb299bd6912586cafd5d864e9:
 
---391db8165047b94910b5ccebb5ad2599ee27cea92c5ec45c34608959c9dd--
+  clk: mvebu: cp110 add CLK_IGNORE_UNUSED to pcie_x10, pcie_x11 & pcie_x4 (=
+2025-11-10 15:19:00 +0100)
+
+----------------------------------------------------------------
+mvebu dt64 for 6.19 (part 1)
+
+pinctrl node names cleanup from Rob on Marvell device tree files
+Proper fix for pci errors on armada cp11x based platforms
+
+----------------------------------------------------------------
+Josua Mayer (2):
+      Revert "arm64: dts: marvell: cn9132-clearfog: fix multi-lane pci x2 a=
+nd x4 ports"
+      clk: mvebu: cp110 add CLK_IGNORE_UNUSED to pcie_x10, pcie_x11 & pcie_=
+x4
+
+Rob Herring (Arm) (1):
+      arm64/arm: dts: marvell: Rename "nand-rb" pinctrl node names
+
+ arch/arm/boot/dts/marvell/armada-38x.dtsi         |  2 +-
+ arch/arm/boot/dts/marvell/armada-xp-98dx3236.dtsi |  2 +-
+ arch/arm64/boot/dts/marvell/armada-70x0.dtsi      |  2 +-
+ arch/arm64/boot/dts/marvell/armada-80x0.dtsi      |  2 +-
+ arch/arm64/boot/dts/marvell/cn9130-db.dtsi        |  2 +-
+ arch/arm64/boot/dts/marvell/cn9132-clearfog.dts   | 16 ++--------------
+ drivers/clk/mvebu/cp110-system-controller.c       | 20 ++++++++++++++++++++
+ 7 files changed, 27 insertions(+), 19 deletions(-)
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
