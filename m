@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B42F2F2603
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C954C19B5A7
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763758250; cv=none; b=J4mlteflAndGfjwLf3NWe8qWDdg0hBuIxtBwo58KSbrAn8zJDF5B2+hg7oW8/z8SCuFmYPd7dOdWQuv12aJ3T9Rgtm0RfvZTjkSnthe2pHpR1zXoNrf1MCe3ygBzvMCcmXxeNrbVY4P8Y5GE0KdO8l7pDB/eqI5reM+7eYYJWOk=
+	t=1763758251; cv=none; b=RPUHfTnid1XwOCV88OAEM87lUTlGidD3xtguzTjXIlj2KuGf67v2nlUv77rIH+ty4XhWHmsO0yGJEJAzJZFtYeGJXRpHWtK46ZmQeov23YPFF1l+9FXUWgcJxXiAA/3e3LSmdzlAq1Vmzc5WYNjTU02Wjwvidsv3kRE+4zprTk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763758250; c=relaxed/simple;
-	bh=Fj+xSjaobos8z3oo6fsPndUr1fyBwiWyrSKlxQGogyo=;
+	s=arc-20240116; t=1763758251; c=relaxed/simple;
+	bh=qRyRIQ89COXOlkjdAXz8RkVMVlZ4Z3nxa+DJ4CS8slA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=T6eTagP+EqRwsGzIFe8ykQluGhukMl2O7+6PVYn7J++L5GmYfroM1bfhCGFzCBcnDLu4hM1Wt1Cwa9slaznOr6apCXowZVlcblJ3SK88wPk1mdRw2BO6S/q9bR0tCs/6U79wmaJTCpB4/MPM4F17tJmQ7pJ0w0jmXIsQ0OMezy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJ5MrxT/; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=EZtR4yVSIzymNK+GQnVrNOUWp19chQ5iNRliej/p77aVF5osTjVZVW9qUOaMt7Au/oqnjlZTgC1yms/2dYtSNE3YrPESCVbyfDVSW4o6w7QQ5VIumLItSCeUlklHvpseGjJ6ktNe8g7Hd43pUJnOnOQ0NCzWj/bO653rorNc0qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxhapqdL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJ5MrxT/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxhapqdL"
 Received: by smtp.kernel.org (Postfix)
-	id 07072C113D0; Fri, 21 Nov 2025 20:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6097C4CEF1;
-	Fri, 21 Nov 2025 20:50:49 +0000 (UTC)
+	id 781DFC116C6; Fri, 21 Nov 2025 20:50:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D234C4CEF1;
+	Fri, 21 Nov 2025 20:50:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763758249;
-	bh=Fj+xSjaobos8z3oo6fsPndUr1fyBwiWyrSKlxQGogyo=;
+	s=k20201202; t=1763758251;
+	bh=qRyRIQ89COXOlkjdAXz8RkVMVlZ4Z3nxa+DJ4CS8slA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WJ5MrxT/E/eZxHNyKxe38TPyWDoiBYblTF2wYXzlOXSra5NS4SLlRNFz5EQmp8CyR
-	 UiUdVt2Kn3RUZg20nsYE6eQC3Rda1UKUbpFT25kxc8DJhjJfepL5Ux8Tc//Y48/IIQ
-	 eR1SKzUb2ZCU6vfM7DqSZc5CfP4fIza7QFDELRr20yVwjv0FDPdXvyVTOQTGfdutNq
-	 AKdGjcmL2AGQzKhHym8NBxqbJNUmtCzKoHNUwAfVx1pzXxtXxW0/rXhSFlabS5cnQw
-	 D0vXfO+lkB8Lya7OYqPcXBx2wAcjhLUVed7KyEW4UGhiC1nLMDL4geD31LJXb3QNLJ
-	 TgUfzGAYVkr3A==
+	b=hxhapqdLDQBUWWH/+kFGexpJ8BV51irxCPJI6BdWysyzN3Aq7rDsTIG7KINMQgOAK
+	 GIVjY7teQDHBU4w0ct0jQBF8tl2Ifm/9pVU5+JO0haQrreapmNO1hOrx8CBdLAqZ7p
+	 A9r2906ccL6O8T3R5qMOu0EHMY7bujh2m2cdB/8t0zUiaYoOxZvrJ4jDywkP6CXEtg
+	 EWjz1LW6uUZp7PG0vV+Uiu71eDBhG1pGDhVqW/rqTUptkENAGljd2IaI29UloJQYld
+	 9foHgJWyYwqs8yrA+mtp/H29MUrPMJYPHHscOStEVvMEUF8Uz0RUOzqqIHdP2u7BhD
+	 ukfmLDj65oodA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD403A78A68;
-	Fri, 21 Nov 2025 20:50:15 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 340FC3A78A68;
+	Fri, 21 Nov 2025 20:50:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/5] i.MX drivers update for 6.19
+Subject: Re: [GIT PULL] soc/defconfig: OMAP updates for v6.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176375821449.2580769.10095811051142389584.git-patchwork-notify@kernel.org>
-Date: Fri, 21 Nov 2025 20:50:14 +0000
-References: <20251117123358.2009662-1-shawnguo2@yeah.net>
-In-Reply-To: <20251117123358.2009662-1-shawnguo2@yeah.net>
-To: Shawn Guo <shawnguo2@yeah.net>
+ <176375821574.2580769.18084783654364233715.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Nov 2025 20:50:15 +0000
+References: <7hv7j8k1og.fsf@baylibre.com>
+In-Reply-To: <7hv7j8k1og.fsf@baylibre.com>
+To: Kevin Hilman <khilman@baylibre.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,28 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 17 Nov 2025 20:33:47 +0800 you wrote:
-> From: Shawn Guo <shawnguo@kernel.org>
-> 
+On Mon, 17 Nov 2025 09:29:35 -0800 you wrote:
 > The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 > 
 >   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 > 
 > are available in the Git repository at:
 > 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.19/defconfig-signed
+> 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/5] i.MX drivers update for 6.19
-    (no matching commit)
-  - [GIT,PULL,2/5] i.MX dt-bindings update for 6.19
-    (no matching commit)
-  - [GIT,PULL,3/5] i.MX ARM device tree changes for 6.19
-    (no matching commit)
-  - [GIT,PULL,4/5] i.MX arm64 device tree changes for 6.19
-    (no matching commit)
-  - [GIT,PULL,5/5] i.MX defconfig changes for 6.19
-    https://git.kernel.org/soc/soc/c/68bdc95066ea
+  - [GIT,PULL] soc/defconfig: OMAP updates for v6.19
+    https://git.kernel.org/soc/soc/c/f65372ea2f34
 
 You are awesome, thank you!
 -- 
