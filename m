@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C5A2EB86C
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 21:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B1A270557
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 21:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763758953; cv=none; b=J5IZuPIaiR++Y/NqN+PqyLhQtS1sqLbgPsjj3PtBi8WnyTr7nfBNB5BBJPY6hKkI/Fp+4WsB/g9a6ezQwtadxqlMtWSmeTAAu+uo6kX+gldo5YNVtCspT2kV1MnZslzE8vaWI7d7UyUgpvh/Yn7h7MnLftXwOPP5+GaIMWZ0RH8=
+	t=1763758954; cv=none; b=DRt+n79fNo1MrvF7bfNPslp7TtujqEu0eP1jdMaRvc+E3/VvVTeQEIVG3CThWjNzyou3b1EcZyV92xl+nwEtpO/f1CWE66p6VnJ12s/vlj19kq297lbnc20vX5r9+OGMAXhr3iAPNLoS5ssHAQys5jDFVYTP7M2a8nVuwqVFvss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763758953; c=relaxed/simple;
-	bh=o7geRVW2T0ibNyKgtm2iGlFVXswzyoQYH9WE6fEJbFc=;
+	s=arc-20240116; t=1763758954; c=relaxed/simple;
+	bh=ZMCEZ9s03tipZRUhiO/sK9qV1ZjV8WYXK5iYculh4Bs=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=s+1029bknubSwxIYxn718pPVqeh9p/iWCrqA5nrSeDeW+9LKc0v+bSNtC8ulWyA2jzSRIs/iGcCkC/VIQqopKDRSCnjKMd3y+HxEoElA7BdZvdVta+/xlQZP6VphnMu/bLX/5Jhvu/Tp/WpqA6DzW8I2gT6YTWlY0Id5YRpZGpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nIbtqeWq; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=U+yKqpRH0XnQIQmQpLPpaPtWfgv+Tu6OBSdtGUGhrypRJqnG7wlOmuo1tZH4K31ElgQ5qoa+fRS473N0Jz7mJtgRUGvRB3u0a4yZ5UtPTjbFL4zZ+wnBUPR7MUq1bwtZhyRsNVtvxuw9MIXO7Xu94LljYMYVJPhv/ChY4Qf5qJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FaBJ4ADb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nIbtqeWq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FaBJ4ADb"
 Received: by smtp.kernel.org (Postfix)
-	id EBC3DC113D0; Fri, 21 Nov 2025 21:02:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C46C4CEF1;
-	Fri, 21 Nov 2025 21:02:32 +0000 (UTC)
+	id 1E1DEC116C6; Fri, 21 Nov 2025 21:02:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0844FC4CEF1;
+	Fri, 21 Nov 2025 21:02:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763758952;
-	bh=o7geRVW2T0ibNyKgtm2iGlFVXswzyoQYH9WE6fEJbFc=;
+	s=k20201202; t=1763758954;
+	bh=ZMCEZ9s03tipZRUhiO/sK9qV1ZjV8WYXK5iYculh4Bs=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=nIbtqeWqPl/TluK3hcFlyFq7ZyEDMxJTo26f05w7lShEWvZ19CYr2Z7IGXe5g9+ae
-	 WUAzuo8SrWygumMeqUDrSPUhPF03v0A+5Z/qbydmezgPs0usELZybjVVDibKys+UD4
-	 GfKZ8FzFhFFo5H/bpxegowv7TRryx/9u3D2HzHOSxzXWUndZwQ518Qr2WYiGWxx9Wh
-	 aa1Q1yc6EajKT4fVCv7eu7iq6bjd3Y+5EpqzlY6p4x4xYbXz1oYxHVgL1E77imcHw6
-	 cSsrTVbdgWSNClpXr16cKqB9C6rKnoboMo8w9LSEu4s1BEOTbbp/Xi09cESPjOekP9
-	 58aiKY+QKmeqg==
+	b=FaBJ4ADbV5dcLUxJwxYTMyUzpHvX3FJ/BcFrBohizKSCrgKGWCQd59ctN17wsDu9V
+	 M4NLhJRe+P0emoeM5r173JFeI1QqDmj5kQxdSRzATEFl3Jn5y4rr07CusgRCm1FSU8
+	 63Vg3TGx5EMuNPruu1vOTpAspSa5glJR1CUbaOAKKChP+j8qkP8B77EP0vxTbYm2SW
+	 0PQFClSXiSFuCdgwj9vsRV1jzYK4pgJ0KpDFuppNUjv9ubKlh0qI6OO84T6QXMfG6r
+	 9Xl3F//o/1XoqcHuYMocqzH8E6eQONGfVa46mi43ImfgO1d6B7iBCgAW8NtMqDMkYa
+	 0vXaKwPT3j4EQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE703A78A69;
-	Fri, 21 Nov 2025 21:01:58 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id CF05A3A78A69;
+	Fri, 21 Nov 2025 21:01:59 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,43 +39,36 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT,PULL,1/5] MediaTek ARM32 mach updates for v6.19
+Subject: Re: [PATCH] ARM: versatile: Fix typo in versatile.c
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176375891749.2583629.16226842647526169419.git-patchwork-notify@kernel.org>
-Date: Fri, 21 Nov 2025 21:01:57 +0000
-References: <20251111095542.13958-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20251111095542.13958-1-angelogioacchino.delregno@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+ <176375891874.2583629.2591089279636126254.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Nov 2025 21:01:58 +0000
+References: <20251023223258.3181274-1-linus.walleij@linaro.org>
+In-Reply-To: <20251023223258.3181274-1-linus.walleij@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 11 Nov 2025 10:55:36 +0100 you wrote:
-> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+On Fri, 24 Oct 2025 00:32:58 +0200 you wrote:
+> From: Shivam Chaudhary <cvam0000@gmail.com>
 > 
->   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+> Corrected minor typo in versatile.c
+> - Fixed "documentaton" to "documentation"
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-arm32-for-v6.19
+> Signed-off-by: Shivam Chaudhary <cvam0000@gmail.com>
+> Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/5] MediaTek ARM32 mach updates for v6.19
-    https://git.kernel.org/soc/soc/c/9572838be3f5
-  - [GIT,PULL,2/5] MediaTek ARM32 DTS updates for v6.19
-    (no matching commit)
-  - [GIT,PULL,3/5] MediaTek ARM64 DTS updates for v6.19
-    (no matching commit)
-  - [GIT,PULL,4/5] MediaTek driver updates for v6.19
-    (no matching commit)
-  - [GIT,PULL,5/5] MediaTek defconfig updates for v6.19
-    (no matching commit)
+  - ARM: versatile: Fix typo in versatile.c
+    https://git.kernel.org/soc/soc/c/00465358f422
 
 You are awesome, thank you!
 -- 
