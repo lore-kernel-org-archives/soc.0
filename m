@@ -1,251 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46E62D5C86
-	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 16:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763743012; cv=fail; b=dV7tZkcNW1vibvMRk07ghgg/l9/yw+QYTmxBNeNljWHN3yI5e9QgXOtpySMT2ID5NDIJPNHZ+HhEduLG0t+IuS4Q76NDPRx3IVKv6V+J18MqAyJgaURY7QdWEhOxQObqy6LuzangvfPzXyoIC0N9cKcU47OZfqyp0F2mskhUg3w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763743012; c=relaxed/simple;
-	bh=t5XN9G4aS4aBiBu9ccT0tg3wfq+L5GIAmmeK1o4804w=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=TfPIXwK6U9e08iGHbVs1NXHEWxzI86/p2BXqcuXpy5/SlA6L6Sm/6lU03aKQkiZUfqKCcBb+Z9RMWjlZ9WXJuS8jeHKA1xKxb6kh1a7a1yjrNYCkdgSoDxmtq57I55pv8tQNt9uRjN6uhfKZVk39cz6KvdnqaEtcV++Si5ogabI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=LvsZ+RH5; arc=fail smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62CE27703E
+	for <soc@lists.linux.dev>; Fri, 21 Nov 2025 20:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763756532; cv=none; b=qxBJQdysrkOKDwLYjCeYfTN7dBbO5hhjdIKQW+eRQuz1FycUGxdLmsN955cqxEZFhRlcbjlOTk3XmPOe4985ROqg3Sbvo6eZOF1ki/+LeiDnTAjHfS0zZelrWDFajVcIeWZJwuQECBdvtz9Af4rRyedC1tPaehP3Oc0p7yBZihQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763756532; c=relaxed/simple;
+	bh=y2dqdjDzhKyrcECPw8MU3PqH7MWqDZEExN50n7RbsRk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hD7W1I/3rY534p5ZpuyarKjzFBIJxxFeHJDUOfngIVbqcxk1YGAPjAX8wNeOac+VcOuGKndJDhdOSQbAubFIllbzM3uu4vaddCiiPnNr8crcL7dt2IpdTaWYoZaOZ5dw1Qi4dp1ENgGAaAYvd/CspXoAESHDhOLcpmqLt3ResCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J924LVgW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="LvsZ+RH5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J924LVgW"
 Received: by smtp.kernel.org (Postfix)
-	id D73C3C116C6; Fri, 21 Nov 2025 16:36:51 +0000 (UTC)
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011066.outbound.protection.outlook.com [52.101.62.66])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D91A0C4CEF1;
-	Fri, 21 Nov 2025 16:36:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D91A0C4CEF1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IzZlp0PoVe0RIrS5kIJe7GNZvmS+GAurXCjVG8VbQ8LPgj1SldfCXVlzYlJGqSmWKD3VUmXJ0L4w36TF56rIqU3i22nqQusd0+Bpp7aS6lZ7W88oznyryb/Fc9Nx2VLO1s+rbbW56kWSQ/5HIiSjeJwISez1l9vrkssMAUzwWuVPg0A+aZlF1nHrRzHJJClo+c8M9Qknx2LSu8QQ0pfGAO5BBqCjuizfGsl9UILueT6XNE62KR3vi+WzPJUzuKQTgFTJP7XqFH9DCEa6NWEJVCGzOnMmjHDCPywxHnX1xcEmeMOoq8msOvVOeJxqYrYS0VqgZbeHfVWTJIK9NuCpJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aH7BfUwaqoK7Hs2FnS70yiRz4vKWLlib8H+Qwa07EdU=;
- b=DJhZNWAGQ0DcBOrJLmZRPsV4DGnCGNB7lJU07WYWc/2/nfD45yWMpzGEREo+G+e2/4NnaKG2NQnnk8+NG7KLu2U9NQwd0ujeGsRZcFFDcUBTKEKCy24x+Gj3t+mgxTlgniH5qvQ/riSL6wVbDF5a2cWSf6aPtWWY3bJBEi0FK42WmDKkGaPyooAkC/UWT0AgD/EqJUuRsOkVhc9d64eAWv8u6TLwJyBEGcmjpjm2Z/3HjNF1D0K3jNw6UuN44iL63+1dZkiZcJzUdOSz1OaSXDAVnDTHBvEWYxyaTNJogpmeDs2ORh6FSsifYJgqp1nuJoANqeEG2Xrox8Xktqz7eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.195) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aH7BfUwaqoK7Hs2FnS70yiRz4vKWLlib8H+Qwa07EdU=;
- b=LvsZ+RH5J+bUKSKPClqWWje+WHOaAsRO6OZRkrXgmunwPI/jrDEehdLKrrrYeV3oD4w1m++OuxKWl/kJLr6IbwdXgVS4psDA+YLzlOj+1XfJhcwfT2Fi9x2hpMSlsnoaosUNcOM5oqyDp7vM1YAteI1ID1SA0e8ittoeP1FPTU0=
-Received: from SJ0PR13CA0082.namprd13.prod.outlook.com (2603:10b6:a03:2c4::27)
- by CYYPR10MB7567.namprd10.prod.outlook.com (2603:10b6:930:be::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.11; Fri, 21 Nov
- 2025 16:36:45 +0000
-Received: from SJ5PEPF000001F2.namprd05.prod.outlook.com
- (2603:10b6:a03:2c4:cafe::6c) by SJ0PR13CA0082.outlook.office365.com
- (2603:10b6:a03:2c4::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.4 via Frontend Transport; Fri,
- 21 Nov 2025 16:36:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
-Received: from lewvzet201.ext.ti.com (198.47.23.195) by
- SJ5PEPF000001F2.mail.protection.outlook.com (10.167.242.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9343.9 via Frontend Transport; Fri, 21 Nov 2025 16:36:44 +0000
-Received: from DLEE210.ent.ti.com (157.170.170.112) by lewvzet201.ext.ti.com
- (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 21 Nov
- 2025 10:36:40 -0600
-Received: from DLEE210.ent.ti.com (157.170.170.112) by DLEE210.ent.ti.com
- (157.170.170.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 21 Nov
- 2025 10:36:40 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE210.ent.ti.com
- (157.170.170.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Fri, 21 Nov 2025 10:36:40 -0600
-Received: from [172.24.233.103] (uda0132425.dhcp.ti.com [172.24.233.103])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ALGabWe1530610;
-	Fri, 21 Nov 2025 10:36:38 -0600
-Message-ID: <7ad1ef51-e56f-44b2-acbf-70bc1f43dce9@ti.com>
-Date: Fri, 21 Nov 2025 22:06:36 +0530
+	id 77D7CC113D0; Fri, 21 Nov 2025 20:22:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FFAC4CEF1;
+	Fri, 21 Nov 2025 20:22:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763756532;
+	bh=y2dqdjDzhKyrcECPw8MU3PqH7MWqDZEExN50n7RbsRk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=J924LVgWC94BIUmhhe/p/BJnhdHd0JXnDOgV116JMeyNmMla4URHR8+wq/2dvpp5U
+	 Aw4q45NdmNUOec+erCS0JB9Z0n1Yvxoh2IsCZeucRnppgJ/Yfi0a8lQJ0bMpCo4U/M
+	 5DyUBs18rTT5qlsQZG/oTyLPzJWGLyF3AN5fhedai1LMtf4pr6dP4g75pJaClrbiSP
+	 FSyFI5zd/M/DcPIQMUOlYJ1vYnHB00/1TLIKsd4NF51UY5Me0+PBaU+ccxzLxJhw41
+	 7LTQosp7zldGF3hT/RWwv/qVEwYOyNGAblqKp01UwzLAGT0Bzx7ggmhTb+Mz+95n3X
+	 xROygD0QmC93g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B4E3A78A68;
+	Fri, 21 Nov 2025 20:21:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [GIT PULL] arm64: dts: ti: K3 updates for v6.19 part2
-From: Vignesh Raghavendra <vigneshr@ti.com>
-To: arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
-CC: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, <soc@lists.linux.dev>
-References: <a07364c1-5a4c-474f-be21-96f38bfe9130@ti.com>
-Content-Language: en-US
-In-Reply-To: <a07364c1-5a4c-474f-be21-96f38bfe9130@ti.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature";
-	boundary="------------waDou8rfZD4gI7w0vN4bo0ys"
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F2:EE_|CYYPR10MB7567:EE_
-X-MS-Office365-Filtering-Correlation-Id: d4582fe7-1450-42d0-3099-08de291c285e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|1800799024|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?QklwT25SRXhlVGp0TDBFdUhQVnB3bDRZM1ZoQXViWE5VK05Ddy9kRkdwOWlu?=
- =?utf-8?B?RzhsMG4yT2tWb1E3bTBtTUs5VUpuYjZkKzNxTkxCMjZSeWZ4dm9QRDZTTCs0?=
- =?utf-8?B?VUp6bUUrck5BVkFNTFdVc2xMT0c5dDRXOVpXTmJUT2kzMUZxRmRDVlBtNnpM?=
- =?utf-8?B?OUVBZERaOHIvZEFtMXZzWStqbkJnMWlNeHNVazloeXFLblEySVVwWjlpa2NS?=
- =?utf-8?B?VE5iaENXREFUSEk0cTF0QWNKeEM2K3phOFhBRTl3LzU2Y0dUSmwraExuMUlz?=
- =?utf-8?B?dzliUnNUdEtXVk5wemVqanY3dDRPYkZ1STVucTFXWEN4bG9XL0RuK0hJc3NR?=
- =?utf-8?B?dmZzWGw5THVPeXB6M0lyVEllNmE0OVJiMDFRcnBndjZCcVA3UHBGenRYVnhV?=
- =?utf-8?B?aHgzMklyNUVOcWF6SjFQUTlwWFVxMllkcnQ1ejA2WUEyK3gvWVlYSXBFNGRx?=
- =?utf-8?B?VHRycU9oV2tteEhBQlBNRGowNCttVUJQTTV2TzRwVTlyRkxRdlNZZW0xTDla?=
- =?utf-8?B?RFNENC84NWFHL296VXRiWmg5RHpuaVNkZHBmRkZUN21hdXhTcHZRSGZhT0s5?=
- =?utf-8?B?WGo1RFF0d2N4a2lLbVp2Y2tRMGkyb1BGMlNhNEFmUFAzZTB5YWVoeGhOU2w2?=
- =?utf-8?B?aTNsQlNFR3lXQlpDc05rNnZVdGV1MFdua2ZIZkVvWTFUSGFGV1pGaUk5bkk0?=
- =?utf-8?B?WGVuVGFoTWEzcnRrcFlkMFA1b002K3lReHY3S1VkczRuMDA5ck5zcS9xQzZT?=
- =?utf-8?B?UkFxSTl5dTdhNnpGalBZc1R2elk3Si9xdFAyVkppU2NRRXR3VjJ3Uld1UmtH?=
- =?utf-8?B?YjVDYmxYd215cFJ0aWF3emM4b1RTWUI1Q0k3Ymk5cHRNL2VKcitYUW1vc1dx?=
- =?utf-8?B?cGpiaityVXRPMkt5OWFMYjJGYTV5RU1DekQzdkR0TElDaUNySE5BMDlQZ1NT?=
- =?utf-8?B?NTFoclFFWTlPUFpSUmxwWjN4eWVDMW5IWWptcFk1YlV2eGllMU1EWmFtSllz?=
- =?utf-8?B?SFU1R1VSZkVVYm5RUWMwaWNwaWpENzNBNUdRQlVmK21yNWVpWnBuRmUzaHZD?=
- =?utf-8?B?Y3owbFFJbzArbExoMDRGbGtDTWpsOTI0T3NiVjBOVXRaM3pGQ3NxOTdnZTRH?=
- =?utf-8?B?VmRyTEczNDFUdVJWc1FvMDhna0ZOellPbXFmNnJKZWhJOW0xUnRBY0loNlhC?=
- =?utf-8?B?V3M5M3VPeFVLT2tSSDFndURqSFA4aitCSVpwdGNpY1VxM2lTdDRVbUFHTHJr?=
- =?utf-8?B?YjJMWUh5UzZ3YUVtVW9DRXI1dXEzVEJKeXZMbytOcnhTOFVrTU9rUWdJbVBj?=
- =?utf-8?B?WVhxdzVxOW9iTERNRlVmR2hWVEcyOWJxSENSdE4zUlZaaXRRVExsajZzM1dv?=
- =?utf-8?B?eWUvK0U3dkp1Si9FVkM2Vkx1M3ZnSHJqOGFCN2tob2MxRldYZThsOFR0bXdp?=
- =?utf-8?B?bE9pc0JxUnZ3NTZrbVgrUXpMSHdrTEwrVjljcmxXYy9xME9hWDRWOXUrOVZH?=
- =?utf-8?B?OFZjVUY2bFQ5QTZRTFgyUTJubkJWVGRZcWdjVituMFFFMFdnYVJReFR6Vzl4?=
- =?utf-8?B?bzB6U2RDejIwOGJIUkI4ZEQxZG5YTG1BclUvUkhNdWNHODcza0plaGdkN0Vj?=
- =?utf-8?B?dTZqWmdNUzR6akVjSFFLa3ZvM1hxY2hxUy9ua2pKUC9hRm5NbUcyeTVtcDQ5?=
- =?utf-8?B?QzVtMlFLUGFYcHNzYmxqR001U1UyV3NpcmlEeXJKVk5jL0xvUXY3dFk3OVhW?=
- =?utf-8?B?eWZYeDhWT0ticXpKTnB6UDFYTTlPeXZwQWNSYUU5S285NHFaWk82QnNJQ1hi?=
- =?utf-8?B?VUFqVWEzSkRGMmc0SXdidlZPeG05aDBPbjFaTjl5OHpER0EyQXJDbThzem95?=
- =?utf-8?B?Rmk0UEg4bWxXNmlPemJzWWpwMDhwVU9VL3NjQ21NdTA1eGJyV3FDMUF6UmVr?=
- =?utf-8?B?R3Fkc0FsNFhteUpTNUZ2enBkSjRHUWloaE93ckxHTGtSMXJGOE9sRXliN0V0?=
- =?utf-8?B?U3NRKzBGRHBrZGZwOFg4U3dWdU5EMFoyak00MmlZMGEwMDNvMHg4LzFnc1pF?=
- =?utf-8?B?c3pydEE3VHlDeTNKd2dyQmx0UXl0SWVlNVMwNm9SUWVzK3VLTis0WDNtOVQw?=
- =?utf-8?Q?x9IU=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2025 16:36:44.5467
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4582fe7-1450-42d0-3099-08de291c285e
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001F2.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR10MB7567
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v6.19
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <176375649700.2571237.9344421368896513686.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Nov 2025 20:21:37 +0000
+References: <20251117205824.3178198-1-andersson@kernel.org>
+In-Reply-To: <20251117205824.3178198-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: soc@kernel.org
 
---------------waDou8rfZD4gI7w0vN4bo0ys
-Content-Type: multipart/mixed; boundary="------------aVcXyVBIK9DUmlEOSOI7WS0D";
- protected-headers="v1"
-From: Vignesh Raghavendra <vigneshr@ti.com>
-To: arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
-Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, soc@lists.linux.dev
-Message-ID: <7ad1ef51-e56f-44b2-acbf-70bc1f43dce9@ti.com>
-Subject: [GIT PULL] arm64: dts: ti: K3 updates for v6.19 part2
-References: <a07364c1-5a4c-474f-be21-96f38bfe9130@ti.com>
-In-Reply-To: <a07364c1-5a4c-474f-be21-96f38bfe9130@ti.com>
+Hello:
 
---------------aVcXyVBIK9DUmlEOSOI7WS0D
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Hi
+On Mon, 17 Nov 2025 14:58:23 -0600 you wrote:
+> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+> 
+>   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-6.19
+> 
+> [...]
 
-This follow on PR for TI K3 DT updates contains few late fixes mostly aro=
-und unapplied overlays
-which now lead to build time warnings and couple of non urgent fixes.
+Here is the summary with links:
+  - [GIT,PULL] Qualcomm Arm32 DeviceTree updates for v6.19
+    https://git.kernel.org/soc/soc/c/c02dce25bc66
 
-The following changes since commit 00fb4c73b67d36783c5ab95a830f0cf0142b9f=
-c3:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  arm64: dts: ti: k3-am62l: add initial reference board file (2025-11-13 =
-22:01:07 +0530)
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
--dt-for-v6.19-part2
-
-for you to fetch changes up to 56baa9190988f35d53b1479a87c1bf44f6c979c6:
-
-  arm64: dts: ti: k3-am62l: Fix unit address of cbass_wakeup (2025-11-21 =
-09:25:42 +0530)
-
-----------------------------------------------------------------
-TI K3 device tree updates for v6.19 part2
-
-Late fixes and cleanups:
-* Fix build warnings for unapplied overlays for PHYTEC, SA67 and certain =
-TI EVM
-* Fix pinmux of SD regulator control line on J721e SK
-* Correct unit address of cbass_wakeup node for AM62L
-
-----------------------------------------------------------------
-Michael Walle (1):
-      arm64: dts: ti: sa67: add build time dtb for overlays
-
-Rob Herring (Arm) (1):
-      arm64: dts: ti: Add missing applied DT overlay targets
-
-Siddharth Vadapalli (1):
-      arm64: dts: ti: k3-j721e-sk: Fix pinmux for pin Y1 used by power re=
-gulator
-
-Vignesh Raghavendra (1):
-      arm64: dts: ti: k3-am62l: Fix unit address of cbass_wakeup
-
-Wadim Egorov (1):
-      arm64: dts: ti: Enable build testing of PHYTEC board overlays
-
- arch/arm64/boot/dts/ti/Makefile        | 34 ++++++++++
- arch/arm64/boot/dts/ti/k3-am62l.dtsi   |  2 +-
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 12 ++--
- 3 files changed, 41 insertions(+), 7 deletions(-)
-
---=20
-Regards
-Vignesh
-https://ti.com/opensource
-
---------------aVcXyVBIK9DUmlEOSOI7WS0D--
-
---------------waDou8rfZD4gI7w0vN4bo0ys
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wnsEABYIACMWIQRQBrqaOmQ441h4YbUDQj8NV+8d1wUCaSCVFQUDAAAAAAAKCRADQj8NV+8d11Jt
-AQC8Tnp+HA2MlKlk+0v6ja5oQC35F37MFYAztEvqIl4JDAD+OYYkqAbTtUipGzZuWsAp2VUYppp7
-kaCkgu2+Y+iN3g0=
-=ptuh
------END PGP SIGNATURE-----
-
---------------waDou8rfZD4gI7w0vN4bo0ys--
