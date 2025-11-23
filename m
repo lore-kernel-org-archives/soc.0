@@ -1,109 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61E1221265;
-	Sat, 22 Nov 2025 14:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCED81F4CBB
+	for <soc@lists.linux.dev>; Sun, 23 Nov 2025 22:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763822063; cv=none; b=DvVwf5efJ/8DXtVgROmcAxC1jBda7/vuwANytblGBpxRmSCHExh2oldMvvW1fDnHnE4cd//R6YgP+Yl2P4WQkKGzPRO1lKMVXwl/z7BqcVSnd27VJQ7zwBdyI0mA4mUD7gZIPOzEMl2Y85lKiXxevQKv8mrh1Yk8Bj9dLXJig/E=
+	t=1763936848; cv=none; b=jdY8qyMhwntQen4u7AZSbAHcZ7INTllxVN49UotZ4dAZ8QHRLiJ1Bdk2GW29KP9lpEJ0ZuOiGU8oWN9r7l+agFolK0HdlbeFJeGc1xKTbq9GlDlkax6M077m/9JsAnVDWhZqjkwBLloBkmDizxzJrHq+y1glWJIngF6ijzRW4oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763822063; c=relaxed/simple;
-	bh=T+6mWQVCFsla9EUgNqlT9JSbzGiGlClNcL+IwLTmnJQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dMlgbfQm4JS1WVwMt5C+dIvD4zk/F7Dg6fTC/ZpymOM5hNkVjrCZN013/Wew/TLpN1TNljIFCGgr/zXdYsJzaGyrIavDwGtSg3R4WPthlR2elbfQrOQLK5eTy9B5rlVnrABU0TlPq+eOO/fDnTcWEzY7MMg1Ivkub7l02vMZHFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsiZQLWS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763936848; c=relaxed/simple;
+	bh=quDPOJ1bxIEUTCsg+6JgowNESYD93x73iDlGuTIuswM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GXC1jZPunAcoLJBRYj6X6oUxiqJIJ/rj02ETs9BfLPQJsW6u8Fq+H43yTxsSmxaGxqlqsPQDA0tg/gnpUGGHUfuWsXwy6b8AOJ3h+KWJixk/Ppqput3IlcamDOlrhagcndJLwR6ndkWGNQI3p5SDxgIJ2QxFupLM7r8Co+7pSPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=eZctvz/A; arc=none smtp.client-ip=46.255.230.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsiZQLWS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A93C4CEF5;
-	Sat, 22 Nov 2025 14:34:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763822062;
-	bh=T+6mWQVCFsla9EUgNqlT9JSbzGiGlClNcL+IwLTmnJQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=bsiZQLWSG7BjnQYJcpG/lzJozWeDi5cVSkEtfkqkn3l32EizemIyGRuWdWII9Tzg3
-	 k33OcK4bdD1IFn9P0Qb6nqj0v1kMD7thoi+SIer8jqfPaIKsqj7FO6WKb7/y/Uv0L2
-	 uWYRke1xA+VrVM82ptgvQ2lcOXboD8u4YCeuiJWXJdgpyJtf8bnHn5TROjyiCC1VQz
-	 mU9k6seQd/vSeaswAqMEh/vFF35kdf3d+/TXzhNxPUynv4je635YWsPDKELPVFAZY+
-	 hL/pNVRFdgNCBV/hndN1yAiHKbOMWCuKAutCuNJGJmIeX8E2ifLjQahHD863RKYto5
-	 mhrNbllqOQn7g==
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Aaron Kling <webgeek1234@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>
-Subject: [GIT PULL] memory: drivers for v6.19 - replacement pull (v2)
-Date: Sat, 22 Nov 2025 15:34:08 +0100
-Message-ID: <20251122143409.68115-2-krzk@kernel.org>
-X-Mailer: git-send-email 2.48.1
+	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="eZctvz/A"
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+	id 953B51C00AB; Sun, 23 Nov 2025 23:27:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+	t=1763936843;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5xAznBhU7b6p8zrOxLbtkgNtB3cV8Rju+4Nj3dJJodo=;
+	b=eZctvz/AuXpRgwETlv1Z76brt46sfWxyZhJzJJYhqbkkreqWfOEmZbhoFcyVgHOka59Cq9
+	khR5WEhVnzLBx/wPiaxlkz9oI2vkUApME9IEhexQqCfe8IFDTerizsPYYCji2GnTplKXqw
+	XrwAHnIJkkD0x55zUhov5YKJb4YpzDQ=
+Date: Sun, 23 Nov 2025 23:27:23 +0100
+From: Pavel Machek <pavel@ucw.cz>
+To: Douglas Anderson <dianders@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	linux-samsung-soc@vger.kernel.org, Roy Luo <royluo@google.com>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	Julius Werner <jwerner@chromium.org>,
+	William McVicker <willmcvicker@google.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Drew Fustini <fustini@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, soc@lists.linux.dev
+Subject: Re: [PATCH 0/4] arm64: google: Introduce frankel, blazer, and
+ mustang boards
+Message-ID: <aSOKS35/huSWd/RW@duo.ucw.cz>
+References: <20251111192422.4180216-1-dianders@chromium.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2616; i=krzk@kernel.org; h=from:subject; bh=T+6mWQVCFsla9EUgNqlT9JSbzGiGlClNcL+IwLTmnJQ=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpIcnhy40yDKg+V3FjazX3U/w5YaYWspTAl8H/W GgiI6ae3uGJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaSHJ4QAKCRDBN2bmhouD 18uuD/9vnbiUaQ2I+CWmOToSCcHGVxi/FGFxj6HPAMYTolBuJ1juiFvViMwNoixuRK5LoH6TFfu vQgGNeoxiEtWjqw8+d/mKTj8xLA6P1mjsr5b2l3zZO+mgrDvc+DKQlybSC7SGRODigkc+MJVCm3 QJdauI6N8R14AGDzTySo8UOiQRpf3KZmOnSvNahVLSDGN8D1L19cd2pFtqZ/IcqzkJEeA0T0iBl eJW3cs5ZTcJzQvBvZbVBIDcXksJInTM34ODbYdTRMjs2iN/xS+4b6HerbvCK75HA0cI7PRTZWYB xNaLG5sDp9pLnpPxnWXb+dySiT5Iwikb/CDnAodh1PJKOuPw9KhW5O7iMuJJtBm+yHS4bjaKyEG y80Y/ZdCR9oIeOAvv2FPOppRNEq98bGygGvIrREJJEq/MBOvU1ShUKn9PYOivvj7Dzpqon4FFAO /dxJij3y3XuparGZQsZmY4vvYdNuEirohoSZ6Iy2nQ1VlujHV2HdvXi5aL8RJ6WRM5R+o3k273o PnEUHmkjU91dyzYb7YIj2GlXBi1wf8d1roENpZ5p+x5qdbIk0wpx7hyueXGD/4U07dzJeCbdN+0 6aXLnzhzsRIGj8q8K9Yjz8qYr2TOOHgKHTs/nL1YHHavAGyNCCooObpRq8z3CGEy6zvz5A4UlBK dDlrCaSluMRWD2g==
-X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="YeGGzS8kR2qSk1N0"
+Content-Disposition: inline
+In-Reply-To: <20251111192422.4180216-1-dianders@chromium.org>
 
-Hi,
 
-This replaces previous pull request:
-https://lore.kernel.org/r/20251110173624.3127-2-krzk@kernel.org
+--YeGGzS8kR2qSk1N0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-by dropping Tegra ICC changes, because Jon [2] reported regressions and we
-could not solve them within reasonable time.
+Hi!
 
-[2] https://lore.kernel.org/r/82c8dda8-6fcb-48f9-bdaa-f3d1431e41ae@nvidia.com/
+> This series adds barebones device trees for Pixel 10 (frankel), Pixel
+> 10 Pro (blazer), and Pixel 10 Pro XL (mustang). With a yet-unreleased
+> bootloader these can boot to a UART command prompt from an initramfs.
+
+Well, booting to full system with working cameras would be nicer, but
+this is good start. Do you plan / do you have resources for full
+support in some reasonable timeframe?=20
+
+Please cc phone-devel@vger with phone related patches.
+
+And... thanks! :-).
 
 Best regards,
-Krzysztof
+								Pavel
+--=20
+I don't work for Nazis and criminals, and neither should you.
+Boycott Putin, Trump, Netanyahu and Musk!
 
+--YeGGzS8kR2qSk1N0
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+-----BEGIN PGP SIGNATURE-----
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCaSOKSwAKCRAw5/Bqldv6
+8sPoAJ9cO3b8E0fHRQKhJnNaeZSI9nez0QCcDEiBnY8VsCk6Oi+ran/TdVPmbIw=
+=DqOt
+-----END PGP SIGNATURE-----
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.19-2
-
-for you to fetch changes up to 1463299a227d02b40c842a5d91d989cb26da5bbb:
-
-  memory: tegra186-emc: Fix missing put_bpmp (2025-11-22 13:41:24 +0100)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.19
-
-1. Tegra drivers: Several cleanups (dev_err_probe(), error messages).
-2. Renesas RPC IF: Add system suspend support.
-
-----------------------------------------------------------------
-Biju Das (1):
-      memory: renesas-rpc-if: Add suspend/resume support
-
-Jon Hunter (1):
-      memory: tegra186-emc: Fix missing put_bpmp
-
-Krzysztof Kozlowski (13):
-      memory: tegra124-emc: Simplify return of emc_init()
-      memory: tegra124-emc: Do not print error on icc_node_create() failure
-      memory: tegra186-emc: Do not print error on icc_node_create() failure
-      memory: tegra20-emc: Do not print error on icc_node_create() failure
-      memory: tegra30-emc: Do not print error on icc_node_create() failure
-      memory: tegra30-emc: Simplify and handle deferred probe with dev_err_probe()
-      memory: tegra20-emc: Simplify and handle deferred probe with dev_err_probe()
-      memory: tegra186-emc: Simplify and handle deferred probe with dev_err_probe()
-      memory: tegra124-emc: Simplify and handle deferred probe with dev_err_probe()
-      memory: tegra124-emc: Add the SoC model prefix to functions
-      memory: tegra186-emc: Add the SoC model prefix to functions
-      memory: tegra20-emc: Add the SoC model prefix to functions
-      memory: tegra30-emc: Add the SoC model prefix to functions
-
- drivers/memory/renesas-rpc-if.c     |  56 +++++++++++---
- drivers/memory/tegra/tegra124-emc.c | 140 +++++++++++++++------------------
- drivers/memory/tegra/tegra186-emc.c |  35 ++++-----
- drivers/memory/tegra/tegra20-emc.c  | 150 +++++++++++++++++-------------------
- drivers/memory/tegra/tegra30-emc.c  | 119 +++++++++++++---------------
- 5 files changed, 250 insertions(+), 250 deletions(-)
+--YeGGzS8kR2qSk1N0--
