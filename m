@@ -1,138 +1,273 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637A9314D0F
-	for <soc@lists.linux.dev>; Mon, 24 Nov 2025 16:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EE51A9FB3
+	for <soc@lists.linux.dev>; Mon, 24 Nov 2025 21:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764000811; cv=none; b=Jkze3UYsgwT5pWgpqbYD06ZTUBj+ZpA/U0RHM9/FYOH1xwG0O/a9TN/D0XtGZhQgunbguaROXDxvLCifEps2lMBSsqQaBqcEFZuBRodXziwkEcEYGDs7rNr8JsB7RM9mRgST+8KUo3NOWLaRD8GUf4bICnKr8+AIouswO6W5CXE=
+	t=1764018067; cv=none; b=LN1WqC8JquJIx3nMP+tvdB1OwrnWFVhsNi7/A0cMdlWUBA4+1W74ZB9u4D8FiR7jz8TxtpQ3U6cYsOrmokXH+DvG2g8C7mdYUk8cN4mngYlZiSkl22CpRqJYm2dMgG32/sRwrz0tDAwDQ6szyNr4nKwaB10WYtOqqu9bi+jlQyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764000811; c=relaxed/simple;
-	bh=s3e2+5ErfhqMPd2m9183lfzRZ3SAL+PNdFL42U93T6o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RAeOfzXyWdPLBKlTlUIr7lr+esULkSZ5Wc0aZsz9ak0jA2gYdlTmMokoBIfwjw6EV7UJFumiQM4SVbJF/44AfLyyCA4nTa/TXUimB7TzcTyS6yPN9YctUbjRYaT7VeeaScMpDNopOKHtbX77DVFATCLO44i0qZS9mKPHGhcHaas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=oBi9MT4C; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1764018067; c=relaxed/simple;
+	bh=pNtG1dsnjKimp+Ox3GUKkEVTcmUQ1B6ZXj/XYIi74C4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bv1ODMmCh6yZ7fXU/kn4ZaBEGQT6ty0CNVkXjMV/e+nQSjQhADaEbPef1ojvF0NPoBHt9WI6yWZKjo4/jEiV53eW/wEK3Op7yhq45Ea+ls1jTRz9Un22QBVj8OXz30Mc2sn1c1Bzj0iuJ36Enfr9jUuqcRfVriQUGKHdONDXBsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3wIH7zy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="oBi9MT4C"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b713c7096f9so691208166b.3
-        for <soc@lists.linux.dev>; Mon, 24 Nov 2025 08:13:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1764000805; x=1764605605; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s3e2+5ErfhqMPd2m9183lfzRZ3SAL+PNdFL42U93T6o=;
-        b=oBi9MT4CBT5NiGlRkDAA2AtxEru4cwFARVg+aHI++y1t3NWXXD4icP5luL380PphFV
-         O/fSp/pxB1c73U39VVw308utbZ1hSbzmqziaWjEFhsuAfImmnETleAB9TU5p3wxD2bRO
-         E4qwY5GulRcbYJxvckjoOFn/+KeTVE/EslJUg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764000805; x=1764605605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=s3e2+5ErfhqMPd2m9183lfzRZ3SAL+PNdFL42U93T6o=;
-        b=dfmV0CTqzvEhOY92p2lE6wWUMyok/g55KppYtpNaeCvaePfx3eeNtWwYwjo1xHMtwu
-         7xuC6lHMpBKr2xvaPBur5VWkonxBOjt925RqC7qI3IriokjpUQe48V/6wRfKgntJxQl2
-         xsSewGPGgBh7tL4xOLb9SvsmyJfD59otM20I2AsSMpe+Kd+qvPaW7pMGjO4nfY0Mprnz
-         m5bUDHl5gS0pLxIXvbF7vSwUAqnFwVuSCkmtpfHt5oep/Gzbnr1e+B1be6nUItNAkbfg
-         3DYm4LP1IPbqZzeO0MW+wkAgS+K+k6J2+TrI6YoTw58B6o50B2lgGBlgN3EdSI68UuMP
-         dDQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWoTwu6p1PVmlauyDfxN81yPXB6nEq88U1c3OiUOpqQzJHTrP0xgW0qpCWWOXd08WZHO/o=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzyujNhYtSP3i9dirQvB592sLxfX/veFIm83kfj7xpA+dJWQgxq
-	wWyzXcegWMSxyIbbJ5clWhOVU9a+2ajOcZfqmNImLvb1YkjdXZdTLwQdR57W6E2ysAntv0PPIbm
-	K5UvJkg==
-X-Gm-Gg: ASbGncsfjS7Opw4+t5lunLtprtiaNGIUmb30TWkaJ2VZ186m9LSMDdS1GdQyUt5HYY0
-	DmoPxwvG0w4RC9f2EDzfIw2LCkS5lzSS8Ba2/1q8thNauS4vVeSJuVNIGXOtbXYY1lCqL2RBsrq
-	wb2A9EQuraw0CNAbncJtd4j0Bpe96fX6oCbp7Xu+kcIrqfUIrBuP2lq9BgAQtw1XRLDUNj/XVw3
-	mtBrKiEHjwOsEZGKG8xjTrRzWtFCLTbbJz6+IruZJtJYAB3OWNip5SWklY7zgZ43gh0VKelzl9L
-	9FUz50mygicQnEeeKjfWJ+yJNB+RnSmgxnaX5taKb7B4bT7js9nmsrYHIwLbzBs3fLhfpPXJaDX
-	/HBpT65ZTqSTzs0hQ+H5ZCEHSLdYAfcbqe9NDzLNNNdI+OknN1dlg8/jD0/bEY8Tep8uiOhpamf
-	afUbm8qHVcTjupZkSrKB4JrsW9ojb6D7S1mVqsPgXDCqbxhDm1sA==
-X-Google-Smtp-Source: AGHT+IEEcyFzqd5Y9QyNfgKw5lXgYBu+zkOOLT54vVmHOLj5hW/xx0CKEVFG/JCfpHAmJhZ4AIRELA==
-X-Received: by 2002:a17:907:3e0c:b0:b73:9b49:3042 with SMTP id a640c23a62f3a-b767170bfdcmr1538301466b.31.1764000805263;
-        Mon, 24 Nov 2025 08:13:25 -0800 (PST)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7654cefe53sm1321192866b.13.2025.11.24.08.13.20
-        for <soc@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 08:13:22 -0800 (PST)
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-42b3d4d9ca6so3656430f8f.2
-        for <soc@lists.linux.dev>; Mon, 24 Nov 2025 08:13:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWOSx7QZr7+dLh6ql/+OxGxTCqpWuj3P4/icu3EEHCs5WbrA+27DhHB1U95N3UYbUsMM7U=@lists.linux.dev
-X-Received: by 2002:a05:6000:2504:b0:42b:5448:7ae8 with SMTP id
- ffacd0b85a97d-42cc1d2d6fcmr12194643f8f.29.1764000799689; Mon, 24 Nov 2025
- 08:13:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3wIH7zy"
+Received: by smtp.kernel.org (Postfix)
+	id 8EFC6C16AAE; Mon, 24 Nov 2025 21:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A130C4CEF1;
+	Mon, 24 Nov 2025 21:01:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764018067;
+	bh=pNtG1dsnjKimp+Ox3GUKkEVTcmUQ1B6ZXj/XYIi74C4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=V3wIH7zyjZTODQiBRNMk+FQkS0j1Bzq1l74aJIydwAmauxy1hTPQHxitkMK8pJz+o
+	 u3pxGFbzvA22TnlAT4QW2j54nqUzjicWRpeBkddho4DFT6zR3C/ZTcZ2rrO7rNLlRQ
+	 xueFL5tzYvDI0OvM/79SZ+a2VHJBQ4nO3jyFf18t8tNbV/2inbgcS0hYZtmn46z+Ce
+	 XSpkg/DHnAdlWl953q3Aajl30S1/nLrVJmy9E7ypzNAhl8WFLum2m5pUJrcOmcZ+K+
+	 XfD0oVLPfWpIhiIrA5FyehGz5HQWTrrOieU60uRxnX447eNSJoUmZ2s2YuBIEoSeuM
+	 ezMejNltiWACg==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: soc@kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm64: dts: sprd: sc9860: Simplify clock nodes
+Date: Mon, 24 Nov 2025 15:00:31 -0600
+Message-ID: <20251124210031.767382-2-robh@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251111192422.4180216-1-dianders@chromium.org> <aSOKS35/huSWd/RW@duo.ucw.cz>
-In-Reply-To: <aSOKS35/huSWd/RW@duo.ucw.cz>
-From: Doug Anderson <dianders@chromium.org>
-Date: Mon, 24 Nov 2025 08:13:07 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WVeiGa6YkRmce4McnePEV9X_n79YA0bywPdNZcZCV=ZQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bnTIIDYlcAzuiT7QR2OuZm4XUUvQ7JBRQh8rXJBFJr7sqsbbpHBMlqok64
-Message-ID: <CAD=FV=WVeiGa6YkRmce4McnePEV9X_n79YA0bywPdNZcZCV=ZQ@mail.gmail.com>
-Subject: Re: [PATCH 0/4] arm64: google: Introduce frankel, blazer, and mustang boards
-To: Pavel Machek <pavel@ucw.cz>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, 
-	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, linux-samsung-soc@vger.kernel.org, 
-	Roy Luo <royluo@google.com>, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wenst@chromium.org>, 
-	Julius Werner <jwerner@chromium.org>, William McVicker <willmcvicker@google.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Drew Fustini <fustini@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org, soc@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi,
+The various "syscon" nodes in SC9860 are only referenced by clock
+provider nodes in a 1:1 relationship, and nothing else references the
+"syscon" nodes. There's no apparent reason for this split. The 2 nodes
+can simply be merged into 1 node. The clock driver has supported using
+either "reg" or "sprd,syscon" to access registers from the start, so
+there shouldn't be any compatibility issues.
 
-On Sun, Nov 23, 2025 at 2:27=E2=80=AFPM Pavel Machek <pavel@ucw.cz> wrote:
->
-> Hi!
->
-> > This series adds barebones device trees for Pixel 10 (frankel), Pixel
-> > 10 Pro (blazer), and Pixel 10 Pro XL (mustang). With a yet-unreleased
-> > bootloader these can boot to a UART command prompt from an initramfs.
->
-> Well, booting to full system with working cameras would be nicer,
+With this, DT schema warnings for missing a specific compatible with
+"syscon" and non-MMIO devices on "simple-bus" are fixed.
 
-For sure!
+Reviewed-by: Chunyan Zhang <zhang.lyra@gmail.com>
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+Arnd, Please apply directly.
 
+v2:
+ - Correct some indentation
+---
+ arch/arm64/boot/dts/sprd/sc9860.dtsi | 62 ----------------------------
+ arch/arm64/boot/dts/sprd/whale2.dtsi | 54 ++++++++++++++++--------
+ 2 files changed, 36 insertions(+), 80 deletions(-)
 
-> but
-> this is good start. Do you plan / do you have resources for full
-> support in some reasonable timeframe?
+diff --git a/arch/arm64/boot/dts/sprd/sc9860.dtsi b/arch/arm64/boot/dts/sprd/sc9860.dtsi
+index d2456d633c39..864ef0a17425 100644
+--- a/arch/arm64/boot/dts/sprd/sc9860.dtsi
++++ b/arch/arm64/boot/dts/sprd/sc9860.dtsi
+@@ -184,20 +184,6 @@ gic: interrupt-controller@12001000 {
+ 						| IRQ_TYPE_LEVEL_HIGH)>;
+ 		};
+ 
+-		pmu_gate: pmu-gate {
+-			compatible = "sprd,sc9860-pmu-gate";
+-			sprd,syscon = <&pmu_regs>; /* 0x402b0000 */
+-			clocks = <&ext_26m>;
+-			#clock-cells = <1>;
+-		};
+-
+-		pll: pll {
+-			compatible = "sprd,sc9860-pll";
+-			sprd,syscon = <&ana_regs>; /* 0x40400000 */
+-			clocks = <&pmu_gate 0>;
+-			#clock-cells = <1>;
+-		};
+-
+ 		ap_clk: clock-controller@20000000 {
+ 			compatible = "sprd,sc9860-ap-clk";
+ 			reg = <0 0x20000000 0 0x400>;
+@@ -214,19 +200,6 @@ aon_prediv: aon-prediv@402d0000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
+-		apahb_gate: apahb-gate {
+-			compatible = "sprd,sc9860-apahb-gate";
+-			sprd,syscon = <&ap_ahb_regs>; /* 0x20210000 */
+-			clocks = <&aon_prediv 0>;
+-			#clock-cells = <1>;
+-		};
+-
+-		aon_gate: aon-gate {
+-			compatible = "sprd,sc9860-aon-gate";
+-			sprd,syscon = <&aon_regs>; /* 0x402e0000 */
+-			clocks = <&aon_prediv 0>;
+-			#clock-cells = <1>;
+-		};
+ 
+ 		aonsecure_clk: clock-controller@40880000 {
+ 			compatible = "sprd,sc9860-aonsecure-clk";
+@@ -235,13 +208,6 @@ aonsecure_clk: clock-controller@40880000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
+-		agcp_gate: agcp-gate {
+-			compatible = "sprd,sc9860-agcp-gate";
+-			sprd,syscon = <&agcp_regs>; /* 0x415e0000 */
+-			clocks = <&aon_prediv 0>;
+-			#clock-cells = <1>;
+-		};
+-
+ 		gpu_clk: clock-controller@60200000 {
+ 			compatible = "sprd,sc9860-gpu-clk";
+ 			reg = <0 0x60200000 0 0x400>;
+@@ -256,13 +222,6 @@ vsp_clk: clock-controller@61000000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
+-		vsp_gate: vsp-gate {
+-			compatible = "sprd,sc9860-vsp-gate";
+-			sprd,syscon = <&vsp_regs>; /* 0x61100000 */
+-			clocks = <&vsp_clk 0>;
+-			#clock-cells = <1>;
+-		};
+-
+ 		cam_clk: clock-controller@62000000 {
+ 			compatible = "sprd,sc9860-cam-clk";
+ 			reg = <0 0x62000000 0 0x4000>;
+@@ -270,13 +229,6 @@ cam_clk: clock-controller@62000000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
+-		cam_gate: cam-gate {
+-			compatible = "sprd,sc9860-cam-gate";
+-			sprd,syscon = <&cam_regs>; /* 0x62100000 */
+-			clocks = <&cam_clk 0>;
+-			#clock-cells = <1>;
+-		};
+-
+ 		disp_clk: clock-controller@63000000 {
+ 			compatible = "sprd,sc9860-disp-clk";
+ 			reg = <0 0x63000000 0 0x400>;
+@@ -284,20 +236,6 @@ disp_clk: clock-controller@63000000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
+-		disp_gate: disp-gate {
+-			compatible = "sprd,sc9860-disp-gate";
+-			sprd,syscon = <&disp_regs>; /* 0x63100000 */
+-			clocks = <&disp_clk 0>;
+-			#clock-cells = <1>;
+-		};
+-
+-		apapb_gate: apapb-gate {
+-			compatible = "sprd,sc9860-apapb-gate";
+-			sprd,syscon = <&ap_apb_regs>; /* 0x70b00000 */
+-			clocks = <&ap_clk 0>;
+-			#clock-cells = <1>;
+-		};
+-
+ 		funnel@10001000 { /* SoC Funnel */
+ 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+ 			reg = <0 0x10001000 0 0x1000>;
+diff --git a/arch/arm64/boot/dts/sprd/whale2.dtsi b/arch/arm64/boot/dts/sprd/whale2.dtsi
+index a551e14ce826..2ecaa56001b8 100644
+--- a/arch/arm64/boot/dts/sprd/whale2.dtsi
++++ b/arch/arm64/boot/dts/sprd/whale2.dtsi
+@@ -18,49 +18,67 @@ soc: soc {
+ 		#size-cells = <2>;
+ 		ranges;
+ 
+-		ap_ahb_regs: syscon@20210000 {
+-			compatible = "syscon";
++		apahb_gate: clock-controller@20210000 {
+ 			reg = <0 0x20210000 0 0x10000>;
++			compatible = "sprd,sc9860-apahb-gate";
++			clocks = <&aon_prediv 0>;
++			#clock-cells = <1>;
+ 		};
+ 
+-		pmu_regs: syscon@402b0000 {
+-			compatible = "syscon";
++		pmu_gate: clock-controller@402b0000 {
+ 			reg = <0 0x402b0000 0 0x10000>;
++			compatible = "sprd,sc9860-pmu-gate";
++			clocks = <&ext_26m>;
++			#clock-cells = <1>;
+ 		};
+ 
+-		aon_regs: syscon@402e0000 {
+-			compatible = "syscon";
++		aon_gate: clock-controller@402e0000 {
+ 			reg = <0 0x402e0000 0 0x10000>;
++			compatible = "sprd,sc9860-aon-gate";
++			clocks = <&aon_prediv 0>;
++			#clock-cells = <1>;
+ 		};
+ 
+-		ana_regs: syscon@40400000 {
+-			compatible = "syscon";
++		pll: clock-controller@40400000 {
+ 			reg = <0 0x40400000 0 0x10000>;
++			compatible = "sprd,sc9860-pll";
++			clocks = <&pmu_gate 0>;
++			#clock-cells = <1>;
+ 		};
+ 
+-		agcp_regs: syscon@415e0000 {
+-			compatible = "syscon";
++		agcp_gate: clock-controller@415e0000 {
+ 			reg = <0 0x415e0000 0 0x1000000>;
++			compatible = "sprd,sc9860-agcp-gate";
++			clocks = <&aon_prediv 0>;
++			#clock-cells = <1>;
+ 		};
+ 
+-		vsp_regs: syscon@61100000 {
+-			compatible = "syscon";
++		vsp_gate: clock-controller@61100000 {
+ 			reg = <0 0x61100000 0 0x10000>;
++			compatible = "sprd,sc9860-vsp-gate";
++			clocks = <&vsp_clk 0>;
++			#clock-cells = <1>;
+ 		};
+ 
+-		cam_regs: syscon@62100000 {
+-			compatible = "syscon";
++		cam_gate: clock-controller@62100000 {
+ 			reg = <0 0x62100000 0 0x10000>;
++			compatible = "sprd,sc9860-cam-gate";
++			clocks = <&cam_clk 0>;
++			#clock-cells = <1>;
+ 		};
+ 
+-		disp_regs: syscon@63100000 {
+-			compatible = "syscon";
++		disp_gate: clock-controller@63100000 {
+ 			reg = <0 0x63100000 0 0x10000>;
++			compatible = "sprd,sc9860-disp-gate";
++			clocks = <&disp_clk 0>;
++			#clock-cells = <1>;
+ 		};
+ 
+-		ap_apb_regs: syscon@70b00000 {
+-			compatible = "syscon";
++		apapb_gate: clock-controller@70b00000 {
+ 			reg = <0 0x70b00000 0 0x40000>;
++			compatible = "sprd,sc9860-apapb-gate";
++			clocks = <&ap_clk 0>;
++			#clock-cells = <1>;
+ 		};
+ 
+ 		ap-apb@70000000 {
+-- 
+2.51.0
 
-As you can probably guess, I can't really make any promises. :-) Of
-course, "full support" of Pixel 10 by an upstream kernel in a
-"reasonable" timeframe could arguably be impossible no matter how many
-resources were thrown at it. There are just some drivers / subsystems
-where getting upstream working as well as downstream is working
-doesn't feel likely as a short term goal.
-
-That all being said, interest / support from the community helps.
-Knowing that people are interested in this work helps motivate folks
-at Google and (hopefully) upstream maintainers.
-
-
-> Please cc phone-devel@vger with phone related patches.
-
-I will try to remember.
-
-
-> And... thanks! :-).
-
-Of course! Hopefully many people find the work interesting / helpful.
-
--Doug
