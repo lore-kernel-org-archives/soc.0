@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC11E238150
-	for <soc@lists.linux.dev>; Tue, 25 Nov 2025 13:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E08ACA5A
+	for <soc@lists.linux.dev>; Tue, 25 Nov 2025 13:50:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764078644; cv=none; b=pQFKwHfdC68jPbRUkNwm9+HD6TtKYurO+UJLHfAOGO7ct2DzO2Sh/MggsV73P9SdH7UH2P6AeOIjiViHbbzI+9UX9HFm5vHp7LZgRchYjmgzzJRhV4gCYJ1WV0RHj6mBBUtXt9V0jkmNafCSmbVlkzAXbH7roNrx0u5i08AyXUc=
+	t=1764078646; cv=none; b=qjsVILoOTllExZjDFWnsG/DbOx/G0DjSMrrAtYVOx/faFyNiu3ZQpfMzus1r84IHJlkLqlPROXbfDB99iv4fHyDHexQjmnkRZMDlJpxFu6k20FGm1QxpzURGruCtHbz4lFhrsRVFB5NtduOywlA4319K1GqtTsQDpXr5t6jAikk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764078644; c=relaxed/simple;
-	bh=2BkZdGs/4H1T3zk6r2uBwNggm8V3xmGkBkC/X+lCqKw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=BJILVWr3mV1pzRBSX+cY3PTlQAdnQEo+zZfNBDgxLlM29Q6c1VyirHXTuxtBr0hr1zpBqGIZiJrTIUcNcHtEVpu9cWaLQL7+Ny3HL0+/PvzX0bkEkbrzDMJky/yLpdMjrJxuSItK+6pjSgJz72SFRoxqh4K2VzftE4/9Y4gBE4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EyHx7G4B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764078646; c=relaxed/simple;
+	bh=15ZyKjRBYKovBwuo07/yIzeLfFX3GY0EIJcGd4xfeMU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=rXd/YvRU+7Uq5Tel5FZJbpj46YMTAcSmpf84jpdbzDP5c8PsmQfxRxSYk0BGb9Vcba3f81J6G3DeCPFDrwN75q5ehvOrhEeu1dQsVCr1UGAnRuTJU8WD5df0zNiyz+BOJ1MrmaSVnapS70uyY4mumMylkL3dqjh5S3N6DZKg2Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d84pvYrT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EyHx7G4B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d84pvYrT"
 Received: by smtp.kernel.org (Postfix)
-	id A702CC19421; Tue, 25 Nov 2025 13:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91154C116B1
-	for <soc@kernel.org>; Tue, 25 Nov 2025 13:50:44 +0000 (UTC)
+	id C917EC19421; Tue, 25 Nov 2025 13:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8F5C116B1;
+	Tue, 25 Nov 2025 13:50:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764078644;
-	bh=2BkZdGs/4H1T3zk6r2uBwNggm8V3xmGkBkC/X+lCqKw=;
-	h=Subject:From:Date:To:Cc:From;
-	b=EyHx7G4BnpQnqrLsmmSDBHbKCNaKnKTw4DmdAkSsZiVcbQOxedMRcLWFAFRpW/HqR
-	 It6s3eUlDHilVVD4msI+3+UTa6gsGSAHgBTuTCsCL/bbfmyPs0qcBWy6TOrpojUstV
-	 PzBbwBXp0ksW04rb8Gz604akdQK9RUD5jelrS7/PqVb6MNCSFgALC5iPTXnJ5E0D2u
-	 /i8Trb0bA1ueJkgVP5yDcF/tZKKJE53SnS7TWE64EiOTs2ZKd681eqn1G27WvrYsKd
-	 fYPovsrU7xb8AFfU0IkBtx0nYFEgDERlht5mk8KyssCmfRcjDIEdzHwW8Z16JZdwhx
-	 G2BE9LN42HF2w==
+	s=k20201202; t=1764078645;
+	bh=15ZyKjRBYKovBwuo07/yIzeLfFX3GY0EIJcGd4xfeMU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=d84pvYrT3OMoSiljyw8fzir3UcDYSOaO1aueTjp9hNLWt+0U/KKOdG44L+maOSVx6
+	 1yWiKSbcbHpF7yw11KtXTEx0RLDGDM4eVx1M1iT59RecA3Jqv5mzb2K3BaDPNotuAM
+	 Xg0hG7hKC9VOCkusOBoPKVOA1Tyhun4Q3ti3qUuc3mSRoE3I712Y34xh72QUp57OS0
+	 OM7VBvpwIqoYq9vixbQDM8W8pFfDQEJ6jYUtuZj1BqyqsESw+cF2pLXa827lEyI5CK
+	 crNK0XDFiiDBoCupKyDPZBEzAY1Ug0GiRvfoxqs966mmHlXOsYd0SMUKDZFlbh10z9
+	 74+yVHAq28+Ig==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 37ADE3A8D153;
-	Tue, 25 Nov 2025 13:50:08 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C483A8D153;
+	Tue, 25 Nov 2025 13:50:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,28 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] soc/maintainers: OMAP updates for v6.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176407860672.736376.9411540466466165014.git-patchwork-summary@kernel.org>
-Date: Tue, 25 Nov 2025 13:50:06 +0000
-To: soc@kernel.org
+ <176407860826.736376.15156140555310710124.git-patchwork-notify@kernel.org>
+Date: Tue, 25 Nov 2025 13:50:08 +0000
+References: <7hqztwk1n5.fsf@baylibre.com>
+In-Reply-To: <7hqztwk1n5.fsf@baylibre.com>
+To: Kevin Hilman <khilman@baylibre.com>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] soc/maintainers: OMAP updates for v6.19
-  Submitter: Kevin Hilman <khilman@baylibre.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1024437
-  Lore link: https://lore.kernel.org/r/7hqztwk1n5.fsf@baylibre.com
+On Mon, 17 Nov 2025 09:30:22 -0800 you wrote:
+> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+> 
+>   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.19/maintainers-signed
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] soc/maintainers: OMAP updates for v6.19
+    https://git.kernel.org/soc/soc/c/fe57a0a548c1
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
