@@ -1,87 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCF2224891
-	for <soc@lists.linux.dev>; Wed, 26 Nov 2025 17:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D03B9463;
+	Wed, 26 Nov 2025 21:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764179304; cv=none; b=NwcWLV+Y7nb/z/EViWhwCfRCCcXr/SwbToq3UWR1GhAjY6M/f0RnlhEuVP82ERra9K/wBEsfMXX9pJYByYk1hiodWWa62Dj7L3Ew3Bjl5iIT1zo1HbX8Ycqvl/Ybp6ba64E+erFaNMwx5nFO0O6aKF4skpnOoJnOYDBEGWV6uQA=
+	t=1764191813; cv=none; b=eA61QrVWDalHoVo4e0zCbk4uJwYbgPHlGzIlw/Og9Hb5XANhhoBngFDrp5sdICu5K0cN9dAQiULyu1zVrC4dmIKqAbs4OY/csedKC75VJntSCsqY9oULj/aGQIRw01nIlEb/deko5BsMwpcoYDdePWbGP+NJ1VcCTr2ZgNjzQ4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764179304; c=relaxed/simple;
-	bh=zHBYHoIByXuUM6ZleC5iGbaw2z8W/IszKtZZgdJ89O8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=oMLpT2siNB5mduCYE4FSAwoeFwoUso9KwLPXHApKMvFNqJIBvBT5YmhGVi9d5PGFUuYHOGseW0Tvv3S6QN1pyCI5ZjgrH37fnzQ1qRfU7nrFINGWzXeoDTyzC/Rs/XX2X8OshNqLoUlsFKEHjQsQ1QwSdfybq0/M/sAtuqX5ZKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kX4Vmyai; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764191813; c=relaxed/simple;
+	bh=6FSXv6lvj8Cxw9bAiqE0JGXXnCopMs910raX/aEiueY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vr1Mlv+GS0cWEVcz+97whRVk9sWHKI/1L21VH2tPEIt7C2aRLniMrHR/1GDVX3lBD054sA9Fh+dXu0YpefWk4Nv2g3uYjDUaXQaQQD9tnaFd/7HUygeVV05kKo2lWQ372hY5QeQBGiWpU2z6V44SQ+AKBi6nNDtfU/jnOXQG8k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uWO3HjYD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kX4Vmyai"
-Received: by smtp.kernel.org (Postfix)
-	id B92D9C113D0; Wed, 26 Nov 2025 17:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57D3C4CEF7;
-	Wed, 26 Nov 2025 17:48:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uWO3HjYD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA15FC4CEF7;
+	Wed, 26 Nov 2025 21:16:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764179303;
-	bh=zHBYHoIByXuUM6ZleC5iGbaw2z8W/IszKtZZgdJ89O8=;
-	h=Date:From:Subject:To:Cc:From;
-	b=kX4VmyaiDxa17k+okdxjkYfABrWXS+EXefWfH6JVvpxNfhRAVpFKPiICd3Bystihn
-	 GrLs4DouIYtQKJjyXQGfKYeP3JuzYxd2BMVCAesTABcViULzqhB6rSIO/IWrnxL4rW
-	 xr0zcuYGeidB/d4YjbupFPF0G+44YjWLT2Laxr8GB2XxL0VUZBuC3RZPqdnz9cOjDt
-	 HyCNVaDffzAqpiJEjs23FGrynhJG/UH/5xOg++HtZTLZ0xgc5YMc2N70djpPLR1joD
-	 1a9/HzWD531XpH/ZYn0KdF+y0aJW3OkzIiArRGg3AEsTFRabamxUqnOuWBCEH2TvIt
-	 PPUTuCr9lmhwA==
-Message-ID: <bd0f1a68-7e0e-4cc6-995c-f46561b71c52@kernel.org>
-Date: Wed, 26 Nov 2025 18:48:19 +0100
+	s=k20201202; t=1764191813;
+	bh=6FSXv6lvj8Cxw9bAiqE0JGXXnCopMs910raX/aEiueY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uWO3HjYDThOYfpBqwCtm91Yweuelw481K2wJe9VK1m6sVqnffr5zIpgjGG4v9fgrO
+	 kOrwjAd9Igw0VIi6uBggtNY5tutVTD+S4n5xw53rJ+hLK0W3CqyboSK9rAzb8iPO4e
+	 c+2CJl5TFMrzbaPVEOSDW+WILmlv0tL0Wqv5UFoiQqgLYtzYasDIOvucKcQuZn86lr
+	 hhqJByiQ1s89fbrPRgL+kA20E2KUjjVvabCUobhN4F77ZggEOA23JHnFWnQKSGg36v
+	 4exweOY9ZaZN6L44+ODCcQ+NfdXUv0duQTZhe9V0Vu5xwu9NJhYIvm8ZxY0srkGEj+
+	 8aeIA6Uh1M0aA==
+From: Sven Peter <sven@kernel.org>
+To: soc@lists.linux.dev
+Cc: asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Sven Peter <sven@kernel.org>
+Subject: [GIT PULL] Apple SoC driver changes for v6.19
+Date: Wed, 26 Nov 2025 22:16:32 +0100
+Message-ID: <20251126211634.8864-1-sven@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Subject: [GIT PULL] SOC FSL for 6.19
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Language: fr-FR
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Arnd,
+Hi,
 
-Please pull the following Freescale Soc Drivers changes for 6.19
+Please pull the following changes for Apple SoC drivers. These have been in
+-next for a few weeks as usual and details are in the signed tag.
 
-Thanks
-Christophe
+
+Thanks,
+
+
+Sven
+
 
 The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
-   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
 are available in the Git repository at:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/chleroy/linux 
-tags/soc_fsl-6.19-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git tags/apple-soc-drivers-6.19
 
-for you to fetch changes up to 760b8eec2cf861c5b013f62c4af8ee06c959853e:
+for you to fetch changes up to f95f3bceade25914cca30c871187b2d33db23f34:
 
-   soc: fsl: qbman: use kmalloc_array() instead of kmalloc() (2025-11-26 
-12:29:40 +0100)
+  soc: apple: sart: drop device reference after lookup (2025-10-13 18:32:53 +0200)
 
 ----------------------------------------------------------------
-FSL SOC Changes for 6.19
-- A couple misc changes to fsl/qbman
-- Update email address for Christophe Leroy in MAINTAINERS
+Apple SoC driver updates for 6.18
+
+Two small fixes:
+- mailbox: Stop leaking a reference to the mbox platform device during
+  lookup
+- sart: drop device reference after lookup since it's no longer used
+  afterwards
+
+Signed-off-by: Sven Peter <sven@kernel.org>
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQS3vz815OHsEaWy0u9EEX0kKnUe6QUCaSdsTAAKCRBEEX0kKnUe
+6Q3TAP9LzbLNHLFbDgCQXRRU5Qb5RxakNQ6o6eoyJP2I4C16SwEA0PChp6r/yH7I
+US56W3mTG3vlJKag472fLyDmZITkFw0=
+=9YPH
+-----END PGP SIGNATURE-----
 
 ----------------------------------------------------------------
-Christophe Leroy (CS GROUP) (1):
-       MAINTAINERS: Update email address for Christophe Leroy
+Johan Hovold (2):
+      soc: apple: mailbox: fix device leak on lookup
+      soc: apple: sart: drop device reference after lookup
 
-Gongwei Li (1):
-       soc: fsl: qbman: use kmalloc_array() instead of kmalloc()
-
-Marco Crivellari (1):
-       soc: fsl: qbman: add WQ_PERCPU to alloc_workqueue users
-
-  .mailmap                                |  3 +++
-  MAINTAINERS                             | 10 +++++-----
-  drivers/soc/fsl/qbman/qman.c            |  2 +-
-  drivers/soc/fsl/qbman/qman_test_stash.c |  2 +-
-  4 files changed, 10 insertions(+), 7 deletions(-)
+ drivers/soc/apple/mailbox.c | 15 +++++++++++----
+ drivers/soc/apple/sart.c    | 13 ++-----------
+ 2 files changed, 13 insertions(+), 15 deletions(-)
