@@ -1,75 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89649318143
-	for <soc@lists.linux.dev>; Wed, 26 Nov 2025 08:40:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9359F31A051
+	for <soc@lists.linux.dev>; Wed, 26 Nov 2025 08:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764146454; cv=none; b=XHCjHi3q277x7ArrvgEH7EyrMWchahgtTM/Q12wbxYSg+8m4WFz8lAqfsOx2QY6XUDGRpjpxwHA1I3tCSPA6P9BC2XZ/ij5ItCbciAGh4jmLsUseoDJGLWFcOD95wZlNbnxGofQ+iwfA4u3m7znCGRSxxF1t5X8VS4eBpCnXazo=
+	t=1764146605; cv=none; b=AhXtTvrz2+C4lVjfEvHvj1HQLD2ZTVm4ZYeKLEPAsUojETjIFJS18SNEP6XIsYQUVpOH6w6c9xdmh5f6ka/qo4nn7QevJuRjJD/AnwX3bv74D5rdLOY5XwHs+kbPl7EQ0NVqqsoNF/NS6Rxo6GNLCOcGD6LlpCuLm9CDldSV5Qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764146454; c=relaxed/simple;
-	bh=QtnJb687NGpc8F4ngXGCCNzKHRoIjXc8hInm9vz6+zQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Po22w8GQDFOziiPbPoSAhzboWEoC/eNDhvl/kWx3vth+t90AxU/E+9YjYqJ6ToTRw+swR1nJcDWc9bUpMFaYuX+vMj1NdFTLmpVUjGhm1tp7apKWiI20vFNdFNhdE8pm7u7q9bTR+xENq15emxlfjAzxGoc9ww+TKET8yhQ3DHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EPce8lW4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764146605; c=relaxed/simple;
+	bh=kxeLmiAF8Cd0nLuoF+tB8ECt9D9vi0AAPf9/Slhg46A=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=gO0kRFVP9XD8QCWiXBEWMC74ZK8sXUxSUHd7LgTTtZllMfH8zhyxaJtOL0cKRRB465U1ZBihP4FUJYzvdj0Ol7L/bdgBKLvTYnKwdmmyKhzXDLmRGW4i8uj3DRcpJi2bwdpx3uqtn2idomWyPOza77OsmguWPoGKBhCQstQczmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ziXMen7D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EPce8lW4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ziXMen7D"
 Received: by smtp.kernel.org (Postfix)
-	id 358E2C16AAE; Wed, 26 Nov 2025 08:40:54 +0000 (UTC)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	id 37870C116D0; Wed, 26 Nov 2025 08:43:25 +0000 (UTC)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 486CDC116D0
-	for <soc@kernel.org>; Wed, 26 Nov 2025 08:40:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 486CDC116D0
+	by smtp.kernel.org (Postfix) with ESMTPS id 3F8AEC16AAE
+	for <soc@kernel.org>; Wed, 26 Nov 2025 08:43:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3F8AEC16AAE
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-47774d3536dso4792985e9.0
-        for <soc@kernel.org>; Wed, 26 Nov 2025 00:40:53 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-477563e28a3so4131195e9.1
+        for <soc@kernel.org>; Wed, 26 Nov 2025 00:43:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764146452; x=1764751252; darn=kernel.org;
+        d=linaro.org; s=google; t=1764146602; x=1764751402; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DZRyLJQWLyu2ofm6THBGdej8nUflr7mrvYDLc8L0ZgQ=;
-        b=EPce8lW4fEuLMrxEAXza2zeYd/g0VcH1z/PYn7A/HfEI0e7RO2r8U0oOtKMlLtfDv5
-         mXGvc7UpnssR5i5WiZXyu6k8sdqEiamTnbaWLYTJhxkgJ8P3+qoJwm42EvXWt2y3Iop6
-         tU6jy4Z87aKhr/cR4tefoKBgjQ+thQGleGDzZWKdT0b0FXh8983CQNLv2zGKq9JgSFCh
-         az6y/kiTKxIN3usM6YPB5q75NrZU/2w0Ezg22RYm2o++s46JfKhDfqon3lTD/Y2FKg1f
-         PSMP41GcLdbyKAPJ+zqsI/y+dpM57/JbcZLOz2DCxCtLJrzT7bSg98Xr8o0Mgw+PGJUy
-         iZ0Q==
+        bh=XruInUkMDiRfUB8yo5/J+YoWJdFLwmVpCDCt0tsy4IU=;
+        b=ziXMen7DqxKmrB4+RhtF+r+FIaeAUfTdK0MEVmhcvYUCbkv5QXX7sN1RjJK7nKe/mz
+         Uzxr5WcNoZRADbF1j4jTyIw6A5VD5imuLqmRwd3UoSGYrFrVpLlbWYHCXGNg70TMELFZ
+         BKABN7FvOFj+6jUOB3hmcrQ3NR/5OvAzYjA+tyxdeI35naOLds7QjiHmJFbEoliLe6mK
+         MmpD5GTrTwfy/iXMnXr/KkMtnbFZM6uB7ZmwcAcUs5dXhvT4EqDmLcaYqduNMIadYp27
+         6CCpYr6KF17SgZu6HDVglOjCWYky+mGFMQ+3K2Cp5GV0xSnhb1NzLQLkRsy0TCO1xGTW
+         g0gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764146452; x=1764751252;
+        d=1e100.net; s=20230601; t=1764146602; x=1764751402;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DZRyLJQWLyu2ofm6THBGdej8nUflr7mrvYDLc8L0ZgQ=;
-        b=V1pQik5NfoQcYrsSMXVBOr81kQ0xvNfZXS2rHWVxr+hjl6PadItQJa3w9+4O1cTgnR
-         TKkPWfZq8G5mFLNFmbKdHbw/SOz0Tb7SpvEjQIQd2jc+Panh/CCud4eP5pMytgEposUy
-         vkOGtcKFWy/W9AW/W8MY8+8UApsei1yUGR2roHTwesC8lQkUOjgZ+QNJ+dHxmVLwWEsT
-         l4e2IqZJ2SX7B50TuIPPk6b3XB68HKnnrTjC38lWAOmQfwXzlBPAv2ia3scx57F0lMRZ
-         6Wc1GRBJWDCXxyC3puib9k+g+EQAZ2l9bqVqM/lAj2x5rieLxGyvwzyX9hi+ogj6ck8O
-         +27g==
-X-Gm-Message-State: AOJu0YzWTpBxsRJIylltcd/d1m0/K6ee6Ftf7XEEuHBqneZG/5iR6dEa
-	RV5/4OJB4XovU0HkLDFaz2WoMJt73T+rCDvu4Etqx5Y3Qjx9TLBihuZ/klWi09l/JHnG11MiE1I
-	vSzcv
-X-Gm-Gg: ASbGncshRoCES86czMk4Kz1Twy191YGlxB5S0SPHS8EpfOpQFKZ0um8chDmLi3xH7Sn
-	HV5FfwZge/VUBcGLQF/ctjhSvRv7g9cS5G8iNUG+KPRaDiWMoi4eYeTvHnLL4U97Lc4y04dFGTt
-	9Kd41HFqd6n6DpnlSnLFqBH50VEwinSIAK0f8GPAeFIs0i5dP+pbCRSaoSP/6KGBnEkx6dk/abu
-	qDz1QY2IsVHqCvVFe3YhkW/W67babjDefNcPBa8LsLeZtcgIc4jHgUlh0I7Uicfwqp1LmskS3La
-	pw94dGazKSpkh0X96bQuv829fiRpkkw4G290flIHpZoHaf44hV4PdeMfQBAl/86UBwXGpBxMTy7
-	h1B7W3OtaDAKM3z3GpdAFaKhxBqlKf6jNu5iDeSl8aRkb/ndPPYsRy3MYry8YegEyNEDZCwPRnV
-	1lD50qezHmxpUxelHxVT+1oXzdXzVZPiT7tiQzIXbU1vmxMAc+Y8pBNkGwWrbH
-X-Google-Smtp-Source: AGHT+IGzRRMF+OnlXmN4I27NO53Fg8uCF8bhGoTJ8TUJhsPX0oqyzIKFxwBWRjR2h6rX86vbOV8tcg==
-X-Received: by 2002:a05:600c:c8a:b0:471:5c0:94fc with SMTP id 5b1f17b1804b1-477c04cfb70mr207353655e9.6.1764146451593;
-        Wed, 26 Nov 2025 00:40:51 -0800 (PST)
+        bh=XruInUkMDiRfUB8yo5/J+YoWJdFLwmVpCDCt0tsy4IU=;
+        b=BOOAJ2ODNeBFXRrz0xxrNqao57lh/V4KV8WBlc81XirsFD5K56Ph3kZOzwpB3Y+aWh
+         NwoySc+5IhF6tTKZLXo2mKxLiFf66GHkZz2Yhwkxnte97mtEia9hmXb2xUQvzp319bE/
+         XdPVV+MPiBesF+SI8WgcJSajT05vXzv2fzMhVexsktSz4zto4kuoVGhnhEU+/3kGE4jg
+         pRYNdOIQA8qmzMAk7Zc2F4bS+ALB1rjicOaySUTSP7lvATYLA+kDIlM0XTJgsHTHSGO8
+         3e4XN6yeInIKeAyQv4fJ6dvs8loAkQcQjpywdrcBFeVtFgs7S1dP5tpBEvjKFq1+tW/m
+         mH1Q==
+X-Gm-Message-State: AOJu0YxOpHTpplnYfWPmvS967MtJf2u1BpcR9YWK3uLDotUKn+LBzST7
+	2FYDnJYsf//tzeQxB1vcdSak1MC0LyfuYH4J5IRW123qy0adV8MCvrm2oYfGgAirvYKfVJJ9Hl+
+	ZV5Tx
+X-Gm-Gg: ASbGncu1alvsv74eEYKxk3QjLOoKs/QLRwKgRHRyhZDQ7ZpJxbosJXE1DAwByzccap2
+	+4HKlKez7STzwv2ciggo9ByyUkDrfEQroYxBskwbnv5PJbWMpNN17FGPhMWH4e4xlMJ0HmLAZGk
+	xsQvl5EeqEuPc6MLxHg8ZU9tSJqmqQbVaieqxIX/54UCW5gLkyRHSaKYihBl2vQ/mq3IwYX27Bp
+	I9ONcQG9eanbtXTSDAqTiIKUss04QGm72LlHiIt9W6k3+DFu+hV5XmRY8xQRz/pVyjoGpEjm5d9
+	+H3v9f3J6Ec9UUGXRkw1+aRq4SkFYjlQa+EREYP+JfDGdbDJPwjMJ6Haog/VypZw9GdnP9bhdUy
+	BUJCl+YICyKCnwzZeTtx0nqamzoAdBgUlvyX+EGQnhfb9OzvS4KGbI9h5JVPc7eEy2/COVyKF2X
+	FuMHn6QHqhQlFtFUuvIJ+di95bNuaWwMqxCbpIsSMwNVNjdyIrnkP2Og833Z0R
+X-Google-Smtp-Source: AGHT+IFYo1aOFiVVd5emFHT/2Q/Aa0vH10uNANU4wEdWdlgfUVEUJxUFnPb3U+rfvktY3VmPyPwQDw==
+X-Received: by 2002:a05:600c:c8a:b0:471:5c0:94fc with SMTP id 5b1f17b1804b1-477c04cfb70mr207424865e9.6.1764146602375;
+        Wed, 26 Nov 2025 00:43:22 -0800 (PST)
 Received: from ?IPV6:2a01:e0a:3d9:2080:91ba:3a5e:334:4534? ([2a01:e0a:3d9:2080:91ba:3a5e:334:4534])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479052b3f5fsm36218435e9.4.2025.11.26.00.40.50
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4790add60e2sm31255295e9.6.2025.11.26.00.43.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Nov 2025 00:40:51 -0800 (PST)
-Message-ID: <9e0a76ed-8eb5-4820-b64b-a0efa0f91170@linaro.org>
-Date: Wed, 26 Nov 2025 09:40:50 +0100
+        Wed, 26 Nov 2025 00:43:22 -0800 (PST)
+Message-ID: <8386665e-b465-4efc-a5c5-72354397623a@linaro.org>
+Date: Wed, 26 Nov 2025 09:43:21 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -78,7 +78,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] Amlogic drivers updates for v6.19
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.19
 Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
 To: soc@kernel.org, arm@kernel.org
 Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
@@ -113,8 +113,10 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's drivers updates for Amlogic SoCs, 2 non-urgent fixes for the canvas driver
-and support for new SoCs.
+Here's the Amlogic ARM64 DT changes for v6.19, adding new base hardware nodes
+for the Amlogic S6/S7/S7D SoCs, pinctrl for Amlogic A5, hardware camera ISP
+nodes for the Amlogic C3, non urgent fix for the PCIe DBI memory region and
+support for new Tanix TX9 Pro board.
 
 Thanks,
 Neil
@@ -125,28 +127,63 @@ The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.19
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.19
 
-for you to fetch changes up to ba8abbdfd09e64f51ead8b86afc6b586505919b4:
+for you to fetch changes up to a7ab6f946683e065fa22db1cc2f2748d4584178a:
 
-   soc: amlogic: meson-gx-socinfo: add new SoCs id (2025-11-19 15:47:15 +0100)
-
-----------------------------------------------------------------
-Amlogic Drivers for v6.19:
-- Canvas device leak fix and error handling simplification
-- Add more SoCs definitions
-- Suport more SoCs for meson-gx-ao-secure
+   arm64: dts: amlogic: meson-g12b: Fix L2 cache reference for S922X CPUs (2025-11-26 09:35:42 +0100)
 
 ----------------------------------------------------------------
-Johan Hovold (2):
-       soc: amlogic: canvas: fix device leak on lookup
-       soc: amlogic: canvas: simplify lookup error handling
+Amlogic ARM64 DT Changes for v6.19:
+- Fix the PCIe DBI memory region name
+- Add ISP nodes for Amlogic C3
+- Add power controller nodes for Amlogic S6/S7/S7D
+- Add Pinctrl node for Amlogic A4
+- Add AO Secure node for Amlogic S6/S7/S7D
+- Add GPIO Interrupt node for Amlogic S6/S7/S7D
+- Fix S922X cache layout
+- New Boards:
+   - Tanix TX9 Pro
 
-Xianwei Zhao (2):
-       dt-bindings: arm: amlogic: meson-gx-ao-secure: support more SoCs
-       soc: amlogic: meson-gx-socinfo: add new SoCs id
+----------------------------------------------------------------
+Christian Hewitt (2):
+       dt-bindings: arm: amlogic: add support for Tanix TX9 Pro
+       arm64: dts: meson: add initial device-tree for Tanix TX9 Pro
 
-  .../bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml     |  3 +++
-  drivers/soc/amlogic/meson-canvas.c                           | 12 ++++--------
-  drivers/soc/amlogic/meson-gx-socinfo.c                       |  6 ++++++
-  3 files changed, 13 insertions(+), 8 deletions(-)
+Guillaume La Roque (1):
+       arm64: dts: amlogic: meson-g12b: Fix L2 cache reference for S922X CPUs
+
+Keke Li (1):
+       dts: arm64: amlogic: Add ISP related nodes for C3
+
+Manivannan Sadhasivam (1):
+       arm64: dts: amlogic: Fix the register name of the 'DBI' region
+
+Xianwei Zhao (7):
+       dts: arm64: amlogic: add a5 pinctrl node
+       arm64: dts: amlogic: s6: add ao secure node
+       arm64: dts: amlogic: s7: add ao secure node
+       arm64: dts: amlogic: s7d: add ao secure node
+       arm64: dts: Add gpio_intc node for Amlogic S6 SoCs
+       arm64: dts: Add gpio_intc node for Amlogic S7 SoCs
+       arm64: dts: Add gpio_intc node for Amlogic S7D SoCs
+
+hongyu.chen1 (3):
+       arm64: dts: amlogic: s6: add power domain controller node
+       arm64: dts: amlogic: s7: add power domain controller node
+       arm64: dts: amlogic: s7d: add power domain controller node
+
+  Documentation/devicetree/bindings/arm/amlogic.yaml |  1 +
+  arch/arm64/boot/dts/amlogic/Makefile               |  1 +
+  arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi        | 90 ++++++++++++++++++++++
+  .../boot/dts/amlogic/amlogic-c3-c308l-aw419.dts    | 84 ++++++++++++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi        | 88 +++++++++++++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-s6.dtsi        | 28 +++++++
+  arch/arm64/boot/dts/amlogic/amlogic-s7.dtsi        | 28 +++++++
+  arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi       | 28 +++++++
+  arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |  4 +-
+  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  2 +-
+  arch/arm64/boot/dts/amlogic/meson-g12b.dtsi        |  4 +-
+  arch/arm64/boot/dts/amlogic/meson-gxm-tx9-pro.dts  | 90 ++++++++++++++++++++++
+  12 files changed, 443 insertions(+), 5 deletions(-)
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxm-tx9-pro.dts
