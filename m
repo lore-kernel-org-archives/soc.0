@@ -1,121 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA83B246768
-	for <soc@lists.linux.dev>; Thu, 27 Nov 2025 13:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A91330336
+	for <soc@lists.linux.dev>; Thu, 27 Nov 2025 16:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764249931; cv=none; b=eybjoucYfUpw14C1rAYZFXCMuL1HuhlBWcf+unMzBfQLUxuzSrENXECUNbSvm+5LZBD8tZtvJnoMzOCe/u8TG+GlNJ/H6rzaqc39r7V+81Eqj4JIEkhPql8Qofn8ouMaF1VczDbSwKZc9yGqP+yAEQqz9l+TWuVXTedWeGJdea4=
+	t=1764259633; cv=none; b=JQvGWztNvzz0RyLJ/D56R3U9n6xKbkR8Q5FDr94+6b2hyLE/7Pzr1juUM+VIrmWPeyoXPq0EONcqRwskG3trIE9+lZIvVyRACPNYxo0HZ747eXoDvsm+aVnrHNJbWZliQHvb4wPf4CkXDBHEU2WZQZJkojDb5B4fdV5KNasej1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764249931; c=relaxed/simple;
-	bh=aEiQVMDoMgNcxL4GiRqNIJWzllGGLe7RboB7EQdNgAI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=knRuBSwc/nLAp86IoudSuSZLcnNEsMjIjKKlC3Q5rPUQYuOePUGpIPmnZ29saJRDgy2Sx4cilvChu4eMsgnRWySVlQyxa5NahJQnWvFR8kCXC7BEO5ifWg7LXdRKTKFgLVvLHbt/apAvDU+fnOPSZTfj4bNYQmg4yVE/NgI79tI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=AZzbizIk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764259633; c=relaxed/simple;
+	bh=wPDhpQkNJJQk7R1CNhHFSFjejlF8GTL99mJgXlWw0mE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=n5Qmwj+pF0KMeSiqYyo3+Yt4Nr6Jti91SGv9qDuTkABimcjut57VJgEnXPgu345XjoavUziIZZqvj+0PRbiPkUSeUj+V2o+TCuluUgo7hBUrTyERifMZijGqvfrI7re3s3C2GYS+i1N7qmuvtzvaK3a28bi0h30ydjXRPBsfOAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxJ178Is; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="AZzbizIk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxJ178Is"
 Received: by smtp.kernel.org (Postfix)
-	id 9F61BC4CEFB; Thu, 27 Nov 2025 13:25:30 +0000 (UTC)
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 122D7C4CEF8;
-	Thu, 27 Nov 2025 13:25:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 122D7C4CEF8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1764249927;
-	bh=aEiQVMDoMgNcxL4GiRqNIJWzllGGLe7RboB7EQdNgAI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AZzbizIkgAjmlxdMrCRH9UpGgY4MV+GjkNFPdScQP/b3jx/kYcK2Dafll06rvzl5l
-	 Dwy5k0aDjZcLSaCr5/DhtxRTfOPLQExZm6jh7bmQSd9C/ca1XjVH7GDgniahP1bXmR
-	 +ldD2Sl3F2bmpvdNgdFttemhwq0mKYaDROEQ9VJWdo9xdWYGSSPod7wYIqmQHp0mF8
-	 2Y0FpjWm/exFALIMAMKG45up+DO54QVk8M8+QOgkp/B+Maer7LvwDu715bw05gOBdD
-	 /7JCrJDdSdfSzYxc0nszBqn/46vwNg473QJnte8AnaTZS6HVAdC2QnTiN4VTHiOSyy
-	 rXhtGXcgIQETA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id D28DD17E0117;
-	Thu, 27 Nov 2025 14:25:26 +0100 (CET)
-Message-ID: <fc5febc7-d1ee-4b93-81c7-eca7134e9c39@collabora.com>
-Date: Thu, 27 Nov 2025 14:25:26 +0100
+	id 7DAB5C116C6; Thu, 27 Nov 2025 16:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B5E8C4CEF8;
+	Thu, 27 Nov 2025 16:07:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764259630;
+	bh=wPDhpQkNJJQk7R1CNhHFSFjejlF8GTL99mJgXlWw0mE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dxJ178IsFIufTUkjOHktklvTY08b+K5oFjXew0fRFJqP5wMDyYBUBoLeNY1NOBcfq
+	 X94RLDhdbBTq7/MQ4rM3oELG5RxTAdrO0PL22H1IboKRAFmv4EAfcJekQT259BnUQZ
+	 XufwEvGvyVBUTLxS5VVrL6mUApgUKBBok2WFmSGX7NUFOXVx9KN2sZjnA0PaSmeMpX
+	 +Isqf2aHRKfcMWx9ZNFLemgoFW1AM7phoLizE2BLVOH3s3ULLHc8c+CYs+TjUNdikL
+	 13RNk/yelQpgT0TbihXZ0tRcReT4v6rFmaqhKQM+hyTa0IFI+2qjYIzOSBMWFDe2mU
+	 zh9w56Qz+Pfyw==
+Date: Thu, 27 Nov 2025 16:07:07 +0000
+From: Conor Dooley <conor@kernel.org>
+To: soc@kernel.org
+Cc: conor@kernel.org, linux-riscv@lists.infradead.org
+Subject: [GIT PULL] RISC-V soc-drivers for v6.19
+Message-ID: <20251127-wish-shining-300e8fb80599@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8195: Fix address range for JPEG
- decoder core 1
-To: Chen-Yu Tsai <wenst@chromium.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, Arnd Bergmann <arnd@kernel.org>
-Cc: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, soc@kernel.org
-References: <20251127100044.612825-1-wenst@chromium.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20251127100044.612825-1-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5Lj1ZaEMcGf5EH9/"
+Content-Disposition: inline
 
-Il 27/11/25 11:00, Chen-Yu Tsai ha scritto:
-> The base address of JPEG decoder core 1 should start at 0x10000, and
-> have a size of 0x10000, i.e. it is right after core 0.
-> 
-> Instead the core has  the same base address as core 0, and with a crazy
-> large size. This looks like a mixup of address and size cells when the
-> ranges were converted.
-> 
-> This causes the kernel to fail to register the second core due to sysfs
-> name conflicts:
-> 
->      sysfs: cannot create duplicate filename '/devices/platform/soc/soc:jpeg-decoder@1a040000/1a040000.jpgdec'
-> 
-> Fix up the address range.
-> 
-> Fixes: a9eac43d039f ("arm64: dts: mediatek: mt8195: Fix ranges for jpeg enc/decoder nodes")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+--5Lj1ZaEMcGf5EH9/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> ---
-> This was introduced in v6.18-rc1.
-> 
-> Maybe have the soc maintainers take this directly instead of waiting?
+Hey folks,
 
-I'm fine with that; if Arnd wants to take it directly, that'd be easier for me as
-I really don't expect any other Fixes commits for the moment (and I'm currently in
-a very, very... very busy "moment").
+Please pull my 6.19 soc driver changes.
 
 Cheers,
-Angelo
+Conor.
 
-> 
-> Also, I'm not sure if this error could mess up the JPEG decoder driver's
-> internal tracking.
-> 
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index ec452d657031..c7adafaa8328 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -3067,7 +3067,7 @@ jpgdec@0,0 {
->   
->   			jpgdec@0,10000 {
->   				compatible = "mediatek,mt8195-jpgdec-hw";
-> -				reg = <0 0 0x10000 0x10000>;/* JPGDEC_C1 */
-> +				reg = <0 0x10000 0 0x10000>;/* JPGDEC_C1 */
->   				iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
->   					 <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
->   					 <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
--- 
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ soc-drivers-for-v6.19
+
+for you to fetch changes up to 66c6ceb41ed375773491c5d024167a2cbe6fe944:
+
+  MAINTAINERS: rename Microchip RISC-V entry (2025-11-11 16:52:30 +0000)
+
+----------------------------------------------------------------
+RISC-V soc-drivers for v6.19
+
+Microchip:
+Add bindings and mfd drivers for two syscon regions on PolarFire SoC,
+needed as part of a rework of the devicetree to permit supporting,
+among other things, pinctrl sanely and avoiding the "new" pic64gx SoC
+ever using the original incorrect clock nodes. Fiddle with the Microchip
+RISC-V MAINTAINERS entry to add these drivers and avoid branding it FPGA
+only.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+----------------------------------------------------------------
+Conor Dooley (4):
+      dt-bindings: soc: microchip: document the simple-mfd syscon on PolarFire SoC
+      soc: microchip: add mfd drivers for two syscon regions on PolarFire SoC
+      MAINTAINERS: add new soc drivers to Microchip RISC-V entry
+      MAINTAINERS: rename Microchip RISC-V entry
+
+ .../microchip/microchip,mpfs-mss-top-sysreg.yaml   | 47 ++++++++++++++++++++++
+ MAINTAINERS                                        |  4 +-
+ drivers/soc/microchip/Kconfig                      | 12 ++++++
+ drivers/soc/microchip/Makefile                     |  1 +
+ drivers/soc/microchip/mpfs-control-scb.c           | 38 +++++++++++++++++
+ drivers/soc/microchip/mpfs-mss-top-sysreg.c        | 44 ++++++++++++++++++++
+ 6 files changed, 145 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-mss-top-sysreg.yaml
+ create mode 100644 drivers/soc/microchip/mpfs-control-scb.c
+ create mode 100644 drivers/soc/microchip/mpfs-mss-top-sysreg.c
+
+--5Lj1ZaEMcGf5EH9/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaSh3KwAKCRB4tDGHoIJi
+0pt+AP9DympcOswdVPZPrJm+aekvGfrjMkCi5M34N5LnusAWmgEA3Xz5bGLoSqNv
+zg4Kn55STYoEiK1Xd73sI+DcLlo0/g4=
+=m0FT
+-----END PGP SIGNATURE-----
+
+--5Lj1ZaEMcGf5EH9/--
