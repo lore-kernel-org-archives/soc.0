@@ -1,39 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3A32D7DC8
-	for <soc@lists.linux.dev>; Thu, 27 Nov 2025 16:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19032DECB0
+	for <soc@lists.linux.dev>; Thu, 27 Nov 2025 17:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764261414; cv=none; b=VVZ6XDuX4k3wILU7BQF/pfZgsyDOaqCUzG3JAV90wpfMUh3pX74wMh/EBMp5jCVSjF761JqdVIRX0bSOKatDi6gnJ8iWynrkWOWwwKBsbmAVl0H2/mD4QUHi4o53jjxYJ7c9dXpvkj2+BdI3o3UwU9I3kLe2hWJT5tmiKtmffzo=
+	t=1764263415; cv=none; b=l6XgkAoE7YHPQwvtF/IQEdZanKpD0XkAJeH7YoNk5SKNN4RVfiMCqkhbd/N0O4a1UT5pYaftf8QyNSKhp46QsqbWv/o2vO9orjYLzeqoKTaKpBvv4ursMbrV+MaGxuqI1lUHI8lnnRqG1a8ggwY2TFpPsiE1qZOcjcHEbYFtaDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764261414; c=relaxed/simple;
-	bh=Aa6TofsDgEtlr/eVXyb0tnk9QiuGSJrfHim0d0dEtuU=;
+	s=arc-20240116; t=1764263415; c=relaxed/simple;
+	bh=APMrvtSXM/H86MqQD8Gjn4Wda8FEWOLElWIHtNrbXc8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kEpNntg7+EOnrP8yRpaD2N3y05bgTBdmcb5u9DWwrvr8NChU3zYgpxTbtT4zIUCrGZ8uWFUg3vu+dFub28VDyxPLOxLxwuw5VT04PsW3fpPKFzjV4Nd0QoT+6hKz4k7AKSBcWyTvcXfM9N6hegWqIi2KsR2L5WAF0ZDJCfw+la4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NvXxf7DA; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=YGaZon+sz7oKaagExN0jNw48PYItCxuFd7/31DtH7T9bCGRrjwA1AVjryxHqbLnnJqTQYxP8Cfb3dGzhXMxRVymrvQkzqq7OFmcmacvNi5XM8edXr6RQ2rC8DTP0WhBIjn/zumcrPwL5Ef3DS4uoCRpLTzsgDq0FNFMU4GuvRxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ic9q3scE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NvXxf7DA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ic9q3scE"
 Received: by smtp.kernel.org (Postfix)
-	id 783E7C116C6; Thu, 27 Nov 2025 16:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96888C4CEF8;
-	Thu, 27 Nov 2025 16:36:53 +0000 (UTC)
+	id A0390C116D0; Thu, 27 Nov 2025 17:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95DB5C4CEF8;
+	Thu, 27 Nov 2025 17:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764261414;
-	bh=Aa6TofsDgEtlr/eVXyb0tnk9QiuGSJrfHim0d0dEtuU=;
+	s=k20201202; t=1764263414;
+	bh=APMrvtSXM/H86MqQD8Gjn4Wda8FEWOLElWIHtNrbXc8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=NvXxf7DANd4/o5pEdsxmGwFcmVANV5Hnxf2Q22nrM7BaZrreYTx4KjiXR23SNOsMI
-	 secQiWLAWlau+7eXACzzOuoufutI/jlbiq9cnFnDLmts5FG68LIX3/UPqUJNcrDy1w
-	 n0LgSt/JiINJD0gu0HXPsvfCyto9jLvQtSl0Ju/yJ6wokD1VpkCdS92pyAEHG/EHUy
-	 nsOBJXZkdX22b7Leu8EDgLRMasWByiDtX+Auu4OjxQ5HQjW7Jpii2HFLPvx3KD4I4z
-	 fHy4L+GvBnJWAAqEHearF4rc0vz2qthDQRTtaWCwKNf3jPyx2Qtygb3e7s0zoQEuFJ
-	 DFFnz4ba30hfg==
-Date: Thu, 27 Nov 2025 16:36:51 +0000
+	b=Ic9q3scEq1fxcXMHIG76lLOd+EoUtA7XtWNnQrG2iELrgpiykK75tZQ1KBjyuPvdF
+	 T65pKwQ8yrSF8G974tZqDIBjKwtlPAOBDd1/Fd5P3qbB4zCAcDTDAsgIVNBDEPcvdy
+	 s1hxbFFGGRdVbZikI8thXdus8gkgzeYeIXNsYxq5sqSk3ZfO3NtZvCDd+bhpWxmzQH
+	 Wq3cS+GsEKEfnGClAic9xKSi7SeURnfeMF7erfineQIqn/bRwjzaxalseaNDk+uwWh
+	 pRdiXkrDxzEVY0h1nSjWCzMPewdkphqPIkPg+ACc0HgJMxpfw2LpeAxhZlUtTKLu3J
+	 sQl26syu4+cMg==
+Date: Thu, 27 Nov 2025 17:10:11 +0000
 From: Conor Dooley <conor@kernel.org>
 To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V config for v6.19
-Message-ID: <20251127-saturate-slam-ab92576bcca7@spud>
+Cc: conor@kernel.org, jonathan.cameron@huawei.com, soc@kernel.org
+Subject: [GIT PULL] standalone cache drivers for v6.19
+Message-ID: <20251127-facelift-revisable-772b117a799b@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -41,60 +41,99 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="d0a3FAk5e90PPeWm"
+	protocol="application/pgp-signature"; boundary="WSRjwrTseeO6xcTQ"
 Content-Disposition: inline
 
 
---d0a3FAk5e90PPeWm
+--WSRjwrTseeO6xcTQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey folks,
 
-On behalf of the spacemit platform maintainers, I grabbed a config
-option, so here it is. It's the only thing I have config wise this
-time around.
+Please pull my standalone cache driver 6.19 update.
+The base here is a wee bit odd, I forgot to fast-forward this cycle and
+didn't want to do a last-minute rebase when I noticed this today.
 
 Cheers,
 Conor.
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+The following changes since commit 941327ca5ddd45cfc4dd960cbbabed9e2b5cb1b0:
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+  cache: sifive_ccache: Optimize cache flushes (2025-09-11 19:13:21 +0100)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-config-for-v6.19
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ cache-for-v6.19
 
-for you to fetch changes up to 3187e25eb2705dec9f0509f6e42da7e018718c74:
+for you to fetch changes up to 055bcc552b5181da208038c1de9437e9cca69380:
 
-  riscv: defconfig: enable SPI_FSL_QUADSPI as a module (2025-11-12 11:26:51 +0000)
+  MAINTAINERS: refer to intended file in STANDALONE CACHE CONTROLLER DRIVERS (2025-11-21 18:42:02 +0000)
 
 ----------------------------------------------------------------
-RISC-V config for v6.19
+standalone cache drivers for v6.19
 
-Spacemit:
-The Spacemit k1 wants the freescale qspi driver enabled as a module
-as they appear to be rather similar IPs.
+ccache:
+Add a compatible for the pic64gx SoC. No driver change needed, as it
+falls back to the PolarFire SoC.
+
+hisi hha/generic cpu cache maintenance:
+Add support for a non-architectural mechanism for invalidating memory
+regions, needed for some cxl implementations on arm64 (and probably
+elsewhere in the future). The HiSilicon Hydra Home Agent is the first
+driver to provide this support.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Alex Elder (1):
-      riscv: defconfig: enable SPI_FSL_QUADSPI as a module
+Jonathan Cameron (4):
+      memregion: Drop unused IORES_DESC_* parameter from cpu_cache_invalidate_memregion()
+      arm64: Select GENERIC_CPU_CACHE_MAINTENANCE
+      MAINTAINERS: Add Jonathan Cameron to drivers/cache and add lib/cache_maint.c + header
+      cache: Make top level Kconfig menu a boolean dependent on RISCV
 
- arch/riscv/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Lukas Bulwahn (1):
+      MAINTAINERS: refer to intended file in STANDALONE CACHE CONTROLLER DRIVERS
 
---d0a3FAk5e90PPeWm
+Pierre-Henry Moussay (1):
+      dt-bindings: cache: sifive,ccache0: add a pic64gx compatible
+
+Yicong Yang (2):
+      memregion: Support fine grained invalidate by cpu_cache_invalidate_memregion()
+      lib: Support ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+
+Yushan Wang (1):
+      cache: Support cache maintenance for HiSilicon SoC Hydra Home Agent
+
+ .../devicetree/bindings/cache/sifive,ccache0.yaml  |   5 +
+ MAINTAINERS                                        |   3 +
+ arch/arm64/Kconfig                                 |   2 +
+ arch/x86/mm/pat/set_memory.c                       |   2 +-
+ drivers/cache/Kconfig                              |  37 +++-
+ drivers/cache/Makefile                             |   2 +
+ drivers/cache/hisi_soc_hha.c                       | 194 +++++++++++++++++++++
+ drivers/cxl/core/region.c                          |   5 +-
+ drivers/nvdimm/region.c                            |   2 +-
+ drivers/nvdimm/region_devs.c                       |   2 +-
+ include/linux/cache_coherency.h                    |  61 +++++++
+ include/linux/memregion.h                          |  16 +-
+ lib/Kconfig                                        |   3 +
+ lib/Makefile                                       |   2 +
+ lib/cache_maint.c                                  | 138 +++++++++++++++
+ 15 files changed, 462 insertions(+), 12 deletions(-)
+ create mode 100644 drivers/cache/hisi_soc_hha.c
+ create mode 100644 include/linux/cache_coherency.h
+ create mode 100644 lib/cache_maint.c
+
+--WSRjwrTseeO6xcTQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaSh+IwAKCRB4tDGHoIJi
-0iJMAP0aRCYPja92Y3M72E7oDltBp2qgEIk2bxJ2S873n8H6LgD9El+Vagf/hr1N
-bAzmTjiFY6AahhQHcTavEeJ3aa4zKgk=
-=T+S3
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaSiF8wAKCRB4tDGHoIJi
+0n/6AP9hcctjfzFUpuTs8DhM12oHXeDiZkKt/ro8iiZdjrsVSwEA5jfGvZyvBH6y
+D0xRvhMHkrS9zFNseKpxmKhY5ddizQA=
+=YAAk
 -----END PGP SIGNATURE-----
 
---d0a3FAk5e90PPeWm--
+--WSRjwrTseeO6xcTQ--
