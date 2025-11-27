@@ -1,39 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A91330336
-	for <soc@lists.linux.dev>; Thu, 27 Nov 2025 16:07:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3A32D7DC8
+	for <soc@lists.linux.dev>; Thu, 27 Nov 2025 16:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764259633; cv=none; b=JQvGWztNvzz0RyLJ/D56R3U9n6xKbkR8Q5FDr94+6b2hyLE/7Pzr1juUM+VIrmWPeyoXPq0EONcqRwskG3trIE9+lZIvVyRACPNYxo0HZ747eXoDvsm+aVnrHNJbWZliQHvb4wPf4CkXDBHEU2WZQZJkojDb5B4fdV5KNasej1c=
+	t=1764261414; cv=none; b=VVZ6XDuX4k3wILU7BQF/pfZgsyDOaqCUzG3JAV90wpfMUh3pX74wMh/EBMp5jCVSjF761JqdVIRX0bSOKatDi6gnJ8iWynrkWOWwwKBsbmAVl0H2/mD4QUHi4o53jjxYJ7c9dXpvkj2+BdI3o3UwU9I3kLe2hWJT5tmiKtmffzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764259633; c=relaxed/simple;
-	bh=wPDhpQkNJJQk7R1CNhHFSFjejlF8GTL99mJgXlWw0mE=;
+	s=arc-20240116; t=1764261414; c=relaxed/simple;
+	bh=Aa6TofsDgEtlr/eVXyb0tnk9QiuGSJrfHim0d0dEtuU=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=n5Qmwj+pF0KMeSiqYyo3+Yt4Nr6Jti91SGv9qDuTkABimcjut57VJgEnXPgu345XjoavUziIZZqvj+0PRbiPkUSeUj+V2o+TCuluUgo7hBUrTyERifMZijGqvfrI7re3s3C2GYS+i1N7qmuvtzvaK3a28bi0h30ydjXRPBsfOAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxJ178Is; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=kEpNntg7+EOnrP8yRpaD2N3y05bgTBdmcb5u9DWwrvr8NChU3zYgpxTbtT4zIUCrGZ8uWFUg3vu+dFub28VDyxPLOxLxwuw5VT04PsW3fpPKFzjV4Nd0QoT+6hKz4k7AKSBcWyTvcXfM9N6hegWqIi2KsR2L5WAF0ZDJCfw+la4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NvXxf7DA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxJ178Is"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NvXxf7DA"
 Received: by smtp.kernel.org (Postfix)
-	id 7DAB5C116C6; Thu, 27 Nov 2025 16:07:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B5E8C4CEF8;
-	Thu, 27 Nov 2025 16:07:09 +0000 (UTC)
+	id 783E7C116C6; Thu, 27 Nov 2025 16:36:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96888C4CEF8;
+	Thu, 27 Nov 2025 16:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764259630;
-	bh=wPDhpQkNJJQk7R1CNhHFSFjejlF8GTL99mJgXlWw0mE=;
+	s=k20201202; t=1764261414;
+	bh=Aa6TofsDgEtlr/eVXyb0tnk9QiuGSJrfHim0d0dEtuU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=dxJ178IsFIufTUkjOHktklvTY08b+K5oFjXew0fRFJqP5wMDyYBUBoLeNY1NOBcfq
-	 X94RLDhdbBTq7/MQ4rM3oELG5RxTAdrO0PL22H1IboKRAFmv4EAfcJekQT259BnUQZ
-	 XufwEvGvyVBUTLxS5VVrL6mUApgUKBBok2WFmSGX7NUFOXVx9KN2sZjnA0PaSmeMpX
-	 +Isqf2aHRKfcMWx9ZNFLemgoFW1AM7phoLizE2BLVOH3s3ULLHc8c+CYs+TjUNdikL
-	 13RNk/yelQpgT0TbihXZ0tRcReT4v6rFmaqhKQM+hyTa0IFI+2qjYIzOSBMWFDe2mU
-	 zh9w56Qz+Pfyw==
-Date: Thu, 27 Nov 2025 16:07:07 +0000
+	b=NvXxf7DANd4/o5pEdsxmGwFcmVANV5Hnxf2Q22nrM7BaZrreYTx4KjiXR23SNOsMI
+	 secQiWLAWlau+7eXACzzOuoufutI/jlbiq9cnFnDLmts5FG68LIX3/UPqUJNcrDy1w
+	 n0LgSt/JiINJD0gu0HXPsvfCyto9jLvQtSl0Ju/yJ6wokD1VpkCdS92pyAEHG/EHUy
+	 nsOBJXZkdX22b7Leu8EDgLRMasWByiDtX+Auu4OjxQ5HQjW7Jpii2HFLPvx3KD4I4z
+	 fHy4L+GvBnJWAAqEHearF4rc0vz2qthDQRTtaWCwKNf3jPyx2Qtygb3e7s0zoQEuFJ
+	 DFFnz4ba30hfg==
+Date: Thu, 27 Nov 2025 16:36:51 +0000
 From: Conor Dooley <conor@kernel.org>
 To: soc@kernel.org
 Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V soc-drivers for v6.19
-Message-ID: <20251127-wish-shining-300e8fb80599@spud>
+Subject: [GIT PULL] RISC-V config for v6.19
+Message-ID: <20251127-saturate-slam-ab92576bcca7@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -41,17 +41,19 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5Lj1ZaEMcGf5EH9/"
+	protocol="application/pgp-signature"; boundary="d0a3FAk5e90PPeWm"
 Content-Disposition: inline
 
 
---5Lj1ZaEMcGf5EH9/
+--d0a3FAk5e90PPeWm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey folks,
 
-Please pull my 6.19 soc driver changes.
+On behalf of the spacemit platform maintainers, I grabbed a config
+option, so here it is. It's the only thing I have config wise this
+time around.
 
 Cheers,
 Conor.
@@ -62,52 +64,37 @@ The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ soc-drivers-for-v6.19
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-config-for-v6.19
 
-for you to fetch changes up to 66c6ceb41ed375773491c5d024167a2cbe6fe944:
+for you to fetch changes up to 3187e25eb2705dec9f0509f6e42da7e018718c74:
 
-  MAINTAINERS: rename Microchip RISC-V entry (2025-11-11 16:52:30 +0000)
+  riscv: defconfig: enable SPI_FSL_QUADSPI as a module (2025-11-12 11:26:51 +0000)
 
 ----------------------------------------------------------------
-RISC-V soc-drivers for v6.19
+RISC-V config for v6.19
 
-Microchip:
-Add bindings and mfd drivers for two syscon regions on PolarFire SoC,
-needed as part of a rework of the devicetree to permit supporting,
-among other things, pinctrl sanely and avoiding the "new" pic64gx SoC
-ever using the original incorrect clock nodes. Fiddle with the Microchip
-RISC-V MAINTAINERS entry to add these drivers and avoid branding it FPGA
-only.
+Spacemit:
+The Spacemit k1 wants the freescale qspi driver enabled as a module
+as they appear to be rather similar IPs.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Conor Dooley (4):
-      dt-bindings: soc: microchip: document the simple-mfd syscon on PolarFire SoC
-      soc: microchip: add mfd drivers for two syscon regions on PolarFire SoC
-      MAINTAINERS: add new soc drivers to Microchip RISC-V entry
-      MAINTAINERS: rename Microchip RISC-V entry
+Alex Elder (1):
+      riscv: defconfig: enable SPI_FSL_QUADSPI as a module
 
- .../microchip/microchip,mpfs-mss-top-sysreg.yaml   | 47 ++++++++++++++++++++++
- MAINTAINERS                                        |  4 +-
- drivers/soc/microchip/Kconfig                      | 12 ++++++
- drivers/soc/microchip/Makefile                     |  1 +
- drivers/soc/microchip/mpfs-control-scb.c           | 38 +++++++++++++++++
- drivers/soc/microchip/mpfs-mss-top-sysreg.c        | 44 ++++++++++++++++++++
- 6 files changed, 145 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-mss-top-sysreg.yaml
- create mode 100644 drivers/soc/microchip/mpfs-control-scb.c
- create mode 100644 drivers/soc/microchip/mpfs-mss-top-sysreg.c
+ arch/riscv/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
---5Lj1ZaEMcGf5EH9/
+--d0a3FAk5e90PPeWm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaSh3KwAKCRB4tDGHoIJi
-0pt+AP9DympcOswdVPZPrJm+aekvGfrjMkCi5M34N5LnusAWmgEA3Xz5bGLoSqNv
-zg4Kn55STYoEiK1Xd73sI+DcLlo0/g4=
-=m0FT
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaSh+IwAKCRB4tDGHoIJi
+0iJMAP0aRCYPja92Y3M72E7oDltBp2qgEIk2bxJ2S873n8H6LgD9El+Vagf/hr1N
+bAzmTjiFY6AahhQHcTavEeJ3aa4zKgk=
+=T+S3
 -----END PGP SIGNATURE-----
 
---5Lj1ZaEMcGf5EH9/--
+--d0a3FAk5e90PPeWm--
