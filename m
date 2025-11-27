@@ -1,168 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D2C302155
-	for <soc@lists.linux.dev>; Thu, 27 Nov 2025 17:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB822AD37
+	for <soc@lists.linux.dev>; Thu, 27 Nov 2025 22:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764264076; cv=none; b=pd2Wd3zDZxodYXX/d9YK/Yw2jKUFuI1qP1X0YAf6o89E9alv4hdBU7p7Qy6vG6eRHIMLCPVUgZFlTpltlWMSHga3PMcydiYUgT9bS/ME4qoJ76w35SOiVfRBxoqU3ZwVtk1NKeYJG4SvU8oGMwayv3j2FHEAxQBh6ux60l1ECcw=
+	t=1764281591; cv=none; b=Pia/GVCFQpEMqFIxmen2zLFlqriLCbUfG7ZQEGH9Qw1nDGT4L2vmi/bhZi7SEP7CJaRUzXFQKtIfpAM0SLr6tZqHGvl9uYW5SYyQB0JwpK+OON4Y/PdTQunjdCHiW7pdQ/QcZTiZPa+K+JY+vjgIWnBCVAX4mteKXpIkZhzAUtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764264076; c=relaxed/simple;
-	bh=HS77SmwEsYpkqDMSzAifIhnPv+Zayz1qcg96NR9gw48=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=saHOD54l48e1eBD3efb8oGeVvqbOTraNXrFwUnpO7XD1/9uGUr3NzkclUPJa5piTDS/qST67Il/KjGr5Hbxlzh6sNPoYJ7ZtT+MdDB3xoTlTzTLKW8gDOLMAx7S83XUZvzdUff39vSUYGH04/yMLc/7Mw5ujXn3YaNzWiLFK00A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T87OKTeu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764281591; c=relaxed/simple;
+	bh=Ab3tsNt4//sDToWm7ZyoaBV6aKerto5SO6PUSHVolDE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=C4GAjpsUFw3tZ1cMLhfhFQB+gpVferBFy7xWLCBNJEiqbqMQmVz/YurdlYDgPds1Tbb23CWtOpdel1f6t3HyBtLjhYyuOQaN4O25OpykbqxkrNhI8TU7fCcBOiVWEPOoPwPwbbna9Zg5/7nYG0iXs7ngA0zrAz9/+zjeEtJ7AYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UrmBHSZO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T87OKTeu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UrmBHSZO"
 Received: by smtp.kernel.org (Postfix)
-	id 07B79C116C6; Thu, 27 Nov 2025 17:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F16F0C4CEF8;
-	Thu, 27 Nov 2025 17:21:14 +0000 (UTC)
+	id 60091C113D0; Thu, 27 Nov 2025 22:13:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF2CC4CEF8
+	for <soc@kernel.org>; Thu, 27 Nov 2025 22:13:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764264075;
-	bh=HS77SmwEsYpkqDMSzAifIhnPv+Zayz1qcg96NR9gw48=;
-	h=Date:From:To:Cc:Subject:From;
-	b=T87OKTeu2ddm6MB8ijGVxO5FIYlPymZ4FbcXTSX7t8R8/PMNSugNLkR9hxkHcY5iF
-	 SmjhItONkE2dlNraMKsHHwBgjqMWqkwwMvCixGsWV/wCBc+looPMixrtwc0Zrd84hD
-	 iYBDFBWDWIUzZqzhy3jSVk0v21m3ZYtvkR9aR0Uegwq1zHwarHZM8gJiYEJJFEi6IN
-	 5Sb/EJcgN0g3gbV6D3z2pCBOOTGCkoGSoTw1dVhTyj6VFDT/NbELnSfxAVHPbX3r6s
-	 8lzMUYvGxo4JvrTOKUVPszFFPvCzWLvzHdPUvPvm6S/6UTRgVTH9U4pQIWz47xwaXv
-	 Uff8qqsbpunkA==
-Date: Thu, 27 Nov 2025 17:21:12 +0000
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org, kernel@esmil.dk
-Subject: [GIT PULL] RISC-V Devicetrees for v6.19
-Message-ID: <20251127-unthread-probable-75bbd4e737f5@spud>
+	s=k20201202; t=1764281590;
+	bh=Ab3tsNt4//sDToWm7ZyoaBV6aKerto5SO6PUSHVolDE=;
+	h=Subject:From:Date:To:Cc:From;
+	b=UrmBHSZOwG8yV42SJSCUOPBj4gIA2gOG3yCbfJugYrXc3EmBtpacMtOrgVMTDoDd9
+	 2M2y4B0sdQ2M96Ue3jAy2ngpD/BtX8SDnZzkGhqd1ko9akruYV+BFji8x+huTw9uyn
+	 r7R7zErslZ+gIsmV2j3WzTf6NTyiO6dyWhf587Ql+HWMhEFoS/x9viDKMddbSGghz9
+	 OyDyKh9sJZaOoqKeSWlvRrYcruhzxmkM+W8V0rg6dUnwVL3PK8aZ4Y9umsI3UjPErd
+	 Z9r5FxTxYX2Kk4uRpW5vrp31nvZ9C8FkqHUpEnT1YPE3f2x4V8zjGo3jkyGDgusJvV
+	 hD31y6QXhUShg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BACC63808204;
+	Thu, 27 Nov 2025 22:10:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vC5F/PZ6oQKMyVGD"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <176428141221.55019.1992443123584837272.git-patchwork-summary@kernel.org>
+Date: Thu, 27 Nov 2025 22:10:12 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
+
+Hello:
+
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
+
+Patch: [GIT,PULL] Apple SoC driver changes for v6.19
+  Submitter: Sven Peter <sven@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1028044
+  Lore link: https://lore.kernel.org/r/20251126211634.8864-1-sven@kernel.org
+
+Patch: [GIT,PULL] SOC FSL for 6.19
+  Submitter: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1027984
+  Lore link: https://lore.kernel.org/r/bd0f1a68-7e0e-4cc6-995c-f46561b71c52@kernel.org
+
+Patch: [GIT,PULL] Amlogic drivers updates for v6.19
+  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1027712
+  Lore link: https://lore.kernel.org/r/9e0a76ed-8eb5-4820-b64b-a0efa0f91170@linaro.org
+
+Patch: [GIT,PULL] standalone cache drivers for v6.19
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1028385
+  Lore link: https://lore.kernel.org/r/20251127-facelift-revisable-772b117a799b@spud
+
+Patch: [GIT,PULL] Reset/GPIO/swnode changes for v6.19 (v2)
+  Submitter: Philipp Zabel <p.zabel@pengutronix.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1026397
+  Lore link: https://lore.kernel.org/r/20251121152802.3619853-1-p.zabel@pengutronix.de
+
+Patch: [GIT,PULL] RISC-V soc-drivers for v6.19
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1028364
+  Lore link: https://lore.kernel.org/r/20251127-wish-shining-300e8fb80599@spud
+
+Patch: arm64: dts: mediatek: mt8195: Fix address range for JPEG decoder core 1
+  Submitter: Chen-Yu Tsai <wenst@chromium.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1028209
+  Lore link: https://lore.kernel.org/r/20251127100044.612825-1-wenst@chromium.org
+
+Patch: [GIT,PULL] amlogic ARM64 DT updates for v6.19
+  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1027716
+  Lore link: https://lore.kernel.org/r/8386665e-b465-4efc-a5c5-72354397623a@linaro.org
+
+Patch: [GIT,PULL] RISC-V config for v6.19
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1028375
+  Lore link: https://lore.kernel.org/r/20251127-saturate-slam-ab92576bcca7@spud
+
+Patch: [GIT,PULL] RISC-V Devicetrees for v6.19
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1028393
+  Lore link: https://lore.kernel.org/r/20251127-unthread-probable-75bbd4e737f5@spud
 
 
---vC5F/PZ6oQKMyVGD
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Total patches: 10
 
-Hey folks,
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Please pull my devicetree updates for 6.19.
 
-Cheers,
-Conor.
-
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
-
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-dt=
--for-v6.19
-
-for you to fetch changes up to 5b70764e10190d57e6cd3287d3a3b06f8c89f69c:
-
-  riscv: dts: starfive: add Orange Pi RV (2025-11-25 22:20:54 +0000)
-
-----------------------------------------------------------------
-RISC-V Devicetrees for v6.19
-
-MAINTAINERS:
-There's some re-jigging of things to reduce duplication, by moving me
-into the StarFive entry and my tree into the Microchip one. The
-other platforms that I look after (SiFive and Canaan) are marked as Odd
-Fixes to better represent their status. Nothing functionally changes.
-
-Microchip:
-Add adc and mmc nodes for the Beagle-V Fire.
-
-SiFive:
-Add pwm fans to the unmatched board.
-
-StarFive:
-Add the Orange PI RV board, another VisionFive 2 derived SBC. This
-required moving a mmc related nodes out of the common file, into
-<board>.dts. Yet more things moved out of the common file when the
-VisionFive 2 Lite boards were added, which use the JH7110S SoC instead of
-the JH7110. The difference here between SoCs is just temperature and
-frequency ranges, but the boards differ enough that the pool of common
-nodes decreases a little further.  There's an eMMC and an SD variant
-here, that are different SKUs, bringing the total new StarFive boards to
-three.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-----------------------------------------------------------------
-Conor Dooley (5):
-      riscv: dts: microchip: enable qspi adc/mmc-spi-slot on BeagleV Fire
-      MAINTAINERS: add Conor to StarFive entry
-      MAINTAINERS: remove patchwork from RISC-V MISC SOC SUPPORT
-      MAINTAINERS: add tree to RISC-V Microchip entry
-      MAINTAINERS: degrade RISC-V MISC SOC SUPPORT to Odd Fixes
-
-E Shattow (1):
-      dts: starfive: jh7110-common: split out mmc0 reset pins from common i=
-nto boards
-
-Hal Feng (5):
-      dt-bindings: riscv: Add StarFive JH7110S SoC and VisionFive 2 Lite bo=
-ard
-      riscv: dts: starfive: jh7110-common: Move out some nodes to the board=
- dts
-      riscv: dts: starfive: Add common board dtsi for VisionFive 2 Lite var=
-iants
-      riscv: dts: starfive: Add VisionFive 2 Lite board device tree
-      riscv: dts: starfive: Add VisionFive 2 Lite eMMC board device tree
-
-Icenowy Zheng (2):
-      dt-bindings: riscv: starfive: add xunlong,orangepi-rv
-      riscv: dts: starfive: add Orange Pi RV
-
-Ren=E9 Rebe (1):
-      riscv: dts: sifive: unmatched: Add PWM controlled fans
-
- .../devicetree/bindings/riscv/starfive.yaml        |   7 +
- MAINTAINERS                                        |   9 +-
- .../riscv/boot/dts/microchip/mpfs-beaglev-fire.dts |  96 ++++++++++++
- .../riscv/boot/dts/sifive/hifive-unmatched-a00.dts |  10 ++
- arch/riscv/boot/dts/starfive/Makefile              |   3 +
- arch/riscv/boot/dts/starfive/jh7110-common.dtsi    |  19 ---
- .../dts/starfive/jh7110-deepcomputing-fml13v01.dts |  27 ++++
- arch/riscv/boot/dts/starfive/jh7110-milkv-mars.dts |  27 ++++
- .../boot/dts/starfive/jh7110-milkv-marscm-emmc.dts |   9 ++
- .../boot/dts/starfive/jh7110-milkv-marscm-lite.dts |   1 +
- .../boot/dts/starfive/jh7110-milkv-marscm.dtsi     |  13 ++
- .../riscv/boot/dts/starfive/jh7110-orangepi-rv.dts |  76 ++++++++++
- .../boot/dts/starfive/jh7110-pine64-star64.dts     |  27 ++++
- .../jh7110-starfive-visionfive-2-lite-emmc.dts     |  22 +++
- .../starfive/jh7110-starfive-visionfive-2-lite.dts |  20 +++
- .../jh7110-starfive-visionfive-2-lite.dtsi         | 161 +++++++++++++++++=
-++++
- .../dts/starfive/jh7110-starfive-visionfive-2.dtsi |  24 +++
- 17 files changed, 528 insertions(+), 23 deletions(-)
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-orangepi-rv.dts
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive=
--2-lite-emmc.dts
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive=
--2-lite.dts
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive=
--2-lite.dtsi
-
---vC5F/PZ6oQKMyVGD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaSiIiAAKCRB4tDGHoIJi
-0rFKAQCkfSkHhBqdMQ3GdKyUi1dJbZqUg86rEjb1P0Ijr1BN7wEAiZvcquFF+ANu
-Jbqs6y+xNCqJ6w6hpuXe9foD0gSRKQQ=
-=wPOI
------END PGP SIGNATURE-----
-
---vC5F/PZ6oQKMyVGD--
