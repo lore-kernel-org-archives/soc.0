@@ -1,129 +1,361 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87097214210
-	for <soc@lists.linux.dev>; Thu, 11 Dec 2025 13:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DD82C236D;
+	Fri, 12 Dec 2025 20:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765458306; cv=none; b=V/MWuP1tDUqPQHwa4QCC1XNccIUOWm3xFvB3/VgQLPpVWLBeavwDSWie5TFsQXCLghHvWmGo6GHToFJw1PXyF/ZD/tckzRtKQPwHNZyi70dKgjc+8FUzLvb1tOKB4FqZkjZbefM0JyPzrVTzSehnLJZ6mkA28AAd+NIHTYP2dx4=
+	t=1765571582; cv=none; b=AeqYd3Xhe6musuIwzcF7Yizba5n4t1JoMJVNpmOdS6XiDxDb47WFsgZNlrnOY04WOErgYKWOmVyN3qK3MA5n8MfJBZ4DUofDm9M2DJdM+BrEF9Jrgu2vfWWDtmj2IVThctk/vNvhVlBUkvxdOPWyLhuTvN3NHE0anHwsR70Lpag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765458306; c=relaxed/simple;
-	bh=TM4pB4B99UeY51FOmKqHe9qaAswn9fi2oFJ4ttsgNko=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=cVgWzcy6xV0JlXNZv2PCyYOCra3ETOtzN22CvaXxaQRzJ+N+YdHzVmMmgltewV4gSUA7nKngDMDLRmoMhhZp4Xoq73IKcTIXyzDdIekR1eT5Pi2oYnQHRJ83QABC3H6aNiigTH3YOWG0cFCpgZoH3iynWRYXMLuQqZ5HeghDqj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=esPDVsMy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765571582; c=relaxed/simple;
+	bh=oXV52+EBwnwQgsf4JQISAFcL+Q5wlGyp41ZRqonHpZ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QVhxV3gzTjKnDZp16/pP86uVvP5V9UK3WdpcR017oJdbIpuH32PVApeoxkv1FM5PzTLVqV27i2Z5XYtUrnUNAsbyprLq8JSejE3mwLV9LTiDioXXgpjNp4lp2FQH8+a7IWsdBTvAN9ITTaKfpyUY8cYRdX5mjYrTU25wmOCJ5jI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KpvygYdb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esPDVsMy"
-Received: by smtp.kernel.org (Postfix)
-	id 1C062C116B1; Thu, 11 Dec 2025 13:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D325C4CEF7;
-	Thu, 11 Dec 2025 13:05:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KpvygYdb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D849DC4CEF1;
+	Fri, 12 Dec 2025 20:33:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765458304;
-	bh=TM4pB4B99UeY51FOmKqHe9qaAswn9fi2oFJ4ttsgNko=;
-	h=From:Date:Subject:To:Cc:From;
-	b=esPDVsMyszqmorGhvl0xDE3fZGdI2t1u3n41KhR+1sh6UO53kygqKyPY/sEd/7szU
-	 dja9fSKZXVxU/PtU5yMRel4WN2bnWjHHC3uaEMqYacppbUNtY9keb9uqR1RtiNCpIA
-	 zaorg6abqsIfztldpWpyaodqiXxsiFBmqwgVh/k94nOeb0BDGrnUqOrM3gU0PeI1sI
-	 ojp10zb+ocJOfSQ0NSOfJWWTDZlMB5UAXes+iPWsMAoYHeVlSAjzzMi6ckO6JkZ2i1
-	 TWSM4pMVkPWJhA2og9y1qD9r4WlxPFptr0nDxxOc/lLT/6rpKw8wvnHHQQPHwtyHA+
-	 iFZDoXaMXaTuA==
-From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 11 Dec 2025 14:05:01 +0100
-Subject: [PATCH] ARM: dts: ixp4xx: Fix up Actiontec MI424WR DTS files
+	s=k20201202; t=1765571582;
+	bh=oXV52+EBwnwQgsf4JQISAFcL+Q5wlGyp41ZRqonHpZ8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KpvygYdbl+4QNc5B0uRSQKkrD3fQ8etfSezmQ9uT3E2yv1THLQROJFd6eavFCHURo
+	 xX0+3Wdd/mbarggr2WfdhfVIfznhmevgSradqiJrVjX4oATKIeQpOidzJxWfYX9UMj
+	 mvSRtL8QntugInpc1el8zgQfBM4jRQE3rjSZj38S6XHrdT28tifFqrTWrk+K4xbxZX
+	 5nKqVWjr+g6ZSc5MEPMJTzz39ERSfNQ3UnXiSbDQ2D5/EWhTKYTYPhFDVDJ89u5xok
+	 tTS1nIt0485bFcHL0AGVHkTEPjIwH7xF6ygRuyHdLliBze4vkI45jOn8PGJ1ziiTDC
+	 SMAmkG1Od/Yjg==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	soc@lists.linux.dev,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-msm@vger.kernel.org
+Subject: [PATCH] arm/arm64: dts: st: Drop unused .dtsi
+Date: Fri, 12 Dec 2025 14:32:09 -0600
+Message-ID: <20251212203226.458694-3-robh@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251211-ixp4xx-actiontec-dts-fix-v1-1-97af8e79d474@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBBFryKzbiDNiLpKtBCdajYlKiGEd29o+
- T7vvxcyJaYMi3oh0cOZ70tAdwr86a6DkIMwmN6M2miNXKOtFZ0vYhbyGErGnSuSt24ydt7tMIL
- cYyKZ//S6tfYB8jrkRmoAAAA=
-X-Change-ID: 20251211-ixp4xx-actiontec-dts-fix-ec4a7249f435
-To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, Linus Walleij <linusw@kernel.org>
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
 
-The KS8995 switch was unconditionally wired to EthC (eth1)
-on both MI424WR variants, this is wrong: the D revision has
-the switch connected to EthB (eth0) so pull this assingment
-out of the generic MI424WR DTSI file and make it a property
-of the respective variants instead.
+These .dtsi files are not included anywhere in the tree and can't be
+tested.
 
-Signed-off-by: Linus Walleij <linusw@kernel.org>
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
-SoC maintainers: please apply this patch directly for fixes.
----
- .../boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-ac.dts  | 11 +++++++++++
- .../boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-d.dts   | 11 +++++++++++
- .../boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi    |  1 -
- 3 files changed, 22 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/st/spear320s.dtsi           | 24 -------
+ .../boot/dts/st/stm32mp15xxab-pinctrl.dtsi    | 57 ---------------
+ arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi    | 63 ----------------
+ arch/arm64/boot/dts/st/stm32mp21xc.dtsi       |  8 ---
+ arch/arm64/boot/dts/st/stm32mp23xc.dtsi       |  8 ---
+ arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |  8 ---
+ .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    | 71 -------------------
+ 7 files changed, 239 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/st/spear320s.dtsi
+ delete mode 100644 arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
+ delete mode 100644 arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi
+ delete mode 100644 arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+ delete mode 100644 arch/arm64/boot/dts/st/stm32mp23xc.dtsi
+ delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+ delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
 
-diff --git a/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-ac.dts b/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-ac.dts
-index 413b9255f9e3..19a8d7b07758 100644
---- a/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-ac.dts
-+++ b/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-ac.dts
-@@ -12,6 +12,17 @@ / {
- 	model = "Actiontec MI424WR rev A/C";
- 	compatible = "actiontec,mi424wr-ac", "intel,ixp42x";
- 
-+	/* Connect the switch to EthC */
-+	spi {
-+		ethernet-switch@0 {
-+			ethernet-ports {
-+				ethernet-port@4 {
-+					ethernet = <&ethc>;
-+				};
-+			};
-+		};
-+	};
-+
- 	soc {
- 		/* EthB used for WAN */
- 		ethernet@c8009000 {
-diff --git a/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-d.dts b/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-d.dts
-index 3619c6411a5c..244c6ea0973f 100644
---- a/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-d.dts
-+++ b/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-d.dts
-@@ -12,6 +12,17 @@ / {
- 	model = "Actiontec MI424WR rev D";
- 	compatible = "actiontec,mi424wr-d", "intel,ixp42x";
- 
-+	/* Connect the switch to EthB */
-+	spi {
-+		ethernet-switch@0 {
-+			ethernet-ports {
-+				ethernet-port@4 {
-+					ethernet = <&ethb>;
-+				};
-+			};
-+		};
-+	};
-+
- 	soc {
- 		/* EthB used for LAN */
- 		ethernet@c8009000 {
-diff --git a/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi b/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi
-index 76fd97c5beb6..9b54e3c01a34 100644
---- a/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi
-+++ b/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi
-@@ -152,7 +152,6 @@ ethernet-port@3 {
- 				};
- 				ethernet-port@4 {
- 					reg = <4>;
--					ethernet = <&ethc>;
- 					phy-mode = "mii";
- 					fixed-link {
- 						speed = <100>;
-
----
-base-commit: 7d0a66e4bb9081d75c82ec4957c50034cb0ea449
-change-id: 20251211-ixp4xx-actiontec-dts-fix-ec4a7249f435
-
-Best regards,
+diff --git a/arch/arm/boot/dts/st/spear320s.dtsi b/arch/arm/boot/dts/st/spear320s.dtsi
+deleted file mode 100644
+index 133236dc190d..000000000000
+--- a/arch/arm/boot/dts/st/spear320s.dtsi
++++ /dev/null
+@@ -1,24 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * DTS file for SPEAr320s SoC
+- *
+- * Copyright 2021 Herve Codina <herve.codina@bootlin.com>
+- */
+-
+-/include/ "spear320.dtsi"
+-
+-/ {
+-	ahb {
+-		apb {
+-			gpiopinctrl: gpio@b3000000 {
+-				/*
+-				 * The "RM0321 SPEAr320s address and map
+-				 * registers" document mentions interrupt 6
+-				 * (NPGIO_INTR) for the PL_GPIO interrupt.
+-				 */
+-				interrupts = <6>;
+-				interrupt-parent = <&shirq>;
+-			};
+-		};
+-	};
+-};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
+deleted file mode 100644
+index 328dad140e9b..000000000000
+--- a/arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
++++ /dev/null
+@@ -1,57 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+-/*
+- * Copyright (C) STMicroelectronics 2019 - All Rights Reserved
+- * Author: Alexandre Torgue <alexandre.torgue@st.com> for STMicroelectronics.
+- */
+-
+-&pinctrl {
+-	st,package = <STM32MP_PKG_AB>;
+-
+-	gpioa: gpio@50002000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 0 16>;
+-	};
+-
+-	gpiob: gpio@50003000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 16 16>;
+-	};
+-
+-	gpioc: gpio@50004000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 32 16>;
+-	};
+-
+-	gpiod: gpio@50005000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 48 16>;
+-	};
+-
+-	gpioe: gpio@50006000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 64 16>;
+-	};
+-
+-	gpiof: gpio@50007000 {
+-		status = "okay";
+-		ngpios = <6>;
+-		gpio-ranges = <&pinctrl 6 86 6>;
+-	};
+-
+-	gpiog: gpio@50008000 {
+-		status = "okay";
+-		ngpios = <10>;
+-		gpio-ranges = <&pinctrl 6 102 10>;
+-	};
+-
+-	gpioh: gpio@50009000 {
+-		status = "okay";
+-		ngpios = <2>;
+-		gpio-ranges = <&pinctrl 0 112 2>;
+-	};
+-};
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi b/arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi
+deleted file mode 100644
+index 929bdcd45d02..000000000000
+--- a/arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi
++++ /dev/null
+@@ -1,63 +0,0 @@
+-// SPDX-License-Identifier: BSD-3-Clause
+-/*
+- * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
+- */
+-
+-#include "msm8996.dtsi"
+-
+-/ {
+-	qcom,msm-id = <246 0x30000>;
+-};
+-
+- /*
+-  * This revision seems to have differ GPU CPR
+-  * parameters, GPU frequencies and some differences
+-  * when it comes to voltage delivery to.. once again
+-  * the GPU. Funnily enough, it's simpler to make it an
+-  * overlay on top of 3.1 (the final one) than vice versa.
+-  * The differences will show here as more and more
+-  * features get enabled upstream.
+-  */
+-
+-gpu_opp_table_3_0: opp-table-gpu30 {
+-	compatible = "operating-points-v2";
+-
+-	opp-624000000 {
+-		opp-hz = /bits/ 64 <624000000>;
+-		opp-level = <7>;
+-	};
+-
+-	opp-560000000 {
+-		opp-hz = /bits/ 64 <560000000>;
+-		opp-level = <6>;
+-	};
+-
+-	opp-510000000 {
+-		opp-hz = /bits/ 64 <510000000>;
+-		opp-level = <5>;
+-	};
+-
+-	opp-401800000 {
+-		opp-hz = /bits/ 64 <401800000>;
+-		opp-level = <4>;
+-	};
+-
+-	opp-315000000 {
+-		opp-hz = /bits/ 64 <315000000>;
+-		opp-level = <3>;
+-	};
+-
+-	opp-214000000 {
+-		opp-hz = /bits/ 64 <214000000>;
+-		opp-level = <3>;
+-	};
+-
+-	opp-133000000 {
+-		opp-hz = /bits/ 64 <133000000>;
+-		opp-level = <3>;
+-	};
+-};
+-
+-&gpu {
+-	operating-points-v2 = <&gpu_opp_table_3_0>;
+-};
+diff --git a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi b/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+deleted file mode 100644
+index e33b00b424e1..000000000000
+--- a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
++++ /dev/null
+@@ -1,8 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+-/*
+- * Copyright (C) STMicroelectronics 2025 - All Rights Reserved
+- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+- */
+-
+-/ {
+-};
+diff --git a/arch/arm64/boot/dts/st/stm32mp23xc.dtsi b/arch/arm64/boot/dts/st/stm32mp23xc.dtsi
+deleted file mode 100644
+index e33b00b424e1..000000000000
+--- a/arch/arm64/boot/dts/st/stm32mp23xc.dtsi
++++ /dev/null
+@@ -1,8 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+-/*
+- * Copyright (C) STMicroelectronics 2025 - All Rights Reserved
+- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+- */
+-
+-/ {
+-};
+diff --git a/arch/arm64/boot/dts/st/stm32mp25xc.dtsi b/arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+deleted file mode 100644
+index 5e83a6926485..000000000000
+--- a/arch/arm64/boot/dts/st/stm32mp25xc.dtsi
++++ /dev/null
+@@ -1,8 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
+-/*
+- * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+- */
+-
+-/ {
+-};
+diff --git a/arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
+deleted file mode 100644
+index 2406e972554c..000000000000
+--- a/arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
++++ /dev/null
+@@ -1,71 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
+-/*
+- * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+- */
+-
+-&pinctrl {
+-	st,package = <STM32MP_PKG_AL>;
+-
+-	gpioa: gpio@44240000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 0 16>;
+-	};
+-
+-	gpiob: gpio@44250000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 16 16>;
+-	};
+-
+-	gpioc: gpio@44260000 {
+-		status = "okay";
+-		ngpios = <14>;
+-		gpio-ranges = <&pinctrl 0 32 14>;
+-	};
+-
+-	gpiod: gpio@44270000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 48 16>;
+-	};
+-
+-	gpioe: gpio@44280000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 64 16>;
+-	};
+-
+-	gpiof: gpio@44290000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 80 16>;
+-	};
+-
+-	gpiog: gpio@442a0000 {
+-		status = "okay";
+-		ngpios = <16>;
+-		gpio-ranges = <&pinctrl 0 96 16>;
+-	};
+-
+-	gpioh: gpio@442b0000 {
+-		status = "okay";
+-		ngpios = <12>;
+-		gpio-ranges = <&pinctrl 2 114 12>;
+-	};
+-
+-	gpioi: gpio@442c0000 {
+-		status = "okay";
+-		ngpios = <12>;
+-		gpio-ranges = <&pinctrl 0 128 12>;
+-	};
+-};
+-
+-&pinctrl_z {
+-	gpioz: gpio@46200000 {
+-		status = "okay";
+-		ngpios = <10>;
+-		gpio-ranges = <&pinctrl_z 0 400 10>;
+-	};
+-};
 -- 
-Linus Walleij <linusw@kernel.org>
+2.51.0
 
