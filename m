@@ -1,361 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DD82C236D;
-	Fri, 12 Dec 2025 20:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E8354763;
+	Sat, 13 Dec 2025 03:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765571582; cv=none; b=AeqYd3Xhe6musuIwzcF7Yizba5n4t1JoMJVNpmOdS6XiDxDb47WFsgZNlrnOY04WOErgYKWOmVyN3qK3MA5n8MfJBZ4DUofDm9M2DJdM+BrEF9Jrgu2vfWWDtmj2IVThctk/vNvhVlBUkvxdOPWyLhuTvN3NHE0anHwsR70Lpag=
+	t=1765594884; cv=none; b=DkcUKLVh27jlMrgEvELkmIYpwEePhMaAj0uFoBWJuEO5BKQMaa6JvuobKL+Y4Qh2pj0kUnvcldTphqKZaUDbuvI3vlVt33/eII/SZXNUXYMMgqQtIcB2cPyja1sO0iBT42Hrr45ncn5Sv58SyVZjzYWW2HoA8OplKG+coeHLLTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765571582; c=relaxed/simple;
-	bh=oXV52+EBwnwQgsf4JQISAFcL+Q5wlGyp41ZRqonHpZ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QVhxV3gzTjKnDZp16/pP86uVvP5V9UK3WdpcR017oJdbIpuH32PVApeoxkv1FM5PzTLVqV27i2Z5XYtUrnUNAsbyprLq8JSejE3mwLV9LTiDioXXgpjNp4lp2FQH8+a7IWsdBTvAN9ITTaKfpyUY8cYRdX5mjYrTU25wmOCJ5jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KpvygYdb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765594884; c=relaxed/simple;
+	bh=u4uC+opD9/GDpFJsYurkfVKTjIdwkKonZMXbeLIgp5E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ycxte6eVEDoDTVr4fOL0Lgn08HmeKi1bB4Bsz7TssGbDQuksHmOx/D8uehCeGv3cKbxcuOYEvIKJVxd0pFGDMJCgY9kvCIDv+ofTLok2Qo66jbQX/PlfkSkm6VOf057rVO4XuM7ElDGfs/CVyzmkcVyK7k2lXQxMUKaI0t/gMIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G3nhlJCo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KpvygYdb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D849DC4CEF1;
-	Fri, 12 Dec 2025 20:33:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G3nhlJCo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD92C4CEF5;
+	Sat, 13 Dec 2025 03:01:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765571582;
-	bh=oXV52+EBwnwQgsf4JQISAFcL+Q5wlGyp41ZRqonHpZ8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=KpvygYdbl+4QNc5B0uRSQKkrD3fQ8etfSezmQ9uT3E2yv1THLQROJFd6eavFCHURo
-	 xX0+3Wdd/mbarggr2WfdhfVIfznhmevgSradqiJrVjX4oATKIeQpOidzJxWfYX9UMj
-	 mvSRtL8QntugInpc1el8zgQfBM4jRQE3rjSZj38S6XHrdT28tifFqrTWrk+K4xbxZX
-	 5nKqVWjr+g6ZSc5MEPMJTzz39ERSfNQ3UnXiSbDQ2D5/EWhTKYTYPhFDVDJ89u5xok
-	 tTS1nIt0485bFcHL0AGVHkTEPjIwH7xF6ygRuyHdLliBze4vkI45jOn8PGJ1ziiTDC
-	 SMAmkG1Od/Yjg==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-msm@vger.kernel.org
-Subject: [PATCH] arm/arm64: dts: st: Drop unused .dtsi
-Date: Fri, 12 Dec 2025 14:32:09 -0600
-Message-ID: <20251212203226.458694-3-robh@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	s=k20201202; t=1765594883;
+	bh=u4uC+opD9/GDpFJsYurkfVKTjIdwkKonZMXbeLIgp5E=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=G3nhlJCoMGvmOz+XiMZc/DcR6HIW5jKCvJVIs1tjc0OQBqIbqU2hRHpQOfjfRhtNF
+	 IgbI6VXcef8yOWWk5ik0IBpVRTS/+jzGGw5jDQoKUtY35IRtJNy6fmDtUAPGEjLEEq
+	 QbsjSXnjCE00gd8GzeygvC1Gdw90e4t2YrFBtERJ+AbTAP9uPM+yaP/++sibFxJcnq
+	 LPlw98k+NlL5dvbWpIzE9HQKvbWvFtvFwqUJF1Yr/4sqg0Flj90dgP1DImTese0a50
+	 QhM6qH8F/NZHqML2xcG3TLQplB754leenZbK95FHsPAo8zouQBkbLXK/ySETrb3l5B
+	 oschu81Pdykow==
+Message-ID: <eb752290-0eb3-4817-b3ca-91a4f423dac4@kernel.org>
+Date: Sat, 13 Dec 2025 04:01:17 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] arm/arm64: dts: st: Drop unused .dtsi
+To: "Rob Herring (Arm)" <robh@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Viresh Kumar <vireshk@kernel.org>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ soc@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-msm@vger.kernel.org
+References: <20251212203226.458694-3-robh@kernel.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251212203226.458694-3-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-These .dtsi files are not included anywhere in the tree and can't be
-tested.
+On 12/12/2025 21:32, Rob Herring (Arm) wrote:
+> These .dtsi files are not included anywhere in the tree and can't be
+> tested.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  arch/arm/boot/dts/st/spear320s.dtsi           | 24 -------
+>  .../boot/dts/st/stm32mp15xxab-pinctrl.dtsi    | 57 ---------------
+>  arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi    | 63 ----------------
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- arch/arm/boot/dts/st/spear320s.dtsi           | 24 -------
- .../boot/dts/st/stm32mp15xxab-pinctrl.dtsi    | 57 ---------------
- arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi    | 63 ----------------
- arch/arm64/boot/dts/st/stm32mp21xc.dtsi       |  8 ---
- arch/arm64/boot/dts/st/stm32mp23xc.dtsi       |  8 ---
- arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |  8 ---
- .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    | 71 -------------------
- 7 files changed, 239 deletions(-)
- delete mode 100644 arch/arm/boot/dts/st/spear320s.dtsi
- delete mode 100644 arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
- delete mode 100644 arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi
- delete mode 100644 arch/arm64/boot/dts/st/stm32mp21xc.dtsi
- delete mode 100644 arch/arm64/boot/dts/st/stm32mp23xc.dtsi
- delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
- delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
 
-diff --git a/arch/arm/boot/dts/st/spear320s.dtsi b/arch/arm/boot/dts/st/spear320s.dtsi
-deleted file mode 100644
-index 133236dc190d..000000000000
---- a/arch/arm/boot/dts/st/spear320s.dtsi
-+++ /dev/null
-@@ -1,24 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * DTS file for SPEAr320s SoC
-- *
-- * Copyright 2021 Herve Codina <herve.codina@bootlin.com>
-- */
--
--/include/ "spear320.dtsi"
--
--/ {
--	ahb {
--		apb {
--			gpiopinctrl: gpio@b3000000 {
--				/*
--				 * The "RM0321 SPEAr320s address and map
--				 * registers" document mentions interrupt 6
--				 * (NPGIO_INTR) for the PL_GPIO interrupt.
--				 */
--				interrupts = <6>;
--				interrupt-parent = <&shirq>;
--			};
--		};
--	};
--};
-diff --git a/arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
-deleted file mode 100644
-index 328dad140e9b..000000000000
---- a/arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
-+++ /dev/null
-@@ -1,57 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
--/*
-- * Copyright (C) STMicroelectronics 2019 - All Rights Reserved
-- * Author: Alexandre Torgue <alexandre.torgue@st.com> for STMicroelectronics.
-- */
--
--&pinctrl {
--	st,package = <STM32MP_PKG_AB>;
--
--	gpioa: gpio@50002000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 0 16>;
--	};
--
--	gpiob: gpio@50003000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 16 16>;
--	};
--
--	gpioc: gpio@50004000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 32 16>;
--	};
--
--	gpiod: gpio@50005000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 48 16>;
--	};
--
--	gpioe: gpio@50006000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 64 16>;
--	};
--
--	gpiof: gpio@50007000 {
--		status = "okay";
--		ngpios = <6>;
--		gpio-ranges = <&pinctrl 6 86 6>;
--	};
--
--	gpiog: gpio@50008000 {
--		status = "okay";
--		ngpios = <10>;
--		gpio-ranges = <&pinctrl 6 102 10>;
--	};
--
--	gpioh: gpio@50009000 {
--		status = "okay";
--		ngpios = <2>;
--		gpio-ranges = <&pinctrl 0 112 2>;
--	};
--};
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi b/arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi
-deleted file mode 100644
-index 929bdcd45d02..000000000000
---- a/arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi
-+++ /dev/null
-@@ -1,63 +0,0 @@
--// SPDX-License-Identifier: BSD-3-Clause
--/*
-- * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
-- */
--
--#include "msm8996.dtsi"
--
--/ {
--	qcom,msm-id = <246 0x30000>;
--};
--
-- /*
--  * This revision seems to have differ GPU CPR
--  * parameters, GPU frequencies and some differences
--  * when it comes to voltage delivery to.. once again
--  * the GPU. Funnily enough, it's simpler to make it an
--  * overlay on top of 3.1 (the final one) than vice versa.
--  * The differences will show here as more and more
--  * features get enabled upstream.
--  */
--
--gpu_opp_table_3_0: opp-table-gpu30 {
--	compatible = "operating-points-v2";
--
--	opp-624000000 {
--		opp-hz = /bits/ 64 <624000000>;
--		opp-level = <7>;
--	};
--
--	opp-560000000 {
--		opp-hz = /bits/ 64 <560000000>;
--		opp-level = <6>;
--	};
--
--	opp-510000000 {
--		opp-hz = /bits/ 64 <510000000>;
--		opp-level = <5>;
--	};
--
--	opp-401800000 {
--		opp-hz = /bits/ 64 <401800000>;
--		opp-level = <4>;
--	};
--
--	opp-315000000 {
--		opp-hz = /bits/ 64 <315000000>;
--		opp-level = <3>;
--	};
--
--	opp-214000000 {
--		opp-hz = /bits/ 64 <214000000>;
--		opp-level = <3>;
--	};
--
--	opp-133000000 {
--		opp-hz = /bits/ 64 <133000000>;
--		opp-level = <3>;
--	};
--};
--
--&gpu {
--	operating-points-v2 = <&gpu_opp_table_3_0>;
--};
-diff --git a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi b/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
-deleted file mode 100644
-index e33b00b424e1..000000000000
---- a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
-+++ /dev/null
-@@ -1,8 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
--/*
-- * Copyright (C) STMicroelectronics 2025 - All Rights Reserved
-- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-- */
--
--/ {
--};
-diff --git a/arch/arm64/boot/dts/st/stm32mp23xc.dtsi b/arch/arm64/boot/dts/st/stm32mp23xc.dtsi
-deleted file mode 100644
-index e33b00b424e1..000000000000
---- a/arch/arm64/boot/dts/st/stm32mp23xc.dtsi
-+++ /dev/null
-@@ -1,8 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
--/*
-- * Copyright (C) STMicroelectronics 2025 - All Rights Reserved
-- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-- */
--
--/ {
--};
-diff --git a/arch/arm64/boot/dts/st/stm32mp25xc.dtsi b/arch/arm64/boot/dts/st/stm32mp25xc.dtsi
-deleted file mode 100644
-index 5e83a6926485..000000000000
---- a/arch/arm64/boot/dts/st/stm32mp25xc.dtsi
-+++ /dev/null
-@@ -1,8 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
--/*
-- * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
-- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-- */
--
--/ {
--};
-diff --git a/arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
-deleted file mode 100644
-index 2406e972554c..000000000000
---- a/arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
-+++ /dev/null
-@@ -1,71 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
--/*
-- * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
-- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-- */
--
--&pinctrl {
--	st,package = <STM32MP_PKG_AL>;
--
--	gpioa: gpio@44240000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 0 16>;
--	};
--
--	gpiob: gpio@44250000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 16 16>;
--	};
--
--	gpioc: gpio@44260000 {
--		status = "okay";
--		ngpios = <14>;
--		gpio-ranges = <&pinctrl 0 32 14>;
--	};
--
--	gpiod: gpio@44270000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 48 16>;
--	};
--
--	gpioe: gpio@44280000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 64 16>;
--	};
--
--	gpiof: gpio@44290000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 80 16>;
--	};
--
--	gpiog: gpio@442a0000 {
--		status = "okay";
--		ngpios = <16>;
--		gpio-ranges = <&pinctrl 0 96 16>;
--	};
--
--	gpioh: gpio@442b0000 {
--		status = "okay";
--		ngpios = <12>;
--		gpio-ranges = <&pinctrl 2 114 12>;
--	};
--
--	gpioi: gpio@442c0000 {
--		status = "okay";
--		ngpios = <12>;
--		gpio-ranges = <&pinctrl 0 128 12>;
--	};
--};
--
--&pinctrl_z {
--	gpioz: gpio@46200000 {
--		status = "okay";
--		ngpios = <10>;
--		gpio-ranges = <&pinctrl_z 0 400 10>;
--	};
--};
--- 
-2.51.0
+This should go to the qcom one.
 
+Best regards,
+Krzysztof
