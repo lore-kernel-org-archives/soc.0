@@ -1,71 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A2249659
-	for <soc@lists.linux.dev>; Mon, 15 Dec 2025 20:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11AF30E856
+	for <soc@lists.linux.dev>; Mon, 15 Dec 2025 20:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765830307; cv=none; b=u48X2RU5VHiACqZyV9jcMuKu1JO6OFmgbxYtt3miKvoaVW7AM79qC3m1XXMVEb2XBuiZvfLd21eogIL6OJGqv/HUEyks7VYqnQXKXZ2Ec9lIeB2SjOayw6fst2H9jRs10OvF8bTCgONsiCWu7v+9eD166cIO1fUiFy0zf+oUz7s=
+	t=1765831531; cv=none; b=uwL1Vo2Oul5giH6argYYmevAi1muF1/VQnYwYJkHmPrSaw8ODt0z+0NYJHE2LXKxIY9Ln5xPmRxVkOYFnHNDN+YwX2J/w0biuxncwdEV+acx1FCXkpD/MNhHobx6equx2jxa8uRADCMLPlOMgjwzBUoT8KLVHWeEBfn5sSZCMYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765830307; c=relaxed/simple;
-	bh=jP5lpq2LOwmvTnRrKT+DTVLnvpu/X1E0EgAQfBfTPjM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GCawP8Sw3yBzNK6n0Zv0R61ogyxof5BZKmww+ydQKVUr96zjJkn5WXJZRR4xwyRRHgt4W3Ift81j9oFhckdEEIHOxvTNwGMJBYXUAgbelzH20jqIx4BV0VujKAnvYrNrXcqpQGEZUDZtKhfrX31hTaExw9Ihrb1fLuOT+dm7GiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3haMYzT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765831531; c=relaxed/simple;
+	bh=ffQT5cT61rJ5HoHi7PMrdCP32CvXfBrKhJIJBA5/xMs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=usc7sftcu0j/EdfQgJl8myu/TpyTQKKyR7X1ze0iadTFNr+9LiRmvNSs4P45iddDQWbh6lPEl2ED+IQtW2Z/ttVfNWmvpN1gZDlBmD3G+9N+F2jKTwta0YJuPa4taDmf9TUqhzr5wnBP50zIqRmA0hw8XX7HaSqE54fa6Vtf+TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TxXpee6l; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3haMYzT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TxXpee6l"
 Received: by smtp.kernel.org (Postfix)
-	id C9B84C116B1; Mon, 15 Dec 2025 20:25:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A621FC4CEF5;
-	Mon, 15 Dec 2025 20:25:05 +0000 (UTC)
+	id 98E8DC116B1; Mon, 15 Dec 2025 20:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8313AC4CEF5
+	for <soc@kernel.org>; Mon, 15 Dec 2025 20:45:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765830306;
-	bh=jP5lpq2LOwmvTnRrKT+DTVLnvpu/X1E0EgAQfBfTPjM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V3haMYzTwBediby/Zlpwk73gzH8c7YCuBsd+sjuPkmIE1HqQqMnVR9vx/R4CpthaV
-	 4dbGA55/7yNth+KvT+zzkmCFk+3VajD697ZkE1kEsfNp1670sbotjoOEVUSTTre43a
-	 /JZglQ3LC4kOnkg2s9Mm0r8AEWMg3hhJT/x+LxlOGFCHKMu9aIZVwr2jNxQ/NMZpxZ
-	 ySk5U2fehv11Hnvy9CkPkMgGVVGddZRH/B84py0pnCtSarwzgjXAtmxprzMWL0It6R
-	 V+a+tLqqFfDFWrwXQf1TL2YBacOuwzcVbgk+5TxYTJ1vR0bSnQO0IZ9xKoGz7fVnfH
-	 bak50MNCNelWw==
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: soc@kernel.org,
-	Linus Walleij <linusw@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] ARM: dts: ixp4xx: Fix up Actiontec MI424WR DTS files
-Date: Mon, 15 Dec 2025 21:25:01 +0100
-Message-ID: <176583027654.110616.5692785131178789330.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251211-ixp4xx-actiontec-dts-fix-v1-1-97af8e79d474@kernel.org>
-References: <20251211-ixp4xx-actiontec-dts-fix-v1-1-97af8e79d474@kernel.org>
+	s=k20201202; t=1765831530;
+	bh=ffQT5cT61rJ5HoHi7PMrdCP32CvXfBrKhJIJBA5/xMs=;
+	h=Subject:From:Date:To:Cc:From;
+	b=TxXpee6l1fOwzJqhq8JSx9HuvFTWNJrDpy7GQpDNG4zEDHAugBoqv6NLSCUgziblZ
+	 binrv7Jbywm6dW+dZxiKd5P2tVM2kEr51sd4tZQAyvowYmDSSaLFZyNpIMM3iVr2Me
+	 1Awr4fc6C3TpA4+bmkW/L+MG5BstIwANqzihN2x4XQ5RS7O3N0tW/ziJjPnU18TE13
+	 Cur1LrNF9nu+d/XgQQDHC6ZmN4j74V+sPNuseL2pVtMfyo9RJcTd1IV0QXJWWKwQEl
+	 +sfVnapNbTnEJOYYnrMB6VRLqx3x/gT3jYc/6XAX1si+DfzujhxHJ05SBIMaek+r35
+	 ZiQh1DzrO+O6w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA385380AAEC;
+	Mon, 15 Dec 2025 20:42:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=589; i=krzk@kernel.org; h=from:subject:message-id; bh=VNvTpX+IUbbw98YtQo9u9OYa7rAUIxvWwHWSIiGXWMY=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpQG6dGZTh4EYSxcWG1fiiStGGW0Z4P53VixfgZ FFNEMwoAbmJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaUBunQAKCRDBN2bmhouD 1xbdD/93MMebgxboaOJNU1uqaz4LHEgiXi79N5FWPyR9ybg4CT/8ImF4vmVr63M1d/Lv47BNlF/ dNF6nP35kIRSCEBqWYJ5ZJwZAqyoOADHbbmN6l/iRO9g8TnZWR2TAFwSHxjJQ0yaCkWXnz1RzvY 8S4qXylPaf6tI88O/vFhoZ4cJOEvxIGXLTx75aYR+WZEBvo8mPHAw0yD6g+kyBtGVL2GHwVGi7I unFPuCeqqu8JdzE9dqqOtYTLTDJ/sQesNO8R856tSXBANRgjHPXR0dLHFmVMbaizsttAWISsNPy elYRuXk28IPKQZFgXju4m+9+vxhP5/GhC2VKvuqeE5EqpBylcy+csYZ2Fak57x0FWC1CEIz0J+w skfdMcR7w5i6ygtFk1jZ5K7c60XBhm+u3ldykVY1OLEVsVcTXlJRein44IG1sCUv+I9mbTDrfl4 QAriUvHX28hLnMd8xuszjKvEgPbXgORx7hmS3MVplCrQEdRG0EpunTv1CgXSP++ESuLerwfWae7 0ltJCVMe3vgGISjyASTBkxXGnd9hKH/1+uIsuda1ANIUQrsMcM8MO5s9xdzk1fQFQFwGaWNI2gy ZAgu/PV0wiGboDLhUyfGziUhSgEVaFcFl5CGX/anIvrQqHbtqfKox6ppA2rkIbyNSyQKqrg0sOj laePeDGTL9mGhGg==
-X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <176583134123.289481.10353622716856575209.git-patchwork-summary@kernel.org>
+Date: Mon, 15 Dec 2025 20:42:21 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
+
+Hello:
+
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
+
+Patch: ARM: dts: ixp4xx: Fix up Actiontec MI424WR DTS files
+  Submitter: Linus Walleij <linusw@kernel.org>
+  Committer: Krzysztof Kozlowski <krzk@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1032323
+  Lore link: https://lore.kernel.org/r/20251211-ixp4xx-actiontec-dts-fix-v1-1-97af8e79d474@kernel.org
+
+Series: [GIT,PULL,1/2] samsung: drivers: second late for v6.19
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1030196
+  Lore link: https://lore.kernel.org/r/20251203175942.296554-3-krzysztof.kozlowski@oss.qualcomm.com
+    Patches: [GIT,PULL,1/2] samsung: drivers: second late for v6.19
+             [GIT,PULL,2/2] ARM: dts: samsung: fixes for v6.19
+
+Patch: ARM: omap1: avoid symbol clashes in fiq handler
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1030418
+  Lore link: https://lore.kernel.org/r/20251204095355.1032786-1-arnd@kernel.org
 
 
-On Thu, 11 Dec 2025 14:05:01 +0100, Linus Walleij wrote:
-> The KS8995 switch was unconditionally wired to EthC (eth1)
-> on both MI424WR variants, this is wrong: the D revision has
-> the switch connected to EthB (eth0) so pull this assingment
-> out of the generic MI424WR DTSI file and make it a property
-> of the respective variants instead.
-> 
-> 
-> [...]
+Total patches: 4
 
-Applied, thanks!
-
-[1/1] ARM: dts: ixp4xx: Fix up Actiontec MI424WR DTS files
-      https://git.kernel.org/soc/soc/c/ececfba255bf3616301419e47a5c824e04b60ab8
-
-Best regards,
 -- 
-Krzysztof Kozlowski <krzk@kernel.org>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
