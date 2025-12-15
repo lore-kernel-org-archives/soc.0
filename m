@@ -1,33 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E8354763;
-	Sat, 13 Dec 2025 03:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765594884; cv=none; b=DkcUKLVh27jlMrgEvELkmIYpwEePhMaAj0uFoBWJuEO5BKQMaa6JvuobKL+Y4Qh2pj0kUnvcldTphqKZaUDbuvI3vlVt33/eII/SZXNUXYMMgqQtIcB2cPyja1sO0iBT42Hrr45ncn5Sv58SyVZjzYWW2HoA8OplKG+coeHLLTQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765594884; c=relaxed/simple;
-	bh=u4uC+opD9/GDpFJsYurkfVKTjIdwkKonZMXbeLIgp5E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ycxte6eVEDoDTVr4fOL0Lgn08HmeKi1bB4Bsz7TssGbDQuksHmOx/D8uehCeGv3cKbxcuOYEvIKJVxd0pFGDMJCgY9kvCIDv+ofTLok2Qo66jbQX/PlfkSkm6VOf057rVO4XuM7ElDGfs/CVyzmkcVyK7k2lXQxMUKaI0t/gMIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G3nhlJCo; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F652D6E55
+	for <soc@lists.linux.dev>; Mon, 15 Dec 2025 09:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.182.106
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765790836; cv=fail; b=TY0XfqeSn2RKHxLWwtq48ciMXKEzY1eboHdOidjzWLECMu1N8yQ5buoKCugoP5k0PVe3tcgreG5NsI3vBpfVOR/7PDWF7gALLHKcLJxoFRJSYGzM8GnxPtanaNfDj6OLcaOP7ESphiV952Ng5sp7izWLRqjNGDLAyzpXkFdCs1o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765790836; c=relaxed/simple;
+	bh=w/l4QHYPYo4sjaua20EF6yucKCdzjCRtC2RIL2n2sDc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=BK8grJPeheJpzzr5Pla4A3h04V/82HzzMAOeRqILxBtV/Rk7+sGWrSRyZl/fJ8APvk0a7XwHdvtZPBn8x/bF0gowzpwRU87U4fLOhWdMR76Dj6U8msmyOCfW01oDnTDjVsFAXFLjxoxnafR/GrAQhQu5ubZUPqhVN/IOpc95sag=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=S3IFVqJq; arc=fail smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G3nhlJCo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD92C4CEF5;
-	Sat, 13 Dec 2025 03:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765594883;
-	bh=u4uC+opD9/GDpFJsYurkfVKTjIdwkKonZMXbeLIgp5E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G3nhlJCoMGvmOz+XiMZc/DcR6HIW5jKCvJVIs1tjc0OQBqIbqU2hRHpQOfjfRhtNF
-	 IgbI6VXcef8yOWWk5ik0IBpVRTS/+jzGGw5jDQoKUtY35IRtJNy6fmDtUAPGEjLEEq
-	 QbsjSXnjCE00gd8GzeygvC1Gdw90e4t2YrFBtERJ+AbTAP9uPM+yaP/++sibFxJcnq
-	 LPlw98k+NlL5dvbWpIzE9HQKvbWvFtvFwqUJF1Yr/4sqg0Flj90dgP1DImTese0a50
-	 QhM6qH8F/NZHqML2xcG3TLQplB754leenZbK95FHsPAo8zouQBkbLXK/ySETrb3l5B
-	 oschu81Pdykow==
-Message-ID: <eb752290-0eb3-4817-b3ca-91a4f423dac4@kernel.org>
-Date: Sat, 13 Dec 2025 04:01:17 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="S3IFVqJq"
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BF9P1uY1698651;
+	Mon, 15 Dec 2025 10:26:47 +0100
+Received: from duzpr83cu001.outbound.protection.outlook.com (mail-northeuropeazon11012049.outbound.protection.outlook.com [52.101.66.49])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4b1jk5bqgm-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 15 Dec 2025 10:26:47 +0100 (CET)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=f2RMOw9nL5soxHLOAShKUdmV6ysrhMJKoeUmXclJGS1koo3zKCmn99PyiBlJ8jJC1M8LOVw40JF38lwUJFXqaQXZ77n60KcbsyddnvQ36OLq1qNJVusMRxbMIZKHY8z/9ZJ0FSHFtueALpeVgnDBtRCAPSaYG5MbWd8AffOPuLGGC97/BuzIGV3n2h6HPEW2VTMYOj4R+EQbv2nPJIXIZnmYZTImfCqAiLFi/cRL6TgZ+bvtEyNgfAVfAK9EFaKQDo/0GcjyJ4DstqRwh8J9/ZAOtrXiTNeeEzWFESUzA+jv/z0+uqVB9/kj6AjQHvzISAT/tfvqiASdHVUj2w2DXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sONj9qJO3xW6NVxWrQ6cQBa+GRsI9FSdSQoWk/qPV40=;
+ b=vi0D6XA5IG7+P1m3Dtv7Tlp8B9ZYsQQkKBkXgNzkz5VvJlp3DqA8q78Ux1Lq4NhuDZBV0Xwce8hey5tH5rokp3dINj7k0eSEo7IrG5qfsjNRgRWUKKMQxigO99n6ZK4yv6L7wrQ430YOwKgQksdTBv5EGdJRYvRaNN0vYZ6ZyT0YWHIkTZcGBt6rqpf4w2yF8DDcgi6ETmxqleuCHmxNsyS7LoaM0ozO6+kZnOYmd9+eE0VhuX0a/1c+kKZRYaXGM2qrC+81aVwZR6kGuvq+5DUi+wydsOlnOuHTnibZxicDuy/hZUGr40FsKwTdPagdoNoJlz+I23OQhkOc9In0lA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 164.130.1.60) smtp.rcpttodomain=kernel.org smtp.mailfrom=foss.st.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sONj9qJO3xW6NVxWrQ6cQBa+GRsI9FSdSQoWk/qPV40=;
+ b=S3IFVqJqPe4V1Ehlns1RRSLx4YJDSoUjBEAOSLTBxdtFJJauj7l5wYYFIr8HlTov3/Qu5TnF/1J/ZhK1LLleQC4W/1eSdgP0rVuCp9CCbUJz40jXcbAMRtrgrZxcUkrvkLhUE8/5rBO/UyUJZvR59Dq7J7GMppDjh8Lm4kNEVK0t7938VsCBqNFn4iTxc6IJyEfd2DniJlPWagpvCzAiq+64Sy2+mETGyqzApaV1PQGfUn2ctJvgSziLHlAOUVm+WPrLcKclI8WOASwMlE/xrJQIsIYCger5h8yRo/28AVV1kqZC89C5PgS5+Bp6Ti0qG1NafxlZ9D5SGPyW6/No5A==
+Received: from DUZPR01CA0203.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4b6::16) by VI1PR10MB3342.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:803:132::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.13; Mon, 15 Dec
+ 2025 09:26:45 +0000
+Received: from DB1PEPF000509F3.eurprd02.prod.outlook.com
+ (2603:10a6:10:4b6:cafe::69) by DUZPR01CA0203.outlook.office365.com
+ (2603:10a6:10:4b6::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9412.13 via Frontend Transport; Mon,
+ 15 Dec 2025 09:26:43 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.60)
+ smtp.mailfrom=foss.st.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=foss.st.com;
+Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
+ designate 164.130.1.60 as permitted sender) receiver=protection.outlook.com;
+ client-ip=164.130.1.60; helo=smtpO365.st.com;
+Received: from smtpO365.st.com (164.130.1.60) by
+ DB1PEPF000509F3.mail.protection.outlook.com (10.167.242.149) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9412.4 via Frontend Transport; Mon, 15 Dec 2025 09:26:45 +0000
+Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpO365.st.com
+ (10.250.44.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 15 Dec
+ 2025 10:27:28 +0100
+Received: from [10.48.86.79] (10.48.86.79) by STKDAG1NODE2.st.com
+ (10.75.128.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 15 Dec
+ 2025 10:26:43 +0100
+Message-ID: <73678ca9-0943-4daa-a2f4-05219db2384e@foss.st.com>
+Date: Mon, 15 Dec 2025 10:26:26 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -37,80 +78,140 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] arm/arm64: dts: st: Drop unused .dtsi
 To: "Rob Herring (Arm)" <robh@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Viresh Kumar <vireshk@kernel.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-msm@vger.kernel.org
+        Geert Uytterhoeven
+	<geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Viresh
+ Kumar" <vireshk@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>
+CC: <linux-renesas-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <soc@lists.linux.dev>, <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-msm@vger.kernel.org>
 References: <20251212203226.458694-3-robh@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 In-Reply-To: <20251212203226.458694-3-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: STKCAS1NODE1.st.com (10.75.128.134) To STKDAG1NODE2.st.com
+ (10.75.128.133)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509F3:EE_|VI1PR10MB3342:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0751f43d-ebdc-4b4a-8b07-08de3bbc10b1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|82310400026|36860700013|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dHJFQXVZY1VzbWx1WmR4Mk9ZS01RVnhSdGFDZjIzVGMvN3RZTEpEcm9zMVBx?=
+ =?utf-8?B?dFYwYVlKLy9MbkdhQjZFTWFOV2NHdUVDY1IxSnNmYzI1VjVhNVVOUzk5WE1r?=
+ =?utf-8?B?bW1EQW5xYXUvT1ZlQ29Kd09IMXBHMy9xNU9ON1lBbVFuakpLRGp0UjhkNW9s?=
+ =?utf-8?B?QVEwSGFud0lpLzRVMitnQWJoQ3MyRWNrRlBoa1l1c2wzOEsyLzRxZzVtYU9P?=
+ =?utf-8?B?cnB0YSt4eEh1RHZONzFJTDRXTTNrY3ZyUmhJMVN5eXdjeXUvZWtCMC8zRUpa?=
+ =?utf-8?B?MGJYS2VsVi9YOVd0eVladkxKTGthTFlaWHVGVWsrNjBEMWtXZ2JHVmJVSGcv?=
+ =?utf-8?B?bGJIMm84dm1BZlY2ekpXZS93aGtCSDlYVjlnUXlhVEtlNWx4bzFHbVo1eHZZ?=
+ =?utf-8?B?ZVFhT3VTUlNxQ24xRUV2UkxiREwxT0VIYzgvM242ZS9CeTFuS2M3MEkrZi8w?=
+ =?utf-8?B?bjZPL1JoKytBcVNVQ0hCU1BVRytraC90VkwzVjVvRmRVTFVXWG9BTkNmcllS?=
+ =?utf-8?B?dDMwNEdZczV1bG4yZG53SkZsUG5CQkdGN1hPbWZ5TEdIVGIzcE5IT293c1Jj?=
+ =?utf-8?B?aEJDNTlVbzZOSXZkdkNMRmdxeTZhWlhqcjZxY09JNkV5WFllS1BLWVU0dkRr?=
+ =?utf-8?B?aG9aQnEzYnVwYVYxczkxY0hmbVpndWd2SGw1RFpoK2IzL0RHSXRWU2hPalVt?=
+ =?utf-8?B?azhhdzRBd1draWNZWWNuVlV3dEQ3Z0hwSGtDVUJCSHVYNEFSN1draUJlYmp5?=
+ =?utf-8?B?SU03U01KS2NVL1JoYWVJb2wvU1BZK2xkemZIYWlaL3ZLWENvazlOdmM4M1Fp?=
+ =?utf-8?B?bUJuSXoxNEZjMXBkSGR3MTN2UDV3U3JXYmZIVm5hMWZ4UEduYlNkZ3R3M1lG?=
+ =?utf-8?B?NGRrTGxYajljRzE3cmo3NjE3WklKdzFTMjRnY2QvUnRKTVgyaFNRYmVMSlZJ?=
+ =?utf-8?B?ck9ZOEN4bytQdHFGWDRlV284QVpvSkFJZ3F1RWQwM3AwRnFTRGlVRCtHbDFJ?=
+ =?utf-8?B?OW5tN1NzeGpUQVpzWUZ6VzMxbEpYeFlxYXVnT3FPSGxoWStOd0xxQ01JVFU3?=
+ =?utf-8?B?MzJhU3NnWSt2cnFQeWQ5bkFYM1VOb2xzZWdhZ00zMVNiU1RXZGdpZGIwZi93?=
+ =?utf-8?B?QW1WQ0hvYUZSNURIdDNiT0RLd0J6Y1Brc3NLK1phbUFuT3JKYzIrcHh6WWtJ?=
+ =?utf-8?B?bHVNU1lBUjA3L2tEOGVjdnJqSjd6ZmpaS1Qya21iYVVoQktVai95SWljSHRJ?=
+ =?utf-8?B?RUtwRTk0blBCVElPd2x1YjZ2TEZDcmh4ay8wVHRyNnRpTDhlVnM1VW90RmI1?=
+ =?utf-8?B?Q0Uxd1pGM2ovVXU2cWFyY2V6MDl5SHhrWnRVbU1Wb21jSEoyTUpOTWk5ZlQ5?=
+ =?utf-8?B?Q0JrUnQzVkZEem9LVEZtdlJ5M0IwMndPMWkwRnhydEoxdlpuUXRYU3ArajNX?=
+ =?utf-8?B?aUYybnhKb0Z6clFjZENyeWxtclhHa1orNDhxU3h4ZWtBNkhaNkpwTFNRNW1J?=
+ =?utf-8?B?ZDdLVmhJRlpPUCtuTGlnU0MyU0NJeFJ1dEVGUUs5RFgzaUl2ekYwanFTRGJS?=
+ =?utf-8?B?M2hXamRhUXJBOC8wNzlTSnVuMlV4YjRzU0lFbDVJRHhOZUhvUlVVL3lHVTQw?=
+ =?utf-8?B?MGU3MmhNMjdDSTc5U1dLcHFIU09IeU5HWEFPSHFZZ3Nrdy9LNjI0ZlJJUmgx?=
+ =?utf-8?B?NWlVTUFieVVpeXhWSWFVSGEzandXQkJNdkJQZkZOWDJYNnJYR2d2U29VcDBZ?=
+ =?utf-8?B?Q0lOSmZVaUlNQjVTdXpwaUxWV2VibmVQaXFsRE44YmhEL25EcCtSeXpMNjY1?=
+ =?utf-8?B?Tk12cW1TcjRBY29OZnBDYXNrQlN0emN4OHdvQ2txbUxUeXk3TzRrendkdnUy?=
+ =?utf-8?B?ampFbFE5NVBkR1BFcjNWOGNRZXF0VXNhaDBxeEJYYTJiVWR2dUd5STFENVV2?=
+ =?utf-8?B?Rk1KNCt1cXhwcmd5MHFBR3FOTnFOU2krMTkrQ3JOVXFmZ2VHZ3FMMGNOeTFu?=
+ =?utf-8?B?R2packJtc0tDbW1FVHlhMVVqNlFjVENBNkt0L2RJWmVYa2RRNVpWTUJJY2or?=
+ =?utf-8?B?RDBjVFdvUENLNmtHcVJDWldvQjlrRkdleElycVFWUXdKbWtFbzl3UlBqZ1ZW?=
+ =?utf-8?Q?S1A8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:164.130.1.60;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(82310400026)(36860700013)(7053199007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: foss.st.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2025 09:26:45.2023
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0751f43d-ebdc-4b4a-8b07-08de3bbc10b1
+X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.60];Helo=[smtpO365.st.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509F3.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3342
+X-Proofpoint-GUID: TP7hzq-2S5uSP2JkQ2QTwVE6vpRqkgq_
+X-Authority-Analysis: v=2.4 cv=NKvYOk6g c=1 sm=1 tr=0 ts=693fd457 cx=c_pps
+ a=LNCg/zpmBfqMMZfMBfYAWg==:117 a=uCuRqK4WZKO1kjFMGfU4lQ==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=TP8aPCUxYTYA:10 a=IkcTkHD0fZMA:10
+ a=wP3pNCr1ah4A:10 a=s63m1ICgrNkA:10 a=KrXZwBdWH7kA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=8b9GpE9nAAAA:8
+ a=HGlTMLAbYNIrajXc9F4A:9 a=QEXdDO2ut3YA:10 a=T3LWEMljR5ZiDmsYVIUa:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE1MDA3OSBTYWx0ZWRfXxJwnqiOtmzA/
+ REShqRh4PiLrlZDOakw+blTpyP3X2QqeqZWurRKLndPSlKGZRg0hOMKjB5I12KbHZcEpetwIQ3E
+ RV3kHVZ7efNtgkIpQuPmAYbGVEkq008NLft69k+cra7bYZkMBvVKanxGtG8Bqsym9zlrRkbTUBB
+ kH40yD9/6z24MUk/pSGWxBzIeuRG8NTLx3lokQ9+CfIh6ipO+RvYx31t8Mce74H7PsFPE1NFO6n
+ mXb3AxlywWiT4WKCMx0MfDPtpeI6R7u9+dPyUUwbHtf4sW8UzVuCBmN4AcUaN0tiXOiXROkYKTg
+ kMIJOu/Rw99gFgWkW6XBH285yoVpBnNyBF+1Vy3tAFsej/i+Ed1Y7wt/8LNhWAQ68kCxvYvEovn
+ h/teSGiPxtKBJnBAPYkfW+on1va6lw==
+X-Proofpoint-ORIG-GUID: TP7hzq-2S5uSP2JkQ2QTwVE6vpRqkgq_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-15_01,2025-12-15_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 impostorscore=0 malwarescore=0
+ clxscore=1011 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512150079
 
-On 12/12/2025 21:32, Rob Herring (Arm) wrote:
+Hi Rob
+
+On 12/12/25 21:32, Rob Herring (Arm) wrote:
 > These .dtsi files are not included anywhere in the tree and can't be
 > tested.
 > 
 > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 > ---
->  arch/arm/boot/dts/st/spear320s.dtsi           | 24 -------
->  .../boot/dts/st/stm32mp15xxab-pinctrl.dtsi    | 57 ---------------
->  arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi    | 63 ----------------
+>   arch/arm/boot/dts/st/spear320s.dtsi           | 24 -------
+>   .../boot/dts/st/stm32mp15xxab-pinctrl.dtsi    | 57 ---------------
+>   arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi    | 63 ----------------
+>   arch/arm64/boot/dts/st/stm32mp21xc.dtsi       |  8 ---
+>   arch/arm64/boot/dts/st/stm32mp23xc.dtsi       |  8 ---
+>   arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |  8 ---
+>   .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    | 71 -------------------
+>   7 files changed, 239 deletions(-)
+>   delete mode 100644 arch/arm/boot/dts/st/spear320s.dtsi
+>   delete mode 100644 arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/qcom/msm8996-v3.0.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/st/stm32mp23xc.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
+>
 
+...
 
-This should go to the qcom one.
+Ok with this patch. We'll re introduce files when we'll have really a 
+usage of those files by a board.
 
-Best regards,
-Krzysztof
+Reviewed-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
