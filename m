@@ -1,74 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE48338591
-	for <soc@lists.linux.dev>; Tue, 16 Dec 2025 20:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CAE0272801
+	for <soc@lists.linux.dev>; Tue, 16 Dec 2025 23:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765916881; cv=none; b=DIXbtw0yMsEVKWlWq3s9GBio10OoipJkcfQoNAPOZqT7/WwlwdHm/k6sDNLLma7s+hdx6YXHEkTT/Rwpis3uUPht7/vkIeIYUp5h44OofHuPoGttQeeyEWMd7z6bOPyJezrWs6KnxrpLn2XilDC8haQS2RM2p5ya8SVNIrspGIg=
+	t=1765929423; cv=none; b=TT/cvymhtzc9Q0NCt24sVXFC+PAKSjeUkzMJnNIeMRY/Z8+GCyCA4UISzZF4DL0RfjEPptnMtNxp+yZYZZyVJfFPltYTOSFISkQA/4ezdvDbhZSyKYXEeEqFL1zrXlQF1zw827sWA9aYiEp/E4kej8CL8Vm64fl0gAJePe82SOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765916881; c=relaxed/simple;
-	bh=E/c7FmwxiuzYUMlnCpvlOk0eEAqzmcITorONITnLcaU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VDEsVChSBrVolsMS6DfxpqP4KYaqambLafAMf438mKjH3qcQvk4H81nTrw85cg9204AApN7yXkgefq8dcUTKK0X3RwZCHJpmdhw0/SUpjUYJDyMsrsRq6+6a23W5/yycfqXWa64WtaAOCQkHyCYVnvE2adqlPoV3AX7Ghw9seKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M4CIRJy0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765929423; c=relaxed/simple;
+	bh=+GhQz0HcVABtkaWXGXcZPptUFJwcu/sMoBufxXOMtLk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=igblpl9a7NJvXMi/8mkokVcrEQUvkW4jYti0ODPCR8BDagoquBLpkMT01LG87vmodGlHKBHW8RbebVZwVGn6tf+06YvnD32Opb5AYC9kd4+jVXqXqIX3cREohcwxXesQvcWvAu41E8s6BD5A2PeaneN8bKMmygOM9YZT52ffBDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=B/8glXId; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M4CIRJy0"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="B/8glXId"
 Received: by smtp.kernel.org (Postfix)
-	id 0DBF1C4CEF1; Tue, 16 Dec 2025 20:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB83C113D0;
-	Tue, 16 Dec 2025 20:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765916881;
-	bh=E/c7FmwxiuzYUMlnCpvlOk0eEAqzmcITorONITnLcaU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=M4CIRJy0rKk4pU1XZgnDX5bX8iuv9W3OvabTvQ+Alqj7MQZ/S4u5Rb88JZ1QZkmTU
-	 XZQIjeHFDDUIyINfK5ORO+T8QMKGu1V22rAwVpKz9Lbhl3PeGnZdQz4rZe5IZ7FfpR
-	 XGQBmzjYz3qAtY2NRx/n+3ZTD2wEFtqQ2all3prXROBs+monJ/01F90viSOC+IfR7/
-	 E/JAfdW+nXp1MXABKA6sUglVoJwywJfdyAMqLHCuiY89uRTw7867Bua6hkuIa/lz9b
-	 KmB07nZysGVn+Gp3WppHOZcEAMRBhsXwXC+OtmsT1G4eyl+EAJyRTAN9PQigLij+83
-	 MdfOPVl4Fqjbw==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Tue, 16 Dec 2025 14:27:51 -0600
-Subject: [PATCH 4/4] arm64: dts: apm: Drop "dma" device_type
+	id 41FDBC19422; Tue, 16 Dec 2025 23:57:03 +0000 (UTC)
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 611F6C113D0;
+	Tue, 16 Dec 2025 23:57:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 611F6C113D0
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 1D2E7C001515;
+	Tue, 16 Dec 2025 15:56:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 1D2E7C001515
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1765929412;
+	bh=+GhQz0HcVABtkaWXGXcZPptUFJwcu/sMoBufxXOMtLk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=B/8glXIdreocIh9Ji/XcZTn4guKqcoQlJOjx5X/VT/Jy4zAggtsqZmsvG3w5EUdvI
+	 eAqU0pByVfzVbYn6SLe26kBUJTVLft07pyzh7+dhYBvEuM80mWX1yTtFYEUCt4yntp
+	 fGI6Iiic5vp7SL/0uGAc066KFGeJOTn5spaZ1itc=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id B6DB218000520;
+	Tue, 16 Dec 2025 15:56:51 -0800 (PST)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: soc@kernel.org
+Cc: Stanimir Varbanov <svarbanov@suse.de>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	Stefan Wahren <wahrenst@gmx.net>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/1] Broadcom devicetree-arm64 changes for 6.19
+Date: Tue, 16 Dec 2025 15:56:49 -0800
+Message-ID: <20251216235649.633331-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251216-dt-apm-v1-4-0bf2bf8b982c@kernel.org>
-References: <20251216-dt-apm-v1-0-0bf2bf8b982c@kernel.org>
-In-Reply-To: <20251216-dt-apm-v1-0-0bf2bf8b982c@kernel.org>
-To: soc@kernel.org, Khuong Dinh <khuong@os.amperecomputing.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.15-dev
+Content-Transfer-Encoding: 8bit
 
-The only supported cases of otherwise deprecated for FDT "device_type"
-property are memory, cpu, and pci. "dma" is not valid, so drop it.
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- arch/arm64/boot/dts/apm/apm-storm.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
-diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
-index 3bb59704fcb2..4c4938faffb1 100644
---- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
-+++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
-@@ -1083,7 +1083,6 @@ rng: rng@10520000 {
- 
- 		dma: dma@1f270000 {
- 			compatible = "apm,xgene-storm-dma";
--			device_type = "dma";
- 			reg = <0x0 0x1f270000 0x0 0x10000>,
- 			      <0x0 0x1f200000 0x0 0x10000>,
- 			      <0x0 0x1b000000 0x0 0x400000>,
+are available in the Git repository at:
 
--- 
-2.51.0
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.19/devicetree-arm64
 
+for you to fetch changes up to 37c3a91e9730e274fe2eca9703033ae0f154cb62:
+
+  arm64: dts: broadcom: bcm2712: Add watchdog DT node (2025-11-05 10:28:29 -0800)
+
+----------------------------------------------------------------
+This pull request contains Broadcom ARM64-based SoCs Device Tre updates
+for 6.19, please pull the following:
+
+- Peter enables the random number generator on BCM2712
+
+- Stanimir adds the watchdog Device Tree node for BCM2712
+
+----------------------------------------------------------------
+Peter Robinson (1):
+      arm64: dts: broadcom: bcm2712: Enable RNG
+
+Stanimir Varbanov (1):
+      arm64: dts: broadcom: bcm2712: Add watchdog DT node
+
+ arch/arm64/boot/dts/broadcom/bcm2712.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
