@@ -1,93 +1,110 @@
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7145033A9D3
-	for <soc@lists.linux.dev>; Tue, 16 Dec 2025 14:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B16F2D7D30
+	for <soc@lists.linux.dev>; Tue, 16 Dec 2025 14:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765895758; cv=none; b=urhQZveJfwsXWAbYM/+ioVivCJa+GgIQE59ditkkJfykxQ0AXy/Mh24iKy4KLiPdQHtXZVX6+2TdhLNMlF8nuve1TbnPfIk8AnccOmR0tegLIsYCS30tHrWo5RuvQXknk5nwZiRLEHttokCjC2MAuPiRBf3WGMJlnze40iONlnU=
+	t=1765896017; cv=none; b=j9WMCxfGVWy14C+rNlh9ZPn1pZP4IdwOVANXMosfvp+Wqh9RPagn+8mowHx7SIUg9g2QXdBzL1ulneCYwrwDNNgq8TgbqVdqSn8fyQIfQLlUwNw5x7CioIvGEHdK1Ar18xgQhe2JF9oki44OzOsSAfaJVtS+5iAMNCzxX9cjTvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765895758; c=relaxed/simple;
-	bh=CQP01wI40yfCAaN+xuwRruAoF2NnihgC1fc3TRwt8Fs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=faNCD8Ne43Kz+btwWUg9nDvZurmu3tiB6F+Z5g0oGXHblTmETvbSWCcVOT1NoTKotFmuCZc5jnlw/HMcqmImVf4Vr4H8ZVPINxclPd29/kp3qMNxiFLdpEDI9yntW5kp63tALpBWJk+VlqgXjGm/QR26+3b6UeliYCgmNlxSjc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-941063da73eso2644527241.3
-        for <soc@lists.linux.dev>; Tue, 16 Dec 2025 06:35:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765895755; x=1766500555;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=re5YBOZyD0Zj32H+1no6aQeFsI2W9h+rLAtav/Y6K64=;
-        b=miVJslcRBpGqtH9RCDnn6KSA4it0JJnhP+H+4I/tcpnfN2LMep8w5TEo8kD06gJKzy
-         yCJzDki52fn9HExeA57/EE7uLgRM6BoGwrDFyjWapM/HDdJPMWVnp+vTOhprPPUqsfo6
-         esnALBWD67ZeyLmE1pXULEm5FoWOI4faYIhv2D6UFXMN33cfratcyPzq34EzwmfX4Gb7
-         0mgLshXdqxyMotJXqe9Y8p/WFycgHB30hWWI3GarrJVgK9+V9yJ560pBEbHXv2uXXM9Z
-         br/qsNzC9vW4LsE2nyPSJ15/8d6gQd/U2M4OhLIWLLOwJaI6qi11AqA8OYi1NRFxDLLq
-         SOKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXeCZiM66lRn0IbuZB5a1j9N/5+S8B8XOBDVtVZJPceDCgyWifiukcTazaGqId+5mWv1Vk=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyJSssuFoTvEaGNQyZDps42ZbVxQXyqs3VzFTxRvgj6wFlKuzEl
-	Zc9jVweyEl2PT/BjBQ4Ts6BVWxsL8tHjxXXVaAED38IUdg6abDGcEFGYbIH1ObSO
-X-Gm-Gg: AY/fxX5Duzn6zQDE/m47qssFg0QGVEX3SFuVIVlchyx/9lEI8F2tY26jaoXlj9yNVBI
-	JfMj54tWzkFB0fG4G8+r02YLIscEagTh+P9AQpCDQJfpjF9X3492m6H75fFHt0eOAUPSxaWMePH
-	xF1H1tl+Qg6hRakmVUaPrLIT45TNjf08h2JgC9mgyOOKJfxMD5a0/pGR93XBeIN5qYT5k6OFvns
-	M/j0Zt7nevNdco7Ee5Y7ld/Rngtdp8C8qYQT5GFvZCqDOsF2AOxvXKsMmxJAQnlQLc2MRXu7l5t
-	q1ABJ8g+esUVhZn/Pz2SMk80KjE/0EGHDRC8ILnTkAGnyp8O+YpBaBTqZerx9DW50CrgDJrloVg
-	isHQ/k9CwncQ2fBLZDqsd3Td8Lo+BCkSKLYtRA7ccUdIBnLry9LCaXCwo81eZBCwrX9QEOZClH3
-	4KCaaNwSA5HReEOHdKozuWhEVIicvFC58JQXm92oZtuSLZGgGx
-X-Google-Smtp-Source: AGHT+IGbWHB4/ojKnQbSasXq4vFrTgN0yeFboBbYukK3BXh7YFEms/kFBiXVRU9zs7QOaxX7TYPZ/w==
-X-Received: by 2002:a05:6102:5818:b0:5d6:12fc:76e1 with SMTP id ada2fe7eead31-5e8276ba82amr4862439137.17.1765895754391;
-        Tue, 16 Dec 2025 06:35:54 -0800 (PST)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5e7d0ecf428sm7487474137.5.2025.12.16.06.35.53
-        for <soc@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Dec 2025 06:35:53 -0800 (PST)
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-94120e0acbeso2355733241.2
-        for <soc@lists.linux.dev>; Tue, 16 Dec 2025 06:35:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXJ5pSpoxocKbTMsMIOIhonYSbGnL8gD3ljK7qwFsKaybr9A/rsdGpxUpZyuABSdg0wsQQ=@lists.linux.dev
-X-Received: by 2002:a05:6102:5818:b0:5d6:12fc:76e1 with SMTP id
- ada2fe7eead31-5e8276ba82amr4862421137.17.1765895753360; Tue, 16 Dec 2025
- 06:35:53 -0800 (PST)
+	s=arc-20240116; t=1765896017; c=relaxed/simple;
+	bh=c3H6TPFY1I01kqg1crGrKZrChG7ywbSiz6fMGxT/2lE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=KCHAjZT8jZOdZyEZaeIpc9X5xqt2e4O73TyWpetIwfbR0HdtG6ws0vqyPalJCLf/BxWPIJMSVtxJiog43SMr187ize5FyiEGdCpTRw6zbYHvjjuXAjTHkEOSDBZamypLqKC7W8aCrYI5J0yssWASDmWYF28ZMjAOVdw6eDAuqg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gE/EUmHb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VB+t+7yj; arc=none smtp.client-ip=202.12.124.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gE/EUmHb";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VB+t+7yj"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 434F17A0179;
+	Tue, 16 Dec 2025 09:40:12 -0500 (EST)
+Received: from phl-imap-17 ([10.202.2.105])
+  by phl-compute-04.internal (MEProxy); Tue, 16 Dec 2025 09:40:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1765896012;
+	 x=1765982412; bh=ldnqBVievPPwN4paIWz2GuHWUsTTTEenwvxVDL16XSg=; b=
+	gE/EUmHbO+OXO2BdF016z86Vz21blRipkOSSr4ycrxmEXrT/TGB3ChfE86veMmzX
+	sIrqJc+BU0eBKB1meL+YfEtP+tSiHA5WwrZm2hnUtq2tW1jOnxQ+n2uYZ+VhFh+v
+	9fQwLQixR4ijJaWqK9J/BMuqK6h76Dl4VuZXbeVPWVOLA+Iw5d+2FnO5xiVV0KvI
+	leMV7AfoWE9wcKjIkJrSDMO3d4W3Sf4YGQlp8bQpsMwprFtW6OjvvUNZzCLnWYJu
+	AfuI5EvmHZWV5XSDH8igiOUuNLuahspkyv47L0LepBMsXbyANI6ff2hMnGN2+elD
+	O8KJ4naVmNMlQ3Dk/3yBxQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1765896012; x=
+	1765982412; bh=ldnqBVievPPwN4paIWz2GuHWUsTTTEenwvxVDL16XSg=; b=V
+	B+t+7yjpFwZ2csKvS8fZ1/PP/V72Z/Rw9PPDRu19VYcVqsfob+qyg8vfFhZbUT2k
+	mbmO0lf7kSZrEjMVj891P9X3MYqRFGm02I+EYmwOop8My8mE7AfMAzRqyjP2+iLG
+	O8i9b6yRzrXtzhdU2AsHgkrjFKda9ACHab4Wz4Wp7cg6N/At5zWhSUn3xgagZmms
+	CMknZ7nAlYtD6a02WQGTu0if4XlKALkyhFs3WZMVXVnAbK0zRlPDlc5pu3iNrIdv
+	KUM5WxBEbodH329EYW2KE8NUikLh0YzCGDQkOKh+BMDsPHj5oQondDiwyC1bfBOe
+	MPYvj8f8GKJk7yZEvprYw==
+X-ME-Sender: <xms:S29BaTITgBu11-TbY251uBEDBdnc6v5Mta2fCFbDl0DF8UDyDce7Ig>
+    <xme:S29BaR_sbbCntKwxtnMtF7VXEFjGdXyAC7fDVzF-zZKfs-11nt7CHWoSNXyXImuwn
+    7dNnVCRFI06Q0e143zfoXfntjuccOmsrSlP9_ZNtNx7WgBn7cIu0J8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefleelhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehpdhmohguvgepshhmthhpohhuthdp
+    rhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorh
+    hgpdhrtghpthhtohepghgvvghrtheslhhinhhugidqmheikehkrdhorhhgpdhrtghpthht
+    oheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurd
+    horhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdprhgtphht
+    thhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:S29Bab8dgtdIlgC9z8aGTms_TY5oWJleV_TdMh5ahJjghxMSSvxkDA>
+    <xmx:S29BabaFpa7-VSxT59eZ6akRqdoBvtz_sh2wZh1f44Vrr4ILDTkXDg>
+    <xmx:S29BaS3NJnO6tZ2Ec6b2YK6ygkKggXe0jTOexrWv8CUTExett-XjWg>
+    <xmx:S29BaeY5RfNSIIRlx3nGhOiPcwgH0hKbQyIgoqBZ3e3PqBK-y7mNFA>
+    <xmx:TG9BaQ5uP1GeIfHYAM9NejjoHNVC3tK0faMhSJym7--6tvivhxiNyDfU>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D38D3C40054; Tue, 16 Dec 2025 09:40:11 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <334684ec-5796-47a4-b9f4-96c60f449634@app.fastmail.com> <52068d9c-d677-4fa6-8ced-6a7fb190a935@app.fastmail.com>
-In-Reply-To: <52068d9c-d677-4fa6-8ced-6a7fb190a935@app.fastmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 16 Dec 2025 15:35:42 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUKreg6NcMUK-jvgM=R1Mt=VQPntTrwN-PO-S3fnAUw2A@mail.gmail.com>
-X-Gm-Features: AQt7F2rACQpLF79AXAKKa3e1I8_5jvGUOJu5XzdjILbOotHKGddZqOAsNt9CQLQ
-Message-ID: <CAMuHMdUKreg6NcMUK-jvgM=R1Mt=VQPntTrwN-PO-S3fnAUw2A@mail.gmail.com>
+X-ThreadId: AgGhHji4LWAw
+Date: Tue, 16 Dec 2025 15:39:51 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc: "Linus Torvalds" <torvalds@linux-foundation.org>, soc@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Message-Id: <1ce00594-66ce-4fa7-b75a-d26dc756541e@app.fastmail.com>
+In-Reply-To: 
+ <CAMuHMdUKreg6NcMUK-jvgM=R1Mt=VQPntTrwN-PO-S3fnAUw2A@mail.gmail.com>
+References: <334684ec-5796-47a4-b9f4-96c60f449634@app.fastmail.com>
+ <52068d9c-d677-4fa6-8ced-6a7fb190a935@app.fastmail.com>
+ <CAMuHMdUKreg6NcMUK-jvgM=R1Mt=VQPntTrwN-PO-S3fnAUw2A@mail.gmail.com>
 Subject: Re: [GIT PULL 3/6] soc: devicetree updates for 6.19
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, 5 Dec 2025 at 19:28, Arnd Bergmann <arnd@arndb.de> wrote:
-> Three new SoCs got added in existing arm64 chip families:
+On Tue, Dec 16, 2025, at 15:35, Geert Uytterhoeven wrote:
+> On Fri, 5 Dec 2025 at 19:28, Arnd Bergmann <arnd@arndb.de> wrote:
+>> Three new SoCs got added in existing arm64 chip families:
+>>
+>>  - Renesas R-Car X5H (R8A78000) is a new generation of automotive SoCs,
+>>    based on 16 Cortex-A720 (Armv9.2) cores, which makes the the currently
+>>    highest-perforance embedded SoC.
 >
->  - Renesas R-Car X5H (R8A78000) is a new generation of automotive SoCs,
->    based on 16 Cortex-A720 (Armv9.2) cores, which makes the the currently
->    highest-perforance embedded SoC.
+> Actually 32 Cortex-A720AE cores, which I believe could indeed reduce to
+> 16 cores when enabling dual-core lock-step mode.
+>
 
-Actually 32 Cortex-A720AE cores, which I believe could indeed reduce to
-16 cores when enabling dual-core lock-step mode.
+Sorry about that, I should have looked more closely.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+      Arnd
