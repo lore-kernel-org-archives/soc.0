@@ -1,105 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78182272E54
-	for <soc@lists.linux.dev>; Tue, 16 Dec 2025 19:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C806129BDBF
+	for <soc@lists.linux.dev>; Tue, 16 Dec 2025 20:27:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765912369; cv=none; b=KoeZVKIYDAJgWgb+msfSj1+26gqow+78zDupT9mGNrIT9GUp2MNm550Qprv/7fzc46rB7vHSJCWz05UlFSccKd5n7z038PhyvVOhtZoGidRw5YHBIUKsaWOc77IZpSVFtdFzv0Xf9BTpGOzcWwizP0RiVfHGVckosSv6kutRXRM=
+	t=1765916874; cv=none; b=cT9K+7hN51oF4JUzw/38fbj3Cvh7wSOntoRuRKld90UmixY18rAZe9LBG+KmSG98lgXeD1nkl7Z1eYYnM5UP9PWQp1PzFaxN6bFSk/oiPpl5QP/FehziTwl02PM12504L8aWd5TCzp0oYSjXiUXB7imdZbbsbnek44l8Yn0k8rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765912369; c=relaxed/simple;
-	bh=lZ1L36MMIvqC3ItTAU11Z5ZidG2aFDbgBmoFw5G5xis=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kihes6y8w/j3OBq5nRMn1CtDsk7vvDE+f5t8PafcGO3PfTOfb3gj9G0UE/8YFuTS8hoU4aoG6zGq675xlNN+vbU8csvZsGCHZ/rLYaHdeaqeln7NBWLoeEYsMRZJaaTiUkZ4n3dzRHUIsn4XbSfiWO7gEXK5MqkXBkaONlRoP58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5obNDte; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765916874; c=relaxed/simple;
+	bh=+1SqpF/XGRA+dpb2sLKshDR1VeFj8O2Uym6zaIH0yME=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cx9JdEZxDmXROqlc4g0cJ7h1BUOjKUKizXWVeRkQX+SyBHCgxcCSiEiDSqO7yiN5tMw0h1Z+Nh5FSOCf2iTMMJCyL9Yg5dM4ekIkgCyXzXipv4BdiNl5S2eOdAG4BohNRM4+yCJWx4r4xTZ47/1ApyJoYJG/iZLNnK4TfVuPYow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jBaoWK8Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5obNDte"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jBaoWK8Q"
 Received: by smtp.kernel.org (Postfix)
-	id 6DCE2C4CEFB; Tue, 16 Dec 2025 19:12:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353A2C4CEF1;
-	Tue, 16 Dec 2025 19:12:49 +0000 (UTC)
+	id 9262DC4CEFB; Tue, 16 Dec 2025 20:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B38EC4CEF1;
+	Tue, 16 Dec 2025 20:27:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765912369;
-	bh=lZ1L36MMIvqC3ItTAU11Z5ZidG2aFDbgBmoFw5G5xis=;
-	h=From:To:Cc:Subject:Date:From;
-	b=M5obNDteU4o4mV8OFBa77Oiq9OosbnLYuPXvNuf/t2eZ5LnDMYbp0k/NA+X1Nd1uZ
-	 4jQ6S60XdmhsZAfHWvJrcol4iA51yqLNhcgEV6CjfWmnt148IxJhYMf88n+JB02GUG
-	 w7Z0kgXNKmBkT5/pFpd+MUL2H6VDFex0veX4kmPAi+GTM7h2xNvDU6GDBAD8fAV46G
-	 +z64gtwrmsaGqf+rSBHLeaAvV2VP153wzq0deDtxs50FtccrqXnq1z3ngsYZcQubyC
-	 G0mtPXAC7Sihk4D2nBjXBHLwCsrrNc2jkrLC23r1cyimf0cAgjVfQEwoFwmaYPFNhU
-	 Ct9a3Pp2ib5sQ==
+	s=k20201202; t=1765916874;
+	bh=+1SqpF/XGRA+dpb2sLKshDR1VeFj8O2Uym6zaIH0yME=;
+	h=From:Subject:Date:To:Cc:From;
+	b=jBaoWK8QQYU8T6RjUbs6FM/rRVc6ivlyDZ0dBugUIsy+6FA3dTZ+c2AH3ASfUKa9O
+	 6SRwm7N10R1e1AunhUU6beT4QN7xhUqr0VA0f8J8QEnxrm4NU1irJLlh3536/Sbqh/
+	 rSmERi+HQBH+XmW9s7X3ifI2dkrKpkftJ8QvN7TAkp1jmi9ldTr0cEnGjeChXI4dx2
+	 Fsphpy3lRe4fuwnA3Tc0q0LqeNIuhZBYV/9f0KjglOiz1iS9XKZwMPGNt5SPgFMNiW
+	 fKVraYDEZ8Mz4pmTXMD0bQ95LdYuj17ogEkVMLd+2sJ6jtp+w7hF3nSWjJ5PwcBr7M
+	 kQUSAamCvoOvg==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: soc@kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: vexpress/v2m-rs1: Use documented arm,vexpress,config-bus child node names
-Date: Tue, 16 Dec 2025 13:12:12 -0600
-Message-ID: <20251216191212.2879226-2-robh@kernel.org>
-X-Mailer: git-send-email 2.51.0
+Subject: [PATCH 0/4] arm64: dts: apm: Fix remaining warnings
+Date: Tue, 16 Dec 2025 14:27:47 -0600
+Message-Id: <20251216-dt-apm-v1-0-0bf2bf8b982c@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMPAQWkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDI0Mz3ZQS3cSCXF1zCwuTNINUS1PDlBQloOKCotS0zAqwQdGxtbUAb7l
+ iiVgAAAA=
+X-Change-ID: 20251216-dt-apm-7884f0e951dd
+To: soc@kernel.org, Khuong Dinh <khuong@os.amperecomputing.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.15-dev
 
-Update the arm,vexpress,config-bus child node names to use the
-documented ones. Most of these were updated a while back, but I missed
-these.
+This series (along with separately sent binding changes) fixes the 
+remaining DT warnings for APM platforms with the exception the 
+non-standard use of the "phy-handle" property having 2 phys. I'm not 
+sure what is the right fix there. It looks like the same phy is defined 
+twice on different MDIO buses though the "apm,xgene-mdio-rgmii" MDIO 
+registers overlap with the "apm,xgene-enet" registers which also defines 
+a MDIO bus...
+
+SoC maintainers, please take this series directly.
+
+Rob
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
-SoC maintainers may want to take this directly?
+Rob Herring (Arm) (4):
+      arm64: dts: apm/shadowcat: More clock clean-ups
+      arm64: dts: apm: Use recommended i2c node names
+      arm64: dts: apm: Add "reg" to "syscon-reboot" and "syscon-poweroff"
+      arm64: dts: apm: Drop "dma" device_type
 
- arch/arm/boot/dts/arm/vexpress-v2m-rs1.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/apm/apm-merlin.dts     |  1 +
+ arch/arm64/boot/dts/apm/apm-mustang.dts    |  1 +
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi | 20 ++++++++++----------
+ arch/arm64/boot/dts/apm/apm-storm.dtsi     |  4 ++--
+ 4 files changed, 14 insertions(+), 12 deletions(-)
+---
+base-commit: 563c8dd425b59e44470e28519107b1efc99f4c7b
+change-id: 20251216-dt-apm-7884f0e951dd
 
-diff --git a/arch/arm/boot/dts/arm/vexpress-v2m-rs1.dtsi b/arch/arm/boot/dts/arm/vexpress-v2m-rs1.dtsi
-index 158b3923eae3..248b8e492d43 100644
---- a/arch/arm/boot/dts/arm/vexpress-v2m-rs1.dtsi
-+++ b/arch/arm/boot/dts/arm/vexpress-v2m-rs1.dtsi
-@@ -420,7 +420,7 @@ mcc {
- 					compatible = "arm,vexpress,config-bus";
- 					arm,vexpress,config-bridge = <&v2m_sysreg>;
- 
--					oscclk0 {
-+					clock-controller-0 {
- 						/* MCC static memory clock */
- 						compatible = "arm,vexpress-osc";
- 						arm,vexpress-sysreg,func = <1 0>;
-@@ -429,7 +429,7 @@ oscclk0 {
- 						clock-output-names = "v2m:oscclk0";
- 					};
- 
--					v2m_oscclk1: oscclk1 {
-+					v2m_oscclk1: clock-controller-1 {
- 						/* CLCD clock */
- 						compatible = "arm,vexpress-osc";
- 						arm,vexpress-sysreg,func = <1 1>;
-@@ -438,7 +438,7 @@ v2m_oscclk1: oscclk1 {
- 						clock-output-names = "v2m:oscclk1";
- 					};
- 
--					v2m_oscclk2: oscclk2 {
-+					v2m_oscclk2: clock-controller-2 {
- 						/* IO FPGA peripheral clock */
- 						compatible = "arm,vexpress-osc";
- 						arm,vexpress-sysreg,func = <1 2>;
-@@ -447,7 +447,7 @@ v2m_oscclk2: oscclk2 {
- 						clock-output-names = "v2m:oscclk2";
- 					};
- 
--					volt-vio {
-+					regulator-vio {
- 						/* Logic level voltage */
- 						compatible = "arm,vexpress-volt";
- 						arm,vexpress-sysreg,func = <2 0>;
--- 
-2.51.0
+Best regards,
+--  
+Rob Herring (Arm) <robh@kernel.org>
 
