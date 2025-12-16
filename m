@@ -1,77 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F382E327206
-	for <soc@lists.linux.dev>; Mon, 15 Dec 2025 20:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475A5314B8E
+	for <soc@lists.linux.dev>; Tue, 16 Dec 2025 09:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765831535; cv=none; b=NJqNVKADW2bZ6EBajxbncD+h836FUW/d13TLX2zamX2+ROoOHiZVR3bsH0p6mWA9KSKXIfcF2RtxTUc1N2sRVjRr5TzGMWEtMI645Xr+b24M+HP4wuCicx5414O9xVhucupEtPBjcfx7zF5nP80wPTzgPuqIElS48NRV/CYqT68=
+	t=1765878046; cv=none; b=GsdfaNn0ZpATo74KhzdLftxEsjAwTtMQEyYbWn3HvDbXTcbQRXNUbSD4S1y0wm2E3PBNpNYBPZRa1OzN/tK+Rvq8NcURzKYYklQy5paXiN7XkmcfwYidU/kRhN327NOC+qYwTWHwT1I1snCU9nPfQiEZjIRaFFw6/2y0stD7ogk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765831535; c=relaxed/simple;
-	bh=81694V6q5hynuKLm6mBUEPRTUdoT/rs2crEr9qIx9Y0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=TBd9YE+KCYxmYyGT6Br28vn+1RuWlKfECabRVCQMWttPCoIxjnp7USN0owKUUMNx8bbSW7PWfbegAhLlOUDDRrgRxdB8WaX/4pUQ/auA4PGxaAImbKl+AY9jpKSRTVqDSUAKAaO67KZbcHXcaI8fB5s1iTaFNY+9R5b2yYMuSHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BIBw/5D+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765878046; c=relaxed/simple;
+	bh=/KuCE1oVoKwhFRZxrnWzL267YxvDezKhlS9MzFOQJ8k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kSoha3SB863gWeyeNKYq9hCnK6bGlnWSksRD9NJdJ21jwBEpg4X2pyTkOYSXRi0jxwNuXh1fxa+w7J/p4sHlCM4H2YcjV0FxrWu85nVcGNGLlUMuGq1ks+4n06INDEJv+e2wHX9nOPPoIItkbQgm8IKhnk3+Glt1nljzdYdn/UQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTCT3Rc1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BIBw/5D+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTCT3Rc1"
 Received: by smtp.kernel.org (Postfix)
-	id A4B88C116B1; Mon, 15 Dec 2025 20:45:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E9FFC4CEF5;
-	Mon, 15 Dec 2025 20:45:34 +0000 (UTC)
+	id 0ACACC16AAE; Tue, 16 Dec 2025 09:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 532E8C4CEF1;
+	Tue, 16 Dec 2025 09:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765831534;
-	bh=81694V6q5hynuKLm6mBUEPRTUdoT/rs2crEr9qIx9Y0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=BIBw/5D+0BkMGoLxzi3+/5MWRgeYvL4rI9peRjNbvQ52Lf7A+uiT5oaBF5Qu3FuQA
-	 WiEBc5VaHXnuVTRAzXb0823ZdMdWidGJkBjenG3SRL9oqexqFYL9d3MmVv40PL0YgP
-	 oWdYR36/rC5FhFv5G3N/b5zqZsRVa4W0poyCLI75XR5sRYQVoKVuhvJSptJfen7gVH
-	 C+jfYdK0lm9RlThvVbi2kid4Wr/QT8A53YZS7QwBcVx83jU3DXeBksvjZPpXUHOVML
-	 Op+0rqLoB1dPrlGXCKXW/+xzcv4/BrN7UKkU4if8XCDN9EdRavkc0AQtFfvBYsGr6I
-	 Q9+DgbOyTHzew==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F28E1380AAEC;
-	Mon, 15 Dec 2025 20:42:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1765878045;
+	bh=/KuCE1oVoKwhFRZxrnWzL267YxvDezKhlS9MzFOQJ8k=;
+	h=From:Date:Subject:To:Cc:From;
+	b=RTCT3Rc1UbrnLZroUJ0Ssy3CGBOf2gy3PIP4M6FK5HMIVFhxLgvMfSNdha7MUPKoZ
+	 ypBm7hzsjnjV5+Phvot8ZT6NjaCKy2EX445w7mX8/X3gzk5EDSHVXeJOPg0Zknr5Ue
+	 X1nJoq+ipjUqm93UvzemWAYZQLG1Nt9Utd0tOekzdDbo1kGy3nbZJzhpoKOg5YvXzn
+	 +gFoMncOkIq6FE19kHK92wlaoYsuGfXIusYv6kre53tcBLWRkoPX5V7hGgMn+YkWh4
+	 oRH8r3HHfGBCi8EgsC5k3UY3IhOo/lh/PU6kUVDzDoFCPQ3LurN3lcbIhJp/RgtFlZ
+	 VY33f96UA27Ow==
+From: Linus Walleij <linusw@kernel.org>
+Date: Tue, 16 Dec 2025 10:40:42 +0100
+Subject: [PATCH] MAINTAINERS: Fix a linusw mail address
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: omap1: avoid symbol clashes in fiq handler
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <176583134552.289481.16653572825737154822.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Dec 2025 20:42:25 +0000
-References: <20251204095355.1032786-1-arnd@kernel.org>
-In-Reply-To: <20251204095355.1032786-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: soc@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251216-maintainers-fix-v1-1-92f11231b27e@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBBFryKzTsgBC7pKtDAdaxZZaEQg3r2hx
+ Vu8B/9XKJSZCkyqQqaHC59JxHQK/O7SRpqDOGCP1qAZ9OE43QLloiO/2jofzIqINEaQ1ZVJ8v8
+ 4L619fhwA+WEAAAA=
+X-Change-ID: 20251216-maintainers-fix-5acd1b222e7f
+To: soc@kernel.org
+Cc: linux-kernel@vger.kernel.org, Linus Walleij <linusw@kernel.org>
+X-Mailer: b4 0.14.3
 
-Hello:
+The patch adding me to the SoC maintainers was in-flight at the
+time I had to change my mail address. This fixes it up.
 
-This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+Signed-off-by: Linus Walleij <linusw@kernel.org>
+---
+SoC maintainers: please apply this for fixes to Torvalds.
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu,  4 Dec 2025 10:53:47 +0100 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The ams-delta-fiq-handler.S file has a number of symbols with fairly
-> generic names, including one named 'exit' that causes a compiler warning
-> in some configuration options:
-> 
-> vmlinux.o: error: exit() function name creates ambiguity with -ffunction-sections
-> 
-> [...]
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5b11839cba9d..15c4dacfa5f7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2011,7 +2011,7 @@ ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)
+ M:	Arnd Bergmann <arnd@arndb.de>
+ M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
+-M:	Linus Walleij <linus.walleij@linaro.org>
++M:	Linus Walleij <linusw@kernel.org>
+ R:	Drew Fustini <fustini@kernel.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	soc@lists.linux.dev
 
-Here is the summary with links:
-  - ARM: omap1: avoid symbol clashes in fiq handler
-    https://git.kernel.org/soc/soc/c/3ce8f4a501f6
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251216-maintainers-fix-5acd1b222e7f
 
-You are awesome, thank you!
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Linus Walleij <linusw@kernel.org>
 
