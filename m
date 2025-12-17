@@ -1,180 +1,298 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831FE3D6F
-	for <soc@lists.linux.dev>; Wed, 17 Dec 2025 00:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765929832; cv=none; b=aWOiz0VsrY19MSOBZiyTCTBFj/UKegg2Ya9YMyCz/nKfGwEnL6RLN8Lj1NPsnIWTS9UF+69C8KgZsVFR2ty6TowJb11P4PlidHCQlIoSn5Vwf5bWZFk0Q5kEJAeMXW9OeKNPvOfkRdVIZNeLBZLVWOMKLeYHqx50PS0QKApv2lc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765929832; c=relaxed/simple;
-	bh=NJZaH7skSexEaFAy/gh9p3/z9J6dpaWX6TKh+Z4jInw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pDJ1cPcD6OlbwkzrTpdbtvwgwVur4Qafk0xvPttY33LxGl4uFyOsFn/moa/CfF3JeIktc+eC85AZflJqe+oDlktbm9s7l2ochawuiyKYA+6rcOHGLGRIutXpYbodw/HlBzN5YdZ+qxqPb7G0TMZp1i+nepyzaJZZRuzqBZToL9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Cpf+TBa1; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D620523EAB9
+	for <soc@lists.linux.dev>; Wed, 17 Dec 2025 02:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765937602; cv=fail; b=cEQ/EGXphg8u0+h2a2CE22z3YWiHi6X37ftzwdxSa8kgRtvv7EvjySffUHxSG3oYRKF6pW9YbyGvuXR03ILfv8CIDFYsYukqG6w6loU5SjRzHgxFdPDBAb+MuEKFZgpW6bZDX7WRHkgdwH20YwMOSTv1VlJr57CqT93tGCd1FoI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765937602; c=relaxed/simple;
+	bh=VFmXqTSeUNSdIscNWy/JxVan+IE0NT4SNT3O2enTIx8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=gjLB2RheDZ2clzF5BZRSeuEfLplSPTN8RKtsKQxRe5lZFiD1ofPiSg9maoOcr0lPosNO2TfhRsjvAvzMnkL3rq2OvqKUo8Qk4akG9zEpHF1wcrds3E/a/GDheAY11/Us11OTFq+dhgBJV1ZhYWny7Fxa7X0QmB7ooE4/jx4uKo8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=mail.toshiba header.i=nobuhiro.iwamatsu.x90@mail.toshiba header.b=L1oqNXeG; arc=fail smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Cpf+TBa1"
+	dkim=pass (2048-bit key) header.d=mail.toshiba header.i=nobuhiro.iwamatsu.x90@mail.toshiba header.b="L1oqNXeG"
 Received: by smtp.kernel.org (Postfix)
-	id 3A7BEC113D0; Wed, 17 Dec 2025 00:03:52 +0000 (UTC)
-Received: from mail-oa1-f100.google.com (mail-oa1-f100.google.com [209.85.160.100])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 713DBC113D0; Wed, 17 Dec 2025 02:13:21 +0000 (UTC)
+Received: from mo-csw.securemx.jp (mo-csw1121.securemx.jp [210.130.202.132])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8463CC4CEF1
-	for <soc@kernel.org>; Wed, 17 Dec 2025 00:03:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8463CC4CEF1
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-oa1-f100.google.com with SMTP id 586e51a60fabf-3e7f68df436so40894fac.1
-        for <soc@kernel.org>; Tue, 16 Dec 2025 16:03:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765929828; x=1766534628;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Q8Y5Nly6/2QcuWXLw650vy+bFUZ3dsDuqEwgOZmk9iA=;
-        b=Rw67sRWUfDd2dm8N+sEZ+r937C+lqViIc5/jsDFNEtZHIsBvdkHKohh1hN2hNsfHm1
-         6DawX/1sVgVLxDPJkxDYhFU9VaGBKGOOKP55niW4j1mfKqY6U8NlPRWOvzuSKnXQxGoe
-         wgJigbu343uj5uJAy+Qi4CetP0QQS4e75Ks+F26QOmHxu/DODTrTCwEYPXoBj1SP6DJx
-         zIPrZnc/G1iGCxV4Wqznmb0CvWS529UNvjZEpV+KL+vi7AUjpdnBbekML1fHCS5P2a14
-         zuget4XBMCSM+9eU1bxLEUKo5VMCT+WHjfS8BLJD8pJjnagRVS3f/w1oDqWqYkQKOGmL
-         Nnhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUIxC8ErtqYp8r+ynziY+PdJTOQWn9/H3ajWcVm+o7MEC/m+piADvy7ALxBvB6y00hNAro=@kernel.org
-X-Gm-Message-State: AOJu0YxwU2QbLUZUa+fD9YdvR+Hsv9q2RPl25qvnqdDwM5ua3no7aADi
-	6d/gPL2Pl0/b9KYyo/uhYYeghdSDM8ccWG26P/zPxUw0doPtvZaa70qbtl6sUnkwmSZZIV04IZk
-	5j7pfqZvlLyLlV4vZVqk0ok1QfbIV2Vk++xFCYFwaFLw70sqLoEPWymX+CnCdlwTDYNr5fLAZ91
-	56dg1Jr0/W+sW+dEW7O0LfY7gD6LZSbDSBtsH3GKEKG5maI3kzBFHwSEWzzn09JqsFjnDS6WHiG
-	r8HWg==
-X-Gm-Gg: AY/fxX7N4wqw2QQD3/0XA9mKUmAiqbdHq0AHG66MuD6gtqrcLl0unKAps2cazo/McQO
-	SoHETZDdtNGkgGhvH6ggxGQE9GCIDcHjeRnUOWeqWnr7sl+QDeD0sDv4g8mWpAK/9mkkuXoNkVo
-	AFyi3daTCSnhq1t+QC8POPlwULMS5mwYFlKhjCn+uAB/cB2SCArYp/HzrwZe+gehwQ02InJDqyM
-	X+qCkUI64US3WsrmuGMcpef0ENWEHAJZ3usmPaDBVEKdCHiB854UPg44q0PR+jOED4fSjBD3P2x
-	pPg4cr3nKIHC9mddSS5en0zv6NTsGhTaNjG6A6/wUNIUkquzyaDq0X4CaS8y3vqVmOKD5iYfpD+
-	ndpLa6V5BmsSqsQ267HrBjhfLMnYboNgRmDJ6X2yEvt3659gKgWzh2U/0bOD3Hb4oDOR0h2syl1
-	XbL/0hcy+xY5tMcRUwk5NjPiCUmkDBlVDcg9hNKjWwc9YwZTS89g==
-X-Google-Smtp-Source: AGHT+IGBLptu/iGSD9WUccYmtkpMWh2ZDhbIVTsNSeeTbWHJv/jRXHBXN/7JrjdV/QaAw/7vmwLyBoNp6Ao3
-X-Received: by 2002:a05:6871:281:b0:3d2:e6a7:e938 with SMTP id 586e51a60fabf-3f5dfbc0168mr9915446fac.15.1765929828330;
-        Tue, 16 Dec 2025 16:03:48 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-19.dlp.protect.broadcom.com. [144.49.247.19])
-        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-3f614b82306sm1445235fac.2.2025.12.16.16.03.47
-        for <soc@kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Dec 2025 16:03:48 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-2ac387300f4so96209eec.0
-        for <soc@kernel.org>; Tue, 16 Dec 2025 16:03:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1765929826; x=1766534626; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8Y5Nly6/2QcuWXLw650vy+bFUZ3dsDuqEwgOZmk9iA=;
-        b=Cpf+TBa1l7UE51ysysjW54/XAVZmakXvXS81LBWg/aKCkFbqAjUAnBp+RdKMxYRM9R
-         72+LrATW5OXRpZDywLNLu40Cd1uc2sgkoA5kd+foTtfNfBLNIQTo2X6gkacE8RKug1ja
-         C5R3SZS5UDtwaYEvrTJkjPpnUXPYMWhYVY3oc=
-X-Forwarded-Encrypted: i=1; AJvYcCUgy0wJG37wcz+afeVANNzehjl0Tn2AD3U/Gb693QFw+FRdDygJjvEkF5KFoYjWWqrs1ls=@kernel.org
-X-Received: by 2002:a05:693c:8006:b0:2ab:f74a:6a63 with SMTP id 5a478bee46e88-2ac3119e045mr8038583eec.16.1765929826003;
-        Tue, 16 Dec 2025 16:03:46 -0800 (PST)
-X-Received: by 2002:a05:693c:8006:b0:2ab:f74a:6a63 with SMTP id 5a478bee46e88-2ac3119e045mr8038570eec.16.1765929825269;
-        Tue, 16 Dec 2025 16:03:45 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ae4f0546a1sm1821021eec.29.2025.12.16.16.03.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Dec 2025 16:03:44 -0800 (PST)
-Message-ID: <822bdd19-276b-4868-b3e4-59a187bc7048@broadcom.com>
-Date: Tue, 16 Dec 2025 16:03:43 -0800
+	by smtp.kernel.org (Postfix) with ESMTPS id D88E8C4CEF1;
+	Wed, 17 Dec 2025 02:13:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D88E8C4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.toshiba
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=mail.toshiba
+DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=mail.toshiba;h=From:To:CC:
+	Subject:Date:Message-ID:References:In-Reply-To:Content-Type:
+	Content-Transfer-Encoding:MIME-Version;i=nobuhiro.iwamatsu.x90@mail.toshiba;
+	s=key1.smx;t=1765937586;x=1767147186;bh=VFmXqTSeUNSdIscNWy/JxVan+IE0NT4SNT3O2
+	enTIx8=;b=L1oqNXeG/66601K67WhUHB8IAixYpxI13DsrfmeXILaIeX7o2hNy5J6xDSuB1K9oK8G
+	ru+WGr6VuBycHuIA3ZLUDpju4QUj1Pz4JJfEHqYBdYlVCdNHyicJNKTe0jk26RZc7BQyyTPt9rXxM
+	TiAsUwPAcSBVbXasDZNyeO2y9dKsMpuGgUo+Fqmt1vorKEaMojcoXk50VCq6S6pOtgFc7/ShuED1Q
+	9uT9zs85Y70lLPmE+k++g7QXoAwHXwOkO1ETsnNANPuPf/MzRzqjpx+NS4kB9rvcc0U36KSpvPa4T
+	m/ih2QhfPFN8SfScWIxUaFrXk3eQ9hoR58EP5x9Pe9Jg==;
+Received: by mo-csw.securemx.jp (mx-mo-csw1121) id 5BH2D57h1067468; Wed, 17 Dec 2025 11:13:05 +0900
+X-Iguazu-Qid: 2rWgRWki9ldvmgDsgE
+X-Iguazu-QSIG: v=2; s=0; t=1765937584; q=2rWgRWki9ldvmgDsgE; m=1luXCkQYDzlh0JL4E+xOMG4BrGiklTOT6BP7VSeUYvw=
+Received: from imx12-a.toshiba.co.jp (unknown [38.106.60.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	 id 4dWHQ74nj0z1xnc; Wed, 17 Dec 2025 11:13:03 +0900 (JST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=v/qQretvXpL5lqlL1StVbf3jkvjMNE8+wVMXtezGglfMy0LdYRRJDHDoLeytDWDh+e915cabfECMBRJZ74AZAKZ+rJLh9/1zVQuo2AllbIz5/mRriZcayIAwtvQrPKaYT1qRKBN3AuG8Mos6cBD5iTrgUDFB9YrUXso++vEKJZeuAxYEP1friMMuvCrmb+10hnuQiyf/HEHAp9BEv4NT51rN/NZI2P2JJE9BCqhtHuu5QQ3sqhgMu5WwYmtALh0FHhpieRis8O6HXscu3VsdW0VI3Uz49qE2G6y04yU16oYQm9OU8LPFDCIHU5QgoavC1mY7IoMqOOTHslkyckSR7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Wa0xxFfQ3t8zO1ggW0WedCe90akKSAxQWKQ32p443kA=;
+ b=aexeu6iMHhtw486fhOK1Ovt3HmIA/FiVW/PO189E8oLwhy2TSl2AkylDv9JtcymS+2YJ5a2+uEvoxTlvO4tjaBXBvsAOWS9vILRQU6K1OQWtgRu1pD8TT1Eqa56Qdwh7KePm61Lh9Dutxh+rhXLd/RuFGu5e3b0pIIX8HiLf2GXLjAyAU8YTe3KW+oNNm+7yFOumuYJxPBZiPJMqxhUI/bL8zXZWLv2Qh99xomDPgqAtcHLYuKP1O13uaDZAYAh65u2MVPuZx6/RYyUAIfFd6UzDMoRIDcBeXKsByNSa8x1vgM3/5hVD749P6UeNJAzJ0h9oz7qbkBDm/rJcyLtJOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mail.toshiba; dmarc=pass action=none header.from=mail.toshiba;
+ dkim=pass header.d=mail.toshiba; arc=none
+From: <nobuhiro.iwamatsu.x90@mail.toshiba>
+To: <robh@kernel.org>, <soc@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] arm64: dts: toshiba: Use recommended node names
+Thread-Topic: [PATCH] arm64: dts: toshiba: Use recommended node names
+Thread-Index: AQHcbrYCCg0+xgdFxEqx6sSVCjAVubUlF4mA
+Date: Wed, 17 Dec 2025 02:13:00 +0000
+X-TSB-HOP2: ON
+Message-ID: 
+ <TY7PR01MB148187A7304501EA9EB3B2DFCCDABA@TY7PR01MB14818.jpnprd01.prod.outlook.com>
+References: <20251216180055.2793215-2-robh@kernel.org>
+In-Reply-To: <20251216180055.2793215-2-robh@kernel.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mail.toshiba;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY7PR01MB14818:EE_|TY4PR01MB17375:EE_
+x-ms-office365-filtering-correlation-id: a728cc93-7368-48a7-2470-08de3d11cddb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700021;
+x-microsoft-antispam-message-info: 
+ =?iso-2022-jp?B?ZlcrSUxXd25hcWFXdFB5YlRBRG56ZDNsS0lHTzVzaWFNLzh5YkFTeXZq?=
+ =?iso-2022-jp?B?TjhQa1QzWWI0S1FUMjNlN3NDNUpuWE1wemYyVi9WY1doaEc4TWlIOGNx?=
+ =?iso-2022-jp?B?ODJQZnJTdjdsdFpMc3ZhQjVFOEpIbTNWa1FQVk9nNDZGaytkbXdlWUR4?=
+ =?iso-2022-jp?B?U0RIaGUrbXhEcExzTTBpU0ZCMXRXdTVIZkh3VWJRMC9RTEF4SDZNZS9a?=
+ =?iso-2022-jp?B?OVFTU01vdzBUc3JSSE5CaWp1RGdZbzBPamJuYUhGaVdITk45bytXRnhW?=
+ =?iso-2022-jp?B?di9ZWk8yUk9venI1U3RyUGlQdDdlZGRtMGE0dzByU2VVajQ3VWVmU0gw?=
+ =?iso-2022-jp?B?MWV0S3A2c3o1RklQNFVjOWRrN0JsWkJYaW96SkRnYUhrK21qclhNVzNV?=
+ =?iso-2022-jp?B?MTk2aWRPa2gzb0NScEJ4QldKVWthOU4zVGIvNGpwNmVMbUlxR1p4S2Yz?=
+ =?iso-2022-jp?B?a0x1d3JqV3BhWDlVWU9UdFRPODlwbVQ4ZDh3ZnhwT2FYems0STlTcndq?=
+ =?iso-2022-jp?B?K25UcFUzZHhqbkcySWhhYlRhcGgyQVFXenlUWmE5b3J5ei8zVlRzaDlq?=
+ =?iso-2022-jp?B?K01OYUlBdEZHRUVBeUZaY09KcXFscGRrM1k4b3AwZGMyeUV2RCtOc05o?=
+ =?iso-2022-jp?B?UkJTQ1VXUlRHK0d5NUdZUUhGUWtQWGFKc2V3VE9aRnV1b1N1alQ5YW1z?=
+ =?iso-2022-jp?B?ZjQrV3dpS0tubWx2VXUwcG9CM0RvVHdBK3hwOXNxaUhHT0M3WTh4alVC?=
+ =?iso-2022-jp?B?ZGpLOHhmLzVpZFIydUJqSjFnL2g4d2NEU1dKU25xdlNiUHk4ZzI1OVl4?=
+ =?iso-2022-jp?B?YWUrbFN4RUJDK2d0ZFRNdXN3dXh6UmRPZEk0Vm15YW5YaDlUQlFKcStk?=
+ =?iso-2022-jp?B?YTBCU1N4c2lBSDRrenUxZFZjWFA2czlKWDB6MHZuNEhKd1NoWS9CVFM0?=
+ =?iso-2022-jp?B?OXBKelJWbG4xSm5QM0xjUWVkd1Rtc1g1N2tIUGFUSmVKaktPVExjT3lj?=
+ =?iso-2022-jp?B?MHZDcVpDSER4MEFaSDBRUzhGVGhsRytwYTZRQjNSekU5ZCtnNUhLK1A5?=
+ =?iso-2022-jp?B?bWhBcUYvL3FIZkNJUC9LSytHamU2anQxQlZsUUFiUDlPSExySDU2eUt3?=
+ =?iso-2022-jp?B?VThrbHM3dlBDVjZDSUtYZ2lFT3ZvQ01XbVd0Mis4OHBNQ1FGM1hxMFpy?=
+ =?iso-2022-jp?B?ZnZqVUh1Rk0rbWhtVUp3aU41NmQwY2FKZUFXMklCczFOM0FGZzJCeDdV?=
+ =?iso-2022-jp?B?UU4yMGoyalFjYWxXdkVpZGxlTnQ2TEcydFVhMGlkdkIzSVZUTE0ybXhG?=
+ =?iso-2022-jp?B?STBGam5nZkF6MjlvVkRmVmhCeU9BS1ZZbjRSTzVweFdMS0tHRURsNFBK?=
+ =?iso-2022-jp?B?SGkrLzJ5cjV4RndsZjdiZ2hGc2NDdUFtNk9NQmtyRmdJYWZFVWdQWFJ1?=
+ =?iso-2022-jp?B?TjdZNThLVUZFdGV1d2RCdGNRQmhXaWgxRHA1SWs2ZG1kZXpVK2JrREZN?=
+ =?iso-2022-jp?B?WlNITXRldENSajVjOVpra09zREtOcGNvSVpSYlc4anoyZ1Y4emtKUHV6?=
+ =?iso-2022-jp?B?VjdyVkNpbGVXc09WRGlJaXZqTXpBdUwxdVQwbmhYNDdtR2dNS0RWaFA1?=
+ =?iso-2022-jp?B?dDNyUTZ0RE9ZUTU3SzNieEpIaXNUZ1drQWZMczRoVlZVbklGYit3NDlO?=
+ =?iso-2022-jp?B?V3dnSURQc2dtMlJTZ09WbVV3RENSc3lqaWllTStKek53R2ZDanB1WVdI?=
+ =?iso-2022-jp?B?alUxOEc2UXdEZGZyY2swTW1KSHZDcFpINzRGZ3VHV0xxbE1KNmxJNEdL?=
+ =?iso-2022-jp?B?YXRHUkc2K2U5ZE5nQzlEVnpwTzlwWXIzejhCbkF3SlZUSC8xK29pVmdI?=
+ =?iso-2022-jp?B?R0c1WDZadFVkVWkydXBpZ0lhdkovRjd1R25uSTNQcm1WVGljZXRUb0g1?=
+ =?iso-2022-jp?B?UTBQMUFJTTNOUEtsT2QrdFREeXl5MXVlMm52ZldlUWMrT0V3b3E2Ulk4?=
+ =?iso-2022-jp?B?UDJ0OEdra0xFcExxa082Q29aekl1T1RadFU2dXRadkxZSWJvTUUwZkdX?=
+ =?iso-2022-jp?B?a2Y1aHpOeXNaZHd2RUFzdTFsbUVSV1BRYXRwRHBDdlJuVnUxU0NCUDk3?=
+ =?iso-2022-jp?B?KzVMR2RWd0owb1pRYnlyendCTlhMM2pGeE04MmpxZnpnekhKUWYwdFYx?=
+ =?iso-2022-jp?B?N0Vid0dwdkgwdGN2R21kWk93YnEvNmtI?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:ja;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7PR01MB14818.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?iso-2022-jp?B?MW90bnZVZkRTUmJBNi9VK29PSzRVdTdRbzM2bEs5R2wwVXJGckJzaVVv?=
+ =?iso-2022-jp?B?UEYyVXgzYUdNSjl0RktDa3JWbzFOcllKeDFJSXhTTjN3VXdORExiS0sv?=
+ =?iso-2022-jp?B?K3ZGOVIrRjR0WFR2ZVQyeWp3L05rSXVIN2N1N3lySm1CMGl5L2tjeUFk?=
+ =?iso-2022-jp?B?OFRVZTBXTjA2MGRBc3JXL2lLaVdGOFhDcFFjNTd2LzJBbnVCTUJBNTE5?=
+ =?iso-2022-jp?B?VnY5MlgvRmg4M1VUOGFBc3lFTi9nMUNvZExKSnVEQVo0RE9mdWFiNGxv?=
+ =?iso-2022-jp?B?K2VKd3daRzB5RG9QdTVOU3kvOHhMd3ZvVm9ZZFhiUTR3Wk5jakNZUm4x?=
+ =?iso-2022-jp?B?cDJSQWpVYTZBZUJkVWJrbnpVQTQvbVVia0RUR0svN0Z4RWsyUWtnUkpz?=
+ =?iso-2022-jp?B?cXNLZTV1YU5OckdZTm0yUTNtUmVmVFhKUlAySnVtckc0Tkc5Y3paNDNI?=
+ =?iso-2022-jp?B?L1JWVWloRHRZWEdRZldWRW1ZS3JWNkVsMkxMMFdxaEpIYnYxMGMzcDFX?=
+ =?iso-2022-jp?B?QzhPSFpEUzlzTWZkZmlYRlBDaVgwR3c2NzN5d1ArK3hpK2YzUmkyTDZy?=
+ =?iso-2022-jp?B?NlljUzY1M09CTDJuNlJXMWhJQ1RDMVk2ODFRY0h0Mmx6MW0xcUVIZFQ5?=
+ =?iso-2022-jp?B?S2RkUWNKWTk5VmxBbzN2RDJ0VkR0R3FDRm5rWnNvSmRjeDVhRTg5WEtu?=
+ =?iso-2022-jp?B?Qmo5QTJKc1oyemNWQWZjUUVCdmRqMzEzZ01FdGkxNzd0ajZIZ1h3YXVH?=
+ =?iso-2022-jp?B?TUNkeDVnOVVxd24zMUQvcnRiRnNlMG1DdGNuenRNL3M2bG1rZnlhblRS?=
+ =?iso-2022-jp?B?N2ExNGFVMHYraVdMaERETG5lVk93SzdlK05aQXJnYU4yZ1gyVENYdFZZ?=
+ =?iso-2022-jp?B?K0tTcEpDOGd1KzJVajhuY0VPeEYwaVlpVjVtbUxtQUVjanhuSlVteWNa?=
+ =?iso-2022-jp?B?UUdWMEpJWWlxTjlFb3RFZ0RmTlhRL2JHenFLd29SWFcyVmtLWUZlKy9D?=
+ =?iso-2022-jp?B?dEN5NXlraENkN2ZiYjF4Z3p5ajg1NzVPYlRCQlBZQm1TMTR1NFBvWVBL?=
+ =?iso-2022-jp?B?Z2dXU0RoZXhxZkNQUWdsUjR2NU1DL1lsUlpDV09RZmRucW5WSTdFLytJ?=
+ =?iso-2022-jp?B?OWRPWThob1ZDUXAwcGxnWFlBOWE2OWZEUWRhcTk1NnpXcEVQNWQxUFhJ?=
+ =?iso-2022-jp?B?SmVCNHc3Lzd4NitscXhvSGczR1J1NHFBSDBQK1pxdjZrbVFUTzFxM3k5?=
+ =?iso-2022-jp?B?MlJMdzdKS3NUazhGL1pWZ2tDZXRlY0ZSWm5FQnQ1YkRaWWUxT2tMcVAy?=
+ =?iso-2022-jp?B?dk1zVUtYbU5tUjZpdUp1KzJIUU5nV0xXU09HcjloMkJ6WEVLYVJRUE1x?=
+ =?iso-2022-jp?B?aEZaaVFhZGxtR0pIeFMweTUyUGk2L0xGd1BkL0tHUFMwZlFUREFmOHNa?=
+ =?iso-2022-jp?B?ZGdudXo2aTJDSzlIK2YreldwdDR6YmtINHlua0MxVTZ4OG1oODJTK1U4?=
+ =?iso-2022-jp?B?OW1lOGlXd1dlQjYvNnhHVFEyR2wwSXRFRFVKZEpRYjZnWEZwRTdhd2VI?=
+ =?iso-2022-jp?B?NGNPaFpYaG1wWjcralBXR0d0dUlVaVhPdDR0TXVZMDNaS05tK0ZRcUpx?=
+ =?iso-2022-jp?B?R1NkY1BDSDhTQWNuTTRPdjZqNFVPdDBOZnBzWThyQzJ5QmxacmExUUdT?=
+ =?iso-2022-jp?B?c1M0Q1h2SHdZekNiRUtrbHYwMFVRWXNnaUx3UzA0M1dBYXUzRnlGcm50?=
+ =?iso-2022-jp?B?VWp0UDBIbjFqd2hoWnFqb2Y5M2ZrNEVFQ29aL2UrakI1UENvQVlOS3p4?=
+ =?iso-2022-jp?B?MFZGQkF2aWR3WVo2NmZVYm5LVllVWHlsWDJIVVkyTUFSRFdNMFpzOVVL?=
+ =?iso-2022-jp?B?L3pHUVdMNGpldXI2NjRLN0tudWY2M1Y0OWJNb0pvbGM4bW1rYUY3OFFm?=
+ =?iso-2022-jp?B?ZENmNG1VL2tEOGhUSnNCSlQwOTRjWmlsMVduVDBBL0hDenVLeHZUZEp4?=
+ =?iso-2022-jp?B?RnY1MlJGQlFvNHZRbmRTWmZhY2ladGxQTkNmVUh4a0JUSHl2Tk5DZ1c2?=
+ =?iso-2022-jp?B?V05lQXNmUlUyMDI5ekk0NExKRVQrdk1iSlRpVGVCQWVIMmZqZzNnVURS?=
+ =?iso-2022-jp?B?VHV3YWR5QWxhVnZHQUp6NHpNczNjS0hCVkNTK0pnUTUxRmU0Y3RieE1D?=
+ =?iso-2022-jp?B?aStvcXQzSW5mNjBKMmFsQjd2QS9HOHorZmNRSmlCZUw4WTZZY2lRVlZv?=
+ =?iso-2022-jp?B?eFE1Rmd4bS9GNktiM2xWd21uTHhhY2I1U3dyMmdzMWMxSVJ0bmdkYkl0?=
+ =?iso-2022-jp?B?SGwxWnZuMng3YkZZaytqTUpFVlZqSDhyQ2c9PQ==?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL 1/1] Broadcom devicetree-arm64 changes for 6.19
-To: Florian Fainelli <florian.fainelli@broadcom.com>, soc@kernel.org
-Cc: Stanimir Varbanov <svarbanov@suse.de>,
- Peter Robinson <pbrobinson@gmail.com>, Stefan Wahren <wahrenst@gmx.net>,
- linux-arm-kernel@lists.infradead.org, arnd@arndb.de, khilman@kernel.org,
- bcm-kernel-feedback-list@broadcom.com
-References: <20251216235649.633331-1-florian.fainelli@broadcom.com>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20251216235649.633331-1-florian.fainelli@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+X-OriginatorOrg: mail.toshiba
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY7PR01MB14818.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a728cc93-7368-48a7-2470-08de3d11cddb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2025 02:13:01.0213
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LV0LrsC2WwPN69PA6loQ+LwD4y3zFRtYugHtlveN7kFx80C8OGhGSKARCRrM6ultTc834AUMYr0PM6K4lLEjzv5zOJdxTE7cpJ6lsL8YejUbDRg7QAFxv8S4Wu09BH4/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY4PR01MB17375
 
-On 12/16/25 15:56, Florian Fainelli wrote:
-> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
-> 
->    Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
-> 
-> are available in the Git repository at:
-> 
->    https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.19/devicetree-arm64
-> 
-> for you to fetch changes up to 37c3a91e9730e274fe2eca9703033ae0f154cb62:
-> 
->    arm64: dts: broadcom: bcm2712: Add watchdog DT node (2025-11-05 10:28:29 -0800)
-> 
-> ----------------------------------------------------------------
-> This pull request contains Broadcom ARM64-based SoCs Device Tre updates
-> for 6.19, please pull the following:
-> 
-> - Peter enables the random number generator on BCM2712
-> 
-> - Stanimir adds the watchdog Device Tree node for BCM2712
-> 
-> ----------------------------------------------------------------
-> Peter Robinson (1):
->        arm64: dts: broadcom: bcm2712: Enable RNG
-> 
-> Stanimir Varbanov (1):
->        arm64: dts: broadcom: bcm2712: Add watchdog DT node
-> 
->   arch/arm64/boot/dts/broadcom/bcm2712.dtsi | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
-> 
+Hi Rob,
 
-Apologies for sending this so late, after v6.19-rc1, these changes are 
-somewhat minor, so please let me know if they can be accepted as late 
-changes to the 6.19 merge window.
+> -----Original Message-----
+> From: Rob Herring (Arm) <robh@kernel.org>
+> Sent: Wednesday, December 17, 2025 3:01 AM
+> To: soc@kernel.org; iwamatsu nobuhiro(=1B$B4d>>=1B(B =1B$B?.MN=1B(B =1B$B=
+""#D#I#T#C!{#C#P#T=1B(B)
+> <nobuhiro.iwamatsu.x90@mail.toshiba>; Krzysztof Kozlowski
+> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org; devicetree@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: [PATCH] arm64: dts: toshiba: Use recommended node names
+>=20
+> Update Toshiba TMPV7708 node name to the recommended standard node
+> names. Generally, node names and paths aren't considered ABI, so it is sa=
+fe to
+> change them.
+>=20
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-Thank you!
--- 
-Florian
+Reviewed-by: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
+
+Best regards,
+  Nobuhiro
+> ---
+> SoC maintainers, Please take this directly.
+>=20
+>  arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts      | 2 +-
+>  arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrb.dts  | 2 +-
+> arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrc.dtsi | 2 +-
+>  arch/arm64/boot/dts/toshiba/tmpv7708.dtsi             | 4 ++--
+>  arch/arm64/boot/dts/toshiba/tmpv7708_pins.dtsi        | 2 +-
+>  5 files changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
+> b/arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
+> index d209fdc98597..8d099b237025 100644
+> --- a/arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
+> +++ b/arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
+> @@ -43,7 +43,7 @@ &piether {
+>  	phy-handle =3D <&phy0>;
+>  	phy-mode =3D "rgmii-id";
+>=20
+> -	mdio0 {
+> +	mdio {
+>  		#address-cells =3D <1>;
+>  		#size-cells =3D <0>;
+>  		compatible =3D "snps,dwmac-mdio";
+> diff --git a/arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrb.dts
+> b/arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrb.dts
+> index ed7aa7e457b1..4439b3e8acbb 100644
+> --- a/arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrb.dts
+> +++ b/arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrb.dts
+> @@ -43,7 +43,7 @@ &piether {
+>  	phy-handle =3D <&phy0>;
+>  	phy-mode =3D "rgmii-id";
+>=20
+> -	mdio0 {
+> +	mdio {
+>  		#address-cells =3D <1>;
+>  		#size-cells =3D <0>;
+>  		compatible =3D "snps,dwmac-mdio";
+> diff --git a/arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrc.dtsi
+> b/arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrc.dtsi
+> index 0c8321022a73..af406f7285c4 100644
+> --- a/arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrc.dtsi
+> +++ b/arch/arm64/boot/dts/toshiba/tmpv7708-visrobo-vrc.dtsi
+> @@ -26,7 +26,7 @@ &spi0_pins {
+>  &spi0 {
+>  	status =3D "okay";
+>=20
+> -	mmc-slot@0 {
+> +	mmc@0 {
+>  		compatible =3D "mmc-spi-slot";
+>  		reg =3D <0>;
+>  		gpios =3D <&gpio 15 GPIO_ACTIVE_LOW>;
+> diff --git a/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
+> b/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
+> index 9aa7b1872bd6..88e38d6efcaa 100644
+> --- a/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
+> +++ b/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
+> @@ -161,7 +161,7 @@ gic: interrupt-controller@24001000 {
+>  			      <0 0x24006000 0 0x2000>;
+>  		};
+>=20
+> -		pmux: pmux@24190000 {
+> +		pmux: pinctrl@24190000 {
+>  			compatible =3D "toshiba,tmpv7708-pinctrl";
+>  			reg =3D <0 0x24190000 0 0x10000>;
+>  		};
+> @@ -463,7 +463,7 @@ piether: ethernet@28000000 {
+>  			status =3D "disabled";
+>  		};
+>=20
+> -		wdt: wdt@28330000 {
+> +		wdt: watchdog@28330000 {
+>  			compatible =3D "toshiba,visconti-wdt";
+>  			reg =3D <0 0x28330000 0 0x1000>;
+>  			clocks =3D <&pismu TMPV770X_CLK_WDTCLK>; diff
+> --git a/arch/arm64/boot/dts/toshiba/tmpv7708_pins.dtsi
+> b/arch/arm64/boot/dts/toshiba/tmpv7708_pins.dtsi
+> index a480c6ba5f5d..5ea835fe08a8 100644
+> --- a/arch/arm64/boot/dts/toshiba/tmpv7708_pins.dtsi
+> +++ b/arch/arm64/boot/dts/toshiba/tmpv7708_pins.dtsi
+> @@ -91,7 +91,7 @@ i2c8_pins: i2c8-pins {
+>  		bias-pull-up;
+>  	};
+>=20
+> -	pwm_mux: pwm_mux {
+> +	pwm_mux: pwm-pins {
+>  		function =3D "pwm";
+>  	};
+>=20
+> --
+> 2.51.0
+
 
