@@ -1,150 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BB231771B
-	for <soc@lists.linux.dev>; Thu, 18 Dec 2025 11:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B85285050
+	for <soc@lists.linux.dev>; Fri, 19 Dec 2025 20:46:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766058980; cv=none; b=fjErCE1iYxiCkeEObQtCI230DJYD1bDrsGoZjygJOeZpYNfmEaGeuhpL87FTuHWubOHYEKaTPiAOZxJc4+v9IzJM5echrfOWrJO4ecLvoT49/Jti+W5poar6/wq34FAPkQSCw8TwsLIY3R67qG5hZzkAgK0ZiqeuhlKo8p0yoTE=
+	t=1766177170; cv=none; b=eOOK2mE3+1XYuIntmIioAUXWsa1md3NeLQzvqvlqOQndDpXVQPHbrS7OI8OzbGrYDLYag4+Vl/N7Y+gi3xKtbB/OIn9MIbf+uFcoKPeWuHAyZNNeIxCAO1RAVKtsqS0BtTONBOes2cQz2GcJAQTlnIlU01D1rb1v7U+DbqHA0Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766058980; c=relaxed/simple;
-	bh=o/f5qG0fB8BBMiDPrl1dIu9DCRfziVECUeUUdt0apcg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g9vHJaXbBDMzIE8U+iKm/K68kytBNw5yOhJrEQ0ZFjcm3MAERKs/1nFV1oAcTO9DVAiSI7NMnw0mlDTY+AX84Lm/JRDAMxacqnhWnYjdpPEOg7PRAipV7VMFqkBnqimIphv8wWd7/MQYlbetTiduNga9hMIkar4o1m8aSedcqZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nWlq6ddX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766177170; c=relaxed/simple;
+	bh=uFoiAnmfkJdBKjec/SKY3O4A9OIGwgwAd5zYY2hU5Mc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VqZ2GY/72XeT1pY43RtVi5uNAKt2UgqCiWZIYXdC+Lju/da6Od2ZhD+6bBS9DYUDuwoRlInz0hTFxK9VWMwpkXgzsX/hNKmZCboZUpg6+pX53BxhGbm/RsG236yV2f4E+2PwYb3w8CfUkN1YGIA2MyHQQ52s7E86DM+Jnh1i1jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=ZFS//D1I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nWlq6ddX"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ZFS//D1I"
 Received: by smtp.kernel.org (Postfix)
-	id 0D896C116B1; Thu, 18 Dec 2025 11:56:20 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 520DDC16AAE; Fri, 19 Dec 2025 20:46:10 +0000 (UTC)
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8DEF3C19422
-	for <soc@kernel.org>; Thu, 18 Dec 2025 11:56:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8DEF3C19422
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-477a219dbcaso4877075e9.3
-        for <soc@kernel.org>; Thu, 18 Dec 2025 03:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766058977; x=1766663777; darn=kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sirw8Y7pkirUUd1z1lvj9vBpxM3O2QyNtSUkQSCiIMY=;
-        b=nWlq6ddXMH0AOf+wT86AYnixD7xsF9kRFSkTyekw38WAJ192OK+FfPGANV0KW4BIGo
-         q9vQl4MI55KumICAwgJ1cnOyDaGkjy1LEMw+sSNIQdAewaKzGav1D1gSONTdAc1muGKN
-         rnmGrGazldJNS1tBSvQmGq+txM1HrF4U+LpRP9J/NfNCO5BeDunIOGgWlK3SgBWTR4iE
-         jELKbeC2/ravwwmS8DZQ60Tqe/FlwQKBWKHjhu+uUijVzn/5aCk6r3CJVpwJ4A9Ealdk
-         lJDu8qAmHbEDy1Sk0+ZiswdRfTNk2cNVWrvAbTNfivU+FXUCtNZl75/Wj3Uk1Eu6iwTq
-         nqhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766058977; x=1766663777;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sirw8Y7pkirUUd1z1lvj9vBpxM3O2QyNtSUkQSCiIMY=;
-        b=FdINafzxxcIhOSMnL5tatWzZqfnPr6OFrBXf/end4DhkCB9lQEhd0SscGgm338p82V
-         XHtfBawLdv3LvospJPEQGUgO7j2UGhtMnPw/gLI2/ACm2q41SWDxK3WTGLaEgBW3sc1I
-         qYcOeQMkr6VmCr3KNCu/17sDPJgZMKQIq0PtwqVwYsep8a7W94PKJCCVMxN1qaW9+VXy
-         iEC5+4Dl9KsYkoRaDxfqAjbq4GdQ+H155YH+ziW6dplFNpM05kceXuzCCsfQ9reZRsxR
-         eNVzwCv9/yZbEAcqASkFnvbB0Aq6wcaDz2VXu3rUfIx4HJ3qwTO0v7C+5SDKREUcWoT2
-         5stg==
-X-Forwarded-Encrypted: i=1; AJvYcCWnwRFchL11pqPFUTLaTDuEzXDYVYxGywVCVLFV8V/ObNbSxA2eHCDq/d8g5CK2WldY5uQ=@kernel.org
-X-Gm-Message-State: AOJu0YzkArtlMNT9P0idIecy3A9Z9qK+O+DD9fc7jtuvHGe+xKqxwnrX
-	VH/EelP6JstBPUAPwjVvsK5lHrnQ9OXFmoUsSrof+3NlJFTKJki3UbRu
-X-Gm-Gg: AY/fxX6p9AcvIAU94ZgZz7cSNBSt2uUImV7F6shb16wXXNYsYZMcsoxIc0He3HaWCmR
-	XF5I1kpNFntIfZeurGviSTfuDwC//GGEOnY2BIHT3hJpptMyJYfTsKJSIoT/5ybyLkzUoEHXMEf
-	2swGJJlqoKhXEpswnBl5XPxXcN+WF+a7x+VuQw42tN0dOTqZiL+oclYB9tKiwB9Sr8wE6pqECSo
-	Jk05ju+emWtQkKZtr7N9KAgqwpkldVM7tJznJfkNk+H7xKr99f0QjIiUfPqbiSQvDsvybUamrJU
-	H9fxjcLfBuAE4p9KDWAfl/7gzD3Duvuk2YbrmWjd11ljfs/ZpWCYhyP83S2ce7A5o1PYAZeuYhY
-	/HrQ3EvrNFgKvsjzbQSDLtp/PSXZDfZEBCXrViY28+78ofuWHkASwvYCAFVnXQfX+odAAvJqVDC
-	BUr1gABHWn0nx6fT4sRPiE21R8zcv5kuFQjmHlWqEdSf7SMLDimvPXMJL4xt31K5GQwhROV+K8T
-	g==
-X-Google-Smtp-Source: AGHT+IHRcSZ29A+PddLskNnFZhBchA0KUCvXevXJCVDr0syq4PFng4cIKjNObk2K4UBPbK++koXBXA==
-X-Received: by 2002:a05:600c:6994:b0:477:a54a:acba with SMTP id 5b1f17b1804b1-47a8f904080mr201336975e9.17.1766058976598;
-        Thu, 18 Dec 2025 03:56:16 -0800 (PST)
-Received: from orome (p200300e41f07e000f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f07:e000:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be3029f37sm38329635e9.7.2025.12.18.03.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Dec 2025 03:56:14 -0800 (PST)
-Date: Thu, 18 Dec 2025 12:56:12 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: arm@kernel.org, soc@kernel.org
-Cc: Jon Hunter <jonathanh@nvidia.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Aaron Kling <webgeek1234@gmail.com>, devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] Revert "arm64: tegra: Add interconnect properties for
- Tegra210"
-Message-ID: <aUPrVFWKfFYmuwhB@orome>
-References: <20251217104744.184153-1-jonathanh@nvidia.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 77195C4CEF1;
+	Fri, 19 Dec 2025 20:46:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 77195C4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 7D89FC0005DE;
+	Fri, 19 Dec 2025 12:46:07 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 7D89FC0005DE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1766177167;
+	bh=uFoiAnmfkJdBKjec/SKY3O4A9OIGwgwAd5zYY2hU5Mc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ZFS//D1I/a0QX+ABNCQJZtABaTiQ6RWS0MyTmE20f9Y8DgfjATxiaNTmLRJdPpQhw
+	 z9ssngQr1ueVBA6UTzcNbWwuCcUn0pWJcSKEvbB5ofwjz7Pev9Gdplno+UoUnRmsWc
+	 iLN39h4srKBJ0lhyvdeBrdY/jDDTKpfgmxeJv0U4=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 302D9A340;
+	Fri, 19 Dec 2025 12:46:07 -0800 (PST)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: soc@kernel.org
+Cc: Andrea della Porta <andrea.porta@suse.com>,
+	Rob Herring <robh@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/1] Broadcom devicetree-arm64 fixes for 6.19
+Date: Fri, 19 Dec 2025 12:46:03 -0800
+Message-ID: <20251219204603.1016528-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wl6sai33pii6l6ws"
-Content-Disposition: inline
-In-Reply-To: <20251217104744.184153-1-jonathanh@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
---wl6sai33pii6l6ws
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] Revert "arm64: tegra: Add interconnect properties for
- Tegra210"
-MIME-Version: 1.0
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
 
-On Wed, Dec 17, 2025 at 10:47:44AM +0000, Jon Hunter wrote:
-> Commit 59a42707a094 ("arm64: tegra: Add interconnect properties for
-> Tegra210") populated interconnect properties for Tegra210 and this is
-> preventing the Tegra DRM driver from probing successfully. The following
-> error is observed on boot ...
->=20
->  drm drm: failed to initialize 54240000.dc: -517
->=20
-> For now revert this change, until a fix is available.
->=20
-> Fixes: 59a42707a094 ("arm64: tegra: Add interconnect properties for Tegra=
-210")
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra210.dtsi | 24 ------------------------
->  1 file changed, 24 deletions(-)
+are available in the Git repository at:
 
-Hi Arnd,
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.19/devicetree-arm64-fixes
 
-this is the only patch that I think we need in v6.19 for now, so do you
-want me to send a PR or would you rather pick this up directly?
+for you to fetch changes up to 9a96cc8bbeefbc64654ac9c3da619443c22f6d32:
 
-Here's a link to the patchwork for this, for convenience:
+  arm64: dts: broadcom: rp1: drop RP1 overlay (2025-12-19 12:42:36 -0800)
 
-	https://patchwork.ozlabs.org/project/linux-tegra/patch/20251217104744.1841=
-53-1-jonathanh@nvidia.com/
+----------------------------------------------------------------
+This pull request contains Broadcom ARM64-SoC Device Tree fixes for
+6.19, please pull the following:
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+- Andrea fixes the RP1 DeviceTree hierarchy and drop overlay support,
+  this resolves a number of DTC warnings and other issues
 
---wl6sai33pii6l6ws
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Andrea della Porta (4):
+      dt-bindings: misc: pci1de4,1: add required reg property for endpoint
+      misc: rp1: drop overlay support
+      arm64: dts: broadcom: bcm2712: fix RP1 endpoint PCI topology
+      arm64: dts: broadcom: rp1: drop RP1 overlay
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmlD69wACgkQ3SOs138+
-s6GOsg/8CjcraGpbQ/5+n8XTP/H5o3bObJEbJDalfjw48fO1XUKkjmY2KDYNk3tH
-jP8JMNYSIhkntLFTr+0Z9JjK8IUZYbvg2QjOgjS5NQt2WEcoVY5ZjZH11a+pBA4h
-IyPYbq3dXxYZvj2AMMYRAQvsKB0/ltokxbfaXvqNzluXV6oOsCwVle0k6TV8jUWH
-v3i1b3U+Iyu8MoTvH88RIMPspYmmzNMN1nfJ5+XX9mvNvS5NrvujTe4zsYmtoSVa
-HyKe8l8NvtCNW8HNBLPP95FgV1wxHhLHUbuaYLadpIS0yaHRiDgbn+EQXNLM/OBl
-qwK5Go8ji7Id5FVtno1JQvsnDKYcTId5IBBcKPAdL9PUk818h3IeLnJBQXELPAvT
-HV2FnMfB5LFZt7t5f+BdCmxf9TxptRocLaVsAF6VJCHgWerUNnnEx6OuDKk7Uvyy
-RdzP6ttDMk4hnDKGzVNjmaIXjBy7qW2/j1QLOPFZxMepAWVgJHehyR5yYl2ekeOZ
-P9vsebHQeabpXVQFJFO0UI9Cgh788xQb1boXgfuric9IXQrG1OJb+R4NsfznsvJ6
-vc1WUfxGAepFo8cH/K3vCPpbyujO5+n5jRDvn3IuT9W0HNTHJ82p35ciVJ+araQN
-8Xstha0OfmhcMPM/Rg8/nmT0mex/y6IvE+MSULZY3eSLX9EcA8k=
-=w6w4
------END PGP SIGNATURE-----
-
---wl6sai33pii6l6ws--
+ .../devicetree/bindings/misc/pci1de4,1.yaml        |  8 ++++-
+ arch/arm64/boot/dts/broadcom/Makefile              |  4 +--
+ ...i-5-b-ovl-rp1.dts => bcm2712-rpi-5-b-base.dtsi} |  0
+ arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts   | 39 ++++++++++++++--------
+ arch/arm64/boot/dts/broadcom/rp1-nexus.dtsi        | 14 --------
+ arch/arm64/boot/dts/broadcom/rp1.dtso              | 11 ------
+ drivers/misc/rp1/Kconfig                           |  6 +---
+ drivers/misc/rp1/Makefile                          |  3 +-
+ drivers/misc/rp1/rp1-pci.dtso                      | 25 --------------
+ drivers/misc/rp1/rp1_pci.c                         | 37 +++-----------------
+ drivers/pci/quirks.c                               |  1 -
+ 11 files changed, 40 insertions(+), 108 deletions(-)
+ rename arch/arm64/boot/dts/broadcom/{bcm2712-rpi-5-b-ovl-rp1.dts => bcm2712-rpi-5-b-base.dtsi} (100%)
+ delete mode 100644 arch/arm64/boot/dts/broadcom/rp1-nexus.dtsi
+ delete mode 100644 arch/arm64/boot/dts/broadcom/rp1.dtso
+ delete mode 100644 drivers/misc/rp1/rp1-pci.dtso
