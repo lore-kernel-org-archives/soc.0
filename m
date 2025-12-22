@@ -1,41 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D015FDA7
-	for <soc@lists.linux.dev>; Mon, 22 Dec 2025 09:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9252FBE1C
+	for <soc@lists.linux.dev>; Mon, 22 Dec 2025 09:58:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766397423; cv=none; b=Xv0YhxYZ1UYT1/iHj/3rc1Sw5jIs5ihuJ4OjpxrEeoj0ErebtPAq46i82mulUxlbb0rGhgfyTY55obi2ssPoeDnpA2IbC6zbwNefR/lOsex16FPGRt7hFezSVrvBnlf7etxqWcNjHWCP2n4tryEeqstyYtnA+e0JIzBVI9IZ9ys=
+	t=1766397536; cv=none; b=cTehw43W/CQr26viRwow169J2KAK5Cuf0lYkY3+/rgueNilxzUP/KWLyqzo4TrBQ7Zgvvf86qnekqskbct52mZHWlR5aodKlaVC8v17Ay2IKnDpEfgEMDKmHE9ruMxRd5dGC5DXsaCYwxjYc3FtwQ4IYlLgL8dVQeNTxgAWOrog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766397423; c=relaxed/simple;
-	bh=CYmiWxroTeuGX+wvyMr/3M+luTzSTpeh/V3eQgu9idM=;
+	s=arc-20240116; t=1766397536; c=relaxed/simple;
+	bh=8xhaDtSjXOSgRrUdLRpzbBVsMJ6bbqn9dV31CeS8RPk=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=qS1jRVE6qYfmtwoPHin/82y87vok5SwEdjl7RFvZg/pCbrj3qPcUXPDWp4rnRYur0jKAqWFsHU8xgLkKCHBznBOPM/mnpeEFpItoZPR48uwmj+O25Z7VgGfioUGBUE8U0JIrm5gyTkRpZ9MpnVFKIGHf6S8q+TTBGubypzmfbik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/mWXNof; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=guoJjjMf9712SMXpC+CxI1qf51JVhlvE6Eo51fM262myRqLJ59vQqBa0AaZmNSbmceB8aJzwJ7vHNeKuo31FRpWahJK1sYKSxJIfGxfNC2zYv/TereaybxFwI6P4riLwaPB2wzE5hkzfg8HUkmc15PMm9qqVLhodFZ9POy9Htiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IcQExJiL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/mWXNof"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IcQExJiL"
 Received: by smtp.kernel.org (Postfix)
-	id 95730C19421; Mon, 22 Dec 2025 09:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2939C4CEF1;
-	Mon, 22 Dec 2025 09:57:02 +0000 (UTC)
+	id BE6FAC116D0; Mon, 22 Dec 2025 09:58:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFECC4CEF1;
+	Mon, 22 Dec 2025 09:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766397423;
-	bh=CYmiWxroTeuGX+wvyMr/3M+luTzSTpeh/V3eQgu9idM=;
+	s=k20201202; t=1766397535;
+	bh=8xhaDtSjXOSgRrUdLRpzbBVsMJ6bbqn9dV31CeS8RPk=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=L/mWXNofGnUxm66rtK/PbCodBYTcbvO1fquMVMqV+YqXV+Pu3Ix63AkE/k8yGchQ4
-	 tLCy71rCNXUDZ0RhrPxmqEUj8eKlV5unDQPZ4ok4MqgaZ3DYUPXFSXDxUcEplgUXPl
-	 eob4SZwVIglL615r0yD8Tg5mwD4EZHJbmenOsHVocloKMGdmzazSeR2WuFNuXPQhX5
-	 W/xIHIJKHz7cQyDe3kSWd4xxH+2d9FeUWhapaLXtwh/o4jCRoNXuCg4Ww7wPmB3+8f
-	 ta27rdJniqF4FdMAm/TC4ACIKU7WFx7D8fNyXeDQ55mhzgyYhsHieQMuSOe0pGNQ/y
-	 Ur6wS97+3m48Q==
+	b=IcQExJiLestmYEqXaLFKpPDrkmen39A6xVBakQOZ9Sv3KzUpfATq0hzwnfi3N7R76
+	 xaS6/HM1ujZBKKVBr88DCgk+dxnHx+Vf+tbYv71GDgZFQWQ5UU+5WlvPP1PcWZqSfN
+	 WU/Vq42SxbHikQe+Vftto3WL+fxAcIr2jDkpGCywLdnvVvrkp/XR1uIRrXsWUNDmzy
+	 ZLQhNtDAYlLOI2UHDbwtq46KHkgu3DKLGtwCMTwO9Zq6GCDCqh8DzS9wlnsZltGOaI
+	 ZI1fEbfnQ5zCsuf9Nbvjh7aEaHqAYkkVv6rYjjNDOFaUt7rgu3szYL0iJGk9YjxE99
+	 9/jsNM2DUJu6Q==
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: soc@kernel.org, Linus Walleij <linusw@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-In-Reply-To: <20251216-maintainers-fix-v1-1-92f11231b27e@kernel.org>
-References: <20251216-maintainers-fix-v1-1-92f11231b27e@kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: Fix a linusw mail address
-Message-Id: <176639742232.29718.2937743508114738336.b4-ty@kernel.org>
-Date: Mon, 22 Dec 2025 10:57:02 +0100
+To: soc@kernel.org, Chanho Min <chanho.min@lge.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20251216175951.2791921-2-robh@kernel.org>
+References: <20251216175951.2791921-2-robh@kernel.org>
+Subject: Re: [PATCH] arm64: dts: lg: Use recommended simple-bus node name
+Message-Id: <176639753214.30319.18070408035908204137.b4-ty@kernel.org>
+Date: Mon, 22 Dec 2025 10:58:52 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -47,16 +50,17 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.3
 
 
-On Tue, 16 Dec 2025 10:40:42 +0100, Linus Walleij wrote:
-> The patch adding me to the SoC maintainers was in-flight at the
-> time I had to change my mail address. This fixes it up.
+On Tue, 16 Dec 2025 11:59:52 -0600, Rob Herring (Arm) wrote:
+> Update LG LG131x 'amba' bus node name to 'amba-bus' following the
+> standard names for simple-bus nodes. Generally, node names and paths
+> aren't considered ABI, so it is safe to change them.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] MAINTAINERS: Fix a linusw mail address
-      https://git.kernel.org/soc/soc/c/c4c6db7ac54649c0cfe7d86b4a5358296dc8d08b
+[1/1] arm64: dts: lg: Use recommended simple-bus node name
+      https://git.kernel.org/krzk/linux-dt/c/30ae13173704585f2a3f406e94e0dbaa5cfde69a
 
 Best regards,
 -- 
