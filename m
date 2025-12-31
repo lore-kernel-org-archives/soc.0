@@ -1,235 +1,124 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0270329E4D
-	for <soc@lists.linux.dev>; Wed, 24 Dec 2025 08:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB5F81ACA
+	for <soc@lists.linux.dev>; Wed, 31 Dec 2025 03:26:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766565516; cv=none; b=r0sVXWKHoZX3gw3Lcx1QXfkLBitCYy04GHrT1fGCaVJr+x9QKHYDDrwZdlQx/mOKBED5yFFF8ZrdqaHyXytmdLK3NMOJb6Mg61HFU7nt6l3WHOMNd0B18AdkvIn/7hJHC6PeS4+IQhSoXPx1WcK+wNkzuSU7U7W0niZF+2af5lY=
+	t=1767151598; cv=none; b=WtdJMJ9tMtf+jrMpnl3pza03kQ6ptPaSRzfQz+u1xVpQQ7duwzbJrH3cbGnJYcrNXmLwjzqUS4VgvRb7lqdFNajyWEPNgaPPm4+kHfN4NeulZQnijUAuwqeEHI0CPAxCQbSHDDEkCPwh42cEODa92hlCLoZrN2F2nMl2ApxCKds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766565516; c=relaxed/simple;
-	bh=pk0XS/DyAvk1Kec6re87YzIHBZn/1WBaX/mZ5bHMJ3I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OwZvIFtm2NmXxu4Wx6YIAzK7GiRs/JwAQQnDhUxKGNjzzC5yQJlgMalDVs4Tgv2Zj8XGctUlowGnNGvcsPHG2Xs9qF1a/hFaw5nq6n27VYTeCiLOxiBAcuqG8KaGbfAL/34yitGYpDLpJeE/9rczAQqocSDqqjA0n3BZ2WcOVkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Qd0k5WqG; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=feF6vtNj; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1767151598; c=relaxed/simple;
+	bh=PJKXSxPgbYTmAJS2PZh06PVU8Cqx4k5G2YhmqbfasVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oPrbHJyCLMcuR6gnlHIQwtCFL/2lzvLaQAtZpjTClEdQKEpVCrleSiSsnegaCfwVx4+opWfgwyJhWkqY3bLOImeKpgCB9DnfImow20nkwV/TAfnl/8hEFm4RqPEXRmik4aDkLxtsWkZS4Y9dygfbD4mv83Mmxawnv7WGKHfGLSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GxRmoO5Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Qd0k5WqG";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="feF6vtNj"
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BO35iW0461402
-	for <soc@lists.linux.dev>; Wed, 24 Dec 2025 08:38:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	glFZCrXoWzuhHKqjW3tJJJ1r2Fv3OKqJtPkBd6Z/kF8=; b=Qd0k5WqGYTqfatFd
-	hmzcA1BOY0CE030rbP+rCT+A8nWWyKo22JMj8PZQWk8MjbRP0jqysDcr/wHGaAmk
-	szF74k5Ov75vSCVzPrIC+MGYYKz7eur9poKHuL8KVFM+I953GtUoMajurJdIFRYg
-	AFPUFKYBEd0vfafV3KcOFpSYdJgoQzpB85XuN2umGCdmEXbFo5MCjgz4JDqH5GMv
-	Ts6JG2uydGfFkBIpZUukP8mYvfehKrBxk0F5Gzqe727YoB8aOWbW+sE6VLrywgqo
-	9eCtJcye/7Ub5KWnu6eJsWC+ML+GMsjWA2QVavWmmFUA0p7fprCM9EMGCO39Rozi
-	YoVtNg==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b7w8ftmx1-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <soc@lists.linux.dev>; Wed, 24 Dec 2025 08:38:34 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4ed6ff3de05so159800651cf.3
-        for <soc@lists.linux.dev>; Wed, 24 Dec 2025 00:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766565513; x=1767170313; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=glFZCrXoWzuhHKqjW3tJJJ1r2Fv3OKqJtPkBd6Z/kF8=;
-        b=feF6vtNj5kk0allGS9aWRRF9CGjZ+5vEYEgEJeLH1WLg1ngR5aiyn0nX8yO1ORGYTU
-         9UV9QAsrbvtNKWsRTUXdJ9WA+cvXibb2RYYpq/LrifUoXhSZYqM2PJ8y2wu0fXuOmDNs
-         ElGpP023IeGraSreTRtaf7wXXzhqKMd4L7Puqx8PUVDpmRmd7sSSB51W10rmkSLOK3jk
-         l/I0kWXXcG75mg9uegQ1nrvvKzEA8u2omjYLJFGh5pivtF2MZXF7amK7vzvTVg/Akh16
-         ln9nN3hdmdyf0eW07sBoSpkIIpjAK0lr0RF7SG5xskYT7sW//CMcuPIOWglp5PUUxqX/
-         tVsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766565513; x=1767170313;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=glFZCrXoWzuhHKqjW3tJJJ1r2Fv3OKqJtPkBd6Z/kF8=;
-        b=crRvuVRJCccfI+OBj0zM40ohxoMW3imnBZOvHPD9ISnsRsqGbBq8XfwY2r9PHLk64C
-         55nUCmEg1b+t73OTUBqyMUgN2IuW+1evw7G7TmS7ojBAaOBgG2bxS0qyKyXKLJ55ZwId
-         Sl+jPdwEsJa+Edm2zzWCZ4fsPOIhYjtc5mPhGS34XTvt4VxQ7kH9ooUBpN8MI1FCGIed
-         TBUx4mndAEyKWypXZJ4vYVoe8OCRKzki3VnNV33dnArWekDsP3N/Wqwv1ohq2lkZF/2V
-         fZuN2+0yv+N7R/pZQ0HStKvyWTzNkQEsbWnn6bBlpTPGkFvqvVk9oD6I+pJ9BD4Y/oyW
-         rxRw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbgCfY7Ec8h8swgta6pDMxoK/b1VsrEaPEgTti7F/6FH4a73Q9dZVM0e6JkC+8Sem61HM=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxJ0lKPx6G66Oshl+ityxxVcT+Fck6N2AkjxgvrJIsgD8F5e4GU
-	SVyUQYjrlBxHlZjU/L2/5iFU9QiH97G6PXNCBexCkeoQLNA5qEMLLUmzxNAhYnKyjInLLW3tQNU
-	UjSXquKyVPpam8syP7q2cAX30h3j+Db8ge3lqVAFF4IFgjTMu//o8qJfb5RhaTtM=
-X-Gm-Gg: AY/fxX6yx0LwLHJsUsWPP4OOUTkKdKBcFMoYBxXcke7iGDbc7Uh7f3i9xrSB3ri50mo
-	u9TbwlVGf8jvCOlGxnmJT+G8ez4P9y7e/I3OWa/0zEHtZhyRj8G+AVloAP0PrPouKrnvnJOk8vG
-	ptaBYGBQYqxM/uIjgW6/e3/rVv5dEf3UAMzZ/vvP2NBvQLzC32xOJo2mxhGUCjnz2rQTynHtGW6
-	MT1epQV3P9LJJXhre73sJP5Otkl0a6IHKXWC1W9VOrEYgt/iEcyDj7Aio0eJdyxB5ftR3VqSlaA
-	SUZDhzyCu6Vf//UJdHCm9W6Fg28r7e0S8K/LD/Om1pnupXwllE9/YdzHJ2N0tK45+9gSIp+wjmG
-	LfS4VMFD2j5gVD/W/OWxrP6bDERJ/YG03VHUUkik5eV/8aJfEUzFTdmGrr/IxTqV8NFcSebBrnp
-	k=
-X-Received: by 2002:a05:622a:8:b0:4ed:da3a:c0d4 with SMTP id d75a77b69052e-4f4abde3937mr251257511cf.78.1766565512684;
-        Wed, 24 Dec 2025 00:38:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHOKhJ1hbaLKHjn4nSfm29Zo5mU4EvJVu2XZpEhp/RRCcKQctHUj6bYiP/qOmkilnCwRxVrlA==
-X-Received: by 2002:a05:622a:8:b0:4ed:da3a:c0d4 with SMTP id d75a77b69052e-4f4abde3937mr251257371cf.78.1766565512198;
-        Wed, 24 Dec 2025 00:38:32 -0800 (PST)
-Received: from [192.168.1.27] (83.5.187.232.ipv4.supernova.orange.pl. [83.5.187.232])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64b91056731sm16062618a12.8.2025.12.24.00.38.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Dec 2025 00:38:31 -0800 (PST)
-Message-ID: <9a62f4c8-e707-4a0d-a374-4b0f4168f47f@oss.qualcomm.com>
-Date: Wed, 24 Dec 2025 09:38:29 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GxRmoO5Y"
+Received: by smtp.kernel.org (Postfix)
+	id E469FC16AAE; Wed, 31 Dec 2025 03:26:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F718C116B1;
+	Wed, 31 Dec 2025 03:26:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767151597;
+	bh=PJKXSxPgbYTmAJS2PZh06PVU8Cqx4k5G2YhmqbfasVM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GxRmoO5YFkFG0vTnwf/PNaZD9Q4AwQYK6oGy//0+h/NOXj3H8WOdav3edia85AEnr
+	 1ghKG2mR0rTtHmD/NnW4pTVoP/D77W4uRFUptxYw6ZMjr6mbMElJnEXoOJR4si7O4s
+	 iSHdZ04ZjIzwB3jtx8Nd3rnQxqpIPabuHNnAeU4y4m3Bx5WXDBPBgOkXL1QQOsM+tb
+	 umk5PToUW8aybQJoFR5cm7Myo785351ghDS4KE7PS3iPEJMYFfKqtuIRGhPmUJMjT9
+	 VwgTSf5FKDsW5dIc3gOu+jraQc6/7kuSyCRdIbTNPfJ2EY3G+EIUwHrJzAnT0+eF/g
+	 j/fnmZo0oAcHw==
+Date: Wed, 31 Dec 2025 11:26:33 +0800
+From: Shawn Guo <shawnguo@kernel.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, kernel@pengutronix.de,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 6.19
+Message-ID: <aVSX6SK_LADf1ti4@dragon>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] Documentation/process: maintainer-soc: Be more
- explicit about defconfig
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Drew Fustini <fustini@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
-        workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20251223142726.73417-3-krzysztof.kozlowski@oss.qualcomm.com>
- <20251223150256.GI9817@pendragon.ideasonboard.com>
- <f858ea0e-24d5-4cdd-ab57-dfeebe67ae7b@oss.qualcomm.com>
- <20251223162756.GA25011@pendragon.ideasonboard.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@oss.qualcomm.com; keydata=
- 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
- cwzYbmi/Et7T2+47PN9NZAOyb771QoVr8A==
-In-Reply-To: <20251223162756.GA25011@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: PeDfwdKlP-gpYVqOAswVD-hY1sGv9wH2
-X-Proofpoint-ORIG-GUID: PeDfwdKlP-gpYVqOAswVD-hY1sGv9wH2
-X-Authority-Analysis: v=2.4 cv=QutTHFyd c=1 sm=1 tr=0 ts=694ba68a cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=urQ9wjG1USoGuMoDBEOPbA==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=DmthBJwFisZfL4ceMzYA:9
- a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI0MDA3NCBTYWx0ZWRfX+VSUnMluYyB4
- nBIkqsV7E2ISrUdma6DMwBaFIUgLmdd68JIwAbzUNj5ZxUtQIuXYw7zchJYIfQtenZmUfpFSUzb
- 3pAVNoMm/wX7Qs3UU7Sv3uJegLP6IOla1PUFxkjcPUP/9N2pIfEd8qj357SOx2LFP5OLmd1DL4b
- QQjtvi4va3CSqPq5txGLBVlsNiTt64a53qsrCBzV7O20NWXBS0iwp7X12mwEi/LrBUtokZHpDDZ
- gHbyw8P8rclSpcA9ja3V2qd4ctlBZVf7hgPTuARvXWzTuQVXWDxgaGUctxxpoYv5w3bnHrXQiWd
- rzRsxu8Vbmil+W+gixRxQEmQ2w8NktrZg4tQnBm9eec9CB6h4ZD98STJmMf3KDEuW7Hs3iCB40y
- nlrHUIrqnDYzg9tI55QiWVPAlC82V0gBr1uWHRcV1/GroEFsNz+mobJKJFcocfvXnqtbbSlpB16
- TXUGQBtC8OOQlRjVZDQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-24_02,2025-12-22_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 phishscore=0 bulkscore=0 impostorscore=0 spamscore=0
- malwarescore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2512240074
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 23/12/2025 17:27, Laurent Pinchart wrote:
-> On Tue, Dec 23, 2025 at 04:32:02PM +0100, Krzysztof Kozlowski wrote:
->> On 23/12/2025 16:02, Laurent Pinchart wrote:
->>> On Tue, Dec 23, 2025 at 03:27:27PM +0100, Krzysztof Kozlowski wrote:
->>>> It is already documented but people still send noticeable amount of
->>>> patches ignoring the rule - get_maintainers.pl does not work on
->>>> arm64/configs/defconfig or any other shared ARM defconfig.
->>>>
->>>> Be more explicit, that one must not rely on typical/simple approach
->>>> here for getting To/Cc list.
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
->>>>
->>>> ---
->>>>
->>>> Incorrectly addressed patches for arm64/defconfig are around ~2 per month...
->>>> ---
->>>>  Documentation/process/maintainer-soc.rst | 6 ++++--
->>>>  1 file changed, 4 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/Documentation/process/maintainer-soc.rst b/Documentation/process/maintainer-soc.rst
->>>> index 3ba886f52a51..014c639022b2 100644
->>>> --- a/Documentation/process/maintainer-soc.rst
->>>> +++ b/Documentation/process/maintainer-soc.rst
->>>> @@ -57,8 +57,10 @@ Submitting Patches for Given SoC
->>>>  
->>>>  All typical platform related patches should be sent via SoC submaintainers
->>>>  (platform-specific maintainers).  This includes also changes to per-platform or
->>>> -shared defconfigs (scripts/get_maintainer.pl might not provide correct
->>>> -addresses in such case).
->>>> +shared defconfigs. Note that scripts/get_maintainer.pl might not provide
->>>> +correct addresses for the shared defconfig, so ignore its output and manually
->>>> +create CC-list based on MAINTAINERS file or use something like
->>>> +``scripts/get_maintainer.pl -f drivers/soc/FOO/``).
->>>
->>> I fear this will be another piece of documentation that people won't
->>> read. It would be more effective to implement custom logic in
->>> get_maintainer.pl (or at least output an informative message).
->>
->> Part of the logic is already there, but I will not grow that - I don't
->> want to touch Perl code. It's pretty obvious the tool should be do it,
->> so feel free to fix it.
-> 
-> Even if I knew perl, I'd have no time :-)
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
-Same here. I see little incentive for me to spend significant amount of
-time on this - considering I barely know Perl and how much I like this
-language - to solve not my problem. The best I could do is to clarify
-the docs. I agree however that this will be one more ignored doc, so I
-don't mind skipping the patch.
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
 
-Patch 2/2 is independent though, so please still consider it.
+are available in the Git repository at:
 
-Best regards,
-Krzysztof
+  https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.19
+
+for you to fetch changes up to 89e87d0dc87eb3654c9ae01afc4a18c1c6d1e523:
+
+  arm64: dts: mba8mx: Fix Ethernet PHY IRQ support (2025-12-30 16:07:39 +0800)
+
+----------------------------------------------------------------
+i.MX fixes for 6.19:
+
+- A mba8mx fix from Alexander Stein to correct Ethernet PHY IRQ trigger
+  type
+- An i.MX95 fix from Carlos Song to correct I3C2 pclk
+- A couple of imx8qm-mek changes from Haibo Chen to fix light sensor
+  interrupt type and usdhc2 regulator configuration
+- An imx6q-ba16 change from Ian Ray to fix RTC interrupt level
+- An imx8mp-dhcom-som change from Marek Vasut to fix sporadic Ethernet
+  link bouncing caused by interruptions on the PHY reference clock
+- A couple of imx8mp-tx8p changes from Maud Spierings to fix compatible
+  and eqos nvmem-cells
+- An ARM i.MX fix from Rob Herring to correct mc13xxx LED node names
+- An imx8qm-ss-dma change from Sherry Sun to correct DMA channels for
+  LPUART
+- A couple of imx95-toradex-smarc changes from Vitor Soares to fix
+  ethphy1 interrupt and SMARC_SDIO_WP label position
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      arm64: dts: mba8mx: Fix Ethernet PHY IRQ support
+
+Carlos Song (1):
+      arm64: dts: imx95: correct I3C2 pclk to IMX95_CLK_BUSWAKEUP
+
+Haibo Chen (2):
+      arm64: dts: imx8qm-mek: correct the light sensor interrupt type to low level
+      arm64: dts: add off-on-delay-us for usdhc2 regulator
+
+Ian Ray (1):
+      ARM: dts: imx6q-ba16: fix RTC interrupt level
+
+Marek Vasut (1):
+      arm64: dts: imx8mp: Fix LAN8740Ai PHY reference clock on DH electronics i.MX8M Plus DHCOM
+
+Maud Spierings (3):
+      dt-bindings: arm: fsl: moduline-display: fix compatible
+      arm64: dts: freescale: moduline-display: fix compatible
+      arm64: dts: freescale: tx8p-ml81: fix eqos nvmem-cells
+
+Rob Herring (Arm) (1):
+      ARM: dts: nxp: imx: Fix mc13xxx LED node names
+
+Sherry Sun (1):
+      arm64: dts: imx8qm-ss-dma: correct the dma channels of lpuart
+
+Vitor Soares (2):
+      arm64: dts: freescale: imx95-toradex-smarc: use edge trigger for ethphy1 interrupt
+      arm64: dts: freescale: imx95-toradex-smarc: fix SMARC_SDIO_WP label position
+
+ Documentation/devicetree/bindings/arm/fsl.yaml                   | 9 ++++++++-
+ arch/arm/boot/dts/nxp/imx/imx27-phytec-phycore-rdk.dts           | 8 ++++----
+ arch/arm/boot/dts/nxp/imx/imx51-zii-rdu1.dts                     | 4 ++--
+ arch/arm/boot/dts/nxp/imx/imx51-zii-scu2-mezz.dts                | 4 ++--
+ arch/arm/boot/dts/nxp/imx/imx51-zii-scu3-esb.dts                 | 4 ++--
+ arch/arm/boot/dts/nxp/imx/imx6q-ba16.dtsi                        | 2 +-
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi              | 1 +
+ .../boot/dts/freescale/imx8mp-tx8p-ml81-moduline-display-106.dts | 2 +-
+ arch/arm64/boot/dts/freescale/imx8mp-tx8p-ml81.dtsi              | 5 +++++
+ arch/arm64/boot/dts/freescale/imx8qm-mek.dts                     | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8qm-ss-dma.dtsi                 | 8 ++++----
+ arch/arm64/boot/dts/freescale/imx95-toradex-smarc.dtsi           | 4 +---
+ arch/arm64/boot/dts/freescale/imx95.dtsi                         | 2 +-
+ arch/arm64/boot/dts/freescale/mba8mx.dtsi                        | 2 +-
+ 14 files changed, 35 insertions(+), 23 deletions(-)
