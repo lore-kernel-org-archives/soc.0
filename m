@@ -1,56 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE883074A1
-	for <soc@lists.linux.dev>; Thu,  1 Jan 2026 22:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E73A3093AA
+	for <soc@lists.linux.dev>; Thu,  1 Jan 2026 22:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767306817; cv=none; b=cLiuPg87OG7NM0c8yzBempZ5HCVx+T/95yysF2IqwCyjfFzAeB4t5tjKnq2tp62tQNT6XWKh8i/k1CkJJLfqwkY74I2KJNv2HGNdd3PflRfvUHd/Y3NN6hfKIZUt8zqDHGzGeo/CD8LW7jXcRzySi6YX5TzR+JbiEZe2UeoXdkk=
+	t=1767306838; cv=none; b=tXqv9pddmHBLwd1xn7jdChONQCy3UBLiO/hJAYorjcXXwnJlqDj8vWbKS4GV4+EivqnNReoasWZillobZ7Ve1PRkkg/Hr/C0jdtuhDZSpVApJrA5/eIsaWfUnUJDWJSqym8vDK/WkUGoAj/ZduPa/DhSEsVhVlYNgYhGPNRm8iU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767306817; c=relaxed/simple;
-	bh=UXGKdezBnhqWJT3z28AVcODOOBkRsqGWkgI6uf542F4=;
+	s=arc-20240116; t=1767306838; c=relaxed/simple;
+	bh=p3Udg1A7dnizxaYQsat+vi05U+QBftMn1jOjMroxpb8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OpfAYazRcUc8SjUdhh+BkxXxQZMPD4QGEyG+D9hd+8IZKCUjjAjRx3m1OL9Qr8vMUpccp/2voWe5WovmZAwMKs3l98IAOPjdhAWlAgHFFsRywh9lzLYN819Hd+nih0aqy7uy7LiojPIwfUQBwnnldcZBj2reY/H67MgJcJ30cIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K8BtYGxL; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=W7i1xj4T1M5a3LAjYvUBSwS83LTP3MKmuxQbwre6xQxldrcnjNYHOYBqC1nMPOAs+tkZdDucKAfvmstUIHbGafSth0jp/O55NUtz4UVv79deIDaXSY6ZxVskqA7QxELuWLu9dzVZ7esWbQYcUhGqXIy5sqME6Ey3X6zL6AEYZhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dstsjtbp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K8BtYGxL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537A1C19425
-	for <soc@lists.linux.dev>; Thu,  1 Jan 2026 22:33:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dstsjtbp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25FDC4CEF7
+	for <soc@lists.linux.dev>; Thu,  1 Jan 2026 22:33:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767306817;
-	bh=UXGKdezBnhqWJT3z28AVcODOOBkRsqGWkgI6uf542F4=;
+	s=k20201202; t=1767306838;
+	bh=p3Udg1A7dnizxaYQsat+vi05U+QBftMn1jOjMroxpb8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=K8BtYGxL5UrgFaeruJ2bYpsWno6NCzwubi/XDjFvI+iHYbQvO3xnO0Y7wyhj2cCLP
-	 VaKgc3w0IX4QpiURYPgms9c4pkzF8tbO1vcMDyjBiUnBRL8v90Jjd/by7AwRJFPhNC
-	 YjgEEgIlWtpX14PD2WYaQmPm6VsfJDvCvmPi/pFWu5LWuaBGcjnvxbyDCSguflNbtq
-	 VNEjL1IEIzAE2Wf4+e33ukYHmF/6wWLuvhZScRrjR43mYuQq2dp3Nxhbo/NKUeE0NA
-	 MG2XkD6FMCKMY5fQWnAdIQG4AnKuPbokMsi6dCmbx6jOG1HNMPe7ucmUeCczCATjh3
-	 4INYWRS+JrrrA==
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-6467b7c3853so6296004d50.0
-        for <soc@lists.linux.dev>; Thu, 01 Jan 2026 14:33:37 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXc3WxInCY25Z4PCwEdmu6t53RriBk3pXEf/mlyG/6A0/Nf92bd+YVsxxqDVSzZhZTSiu4=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyo5jiOPeREdU70mfCuTTKMLNHtuPMdS3D4pjPquq0oQd2kmqBu
-	fFrWT1aaqWL8QN9hzTKwl3HSefCeUA4e0beXn8S2djoWYdgnV/HJKBlHa+jtCCmDz2SIVWfnmiV
-	F6rjwE8aEvBGGyOBm7cZyLpoXyD70zH0=
-X-Google-Smtp-Source: AGHT+IEBLNKuoraxNZDnarHv/8QNfjLvaAF0ad1d03H/wN5pMxpPWQbhNg4O3Lwnms+Q6/yKd55/WFSt9fl6Hz8W+0k=
-X-Received: by 2002:a53:bacd:0:b0:63f:b0a3:7400 with SMTP id
- 956f58d0204a3-6466a9133c5mr22966072d50.66.1767306816672; Thu, 01 Jan 2026
- 14:33:36 -0800 (PST)
+	b=DstsjtbpXOrYo5m8FwZq48jb0bXLmWDdjx4YCVNiH8UbQHAbA5sypAGa7d4Zz052v
+	 a5lEjgFkIhtTqO16RLRFE/8Kw2WIy6U7WfdbCHzVVKrEaIZ1ORXKMgmnzqh23tzSyi
+	 2cWvAe0RebCV+oBwqHzz0o2bddmxXrI3uAL+svu1TtFEf1DpLVFWKqmjfBVqdZka9m
+	 mt4yijoYcquN5YmVU7sC+ga5wgmieioSXb+ZFbdtnOn5GqrgrAhcQ9eGO5t5JBEmk0
+	 Fyxpn+hrmToCZs1nsclXe3W5dE33qXypKTZClDVEbuvBQKLaJ+4geZfwGVDT64QKry
+	 S7d3DWpOhVttA==
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-78fb9a67b06so90583537b3.1
+        for <soc@lists.linux.dev>; Thu, 01 Jan 2026 14:33:57 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXBmjdjg1odyOhO1c0v3EyKeG8GXCjGA3shlkm6HV92+9c8NckXEi+CkghU3b6BgsTWQgE=@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywhw5SZIoZNbZqzZTTy+cvlRHR2KLBi+5DIeAntj/ducsthhC2N
+	+5DY30t+t0MSL7RjtHDkYBE1xLr8pa0yHJx4v0A42bOZK/cTyUcPZWFibQQchf84F8XBacPzD5f
+	u614WRkPNTVG7p+n3I4hqZQzrBQ/jBT8=
+X-Google-Smtp-Source: AGHT+IE8kG0dl6nfZ9rDsSRend9zuK0sDG20K86USLrsvME01KojRh37n5srP/xA0B/lLw7qk1QH4Fud+Fy7MLPqvEw=
+X-Received: by 2002:a05:690c:4906:b0:78c:6ae6:3c7c with SMTP id
+ 00721157ae682-78fb40560a1mr335458777b3.48.1767306837261; Thu, 01 Jan 2026
+ 14:33:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251223142726.73417-3-krzysztof.kozlowski@oss.qualcomm.com>
-In-Reply-To: <20251223142726.73417-3-krzysztof.kozlowski@oss.qualcomm.com>
+References: <20251223142726.73417-3-krzysztof.kozlowski@oss.qualcomm.com> <20251223142726.73417-4-krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <20251223142726.73417-4-krzysztof.kozlowski@oss.qualcomm.com>
 From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 1 Jan 2026 23:33:25 +0100
-X-Gmail-Original-Message-ID: <CAD++jLnVaeq39ZcNRjjqaXJ-BNGiR8nO3OzG+Fb-Zz7Db_Lfjg@mail.gmail.com>
-X-Gm-Features: AQt7F2pNYT3pv7P7qW-qHrpoGWDYRLqHE5UdSIokYzrI55tQFL698Vhw1A_9duc
-Message-ID: <CAD++jLnVaeq39ZcNRjjqaXJ-BNGiR8nO3OzG+Fb-Zz7Db_Lfjg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] Documentation/process: maintainer-soc: Be more
- explicit about defconfig
+Date: Thu, 1 Jan 2026 23:33:46 +0100
+X-Gmail-Original-Message-ID: <CAD++jLk=9iea0qyDLy9dwmDEZZgkLcjsOPkw31ks=cEQ=qAQ8g@mail.gmail.com>
+X-Gm-Features: AQt7F2rNFZ-MkfoJRD3W8h_DCYrEby3OkFKJI49Jsn33edPsbUed2eaZO-9R5iw
+Message-ID: <CAD++jLk=9iea0qyDLy9dwmDEZZgkLcjsOPkw31ks=cEQ=qAQ8g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Documentation/process: maintainer-soc: Mark 'make' as commands
 To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
 	Alexandre Belloni <alexandre.belloni@bootlin.com>, Linus Walleij <linus.walleij@linaro.org>, 
@@ -64,17 +63,10 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Dec 23, 2025 at 3:27=E2=80=AFPM Krzysztof Kozlowski
 <krzysztof.kozlowski@oss.qualcomm.com> wrote:
 
-> It is already documented but people still send noticeable amount of
-> patches ignoring the rule - get_maintainers.pl does not work on
-> arm64/configs/defconfig or any other shared ARM defconfig.
->
-> Be more explicit, that one must not rely on typical/simple approach
-> here for getting To/Cc list.
+> Improve readability of the docs by marking 'make dtbs/dtbs_check' as
+> shell commands.
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-
-Despite the complaints that the patch does not fix the problem
-there is nothing wrong with the patch.
 
 Reviewed-by: Linus Walleij <linusw@kernel.org>
 
