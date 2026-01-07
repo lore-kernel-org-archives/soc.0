@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C410F347BC7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFDF36BCE9
 	for <soc@lists.linux.dev>; Wed,  7 Jan 2026 17:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767808251; cv=none; b=ImAOFyxke3xefigqnanV5zx+rLotRXCFIjh3kJVyBLibayuraUJCA8RSNE1E8JMMVVhfemPWqXHtDZ0yfRaDp9ExaahM2dIfYCdR1GiqESyyJBVi0nXsOcKOxYnNkzzPDF999n7SwJuXsdbcLQl6JHTpf2srkX7Bx91gDr2tiis=
+	t=1767808251; cv=none; b=Mu41xXu45JJbgYRI7cHBUgXg0/mQhd3cMX2k0KmSZuxqQygLWhSph4ClDuybVQ5KgBhVXwkyQKL7i4AU6kkemg/stvWmFHH/X/S0RIJTDmdQKKaZSUFXZ46mjvFKYDCC23i8/ox7Ibet9S+DdOycrOle6yVKoLV+LUK2IMAKT10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767808251; c=relaxed/simple;
-	bh=/YQKx7v9/Zli7/+c2IRFFHmquly2fBCxeGccPulpxiQ=;
+	bh=ZPt3BpbA9qqMAOA1zXOVstfiMbwFltzH305c7K5Jyu0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XXbtV/QelL7VsagY53iMwIRj4Vj9ys6euo250ApNgOgePt57OJc/eRnBtPzNDKgMyxCQ/ZHV45E9QGFS9UaY6MTmpg6HJM4yUDh9CdrgRJsuf/fHyGmu45jXrrZ/XWNe6qe72+hVcWlTI44YEPtvTK88+FK8PKfQGW5QCnlEswk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bVkfvlin; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=HEa3myblhKFWdXHMkOxP5mB9AfJU5vLokhh8FI5/DJ5e/hv4d1j6IUFGC+UpAWliv7Ktho/tONcToh/3NXfjGB/eyp2fDA2WS19+rA7rTTI0FQ36sSDIKhGqaJAyhekMeSI813WgBBAulI9JDWjIZIAl/iz5AnZ2ZbRYWFcERwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XiLkF214; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bVkfvlin"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XiLkF214"
 Received: by smtp.kernel.org (Postfix)
-	id 45807C19425; Wed,  7 Jan 2026 17:50:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30234C4CEF7;
-	Wed,  7 Jan 2026 17:50:51 +0000 (UTC)
+	id 35EE3C4CEF1; Wed,  7 Jan 2026 17:50:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD72C19422;
+	Wed,  7 Jan 2026 17:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767808251;
-	bh=/YQKx7v9/Zli7/+c2IRFFHmquly2fBCxeGccPulpxiQ=;
+	s=k20201202; t=1767808250;
+	bh=ZPt3BpbA9qqMAOA1zXOVstfiMbwFltzH305c7K5Jyu0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bVkfvlinVbVwVkJhAIUH4EVHZG6hpTv4Z9BDqYwbcQiDY9G30Sf4TAWt8uAc9F7oN
-	 2VNhfnLk7Tz/aeODc1BrPmVJokVILGz6XE7J3mJRUgf5JIPi9q8RFZkD6ATdf8wKcL
-	 Osz8LGFOdBHTwq2ykF3wYp0yfkSEjus8T7Es29mHV6ThhbrhmXroCR+SDhPjfUQqTi
-	 1610LqL4L2Rug3zHUEXt0c7NI11+kS54xs7MwzMqZdRehOLDyFLwCPcgLSwDth+s4Z
-	 8PpmD3kwtBVqVkpKNFcBiosYrR/lBB2V83yHBZZc7H9kQL0GIUnkCQLSWmmCzdZqFF
-	 SxVHWpM9othMw==
+	b=XiLkF214T/jQtid2V6BpHtogfyopaAQGimXj/ecBkVa11QqRBMDj65HTdX+3zRFef
+	 XRU9nprkZvsfkqn/bncBKmSJR7UtegnJKxVuEjMq98a7qqTaDZzuyRxYpkzculV6Tm
+	 xWTuT+jj27XGCCItzlWq+TIfa4XE2Jw6ZF22erPYI1hlqoiOo+IPOs9I9cLIX4SXg9
+	 583bOx1J9ZO2+KM3bHW92z9Ajm9hxNwDq/RQeX7E04Dyl9aPhiPSNrkUOHGfowG0+O
+	 jcoX+KFChdFgZLgMMFSb77LmN4xxsEQBlRglQbAWljIlXd3EtauZ2M5C9NORkOMbbm
+	 SAvPT78KLIlDA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 78A803A40FD1;
-	Wed,  7 Jan 2026 17:47:29 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F297A3A40FD1;
+	Wed,  7 Jan 2026 17:47:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,37 +39,38 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] aspeed: first batch of devicetree changes for 6.20
+Subject: Re: [GIT PULL 0/3] Renesas SoC updates for v6.20
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176780804802.2867211.2655456088997555141.git-patchwork-notify@kernel.org>
-Date: Wed, 07 Jan 2026 17:47:28 +0000
-References: 
- <4ab756729c4e26f7e544156c8613e839a9a9bebe.camel@codeconstruct.com.au>
-In-Reply-To: 
- <4ab756729c4e26f7e544156c8613e839a9a9bebe.camel@codeconstruct.com.au>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>
+ <176780804678.2867211.8786509191069478415.git-patchwork-notify@kernel.org>
+Date: Wed, 07 Jan 2026 17:47:26 +0000
+References: <cover.1767628163.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1767628163.git.geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 05 Jan 2026 15:11:03 +1030 you wrote:
-> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+On Mon,  5 Jan 2026 16:57:37 +0100 you wrote:
+> Hi SoC folks,
 > 
->   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+> This is my first pull request for the inclusion of Renesas SoC updates
+> for v6.20.
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed-6.20-devicetree-0
+> It consists of 3 parts:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] aspeed: first batch of devicetree changes for 6.20
-    https://git.kernel.org/soc/soc/c/bc6fe9f0a643
+  - [GIT,PULL,1/3] Renesas ARM defconfig updates for v6.20
+    (no matching commit)
+  - [GIT,PULL,2/3] Renesas driver updates for v6.20
+    (no matching commit)
+  - [GIT,PULL,3/3] Renesas DTS updates for v6.20
+    https://git.kernel.org/soc/soc/c/aa5f91ce4fd8
 
 You are awesome, thank you!
 -- 
