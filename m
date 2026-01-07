@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFDF36BCE9
-	for <soc@lists.linux.dev>; Wed,  7 Jan 2026 17:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C76C343D83
+	for <soc@lists.linux.dev>; Wed,  7 Jan 2026 17:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767808251; cv=none; b=Mu41xXu45JJbgYRI7cHBUgXg0/mQhd3cMX2k0KmSZuxqQygLWhSph4ClDuybVQ5KgBhVXwkyQKL7i4AU6kkemg/stvWmFHH/X/S0RIJTDmdQKKaZSUFXZ46mjvFKYDCC23i8/ox7Ibet9S+DdOycrOle6yVKoLV+LUK2IMAKT10=
+	t=1767808254; cv=none; b=TJxpNGynWQiHbzEEgdNkJ7kHGAvrbeRibCMhzpCRXGgtQ4nWPyKVFpOJ47ahKQPgDg/kk2sso8bkcKvtPNN3Th/JVztZFxSBrOcOWtuz94LKT67dAEVClJPrM9xpAK+j/q+bbrihMpW4B5ezxLieu0wfQL4vDEsVHByo7Yck0F8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767808251; c=relaxed/simple;
-	bh=ZPt3BpbA9qqMAOA1zXOVstfiMbwFltzH305c7K5Jyu0=;
+	s=arc-20240116; t=1767808254; c=relaxed/simple;
+	bh=ecb/m0MQXKHWkflBkVgTDOPh/8ozd/GAD5pBtQ0yTLM=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=HEa3myblhKFWdXHMkOxP5mB9AfJU5vLokhh8FI5/DJ5e/hv4d1j6IUFGC+UpAWliv7Ktho/tONcToh/3NXfjGB/eyp2fDA2WS19+rA7rTTI0FQ36sSDIKhGqaJAyhekMeSI813WgBBAulI9JDWjIZIAl/iz5AnZ2ZbRYWFcERwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XiLkF214; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Dy6zl69j4FEf2MGdCy8XSlBUhVKw2aQZ/83zK39n1xHW4/0AShEZWKV/yPefYIT4CebM3zLMJbKzPaJ46TkDKMm9Lqk+uBDlTyxTOR6eE7GjeZvaMXTrHswGsTX8VuKbuhyIVyOpj1UWC82R1mc5qDs+vjOiyue+cupZM3o0NNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lkPwNfjM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XiLkF214"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lkPwNfjM"
 Received: by smtp.kernel.org (Postfix)
-	id 35EE3C4CEF1; Wed,  7 Jan 2026 17:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD72C19422;
-	Wed,  7 Jan 2026 17:50:50 +0000 (UTC)
+	id C24CEC4CEF7; Wed,  7 Jan 2026 17:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACAE2C4CEF1;
+	Wed,  7 Jan 2026 17:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767808250;
-	bh=ZPt3BpbA9qqMAOA1zXOVstfiMbwFltzH305c7K5Jyu0=;
+	s=k20201202; t=1767808252;
+	bh=ecb/m0MQXKHWkflBkVgTDOPh/8ozd/GAD5pBtQ0yTLM=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=XiLkF214T/jQtid2V6BpHtogfyopaAQGimXj/ecBkVa11QqRBMDj65HTdX+3zRFef
-	 XRU9nprkZvsfkqn/bncBKmSJR7UtegnJKxVuEjMq98a7qqTaDZzuyRxYpkzculV6Tm
-	 xWTuT+jj27XGCCItzlWq+TIfa4XE2Jw6ZF22erPYI1hlqoiOo+IPOs9I9cLIX4SXg9
-	 583bOx1J9ZO2+KM3bHW92z9Ajm9hxNwDq/RQeX7E04Dyl9aPhiPSNrkUOHGfowG0+O
-	 jcoX+KFChdFgZLgMMFSb77LmN4xxsEQBlRglQbAWljIlXd3EtauZ2M5C9NORkOMbbm
-	 SAvPT78KLIlDA==
+	b=lkPwNfjMAWkccdNda9BWvhbd/COnhrtr/GLuchoyAf4/nxNIQKI4+0uNVuIZMQyDR
+	 tgJZ5UKRpOxwr3Hwmi0f0CQA3T4/JU5yWQ0JIOaee9x4jP9AKs2JQUrzK+9LSsUl6b
+	 bOvGwaW7xG0UkllGyEXe7rKHRrMDYQRrF4hHSrIWZc2zv8ailN1ryNmQ2JUgKYW9Oz
+	 D8yO1FMdv1MPMR8DO+p/7a0f3I+T7abxm8CAsOb0miAzGbRJA/Y62cC/ZmnESrdpfA
+	 JhNKitD9I9G2BvFqbyVo+EEKk3r19WIRvZ5knTrCAqUbaYdjL9zMZhZVDqw9CErWIt
+	 BImdlx+Udv3sw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F297A3A40FD1;
-	Wed,  7 Jan 2026 17:47:27 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2A593A40FD1;
+	Wed,  7 Jan 2026 17:47:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,38 +39,35 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/3] Renesas SoC updates for v6.20
+Subject: Re: [GIT PULL 1/1] Broadcom devicetree-arm64 changes for 6.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176780804678.2867211.8786509191069478415.git-patchwork-notify@kernel.org>
-Date: Wed, 07 Jan 2026 17:47:26 +0000
-References: <cover.1767628163.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1767628163.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+ <176780804952.2867211.8675427151959623828.git-patchwork-notify@kernel.org>
+Date: Wed, 07 Jan 2026 17:47:29 +0000
+References: <20251216235649.633331-1-florian.fainelli@broadcom.com>
+In-Reply-To: <20251216235649.633331-1-florian.fainelli@broadcom.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon,  5 Jan 2026 16:57:37 +0100 you wrote:
-> Hi SoC folks,
+On Tue, 16 Dec 2025 15:56:49 -0800 you wrote:
+> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 > 
-> This is my first pull request for the inclusion of Renesas SoC updates
-> for v6.20.
+>   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 > 
-> It consists of 3 parts:
+> are available in the Git repository at:
+> 
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.19/devicetree-arm64
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] Renesas ARM defconfig updates for v6.20
-    (no matching commit)
-  - [GIT,PULL,2/3] Renesas driver updates for v6.20
-    (no matching commit)
-  - [GIT,PULL,3/3] Renesas DTS updates for v6.20
-    https://git.kernel.org/soc/soc/c/aa5f91ce4fd8
+  - [GIT,PULL,1/1] Broadcom devicetree-arm64 changes for 6.19
+    https://git.kernel.org/soc/soc/c/12e491d4f735
 
 You are awesome, thank you!
 -- 
