@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D261346A18
-	for <soc@lists.linux.dev>; Wed,  7 Jan 2026 17:03:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6895933D6E2
+	for <soc@lists.linux.dev>; Wed,  7 Jan 2026 17:03:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767805410; cv=none; b=tKRwtCji5tcgQV5cPIpFcXfx8E+SYlaLUK4OyKHmFgSFqz3u/lWoDFMGDduUXN0bOCsUo3HKeYvYMEqVn8CA4RRnxbagnq10DVw7fozCfGN2e59b9IBqKYfK+pjgo4nF5CaF8zjkXzZ0w6BSmeAK39vft+0w3Y6nmBc/ggIvqi4=
+	t=1767805411; cv=none; b=V1V0cAVOITJmiKueMZ6AP1QRCLS+rSvMWJZmNuZyBK7Xt8ESn62IP05ueNE9S3vhUvcxpvHBoKKMTN2H/elTgNEptwjMNpqlyzrRTsbmsfcMvD4SKYTd/O3KZmor38r+tslZ81lDstWIH1dzLZS86MvlxVyeZ6AANgFTOhPqca4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767805410; c=relaxed/simple;
-	bh=gvjLsqstr5dgJk7PLp5BVvTU0CmLQJNpzmpqN/XR850=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=LPmPsuWr3qPFXEY693gmcUKB+74/WhoJTEai2Ywch+gsygFys57DpQVApt6P+wwHEdrfY9/V1s6vVzASWIVzXMjkeQJIBY0u5ktNHPThkQpHtCcruPmbFiF2jeoZjETETGSy4CJFdSd7RwfjG7tQ4Q9CNj1CPjCDEgT8MTfP+wY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FDoo2zBL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767805411; c=relaxed/simple;
+	bh=5xRy4HApolb5z9dr8R9LJ8GR9EQTgmybb3jXAvYbRn4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PkUbfQLABa8pywENMNpDGRMNfBykjz/J1r0SIXpXm6qakS95v2wl5ZN8glLWMFKUETEVC1nRyHhczPWUzT/cFom8cjXgUmkAV8JhVcvoqXWBFZ1f73g7s29BKLTjsbMQK2O0+axNnfqudAKIl/vh/7j5JEA7rSOyGPXZKnUqhCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qkfvq8a+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FDoo2zBL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qkfvq8a+"
 Received: by smtp.kernel.org (Postfix)
-	id DEA93C19422; Wed,  7 Jan 2026 17:03:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8903C4CEF1
-	for <soc@kernel.org>; Wed,  7 Jan 2026 17:03:29 +0000 (UTC)
+	id 0E8F5C4CEF7; Wed,  7 Jan 2026 17:03:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE9EC4CEF1;
+	Wed,  7 Jan 2026 17:03:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767805409;
-	bh=gvjLsqstr5dgJk7PLp5BVvTU0CmLQJNpzmpqN/XR850=;
-	h=Subject:From:Date:To:Cc:From;
-	b=FDoo2zBLWcfCyqeiSSu4QKOckE//GRM3pHW9kdKmkPKOrv3NBMvXZEyeG08T5a2gN
-	 oKvgyiVIPYTU9BMF1e5zyTqfRdqpoNqHdAQYob2ipw9hk2gOm3k4lLr+q0Ww2abrvJ
-	 /Ak14y67ssK60hr2VcaB/DeanSH5o4xxyh9L81FBmEVNRtqRjyBGGc6M+F3p24+gpk
-	 aaC+B9cxA0Le9NOWZlky1KHtopMHEfEHG+JVCfOhfIMXHEHEI8DbOs1iX9zUIoecM/
-	 Z78z1NUrhxDKwV4hgbI6FMhVOKZDvDICEJ0K9EFM8rKOLPeIiGDAjTEv2WSNGh/ftP
-	 25ahAflvzN/PA==
+	s=k20201202; t=1767805411;
+	bh=5xRy4HApolb5z9dr8R9LJ8GR9EQTgmybb3jXAvYbRn4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Qkfvq8a+c2P/UIVoglBtEM9U/0lTkIZtsGJfiLtRn7J6H9rUDmDIjM+5i4UAR61Dt
+	 JhFT6O0kolb4h2KycbuVMlQ8vCg9sBWw033cQvZ7v7mt0QGzkRiD4L8xzeavIeWPoZ
+	 49gfz63I+DMpqKqii+l1jCVSPhrsr2K06wbzUanzM01c0L4mFEAuWbivF2MRNxtacS
+	 R+aoyTmtjkzi9FlC5Aw8yA9NJTf+SloEo0y778mdPul7SYLsGeRDSDpUyfg2eI9Wek
+	 X0MGbdvHvYK3RPxCDlwukrzC5uA3GbsdSO1TQk8/aW60WM+IWPbT3NFeGUM/i+leUC
+	 HrI99Ueo66YsQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 052353A40FD9;
-	Wed,  7 Jan 2026 17:00:08 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3BBAB3A40FD1;
+	Wed,  7 Jan 2026 17:00:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,48 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] i.MX fixes for 6.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176780520648.2859028.16337561819404579166.git-patchwork-summary@kernel.org>
-Date: Wed, 07 Jan 2026 17:00:06 +0000
-To: soc@kernel.org
+ <176780520805.2859028.17545110019717527588.git-patchwork-notify@kernel.org>
+Date: Wed, 07 Jan 2026 17:00:08 +0000
+References: <aVSX6SK_LADf1ti4@dragon>
+In-Reply-To: <aVSX6SK_LADf1ti4@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] i.MX fixes for 6.19
-  Submitter: Shawn Guo <shawnguo@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1037534
-  Lore link: https://lore.kernel.org/r/aVSX6SK_LADf1ti4@dragon
+On Wed, 31 Dec 2025 11:26:33 +0800 you wrote:
+> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+> 
+>   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.19
+> 
+> [...]
 
-Series: [1/2] Documentation/process: maintainer-soc: Be more explicit about defconfig
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1036085
-  Lore link: https://lore.kernel.org/r/20251223142726.73417-3-krzysztof.kozlowski@oss.qualcomm.com
-    Patches: [1/2] Documentation/process: maintainer-soc: Be more explicit about defconfig
-             [2/2] Documentation/process: maintainer-soc: Mark 'make' as commands
+Here is the summary with links:
+  - [GIT,PULL] i.MX fixes for 6.19
+    https://git.kernel.org/soc/soc/c/c221cc877bd2
 
-Patch: arm64: dts: hisilicon: hikey960: Drop "snps,gctl-reset-quirk" and "snps,tx_de_emphasis*" properties
-  Submitter: Rob Herring (Arm) <robh@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1038650
-  Lore link: https://lore.kernel.org/r/20260105174002.2997615-1-robh@kernel.org
-
-Patch: [GIT,PULL,1/1] Broadcom devicetree-arm64 fixes for 6.19
-  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1035204
-  Lore link: https://lore.kernel.org/r/20251219204603.1016528-1-florian.fainelli@broadcom.com
-
-
-Total patches: 5
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
