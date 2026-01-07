@@ -1,44 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9F433EAFF
-	for <soc@lists.linux.dev>; Mon,  5 Jan 2026 17:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D261346A18
+	for <soc@lists.linux.dev>; Wed,  7 Jan 2026 17:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767634824; cv=none; b=gw3hkeNa5XlWks6OmxlUFrq8DxhCQD+BEd/8C82sktx2W7wdcBNKAwiN+HMj/htkMe/ml0BX5Z2O7k4RwfUybl88ya7lf3QmzOYOv0b3/jQbcDduhqTfxmll+zK1GGh7tuH30GduGk6gXSuydMUFcfQ2rudV/l1g8KjEp61ZQcQ=
+	t=1767805410; cv=none; b=tKRwtCji5tcgQV5cPIpFcXfx8E+SYlaLUK4OyKHmFgSFqz3u/lWoDFMGDduUXN0bOCsUo3HKeYvYMEqVn8CA4RRnxbagnq10DVw7fozCfGN2e59b9IBqKYfK+pjgo4nF5CaF8zjkXzZ0w6BSmeAK39vft+0w3Y6nmBc/ggIvqi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767634824; c=relaxed/simple;
-	bh=2uciPgKZTfAN+kHFN9+AWCUpup3++wuAGSvEJP++CVU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M3+eYn4n05Zi7K+7S+pJ4mwKWwy4UMVLQy3x2VHefT/v/nZqEEGyn7WB+ml7ZEYYtB5Ih5bV2k9fDGnWrajBxpT1oS4kpFvFA7sLc3Pyrs3xxlgepQqwVesLF03SG8dzW6T3J8lJ4n4DTJ7ze3KWdBOZqQqTAeSwF0LiRS46XKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rxdJfile; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767805410; c=relaxed/simple;
+	bh=gvjLsqstr5dgJk7PLp5BVvTU0CmLQJNpzmpqN/XR850=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=LPmPsuWr3qPFXEY693gmcUKB+74/WhoJTEai2Ywch+gsygFys57DpQVApt6P+wwHEdrfY9/V1s6vVzASWIVzXMjkeQJIBY0u5ktNHPThkQpHtCcruPmbFiF2jeoZjETETGSy4CJFdSd7RwfjG7tQ4Q9CNj1CPjCDEgT8MTfP+wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FDoo2zBL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rxdJfile"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FDoo2zBL"
 Received: by smtp.kernel.org (Postfix)
-	id 64F68C19424; Mon,  5 Jan 2026 17:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A218C19422;
-	Mon,  5 Jan 2026 17:40:24 +0000 (UTC)
+	id DEA93C19422; Wed,  7 Jan 2026 17:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8903C4CEF1
+	for <soc@kernel.org>; Wed,  7 Jan 2026 17:03:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767634824;
-	bh=2uciPgKZTfAN+kHFN9+AWCUpup3++wuAGSvEJP++CVU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rxdJfilehYXTF2CXiJ68ugDkk0WeJK8N06jer4golHbxFQ+Kl18nLFOWgjY5ZxIlI
-	 oyRraD2Lsu8pxVtW+nvLafUTgCQyRt13ut4qqNj3YWwW6rYG0uA1/styq2XtGTQFIS
-	 TfiK/H8S6kr6tb1PSBR5imilYtm3n6zwFeqE5GCyqOheL1N0QWDjzYgvVx2MJW7Rwy
-	 TcmkjPzAsWLiBQUHsH+KmHpxQzWIO4cZ20HrS0bpbUug8/Crxx5nVwkJoq9jp/7pWN
-	 QrUoyINpByyFZPZWAFJYgv1oopnCyXHTFNRIpvtd2vwVVT1AEGSkiVpuZGcIrk5PCY
-	 xPUY/US74WR4A==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: soc@kernel.org,
-	Wei Xu <xuwei5@hisilicon.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: hisilicon: hikey960: Drop "snps,gctl-reset-quirk" and "snps,tx_de_emphasis*" properties
-Date: Mon,  5 Jan 2026 11:40:02 -0600
-Message-ID: <20260105174002.2997615-1-robh@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	s=k20201202; t=1767805409;
+	bh=gvjLsqstr5dgJk7PLp5BVvTU0CmLQJNpzmpqN/XR850=;
+	h=Subject:From:Date:To:Cc:From;
+	b=FDoo2zBLWcfCyqeiSSu4QKOckE//GRM3pHW9kdKmkPKOrv3NBMvXZEyeG08T5a2gN
+	 oKvgyiVIPYTU9BMF1e5zyTqfRdqpoNqHdAQYob2ipw9hk2gOm3k4lLr+q0Ww2abrvJ
+	 /Ak14y67ssK60hr2VcaB/DeanSH5o4xxyh9L81FBmEVNRtqRjyBGGc6M+F3p24+gpk
+	 aaC+B9cxA0Le9NOWZlky1KHtopMHEfEHG+JVCfOhfIMXHEHEI8DbOs1iX9zUIoecM/
+	 Z78z1NUrhxDKwV4hgbI6FMhVOKZDvDICEJ0K9EFM8rKOLPeIiGDAjTEv2WSNGh/ftP
+	 25ahAflvzN/PA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 052353A40FD9;
+	Wed,  7 Jan 2026 17:00:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -46,36 +38,50 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <176780520648.2859028.16337561819404579166.git-patchwork-summary@kernel.org>
+Date: Wed, 07 Jan 2026 17:00:06 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-"snps,tx_de_emphasis" is supposed to be a u8, not a u32. Since it is big
-endian, 0 will be read rather than 1. The DWC3 Linux driver simply ORs
-the value if "snps,tx_de_emphasis_quirk" is set, so the 2 properties
-have no effect. (The driver doesn't clear the field either which is
-another problem).
+Hello:
 
-"snps,gctl-reset-quirk" is not documented nor used in the driver, so
-drop it as well.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts | 3 ---
- 1 file changed, 3 deletions(-)
+Patch: [GIT,PULL] i.MX fixes for 6.19
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1037534
+  Lore link: https://lore.kernel.org/r/aVSX6SK_LADf1ti4@dragon
 
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-index 3f13a960f34e..ed84ab92fb19 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-+++ b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-@@ -675,10 +675,7 @@ &dwc3 { /* USB */
- 	snps,lfps_filter_quirk;
- 	snps,dis_u2_susphy_quirk;
- 	snps,dis_u3_susphy_quirk;
--	snps,tx_de_emphasis_quirk;
--	snps,tx_de_emphasis = <1>;
- 	snps,dis_enblslpm_quirk;
--	snps,gctl-reset-quirk;
- 	usb-role-switch;
- 	role-switch-default-mode = "host";
- 	port {
+Series: [1/2] Documentation/process: maintainer-soc: Be more explicit about defconfig
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1036085
+  Lore link: https://lore.kernel.org/r/20251223142726.73417-3-krzysztof.kozlowski@oss.qualcomm.com
+    Patches: [1/2] Documentation/process: maintainer-soc: Be more explicit about defconfig
+             [2/2] Documentation/process: maintainer-soc: Mark 'make' as commands
+
+Patch: arm64: dts: hisilicon: hikey960: Drop "snps,gctl-reset-quirk" and "snps,tx_de_emphasis*" properties
+  Submitter: Rob Herring (Arm) <robh@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1038650
+  Lore link: https://lore.kernel.org/r/20260105174002.2997615-1-robh@kernel.org
+
+Patch: [GIT,PULL,1/1] Broadcom devicetree-arm64 fixes for 6.19
+  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1035204
+  Lore link: https://lore.kernel.org/r/20251219204603.1016528-1-florian.fainelli@broadcom.com
+
+
+Total patches: 5
+
 -- 
-2.51.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
