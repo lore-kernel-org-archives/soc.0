@@ -1,137 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2867935F8D6
-	for <soc@lists.linux.dev>; Mon, 12 Jan 2026 15:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B5014A60F
+	for <soc@lists.linux.dev>; Mon, 12 Jan 2026 16:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768232136; cv=none; b=Z6TQwo8Tj4dOuDdh072gt+arijOzWjaRxfAZ82zlNLgKiMaoSTk+KJ0CUuvNL4i7wPFdaf2tXF1Oq+2sb/te6Q8pvT0J+6NCtZjFEHfFejf0R8Xs5ljh+uXmAG7eGACauNqNmcImjJxlAyUczY9CpfJajEiqzX/XXphfhVNDgOc=
+	t=1768235953; cv=none; b=ftbTQ0F6maiCasUget0O8p/Gv0Pfxu/ZoNHFz5eqVwfy6FnexfsjOedwFLQrpoURbfqQkR/Fe/mV37/Z4qYrpVo5dkUF3DhmlOJWhDozEV1gppvlrMoAO4m2T5rdzDHemyxh7sMXWQB/bhZ5s+Ocs4lB+A4N27dDbZYwYXik0kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768232136; c=relaxed/simple;
-	bh=VJbJChd8N/LfN0hMbX+wa83dkNT92miG2RddNVLajrI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NBdUneMeZldcTn2McxXEvKPtHMgXLqD5IxQWbpJGn78/p8kNh9spXcd3rG4yCussCRg4nI1aIlrfcfSeueieEtw4PMr+ySVSm7/ORZlOXGEGtsBNxQnnXk8uCmg6qf+NQ+XDhr+7Qy7NsBhPltvtzX6FmUwPij6RkBxu10pmXnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9aLuI8P; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9aLuI8P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297CBC19422;
-	Mon, 12 Jan 2026 15:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768232135;
-	bh=VJbJChd8N/LfN0hMbX+wa83dkNT92miG2RddNVLajrI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U9aLuI8PO6Z01Vz9i1Xm/nKhIEKBFPDAzMIxe5VxPFutzNtC3v3wx1HUUxDcXDaQV
-	 T5CSNIdIhp47zUPnYbqQZRLG1PQ33E2kSuR9XKIBfC/mHyAuWt1yEKgESIdsvD/ADP
-	 dOiO+eKDcsc/yfhEAJGaU9SpPhIAKgRItZbGTVSrgsB0g1km4fVY/oAF0ufoE4veKa
-	 SVPPRJfBpXGng22aSOHoNkB1+8coavyAxDgnIB5ZjlOVDTcvl2Vt41jBr5bn7VNx9N
-	 g92gaLOwxTV8VhyIeBPXjkcl6EbKHAqHAlF8pPEyZ5jc0t0QjAis8twFbHm7qKvpG4
-	 SLJVBkNUgfmdw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: soc@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 2/2] ARM: defconfig: turn off CONFIG_EXPERT
-Date: Mon, 12 Jan 2026 16:32:55 +0100
-Message-Id: <20260112153255.795553-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260112153255.795553-1-arnd@kernel.org>
-References: <20260112153255.795553-1-arnd@kernel.org>
+	s=arc-20240116; t=1768235953; c=relaxed/simple;
+	bh=SfHeLqceqLqg1F0BDqmoBZTnhqV24wMBAr2Vi8nBJAw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U+GE1Z/gQ0XEB15wBcgj6GZ5vFgyTANJdvfdyHP0fidf8rH8fkjPvpz4/FIy22NSLE3RB99zdFSE7m3etvCFp3LnX9HaPloiDdbi08NtZwlmquy0NVrCHJcEOUIFVY0JWEIyyo3Cu+x6bvEv6DsG1v/OkCyi7etycBY+QcHbEw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-9412512e9f3so1999007241.0
+        for <soc@lists.linux.dev>; Mon, 12 Jan 2026 08:39:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768235948; x=1768840748;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BwQEbtswObKKVraQKvQaR/3+rbt3A2+8t9J7vUhV2P8=;
+        b=wmTaLPH6IS/f8hnFxTGjH9tja7xUTRUWlbcb99NWRA/Igh6g5Ao4ZWISseC/JuPITa
+         ySXtAHSYUvTfttrCOeemPGcaFYgow+/HLZi7IWLDvqkd00xhKiQO/pNSFjv6vX0PzcCO
+         LOS3gg8kfrcMN/XlcmkcQQqGPlB8OB9u/7liFIMGgTYUEzxIx6GffKgYbcMZmEl2AaBy
+         ecQNgofNq9gjkqahnkP9ErT+p7YE/xve9U1tysQnsJsbueOghESxj73qsEb3IyV2Y/sI
+         TgBDudVRdm9T5XTybCUa319oW3Qa4dCpUOZ3+hV1OG793836JIGpWWqGQlPh65TWST9Z
+         MA8Q==
+X-Gm-Message-State: AOJu0Yxx4zxvFvv66IuI8TkZWiKxLbSXZejvw4+fgJW0q+1ZUA3kCH+G
+	wE6W0jVEYIWi1K725Tq6/JFLhCmGPQe8ZW2as0dtQheWXv9Td+tTRCS+ZjNHbAdx
+X-Gm-Gg: AY/fxX7Uxq4yGsCxy7N9IG903hAMPOIAvjNPUv2+9IOPscARIfYDOeSSQwNG8NQsK4j
+	MQg88DDzjwwXMD2+DFA1ZSGfP6l2+bThAquWUqIdKct42daAP9oS4R2uwHj9bKtgOh3B05I0cVQ
+	hDWYxDymJzVb00cn76KrYzys8uIBT4aQV4+IFR1qHa2v0lOdkeGnRfPFTalJKMrG7ztGyWGrqwx
+	CiXrVLKt9+UJFzL7q5KGdMz42q6Ltjpg5+OgupVOraloLDMOa61wkDGP70dpat2XF5qimuLUbHc
+	qwoM0mTHNk/7r7Zx2YsLrbNKz5TRVbwL5cjaU+R9cXaOPfsvsvLf9z7wFB/AIZBs70N/ZKFi8J7
+	cL4qRhRHwJ/8O2tFhmaCrc7F70rJwgRb+yV+AOhN4OcEUGvjk3gVbA4G4cXSp/RYddBr5eu2HiD
+	l6AhFFI/AHikpfl+uk+uOe3uZqiqiIoRv3Wvali/CpMBQb1ha7
+X-Google-Smtp-Source: AGHT+IGmnXoPJBRPWRXxrGm42XlYBJJRklk3RVgGodF85tXdD3u4LDuB1D/pDhaisP75xaGWbK/9TQ==
+X-Received: by 2002:a05:6102:1621:b0:5ef:a78d:8095 with SMTP id ada2fe7eead31-5efa78d81a4mr3238039137.26.1768235948195;
+        Mon, 12 Jan 2026 08:39:08 -0800 (PST)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-944122d3040sm16765407241.4.2026.01.12.08.39.07
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jan 2026 08:39:07 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5eae7bb8018so2551686137.2
+        for <soc@lists.linux.dev>; Mon, 12 Jan 2026 08:39:07 -0800 (PST)
+X-Received: by 2002:a05:6102:cc8:b0:5dd:a616:69fc with SMTP id
+ ada2fe7eead31-5ecb5ccf089mr5406109137.9.1768235947165; Mon, 12 Jan 2026
+ 08:39:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260112153255.795553-1-arnd@kernel.org> <20260112153255.795553-2-arnd@kernel.org>
+In-Reply-To: <20260112153255.795553-2-arnd@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 12 Jan 2026 17:38:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV91autCQvYmqBfQqTbGXRJN4_Qvg9gbrExXxP=KDuGYA@mail.gmail.com>
+X-Gm-Features: AZwV_Qgo8GK0GmcM1_4lK01dOThbWZHequguqB6ZSDvB8kICyDbgd6OIA8W4fK4
+Message-ID: <CAMuHMdV91autCQvYmqBfQqTbGXRJN4_Qvg9gbrExXxP=KDuGYA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ARM: defconfig: turn off CONFIG_EXPERT
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Arnd,
 
-Since multi_v7_defconfig is meant to be the generic defconfig, many
-users are not going to be experts and it is counterintuitive to have
-CONFIG_EXPERT enabled.
+On Mon, 12 Jan 2026 at 16:35, Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Since multi_v7_defconfig is meant to be the generic defconfig, many
+> users are not going to be experts and it is counterintuitive to have
+> CONFIG_EXPERT enabled.
+>
+> This change has a couple of side-effects:
+>
+>  - CONFIG_NAMESPACES is enabled by default. This adds about 0.2% of
+>   .text, but is already enabled in many board specific configs, and
+>    apparently a requirement for systemd, so this seems like a useful
+>    change.
+>
+>  - CONFIG_DEBUG_MEMORY_INIT is enabled now, adding a tiny bit
+>    of code in the inittext section
+>
+>  - CONFIG_RFKILL, CONFIG_MEDIA_SUPPORT_FILTER and various CONFIG_HID
+>    driver defaults change, so these have to be listed explicitly to
+>    maintain the previous behavior
+>
+>  - CONFIG_SERIAL_SH_SCI_NR_UARTS=20 changes to the default value
+>    of 18, which I understand to be sufficient for any buard, even
 
-This change has a couple of side-effects:
+board
 
- - CONFIG_NAMESPACES is enabled by default. This adds about 0.2% of
-  .text, but is already enabled in many board specific configs, and
-   apparently a requirement for systemd, so this seems like a useful
-   change.
+>    if all UARTS are enabled at the same time
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
- - CONFIG_DEBUG_MEMORY_INIT is enabled now, adding a tiny bit
-   of code in the inittext section
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
- - CONFIG_RFKILL, CONFIG_MEDIA_SUPPORT_FILTER and various CONFIG_HID
-   driver defaults change, so these have to be listed explicitly to
-   maintain the previous behavior
+> --- a/arch/arm/configs/multi_v7_defconfig
+> +++ b/arch/arm/configs/multi_v7_defconfig
 
- - CONFIG_SERIAL_SH_SCI_NR_UARTS=20 changes to the default value
-   of 18, which I understand to be sufficient for any buard, even
-   if all UARTS are enabled at the same time
+> @@ -859,6 +857,18 @@ CONFIG_SND_SOC_WM8960=m
+>  CONFIG_SND_SOC_WM8962=m
+>  CONFIG_SND_SOC_WM8978=m
+>  CONFIG_SND_AUDIO_GRAPH_CARD=m
+> +# CONFIG_HID_A4TECH is not set
+> +# CONFIG_HID_APPLE is not set
+> +# CONFIG_HID_BELKIN is not set
+> +# CONFIG_HID_CHERRY is not set
+> +# CONFIG_HID_CHICONY is not set
+> +# CONFIG_HID_CYPRESS is not set
+> +# CONFIG_HID_EZKEY is not set
+> +# CONFIG_HID_ITE is not set
+> +# CONFIG_HID_KENSINGTON is not set
+> +# CONFIG_HID_REDRAGON is not set
+> +# CONFIG_HID_MICROSOFT is not set
+> +# CONFIG_HID_MONTEREY is not set
+>  CONFIG_USB=y
+>  CONFIG_USB_OTG=y
+>  CONFIG_USB_XHCI_HCD=y
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/configs/multi_v7_defconfig | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+I guess these should be dropped, and the Kconfig logic fixed instead?
+The current "default !EXPERT" makes them default to "y", while we
+probably want to default to "m" when module support is enabled.
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 22c50b60c794..52b2e792ad42 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -3,7 +3,6 @@ CONFIG_NO_HZ_IDLE=y
- CONFIG_HIGH_RES_TIMERS=y
- CONFIG_CGROUPS=y
- CONFIG_BLK_DEV_INITRD=y
--CONFIG_EXPERT=y
- CONFIG_PERF_EVENTS=y
- CONFIG_KEXEC=y
- CONFIG_ARCH_VIRT=y
-@@ -163,7 +162,6 @@ CONFIG_BT_QCOMSMD=m
- CONFIG_CFG80211=m
- CONFIG_MAC80211=m
- CONFIG_RFKILL=y
--CONFIG_RFKILL_INPUT=y
- CONFIG_RFKILL_GPIO=y
- CONFIG_NFC=m
- CONFIG_NFC_DIGITAL=m
-@@ -376,7 +374,6 @@ CONFIG_SERIAL_TEGRA=y
- CONFIG_SERIAL_IMX=y
- CONFIG_SERIAL_IMX_CONSOLE=y
- CONFIG_SERIAL_SH_SCI=y
--CONFIG_SERIAL_SH_SCI_NR_UARTS=20
- CONFIG_SERIAL_MSM=y
- CONFIG_SERIAL_MSM_CONSOLE=y
- CONFIG_SERIAL_VT8500=y
-@@ -676,6 +673,7 @@ CONFIG_REGULATOR_WM8994=m
- CONFIG_CEC_SAMSUNG_S5P=m
- CONFIG_CEC_STM32=m
- CONFIG_MEDIA_SUPPORT=m
-+# CONFIG_MEDIA_SUPPORT_FILTER is not set
- CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_V4L_PLATFORM_DRIVERS=y
-@@ -859,6 +857,18 @@ CONFIG_SND_SOC_WM8960=m
- CONFIG_SND_SOC_WM8962=m
- CONFIG_SND_SOC_WM8978=m
- CONFIG_SND_AUDIO_GRAPH_CARD=m
-+# CONFIG_HID_A4TECH is not set
-+# CONFIG_HID_APPLE is not set
-+# CONFIG_HID_BELKIN is not set
-+# CONFIG_HID_CHERRY is not set
-+# CONFIG_HID_CHICONY is not set
-+# CONFIG_HID_CYPRESS is not set
-+# CONFIG_HID_EZKEY is not set
-+# CONFIG_HID_ITE is not set
-+# CONFIG_HID_KENSINGTON is not set
-+# CONFIG_HID_REDRAGON is not set
-+# CONFIG_HID_MICROSOFT is not set
-+# CONFIG_HID_MONTEREY is not set
- CONFIG_USB=y
- CONFIG_USB_OTG=y
- CONFIG_USB_XHCI_HCD=y
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.39.5
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
