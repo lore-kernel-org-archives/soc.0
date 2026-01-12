@@ -1,46 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFB832E757
-	for <soc@lists.linux.dev>; Mon, 12 Jan 2026 11:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1277D35F8AA
+	for <soc@lists.linux.dev>; Mon, 12 Jan 2026 15:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768218644; cv=none; b=R3paI90nAxNIgA5qeD+1PcIr/3heqswiFceR+dPh4FaVzpKbk72O7hVatV/ElbacHMJzUHiX81fGgxn6IvTF1ocHePpF0KrhJ0SOLzLMks3eXaa0fS9iH8cOvqjJGkm+rfnYrVI5HssrgE0OVB8SX/vzqg9Dlrif6vclSJhgVCw=
+	t=1768232134; cv=none; b=AC/eUs5CBs7R2MuklqaN0hOUbjWZNDbaUjbMurb0+vneMZ6bmj+DtTAIxheQfvYKFr8SNOtHUre+46kAeESZQRHzfcQy4DzluA3CFYgp6lUud0olDWiM6KLMu6VVAZ/rQGcx+GVcXKa4wt0i2qZeonTPqFvVcBVW2NNEbeAk5mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768218644; c=relaxed/simple;
-	bh=2bd7TI9wtx4wQMxm8Kf94vegFIi6+EfhJC6fJ65b65I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pSSjNyae8r2DWiix4w7X4gsG0gMhwko5JMwcrIcZHqUZIU5z2pRKDx+cwM3P4GsYgy7Tx5/mC0SDUFxMaJ97NvsuHdjR/hCzhfikJLIfqefD7Ud5zPf9xVBzmwMch6Z5I2MqSBenFDPByqhZBJS6iC+l086Sb8zhoXDrRoB73WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix)
-	id 39386C19421; Mon, 12 Jan 2026 11:50:44 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 0E8A0C19424;
-	Mon, 12 Jan 2026 11:50:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0E8A0C19424
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A578B497;
-	Mon, 12 Jan 2026 03:50:35 -0800 (PST)
-Received: from usa.arm.com (e133711.arm.com [10.1.197.51])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7A8AA3F694;
-	Mon, 12 Jan 2026 03:50:41 -0800 (PST)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>,
-	arm-scmi@vger.kernel.org
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.20/v7.0
-Date: Mon, 12 Jan 2026 11:50:18 +0000
-Message-ID: <20260112115021.2551442-3-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260112115021.2551442-2-sudeep.holla@arm.com>
-References: <20260112115021.2551442-1-sudeep.holla@arm.com>
- <20260112115021.2551442-2-sudeep.holla@arm.com>
+	s=arc-20240116; t=1768232134; c=relaxed/simple;
+	bh=7hXIqTf3b9quKHMEcBCSHtHVC5OrOtjJELcXHum5F5I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JngKhu06E2erPQSFhOBKhqSk43vjR3M8VDbxoWJThcPeF/AtehIUomUZ2lM4ab8lINByRP0NSsAwMSKmzeu5gFD/fh3ioQZHvzx4wemakKFc7bI9xJhbqq8uXt6tJS1a7nj+wZhKoorqUpEBnwEAjVx3zbV3WC+FDgeAYPFjfG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3awc9pT; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3awc9pT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7D4C16AAE;
+	Mon, 12 Jan 2026 15:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768232133;
+	bh=7hXIqTf3b9quKHMEcBCSHtHVC5OrOtjJELcXHum5F5I=;
+	h=From:To:Cc:Subject:Date:From;
+	b=A3awc9pT4DUhccCjVKMNmkoL6jXL9BjUR4FbZI2Ep2jfSxz1La/BZoLok/V3vAI0v
+	 BXCC6IvO0/5h6mq1/Y8jMKu3MIpC85msBlqfHh9CYt1hlkYiVUm0RL5nzU4ca6Yujf
+	 6pGjOx+H+GLp2p/o1lwchw07KIbcnKAsa3At+sB1MznYDvLgltmGpBIrWfhMTBGZW4
+	 q5MleRdpeUNdG5naRB4bqo/KjFRWANX3IQt6fRO1l6A0hnRrQT3qACn9iW1mUuWn/f
+	 jW4qW7B6cwP4O0EjfI28K0I+ztTOwBX9ieYt92CyJmcRO764xiwbXuG/jJBcQtFIAV
+	 o/y/FuAe05GRQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: soc@lists.linux.dev
+Cc: linux-arm-kernel@lists.infradead.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 1/2] ARM: defconfig: move entries
+Date: Mon, 12 Jan 2026 16:32:54 +0100
+Message-Id: <20260112153255.795553-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -49,81 +45,167 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC Team,
+From: Arnd Bergmann <arnd@arndb.de>
 
-Please pull !
+Some Kconfig files got rearranged, so change the defconfig file
+to put everything back in the order used by 'make savedefconfig'.
 
-Regards,
-Sudeep
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm/configs/multi_v7_defconfig | 31 +++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
--->8
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 7f1fa9dd88c9..22c50b60c794 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -8,6 +8,8 @@ CONFIG_PERF_EVENTS=y
+ CONFIG_KEXEC=y
+ CONFIG_ARCH_VIRT=y
+ CONFIG_ARCH_AIROHA=y
++CONFIG_ARCH_HPE=y
++CONFIG_ARCH_HPE_GXP=y
+ CONFIG_ARCH_SUNPLUS=y
+ CONFIG_ARCH_UNIPHIER=y
+ CONFIG_ARCH_ACTIONS=y
+@@ -50,8 +52,6 @@ CONFIG_ARCH_HI3xxx=y
+ CONFIG_ARCH_HIP01=y
+ CONFIG_ARCH_HIP04=y
+ CONFIG_ARCH_HIX5HD2=y
+-CONFIG_ARCH_HPE=y
+-CONFIG_ARCH_HPE_GXP=y
+ CONFIG_ARCH_MXC=y
+ CONFIG_SOC_IMX50=y
+ CONFIG_SOC_IMX51=y
+@@ -548,12 +548,12 @@ CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_IMX_THERMAL=y
+ CONFIG_QORIQ_THERMAL=m
+ CONFIG_ROCKCHIP_THERMAL=y
+-CONFIG_RCAR_THERMAL=y
+ CONFIG_ARMADA_THERMAL=y
+ CONFIG_BCM2711_THERMAL=m
+ CONFIG_BCM2835_THERMAL=m
+ CONFIG_BRCMSTB_THERMAL=m
+ CONFIG_ST_THERMAL_MEMMAP=y
++CONFIG_RCAR_THERMAL=y
+ CONFIG_TEGRA_SOCTHERM=m
+ CONFIG_TEGRA30_TSENSOR=m
+ CONFIG_GENERIC_ADC_THERMAL=m
+@@ -715,7 +715,6 @@ CONFIG_VIDEO_ADV7604_CEC=y
+ CONFIG_VIDEO_ML86V7667=m
+ CONFIG_IMX_IPUV3_CORE=m
+ CONFIG_DRM=y
+-CONFIG_DRM_I2C_NXP_TDA998X=m
+ CONFIG_DRM_NOUVEAU=m
+ # CONFIG_DRM_NOUVEAU_CH7006 is not set
+ # CONFIG_DRM_NOUVEAU_SIL164 is not set
+@@ -741,15 +740,16 @@ CONFIG_DRM_TEGRA=y
+ CONFIG_DRM_STM=m
+ CONFIG_DRM_STM_DSI=m
+ CONFIG_DRM_PANEL_LVDS=m
+-CONFIG_DRM_PANEL_SIMPLE=y
+-CONFIG_DRM_PANEL_EDP=y
+-CONFIG_DRM_PANEL_SAMSUNG_LD9040=m
+ CONFIG_DRM_PANEL_ORISETECH_OTM8009A=m
+ CONFIG_DRM_PANEL_RAYDIUM_RM68200=m
++CONFIG_DRM_PANEL_SAMSUNG_LD9040=m
+ CONFIG_DRM_PANEL_SAMSUNG_S6E63J0X03=m
+ CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0=m
+ CONFIG_DRM_PANEL_SHARP_LQ101R1SX01=m
++CONFIG_DRM_PANEL_EDP=y
++CONFIG_DRM_PANEL_SIMPLE=y
+ CONFIG_DRM_DISPLAY_CONNECTOR=m
++CONFIG_DRM_I2C_NXP_TDA998X=m
+ CONFIG_DRM_LVDS_CODEC=m
+ CONFIG_DRM_NXP_PTN3460=m
+ CONFIG_DRM_PARADE_PS8622=m
+@@ -789,9 +789,9 @@ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+ CONFIG_SOUND=m
+ CONFIG_SND=m
+-CONFIG_SND_HDA_TEGRA=m
+ CONFIG_SND_HDA_INPUT_BEEP=y
+ CONFIG_SND_HDA_PATCH_LOADER=y
++CONFIG_SND_HDA_TEGRA=m
+ CONFIG_SND_HDA_CODEC_REALTEK=m
+ CONFIG_SND_HDA_CODEC_REALTEK_LIB=m
+ CONFIG_SND_HDA_CODEC_ALC269=m
+@@ -814,6 +814,8 @@ CONFIG_SND_PXA910_SOC=m
+ CONFIG_SND_SOC_QCOM=m
+ CONFIG_SND_SOC_APQ8016_SBC=m
+ CONFIG_SND_SOC_ROCKCHIP=m
++CONFIG_SND_SOC_SH4_FSI=m
++CONFIG_SND_SOC_RCAR=m
+ CONFIG_SND_SOC_ROCKCHIP_SPDIF=m
+ CONFIG_SND_SOC_ROCKCHIP_MAX98090=m
+ CONFIG_SND_SOC_ROCKCHIP_RT5645=m
+@@ -824,8 +826,6 @@ CONFIG_SND_SOC_SNOW=m
+ CONFIG_SND_SOC_ODROID=m
+ CONFIG_SND_SOC_ARNDALE=m
+ CONFIG_SND_SOC_SAMSUNG_MIDAS_WM1811=m
+-CONFIG_SND_SOC_SH4_FSI=m
+-CONFIG_SND_SOC_RCAR=m
+ CONFIG_SND_SOC_STI=m
+ CONFIG_SND_SOC_STM32_SAI=m
+ CONFIG_SND_SOC_STM32_I2S=m
+@@ -1002,7 +1002,6 @@ CONFIG_RTC_DRV_MAX8997=m
+ CONFIG_RTC_DRV_MAX77686=y
+ CONFIG_RTC_DRV_RK808=m
+ CONFIG_RTC_DRV_RS5C372=m
+-CONFIG_RTC_DRV_PCF85063=m
+ CONFIG_RTC_DRV_PCF85363=m
+ CONFIG_RTC_DRV_BQ32K=m
+ CONFIG_RTC_DRV_TWL4030=y
+@@ -1013,6 +1012,7 @@ CONFIG_RTC_DRV_S35390A=m
+ CONFIG_RTC_DRV_RX8581=m
+ CONFIG_RTC_DRV_EM3027=y
+ CONFIG_RTC_DRV_S5M=m
++CONFIG_RTC_DRV_PCF85063=m
+ CONFIG_RTC_DRV_DA9063=m
+ CONFIG_RTC_DRV_EFI=m
+ CONFIG_RTC_DRV_DIGICOLOR=m
+@@ -1046,9 +1046,6 @@ CONFIG_OWL_DMA=y
+ CONFIG_PL330_DMA=y
+ CONFIG_STE_DMA40=y
+ CONFIG_ST_FDMA=m
+-CONFIG_STM32_DMA=y
+-CONFIG_STM32_DMAMUX=y
+-CONFIG_STM32_MDMA=y
+ CONFIG_TEGRA20_APB_DMA=y
+ CONFIG_UNIPHIER_MDMAC=y
+ CONFIG_XILINX_DMA=y
+@@ -1057,6 +1054,9 @@ CONFIG_DW_DMAC=y
+ CONFIG_RZN1_DMAMUX=m
+ CONFIG_RCAR_DMAC=y
+ CONFIG_RENESAS_USB_DMAC=m
++CONFIG_STM32_DMA=y
++CONFIG_STM32_DMAMUX=y
++CONFIG_STM32_MDMA=y
+ CONFIG_VIRTIO_PCI=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_STAGING=y
+@@ -1094,12 +1094,12 @@ CONFIG_TI_MESSAGE_MANAGER=y
+ CONFIG_QCOM_APCS_IPC=y
+ CONFIG_STM32_IPCC=m
+ CONFIG_QCOM_IPCC=y
++CONFIG_QCOM_IOMMU=y
+ CONFIG_OMAP_IOMMU=y
+ CONFIG_OMAP_IOMMU_DEBUG=y
+ CONFIG_ROCKCHIP_IOMMU=y
+ CONFIG_TEGRA_IOMMU_SMMU=y
+ CONFIG_EXYNOS_IOMMU=y
+-CONFIG_QCOM_IOMMU=y
+ CONFIG_REMOTEPROC=y
+ CONFIG_OMAP_REMOTEPROC=m
+ CONFIG_OMAP_REMOTEPROC_WATCHDOG=y
+@@ -1135,6 +1135,7 @@ CONFIG_ARCH_TEGRA_124_SOC=y
+ CONFIG_SOC_TI=y
+ CONFIG_KEYSTONE_NAVIGATOR_QMSS=y
+ CONFIG_KEYSTONE_NAVIGATOR_DMA=y
++CONFIG_TI_PRUSS=m
+ CONFIG_RASPBERRYPI_POWER=y
+ CONFIG_QCOM_CPR=y
+ CONFIG_QCOM_RPMHPD=y
+-- 
+2.39.5
 
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
-
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-7.0
-
-for you to fetch changes up to 24a0ffefe3f097aa8fe6997a731a71487dd0721f:
-
-  firmware: arm_scmi: Remove legacy protocol versioning logic (2025-12-27 20:09:30 +0000)
-
-----------------------------------------------------------------
-Arm SCMI updates for v7.0
-
-A set of cleanups, refactoring, and fixes to the Arm SCMI stack:
-
-1. Rework protocol version negotiation by moving version discovery and
-   downgrade handling into the SCMI core and performing negotiation early,
-   before protocol initialization. Remove legacy per-protocol versioning
-   logic now made redundant by centralized SCMI handling.
-
-2. Increase the internal MAX_OPPS limit in the SCMI performance protocol
-   to 64, allowing platforms with larger OPP tables to be fully supported.
-
-3. Reduce duplicated boilerplate in pinctrl and related protocols by
-   consolidating validation and lookup logic in protocol get info helpers.
-
-4. Refactor reset protocol domain handling by introducing a shared lookup
-   helper, ensuring consistent validation and error reporting.
-
-5. Fix potential undefined behaviour by properly initializing pointers
-   annotated with the __free attribute.
-
-----------------------------------------------------------------
-Ally Heev (1):
-      firmware: arm_scmi: Fix uninitialized pointers with __free attr
-
-Artem Shimko (1):
-      firmware: arm_scmi: Refactor reset domain handling
-
-Cristian Marussi (2):
-      firmware: arm_scmi: Rework protocol version negotiation logic
-      firmware: arm_scmi: Remove legacy protocol versioning logic
-
-Dan Carpenter (1):
-      firmware: arm_scmi: Move boiler plate code into the get info functions
-
-Vivek Aknurwar (1):
-      firmware: arm_scmi: Increase performance MAX_OPPS limit to 64
-
- drivers/firmware/arm_scmi/base.c                   |  11 +-
- drivers/firmware/arm_scmi/clock.c                  |  24 ++---
- drivers/firmware/arm_scmi/driver.c                 |  98 +++++++++++++----
- drivers/firmware/arm_scmi/perf.c                   |  59 ++++------
- drivers/firmware/arm_scmi/pinctrl.c                | 120 +++++++++------------
- drivers/firmware/arm_scmi/power.c                  |  18 +---
- drivers/firmware/arm_scmi/powercap.c               |  21 ++--
- drivers/firmware/arm_scmi/protocols.h              |   9 +-
- drivers/firmware/arm_scmi/reset.c                  |  68 ++++++------
- drivers/firmware/arm_scmi/sensors.c                |  22 ++--
- drivers/firmware/arm_scmi/shmem.c                  |   5 +-
- drivers/firmware/arm_scmi/system.c                 |  14 +--
- drivers/firmware/arm_scmi/vendors/imx/imx-sm-bbm.c |  10 +-
- drivers/firmware/arm_scmi/vendors/imx/imx-sm-cpu.c |   9 +-
- drivers/firmware/arm_scmi/vendors/imx/imx-sm-lmm.c |   9 +-
- .../firmware/arm_scmi/vendors/imx/imx-sm-misc.c    |  10 +-
- drivers/firmware/arm_scmi/voltage.c                |  13 +--
- 17 files changed, 238 insertions(+), 282 deletions(-)
