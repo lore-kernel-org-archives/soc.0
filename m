@@ -1,98 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E4A13D521
-	for <soc@lists.linux.dev>; Thu, 15 Jan 2026 02:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA642BE05F
+	for <soc@lists.linux.dev>; Thu, 15 Jan 2026 04:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768442628; cv=none; b=fwAi3DOzoLQlDtiED/HofzT/xCvxaEI1WGimK3mIxpX1QDCB4jj87vpCM+eRrVVYcpVZ3+uELKZC7zBy84CIJz7YB4vHsi9v2eAh7NPCmYHfHVQlKwbJiHpZJ7ohLN6EeHwgaUpxf5zjdtgoyWJJNMckzhKxRGR9+eK6hlzbjXg=
+	t=1768450306; cv=none; b=sfUxXDOuvz9nAuSAX1WEwT3NFuIplO/TS5QaqcOnJOv1ZjTfXyIUoyius5rNYAXIi9Qzgc1xpR9/Yr1Xp3Y9xsdgkt/tHGx6kTYBMDlVjobNyG1STktKnLdjgyG9bDPLcEkvFS3Mhc2ls4XjDRMsAOJWRP9EdXpw52c7amccXno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768442628; c=relaxed/simple;
-	bh=01/BcMefdiQJAFqcbKBCElf2up5LTOkivGiQ1oLjw8U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pfYR7nrx/jB8eIJd99bgsxtA1CgTPEx4fI1AOC8kP+a1V27kPT8sISsqcHTIh8Wjy4H0Ce+nfgGU6FOG+gaXTYUJv3N7/fXRz+t11oEsI0qsUGWvYy7bVBR14XHFHrtCKy+Zymq9yVQAwKhClpAGmjV2bcTQtt/np3jL+9H6AEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVn8fEIA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768450306; c=relaxed/simple;
+	bh=kkM52wtwVyVjW+QAm9LKFKkHw3APGb6+WhbcpmuFrq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HdDIxJXaRz/4wGGdO8JgC7u7Ai7D1fmUqsFJwzn4y8cnZK8ZH9jw6dC8mgy+YKyUV7TdktMALB8HYxnSZrBqlGT9m6aNzf+S5EhHXvFV8+oz5AwBI6TKspvR1UHwokPOgDelauLGk8ouY4cVyCu67m4QwNluxy1aZbzX7WfoWNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qlNUhm89; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVn8fEIA"
-Received: by smtp.kernel.org (Postfix)
-	id 006C2C19423; Thu, 15 Jan 2026 02:03:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC19C4CEF7;
-	Thu, 15 Jan 2026 02:03:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768442627;
-	bh=01/BcMefdiQJAFqcbKBCElf2up5LTOkivGiQ1oLjw8U=;
-	h=From:To:Cc:Subject:Date:From;
-	b=VVn8fEIA0P2SRgOgkH9L9xDnNrFMwSMr+FuTiVabG/Cdb0/fC+lXl31t27L0XMF9r
-	 wUcwVaavEX9Jx1gkCtnOKvybhVsLKNfNZsXG7+zWhSsh9jp2xj7QRNPY6Vtr6S9jNP
-	 QOF01QFmkGXT3gcQiqm/KOzcXTMVg7n2u8gbBzGTGP1j7L/VKYWpDo4bRGoXsGjZCq
-	 OGNT4cFmUE45ETlIKcWHDGxSFPXIqaD++f9Pjjn5PSbpT6TYhB3sY4CtnDaDSJpbvc
-	 uWDmI+0hZi6oltmQM/lADkEDKCDVydRFbhGsbEk8Jy8PhDovfFXCrbtuMqP5/C6u2+
-	 PZjgfQyH19yXQ==
-From: Yixun Lan <dlan@kernel.org>
-To: spacemit@lists.linux.dev
-Cc: Yixun Lan <dlan@kernel.org>,
-	soc@kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: update email address for Yixun Lan
-Date: Thu, 15 Jan 2026 10:03:35 +0800
-Message-ID: <20260115-11-maintainer-dlan-v1-1-64bb698da846@kernel.org>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qlNUhm89"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-81e7477828bso241261b3a.0
+        for <soc@lists.linux.dev>; Wed, 14 Jan 2026 20:11:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1768450304; x=1769055104; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xP2VPIUiLJoH99MGWGrtf+rn+/TD63H55qh3heQER8c=;
+        b=qlNUhm89fgrbiXN2sA1Bu9YgwAy5lUKq0mE47yZmGcCMiqgY+Yo6Vt8v7uPXSM4aMB
+         fdfVAGE8m4/pwk92iBXWjwfRKgfCI7jsNrHAkARU6hTcfxUhCYsgq41rM7AVbzFRmjNs
+         Y/C77KluLUnC5Cvy+2mtx139iwhS3TFpDyEVeibz0jHfSTUMeqOLZMMXnnRkR0Nbe5TR
+         6IOKwC9lsRo4Z2sqdHue8bRuDi+XI+xgmSRdR7PUTyjytGBErqdCbn1huP7/0v1UwR2u
+         V80rtIO+bHqyKO0dJaj0yOZZqq/TXUzvPWWSB8EjRkz9KeVb8bXg7Jo+/bxYSeTw4s1l
+         beqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768450304; x=1769055104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xP2VPIUiLJoH99MGWGrtf+rn+/TD63H55qh3heQER8c=;
+        b=ouVcdcXXgBCn2kA2ClGbBNiQRVGVG7XIfSxT1T5StiKb3Uf992YS1BXssvov9Y82aw
+         8lhcNXYbVpjyAD1ssIfvrm79AjTw9GTMwa8DCD9RpN4EI1pU24MG1pQ8eVk7NcO6FkZh
+         EKDp7RZFh1qFwY7EEP3b04IRcGiFMLasA+qdiLwTK+9NRglMvdYmzleyjDjwYAKwvDM/
+         7zDLcgdxAuweFhb7SItUKUwBGTZM8TI7luXpmxjkz+NEJtR6rrV6IdJoXW8Rilx6IDX2
+         3OkpVRJjxT56Y97hT7ts40BGiAfMFkhHiopGqtLdBEfPR5kEbJc3f4T6+Zd/ltRnIhhU
+         ripw==
+X-Forwarded-Encrypted: i=1; AJvYcCXzePTAtCwD8N/iQFrvrk9AZ80OOXk6X5+MxF34ETO/6jbuBk6EcDgqrowOv9Dzq9+br68=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxwhrr9H5sxjqf+QgD3UZbNrMGpGUZOk8Mo+Rt0I1+LHFOEsgxT
+	gBz7f/kHfv+GgdkkD4J6n4vIJLBE82OEcQcgQceKRTO9iOCJDaepwvZGf8DNDzmqtTs=
+X-Gm-Gg: AY/fxX7b9YvC4r/diOMmiSg+JPGVGSgoLRS0i95c3p5wustJUuFgKzL3cvVaw/JFn/h
+	XBtMIrJSb4wbauo6FmUWE4u94BkmF/Mp60l11dd5ARZz9Oi2n81Dwo1EKNuXTXVrfwG1+8yyeEd
+	4IdWeXEhKA5FzN2fVHbgQkjvrvgDGtcBuCpJKNbxnk/cuBsrnogcTSteuhMRv8XQVyuDn6bcbkh
+	cx12mtIiCpyGCtDytG54LSfUdqNavYudyAlmIAgay2Sc3ScMvwVvaXrsPrI6rLGZz+gJ6UJNhXb
+	1lgoMV/xMW7IwmBZVPiW1aakeGZAyxlYScjSCFei36VF15s5ySCBRR+DAOy9/hw3ct528mklE9U
+	rnOweLkBDG3vyuBtb0st/6dl+Sl/unGJUD8n6gBRxwfKa7tWuusJXz1ctG1tWy1k1tR63KaNLIz
+	3sdcC2bXFC+hw=
+X-Received: by 2002:a05:6a00:886:b0:81f:413e:5b6c with SMTP id d2e1a72fcca58-81f8efaca14mr1910211b3a.5.1768450304213;
+        Wed, 14 Jan 2026 20:11:44 -0800 (PST)
+Received: from localhost ([122.172.80.63])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81f8e4f19c5sm1038158b3a.23.2026.01.14.20.11.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 20:11:43 -0800 (PST)
+Date: Thu, 15 Jan 2026 09:41:41 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v2] arm/arm64: dts: st: Drop unused .dtsi
+Message-ID: <idqqwx3svrauv3e26dce4uofevcyd3a6lltsjvpeovp6nse4le@yqym3jc25xr2>
+References: <20260113201340.36950-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20260115-11-maintainer-dlan-59b2ed54999e
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1535; i=dlan@kernel.org; h=from:subject:message-id; bh=01/BcMefdiQJAFqcbKBCElf2up5LTOkivGiQ1oLjw8U=; b=owEB6QIW/ZANAwAKATGq6kdZTbvtAcsmYgBpaErM36niadQaWqw5X0frjrYPjc3l8ULtEaMp9 27u05vS4WaJAq8EAAEKAJkWIQS1urjJwxtxFWcCI9wxqupHWU277QUCaWhKzBsUgAAAAAAEAA5t YW51MiwyLjUrMS4xMSwyLDJfFIAAAAAALgAoaXNzdWVyLWZwckBub3RhdGlvbnMub3BlbnBncC5 maWZ0aGhvcnNlbWFuLm5ldEI1QkFCOEM5QzMxQjcxMTU2NzAyMjNEQzMxQUFFQTQ3NTk0REJCRU QACgkQMarqR1lNu+3+WA//Y7GmKsRetgi8aRvMXT/Aua6pHOk+QCRE6HwEt/KuzCX1BSVcyRlfG VMKZCuyhXv9bZk3MIFofsxuf7MHT22sw03IN5+njd7s/Ln6QWkaLRSbgcuNgGXW7eiqbZt7xre7 H4mTHV76lVZRdL5p+341Z2/0dD1b2U1Gmzi7j4HVc3f57BtUJlxb+myMdrNbgcTJMJcSwJhdaia rWk7+59EusrC1QvveFPV603NGzVIh+hs17xL/7pAfumLiyQ3TVVgoNBjtI6i3SevofQ63cUroHI QUmrzFKb0g897pirSMrvL9xj5AxhNv7/k2tCk1sKmlrORAaS8uqgZ9hX+4krLYTV/stuyppVN2v TeaGP6UJ9SIKYGBU+YpowJvPyitAQOO9+KW0k/amm2hh5Nnsp3MxLIRoL8LbPBbZkXpDTzAEAIb M/lx9Au8MWj+F/Z82R1m4IS8OezDCyyV1Fr4ii4QRAU8koCeVzazigBInQUCfipRVsY+szRVE49 J33q2hVE7udSPlhrcBZ/UwGBurfeUPVZxxYz7OYf20UvsvN7idsph5JJIFXlcnid3fcdRjU4RaC rEVHWBpzQ10irMr/+QwZ5zhz/zXVNobNJW16IvNP8fWszT5iJDfhwG2VULebb9xt0ShVZxi35hD dbo48wuamlAFwo32yMG02jR6T8NT10=
-X-Developer-Key: i=dlan@kernel.org; a=openpgp; fpr=50B03A1A5CBCD33576EF8CD7920C0DBCAABEFD55
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260113201340.36950-1-robh@kernel.org>
 
-Switch my email address to kernel.org account for more convenience.
-Also add entries to the mailmap.
+On 13-01-26, 14:13, Rob Herring (Arm) wrote:
+> These .dtsi files are not included anywhere in the tree and can't be
+> tested.
+> 
+> Reviewed-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+> v2:
+>  - Drop erroneous QCom .dtsi
+> ---
+>  arch/arm/boot/dts/st/spear320s.dtsi           | 24 -------
 
-Signed-off-by: Yixun Lan <dlan@kernel.org>
----
-I will send it along with PR to SoC maintainer via SpacemiT's SoC tree
----
- .mailmap    | 2 ++
- MAINTAINERS | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-diff --git a/.mailmap b/.mailmap
-index 84309a39d329..fa9296de463e 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -868,6 +868,8 @@ Wolfram Sang <wsa@kernel.org> <wsa@the-dreams.de>
- Yakir Yang <kuankuan.y@gmail.com> <ykk@rock-chips.com>
- Yanteng Si <si.yanteng@linux.dev> <siyanteng@loongson.cn>
- Ying Huang <huang.ying.caritas@gmail.com> <ying.huang@intel.com>
-+Yixun Lan <dlan@kernel.org> <dlan@gentoo.org>
-+Yixun Lan <dlan@kernel.org> <yixun.lan@amlogic.com>
- Yosry Ahmed <yosry.ahmed@linux.dev> <yosryahmed@google.com>
- Yu-Chun Lin <eleanor.lin@realtek.com> <eleanor15x@gmail.com>
- Yusuke Goda <goda.yusuke@renesas.com>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5b11839cba9d..8417c0c8cc72 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22518,7 +22518,7 @@ F:	drivers/mailbox/riscv-sbi-mpxy-mbox.c
- F:	include/linux/mailbox/riscv-rpmi-message.h
- 
- RISC-V SPACEMIT SoC Support
--M:	Yixun Lan <dlan@gentoo.org>
-+M:	Yixun Lan <dlan@kernel.org>
- L:	linux-riscv@lists.infradead.org
- L:	spacemit@lists.linux.dev
- S:	Maintained
-
----
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20260115-11-maintainer-dlan-59b2ed54999e
-
-Best regards,
 -- 
-Yixun Lan <dlan@kernel.org>
-
+viresh
