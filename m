@@ -1,137 +1,209 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD4317BCA
-	for <soc@lists.linux.dev>; Fri, 16 Jan 2026 13:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768569434; cv=none; b=JM/TAt6NDrirtVHt0Q+niO2xM+mkuBBQ9uI6F0k0FwKPKyxHoPkyBb3FDy/c3Brk0uc+4/CVgkbNNNajmRGKxihxWApf+2wORZ58gx6LGcgGhrSwqd0FbFgwlu4e81S3VR1/j5h+nS0qQOmvnnH79ikHg7mPttgsDcIQ2CflWek=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768569434; c=relaxed/simple;
-	bh=iw9AAhLT0LshPbazZg9/+/V9To0CbwXv4vifKCG8/iw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OUSrYEbnlONbgH5tHLuTtf373A47UqzSXSnlFDvmotueKzRrFbqivIq+6yS8cbGEFnU03+3NI78bwp3/9TX5PxqGfasTCsWFajLywDsKEPn/ge5Zue+0+IrU/Z6QLqI19D6S+3v45dKM2rlNemORK/orQ/VMTQHnpk+A5SNtHes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=HffbEYQR; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=HffbEYQR; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26825279DB4
+	for <soc@lists.linux.dev>; Fri, 16 Jan 2026 16:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=91.207.212.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768581126; cv=fail; b=siuC5A8zSc4AuYEhy5Pqo3rf9T+lY666KiUPGor5L0EXlGMSZ6ZH5Qf+YVDsQ9quWT+4Gnx3aC9Q+r9r9r7EPJqxPO/4Rzw1L2KL29epqBtMLi4+tvtRP+FHGfDfK0yL85ewJX3myM6TO+aPDEYd85QM87/IKJELHRyhiEyaqFM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768581126; c=relaxed/simple;
+	bh=pTAJQuvO4tGELBeVl49odiNsSdh6vOgsjEQXPLxgTm8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gSo6riHNq94LZrqjlfpah+oQvO+pCCZtP17gGkcxm2S3B7iSsY5GWyR/ZXaAJLGp/2FIPJ3MLvi5VJicT7mxDZgBppVVbuXqQQwi3HH/VTYi3OLrEU7S5FFVE1ZHr2lpoK2pmlKyCg9OPKLNCUDMR91y2qKFnBecL0TqjwLLvPg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=KSQwzHis; arc=fail smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="HffbEYQR";
-	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="HffbEYQR"
-Received: by smtp.kernel.org (Postfix)
-	id 0E659C19421; Fri, 16 Jan 2026 13:17:14 +0000 (UTC)
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9E05BC16AAE;
-	Fri, 16 Jan 2026 13:17:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E05BC16AAE
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=mleia.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1768569423; bh=iw9AAhLT0LshPbazZg9/+/V9To0CbwXv4vifKCG8/iw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=HffbEYQRZqRlfVaG19ZFgQZSMVRBYUmJvUF9z0Rq14zi1D5amx82ePGlDXUa5bqdO
-	 Eno92g0WCzUReZbAU7yUiusgONRS67ZfU8Dpj4syb4GKSwswkFZBhxGeJVKC0otxbf
-	 GWLsI+3lMy0RoGuAIihFaE6yom5WGSxGIwe5v+S0hl9HLbmiHUqMT9VwJonZOUveir
-	 K7jy7lh135XgRxjkHZK/dNGVAVE+gEJdm51rdxFxowKO2A3v2rU2nedfsuTnLVTDuK
-	 6eJIzyB0DmYmPVm2Y4qSIrNWc5AlxkNAhGgqnv8A2Cp/2k622UCpw20X7SP86F1uYs
-	 IUd7/NhusguKA==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-	by mail.mleia.com (Postfix) with ESMTP id C57503ED230;
-	Fri, 16 Jan 2026 13:17:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1768569423; bh=iw9AAhLT0LshPbazZg9/+/V9To0CbwXv4vifKCG8/iw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=HffbEYQRZqRlfVaG19ZFgQZSMVRBYUmJvUF9z0Rq14zi1D5amx82ePGlDXUa5bqdO
-	 Eno92g0WCzUReZbAU7yUiusgONRS67ZfU8Dpj4syb4GKSwswkFZBhxGeJVKC0otxbf
-	 GWLsI+3lMy0RoGuAIihFaE6yom5WGSxGIwe5v+S0hl9HLbmiHUqMT9VwJonZOUveir
-	 K7jy7lh135XgRxjkHZK/dNGVAVE+gEJdm51rdxFxowKO2A3v2rU2nedfsuTnLVTDuK
-	 6eJIzyB0DmYmPVm2Y4qSIrNWc5AlxkNAhGgqnv8A2Cp/2k622UCpw20X7SP86F1uYs
-	 IUd7/NhusguKA==
-Received: from mail.mleia.com (91-159-24-186.elisa-laajakaista.fi [91.159.24.186])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.mleia.com (Postfix) with ESMTPSA id 1D01A3ECA9B;
-	Fri, 16 Jan 2026 13:17:02 +0000 (UTC)
-From: Vladimir Zapolskiy <vz@mleia.com>
-To: soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Drew Fustini <fustini@kernel.org>,
-	Frank Li <Frank.Li@nxp.com>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] NXP LPC32xx device tree changes for v6.20
-Date: Fri, 16 Jan 2026 15:16:37 +0200
-Message-ID: <20260116131637.101296-1-vz@mleia.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="KSQwzHis"
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60GG9ddU1682518;
+	Fri, 16 Jan 2026 17:31:36 +0100
+Received: from gvxpr05cu001.outbound.protection.outlook.com (mail-swedencentralazon11013029.outbound.protection.outlook.com [52.101.83.29])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4bq94k35kq-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Fri, 16 Jan 2026 17:31:36 +0100 (CET)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=enuIRkBIcvay/36teFvzoDF/wJR8BJZQFxyX72/TY16V2oG0aBs9NR5g2BNVIbGJBzE+WeGG6lXaUhmqJ0rlJYNnaGdTnYjT0LeGHb0W/RNQB+TA2rb4k6AkmlgL32VK6Tl+lRfeoXq2MPTaAQZcjvSiGKL0SR6S3WYNA9tvVUJq0fA3JvtQtRt/Q90lIiAscsf8epexEE/swpLgBShovHkac6cbudOwwLvn2FxGjxSiF9W1stcMgORCayzuswqAeMOCniMraslZ/f4zRqwEuSRKCv56K1EBrDQv70haf2lPVGEkCtBGPI/MIS0yyal2vo/wpykv2dDY14qfYV3INw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3NWBBrQwsD6pUIVyRPrwI/MHLBw5cBhLdN2ZEoHg2Tk=;
+ b=ogXQ4hTFYg6RPC50+kr4R2H3K6W2PkVnGuA/VXhx4T4wPoKNuDMJ1FcfN0cdxebtenhGgDGgd42v0CpNlECjbCGgNV6P6hyADc5NcJrte50/koTPNVf7WkQKOvO52z3ynkYDpYRA7KVbPfmEOwLUmaj8vFb6TDOaQRg2lmstDYo3aU7h+QhCCGXKlZgEg+Mh0vdJhBZ/GZkRLMyIXH7xMF5PJzTiKUuJ3vxT8Oo/Oc0p/e3PJ0plFHr7cfZ7F2qZt8pwBBaEV6uEOY1BtQVQYZQ3c8JwzhftLUmPW9kT0eaAmxZXTpcwuu8nzCt5CEdaNt1u/8MTz39oRDWXy2+vWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 164.130.1.60) smtp.rcpttodomain=kernel.org smtp.mailfrom=foss.st.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3NWBBrQwsD6pUIVyRPrwI/MHLBw5cBhLdN2ZEoHg2Tk=;
+ b=KSQwzHisRPSJ73CueyJRDilkTZxq7x08Z0Be3yuwEprkYWtaH/Do+YSwPEwFiMQb6hI5T1OzFCoicQT25cbdPa/kFCn3PQaJo8D9ksD+eoOM9+Pq15+j/2RQe5SNryt9qEwVAF+gtUSGe9imRnW4lnGq5ecYBLorpgCrwPKBlHW8k8IK8rY2zsR+a5ylbGRy3EruG45mrbDuM/2t69pFYBVQrhANH4dl9ivxAoIKpq310K/igm4N6wKuudu7l2WarUe63kd+eaegeL2AMTdYUweIkpRMNrAxK8Jkn7t8AKQyaXCpufhTIKCMzfVa73+7Q7cmsLTm0YJVL4BHDFttVQ==
+Received: from DB8PR06CA0048.eurprd06.prod.outlook.com (2603:10a6:10:120::22)
+ by FRWPR10MB9324.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:d10:177::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.6; Fri, 16 Jan
+ 2026 16:31:32 +0000
+Received: from DB1PEPF000509EA.eurprd03.prod.outlook.com
+ (2603:10a6:10:120:cafe::a9) by DB8PR06CA0048.outlook.office365.com
+ (2603:10a6:10:120::22) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.7 via Frontend Transport; Fri,
+ 16 Jan 2026 16:31:32 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.60)
+ smtp.mailfrom=foss.st.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=foss.st.com;
+Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
+ designate 164.130.1.60 as permitted sender) receiver=protection.outlook.com;
+ client-ip=164.130.1.60; helo=smtpO365.st.com;
+Received: from smtpO365.st.com (164.130.1.60) by
+ DB1PEPF000509EA.mail.protection.outlook.com (10.167.242.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9520.1 via Frontend Transport; Fri, 16 Jan 2026 16:31:31 +0000
+Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpO365.st.com
+ (10.250.44.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Fri, 16 Jan
+ 2026 17:32:49 +0100
+Received: from [10.48.86.79] (10.48.86.79) by STKDAG1NODE2.st.com
+ (10.75.128.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Fri, 16 Jan
+ 2026 17:31:30 +0100
+Message-ID: <7c380ade-97df-4908-b571-d08e5437c72e@foss.st.com>
+Date: Fri, 16 Jan 2026 17:31:30 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20260116_131703_826397_369B0FC1 
-X-CRM114-Status: UNSURE (   9.06  )
-X-CRM114-Notice: Please train this message. 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] arm/arm64: dts: st: Drop unused .dtsi
+To: "Rob Herring (Arm)" <robh@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <soc@lists.linux.dev>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20260113201340.36950-1-robh@kernel.org>
+Content-Language: en-US
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20260113201340.36950-1-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ENXCAS1NODE2.st.com (10.75.128.138) To STKDAG1NODE2.st.com
+ (10.75.128.133)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509EA:EE_|FRWPR10MB9324:EE_
+X-MS-Office365-Filtering-Correlation-Id: 32c59e16-fb3d-493f-d73b-08de551cb522
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|1800799024|36860700013|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SU4rZ0plZUk5aStZTHdmeldpTzdzcUNEUmJHMngxWG9MM2hHdWJkTitiTEVK?=
+ =?utf-8?B?ME4yQmhCY0gvUVZuRWNlcmxXYzFDNGdUWnpZekpZRnc5Vy8wenJzcGp2RWFs?=
+ =?utf-8?B?MUpCemZzc0pxYmN3SENXOWtkTmpjRE1UWXlGS3JGUktuUEM3aHFNd2E5Tm9t?=
+ =?utf-8?B?SGU4a00weEZFd29SaXNwTFZyMnBaWkV6RnI4N1o4NThpalN0ZzJOR3ZKS0Yr?=
+ =?utf-8?B?dkFMcXNMbk94NEorVEg5UHM3R3VDcVRrZ3ExYk9yOXVBakhpZGJ0VGhkY3d5?=
+ =?utf-8?B?eC9FTE1nV0E2SWdkSG4rSzRsNEJxcDZlWUttYXg1eG8yM0hGc1NLbUlJa3VF?=
+ =?utf-8?B?OUdPNWZoT3JaNG5NbFNJNVM4VEd4VVZ0QndkT0tHZjIxN2ZVeFRROEg0VXND?=
+ =?utf-8?B?dnZtWWtaN0l5QjFsa0lheGhkTGlpU1BDcURzNGpIMWt0U2tuczNOT0RSbE1U?=
+ =?utf-8?B?VXBNTFpNUkl1b1B3N2lPZUw3cXNXc3p3eHlqRE9UVHl2YXFhUWZsbzhaYkRG?=
+ =?utf-8?B?NG1KbTg4Wjh6VFFGK05KcTNsWjNtYll2bzhFUkZOeW9TTEVpL283cnVlOEJE?=
+ =?utf-8?B?YkJoYnJPRVZZWm9VelRlL2E1MFdKSUoyTG4yTXcwZzFaNkdDdEtzVTNpUHBC?=
+ =?utf-8?B?V2lyQUR6SmhMcTRWOU9DbjhKWEdRUEttS0FjRW10eWtyWFh4aTRpT0RFRWFm?=
+ =?utf-8?B?RFVIYTI2YVBUaG9TWW5naXhYdEZZbDc1RFU2SGpPa1l0d01DZC9lSXZmUmR4?=
+ =?utf-8?B?bnMwY3o1eW1NbFhuSXBzU1RHNFkyRVA3aHlISEpxZGNsUkREeGRKZnZScUEw?=
+ =?utf-8?B?VTdZS2laMHZ1YlpXMG9uak80ZzdwZW1MUWc2a3RJcU9pd2NPREJONGxSYmo0?=
+ =?utf-8?B?L0dTQ2NpenlYc1E1YkcraVQ2T0RGZFNkd1g5cHZBWDJ2anpBUkhEcXRpYVBi?=
+ =?utf-8?B?QVVwU0cwNGpWV0locDg1WXRHYStaSWlINkJIQ1JUN1lYdnZVZFM0dnBKNDhN?=
+ =?utf-8?B?VDdMeXNIRXc0TlBHSzR5UzE2VGp3KzU4d2lNTWZPS29BeXNIM0Q4RU92Qzlj?=
+ =?utf-8?B?ZlpuNVFDZkp4R0FCR3JsblgwMERYalFZUGRtTUdzcHdXTHliVjMraUlFRkhL?=
+ =?utf-8?B?Ulh2c01mejFvWVRHM0FJaGZvTm9QTCtmZFRYNEpVNmx1VVowdFhtNlEzQUdC?=
+ =?utf-8?B?LzR0SWZZMXA5aGFOY1YrRGtTanNtTllzNndRTzVvNnRjakNEZ0I0SFZBZ2hJ?=
+ =?utf-8?B?K2I1dU1laTNVUWFRaHhLOGVvWFVBclVJQ3lGVS9RVmVYUS9hWW5hZjF3TGdV?=
+ =?utf-8?B?WFFZdnJ4ZWowbWtzaTl5VTV2ZVZ5M3BXWkV6UTlKZWd1cXZZbitRNjNWUmE0?=
+ =?utf-8?B?MlNiRURrb0doMCtPL2JWNXYweVpxY2hVRVozSW5LVThWR1dYaHV6d0Z0RzV1?=
+ =?utf-8?B?NEtxZnBXeHhzcXo1dkR4T0N2U29yYzRPV1RHNTNEZkFFUGM0dXoxZjdENmYy?=
+ =?utf-8?B?eXdwVEhkV2NSYTRkemRnUmdUaVN0QVhISmwyMTd2S1hDcFdUeExDL3lZblQr?=
+ =?utf-8?B?YmtqUEExak5WczZrLytFU0RhSFQxT0Z5cnpEeHk2aER6SWRtOTRmNjBVS05w?=
+ =?utf-8?B?SzY4MmM4RU5wbHpFdzNHZmMvanhlOFcyYWV2c1JSTW9zN0tvZ3lkVERqc3Y2?=
+ =?utf-8?B?dUFYVXRBMzRPbDFrU3FBU1BJN2lsM2lUak5xVHVLSHk2SlRDcFdEWm5pRzhl?=
+ =?utf-8?B?N2NtOU82bjl1MzY2ZVV0eWF3SjF5K2o4MGt1Qnl5dlJ6Z01Za1o2TkUvQnF2?=
+ =?utf-8?B?T2xvVU9jSFp2a01hODFUOHBJMWR3WWdUMWErRC9VczgvRngrNXlKWWVPNW1Y?=
+ =?utf-8?B?N3BUcnBhQ0JtUzFMeTlSNzBnZXdHTmxVNGNZTnk0VzU2aDl6bXQ0d1VLdVZS?=
+ =?utf-8?B?QzJwUWlrVXA5Ylp6dkNNcUw4eDFoYjR5emRwM2w1d2trNVUxY3pMU0xKS2o2?=
+ =?utf-8?B?WHl4cG9RWEhlb3lwN1dvL1Jybjc0bVpwSTdCMTNZajZmeTVXQlJDRzJSNXRD?=
+ =?utf-8?B?RTRibXdQanNkTFMvYUFnWlRtNG5VQ1l3RTBGZzIva1Y5Y0tHVG54dzVPdWkz?=
+ =?utf-8?B?VklraVVXQXQyMUNhRnBJT1ZITi9yWU84UVYycW5ENWhpZTlMNWgvMXVHRDdE?=
+ =?utf-8?B?aFd3TmxrUGtUVWptOFd2R2o3YkU1TngydVFUc3I5L1JGWjhOcDhSMGxWQ2ty?=
+ =?utf-8?B?dzRXbldsb093Q0VQZHdRSEQxOE9RPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:164.130.1.60;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700013)(7053199007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: foss.st.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2026 16:31:31.8450
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32c59e16-fb3d-493f-d73b-08de551cb522
+X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.60];Helo=[smtpO365.st.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509EA.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FRWPR10MB9324
+X-Authority-Analysis: v=2.4 cv=fYmgCkQF c=1 sm=1 tr=0 ts=696a67e8 cx=c_pps
+ a=y2vOfj/AjHT2qeE8d5FlLQ==:117 a=uCuRqK4WZKO1kjFMGfU4lQ==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=TP8aPCUxYTYA:10 a=IkcTkHD0fZMA:10
+ a=vUbySO9Y5rIA:10 a=s63m1ICgrNkA:10 a=KrXZwBdWH7kA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=8b9GpE9nAAAA:8 a=VwQbUJbxAAAA:8
+ a=ijObrN4q47RCNrEETbUA:9 a=QEXdDO2ut3YA:10 a=T3LWEMljR5ZiDmsYVIUa:22
+X-Proofpoint-GUID: XMA0XC9u0S39Kp6pytuk3eor6fNsk6-l
+X-Proofpoint-ORIG-GUID: XMA0XC9u0S39Kp6pytuk3eor6fNsk6-l
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE2MDExOSBTYWx0ZWRfX18a3VTlM0S3T
+ lKvcGkNwSlepGPkEz29S/HCaOWAJ/ryd9OwnWrYrQK8rBB9A5BZdsWIQvqmhllYDvxzOmJ4tfTb
+ 2jiL3ZcBoIMtvGcSJYXkNaBG73GQ0WGng/Hp1Ay7h1ir9r6dllYVFyM9ve/3lRChR/Ye9klRsdC
+ ++ZTu3nQcUpIliaUidZOrevf2vYWhJTNDsn9oOuTyqrwphfUOKDTBLPOTkw9HrZUVqIggGfHQ9t
+ JBAjgBo+kmdnQWDxgVUXNI42CT6ZDYFxabVOY/WQly0Sv1L86qBbAYHTJRGA7tBS/CeOSC2c15T
+ rCnkkWh/S7LbnEDfGZnndwH/Vde3aMVTBNd0lJyrlG5bWQOYCEppSzTGaq/1uqQd1ZoH5vzU+QB
+ d+6KvRtwrBIbNMValJZYEjhu3F/OcNeplGzmjidqTULY+dq1VqAcPsrhJ91agCcf/fvmNcpadKB
+ ingW5B7Fl4O9sXU9xJw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-16_06,2026-01-15_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0
+ adultscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 bulkscore=0 malwarescore=0 clxscore=1015 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.22.0-2512120000 definitions=main-2601160119
 
-Hello SoC maintainers,
+Hi Rob
 
-the following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+On 1/13/26 21:13, Rob Herring (Arm) wrote:
+> These .dtsi files are not included anywhere in the tree and can't be
+> tested.
+> 
+> Reviewed-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+> v2:
+>   - Drop erroneous QCom .dtsi
+> ---
+>   arch/arm/boot/dts/st/spear320s.dtsi           | 24 -------
+>   .../boot/dts/st/stm32mp15xxab-pinctrl.dtsi    | 57 ---------------
+>   arch/arm64/boot/dts/st/stm32mp21xc.dtsi       |  8 ---
+>   arch/arm64/boot/dts/st/stm32mp23xc.dtsi       |  8 ---
+>   arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |  8 ---
+>   .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    | 71 -------------------
+>   6 files changed, 176 deletions(-)
+>   delete mode 100644 arch/arm/boot/dts/st/spear320s.dtsi
+>   delete mode 100644 arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/st/stm32mp23xc.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+>   delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
+> 
 
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+Applied on stm32-next.
 
-are available in the Git repository at:
-
-  https://github.com/vzapolskiy/linux-lpc32xx tags/lpc32xx-dt-for-6.20
-
-for you to fetch changes up to 2940a49ab7e31e9fc4f43637dc9ef75b5e8951d4:
-
-  arm: dts: lpc32xx: add interrupts property to Motor Control PWM (2026-01-10 03:47:36 +0200)
-
-----------------------------------------------------------------
-ARM: nxp: lpc: device tree updates for v6.20
-
-This pull request contains device tree changes for ARM NXP LPC32xx intended
-for v6.20, please pull the following:
-
-- Frank fixes device tree checker warnings reported for NXP LPC32xx boards,
-- Piotr addes a DMA mux block under SCB, DMA properties to controllers and
-  I2S support for NXP LPC32xx,
-- Kuldeep corrects values of PrimeCell PL022 'clocks' and 'clock-names'
-  properties, this is the change from a waiting queue, recently it was
-  repeatedly done by Frank, the hesitation was about a probable ABI break,
-  but here in particular the risk is practically negligible due to the kept
-  backwards compatibale 'clocks' property,
-- Vladimir adds a few missing properties to a number of LPC32xx controllers.
-
-----------------------------------------------------------------
-Frank Li (4):
-      ARM: dts: lpc32xx: remove usb bus and elevate all children nodes
-      ARM: dts: lpc3250-ea3250: add key- prefix for gpio-keys
-      ARM: dts: lpc3250-phy3250: rename nodename at@0 to eeprom@0
-      ARM: dts: lpc3250-phy3250: replace deprecated at25 properties with new ones
-
-Kuldeep Singh (1):
-      ARM: dts: lpc32xx: Update spi clock properties
-
-Piotr Wojtaszczyk (3):
-      ARM: dts: lpc32xx: Use syscon for system control block
-      ARM: dts: lpc32xx: Add missing DMA properties
-      ARM: dts: lpc32xx: Add missing properties to I2S device tree nodes
-
-Vladimir Zapolskiy (5):
-      ARM: dts: lpc32xx: change NAND controllers node names
-      ARM: dts: lpc32xx: describe FLASH_INT of SLC NAND controller
-      ARM: dts: lpc32xx: Declare the second AHB master support on PL080 DMA controller
-      arm: dts: lpc32xx: add clocks property to Motor Control PWM device tree node
-      arm: dts: lpc32xx: add interrupts property to Motor Control PWM
-
- arch/arm/boot/dts/nxp/lpc/lpc3250-ea3250.dts  |  18 ++--
- arch/arm/boot/dts/nxp/lpc/lpc3250-phy3250.dts |   8 +-
- arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi        | 133 ++++++++++++++++----------
- 3 files changed, 94 insertions(+), 65 deletions(-)
+Thanks
