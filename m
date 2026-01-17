@@ -1,79 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CB02FF64C
-	for <soc@lists.linux.dev>; Sat, 17 Jan 2026 12:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C52A153BE9
+	for <soc@lists.linux.dev>; Sat, 17 Jan 2026 12:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768651447; cv=none; b=DOgTsp1XNHVxft+Y+cfWcdwq7BdrUF82lUgP3Ucg5wAJHmJHXHd8O15vqcSYUm8bj+A+ddxG6LRc97kqjN87ShiEhjtYXqEomUfLJmdjZ6TuMk9zTWv7eh5+11/9KpRRQK2OzdB/1UcprqOUuVr8Lh68/4RmxBagCV+Mb7gvVhk=
+	t=1768653014; cv=none; b=EExVXDYXQ1piVWM6sAc+SG4YbUtQcgsTLPWnuPtbs2mHDwqVVnFaRE+0IHja4nDOniQ2K9ymhQZ84uqvXN2uOUKj3VpHzTc2Y33jKXmDs/QF6dGS2e04b9qm2UlWZBHv7tpkBz29vGeYHr6dXF+Iqtkm4VXiiHzW/oTEtYhvJes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768651447; c=relaxed/simple;
-	bh=HsSd+sXUux/dIABdtt+dMC1/mYjNBE96mlk2cgQVmMA=;
+	s=arc-20240116; t=1768653014; c=relaxed/simple;
+	bh=oJpt2EumckLr6/Gf8OW2VuhhcPu/63sI8x26iYUlCK8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gSGb/4Zyn3RAau50DUxJ4IKOGr7/gj+FblvNaUAI4dAZmNz+4VMmo76JWkTKJhFzd2YEJaeheJrmvztgPlxZCGWJKe/8NgvaHnvnVZ4bDbF64rtg3LViZHx0Onk6riWWmta5rlXVRh1JTRP0xoFzgfKoZs5Z88XwfyHv7ZSlnDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=y0mZZ+VD; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=KzRlkCkg46mO5hOQ6yEVOnw9rkJvoyLVBYuUOgcHIORvBwqQfr9Ixdz5YN1ZWGSwmtSZGckp192G+vriZZ0E/cCpbgMypeHUtUVblrk5yzwKD3+BT/hOMYS++NnhOZztosfQQHZmkPF6v49hHNAu9FkGgF0LLKr6+HzPC25hGYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vBVyR7g5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y0mZZ+VD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vBVyR7g5"
 Received: by smtp.kernel.org (Postfix)
-	id 34835C19421; Sat, 17 Jan 2026 12:04:07 +0000 (UTC)
-Received: from mail-lf1-f68.google.com (mail-lf1-f68.google.com [209.85.167.68])
+	id 2A9C9C19421; Sat, 17 Jan 2026 12:30:14 +0000 (UTC)
+Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 61AA0C4CEF7
-	for <soc@kernel.org>; Sat, 17 Jan 2026 12:04:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 61AA0C4CEF7
+	by smtp.kernel.org (Postfix) with ESMTPS id 23588C4CEF7
+	for <soc@kernel.org>; Sat, 17 Jan 2026 12:30:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 23588C4CEF7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f68.google.com with SMTP id 2adb3069b0e04-59b7882e605so3935466e87.0
-        for <soc@kernel.org>; Sat, 17 Jan 2026 04:04:06 -0800 (PST)
+Received: by mail-ed1-f65.google.com with SMTP id 4fb4d7f45d1cf-6505d141d02so4833806a12.3
+        for <soc@kernel.org>; Sat, 17 Jan 2026 04:30:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768651445; x=1769256245; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nj7efHtLNEBGO8kfZHLQ8akJVqyLIMmEIozQ44ZjMkY=;
-        b=y0mZZ+VDQcqMJaJKfE1zvF4CYHggo4ZLBnnKMFnq1SnBdy7Let0qgoUZg0zSbZv37T
-         7v3XM6Hm8hAWGI7DhFXT7kHmEUFohezDRm6mGxnA00QuRHqMz4lAIm0igLxFtVn7Om49
-         qZBeOZItTAWcTF3wwwk7+3Popn9ZgnbEXxqLS5p7u6V13xKC5hF4wBjCjnWS4qPBZhxe
-         Gk4vyed0/F6TrM3R9XIxtxjjFDzLa6LB2hTwN0CFJt9HOPDYE8scoOdKfXk8E2umYmQ3
-         /1OGmLsZoKwuJ1vACSAsidseik4ApHoqtuyoDlcL+NH2N37Cj07mvpEeZZ9RV0khgm0L
-         xK9g==
+        d=linaro.org; s=google; t=1768653011; x=1769257811; darn=kernel.org;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y4m/7Bfur2xzRjYnG86QrkUmg9v434JD51BbkdRFTRE=;
+        b=vBVyR7g5eBuOQvSB3iOGOhMeJ+08Q9uztBe2CJPkLtzlKTzF1B8NPWLub7P4Trw02e
+         YlKIt2P5JQyFzNRe/JvsZBL916OIX4okwxUSDyag5a/9K7EAFo3zun8ThMvvTjf+cNs3
+         wjsAisX5uB+6NMrZmaHQbzanhFTohkXL2OtkPlV8R3nOGJPPwzCSOhr64fs6WrfCun26
+         ZgyFOoVMh0KmJYcZCAPEHdg+5OuPAREVPIyUOQmvZT/kqVJjbnWLhbXpDAqVIamy2dDh
+         Fs2e9lPUFQjMuaqgX5CEP/cAmx7gYTRtQc9fg/8JmuszuPPpuUzgseYcQ0HnTPtmUdF9
+         VEuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768651445; x=1769256245;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nj7efHtLNEBGO8kfZHLQ8akJVqyLIMmEIozQ44ZjMkY=;
-        b=ec73T0/QZly8E8SzIswhLHhTpF4RExHQJEoH8fpt9k7Q4EuvmYwersqIXqtrTYPuaw
-         vBw4eXY3mGuOywfAnS0Yh7DK0mVz0Fdhrk0iW8vwpo2RdL1dAmxlekkMxlXaiRZJCJfV
-         cK1FR58Jn9kmWN89x+wMFrJy4iQ3+CfcbwpXwGMBmbi9TrUvXZIBCteaUiPKoRG7mL0o
-         XAWJCBLKCqTlwesJ2tgWgd/UySrK/DkalCgX25ChnWKiFPqwGytilebZLZPF3KRPeAzA
-         G9H4L6zPxaepL1OU643/Qc/jslV1Uk1M/8iZVgTrIcwa/cy9PAhTbxjlBScy6Be28eGF
-         +BJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXM3vcROEhKYeR/pw0/VBzfL9nWMcEpExbiVGSVhg8Zx0hlhuNkdPaIrtWR9Tvx84w8efg=@kernel.org
-X-Gm-Message-State: AOJu0YzSupGUNLUVWCcrZ+8IxQX7peC2GfM/jk/nTBorpZsJC2zQSphj
-	OBbq3OeNoifw6ubAG9sXo5fXrAU4OBh2mDIH8ABq62Px1v8Rhmsxh83OLdCaerNoTp/sTzdUHL6
-	g3wj8
-X-Gm-Gg: AY/fxX5VlgIIUZPs8wrrTsxuDaCdFCM+0b535H3oaYtR7Gd0WEoIAIbGl3Nf/mzygvS
-	9QjccV12/a+L8OrCchMO12TeZDqeh84ho3k2Jr6Hu1jskZwQVg3Xc6jHGLfq1B5PRLoYd4XhgKv
-	6/BR+c0StggIsaECF3oj0y0FXil1AcD51wG6ESR41Ch4Juu+hGtzeDjnnvO+Cbdgk7iNni0Lb9f
-	+wlHQeXm3N1yIr5b9lG0CZ4Yep8rp6DhIU0gysTm+ileOd+z5y+/8Vzn7HPgLmzC1M1f05gip9o
-	T0Qsk1Q6Mf6xV2T4ixxxDsqDCw13Y9pkI5qoCXkJDGQCqfxz4/fOg07Pfm+Y7TxaHnOSxY9I8TQ
-	HeIPYX3cJJym6saj2k9pzYxC7RA2CrL5dwvE3jo+hZrshRsiCubOc4OnhUjU2FRVJckrmfoRtyQ
-	2Pw1QnmWn9cYVvSwkzzjJGgGSR9ySYqSUoxAMLIWLxJEDYRfaLEShsomaznEooTa0R6FmbkmuJd
-	4RtA0s=
-X-Received: by 2002:a05:6512:378a:10b0:59b:b037:489e with SMTP id 2adb3069b0e04-59bb037493amr1321693e87.4.1768651444486;
-        Sat, 17 Jan 2026 04:04:04 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768653011; x=1769257811;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y4m/7Bfur2xzRjYnG86QrkUmg9v434JD51BbkdRFTRE=;
+        b=a7VUln2RKgyHcasOxVrO18SLIFwPVNpZon6Nov+Vtj0nZuH/DbjBHkN7SivVIWSpzh
+         T3t4YCy5gh8yUTYDWuwIAYbTBngNIw9jUt6lHBKOSoMOCeA7GX14ZmkPM6pPiLTZ5UaY
+         CTHS/Lt5xRKudMAClDOhFFnKbrFJX/pBLLPp+Zl32YukoOXTk7/AnUGcs6yA2+IxZkZ/
+         Vr5qk0xDh79cheCXV0fzbogjcPmzlDq8rRhxKJyHOZ5sF+f3j2zNh2/cANiEC2bsJim8
+         1WzhnwR8SWfP1YYGWrtYCz1B2VcXJ/LLmNUoJMgxeBoDnFpBOnRSwHblqngfqrYXRf/X
+         Kqcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXFzCaL5SwkbpYSRUEE/VAV9dsMMasgLOJRfDsrOk/L3Ces+DXw1xexkBeqdURWVX+TgFs=@kernel.org
+X-Gm-Message-State: AOJu0YyuV4cnyjWxINuxvJ2EIaNCnefpWzPOih+23rPUX7faClV2aNIc
+	GmA7eJIDfNvDeS4gbl/lLDZWdo8et5vhIeSNGUuMSXZkvA6YsguK081FrNFFety1XlY=
+X-Gm-Gg: AY/fxX5geFI7+Je7QrY66aFQxcThGBw8o5d49oru8Q4me8cYtQuzPd6sn4LQW5Yyi5l
+	LzjQNp+ax2wMhMhYGuFKnxi9C8u5ZTtOLA5jLcOsY2hehemi5orOEe95yrIn5mypzhcm9jAr7h2
+	JyL6zq4sXv0wC/uzXZw8tEg4VHSegZfX5ZEK3IQQzPNSQCwK0espeviExI1an3FujsOkaoTDXdv
+	xUPD/dR6tsUJjo0JqdDBkYS8W3FSU/jKDsERu7/iyLENKmE8Udh56Dk13os9Qkr7yBoEKkM3jKs
+	+gtt9OGsHOJTjYbHr0I4TFq8So77rjX+zCxyKbW7SHrjE++mRIpC71pKsjwQj97Wvwj+YkDU9DH
+	86NvOkellg2sXCj76Qkh0nfFdpyIA6gK9lW8/UOxMYaRerFA431yytV1pO7+jXhcr8PVr6e0nQJ
+	DfUcbEI74AajmbZyk3UqwFwzllJnfiVaOB6DVvgH3YbqL481gl0K/AXlaD5ODUociHZd/XpBY7o
+	a2AyRg=
+X-Received: by 2002:a17:907:948a:b0:b7a:5c1a:85e with SMTP id a640c23a62f3a-b8792e2f94cmr478693066b.23.1768653011270;
+        Sat, 17 Jan 2026 04:30:11 -0800 (PST)
 Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38384fb9ab8sm15890091fa.48.2026.01.17.04.04.02
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b87959c9f98sm553325266b.42.2026.01.17.04.30.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jan 2026 04:04:03 -0800 (PST)
-Date: Sat, 17 Jan 2026 13:04:01 +0100
+        Sat, 17 Jan 2026 04:30:10 -0800 (PST)
+Date: Sat, 17 Jan 2026 13:30:08 +0100
 From: Jens Wiklander <jens.wiklander@linaro.org>
 To: arm@kernel.org, soc@kernel.org
 Cc: linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] OP-TEE update for 6.20
-Message-ID: <20260117120401.GB255115@rayden>
+Subject: [GIT PULL] TEE bus callbacks for 6.20
+Message-ID: <20260117123008.GC255115@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -82,11 +82,22 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
 Hello arm-soc maintainers,
 
-Please pull these three small updates for OP-TEE driver in the TEE
-subsystem, and for the OP-TEE mailing list.
+Please pull these updates adding TEE bus callbacks to let the users of
+the bus get rid of the struct device_driver callbacks .probe(),
+.remove() and .shutdown().
+
+The maintainers for the updated drivers using the TEE bus have agreed to
+take these changes via my tree, with the exception of the maintainer for
+drivers/firmware/broadcom/tee_bnxt_fw.c, who has remained silent during
+the review. However, the changes in the drivers are straight forward so
+it's better to take these patches too rather than excluding them.
+
+Further details are in the last patch set:
+https://lore.kernel.org/op-tee/cover.1765791463.git.u.kleine-koenig@baylibre.com/
 
 Thanks,
 Jens
@@ -97,29 +108,51 @@ The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/optee-update-for-6.20
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-bus-callback-for-6.20
 
-for you to fetch changes up to 94ea7063fae835e800768d3b0507f0994ef03878:
+for you to fetch changes up to e82d0477fd80707221c3d110f56d05506de2698c:
 
-  optee: make read-only array attr static const (2026-01-16 10:35:05 +0100)
-
-----------------------------------------------------------------
-OP-TEE update for 6.20
-
-- A micro optimization by making a local array static const
-- Update OP-TEE mailing list as moderated
-- Update an outdated comment for cmd_alloc_suppl()
+  tpm/tpm_ftpm_tee: Fix kdoc after function renames (2026-01-15 10:28:33 +0100)
 
 ----------------------------------------------------------------
-Colin Ian King (1):
-      optee: make read-only array attr static const
+TEE bus callback for 6.20
 
-Geert Uytterhoeven (1):
-      MAINTAINERS: Mark the OP-TEE mailing list moderated
+- Move from generic device_driver to TEE bus-specific callbacks
+- Add module_tee_client_driver() and registration helpers to reduce
+  boilerplate
+- Convert several client drivers (TPM, KEYS, firmware, EFI, hwrng,
+  and RTC)
+- Update documentation and fix kernel-doc warnings
 
-Julia Lawall (1):
-      optee: update outdated comment
+----------------------------------------------------------------
+Uwe Kleine-König (18):
+      tee: Add some helpers to reduce boilerplate for tee client drivers
+      tee: Add probe, remove and shutdown bus callbacks to tee_client_driver
+      tee: Adapt documentation to cover recent additions
+      rtc: optee: Migrate to use tee specific driver registration function
+      rtc: optee: Make use of tee bus methods
+      hwrng: optee - Make use of module_tee_client_driver()
+      hwrng: optee - Make use of tee bus methods
+      efi: stmm: Make use of module_tee_client_driver()
+      efi: stmm: Make use of tee bus methods
+      firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+      firmware: arm_scmi: Make use of tee bus methods
+      firmware: tee_bnxt: Make use of module_tee_client_driver()
+      firmware: tee_bnxt: Make use of tee bus methods
+      KEYS: trusted: Migrate to use tee specific driver registration function
+      KEYS: trusted: Make use of tee bus methods
+      tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+      tpm/tpm_ftpm_tee: Make use of tee bus methods
+      tpm/tpm_ftpm_tee: Fix kdoc after function renames
 
- MAINTAINERS             | 6 +++---
- drivers/tee/optee/rpc.c | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ Documentation/driver-api/tee.rst             | 18 +-----
+ drivers/char/hw_random/optee-rng.c           | 26 ++-------
+ drivers/char/tpm/tpm_ftpm_tee.c              | 35 ++++++++----
+ drivers/firmware/arm_scmi/transports/optee.c | 32 ++++-------
+ drivers/firmware/broadcom/tee_bnxt_fw.c      | 30 +++-------
+ drivers/firmware/efi/stmm/tee_stmm_efi.c     | 25 ++-------
+ drivers/rtc/rtc-optee.c                      | 27 +++------
+ drivers/tee/tee_core.c                       | 84 ++++++++++++++++++++++++++++
+ include/linux/tee_drv.h                      | 12 ++++
+ security/keys/trusted-keys/trusted_tee.c     | 17 +++---
+ 10 files changed, 166 insertions(+), 140 deletions(-)
