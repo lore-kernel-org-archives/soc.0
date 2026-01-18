@@ -1,71 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACDF20C477
-	for <soc@lists.linux.dev>; Sun, 18 Jan 2026 08:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6064CC8F0
+	for <soc@lists.linux.dev>; Sun, 18 Jan 2026 08:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768723390; cv=none; b=LR9UtmgusWmhWd0RyBdHNPsh2BXgadfWWlKQIpT6YpXeGU+uh7m/anNpdaU6YckUG2shxWCYh5oAtE/WokciSqanbPYK+OCCqLzPaksLHBOMVaWVdM65gLvvCRLAi//ep/n0WqFxOmIeFBzp9z6RZ140TKsuWbpzSCrg3xH6X30=
+	t=1768723392; cv=none; b=IVetrWAm2QwXQ4MQN9Vl+4hfw38Q9tP7Mlzbe+w8Y/pROAgH+pAoV332IIeZ0tGzwqgjTBj7gLwGpktnhCWPwrB5HET8iQ5QlZIJxAPhh3Djr4jW7b874l8xOEHYLpzLPnVQwJMbYCQ+YQss4Y+2Vg0uN4cz2Br+vYkTDoR2lJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768723390; c=relaxed/simple;
-	bh=jrTP11soEfORrLVH+xR41AKz6lAjKbEzIalTUkv5/1k=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=pXNbqofq2hSxYPvaD38xYhQNhPh+cRvqkWAbfhseBD25pbmb1uml+yB7pESX+lTd3B+mxcZA7MoFXS2oVgfGEmKz4twIQLWyFPNj2rLpoIlflalXZ36awuff4Mc1E4vMZQYU6u4IjYE+/9wM4dB2plrKDmSLF0ZrO65ZYabEs1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K/+99dC6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768723392; c=relaxed/simple;
+	bh=abPb8hIaBHO1pitSFBec5OO0Rd8g4FIfut3VTH1oglY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WqOvHhrnzo4kDWCK7pdqEWi6NKK6bFfEMIgIh7d/3J4c/9pOmKLMrdqtiMH6wlzyi+B/O8z0+BTXfUfl3yrnGzrvJBtJZCkEX2chiDI/gWnNH4lKnbrHscWjQpBWOUB404EuYVDxdQ8WibYwfAbBa2mxQmcIN6iNP7MpxmF6xZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z0CZzddl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K/+99dC6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z0CZzddl"
 Received: by smtp.kernel.org (Postfix)
-	id A55BAC19421; Sun, 18 Jan 2026 08:03:09 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	id 0B2CDC19425; Sun, 18 Jan 2026 08:03:12 +0000 (UTC)
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D6242C116D0
-	for <soc@kernel.org>; Sun, 18 Jan 2026 08:03:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6242C116D0
+	by smtp.kernel.org (Postfix) with ESMTPS id 485DAC19421
+	for <soc@kernel.org>; Sun, 18 Jan 2026 08:03:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 485DAC19421
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47f3b7ef761so17379305e9.0
-        for <soc@kernel.org>; Sun, 18 Jan 2026 00:03:07 -0800 (PST)
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ac3d5ab81bso3600271eec.1
+        for <soc@kernel.org>; Sun, 18 Jan 2026 00:03:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768723386; x=1769328186; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=S0d4JaXYJUmXcmKZUFMKusPIGrJ84LJQoTA8blpIJf0=;
-        b=K/+99dC6aHVMv+qnhsrfb3PBEecPmFDPGx+4HJ5yWv4t0TqNXl62YSleckUDzWaaOe
-         slTf+jfnyrMUc4Uua5POJJ++UBbNcX5fMrlEsGW8soAsA1UGA+AeGPKKeF+2SqCFrzh8
-         stCZxkpHpchBvLh7g80+NOikrYl2N9ZWiMyM7HCLq05Qfjymkoe4HzCBzCR/qRKmGYr4
-         o/XNO9G5g6XaLjsSetEixo6ML9+HFtbpJf7XPMe1o4GYZNN5lT59posD+UPTTtlqdE7l
-         SvFUGS3/hnVXic7lxHTVK6z1V9WAPt5dhs4Ib4l/PGtOzAoQpPNb5I6S9WNA3eXZULe6
-         1woA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768723386; x=1769328186;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1768723390; x=1769328190; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S0d4JaXYJUmXcmKZUFMKusPIGrJ84LJQoTA8blpIJf0=;
-        b=Y0v/E/0u4BXM+gxKRiPI5DUraE6n/+feDZfHEp6KVQBIRpNJX2Pf90cRKU8HwFzOjG
-         9XAsOzW1UXnkUa9A/VX0T4hzhezrPbwCkW2iLDd5YMfb8VQ67j2ruWWeEgJ51ZP9IRwo
-         l88UC/GRTgsYsnusS8cP17L/vah1YfMFH5DdIAtff+Po/YWTos26wS/ckTk9CTc3K+sJ
-         CBkHszMkDUfkgE9i9M7LbEYf3wq7V5ozRwnkRA/4HZFa6CaxaoTFfoflqTZ0ss+1lxTj
-         33zgd9/y+0/3pVPNYv11MBwsbT8YEtjbLfyC3JrtMI8aoa3WODcjwGJu2vw+YaCcmMh6
-         rd/g==
-X-Forwarded-Encrypted: i=1; AJvYcCVqAYzq8nQv74VaJEsBYwcEEqnoeU0UJiM0imiKIpkTc0243N6Teq/fPb92Jx9m/LDp/94=@kernel.org
-X-Gm-Message-State: AOJu0Yx0ga76y1ESnimSnlPvUy9LqSWELupzb9dIGR6pjYmtWnpMUJjk
-	zADNJ9GY3eibvsZY9+t2GwwjCFrhU015bcS/7tB7GHTrao7/Oo4vGs5V
-X-Gm-Gg: AY/fxX6dS0bjbEsbVCqwoEvRuZ080nZuWJmH3bPwiy+mwCzymUdCAv8OCz05vN9zs+/
-	+q8c06/NURs9xxIK5e+HzVe/hYPz9civVl07rmDPxv5+mKi+Mjk07yxuX+iumn06xjq4ne7ciES
-	7zmVCX3QDjsEwhF+xZgILrbKTrwQHQEt+6LXF+voPt0HXUUbVFhPL+ruKVpoXjhWob875e/GBXe
-	vmoa486Dr2NYB2LBmT1muns+HuzWVkH1ywdoVHNAsauekfyMOdcAe5yYfCWAo7H6jtWJmd2xueH
-	Ye5hD3M/5iOW0n2W4PpC+y46sYQs1eGBmG2FbnQc5ARFukxLyGNah3GWLW5NQ7fk6+8XOXkVr/i
-	MJiBrpR/F6y2I9mGcvYbHFBRYlr1vjxQgYyVaSRZPdHPk5U+lxCFoNzdEBysUdYuHLYaqcN22/k
-	igXx2zm9uAPQYVUYkNwQvNE3hmV4tyBMuWFM0LSx/YHYttJ05/VN/TcqTt6yhUD9KRt4C38t53L
-	Tbe5AE=
-X-Received: by 2002:a05:600c:4e50:b0:47e:e946:3a59 with SMTP id 5b1f17b1804b1-4801e3503fbmr93270645e9.34.1768723386007;
-        Sun, 18 Jan 2026 00:03:06 -0800 (PST)
+        bh=kj8UfNtBvaeaAbcPqe3cu399aKYUpefB3CwEh0ou4Yc=;
+        b=Z0CZzddl0wfsakuly9YioWwzkafDu6FY7nttRq03zlNshfV1RqzjCbGIk4w5lhKkvW
+         dyL4MwWIPpn72CxRDCgFabi9UiR5gBQWsJFHVxi1kbJYxVuOQ6fHDbS/aP8TMaRDJyko
+         NIbuIyrLUdLUtfxIBQ5HtZTMkJ5vpSG3dMwQCSU2s2oP7uE1kP/TGdhv2FSumGzTPHP2
+         eiZFt5ooITJe8srgz9bG6kx3+DURqt+4qsYH4k8FB2TAmaWdZp/k0mF5b6UxEnfLfNdn
+         1eRCDVBpnmHKRUJZfR2lp6xaikHMsmENFWzA6B8Tx2rCeKM1c4oVoiC9yCp5jOIILWEE
+         cTlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768723390; x=1769328190;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kj8UfNtBvaeaAbcPqe3cu399aKYUpefB3CwEh0ou4Yc=;
+        b=jKxy7ulnAOIIh5O/6urX/d3vO2kGpDz4dA1hJZydndRAaxKDo9evKgwfuL+lChCAXW
+         eIaN0OTptfmIiFzB1NnuXoAySRCmYzfcu1ER8tyBGVz892lFRY5H1401WPMFB2sQBL4t
+         cAHEmwRqxR142Yd4LSNEHJBlcsIAgSv9hjOgqHlDT57JPGeUsSwu4qZhT+LehqEbLFMI
+         i2QOWWrkuGCzJ22Bok0IUp+bBRER4/k7UBaXuMX3+Y6WWsF7Glk2hwLjEz9XmQNM7L+2
+         G1PGwComR/wo9QlrlL3Mlryplm2ncbsFfZhdkWeKm57m/ykx0dqgv3qzHX/mJZ7P6BsU
+         lIKw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFWJrZMu28/5fMoV2cuT8NuooJVWJ3eRjDTLfOJePVW9ARkKnKLtM6nHWZVoGLdhTEK/s=@kernel.org
+X-Gm-Message-State: AOJu0Yw9hd04zv9S4wU2pFWaVJrjgEbAELhAK8JISxlpsisttbXWaT+d
+	AIO8rXn7Itc+GRchCLWIHSyuq4fC6DBWCBoivqI0ptf9W4CxIZOPENpt
+X-Gm-Gg: AY/fxX4lnqttsHdD41SSvbYKIf3yfDgAYzgoSoasuh9ilas6Ozq06FYRCp2QmhV5D/0
+	RvnTpbULtO2ZbP4IFLCbSkGH4RfIIcemt1IwomC1EEpMmaDVBc5KJ02wY3fopIBP2Yb6dutxGZE
+	bpolUFMLMvGrCuStMroSPn2EAHkixL/+nj+zEZroj9CxXVJKSmsCa6AyyQZxKUMP2OWI3P7Lcig
+	VwFr1r25vNi77qbJpWhxibcUiYZV8orcEEA2eR05smTZeVNLw34kW50O+Hhckvoo5MseA9qHgrr
+	3w/qx2bf8jRpvo6S6kZU01siLuAOSyZqLdBo8Pls+kCRza9HOMgIsFPrvGJF/xm/YVsNqAGRNq1
+	VLv7pT6aK40HIz/8nbsb1TYzCyE2XKnpr6FTNnpkybKGlvR1CxiRmZ/hYNua9CB+xcCzEds6P6C
+	duCP+VGUpc9v/gzjzKIq7DThDxol6EGedBKjMg61gm3WtYp89qf84CCSPwghwzqi1xienh9J7Xq
+	Lq2JJw=
+X-Received: by 2002:a05:7301:1687:b0:2a7:83e:7b17 with SMTP id 5a478bee46e88-2b6b46e6ddfmr6064907eec.12.1768723390082;
+        Sun, 18 Jan 2026 00:03:10 -0800 (PST)
 Received: from localhost (p200300e41f0ffa00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:fa00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f4b2755absm229099345e9.15.2026.01.18.00.03.04
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b365516asm8498854eec.26.2026.01.18.00.03.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jan 2026 00:03:05 -0800 (PST)
+        Sun, 18 Jan 2026 00:03:09 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: arm@kernel.org,
 	soc@kernel.org
@@ -73,10 +75,12 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/4] dt-bindings: Changes for v6.20-rc1
-Date: Sun, 18 Jan 2026 09:03:00 +0100
-Message-ID: <20260118080304.2646387-1-thierry.reding@gmail.com>
+Subject: [GIT PULL 2/4] soc/tegra: Changes for v6.20-rc1
+Date: Sun, 18 Jan 2026 09:03:01 +0100
+Message-ID: <20260118080304.2646387-2-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260118080304.2646387-1-thierry.reding@gmail.com>
+References: <20260118080304.2646387-1-thierry.reding@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -94,63 +98,41 @@ The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.20-dt-bindings
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.20-soc
 
-for you to fetch changes up to b2788f6320722d6059f849f35a77eb082608c627:
+for you to fetch changes up to 70f752ebb08c85a5ea19471a5aaf26263e53dcb0:
 
-  ASoC: dt-bindings: realtek,rt5640: Document port node (2026-01-17 01:58:18 +0100)
+  soc/tegra: pmc: Add PMC contextual functions (2026-01-18 08:48:30 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v6.20-rc1
+soc/tegra: Changes for v6.20-rc1
 
-This series updates various DT bindings for Tegra architecture,
-primarily focusing on schema validation fixes and new feature
-documentation for Tegra234 and Tegra264 SoCs. Key changes include
-correcting realtek,rt5640 audio codec bindings (adding missing ports,
-clocks, and jack-detect sources), converting Tegra20 NAND bindings to
-YAML, and updating memory, DMA, and IOMMU definitions for Tegra264
-(introducing CMDQV and DBB clock support). Additionally, it resolves
-legacy warnings for Tegra30/132 display and VI interfaces.
+This series primarily refactors the Tegra PMC driver to eliminate
+reliance on a global variable, transitioning to passing the tegra_pmc
+context explicitly across clocks, powergates, sysfs/debugfs interfaces,
+and power management callbacks. Additionally, it resolves a warning
+during system resume by deferring an unsafe generic_handle_irq() call to
+a hard IRQ context using irq_work.
 
 ----------------------------------------------------------------
-Ashish Mhetre (1):
-      dt-bindings: iommu: Add NVIDIA Tegra CMDQV support
+Prathamesh Shete (1):
+      soc/tegra: pmc: Fix unsafe generic_handle_irq() call
 
-Charan Pedumuru (1):
-      dt-bindings: mtd: nvidia,tegra20-nand: convert to DT schema
+Thierry Reding (10):
+      soc/tegra: pmc: Use contextual data instead of global variable
+      soc/tegra: pmc: Pass struct tegra_pmc to tegra_powergate_state()
+      soc/tegra: pmc: Store PMC context in clocks
+      soc/tegra: pmc: Embed reboot notifier in PMC context
+      soc/tegra: pmc: Pass PMC context via sys-off callback data
+      soc/tegra: pmc: Pass PMC context as debugfs data
+      soc/tegra: pmc: Use PMC context embedded in powergates
+      soc/tegra: pmc: Use driver-private data
+      soc/tegra: pmc: Do not rely on global variable
+      soc/tegra: pmc: Add PMC contextual functions
 
-Jon Hunter (4):
-      dt-bindings: tegra: pmc: Update aotag as an optional aperture
-      ASoC: dt-bindings: realtek,rt5640: Document mclk
-      ASoC: dt-bindings: realtek,rt5640: Update jack-detect
-      ASoC: dt-bindings: realtek,rt5640: Document port node
-
-Svyatoslav Ryhel (2):
-      dt-bindings: display: tegra: document Tegra132 MIPI calibration device
-      dt-bindings: display: tegra: document Tegra30 VI and VIP
-
-Thierry Reding (1):
-      dt-bindings: memory: tegra: Document DBB clock for Tegra264
-
-sheetal (1):
-      dt-bindings: dma: Update ADMA bindings for tegra264
-
- .../bindings/arm/tegra/nvidia,tegra186-pmc.yaml    |  11 ++-
- .../display/tegra/nvidia,tegra114-mipi.yaml        |   1 +
- .../bindings/display/tegra/nvidia,tegra20-vi.yaml  |  19 ++--
- .../bindings/display/tegra/nvidia,tegra20-vip.yaml |   9 +-
- .../bindings/dma/nvidia,tegra210-adma.yaml         |  15 ++-
- .../devicetree/bindings/iommu/arm,smmu-v3.yaml     |  27 +++++-
- .../bindings/iommu/nvidia,tegra264-cmdqv.yaml      |  42 +++++++++
- .../memory-controllers/nvidia,tegra186-mc.yaml     |  13 +++
- .../bindings/mtd/nvidia,tegra20-nand.yaml          | 102 +++++++++++++++++++++
- .../bindings/mtd/nvidia-tegra20-nand.txt           |  64 -------------
- .../devicetree/bindings/sound/realtek,rt5640.yaml  |  13 +++
- MAINTAINERS                                        |   2 +-
- 12 files changed, 238 insertions(+), 80 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/iommu/nvidia,tegra264-cmdqv.yaml
- create mode 100644 Documentation/devicetree/bindings/mtd/nvidia,tegra20-nand.yaml
- delete mode 100644 Documentation/devicetree/bindings/mtd/nvidia-tegra20-nand.txt
+ drivers/soc/tegra/pmc.c | 425 ++++++++++++++++++++++++++++++++++++------------
+ include/soc/tegra/pmc.h |  60 ++++++-
+ 2 files changed, 384 insertions(+), 101 deletions(-)
