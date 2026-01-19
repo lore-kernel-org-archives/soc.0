@@ -1,46 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C61238BF80
-	for <soc@lists.linux.dev>; Mon, 19 Jan 2026 15:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2F428C87D
+	for <soc@lists.linux.dev>; Mon, 19 Jan 2026 16:06:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768838336; cv=none; b=K0m62rOWHYbl7jOcJPOH52SpiSnVE8P3wVb/sRS4dEv9QdR9DoY9x8SvehWVKf6LQof4zwnYrlL120bG3s/+YBxWSndlsu0Mh94z14keJRSC+QWSOYf7tidduDxT6vgv61D3ciFLBCmTLRGYazmKXQTnduxmopx7cUr3/wtZ0TM=
+	t=1768838803; cv=none; b=WWMd3iD6a5fKpFURM3QhD1U8U1IbF3aerLz/ZeqOp2DRZlCoDgIlZaLlfNywoVharuhaIG/GE4GMLnBB3B2M0Yk/QVAhkH1V5WPcDNWquPJk8p7p7XeVRvxMtpRCtEQJ7uIkXDiYPzDPoFjomSEUjE3p5DNESHor4euD8v27LIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768838336; c=relaxed/simple;
-	bh=rTjfClrdU+ZLWQCk1mfy8UYKSZu1dS+xZzI6sXKASqI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aU086/8dGN9vnbQWB+Dgw4Izo3uS5T7piS6SoeTGDId8fNX4akwC+Dj+nFW0WxMCvu/ioAHDEcanfAdiQVGK4a6S6kdn4gjHhmzOFftNz4GaQEcLoDHHJrzP6oVBGPWcAvsEFgHMeNt1UZsXBinR/T+A6t7Q0MtzD3leOyC8tMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivmpN5Bo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768838803; c=relaxed/simple;
+	bh=xo28tgWBvvqBcKarBmzdhk1+UC7ykuAy3SMnlm0dwjo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LlNDKEyZyWTCIuPlduxdEEJy7SThoGFxS945OVw7L5bPNQaE32aZck/mfKgY2gneQ0Sw8C7lKvazPHxOMgMOGze71XuZFeMwHCu/d34Ic05RMSBmRzOxm5Ri3hoPQ2u62tHnRqNERw5V7UhFLB5PCiaqBhMC6qQD1rQZMKKZgf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r7U4Aveu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivmpN5Bo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r7U4Aveu"
 Received: by smtp.kernel.org (Postfix)
-	id 5702EC4AF09; Mon, 19 Jan 2026 15:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54AC9C116C6;
-	Mon, 19 Jan 2026 15:58:55 +0000 (UTC)
+	id CB297C2BC86; Mon, 19 Jan 2026 16:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2231BC116C6;
+	Mon, 19 Jan 2026 16:06:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768838336;
-	bh=rTjfClrdU+ZLWQCk1mfy8UYKSZu1dS+xZzI6sXKASqI=;
+	s=k20201202; t=1768838802;
+	bh=xo28tgWBvvqBcKarBmzdhk1+UC7ykuAy3SMnlm0dwjo=;
 	h=From:To:Cc:Subject:Date:From;
-	b=ivmpN5Bo+s8AMNlXQ+DcLUBz88kVKGUMWfQ9W9flczIIdy+/qh7wKJ8bY7Gj0Ycry
-	 3MuCs8TGjuJfLZ6xlSE5VSoxhMLSYBXiW+CfXRHyKtu5enghKK/NnQ/WNOe7iBVpyA
-	 MDCk4ufY964HCnKuSj/8LBGw7SbGoz8R2CaZ1O+h82IzJps1ruNsj5SE2Pa1ZKhawS
-	 GeUYVkRuVCLLziXV9RbLbaVLRzbUAgiXlE0ZRbqQJ5LLY/X8uB1eS4qwxTohhMhYSo
-	 dLyC/7/9xsge5b4FLD9c4Izbroadk0RCwOZkgTXsg30P1NW3UQrEOMLSWF6TlCbSz/
-	 otJW5Lr0+8f7w==
+	b=r7U4AveucwM8EVCwDML70klVCqCPN3a89Qv2WUsOz+/dwsFzOkDoracEZx64nOQWv
+	 J3K1rbgQXZArk6Obj5A+duVI9qDvBpKK32D7wxGJ3EY+3l/D1VAsE5abKOSN+wG1nN
+	 p23ZS+tXrpHzDmaCr4QVB6sCQBTzuvoBif3ponqBXn68X5jCVH5bLJ/XaLp87KDmW/
+	 JN5rpXwsQRlEtdC3Z4Z2sOoCtQzd0dGZc9vzy1XzZeOGtLh+RDsZOiWL0z9uKOFc96
+	 +J8ggkvpE2hQNg3XT8lrgl89U60yf5swlJH3ULXtxg2RYrslhp9iurImKY8JwWeDnz
+	 gUmpTsXttLTag==
 From: Bjorn Andersson <andersson@kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: linux-arm-msm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Arnd Bergmann <arnd@arndb.de>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	Abel Vesa <abelvesa@kernel.org>,
-	David Heidelberg <david@ixit.cz>,
-	Pradeep P V K <pradeep.pragallapati@oss.qualcomm.com>
-Subject: [GIT PULL] Qualcomm Arm64 DeviceTree fixes for v6.19
-Date: Mon, 19 Jan 2026 09:58:54 -0600
-Message-ID: <20260119155854.839183-1-andersson@kernel.org>
+	Luca Weiss <luca@lucaweiss.eu>
+Subject: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v6.20
+Date: Mon, 19 Jan 2026 10:06:41 -0600
+Message-ID: <20260119160641.840311-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -57,54 +53,34 @@ The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.19
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-6.20
 
-for you to fetch changes up to 1f6ca557088eb96c8c554f853eb7c60862f8a0a8:
+for you to fetch changes up to df7c440c904f754d8c94863a910d99e7ed8bbda9:
 
-  arm64: dts: qcom: sm8650: Fix compile warnings in USB controller node (2025-12-16 15:24:10 -0800)
-
-----------------------------------------------------------------
-Qualcomm Arm64 DeviceTree fixes for v6.19
-
-Add missing power-domains to the SC8280XP RPM power-domain and ensure
-these are voted for from the remoteproc instances while powering them
-up.
-
-Clear a couple of DeviceTree validation warnings in SM8550 and SM8650
-USB controller nodes.
-
-Specify the correct display panel on the OnePlus 6.
-
-Correct the UFS clock mapping on Talos, to ensure UFS is properly
-clocked.
-
-Add Abel's old emails address to .mailmap.
+  ARM: dts: qcom: msm8974: Start using rpmpd for power domains (2026-01-19 09:40:32 -0600)
 
 ----------------------------------------------------------------
-Abel Vesa (1):
-      mailmap: Update email address for Abel Vesa
+Qualcomm Arm32 DeviceTree updates for v6.20
 
-David Heidelberg (1):
-      arm64: dts qcom: sdm845-oneplus-enchilada: Specify panel name within the compatible
+Migrate the MSM8974 remoteproc power supplies to RPM provided
+power-domains, to match what is done on most other platforms.
 
-Konrad Dybcio (3):
-      dt-bindings: power: qcom,rpmpd: Add SC8280XP_MXC_AO
-      pmdomain: qcom: rpmhpd: Add MXC to SC8280XP
-      arm64: dts: qcom: sc8280xp: Add missing VDD_MXC links
+Give the LG Nexus 5 its more human friendly model name.
 
-Krishna Kurapati (2):
-      arm64: dts: qcom: sm8550: Fix compile warnings in USB controller node
-      arm64: dts: qcom: sm8650: Fix compile warnings in USB controller node
+----------------------------------------------------------------
+Luca Weiss (3):
+      ARM: dts: qcom: msm8974-hammerhead: Update model property
+      ARM: dts: qcom: msm8974: Sort header includes alphabetically
+      ARM: dts: qcom: msm8974: Start using rpmpd for power domains
 
-Pradeep P V K (1):
-      arm64: dts: qcom: talos: Correct UFS clocks ordering
-
- .mailmap                                              |  1 +
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi                | 16 ++++++++++++----
- arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts |  4 ++--
- arch/arm64/boot/dts/qcom/sm8550.dtsi                  |  2 --
- arch/arm64/boot/dts/qcom/sm8650.dtsi                  |  3 ---
- arch/arm64/boot/dts/qcom/talos.dtsi                   |  4 ++--
- drivers/pmdomain/qcom/rpmhpd.c                        |  4 ++++
- include/dt-bindings/power/qcom,rpmhpd.h               |  1 +
- 8 files changed, 22 insertions(+), 13 deletions(-)
+ .../arm/boot/dts/qcom/qcom-apq8074-dragonboard.dts | 13 ------
+ .../qcom/qcom-msm8974-lge-nexus5-hammerhead.dts    | 14 +-----
+ .../boot/dts/qcom/qcom-msm8974-samsung-hlte.dts    | 12 ------
+ .../dts/qcom/qcom-msm8974-sony-xperia-rhine.dtsi   | 12 ------
+ arch/arm/boot/dts/qcom/qcom-msm8974.dtsi           | 50 ++++++++++++++++++++--
+ .../dts/qcom/qcom-msm8974pro-fairphone-fp2.dts     |  8 ----
+ arch/arm/boot/dts/qcom/qcom-msm8974pro-htc-m8.dts  | 11 -----
+ .../dts/qcom/qcom-msm8974pro-oneplus-bacon.dts     |  9 ----
+ .../qcom/qcom-msm8974pro-samsung-klte-common.dtsi  | 11 ++---
+ ...qcom-msm8974pro-sony-xperia-shinano-common.dtsi | 12 ------
+ 10 files changed, 52 insertions(+), 100 deletions(-)
