@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384F231D36B
-	for <soc@lists.linux.dev>; Tue, 20 Jan 2026 17:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2850735F8A9
+	for <soc@lists.linux.dev>; Tue, 20 Jan 2026 17:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768930207; cv=none; b=Jx3cB495aY3BJWz8NUpfQSZCL5M1vnSwrmENtVmT2srDVYNA9o848D/LnqYmO+mXk4CyrLKTdm6s5Lf5kZOHoSwtJWkLSNjcazSCHcXO+jX1mw59n6N3fhce1/D7z0qqgko4+IvM/1b0Y7BCtVLQydRSefhB/AHhgKF9/0tkIUQ=
+	t=1768930209; cv=none; b=kxR/cR8D6Q+SJJzXmahOEuMT5XBJgY+CsCjPkwA/CUsTzrH4t7NjkFAUaBkunjKXtxbmkNyOPDbZGX3uEr+njENqXx1wwwVXOCVFRXhTBNe6IU/Ay4v270QxzET8lWsRVpUCPUs56qCtKwm4RFAxfKm+jTqfBzjiqy5077bcvp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768930207; c=relaxed/simple;
-	bh=olV9BoaJSLlCHQuEKOHhvtVRs5P5zTg9HD2SglGgNi8=;
+	s=arc-20240116; t=1768930209; c=relaxed/simple;
+	bh=BHkv8j/3Fq8m+0unIykg6EgeGcskEZ1I8Lp6O2XezOU=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XkACrauy/QJat/oF6BGGtwYZ8uQc1X+m2GTVm9ljiGNMzmhf8DWnZh1m4mf8cQwaSqBOJNIycrWGASsP+zX3ClbHNXgiyfsBoQCcVq4AQwXlS/R2vM2nOI2epnBOrrpL6U4ss1xLXbHBHyiP3Na6iTta2H1eHif9NS2UmMgVvhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gNid5cWA; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=b68AtPKaoZ2Scnsc8eBylf3v/hi0Y+p2vI+mfK/+jHEUqaBih6AdbwMmDuuEHulGqgz0psqWcZiywGEM9je/FAqYc/x+JoqyVjqXsD5HlfkLqTuSI1DwAItnJwF2VqMocfXiMnHgAFZnAsizzVNKa+PF+5O9dJf/V6w+NBtr8kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=syl1DK/c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gNid5cWA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="syl1DK/c"
 Received: by smtp.kernel.org (Postfix)
-	id 21A0BC19423; Tue, 20 Jan 2026 17:30:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B18C16AAE;
-	Tue, 20 Jan 2026 17:30:07 +0000 (UTC)
+	id 984F4C19423; Tue, 20 Jan 2026 17:30:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D856C16AAE;
+	Tue, 20 Jan 2026 17:30:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768930207;
-	bh=olV9BoaJSLlCHQuEKOHhvtVRs5P5zTg9HD2SglGgNi8=;
+	s=k20201202; t=1768930208;
+	bh=BHkv8j/3Fq8m+0unIykg6EgeGcskEZ1I8Lp6O2XezOU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gNid5cWA01HXDL6BtO9pg+U1GGJBxIM9Ytect8a5D7j7HInjvLqSGwZHZhjLqtHyW
-	 6ae+v2Yrvz1AV1C7FLPJYjXRFzM4G06q08buPCVdfF7G7csxZOyLElOQ08pn3tl0l7
-	 001BHXKHgCPqLFPRAPeWWhEZVvNfuyfgQELIjtZLcLxcZoBbcFZ6sfFrvKnB0+rfM8
-	 JcW43Mlo3k9klvgoyxt9/9yM4bIpdLcPb6QgkmzKJQ+jDtXudif6lYZdFrT3vPTeOJ
-	 1Og6zotXYmgqKMxZ8xBCfOSjS8jX4cJZB8q9m++7UaurCfTYBT6jGM1SUaJh0qlWaV
-	 Kz6yZto3jPB/Q==
+	b=syl1DK/c+X2q318fxzHZcc0YHmwehqF6LXTruhjE2zeQw+pKtBgZUsKX6M/YdEmOH
+	 VOnUaQ5pak1gTJSD+V8umDjlFLIsG8KO7gykpIRPxkJvAgjL74j0Vp5CvYJe9u8gVT
+	 FLhSS+1HIqq2VCsphR+qrSoDj9TJYgdQtVFzM7dscnWzaRoZnRsbbExSjpzDbC4vAz
+	 i+B8xfdB9xvthJyBbcTCq7FXmN+dC6Ivbtmj0j+JRXZ8hUUVkWZdTWSCsnR1vq8z0t
+	 nyhyJ486LczCkAD+HAZuaa5TsdDAXz3n1hgwLKi1T6nnI0Nf5XHtSv8jfryx8gxlnf
+	 dvM3eEgl20PyA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C89323810935;
-	Tue, 20 Jan 2026 17:30:05 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4E7963810935;
+	Tue, 20 Jan 2026 17:30:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,37 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] MAINTAINERS: Add Andrew as M: to ARM/NUVOTON NPCM
- ARCHITECTURE
+Subject: Re: [GIT PULL] nuvoton: First batch of arm fixes for v6.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176893020460.535807.5470424345171074477.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Jan 2026 17:30:04 +0000
+ <176893020584.535807.606999077081728720.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Jan 2026 17:30:05 +0000
 References: 
- <20260116-npcm-arch-maintainer-v1-1-4abecbe1dc15@codeconstruct.com.au>
+ <392d9247f7c15d11b115c86cba762568f37cd10f.camel@codeconstruct.com.au>
 In-Reply-To: 
- <20260116-npcm-arch-maintainer-v1-1-4abecbe1dc15@codeconstruct.com.au>
+ <392d9247f7c15d11b115c86cba762568f37cd10f.camel@codeconstruct.com.au>
 To: Andrew Jeffery <andrew@codeconstruct.com.au>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 16 Jan 2026 11:29:56 +1030 you wrote:
-> Nuvoton's NPCM SoCs are part of their iBMC product line[1]. NPCM arch
-> patches have historically gone through Joel's tree along with ASPEED
-> changes due to their relevance to OpenBMC. Commit df5e674c7a99
-> ("MAINTAINERS: Switch ASPEED tree to shared BMC repository") does what
-> it says on the tin - we now have bmc/linux.git on git.kernel.org, and
-> I've picked up the maintainer role for it.
+On Fri, 16 Jan 2026 11:43:37 +1030 you wrote:
+> Hello SoC maintainers,
+> 
+> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+> 
+>   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - MAINTAINERS: Add Andrew as M: to ARM/NUVOTON NPCM ARCHITECTURE
-    https://git.kernel.org/soc/soc/c/400928d01fb9
+  - [GIT,PULL] nuvoton: First batch of arm fixes for v6.19
+    https://git.kernel.org/soc/soc/c/0240c8977455
 
 You are awesome, thank you!
 -- 
