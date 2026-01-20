@@ -1,410 +1,335 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE801B4224
-	for <soc@lists.linux.dev>; Tue, 20 Jan 2026 01:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768872383; cv=none; b=DdkgiMI+c1e1vSvjXSjA7Ox5lmc7I1b9eDhOMvghqu0cfE6qzmDRCfW0toDZ/p09FCDfoT3Ze9ScLsYbil/PWhjnzYMeUNOmEziN73RD25m7RytAT7ylt+EIwEoRXc8ZQ/hGQzxOK9TVR/PtTuTULIiN1ZjHmKF3+2wSDjN1Bms=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768872383; c=relaxed/simple;
-	bh=OKxoi9HOjZWaASCiHv6JVGO0cbkhKEQQ9u4CzjawT0I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AfVTKlhTuGMVPF9rTa29KrPudHk3Pv/zKfweCmjk6jq1/5a4/6eITL0okZ5m3ytRjVcfNp5Yr5zlx7XoazZnvFoEd2+IPxQQOyRVQvXdUyGP4TtGs3v0wyUvya0U7hNnDZ9a+qwozp83vfrytrZlHT5jzj2446Yh5F7GztO3P2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=b1RnHgfD; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C7942B730
+	for <soc@lists.linux.dev>; Tue, 20 Jan 2026 12:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768913798; cv=fail; b=mdHcjHP97YrFEEKCYkmCgXdCRHF9cmyfPlPIXdr0fJtWh3GD7DpSVizKYvQIHHAgfGJRmuVKc21UqYO+J5D8E6oCUf6toTbcWFzJ2K895MLIhoIXtJTh1Q8OEOayC1UDFFauZgNVxUec/cQF8gH6aIyGzREv2uedvmWt5sYOvx4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768913798; c=relaxed/simple;
+	bh=Ho2coXeYwGa5gXYtMNOCvIVFE3Q9XRyVYTZxL1Z0LrE=;
+	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=rz8gk/fbWDf52KSi99yAsSe9tRr9Ttn6m4u2Xx8WVURFDVe1MjgtvJ/uZ7JNuva4LUg++DTb/64uYAG4EC/Zy48vFx/7kA04Mrf2vCoq8RAPlOiCoQ63oRuVi0P9cQDBi2miq/fNRm7nkk/kssfitykcoV8v32gQgiDieM9QEx0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=MM61J5F6; arc=fail smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="b1RnHgfD"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="MM61J5F6"
 Received: by smtp.kernel.org (Postfix)
-	id 3DCCAC19425; Tue, 20 Jan 2026 01:26:23 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.19])
+	id C46F1C19422; Tue, 20 Jan 2026 12:56:37 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9E008C116C6;
-	Tue, 20 Jan 2026 01:26:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E008C116C6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Gv
-	oOqSo0pfg2OdoG0EFa29LA+7BiHrq2pBPMKlgj5dc=; b=b1RnHgfDuVJfydTi0v
-	/ZnRELDQZl1gD3+mSX3HcZQbjLcohxJjvUND6b+y6r91PDlhPz4I98TKkYbyqFLC
-	a/bxm3Eg6cylcrNhp9cXrLrdLvThWiAvyW9rxLocAHhca3YVKirTwUur8sluHGnW
-	0q9I6ufjwq6N2n1iVdzqLD11M=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgD3_+V71m5pGbEbAg--.16504S5;
-	Tue, 20 Jan 2026 09:12:31 +0800 (CST)
-From: Shawn Guo <shawnguo2@yeah.net>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	kernel@pengutronix.de,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/5] i.MX arm64 device tree changes for 6.20
-Date: Tue, 20 Jan 2026 09:12:17 +0800
-Message-ID: <20260120011221.4387-4-shawnguo2@yeah.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260120011221.4387-1-shawnguo2@yeah.net>
-References: <20260120011221.4387-1-shawnguo2@yeah.net>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4957AC16AAE;
+	Tue, 20 Jan 2026 12:56:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4957AC16AAE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60KCV2HS2146557;
+	Tue, 20 Jan 2026 13:56:21 +0100
+Received: from as8pr04cu009.outbound.protection.outlook.com (mail-westeuropeazon11011056.outbound.protection.outlook.com [52.101.70.56])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4brmv603ht-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 20 Jan 2026 13:56:21 +0100 (CET)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lJnzaimgz6K2xRcPpcj90OJjxA0ym1Llr3BwB0peykVNj+Eq75ByCAuwMLexW7draaTzDE+xJZgLJXaLq7ZgjQDnJ0AwjUFmALcSOnM/+HF5/l8J9vVgQvdp9UsDujy6h22bUKqtWNsH7/6QOzj9dOB+BBuTt3BvWk/ezf2HfipbtQK2NpZ6WcopKV2X0s5+MYF14VN4FXECy1j5b7cL9sudx172IPM61bRR7boOu8RXndUM/WkfwHOtMutLyXa8CmHFqdh+vF7cZ/Attn1aGI/XYrIL5sVDmG3bWLzntR50RO+yCoLRfOOOc2NPKSDL1ju2vxjtcQuTGzJdfnkvGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o3p8aBB42zS52uHhClBYqCHvZaMcQIl0iaCXt28PN3M=;
+ b=tz7aYyXpNQ1PbhAqOSU58/+lzy9eFfA3ZmccVZ0deqXAShlZHoioTT06XqxIKRxpiG2KlbYORDOZ0VWtsFQPN7t0ow9lyf/YKjnQAHJt7NW8h4z2rC0b3TBDQRts9EARl4xnN1DnXfj7bpDtoXkg3p14SlAw6EcN8cltlz1ynsrNIMQk+wPbiyfR17rwbbcxWl/5N+hx5Y5eQSJYjF2ab2koXM3MxXpTkQ21Guo9IcbUquDzuFcof/HZTynm7CkFf22HoLgHTTtDRFN6I2GW8D9cNQvCcgfhtYYzdC0EuObvKgnCwT4LNTvTsGosJ7RGkrlg3yo9kgiN+bAH92NSnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 164.130.1.59) smtp.rcpttodomain=arndb.de smtp.mailfrom=foss.st.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o3p8aBB42zS52uHhClBYqCHvZaMcQIl0iaCXt28PN3M=;
+ b=MM61J5F62ZAvxdOzswzpQH/h6p1ohtJA4R6ER6QrOEkBSkaJgukwlZY9bqqc3pKUZvGHeKsJ5xfHEtqFoSVoGJCrY9c3/5HFw2973w+drWQyKIkBAYluaXJL3EZc11dqRJdN/ikJ/E24JYyQOujrt0qfrJ/pC6nS6+DbaHZ9jyJUxxAu88QExUi5URYDppRbGB9WbyBiFgSSXFp/DTMK6B+fO0xG25kcsl9ctGOzZAJDVpS99IY31lnlac9rulZRqj736XPKFqAFCvaIXmMAnblmDrvHBkaj3u23q9Vd0aqrOehK8fKPliiF6CHn9/+eww1TBAlBx+LsrNi8sPuMJA==
+Received: from DU7P189CA0016.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:552::28)
+ by AS2PR10MB6926.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:57a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.12; Tue, 20 Jan
+ 2026 12:56:17 +0000
+Received: from DB5PEPF00014B90.eurprd02.prod.outlook.com
+ (2603:10a6:10:552:cafe::c7) by DU7P189CA0016.outlook.office365.com
+ (2603:10a6:10:552::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.13 via Frontend Transport; Tue,
+ 20 Jan 2026 12:56:13 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.59)
+ smtp.mailfrom=foss.st.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=foss.st.com;
+Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
+ designate 164.130.1.59 as permitted sender) receiver=protection.outlook.com;
+ client-ip=164.130.1.59; helo=smtpO365.st.com;
+Received: from smtpO365.st.com (164.130.1.59) by
+ DB5PEPF00014B90.mail.protection.outlook.com (10.167.8.228) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9542.4 via Frontend Transport; Tue, 20 Jan 2026 12:56:17 +0000
+Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpo365.st.com
+ (10.250.44.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Tue, 20 Jan
+ 2026 13:57:46 +0100
+Received: from [10.48.86.79] (10.48.86.79) by STKDAG1NODE2.st.com
+ (10.75.128.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Tue, 20 Jan
+ 2026 13:56:16 +0100
+Message-ID: <662f3c8a-7235-4a3c-adf1-eaa0e4921408@foss.st.com>
+Date: Tue, 20 Jan 2026 13:56:16 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@baylibre.com>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC: <alexandre.torgue@foss.st.com>,
+        "linux-stm32@st-md-mailman.stormreply.com"
+	<linux-stm32@st-md-mailman.stormreply.com>
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Subject: [GIT PULL] STM32 DT changes for v6.20#1
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:M88vCgD3_+V71m5pGbEbAg--.16504S5
-X-Coremail-Antispam: 1Uf129KBjvAXoW3Aw45uF1rWF1fXw4kCFyUKFg_yoW8Cry7Xo
-	Z3CFWrArWjkr47GF4Yvryqkw1Yq3Z5Wr1IqFWUZrWrGw4rXF13t3429r4j9rZ5JFyUCFyk
-	W3W7tr15Ar45W3s7n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUxSoGDUUUU
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiOB-KMGlu1n8iugAA3r
+X-ClientProxiedBy: STKCAS1NODE1.st.com (10.75.128.134) To STKDAG1NODE2.st.com
+ (10.75.128.133)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5PEPF00014B90:EE_|AS2PR10MB6926:EE_
+X-MS-Office365-Filtering-Correlation-Id: 24ef1d8d-9914-4647-3052-08de58234d36
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cHBrSVVxRCtxT3lrTXRyRThFemdvR2hRRjBrd250dWl3VnJjVjgyVEoxVEVl?=
+ =?utf-8?B?bzY0VTNvZk51aGc0eGpnMk9jZFZ1UTd0T2tPbm9FL2Q5aXBLUkZsWFNMZU1E?=
+ =?utf-8?B?YUJvZWdpdTVueUJYQzB1aWE3bTZjSitVdlFsV2J4a2dPZ1NWMjVWaktveFRF?=
+ =?utf-8?B?QkdDM0VpdUxGY255OEhFdzVZWER4d0NHTTlwZzhIbVRQbW9rN3lkTGVPZ3p5?=
+ =?utf-8?B?QTM5WWFxNDFQOGd4eWFBNlVUL0FiL1RlbGZ1dUZQODZVSUxIc1FOdmdBbHpK?=
+ =?utf-8?B?QUkzWXk0b0JoaGh3dExMdkc5NXFVbU1EZjBTUnV3U0xUS0grQ1pHYTZDb1hY?=
+ =?utf-8?B?QmNTWnVDUDdOL1FTQ0NjV2pPekpjRXg5Uit6N01ZNkhla0g4Ky9IMG1PVXVu?=
+ =?utf-8?B?Rnphb0FmZ0hkNlNmaUN0NFRPdjIyaGxmYTZsdXE3TzNyUURCVDFWS2l2TS9v?=
+ =?utf-8?B?UkdmaG5TUCtUbzFCNHNXR0NJbG14dUFNN1VjZWIzMkVFMzdXSmp1TWppSXBS?=
+ =?utf-8?B?ZmNZc2FQZUtLRG9lTmhjOXV5QlhWNHpIaG84MEJpRWtLNjZWaUNsMllzMDQ2?=
+ =?utf-8?B?ZDZZc1d2bnMvd1owN3hvYVh5cHp2NTNxYTNJWFNMUjYyUU12b3ljbU8vUG1j?=
+ =?utf-8?B?WjBJSkd1bzdydkh1ejVFR2piQnNpWTJBQy9qSXJxTWt1MmNTT01hRWt5R1hi?=
+ =?utf-8?B?Zlo0Q1VTWUdIVmhlRENvWklyOERZNXdGdzZoTTZMVWNVWlRMNjBSR25saWZN?=
+ =?utf-8?B?eVdOR2dTVmFBMmwvczQ4Y2JFWFgxdVZteFZzMmd4R1RDVWhQQk1UN2I0dWd0?=
+ =?utf-8?B?eThMQVQ0S2tMT1VDUUJyNnplUTlMZGE3aUkyZEEySEVnQlJvN0dYTVlra3Zt?=
+ =?utf-8?B?dDVONHRveTg4eXJHekdTdzczZndsQm1paEpGWTRhWUtMckE0MHRZNHcwaFNm?=
+ =?utf-8?B?T29HakhGMHpZVnNhZUZkRnRtMTVWcDZoek1DK0VCSERMTjVOZG41cWlGMmZD?=
+ =?utf-8?B?enI0SnY3OXpPaXBlMURuWW96UUJYUmdwLzVvWFZkVnVndmcreFFEV0t2NVJo?=
+ =?utf-8?B?SElLVHEvV1VackZGS1pqajJ0Nis5NmN4aXRKTFlnb2pIQk9uQ1pzSy9zSUdq?=
+ =?utf-8?B?RWZmSHlEVUg4STc3Q0haRkFIRFJxdkJrRnFTNDdldCtUbmJTVmJEencyaEU1?=
+ =?utf-8?B?d2FKRk9oTjdKU2ZNMFdOdm0wNzZPckRNVXo1QWdIeitjQ3V1Mno4Uk9mWVNn?=
+ =?utf-8?B?VDZGc3VBSWRKSzVFMWQ0QTMveVcvYVpqS280WVk0MktXeGg4T05qeTFIenBa?=
+ =?utf-8?B?THZ5Tzl4R05SeWJhdEVPK3NKdDJLVzk5RHpESzkvNDJ1T3grN0xodVNxWEZI?=
+ =?utf-8?B?dU13L2hGWWMxdHlCMWl3Mm9xd0R3STkvRmRXdGtVaEx3dWVwSlRVWm1hN1Yr?=
+ =?utf-8?B?VVBiK1BGVktuSjNlaGhKOXZ1MDdzd3gvOVlsR0RrQ2kwYWRsODNXNDhiQmI3?=
+ =?utf-8?B?QTdicy9LL1I4V3d5bkZTVkZrRUJYakZPMUlvRklXbGhNOWZQTjNGeDJTTlF1?=
+ =?utf-8?B?czVIYmM0RE8wRTZIdlJXZGQ4UlM5K01tVElXRmhzMlVwZEFFM3Z2ZSs0VlZ1?=
+ =?utf-8?B?OGRUNTBlYkJKS1BzYzJPRThFZy9FRnRhUlVQOXZHTG9EaFVEQWFVL3pPN3A1?=
+ =?utf-8?B?U2RBV0dHeTdPRHVtREZ1Z0pHeXNPN0hzUk95QW9oaEFVemNub1U4dmExQmVL?=
+ =?utf-8?B?YzRZWlc1RVcwMnM0ODZBZmdzQkpvQVRCaVRGUzF4YUFiekxkMjZxMW9kQStr?=
+ =?utf-8?B?U1JVUmdRYXJkVVVUV1VQazZJMG0zUndTT3c5QWZpUXUya1RwMzhaVFVMeEVQ?=
+ =?utf-8?B?RGtRMlZtN2hUT1VST0NkNnVUTWlCQmphQVhhVFVEUEdrQzFSLzdDc2N1Nm53?=
+ =?utf-8?B?Rnc4WVJ1QnNXWndGRDRkTEFRQWFGR1ZRWFo1anNPOUorNUduQTZtcEgrTEl6?=
+ =?utf-8?B?NmRUcXpLc3lwVU8ycjIvL3pCVFhXemFkbndyc3BuN1UvdklYWElERlExc1E2?=
+ =?utf-8?B?aEdsNE5WMlZBcngyNVJKaFk1VTBES1VFNXpHVUFUdy9NMERjTm0rNThiR1pu?=
+ =?utf-8?B?cGF5TXB5ZnpwdzMzMzdnQ0pPQUZPN1JucmdhS3dsMjBPUU81Yk0yOVB2MUtV?=
+ =?utf-8?B?WnhXZWZvSWJ4ZkcxNkJ0UkE0aVFBLzZaanRraFluTmN6MURLdGxPeFNrS1Fq?=
+ =?utf-8?B?c2xyMXl1M2x1QWdodUdDUWgxRS93PT0=?=
+X-Forefront-Antispam-Report:
+	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: foss.st.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2026 12:56:17.4569
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24ef1d8d-9914-4647-3052-08de58234d36
+X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.59];Helo=[smtpO365.st.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB5PEPF00014B90.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR10MB6926
+X-Authority-Analysis: v=2.4 cv=Vf/6/Vp9 c=1 sm=1 tr=0 ts=696f7b75 cx=c_pps
+ a=O0dsbvRe/WPT3j730UY7lw==:117 a=d6reE3nDawwanmLcZTMRXA==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=TP8aPCUxYTYA:10 a=IkcTkHD0fZMA:10
+ a=vUbySO9Y5rIA:10 a=s63m1ICgrNkA:10 a=KrXZwBdWH7kA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=D-mElihrz8eyQg9S2k0A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 3hV8wIiZrLhX-76Il3HanRb0p1rf0JAF
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDEwNyBTYWx0ZWRfX/MUTTfSkUeAB
+ IHbKqzk+X4zWz7xaGbqkh2kSjuwRGtB9hvLGowZGHhrFWVJtGrj+x3d9X9p5s7gTCsQ93x2Lh18
+ XRUUOmEuX1ImsvqXxlaGUEbBK6IoS39d3eQBoRmCIkda+0e8zNSDGeQHSJT2xW9CqJl03aybMQg
+ YYDeFoVQtp7j/UNIlkX8lDsgFmx7gwOPK5IFCYeWhqvfv8SIYUcwmAU4MY55rRiASB5VFjKkKYe
+ 53zq3hJAO/DxXWzVTvqRgrajF4xyp0njzQDz34qnVnyGsha+Wsuk50+dZtq2lXygPd+S0R03RkX
+ eZG+ZHc3CezNGBl/yNvbZLYwOukot2DXg481QAdEa9irVYucmJpWM9S35e2Jrn42E/o1+Z1ZByH
+ uxYZ+hjhKDpwWW2ObT+U1D69fnbc9nxrAdWZeIwLPC0p1ddkacybh9fTFsysBogOTlD41p+Rgu4
+ SUZQyNfPcEHVtSGnBKg==
+X-Proofpoint-ORIG-GUID: 3hV8wIiZrLhX-76Il3HanRb0p1rf0JAF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-20_03,2026-01-20_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ bulkscore=0 suspectscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
+ clxscore=1011 adultscore=0 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601200107
 
-From: Shawn Guo <shawnguo@kernel.org>
+Hi ARM SoC maintainers,
+
+Please consider this first round of STM32 DT changes for v6.20 cycle.
+
+Thanks
+Alex
 
 The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt64-6.20
+   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
+tags/stm32-dt-for-v6.20-1
 
-for you to fetch changes up to 9bdfeed989b126a3c9c5a6f74ad2d96784b69d27:
+for you to fetch changes up to 1636348aab60830a1bc58a55916b218ce18712b5:
 
-  arm64: dts: freescale: imx95: Add support for i.MX95 15x15 FRDM board (2026-01-18 14:39:44 +0800)
-
-----------------------------------------------------------------
-i.MX arm64 device tree changes for 6.20:
-
-- New board support: i.MX8MP/i.MX91/i.MX93/i.MX95 FRDM, ifm VHIP4
-  EvalBoard, Apalis iMX8QP, TQ-Systems MBLS1028A/MBLS1028A-IND
-- A number of series from Alexander Stein improving lpcg indices
-  description for tqma8xxs board, moving BMAN/QMAN buffers for
-  tqmls1046a, refreshing tqma8mpql-mba8mpxl support a bit, adding HDMI
-  audio support for tqma8mpql-mba8mp-ras314 etc.
-- A series from Chancel Liu adding various audio features for
-  imx93-14x14-evk board
-- A series from Francesco Dolcini enabling hdmi_pai device for
-  imx8mp-verdin and imx8mp-toradex-smarc
-- A couple of changes from Francesco Valla enabling more devices
-  and correcting CAN transceiver gpio for imx93-11x11-frdm
-- A few changes from Frank Li adding DDR perf support for imx8qm, adding
-  camera support for imx8mp-evk, enabling thermal support for i.MX91, etc.
-- A series from Haibo Chen adding flexcan support for imx943-evk and
-  imx952-evk boards
-- A series from Krzysztof Kozlowski fixing up coding style issues
-- A couple of changes from Marek Vasut updating Data Modul i.MX8M Plus
-  eDM SBC DT to rev.903, using GPU_CGC as core clock for GPU on i.MX95
-- A series from Markus Niebel to clean up imx8mm-tqma8mqml board
-  regulators
-- A couple of series from Peng Fan replacing xceiver-supply with phys
-  for NXP EVK boards, improving imx952-evk board support
-- A series from Sebastian Krzyszkowiak to refresh imx8mq-librem5 support
-- A couple of series from Stefano Radaelli to improve
-  imx93-var-som-symphony and imx8mp-var-som support
-- Other random changes for various boards
+   arm/arm64: dts: st: Drop unused .dtsi (2026-01-20 09:54:16 +0100)
 
 ----------------------------------------------------------------
-Alexander Stein (12):
-      arm64: dts: tqma8xxs: replace 0 with IMX_LPCG_CLK_0 for lpcg indices
-      arm64: dts: tqma8xxs-mb-smarc-2: replace 0 with IMX_LPCG_CLK_0 for lpcg indices
-      arm64: dts: tqmls1046a: Move BMAN/QMAN buffers to DRAM1 area
-      arm64: dts: tqma8mpql-mba8mpxl: Adjust copyright text format
-      arm64: dts: tqma8mpql-mba8mpxl: Fix Ethernet PHY IRQ support
-      arm64: dts: tqma8mpql-mba8mpxl: Fix HDMI CEC pad control settings
-      arm64: dts: tqma8mpql-mba8mpxl: Add HDMI audio output support
-      arm64: dts: tqma8mpql-mba8mpxl: Configure IEEE 1588 event out signal
-      arm64: dts: tqma8mpql-mba8mp-ras314: Fix Ethernet PHY IRQ support
-      arm64: dts: tqma8mpql-mba8mp-ras314: Fix HDMI CEC pad control settings
-      arm64: dts: tqma8mpql-mba8mp-ras314: Add HDMI audio output support
-      arm64: dts: mb-smarc-2: Add PCIe support
+STM32 DT for v6.20, round 1
 
-Chancel Liu (7):
-      arm64: dts: imx93-14x14-evk: Add bt-sco sound card support
-      arm64: dts: imx93-14x14-evk: Add audio XCVR sound card
-      arm64: dts: imx91-11x11-evk: Refine label and node name of WM8962
-      arm64: dts: imx91-11x11-evk: Add bt-sco sound card support
-      arm64: dts: imx91-11x11-evk: Add WM8962 sound card support
-      arm64: dts: imx91-11x11-evk: Add PDM microphone sound card support
-      arm64: dts: imx91-11x11-evk: Add audio XCVR sound card support
+Highlights:
+----------
 
-Daniel Baluta (1):
-      arm64: dts: imx93-11x11-frdm: Add MQS audio support
+- MCU:
+   - Update/add Led support on ST boards.
 
-Daniel Schultz (1):
-      arm64: dts: imx8mm: Add label to thermal-zones
+- MPU:
+   - STM32MP13:
+     - Add boot led and red led on ST DK board.
 
-Fabian Pflug (1):
-      arm64: dts: freescale: add support for NXP i.MX93 FRDM
+   - STMP32MP15:
+     - Add boot led and red led on ST DK boards.
+     - Add SPI1 sleep pinctrl group.
 
-Fedor Ross (1):
-      arm64: dts: imx8mn: Add ifm VHIP4 EvalBoard v1 and v2
+   - STM32MP23:
+     - Add green ,orange and boot leds on ST boards.
+     - Add SPI, I2C, DCMIPP and CSI instances to CLUSTER_PD
+       power domain.
+     - Enable analog-filter to all I2C instances.
 
-Francesco Dolcini (7):
-      arm64: dts: freescale: imx8-apalis: Add ethernet alias
-      arm64: dts: freescale: imx8mp-verdin: Remove obsolete TODO comments
-      arm64: dts: freescale: imx8mp-verdin: enable hdmi_pai device
-      arm64: dts: freescale: imx8mp-toradex-smarc: enable hdmi_pai device
-      arm64: dts: imx8qm: Add CPU cluster labels
-      arm64: dts: freescale: Add NXP i.MX8QP SoC dtsi
-      arm64: dts: freescale: Add Apalis iMX8QP
+   - STM32MP25:
+     - Add green ,orange and boot leds on ST boards.
+     - Add SPI, I2C, DCMIPP and CSI instances to CLUSTER_PD
+       power domain.
+     - Enable analog-filter to all I2C instances.
+     - Add LPDDR/DDR channels to ST boards.
 
-Francesco Valla (2):
-      arm64: dts: imx93-11x11-frdm: enable additional devices
-      arm64: dts: imx91-11x11-frdm: fix CAN transceiver gpio
+----------------------------------------------------------------
+Alain Volmat (14):
+       arm64: dts: st: add power-domains in all spi of stm32mp251.dtsi
+       arm64: dts: st: add power-domains in all spi of stm32mp231.dtsi
+       dt-bindings: i2c: st,stm32-i2c: add 'power-domains' property
+       arm64: dts: st: add power-domains in all i2c of stm32mp251.dtsi
+       arm64: dts: st: add power-domains in all i2c of stm32mp231.dtsi
+       arm64: dts: st: enable i2c analog-filter in stm32mp251.dtsi
+       arm64: dts: st: enable i2c analog-filter in stm32mp231.dtsi
+       ARM: dts: stm32: add spi1 sleep state pinctrl on stm32mp157c-ev1
+       dt-bindings: media: st: csi: add 'power-domains' property
+       arm64: dts: st: add power-domain of csi in stm32mp251.dtsi
+       arm64: dts: st: add power-domain of csi in stm32mp231.dtsi
+       dt-bindings: media: st: dcmipp: add 'power-domains' property
+       arm64: dts: st: add power-domain of dcmipp in stm32mp251.dtsi
+       arm64: dts: st: add power-domain of dcmipp in stm32mp231.dtsi
 
-Frank Li (5):
-      arm64: dts: imx8qm: add ddr perf device node
-      arm64: dts: mba8xx: replace 0 with IMX_LPCG_CLK_0 for lpcg indices
-      arm64: dts: imx8qxp-mek: Add sensors under i2c1 bus
-      arm64: dts: imx8mp-evk: add camera ov5640 and related nodes
-      arm64: dts: imx91: Add thermal-sensor and thermal-zone support
+Clément Le Goffic (2):
+       arm64: dts: st: add LPDDR channel to stm32mp257f-dk board
+       arm64: dts: st: add DDR channel to stm32mp257f-ev1 board
 
-Gregor Herburger (1):
-      arm64: dts: ls1028a: Add mbls1028a and mbls1028a-ind devicetrees
+Krzysztof Kozlowski (2):
+       arm64: dts: st: Use hyphen in node names
+       arm64: dts: st: Minor whitespace cleanup
 
-Haibo Chen (6):
-      arm64: dts: imx943-evk: add flexcan support
-      arm64: dts: imx93-9x9-qsb: add CAN support overlay file
-      arm64: dts: imx94: add xspi device node
-      arm64: dts: imx94: add mt35xu512aba spi nor support
-      arm64: dts: imx952-evk: Change the usdhc1_200mhz drive strength to DSE4
-      arm64: dts: imx952-evk: Add flexcan support
+Patrice Chotard (11):
+       ARM: dts: stm32: reorder nodes for stm32429i-eval
+       ARM: dts: stm32: Update LED nodes for stm32 MCU boards
+       ARM: dts: stm32: Add LED support for stm32h743i-disco
+       ARM: dts: stm32: Add LED support for stm32h743i-eval
+       ARM: dts: stm32: Add red LED for stm32mp135f-dk board
+       ARM: dts: stm32: Add red LED for stm32mp157c-ed1 board
+       ARM: dts: stm32: Update LED node for stm32mp15xx-dkx board
+       arm64: dts: st: Add green and orange LED for stm32mp2 ST boards
+       ARM: dts: stm32: Add boot-led for stm32 MCU ST boards
+       ARM: dts: stm32: Add boot-led for stm32mp1 ST boards
+       arm64: dts: st: Add boot-led for stm32mp2 ST boards
 
-Jacky Bai (1):
-      arm64: dts: imx8dxl-ss-ddr: Add DB (system interconnects) pmu support for i.MX8DXL
+Randy Dunlap (1):
+       arm64: STM32: drop an undefined Kconfig symbol
 
-Joseph Guo (1):
-      arm64: dts: freescale: Add FRDM-IMX91 basic support
+Rob Herring (Arm) (1):
+       arm/arm64: dts: st: Drop unused .dtsi
 
-Krzysztof Kozlowski (3):
-      arm64: dts: freescale: Use hyphen in node names
-      arm64: dts: freescale: Minor whitespace cleanup
-      arm64: dts: freescale: Use lowercase hex
-
-Laurentiu Mihalcea (1):
-      arm64: dts: imx8ulp: add sim lpav node
-
-Lei Xu (1):
-      arm64: dts: freescale: imx95: Add support for i.MX95 15x15 FRDM board
-
-Marek Vasut (3):
-      arm64: dts: imx8mp: Update Data Modul i.MX8M Plus eDM SBC DT to rev.903
-      arm64: dts: imx95: Use GPU_CGC as core clock for GPU
-      arm64: dts: imx8mn: Add SNVS LPGPR
-
-Markus Niebel (7):
-      arm64: dts: imx8mm-tqma8mqml: remove virtual 3.3V regulator
-      arm64: dts: imx8mm-tqma8mqml: remove virtual 1.8V regulator
-      arm64: dts: imx8mm-tqma8mqml: remove superfluous line
-      arm64: dts: imx8mm-tqma8mqml: fix LDO5 power off
-      arm64: dts: imx8mn-tqma8mqnl: remove virtual 3.3V regulator
-      arm64: dts: imx8mn-tqma8mqnl: remove virtual 1.8V regulator
-      arm64: dts: imx8mn-tqma8mqnl: fix LDO5 power off
-
-Max Krummenacher (1):
-      arm64: dts: colibri-imx8x: Add wi-fi 32kHz clock
-
-Peng Fan (13):
-      arm64: dts: imx95-15x15-evk: Use phys to replace xceiver-supply
-      arm64: dts: imx8mp-evk: Use phys to replace xceiver-supply
-      arm64: dts: imx93-11x11-evk: Use phys to replace xceiver-supply
-      arm64: dts: freescale: Add initial device tree for i.MX952
-      arm64: dts: freescale: Add i.MX952 EVK basic device tree
-      arm64: dts: imx952: Add idle-states node
-      arm64: dts: imx952-evk: Enable I2C[2,3,4,6,7] bus
-      arm64: dts: imx952-evk: Enable UART5
-      arm64: dts: imx952-evk: Enable SPI7
-      arm64: dts: imx952-evk: Enable USB[1,2]
-      arm64: dts: imx952-evk: Enable wdog3
-      arm64: dts: imx952-evk: Enable TPM[3,6]
-      arm64: dts: imx952-evk: Add nxp,ctrl-ids for scmi misc
-
-Philippe Schenker (2):
-      arm64: dts: colibri-imx8x: Add backlight
-      arm64: dts: colibri-imx8x: Add cma memory
-
-Rogerio Pimentel (1):
-      arm64: dts: add support for NXP i.MX8MP FRDM board
-
-Sebastian Krzyszkowiak (6):
-      arm64: dts: imx8mq-librem5: Enable I2C recovery
-      arm64: dts: imx8mq-librem5: Set vibrator's PWM frequency to 20kHz
-      arm64: dts: imx8mq-librem5: Enable SNVS RTC
-      arm64: dts: imx8mq-librem5: Limit uSDHC2 frequency to 50MHz
-      arm64: dts: imx8mq-librem5: Set cap-power-off-card for usdhc2
-      arm64: dts: imx8mq-librem5: Don't set mic-cfg for wm8962
-
-Stefan Riedmueller (1):
-      arm64: dts: imx8mp-phyboard-pollux: Enable i2c3
-
-Stefano Radaelli (10):
-      arm64: dts: imx93-var-som-symphony: Update gpio aliases
-      arm64: dts: imx93-var-som-symphony: Add support for ft5x06 touch controller
-      arm64: dts: imx93-var-som-symphony: Add USB support
-      arm64: dts: imx93-var-som-symphony: Enable LPSPI6 controller
-      arm64: dts: imx8mp-var-som: Move USDHC2 support to Symphony carrier
-      arm64: dts: imx8mp-var-som: Move PCA9534 GPIO expander to Symphony carrier
-      arm64: dts: imx8mp-var-som: Move UART2 description to Symphony carrier
-      arm64: dts: imx8mp-var-som: Add WiFi and Bluetooth support
-      arm64: dts: imx8mp-var-som: Add support for WM8904 audio codec
-      arm64: dts: imx8mp-var-som: Add support for TSC2046 touchscreen
-
-Teresa Remmet (1):
-      arm64: dts: imx8mm-phycore-som: Update eth phy impedance
-
-Tim Harvey (1):
-      arm64: dts: imx8m{m,p}-venice-gw71xx: Add Magetometer
-
-Wei Fang (2):
-      arm64: dts: imx94: add basic NETC related nodes
-      arm64: dts: imx943-evk: add ENETC, EMDIO and PTP Timer support
-
-Yannic Moog (3):
-      arm64: dts: imx8mp-phyboard-pollux: add fan-supply
-      arm64: dts: imx8mp-phycore-som: add spi-nor supply vcc
-      arm64: dts: imx8mp-phyboard-pollux: add PEB-WLBT-05 expansion board
-
-Yashwanth Varakala (2):
-      arm64: dts: imx8mp libra: add and update display overlays
-      arm64: dts: imx8mp libra: add peb-av-10 expansion board overlay
-
- arch/arm64/boot/dts/freescale/Makefile             |   48 +-
- arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |    2 +-
- .../fsl-ls1028a-tqmls1028a-mbls1028a-ind.dts       |   68 ++
- .../freescale/fsl-ls1028a-tqmls1028a-mbls1028a.dts |  118 ++
- .../fsl-ls1028a-tqmls1028a-mbls1028a.dtsi          |  287 +++++
- .../boot/dts/freescale/fsl-ls1028a-tqmls1028a.dtsi |  124 ++
- .../boot/dts/freescale/fsl-ls1046a-tqmls1046a.dtsi |   12 +
- arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |    6 +-
- .../arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts |    4 +-
- arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi     |    2 +-
- arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi     |    2 +-
- arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi     |   32 +-
- .../arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi |    4 +
- arch/arm64/boot/dts/freescale/imx8-ss-ddr.dtsi     |    2 +-
- arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi  |   22 +
- arch/arm64/boot/dts/freescale/imx8dxl.dtsi         |    7 +
- .../boot/dts/freescale/imx8mm-phycore-rpmsg.dtso   |    2 +-
- .../boot/dts/freescale/imx8mm-phycore-som.dtsi     |    1 +
- .../boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dts |   13 +-
- .../arm64/boot/dts/freescale/imx8mm-tqma8mqml.dtsi |   39 +-
- .../boot/dts/freescale/imx8mm-venice-gw71xx.dtsi   |   15 +
- arch/arm64/boot/dts/freescale/imx8mm.dtsi          |    2 +-
- .../boot/dts/freescale/imx8mn-tqma8mqnl-mba8mx.dts |   29 +-
- .../arm64/boot/dts/freescale/imx8mn-tqma8mqnl.dtsi |   37 +-
- .../freescale/imx8mn-vhip4-evalboard-common.dtsi   |  396 ++++++
- .../imx8mn-vhip4-evalboard-ksz8794-common.dtsi     |   98 ++
- .../imx8mn-vhip4-evalboard-v1-overlay-ksz8794.dtso |   24 +
- .../imx8mn-vhip4-evalboard-v1-overlay-ksz9031.dtso |   48 +
- .../dts/freescale/imx8mn-vhip4-evalboard-v1.dts    |  258 ++++
- ...imx8mn-vhip4-evalboard-v2-overlay-adin1300.dtso |   60 +
- .../imx8mn-vhip4-evalboard-v2-overlay-ksz8794.dtso |   24 +
- .../dts/freescale/imx8mn-vhip4-evalboard-v2.dts    |  221 ++++
- arch/arm64/boot/dts/freescale/imx8mn.dtsi          |    5 +
- .../dts/freescale/imx8mp-data-modul-edm-sbc.dts    |  148 ++-
- arch/arm64/boot/dts/freescale/imx8mp-edm-g-wb.dts  |    2 +-
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |  123 +-
- arch/arm64/boot/dts/freescale/imx8mp-frdm.dts      |  355 ++++++
- .../imx8mp-hummingboard-pulse-common.dtsi          |    2 +-
- .../imx8mp-libra-rdk-fpsc-lvds-etml1010g3dra.dtso  |    2 +-
- .../imx8mp-libra-rdk-fpsc-lvds-peb-av-10.dtsi      |  196 +++
- .../imx8mp-libra-rdk-fpsc-lvds-peb-av-10.dtso      |    9 +
- ...8mp-libra-rdk-fpsc-lvds-ph128800t006-zhc01.dtso |   44 +
- .../boot/dts/freescale/imx8mp-libra-rdk-fpsc.dts   |    6 +-
- .../imx8mp-phyboard-pollux-peb-wlbt-05.dtso        |  108 ++
- .../dts/freescale/imx8mp-phyboard-pollux-rdk.dts   |   33 +-
- .../boot/dts/freescale/imx8mp-phycore-som.dtsi     |    8 +
- arch/arm64/boot/dts/freescale/imx8mp-sr-som.dtsi   |    6 +-
- .../dts/freescale/imx8mp-toradex-smarc-dev.dts     |    4 +
- .../boot/dts/freescale/imx8mp-toradex-smarc.dtsi   |    6 +-
- .../freescale/imx8mp-tqma8mpql-mba8mp-ras314.dts   |   23 +-
- .../dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dts    |   31 +-
- .../boot/dts/freescale/imx8mp-var-som-symphony.dts |  145 +++
- arch/arm64/boot/dts/freescale/imx8mp-var-som.dtsi  |  331 +++--
- .../boot/dts/freescale/imx8mp-venice-gw71xx.dtsi   |   15 +
- .../boot/dts/freescale/imx8mp-verdin-dahlia.dtsi   |    4 +
- .../boot/dts/freescale/imx8mp-verdin-dev.dtsi      |    4 +
- .../boot/dts/freescale/imx8mp-verdin-mallow.dtsi   |    4 +
- .../boot/dts/freescale/imx8mp-verdin-yavia.dtsi    |    4 +
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi   |    4 -
- .../boot/dts/freescale/imx8mq-librem5-devkit.dts   |    2 +-
- arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi  |   73 +-
- arch/arm64/boot/dts/freescale/imx8qm-mek.dts       |   12 +-
- arch/arm64/boot/dts/freescale/imx8qm-ss-ddr.dtsi   |   19 +
- arch/arm64/boot/dts/freescale/imx8qm.dtsi          |   10 +-
- .../dts/freescale/imx8qp-apalis-v1.1-eval-v1.2.dts |   26 +
- .../boot/dts/freescale/imx8qp-apalis-v1.1-eval.dts |   16 +
- .../freescale/imx8qp-apalis-v1.1-ixora-v1.1.dts    |   16 +
- .../freescale/imx8qp-apalis-v1.1-ixora-v1.2.dts    |   16 +
- .../boot/dts/freescale/imx8qp-apalis-v1.1.dtsi     |   16 +
- arch/arm64/boot/dts/freescale/imx8qp.dtsi          |   24 +
- arch/arm64/boot/dts/freescale/imx8qxp-mek.dts      |   38 +-
- arch/arm64/boot/dts/freescale/imx8ulp.dtsi         |   17 +
- arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi   |   31 +-
- arch/arm64/boot/dts/freescale/imx91-11x11-evk.dts  |  181 ++-
- arch/arm64/boot/dts/freescale/imx91-11x11-frdm.dts |  906 ++++++++++++++
- arch/arm64/boot/dts/freescale/imx91.dtsi           |   58 +
- arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts  |   17 +-
- arch/arm64/boot/dts/freescale/imx93-11x11-frdm.dts |  807 +++++++++++++
- arch/arm64/boot/dts/freescale/imx93-14x14-evk.dts  |   74 ++
- .../boot/dts/freescale/imx93-9x9-qsb-can1.dtso     |   63 +
- .../boot/dts/freescale/imx93-var-som-symphony.dts  |   84 ++
- arch/arm64/boot/dts/freescale/imx93-var-som.dtsi   |    4 +-
- arch/arm64/boot/dts/freescale/imx94.dtsi           |  172 ++-
- arch/arm64/boot/dts/freescale/imx943-evk.dts       |  178 +++
- arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts  |   17 +-
- arch/arm64/boot/dts/freescale/imx95-15x15-frdm.dts |  964 +++++++++++++++
- arch/arm64/boot/dts/freescale/imx95-clock.h        |    1 +
- .../boot/dts/freescale/imx95-toradex-smarc.dtsi    |    2 +-
- .../arm64/boot/dts/freescale/imx95-tqma9596sa.dtsi |    2 +-
- arch/arm64/boot/dts/freescale/imx95.dtsi           |    2 +-
- arch/arm64/boot/dts/freescale/imx952-clock.h       |  215 ++++
- arch/arm64/boot/dts/freescale/imx952-evk.dts       |  596 +++++++++
- arch/arm64/boot/dts/freescale/imx952-pinfunc.h     |  867 ++++++++++++++
- arch/arm64/boot/dts/freescale/imx952-power.h       |   44 +
- arch/arm64/boot/dts/freescale/imx952.dtsi          | 1266 ++++++++++++++++++++
- arch/arm64/boot/dts/freescale/mba8xx.dtsi          |    4 +-
- arch/arm64/boot/dts/freescale/s32g3.dtsi           |    4 +-
- arch/arm64/boot/dts/freescale/s32gxxxa-evb.dtsi    |   20 +-
- arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi    |   20 +-
- .../boot/dts/freescale/tqma8xxs-mb-smarc-2.dtsi    |   12 +-
- arch/arm64/boot/dts/freescale/tqma8xxs.dtsi        |   16 +-
- 101 files changed, 10176 insertions(+), 365 deletions(-)
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-tqmls1028a-mbls1028a-ind.dts
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-tqmls1028a-mbls1028a.dts
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-tqmls1028a-mbls1028a.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-tqmls1028a.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-vhip4-evalboard-common.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-vhip4-evalboard-ksz8794-common.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-vhip4-evalboard-v1-overlay-ksz8794.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-vhip4-evalboard-v1-overlay-ksz9031.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-vhip4-evalboard-v1.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-vhip4-evalboard-v2-overlay-adin1300.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-vhip4-evalboard-v2-overlay-ksz8794.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-vhip4-evalboard-v2.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-frdm.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-libra-rdk-fpsc-lvds-peb-av-10.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-libra-rdk-fpsc-lvds-peb-av-10.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-libra-rdk-fpsc-lvds-ph128800t006-zhc01.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-wlbt-05.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-ss-ddr.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qp-apalis-v1.1-eval-v1.2.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qp-apalis-v1.1-eval.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qp-apalis-v1.1-ixora-v1.1.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qp-apalis-v1.1-ixora-v1.2.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qp-apalis-v1.1.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8qp.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx91-11x11-frdm.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx93-11x11-frdm.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx93-9x9-qsb-can1.dtso
- create mode 100644 arch/arm64/boot/dts/freescale/imx95-15x15-frdm.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx952-clock.h
- create mode 100644 arch/arm64/boot/dts/freescale/imx952-evk.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx952-pinfunc.h
- create mode 100644 arch/arm64/boot/dts/freescale/imx952-power.h
- create mode 100644 arch/arm64/boot/dts/freescale/imx952.dtsi
-
+  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       |  3 +++
+  Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml  |  3 +++
+  Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml |  3 +++
+  arch/arm/boot/dts/st/spear320s.dtsi                           | 24 
+------------------------
+  arch/arm/boot/dts/st/stm32429i-eval.dts                       | 73 
++++++++++++++++++++++++++++++++++++++++++++------------------------------
+  arch/arm/boot/dts/st/stm32746g-eval.dts                       | 15 
+++++++++++++++-
+  arch/arm/boot/dts/st/stm32f429-disco.dts                      | 15 
++++++++++++++--
+  arch/arm/boot/dts/st/stm32f469-disco.dts                      | 15 
+++++++++++++++-
+  arch/arm/boot/dts/st/stm32f746-disco.dts                      | 12 
++++++++++++-
+  arch/arm/boot/dts/st/stm32f769-disco.dts                      | 14 
++++++++++++++-
+  arch/arm/boot/dts/st/stm32h743i-disco.dts                     | 34 
+++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32h743i-eval.dts                      | 25 
++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32h747i-disco.dts                     | 15 
+++++++++++++++-
+  arch/arm/boot/dts/st/stm32mp135f-dk.dts                       | 15 
+++++++++++++++-
+  arch/arm/boot/dts/st/stm32mp157c-ed1.dts                      | 15 
+++++++++++++++-
+  arch/arm/boot/dts/st/stm32mp157c-ev1.dts                      |  3 ++-
+  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi                     | 19 
++++++++++++++++++--
+  arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi               | 57 
+---------------------------------------------------------
+  arch/arm64/Kconfig.platforms                                  |  1 -
+  arch/arm64/boot/dts/st/stm32mp21xc.dtsi                       |  8 
+--------
+  arch/arm64/boot/dts/st/stm32mp231.dtsi                        | 19 
++++++++++++++++++--
+  arch/arm64/boot/dts/st/stm32mp235f-dk.dts                     | 21 
++++++++++++++++++++--
+  arch/arm64/boot/dts/st/stm32mp23xc.dtsi                       |  8 
+--------
+  arch/arm64/boot/dts/st/stm32mp251.dtsi                        | 30 
+++++++++++++++++++++++++++++--
+  arch/arm64/boot/dts/st/stm32mp257f-dk.dts                     | 28 
+++++++++++++++++++++++++++--
+  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts                    | 39 
+++++++++++++++++++++++++++++++++++++++-
+  arch/arm64/boot/dts/st/stm32mp25xc.dtsi                       |  8 
+--------
+  arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi             | 71 
+-----------------------------------------------------------------------
+  28 files changed, 365 insertions(+), 228 deletions(-)
+  delete mode 100644 arch/arm/boot/dts/st/spear320s.dtsi
+  delete mode 100644 arch/arm/boot/dts/st/stm32mp15xxab-pinctrl.dtsi
+  delete mode 100644 arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+  delete mode 100644 arch/arm64/boot/dts/st/stm32mp23xc.dtsi
+  delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+  delete mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
