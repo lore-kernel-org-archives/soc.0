@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B7926A09B
-	for <soc@lists.linux.dev>; Wed, 21 Jan 2026 16:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D072765E2
+	for <soc@lists.linux.dev>; Wed, 21 Jan 2026 16:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769011231; cv=none; b=lewb8+2nUp/LGqYSWIQQioVmG3uhv6EpuLVBOuyWks6+65zAc6I6nj9uFg7LaQ9RkTVeKRe+J+R53BbZ0OVFL1/xzlv42qKIj5Qr2f08JLpYTYZdHpcjkrP6piGGGFmMn0K3gfkDEyQ/f6rAw9TIu77JNyKz2vqtbnEeVdVLgzY=
+	t=1769011233; cv=none; b=Ur3w3I6Gk10WCBsZrs6nwtbPGpdWb5uTWRoHwH8jyREkta9MkIwWehRgovFFQuQhdWmBhOp2KYQ5JITLfeq9ZLNTwGFpTpLENaJQ2/wCzgLgi0iloBAZUqe5LymPTyUMiHpDsNC9LtcWxWzFZxiM1gR1nF7KJNW8hOsfX3aH2sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769011231; c=relaxed/simple;
-	bh=1lTs7QPXktAuSI23zw/GK0QnU+KL/pjWedb8e1B29es=;
+	s=arc-20240116; t=1769011233; c=relaxed/simple;
+	bh=Vcj9OcU4vd2YmMDzwIZW/zMq4kEcuT64aXYNX/+ouIQ=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=S/CXmBrhbwqhNaVhka7BxLOWgwyf7HlFuR33dua0wil37mPePLVMVpRuLyeyrRP1NwcUys/yJnQJOnyUxpPQTDRYw8H0yHOo3Bm3efvCax70rhe8AmY6NikHlTM+5y1eKiXq4SvFm9gVj6XlcioxaUjLDDp8BLrnp8EQg/JHsYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hkqh/u51; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=uZlDguuBqojIQlpaQlwQgNP15wT/ljtSUJYYWH/8vX+TkrdgM+TzTUSxOH3z1/QYnXTMYizFkkHGhBgtXmv01g3S+LsH0jbavsMzYoG/TNmpVuWxX8E7I/Wrax2xx5xIxuuhAipLyd7ueByUsdI1evuaH2CVtmr4fHFNLiaqaRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ie7ltsBP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hkqh/u51"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ie7ltsBP"
 Received: by smtp.kernel.org (Postfix)
-	id D3453C19421; Wed, 21 Jan 2026 16:00:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58F8C4CEF1;
-	Wed, 21 Jan 2026 16:00:29 +0000 (UTC)
+	id 54A5AC116D0; Wed, 21 Jan 2026 16:00:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F7A4C4CEF1;
+	Wed, 21 Jan 2026 16:00:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769011230;
-	bh=1lTs7QPXktAuSI23zw/GK0QnU+KL/pjWedb8e1B29es=;
+	s=k20201202; t=1769011231;
+	bh=Vcj9OcU4vd2YmMDzwIZW/zMq4kEcuT64aXYNX/+ouIQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=hkqh/u51k174Zx1+9V2abH8LatvZ0MRxUzUVjoRE6DRlDZIF7jMPBR26ls6gELEY+
-	 lMmYzxR7C+Eti7fF2lIZFPNE6DIU42+rHzQ3vXb0Tnj7sq5u83vhxyhPlcLzN8Wo0a
-	 ACY8Jk2WP0YFYeT7nkpCTZirKXJfdWKxUIjaS8ebQRc0UcjO/rFxwFNrqstOIPVXU3
-	 qc9cdy7N/mLepV4EpzcZ3fhitT7DUt7B+iL3OZNTkbUB+LF27lVy5iLq/O60D90XmI
-	 WSt9xYrESDwPybBHsppi7EYzQDa6jwV6+ussNtUsYhZS5/PwdX3bpMblDsAeICCJXy
-	 UfB7KApQWNcIQ==
+	b=ie7ltsBPKoKNsLmwSQzaXPsyYxy49iPW1+/FNtjMVVuyeTe9QuPjnBUMYDBaE6odi
+	 26sM/ohCfkqwMEXfCnntefLI/HPclIYbYLWlsltby1jb4dgt44vhCyYxHz/GAfeTf5
+	 KbrV0Eb+VdD0sQF0urSFwJ8tHZNmPVn/pMDbtvazxnMBaX53nAlgdDCL6uV2fnD0Ot
+	 08DZyssSr1qCTtieUMptiU2KEARp4cbFBQBjSmOkl+B7vClZ85aFUe21gJO80yVit+
+	 7bu4aq9r3Q/RNDBamfdVDTuge5iu49iKeXO1N/OwnH5duJiKJwhgE5Q9VuoescYCT2
+	 6Z5LKccw7uxJg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1191C3808200;
-	Wed, 21 Jan 2026 16:00:28 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BB433808200;
+	Wed, 21 Jan 2026 16:00:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_ffa: Updates for v6.20/v7.0
+Subject: Re: [GIT PULL 1/5] i.MX drivers changes for 6.20
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176901122659.951664.6260150833404876053.git-patchwork-notify@kernel.org>
-Date: Wed, 21 Jan 2026 16:00:26 +0000
-References: <20260112115021.2551442-1-sudeep.holla@arm.com>
-In-Reply-To: <20260112115021.2551442-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+ <176901122809.951664.12786199366366717951.git-patchwork-notify@kernel.org>
+Date: Wed, 21 Jan 2026 16:00:28 +0000
+References: <20260120011221.4387-1-shawnguo2@yeah.net>
+In-Reply-To: <20260120011221.4387-1-shawnguo2@yeah.net>
+To: Shawn Guo <shawnguo2@yeah.net>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,19 +54,28 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 12 Jan 2026 11:50:16 +0000 you wrote:
-> Hi ARM SoC Team,
+On Tue, 20 Jan 2026 09:12:14 +0800 you wrote:
+> From: Shawn Guo <shawnguo@kernel.org>
 > 
-> Please pull !
+> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 > 
-> Regards,
-> Sudeep
+>   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm_ffa: Updates for v6.20/v7.0
-    https://git.kernel.org/soc/soc/c/7a391243d4a5
+  - [GIT,PULL,1/5] i.MX drivers changes for 6.20
+    https://git.kernel.org/soc/soc/c/6d9e4c74372b
+  - [GIT,PULL,2/5] i.MX dt-bindgings changes for 6.20
+    (no matching commit)
+  - [GIT,PULL,3/5] i.MX ARM device tree changes for 6.20
+    (no matching commit)
+  - [GIT,PULL,4/5] i.MX arm64 device tree changes for 6.20
+    (no matching commit)
+  - [GIT,PULL,5/5] i.MX defconfig changes for 6.20
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
