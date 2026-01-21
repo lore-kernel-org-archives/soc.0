@@ -1,333 +1,222 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A486D32E698
-	for <soc@lists.linux.dev>; Wed, 21 Jan 2026 12:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768997679; cv=fail; b=HeLL03Oqd2sUgixCc3/9TbDhyWKzKbTgiSsCeuafrSYMSi2nXjk5ioFWJuF4ffk9p3YaM9ss2fNO1803l8H1ZPaT1sUqIouUbABoGloKoBRLstgu5Dq9bI+roWKwwJtdQRcZXUnnkIuOldIwaaeMdl1Wl+TA8tzrd2BUxQKtWB0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768997679; c=relaxed/simple;
-	bh=rzfqO25yHAWT1A84k9mmrIqTkZT3eOGHEgc3xOQzZ58=;
-	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gxyn7cpbRpRn0g3pHnasf/qYhtGjo3g2kCdmpgZJ9ET9lsqMACjZgVvFJa10i/L+oYQYZGyipZqG4LgpXif7TtDHIWmNUnnD/i2AG/uRZKfLNW77lHSVPGFEchIsr0E2fy6e+b63OlLGQoTfuSIk79Km4/DPknUuR6i1Lnp4xSc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rdAs9H0k; arc=fail smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4247B47A0D5
+	for <soc@lists.linux.dev>; Wed, 21 Jan 2026 14:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769007356; cv=none; b=gNrcC/ZmyxoMPRgeCP5v2nl8gVO+rnicfC+AoigYseunasy1pp/pXen5V0qKICRW2SdDS80F+qDBlu/+U5D+iyvhnyxGKK/38atZN5QKcP7lvqZ7W+pe3Rv2MNov4sVqy6OEvtrJgqKD4J9Oahx8Chx7DaHeM7lQ9zNouFZ3PLY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769007356; c=relaxed/simple;
+	bh=2JwymPNTQy0jjs0D55SBYOLNZ+OJOI30HCEvnGLUvG4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=mUpAMXBcxlUVzAhEroVIElrgPg0CgZfkP9sqUWukeOe5Npclq1UVZMjamMf6fpVHn92Fm6dYG26h9KefJ7QWQfPfsdGZbSTgH313CgTVinNG+QUt9JXnFRSHUXD7gBbgLvx7ai0a88WdAp8+v/oiDt1YlP/hRZJmWTkA5W1Jpks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BgsOwEYp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=asRfcDOR; arc=none smtp.client-ip=103.168.172.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rdAs9H0k"
-Received: by smtp.kernel.org (Postfix)
-	id 4ED1DC19425; Wed, 21 Jan 2026 12:14:39 +0000 (UTC)
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012001.outbound.protection.outlook.com [40.107.200.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8BB0CC116D0;
-	Wed, 21 Jan 2026 12:14:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8BB0CC116D0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TDnvpFajD8Ipu7Jj5LaZwlodZsJkQm1VzI9A+OvignpkJsJJYQc3qAj04PXhFqF15+hep0x0VoWpExYY24YNu34NBroG0t5Nob4rZu2xDWG+12EuV0unARCE+ey4AU8Q1W0q51kB1UbLVyQqSyPbjddV2EJUXyRsryGUo0O+I8B5eqdyworLvzgyGhQ/jbWHR8/VVR7IRASsE5Jm7bwsWbXNHhK4Eep3Q5O3uAEWelKaif8AimMCnPn+OqDysYPCoeotM98yJTmRij+lOMiCO6Gd+qAdSQ8GXWqLiW40c8INYz7nN9e9Nj+xbZ0fqdGbb3eb+F+C++Z+upb+8FhOlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JO8SmM+704wEZCd+MjHQoN3LfKuzpVQvhb4T2yDbPJI=;
- b=ok6E1JNQPd+6AexWWqjHCxIwx+VLI99nuSnYRKqZbd8AGHM60TbBJksYiBPlg8BE319K+ZsgucqyS2rQu+z4ZsIAJ6mIInm8Jy+5NdZpGmwzXO9GqL3o+5Liy4fQ8CQgl7K10vZO6/sKTLIydx1a9baeApAsTooRtQlHPH6bJtXIT4xLdUTIuOGEmbvZ69QVhw0QDVmKvcJUIdjIX0ojtBYq1dLQ4UnZLHmPNUz9zZw8LFQhfMS4WW5LumQuUhjqEmrLvbw/oZkpsMw2fWFyLD3VVdce1DXBdYSMuKB+t5RsdwXn8BluMzyEOEyASudupUGqYI614GsRQFZToZzryg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.195) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
- (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
- (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JO8SmM+704wEZCd+MjHQoN3LfKuzpVQvhb4T2yDbPJI=;
- b=rdAs9H0kSNRKNBEYQ6jOmKrmUhMVdR9961nSKAxLH2yceLwLSUr71fmgSJdCeVLh4nunOZvV8GTJaD07tBqelzV2fHeTZ4UXiN/MPrWv7GG15VmSNic9ETIQfM+eVgBrgWIJ6kgTSGVLcEuOx59oofOdHdTBj1apJVjGsPJe/h0=
-Received: from BL1PR13CA0376.namprd13.prod.outlook.com (2603:10b6:208:2c0::21)
- by SA6PR10MB8085.namprd10.prod.outlook.com (2603:10b6:806:43e::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Wed, 21 Jan
- 2026 12:14:32 +0000
-Received: from BN3PEPF0000B06F.namprd21.prod.outlook.com
- (2603:10b6:208:2c0:cafe::b6) by BL1PR13CA0376.outlook.office365.com
- (2603:10b6:208:2c0::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.9 via Frontend Transport; Wed,
- 21 Jan 2026 12:14:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
-Received: from lewvzet201.ext.ti.com (198.47.23.195) by
- BN3PEPF0000B06F.mail.protection.outlook.com (10.167.243.74) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9564.0 via Frontend Transport; Wed, 21 Jan 2026 12:14:32 +0000
-Received: from DLEE206.ent.ti.com (157.170.170.90) by lewvzet201.ext.ti.com
- (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 21 Jan
- 2026 06:14:31 -0600
-Received: from DLEE211.ent.ti.com (157.170.170.113) by DLEE206.ent.ti.com
- (157.170.170.90) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 21 Jan
- 2026 06:14:31 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE211.ent.ti.com
- (157.170.170.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Wed, 21 Jan 2026 06:14:31 -0600
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 60LCEV712981585;
-	Wed, 21 Jan 2026 06:14:31 -0600
-Date: Wed, 21 Jan 2026 06:14:31 -0600
-From: Nishanth Menon <nm@ti.com>
-To: SoC <soc@kernel.org>, <arm@kernel.org>
-CC: SoC list <soc@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, Tero Kristo <kristo@kernel.org>, "Vignesh
- Raghavendra" <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>
-Subject: [GIT PULL 3/3] arm64: dts: ti: K3 updates for v6.20
-Message-ID: <20260121121431.qam6qnq7sxdwpeor@unlivable>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BgsOwEYp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="asRfcDOR"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 561D7EC0223;
+	Wed, 21 Jan 2026 09:55:53 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Wed, 21 Jan 2026 09:55:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1769007353; x=1769093753; bh=yQ
+	23YRgS2KiITA/RkEwSXOJ7lbiLq2Dr+pqkiKDbtJY=; b=BgsOwEYpeiSTT3qAl1
+	ykpeG1oIXzAHdDrRWKv85WG2VL5enmlkqAUFoOlo7kLL2mwE/8hz6+QSB2UjLWBS
+	TWoEQHGIUaStMgakpRpz7jjQOHuUZk60eQyibgRYSUFbup/HEUZihZEx+qVpQY+6
+	ixZrOgym4P0SnX91Id4rzO6k0DirBNQQpK+udrEJkRSN0fGSsSQtxYUDHhmfGkLX
+	HM2WMObC5HI8b4tw8/FpGyZvVUZjNwPQcoDKbG1226ommejYHWGupninDzxvxr0w
+	R/nU6lRxI+E3hNo0G0rLVXkNT998B4gcixu5JPWiQqVtLYser1lme1aevHystFzp
+	rC5A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1769007353; x=1769093753; bh=yQ23YRgS2KiITA/RkEwSXOJ7lbiL
+	q2Dr+pqkiKDbtJY=; b=asRfcDORrFMIiWkH+hq0/RUToZsj2tQtRbqVt4+ZK9Tp
+	s8rY6/AG6ylDh1mx4o3pEgQoLVY/7zsWESAMsFakQhHoBLn3dbHN95zpXny/Bw+2
+	DEpwqaxttVJvJVdWusKQ+0M5RorFY1thv4vuJ7Ed18NwUTj5vRw6gE7TdFBUDHC9
+	fdpgIvNsuQl+NEy2mjBtvvF3ZFXw7jJWlOKQiO2H2Poyv0VicKgKcY039tx3cW88
+	9flZbYb1O9g+BZMtauxE9GUCikkgVVQKGZpwBwRV17o1BPVWPKJeVZNUNFbXwsYG
+	g9Ia/GdulvSrmBs28fGYJbI0dkUpgulT+0Z75JxMyA==
+X-ME-Sender: <xms:-OhwadYt1Cc8YYQpFupMSnpWSyV5xZjRElfn2rFjfLWbVlNNpQL-Cw>
+    <xme:-OhwafObXEfPo1ru666Cu3D21yVDh5NXbwABsszAi8a8b0GG1TPWGMk3DMh085C4c
+    3rvJ0DO5u9O5-FrR_acctTEJAwQDpm0PKqPkdu_3dQg-R0YaDwoBDg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddugeefheejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkffutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
+    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
+    epudelieegkeevueegtedtjedttdelgeehhfdvhfeuheethfduleffuddvueelveetnecu
+    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphht
+    thhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtohhrvhgrlhgusheslh
+    hinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghr
+    mhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
+    epshhotgeslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhk
+    vghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:-OhwaXHr5e8X1v34KPQFqE9f6YcIuPRYf04skq0PvR3LGhRN1tYYpA>
+    <xmx:-OhwabOrxdv_1hHJEN8YcSlsZ_Q7xmSGTZFGb7DP2oWULMMHX1ojJw>
+    <xmx:-OhwaReAg1FIBbzOmkAta6X1OQd5DEWmcn9LIakvA_nDWMGKDS-PaQ>
+    <xmx:-OhwaQte52YirMWUpie5UbsfL6bWgS8sHWqXlfIVmLyeCX9DtDju6A>
+    <xmx:-ehwaSf26qz85C7UEbMb5KVu2DOG6GawJSkS8ZAWTwMQZdncwSuS-3FY>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 8E53B700065; Wed, 21 Jan 2026 09:55:52 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hdnqogoathnziinh"
-Content-Disposition: inline
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06F:EE_|SA6PR10MB8085:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50ff675b-5251-4f6b-3da0-08de58e6a280
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?S2lIz/UBt0em0xn9HszhIwPJMdSKVfc4af6L1ZUZcUVW8cVu0CRjmdXMR6eQ?=
- =?us-ascii?Q?qWVr8Majhc5uzmDCZU7I9Hf+qHm7FumptWFXZbL9iDtS54sPoz8xa2ntiu/o?=
- =?us-ascii?Q?EgvoqFsRtUphwqtog4+65s5qqiy0WeoVUfCDcZG2cvw6EMYBqgVDE8pOTLB4?=
- =?us-ascii?Q?b2kqQTXNR1uw4Kh/011dG8xaHqxwedU8iZ0bv71mwf2ImeTehCJcaZIwQaJI?=
- =?us-ascii?Q?EhHdHo6G+t5EzuOGEDHseO7U/asWxguC7rOBV6ddom0tptENxaWN/tUXoGCB?=
- =?us-ascii?Q?dmpRYUGvA0HmXP6Zm4rQ9bkML3BfDoVWxHQPtQtgrEmKfWfB3YuVjiUaIKd9?=
- =?us-ascii?Q?xyAp5Rg7XFkctOBZYgEbEQWyDCJpTUlHICB3F5otURP7XzpN3iWGy3wWjHBT?=
- =?us-ascii?Q?ygFOUTm0VNGrAoOs7JGzeM+1hDSMg4h/Z7ZHB6x7Yl1u9MRgOLtZEXGsOiIr?=
- =?us-ascii?Q?JabzER64pFlWc4cUt65CdU5dSZ128noYK2Ybvamk4Sa97izNkwxK2f6Hqr8f?=
- =?us-ascii?Q?fYkibcnIHQc4npuTbfhu2zQSXV2V5EEvxshvX6/9e3ki0culEW8WR3FL5dcz?=
- =?us-ascii?Q?Hfzemc9fXJHe1mauHxDu23u6aOqGxIFL5q6EuGVIbEoViEnWs5f57KDRHLjw?=
- =?us-ascii?Q?bIWtTJAwa79XYyUBXLDO8ymWPEt7LIJCq+b89vddev5ReZTMx5dk8IvSNF11?=
- =?us-ascii?Q?c5yRF9lf6rDkp7dE2IwKpKYMaXdIUkC2OC166L6duMmxEm2+JlbWhWEY5gp/?=
- =?us-ascii?Q?B981YJyj3N3RlPTMGj+ZVtkbg6iHgAWLnTJbMPDMCJ0IVFrToVOGytA7r4/o?=
- =?us-ascii?Q?Nx5GB7NkQlXVEk9nS0dEm8SsBL14MH47xuR84SbRuUGzNttWn14edERrAeez?=
- =?us-ascii?Q?ISVJSq1M5vVPG1/H7s+Hgw2fU22pVn9YMJuGhjkeedbR2353eEaFxTU0PtXh?=
- =?us-ascii?Q?ceYcqZ76MBvngA8ngP/cpNeIMpyayGMaU1WkKX3xVLu3UVpSj0Zihvz798IW?=
- =?us-ascii?Q?mAkIAYB6yF9Ycy+PqPfN7o5RhUV69bF2USxtUoq/jcLQJuigR6kBqQ1hvrKm?=
- =?us-ascii?Q?f3wNt7Il940YRAQHnDrSJaoKF4aDne8jlXBH5MfTVTaLu3jRKcUQmtBo9OQA?=
- =?us-ascii?Q?46LNk94voXJcQGammie7EWDaWBbAOAUxLd711fRzTQYcyTcBCOl7SJRvJIP7?=
- =?us-ascii?Q?gNyZlAvK7ksyeTgjhdz1xx1zaUd6Ng7npFsS25nn1HBP+aytqOqYuniFgE/3?=
- =?us-ascii?Q?Xj/62FEJdMbvoRij+xDYFJvxk9mvizYlqPOAptr4PHtbhr/0kMaSOhH6RmsQ?=
- =?us-ascii?Q?+f8cCS/yEinDfVCmNwFIjVxx5eVNnnyVbZNcmMTgslXKiK6uj3K1r6JD5JkM?=
- =?us-ascii?Q?iqFhGX4iwpwy08kEKAJ5eoOmsDOMtDoCv0ym5ORBgWID5R6Upem5s6nZelQG?=
- =?us-ascii?Q?2WIecBLKLr+TuLOa88l2q8QoPm+BNuqd5T1I3j10hYINS4ylijr3jEI1wid/?=
- =?us-ascii?Q?kNdrdko/JJ5lHfe7prl/YwSLp4xhBa7/C0+ZK2l1zPc0Cy+Ox7VcR5AqzN3c?=
- =?us-ascii?Q?qbapxNDRrSSwMT3DZP6PwOg0Q0fP6iL1YIhYVtn7MRAVPH4ydg1iHkk1Cmns?=
- =?us-ascii?Q?12RgXev/RZgwiv+5ig5PEVJj87QWWxoNdBDWgxhAlFObggbJAbEZ/+8WRv7g?=
- =?us-ascii?Q?1oSAAX//kkvJLCx0RrkOiVf9Pek=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2026 12:14:32.4021
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50ff675b-5251-4f6b-3da0-08de58e6a280
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B06F.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR10MB8085
+X-ThreadId: A8kywoqqtqdw
+Date: Wed, 21 Jan 2026 15:55:32 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <77a55850-bd7c-4525-8ffe-46d9e17dc1e4@app.fastmail.com>
+Subject: [GIT PULL] soc: fixes for 6.19, part 2
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
---hdnqogoathnziinh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit 0f61b1860cc3f52aef9036d7235ed1f017632193:
 
-Hi,
-
-This PR has the usual 75 char warnings around pinctrl usage and couple
-of other places which I have chosen to ignore in favor of readability.
-
-Additionally, commit 4df89cb826e0 ("dt-bindings: remoteproc: Add HSM
-M4F core on TI K3 SoCs") is available in linux-next from remote-proc
-tree[1], so ti,hsm-m4fss compatibile nodes were picked as a result.
-This generates a checkpatch warning which should be cleared once
-remote-proc tree is merged.
-
-Finally, this tag also contains ti-k3-dt-fixes-for-v6.19[2] for
-cleaner build which was merged to linus master post v6.19-rc1
-(shortlog and diffstat in the pull request contain these patches as
-well).
-
-Please pull:
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
-
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+  Linux 6.19-rc5 (2026-01-11 17:03:14 -1000)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-d=
-t-for-v6.20
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.19-2
 
-for you to fetch changes up to 53289af62b66812d07a7b0f5f9d62f429c94d317:
+for you to fetch changes up to 0638dc292e54ba0cbcb1ff81af3ca52d3bbfaf54:
 
-  arm64: dts: ti: k3-am67a-kontron-sa67-base: Fix SD card regulator (2026-0=
-1-16 05:57:33 -0600)
+  Merge tag 'qcom-arm64-fixes-for-6.19' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes (2026-01-21 09:52:19 +0100)
 
 ----------------------------------------------------------------
-TI K3 device tree updates for v6.20
+soc: fixes for 6.19, part 2
 
-Generic Fixes/Cleanups:
-- Minor whitespace cleanup and lowercase hex formatting for consistency
-- Various DT schema warning fixes across multiple boards
+The main changes are devicetree updates for qualcomm and rockchips arm64
+platforms, fixing minor mistakes in SoC and board specific settings:
 
-SoC Specific Features and Fixes:
-AM62P/J722S:
-- Add HSM M4F node for hardware security module support
+ - GPIO settings for Pinephone Pro buttons
+ - Register ranges for rk3576 GPU
+ - Power domains on sc8280xp
+ - Clocks on qcom talos
+ - dtc warnings for extraneous properties, nonstandard node names and
+   undocument identifiers
 
-J784S4/J742S2/J721S2:
-- Add HSM M4F node for hardware security module support
-- Refactor watchdog instances for j784s4
-- Move c71_3 node to appropriate order in device tree
+The Tegra210 platform gets a single revert for a devicetree change that
+caused a 6.19 regression.
 
-Board Specific Fixes:
-AM62:
-- phycore-som: Add bootphase tags to cpsw_mac_syscon and phy_gmii_sel
+On 32-bit Arm, we have trivial fixes for Microchip SAMA7 devicetree
+files and NPCM Kconfig, as well as Andrew Jeffery being officially
+listed as MAINTAINER for NPCM.
 
-AM62A:
-- phycore-som: Add bootphase tags to cpsw_mac_syscon and phy_gmii_sel
-
-AM62P:
-- Verdin: Fix SD regulator startup delay
-
-AM67A:
-- Kontron SA67: Fix CMA node and SD card regulator configuration
-
-AM69:
-- Aquila: Change main_spi0/2 chip select to GPIO mode
-- Aquila-clover: Change main_spi2 CS0 to GPIO mode
-- Aquila-dev/clover: Fix USB-C Sink PDO configuration
+A single driver fix is for Qualcomm RPMHD power domains, bringing the
+driver up to date with a devicetree change that added additional power
+domains to be enabled.
 
 ----------------------------------------------------------------
-Abhash Kumar Jha (2):
-      arm64: dts: ti: k3-j784s4-main.dtsi: Move c71_3 node to appropriate o=
-rder
-      arm64: dts: ti: k3-j784s4-j742s2-main-common.dtsi: Refactor watchdog =
-instances for j784s4
+Abel Vesa (1):
+      mailmap: Update email address for Abel Vesa
 
-Beleswar Padhi (2):
-      arm64: dts: ti: k3-{j784s4-j742s2/j721s2}-mcu-wakeup: Add HSM M4F node
-      arm64: dts: ti: k3-am62p-j722s-common-main: Add HSM M4F node
+Alexey Charkov (2):
+      arm64: dts: rockchip: Fix headphones widget name on NanoPi M5
+      arm64: dts: rockchip: Configure MCLK for analog sound on NanoPi M5
 
-Daniel Schultz (2):
-      arm64: dts: ti: k3-am62-phycore-som: Add bootphase tag to cpsw_mac_sy=
-scon
-      arm64: dts: ti: k3-am62a-phycore-som: Add bootphase tag to cpsw_mac_s=
-yscon
+Andrew Jeffery (1):
+      MAINTAINERS: Add Andrew as M: to ARM/NUVOTON NPCM ARCHITECTURE
 
-Francesco Dolcini (3):
-      arm64: dts: ti: k3-am69-aquila-dev: Fix USB-C Sink PDO
-      arm64: dts: ti: k3-am69-aquila-clover: Fix USB-C Sink PDO
-      arm64: dts: ti: am62p-verdin: Fix SD regulator startup delay
+Arnd Bergmann (4):
+      Merge tag 'at91-fixes-6.19' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
+      Merge tag 'v6.19-rockchip-dtsfixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
+      Merge tag 'nuvoton-arm-6.19-fixes-0' of https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux into arm/fixes
+      Merge tag 'qcom-arm64-fixes-for-6.19' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
 
-Krzysztof Kozlowski (2):
-      arm64: dts: ti: Minor whitespace cleanup
-      arm64: dts: ti: Use lowercase hex
+Chaoyi Chen (1):
+      arm64: dts: rockchip: Fix wrong register range of rk3576 gpu
 
-Michael Walle (2):
-      arm64: dts: ti: k3-am67a-kontron-sa67-base: Fix CMA node
-      arm64: dts: ti: k3-am67a-kontron-sa67-base: Fix SD card regulator
+David Heidelberg (1):
+      arm64: dts qcom: sdm845-oneplus-enchilada: Specify panel name within the compatible
 
-Vitor Soares (2):
-      arm64: dts: ti: k3-am69-aquila: Change main_spi0/2 CS to GPIO mode
-      arm64: dts: ti: k3-am69-aquila-clover: Change main_spi2 CS0 to GPIO m=
-ode
+Geraldo Nascimento (2):
+      arm64: dts: rockchip: remove dangerous max-link-speed from helios64
+      arm64: dts: rockchip: remove redundant max-link-speed from nanopi-r4s
 
-Wadim Egorov (4):
-      arm64: dts: ti: k3-am642-phyboard-electra-peb-c-010: Fix icssg-prueth=
- schema warning
-      arm64: dts: ti: k3-am642-phyboard-electra-x27-gpio1-spi1-uart3: Fix s=
-chema warnings
-      arm64: dts: ti: k3-am62-lp-sk-nand: Rename pinctrls to fix schema war=
-nings
-      arm64: dts: ti: k3-am62(a)-phycore-som: Add bootphase tag to phy_gmii=
-_sel
+Hari Prasath Gujulan Elango (1):
+      ARM: dts: microchip: sama7d65: fix the ranges property for flx9
 
- arch/arm64/boot/dts/ti/k3-am62-lp-sk-nand.dtso     |  2 +-
- arch/arm64/boot/dts/ti/k3-am62-phycore-som.dtsi    |  8 +++
- arch/arm64/boot/dts/ti/k3-am62a-phycore-som.dtsi   |  8 +++
- arch/arm64/boot/dts/ti/k3-am62d2-evm.dts           |  2 +-
- .../boot/dts/ti/k3-am62p-j722s-common-main.dtsi    | 17 +++++++
- arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi        |  4 +-
- arch/arm64/boot/dts/ti/k3-am62p.dtsi               |  1 +
- arch/arm64/boot/dts/ti/k3-am62p5-sk.dts            |  2 +-
- .../boot/dts/ti/k3-am62p5-var-som-symphony.dts     |  4 +-
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi           | 18 +++----
- .../ti/k3-am642-phyboard-electra-peb-c-010.dtso    |  7 +--
- .../boot/dts/ti/k3-am642-phyboard-electra-rdk.dts  |  6 +--
- ...m642-phyboard-electra-x27-gpio1-spi1-uart3.dtso | 12 ++---
- .../dts/ti/k3-am65-iot2050-arduino-connector.dtsi  | 58 +++++++++++-------=
-----
- arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi |  2 +-
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi           |  4 +-
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts     |  2 +-
- .../boot/dts/ti/k3-am67a-kontron-sa67-base.dts     |  4 +-
- arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts   | 14 +++---
- arch/arm64/boot/dts/ti/k3-am69-aquila-clover.dts   |  7 +--
- arch/arm64/boot/dts/ti/k3-am69-aquila-dev.dts      |  4 +-
- arch/arm64/boot/dts/ti/k3-am69-aquila.dtsi         |  6 ++-
- arch/arm64/boot/dts/ti/k3-am69-sk.dts              | 26 +++++-----
- arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi    |  4 +-
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts             | 24 ++++-----
- arch/arm64/boot/dts/ti/k3-j721e.dtsi               |  4 +-
- arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi   | 19 ++++++-
- arch/arm64/boot/dts/ti/k3-j722s-evm.dts            |  2 +-
- arch/arm64/boot/dts/ti/k3-j722s-main.dtsi          |  5 ++
- arch/arm64/boot/dts/ti/k3-j722s.dtsi               |  3 +-
- arch/arm64/boot/dts/ti/k3-j742s2-mcu-wakeup.dtsi   |  4 ++
- .../boot/dts/ti/k3-j784s4-j742s2-evm-common.dtsi   |  4 +-
- .../boot/dts/ti/k3-j784s4-j742s2-main-common.dtsi  | 36 --------------
- .../dts/ti/k3-j784s4-j742s2-mcu-wakeup-common.dtsi | 17 +++++++
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi         | 58 ++++++++++++++++++=
-----
- 35 files changed, 238 insertions(+), 160 deletions(-)
+Horatiu Vultur (1):
+      ARM: dts: microchip: lan966x: Fix the access to the PHYs for pcb8290
 
-[1] https://lore.kernel.org/linux-arm-kernel/aV59SdFU15HpLHeO@p14s/
-[2] https://lore.kernel.org/linux-arm-kernel/20251215132845.faudhjh7ywxdx2n=
-q@elongated/
+Jon Hunter (1):
+      Revert "arm64: tegra: Add interconnect properties for Tegra210"
 
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
-https://ti.com/opensource
+Konrad Dybcio (3):
+      dt-bindings: power: qcom,rpmpd: Add SC8280XP_MXC_AO
+      pmdomain: qcom: rpmhpd: Add MXC to SC8280XP
+      arm64: dts: qcom: sc8280xp: Add missing VDD_MXC links
 
---hdnqogoathnziinh
-Content-Type: application/pgp-signature; name="signature.asc"
+Krishna Kurapati (2):
+      arm64: dts: qcom: sm8550: Fix compile warnings in USB controller node
+      arm64: dts: qcom: sm8650: Fix compile warnings in USB controller node
 
------BEGIN PGP SIGNATURE-----
+Krzysztof Kozlowski (1):
+      arm64: dts: rockchip: Fix wifi interrupts flag on Sakura Pi RK3308B
 
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmlwwx8ACgkQ3bWEnRc2
-JJ3BiRAAhvZPWBLtiTLwVmru2J5ohBbWoKME8KF8qYO9CTZybuUJC+Ci1L1TnKAo
-8rtzbIulyo3tgj3QbFXgCd0pTAUhF04mCYwEv+cEUBrx/HeY4J51Ep+aAM5NbTqy
-BjNalKIkJz6xdS43zhCiQ7cb9iF8Idk+7w3GBNKiPb5PBW2SMD8rF8Av+PJKrSEJ
-BJSk/Wr99Jx42j+aaBSc4hdlKoG4ZO/UE1kULbJn6tX48C9eeqgCCQfxM2aE9jO4
-h3Ke9Wlxs1Mr1vI4gIbdny+obktmVHr4R+CBMfpIDo3bo2XzyxoZKeYNpkQpkzoX
-PgOuPxJEyTv4qcktj3ajZwQ9mE6KcKgKs5nr9s7dYXvtVOW23q5HKJDBYsaHY4tG
-e3gmmTXW5n6xxWKPDLHZGTf/LHTpQzrV2IChuQzROnhlG+viPNUmh2OnNZ0Qm7Yx
-vkMxd4tkOcWzViV4Yzi7Ki6Fqp0MHFb3mCNdnHBSytGSwg4IuPmYbm8o/AkZZQOh
-yBpzBZRQZS1V8tshTdih7/ivQdKUDBAYISBqDSYqwr+BG6vhEZg5F13yzi3zGWga
-wOcAAtPg9MPXDx+HgRZFCV9PJuJUMgd6PsiS7bqFD1CbiSfoHnUCF1IftVhMImJy
-QvfOhZqYFcoa/royZUgD+Up4AZbSdWlQ1E374/UDv3Ib1pjIvMo=
-=X2K2
------END PGP SIGNATURE-----
+Nicolas Ferre (1):
+      ARM: dts: microchip: sama7d65: fix size-cells property for i2c3
 
---hdnqogoathnziinh--
+Ondrej Jirman (1):
+      arm64: dts: rockchip: Fix voltage threshold for volume keys for Pinephone Pro
+
+Pradeep P V K (1):
+      arm64: dts: qcom: talos: Correct UFS clocks ordering
+
+Quentin Schulz (1):
+      arm64: dts: rockchip: fix unit-address for RK3588 NPU's core1 and core2's IOMMU
+
+Randy Dunlap (1):
+      arm: npcm: drop unused Kconfig ERRATA symbol
+
+Rob Herring (Arm) (4):
+      arm64: dts: rockchip: Drop "sitronix,st7789v" fallback compatible from rk3568-wolfvision
+      arm64: dts: rockchip: Fix pinctrl property typo on rk3326-odroid-go3
+      arm64: dts: rockchip: Fix gpio pinctrl node names
+      arm64: dts: rockchip: Drop unsupported properties
+
+Yixun Lan (1):
+      MAINTAINERS: update email address for Yixun Lan
+
+ .mailmap                                           |  3 +++
+ MAINTAINERS                                        |  4 +++-
+ arch/arm/boot/dts/microchip/lan966x-pcb8290.dts    |  1 +
+ arch/arm/boot/dts/microchip/sama7d65.dtsi          |  4 ++--
+ arch/arm/mach-npcm/Kconfig                         |  1 -
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           | 24 ----------------------
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 16 +++++++++++----
+ .../boot/dts/qcom/sdm845-oneplus-enchilada.dts     |  4 ++--
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               |  2 --
+ arch/arm64/boot/dts/qcom/sm8650.dtsi               |  3 ---
+ arch/arm64/boot/dts/qcom/talos.dtsi                |  4 ++--
+ .../boot/dts/rockchip/rk3308-sakurapi-rk3308b.dts  |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts |  3 ++-
+ .../boot/dts/rockchip/rk3399-kobol-helios64.dts    |  2 --
+ .../arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dtsi |  1 -
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |  1 -
+ .../boot/dts/rockchip/rk3399-pinephone-pro.dts     |  4 ++--
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |  2 +-
+ .../boot/dts/rockchip/rk3399-rock-4c-plus.dts      |  4 ++--
+ .../rockchip/rk3568-wolfvision-pf5-display-vz.dtso |  3 +--
+ arch/arm64/boot/dts/rockchip/rk3576-nanopi-m5.dts  | 12 +++++++----
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      |  4 ++--
+ drivers/pmdomain/qcom/rpmhpd.c                     |  4 ++++
+ include/dt-bindings/power/qcom,rpmhpd.h            |  1 +
+ 25 files changed, 50 insertions(+), 61 deletions(-)
