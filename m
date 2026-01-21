@@ -1,77 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B31F1B4224
-	for <soc@lists.linux.dev>; Wed, 21 Jan 2026 16:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BD03A7832;
+	Wed, 21 Jan 2026 18:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769011236; cv=none; b=Is+LpZLAl0kiEjux9rgk+i9UJztItM7JwVX2F9iMV95w69WyquiH0vzlLNh5pH2/gq/2jVNO+eb1Az9UfTSpNRAtOgfXcx6t6B6w5TvJM8eQmB8Ih9kZadzejJWAZTHuofM6FgoH4N67GQO+WcBKnJBXsV4QYRiSIaOEezuWw2Y=
+	t=1769019701; cv=none; b=M/MAApAwSq76M7mos0EnQ5K4uuAXStVnLGLNtWA4rvkFonMDWduNWceJDPSzTYI6y7B6H5sfLxm1WLxEetps1VPCZ3OgxzKPXrRs2dzSZo/X7921pg9e4DMB1z8KVY5CZcJlIaCm6XfZgKYTBSjO3/rjc12m53fa+XF/8BYiwog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769011236; c=relaxed/simple;
-	bh=0GhHrV80QpcQ4v+lSA7fyK2tq9yBBCehenSEYJVLQNU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=P12ksf76texFqah0gcajBL7KGt8YXuGY65CMMwSWfp80+qCt0ATMXCyczUZQzmVjg1RdhhQi1txJlcgjy5fDNoCWr8V+jGxLtiWMIX935hphugXzqu1BabxhTXsFUwdrVGmai8pfzeql+8S2zVCvJs3BzGHnuVHC9+0gtm0//d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAToYVEt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769019701; c=relaxed/simple;
+	bh=kdGbKUjg7HDZv9Xoxtbh3+nHI7tolhaWZdYz8UEZvEk=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=eiTELgF4vb3uFghPaf+4uZQY2iA7UmApP69Yj3XKgDpfMMU1GfeAioBZQGt9ETifAePhqDAHCYloy15+l3OooOn9pzazwB5PERjq6eKODFZ5s+uQ232Ry6KO+qMAHDOxd/bIUAu+G6LzaRgE8zixCIU07FKDyZ0Y9747lmmKJcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQrDVeED; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAToYVEt"
-Received: by smtp.kernel.org (Postfix)
-	id D6DFDC19421; Wed, 21 Jan 2026 16:00:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C77C4CEF1;
-	Wed, 21 Jan 2026 16:00:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQrDVeED"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85668C19422;
+	Wed, 21 Jan 2026 18:21:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769011235;
-	bh=0GhHrV80QpcQ4v+lSA7fyK2tq9yBBCehenSEYJVLQNU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=cAToYVEtwcFoVvvrfIDFTzA2a7ePP3uL3JGj4A/H2BRW/ADKXeGPssbE8Gpji7wVZ
-	 Ut8xH+UKy1RHGXCq4ETuh0/4eC/443YsLBdl3tgSZn1tcNJ+Q8ChoFMH8CvjzzKBVv
-	 JpBmXe7cuy6o6iVLFv31swgsEjxrY0Aj7EMm46LFEUtkUsWYBvsyzUcFAFa9jWLsDZ
-	 e+os/mVK/XouueSj/JTX9/PLEP/E1cd6aUWsh9gSRp9VeTawcNOHZ6mi/fnvVbSJiw
-	 Iisrjb47CNGSMvbkTwRLANlJzxSl9qCLKU5AN4xI45IUDcKar9jYyoJAba94uXtPW2
-	 9GmcpFClWZ5YA==
+	s=k20201202; t=1769019700;
+	bh=kdGbKUjg7HDZv9Xoxtbh3+nHI7tolhaWZdYz8UEZvEk=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=eQrDVeED66DgA0dTt7m5pghFcvKPl5+Afmn4NDSo2QHva8ILvHBUygmuRlRhMrwuo
+	 xN+NyooPMj7DQkim5oe1PnK+UMKL+/2J4xMLDyW/5ITm1X5H1DcNU4UO2xekKGQ69k
+	 RoExbsY/4huS+dmWes8VPKxFRqhdHfNd2iGXR5ByVkrWFUnBM3xQTIF2l6Uc3SLRRh
+	 h1lCwL5j871AA91rm+PwWbMaHbCznfNNbFZwz1TiLhPPbeeAjYyrtaMVLSInIRpBcE
+	 s+LYFbMFbXiAVg8Bs1gvmRwuTYJ2fbuvBfydw1GTJUOet4FKzKN4pdqi5J3dniZo9G
+	 qhGvRhZgNkXhA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11AA93808200;
-	Wed, 21 Jan 2026 16:00:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8EEA3808200;
+	Wed, 21 Jan 2026 18:21:38 +0000 (UTC)
+Subject: Re: [GIT PULL] soc: fixes for 6.19, part 2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <77a55850-bd7c-4525-8ffe-46d9e17dc1e4@app.fastmail.com>
+References: <77a55850-bd7c-4525-8ffe-46d9e17dc1e4@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <77a55850-bd7c-4525-8ffe-46d9e17dc1e4@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.19-2
+X-PR-Tracked-Commit-Id: 0638dc292e54ba0cbcb1ff81af3ca52d3bbfaf54
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: cf38b2340c0e60ef695b7137440a4d187ed49c88
+Message-Id: <176901969746.1402269.8266620976533586622.pr-tracker-bot@kernel.org>
+Date: Wed, 21 Jan 2026 18:21:37 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] AMDTEE update for 6.20
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <176901123259.951664.4546522645990213.git-patchwork-notify@kernel.org>
-Date: Wed, 21 Jan 2026 16:00:32 +0000
-References: <20260117123522.GD255115@rayden>
-In-Reply-To: <20260117123522.GD255115@rayden>
-To: Jens Wiklander <jens.wiklander@linaro.org>
-Cc: soc@kernel.org
 
-Hello:
+The pull request you sent on Wed, 21 Jan 2026 15:55:32 +0100:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.19-2
 
-On Sat, 17 Jan 2026 13:35:22 +0100 you wrote:
-> Hello arm-soc maintainers,
-> 
-> Please pull this small patch removing unused return variables in a
-> couple of functions in the AMDTEE driver in the TEE subsystem.
-> 
-> Thanks,
-> Jens
-> 
-> [...]
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/cf38b2340c0e60ef695b7137440a4d187ed49c88
 
-Here is the summary with links:
-  - [GIT,PULL] AMDTEE update for 6.20
-    https://git.kernel.org/soc/soc/c/4b45c2f3f88c
+Thank you!
 
-You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+https://korg.docs.kernel.org/prtracker.html
