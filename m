@@ -1,222 +1,157 @@
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4247B47A0D5
-	for <soc@lists.linux.dev>; Wed, 21 Jan 2026 14:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B3D347BDD
+	for <soc@lists.linux.dev>; Wed, 21 Jan 2026 16:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769007356; cv=none; b=gNrcC/ZmyxoMPRgeCP5v2nl8gVO+rnicfC+AoigYseunasy1pp/pXen5V0qKICRW2SdDS80F+qDBlu/+U5D+iyvhnyxGKK/38atZN5QKcP7lvqZ7W+pe3Rv2MNov4sVqy6OEvtrJgqKD4J9Oahx8Chx7DaHeM7lQ9zNouFZ3PLY=
+	t=1769011214; cv=none; b=psRSrTuXN/xhVIA8RsBs+s5thykKaRL2hvXuomy+Kul9ig9/Fg6X9w1oFXGLajozXUqKAX2dXtWl1POwjHwJ9DqGx39gFUFSnaYumpRwh2EzM7lcLjf/Mb9hyQNB6ksYJKK8H1qfnCR5xwe81ozheRjkyH2YssHL3zw0cgFWSJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769007356; c=relaxed/simple;
-	bh=2JwymPNTQy0jjs0D55SBYOLNZ+OJOI30HCEvnGLUvG4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=mUpAMXBcxlUVzAhEroVIElrgPg0CgZfkP9sqUWukeOe5Npclq1UVZMjamMf6fpVHn92Fm6dYG26h9KefJ7QWQfPfsdGZbSTgH313CgTVinNG+QUt9JXnFRSHUXD7gBbgLvx7ai0a88WdAp8+v/oiDt1YlP/hRZJmWTkA5W1Jpks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BgsOwEYp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=asRfcDOR; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1769011214; c=relaxed/simple;
+	bh=hBy2HVgTQvQ05hcnMQ2HLYcsUj8uIaduThpijHqFGmE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=ZLbpp4+crFUbR4El4GY5Gdb9UjmtEPFHgC9PKTfYw+BmF98pwIck6OVIawyGBN6E5hyXEoboVlDNSvnuOU3cKFa+w6D6XEzW1cf4Tg3n7teumG21dQ1tF/agfSqRKx7gM1N+QMTTru/EWlLfiSvIIrqatMpal0rBZsIldDTYpO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHY4Lcb1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BgsOwEYp";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="asRfcDOR"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 561D7EC0223;
-	Wed, 21 Jan 2026 09:55:53 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Wed, 21 Jan 2026 09:55:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1769007353; x=1769093753; bh=yQ
-	23YRgS2KiITA/RkEwSXOJ7lbiLq2Dr+pqkiKDbtJY=; b=BgsOwEYpeiSTT3qAl1
-	ykpeG1oIXzAHdDrRWKv85WG2VL5enmlkqAUFoOlo7kLL2mwE/8hz6+QSB2UjLWBS
-	TWoEQHGIUaStMgakpRpz7jjQOHuUZk60eQyibgRYSUFbup/HEUZihZEx+qVpQY+6
-	ixZrOgym4P0SnX91Id4rzO6k0DirBNQQpK+udrEJkRSN0fGSsSQtxYUDHhmfGkLX
-	HM2WMObC5HI8b4tw8/FpGyZvVUZjNwPQcoDKbG1226ommejYHWGupninDzxvxr0w
-	R/nU6lRxI+E3hNo0G0rLVXkNT998B4gcixu5JPWiQqVtLYser1lme1aevHystFzp
-	rC5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1769007353; x=1769093753; bh=yQ23YRgS2KiITA/RkEwSXOJ7lbiL
-	q2Dr+pqkiKDbtJY=; b=asRfcDORrFMIiWkH+hq0/RUToZsj2tQtRbqVt4+ZK9Tp
-	s8rY6/AG6ylDh1mx4o3pEgQoLVY/7zsWESAMsFakQhHoBLn3dbHN95zpXny/Bw+2
-	DEpwqaxttVJvJVdWusKQ+0M5RorFY1thv4vuJ7Ed18NwUTj5vRw6gE7TdFBUDHC9
-	fdpgIvNsuQl+NEy2mjBtvvF3ZFXw7jJWlOKQiO2H2Poyv0VicKgKcY039tx3cW88
-	9flZbYb1O9g+BZMtauxE9GUCikkgVVQKGZpwBwRV17o1BPVWPKJeVZNUNFbXwsYG
-	g9Ia/GdulvSrmBs28fGYJbI0dkUpgulT+0Z75JxMyA==
-X-ME-Sender: <xms:-OhwadYt1Cc8YYQpFupMSnpWSyV5xZjRElfn2rFjfLWbVlNNpQL-Cw>
-    <xme:-OhwafObXEfPo1ru666Cu3D21yVDh5NXbwABsszAi8a8b0GG1TPWGMk3DMh085C4c
-    3rvJ0DO5u9O5-FrR_acctTEJAwQDpm0PKqPkdu_3dQg-R0YaDwoBDg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddugeefheejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkffutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
-    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
-    epudelieegkeevueegtedtjedttdelgeehhfdvhfeuheethfduleffuddvueelveetnecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphht
-    thhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtohhrvhgrlhgusheslh
-    hinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghr
-    mhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
-    epshhotgeslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhk
-    vghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:-OhwaXHr5e8X1v34KPQFqE9f6YcIuPRYf04skq0PvR3LGhRN1tYYpA>
-    <xmx:-OhwabOrxdv_1hHJEN8YcSlsZ_Q7xmSGTZFGb7DP2oWULMMHX1ojJw>
-    <xmx:-OhwaReAg1FIBbzOmkAta6X1OQd5DEWmcn9LIakvA_nDWMGKDS-PaQ>
-    <xmx:-OhwaQte52YirMWUpie5UbsfL6bWgS8sHWqXlfIVmLyeCX9DtDju6A>
-    <xmx:-ehwaSf26qz85C7UEbMb5KVu2DOG6GawJSkS8ZAWTwMQZdncwSuS-3FY>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 8E53B700065; Wed, 21 Jan 2026 09:55:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHY4Lcb1"
+Received: by smtp.kernel.org (Postfix)
+	id 63DDBC19421; Wed, 21 Jan 2026 16:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBAEC4CEF1
+	for <soc@kernel.org>; Wed, 21 Jan 2026 16:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769011214;
+	bh=hBy2HVgTQvQ05hcnMQ2HLYcsUj8uIaduThpijHqFGmE=;
+	h=Subject:From:Date:To:Cc:From;
+	b=CHY4Lcb1MkygWtsORgpWSJbCeFr9GKSzYvvWzDCaBi81/zX2BmW3rM0Uj598DjDB8
+	 O80+AoIoNiemqM7N79M/qIRtdeHExQxJZ8bMmVVnqSgmmcF9fCmFub9hLRukl7VqSI
+	 3b80a14+uaqAGIOtTmASQqbZn9CfdNLOoxYt/1+A8FyMUK2HeweiW1vf4sDQ1cq+5p
+	 uzo45zkgkFAiiTLxPxhgIqpz7UZ89A2BwvihHczhiQBhF3gAz/AKMTbxMdFHuXE2xx
+	 O9pOLviersWX2BUpoyS53bcaj7UdU9ZMb6MO6waG3X3Px0fTNSxwZpydYa1GoQVjk0
+	 4b6nTr51flW5Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8E6463808200;
+	Wed, 21 Jan 2026 16:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: A8kywoqqtqdw
-Date: Wed, 21 Jan 2026 15:55:32 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Message-Id: <77a55850-bd7c-4525-8ffe-46d9e17dc1e4@app.fastmail.com>
-Subject: [GIT PULL] soc: fixes for 6.19, part 2
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <176901121110.951664.3918913049249092298.git-patchwork-summary@kernel.org>
+Date: Wed, 21 Jan 2026 16:00:11 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-The following changes since commit 0f61b1860cc3f52aef9036d7235ed1f017632193:
+Hello:
 
-  Linux 6.19-rc5 (2026-01-11 17:03:14 -1000)
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-are available in the Git repository at:
+Patch: [GIT,PULL] firmware: arm_scmi: Updates for v6.20/v7.0
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1041162
+  Lore link: https://lore.kernel.org/r/20260112115021.2551442-3-sudeep.holla@arm.com
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.19-2
+Patch: [GIT,PULL] Qualcomm driver updates for v6.20
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1044247
+  Lore link: https://lore.kernel.org/r/20260119162201.842771-1-andersson@kernel.org
 
-for you to fetch changes up to 0638dc292e54ba0cbcb1ff81af3ca52d3bbfaf54:
+Patch: [GIT,PULL] OP-TEE update for 6.20
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043646
+  Lore link: https://lore.kernel.org/r/20260117120401.GB255115@rayden
 
-  Merge tag 'qcom-arm64-fixes-for-6.19' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes (2026-01-21 09:52:19 +0100)
+Patch: [GIT,PULL] arm64: AMD/Xilinx SOC changes for v6.20
+  Submitter: Michal Simek <monstr@monstr.eu>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043989
+  Lore link: https://lore.kernel.org/r/CAHTX3dJOkqMPogu=HeBtQuVCK3_-73QPVNPco4dxh3AaOOXUhg@mail.gmail.com
 
-----------------------------------------------------------------
-soc: fixes for 6.19, part 2
+Series: Renesas SoC updates for v6.20 (take two)
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043268
+  Lore link: https://lore.kernel.org/r/cover.1768559762.git.geert+renesas@glider.be
+    Patches: [GIT,PULL,1/3] Renesas driver updates for v6.20 (take two)
 
-The main changes are devicetree updates for qualcomm and rockchips arm64
-platforms, fixing minor mistakes in SoC and board specific settings:
+Patch: [GIT,PULL] TEE sysfs for 6.20
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043653
+  Lore link: https://lore.kernel.org/r/20260117124413.GA262260@rayden
 
- - GPIO settings for Pinephone Pro buttons
- - Register ranges for rk3576 GPU
- - Power domains on sc8280xp
- - Clocks on qcom talos
- - dtc warnings for extraneous properties, nonstandard node names and
-   undocument identifiers
+Series: [GIT,PULL,1/3] soc: ti: Driver updates for v6.20
+  Submitter: Nishanth Menon <nm@ti.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1045145
+  Lore link: https://lore.kernel.org/r/20260121121353.5yip2gf4bxljosjr@thrill
+    Patches: [GIT,PULL,1/3] soc: ti: Driver updates for v6.20
 
-The Tegra210 platform gets a single revert for a devicetree change that
-caused a 6.19 regression.
+Patch: [GIT,PULL] TEE bus callbacks for 6.20
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043651
+  Lore link: https://lore.kernel.org/r/20260117123008.GC255115@rayden
 
-On 32-bit Arm, we have trivial fixes for Microchip SAMA7 devicetree
-files and NPCM Kconfig, as well as Andrew Jeffery being officially
-listed as MAINTAINER for NPCM.
+Series: [GIT,PULL,1/4] dt-bindings: Changes for v6.20-rc1
+  Submitter: Thierry Reding <thierry.reding@gmail.com>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043743
+  Lore link: https://lore.kernel.org/r/20260118080304.2646387-1-thierry.reding@gmail.com
+    Patches: [GIT,PULL,1/4] dt-bindings: Changes for v6.20-rc1
+             [GIT,PULL,2/4] soc/tegra: Changes for v6.20-rc1
 
-A single driver fix is for Qualcomm RPMHD power domains, bringing the
-driver up to date with a devicetree change that added additional power
-domains to be enabled.
+Series: Renesas SoC updates for v6.20
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1038602
+  Lore link: https://lore.kernel.org/r/cover.1767628163.git.geert+renesas@glider.be
+    Patches: [GIT,PULL,1/3] Renesas ARM defconfig updates for v6.20
+             [GIT,PULL,2/3] Renesas driver updates for v6.20
 
-----------------------------------------------------------------
-Abel Vesa (1):
-      mailmap: Update email address for Abel Vesa
+Patch: [GIT,PULL] firmware: arm_ffa: Updates for v6.20/v7.0
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1041160
+  Lore link: https://lore.kernel.org/r/20260112115021.2551442-1-sudeep.holla@arm.com
 
-Alexey Charkov (2):
-      arm64: dts: rockchip: Fix headphones widget name on NanoPi M5
-      arm64: dts: rockchip: Configure MCLK for analog sound on NanoPi M5
+Series: [GIT,PULL,1/5] i.MX drivers changes for 6.20
+  Submitter: Shawn Guo <shawnguo2@yeah.net>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1044391
+  Lore link: https://lore.kernel.org/r/20260120011221.4387-1-shawnguo2@yeah.net
+    Patches: [GIT,PULL,1/5] i.MX drivers changes for 6.20
 
-Andrew Jeffery (1):
-      MAINTAINERS: Add Andrew as M: to ARM/NUVOTON NPCM ARCHITECTURE
+Patch: [GIT,PULL] QCOMTEE fixes for 6.20
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043644
+  Lore link: https://lore.kernel.org/r/20260117115312.GA255115@rayden
 
-Arnd Bergmann (4):
-      Merge tag 'at91-fixes-6.19' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
-      Merge tag 'v6.19-rockchip-dtsfixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
-      Merge tag 'nuvoton-arm-6.19-fixes-0' of https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux into arm/fixes
-      Merge tag 'qcom-arm64-fixes-for-6.19' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+Series: [GIT,PULL,1/3] samsung: drivers pull for v6.20/v7.0
+  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043686
+  Lore link: https://lore.kernel.org/r/20260117180406.9361-4-krzk@kernel.org
+    Patches: [GIT,PULL,1/3] samsung: drivers pull for v6.20/v7.0
 
-Chaoyi Chen (1):
-      arm64: dts: rockchip: Fix wrong register range of rk3576 gpu
+Patch: [GIT,PULL] AMDTEE update for 6.20
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043652
+  Lore link: https://lore.kernel.org/r/20260117123522.GD255115@rayden
 
-David Heidelberg (1):
-      arm64: dts qcom: sdm845-oneplus-enchilada: Specify panel name within the compatible
 
-Geraldo Nascimento (2):
-      arm64: dts: rockchip: remove dangerous max-link-speed from helios64
-      arm64: dts: rockchip: remove redundant max-link-speed from nanopi-r4s
+Total patches: 17
 
-Hari Prasath Gujulan Elango (1):
-      ARM: dts: microchip: sama7d65: fix the ranges property for flx9
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Horatiu Vultur (1):
-      ARM: dts: microchip: lan966x: Fix the access to the PHYs for pcb8290
 
-Jon Hunter (1):
-      Revert "arm64: tegra: Add interconnect properties for Tegra210"
-
-Konrad Dybcio (3):
-      dt-bindings: power: qcom,rpmpd: Add SC8280XP_MXC_AO
-      pmdomain: qcom: rpmhpd: Add MXC to SC8280XP
-      arm64: dts: qcom: sc8280xp: Add missing VDD_MXC links
-
-Krishna Kurapati (2):
-      arm64: dts: qcom: sm8550: Fix compile warnings in USB controller node
-      arm64: dts: qcom: sm8650: Fix compile warnings in USB controller node
-
-Krzysztof Kozlowski (1):
-      arm64: dts: rockchip: Fix wifi interrupts flag on Sakura Pi RK3308B
-
-Nicolas Ferre (1):
-      ARM: dts: microchip: sama7d65: fix size-cells property for i2c3
-
-Ondrej Jirman (1):
-      arm64: dts: rockchip: Fix voltage threshold for volume keys for Pinephone Pro
-
-Pradeep P V K (1):
-      arm64: dts: qcom: talos: Correct UFS clocks ordering
-
-Quentin Schulz (1):
-      arm64: dts: rockchip: fix unit-address for RK3588 NPU's core1 and core2's IOMMU
-
-Randy Dunlap (1):
-      arm: npcm: drop unused Kconfig ERRATA symbol
-
-Rob Herring (Arm) (4):
-      arm64: dts: rockchip: Drop "sitronix,st7789v" fallback compatible from rk3568-wolfvision
-      arm64: dts: rockchip: Fix pinctrl property typo on rk3326-odroid-go3
-      arm64: dts: rockchip: Fix gpio pinctrl node names
-      arm64: dts: rockchip: Drop unsupported properties
-
-Yixun Lan (1):
-      MAINTAINERS: update email address for Yixun Lan
-
- .mailmap                                           |  3 +++
- MAINTAINERS                                        |  4 +++-
- arch/arm/boot/dts/microchip/lan966x-pcb8290.dts    |  1 +
- arch/arm/boot/dts/microchip/sama7d65.dtsi          |  4 ++--
- arch/arm/mach-npcm/Kconfig                         |  1 -
- arch/arm64/boot/dts/nvidia/tegra210.dtsi           | 24 ----------------------
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 16 +++++++++++----
- .../boot/dts/qcom/sdm845-oneplus-enchilada.dts     |  4 ++--
- arch/arm64/boot/dts/qcom/sm8550.dtsi               |  2 --
- arch/arm64/boot/dts/qcom/sm8650.dtsi               |  3 ---
- arch/arm64/boot/dts/qcom/talos.dtsi                |  4 ++--
- .../boot/dts/rockchip/rk3308-sakurapi-rk3308b.dts  |  2 +-
- arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts |  3 ++-
- .../boot/dts/rockchip/rk3399-kobol-helios64.dts    |  2 --
- .../arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dtsi |  1 -
- .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |  1 -
- .../boot/dts/rockchip/rk3399-pinephone-pro.dts     |  4 ++--
- arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |  2 +-
- .../boot/dts/rockchip/rk3399-rock-4c-plus.dts      |  4 ++--
- .../rockchip/rk3568-wolfvision-pf5-display-vz.dtso |  3 +--
- arch/arm64/boot/dts/rockchip/rk3576-nanopi-m5.dts  | 12 +++++++----
- arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  2 +-
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      |  4 ++--
- drivers/pmdomain/qcom/rpmhpd.c                     |  4 ++++
- include/dt-bindings/power/qcom,rpmhpd.h            |  1 +
- 25 files changed, 50 insertions(+), 61 deletions(-)
