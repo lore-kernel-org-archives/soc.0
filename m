@@ -1,122 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852D1346AC0
-	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 15:43:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C4E35D600
+	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 17:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769096580; cv=none; b=p2IZzNdM029Yh9PsvfZuavlSQzaS68pcGJBNcGrOSvYemRvVWlAEvny4WVKEHt7ADdl5PLRNqA4Hsuw7VjyAKJeiFLuqXJIe4aQ3HUxVzdKrMLsmK21Fz187XD1fYVXAuhV5GWUTLbrn1KiiIxUS0ojAv2K+V3JuQ2ZVo/vDrV4=
+	t=1769103840; cv=none; b=AhgRyokhqTfL9FLEgnsCfLlwO29HygG7BAiXqs3L/ESxPKxQEj40w0Oap4WzBab+gA6dXs9uc5w9t3Z5HYShRmBak38RUSNJkvsFY0ZoIyzEPuGTovUgMzQgpg1HJ4NEcVCMh55JxTqXB2xhjWCN5pxy4FZucl49skkPuXUDaLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769096580; c=relaxed/simple;
-	bh=h/08S53Gwur52dZA2MXaRpOmGjzTBJprPhMFN04n1pk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ubHIDkNFu2my4SWBfAd3dDn4r+JITJ0cwwiBOE8pd9skguNmo/QyYGZmVoTvw/JWy0LJP1+SC58szlgWpdsWt9QZq+wOZzQ1OHcjQvcbs8xhXyqetYph+BOIp9GKMcx3OfLCYJ9P1IUmk8VNDlbApCVjaPMN2HOqgC1ouHdxIyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZpmFTPBM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769103840; c=relaxed/simple;
+	bh=wbRigpjM8ddoQDGvi5G72zIe79wSife/9VBP5HYvlkQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=AVQaWNUD9W5F+ATznUgaW4JybVjBjTtgEqgoUceSiYc9qXDjdUoGcVHg/sC6bbnrWCkXsJIlxDNnTzHN+vn5W6ozwBc0KwfejBEdGVorpc7Z1hCswr95rXT9Z9R+zEFG2yggmbyWGUWuOzba9+TLdB2pAFd6NjoYcMiIexrBCMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b0rjVAo8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZpmFTPBM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b0rjVAo8"
 Received: by smtp.kernel.org (Postfix)
-	id F044DC19423; Thu, 22 Jan 2026 15:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92ACDC116D0;
-	Thu, 22 Jan 2026 15:42:57 +0000 (UTC)
+	id 83D6AC116D0; Thu, 22 Jan 2026 17:43:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDA8C116C6;
+	Thu, 22 Jan 2026 17:43:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769096579;
-	bh=h/08S53Gwur52dZA2MXaRpOmGjzTBJprPhMFN04n1pk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZpmFTPBM3V8COnLGew6NmTHMXTRVgLx7u+4DyCU6XpKWRis+MjVvsNg0biqcU+D7F
-	 DUhNnkyedAdvzdIXN/iX0bJJt7sClqtlvlS9UrChnjU6V/L/QsoRzwz/DVq72PVMf2
-	 txlH2/Stnsyri6Na8gwRNrsMR2Z9PWDkVVcKb7cybvbmQbB+h2Fjbm2Bbf+Sf+yuay
-	 ASdfunocKsCKhrPokbGb7w6xYWulp6RxeZOv3I2k0B4DYiAAVkFR90ai8M5AqzeqIA
-	 2YkiaP+Ixtlzg5gwrXJROIGwbsLCx2CvWSUPmfSqeDkGofTSqZWWun5pwCIeqzj7E6
-	 VPRnm7KjBHP6w==
-Message-ID: <7426f902-abd1-409f-933f-b3c116ca6a7b@kernel.org>
-Date: Thu, 22 Jan 2026 16:42:55 +0100
+	s=k20201202; t=1769103838;
+	bh=wbRigpjM8ddoQDGvi5G72zIe79wSife/9VBP5HYvlkQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=b0rjVAo8lp0Tq/aoSqiafnJGQXFrBmA1VCu3hS0/sDVf4yKqvNQxExS76DJUIjOBA
+	 Vsf+BXzsVoEfyXWbxO4jjmQEJQlaJ1b14FEN/Cquux8zfoQ+Z1n161z/s330bEKv8s
+	 ekr5BTDlIVm1ue8RIJOueXCudSYfgGiWRNpi/0GlpN8YIefJW1W8rlic0PSl52cCQa
+	 9WPGPXdS3iIL7gCNq0jvHYUG7j3Q343dHDKsWGxGYzInmEe2oo/OLGVzffwKIQj9YT
+	 cZ3EINk3576foSnkoVAnB/7P5CsawKexcoHhOdU2fWzi5Q/3O9a+/76pJpYwzhegkk
+	 +De6HBnsTmGtg==
+Received: by wens.tw (Postfix, from userid 1000)
+	id C73305FBF7; Fri, 23 Jan 2026 01:43:55 +0800 (CST)
+Date: Fri, 23 Jan 2026 01:43:55 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner Device Tree Changes for 6.20
+Message-ID: <aXJh2xBXDWFFREMX@wens.tw>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.19 #1
-To: Heiko Stuebner <heiko@sntech.de>, arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-References: <3166289.xgJ6IN8ObU@diego>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <3166289.xgJ6IN8ObU@diego>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 13/01/2026 14:47, Heiko Stuebner wrote:
-> Hi soc maintainers,
-> 
-> please find below and in the next mails Rockchip changes for for 6.20 .
-> 
-> Please pull.
-> Thanks
-> Heiko
-> 
-> 
-> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
-> 
->   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.20-rockchip-dts64-1
-> 
-> for you to fetch changes up to da0de806d8b46238ac3891a894806da4d1c26cdf:
-> 
->   arm64: dts: rockchip: Add the vdpu383 Video Decoder on rk3576 (2026-01-09 20:58:40 +0100)
-> 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wG/y4cY9mUj2iJDb"
+Content-Disposition: inline
 
 
-It seems pw-bot did not TY this one, so to confirm - I merged this, thanks.
+--wG/y4cY9mUj2iJDb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best regards,
-Krzysztof
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.20
+
+for you to fetch changes up to f36e738549d483878ebf4cc9826c46d9dc4aa496:
+
+  riscv: dts: allwinner: d1: Add CPU thermal sensor and zone (2026-01-22 22:40:20 +0800)
+
+----------------------------------------------------------------
+Allwinner device tree changes for 6.20
+
+Not many changes this cycle.
+
+- The A523 family of SoCs gained support for SPI controllers.
+- Some cleanup of old ARM device tree files to fix DT binding validation
+  errors.
+- D1 and A100 SoCs gained support for their LED controller. This was
+  from a couple years ago. The driver made it in, but the DT patches
+  were missed.
+- D1 and T113 SoCs gained support for the internal thermal sensor.
+
+----------------------------------------------------------------
+Alex Studer (1):
+      riscv: dts: allwinner: d1: Add CPU thermal sensor and zone
+
+Chen-Yu Tsai (4):
+      arm64: dts: allwinner: sun55i: Add SPI controllers
+      arm64: dts: allwinner: t527: orangepi-4a: Enable SPI-NOR flash
+      ARM: dts: allwinner: sun5i-a13-utoo-p66: delete "power-gpios" property
+      ARM: dts: allwinner: Replace status "failed" with "fail"
+
+Samuel Holland (3):
+      arm64: dts: allwinner: a100: Add LED controller node
+      riscv: dts: allwinner: d1: Add LED controller node
+      riscv: dts: allwinner: d1: Add RGB LEDs to boards
+
+ .../dts/allwinner/sun4i-a10-dserve-dsrv9703c.dts   |  2 +-
+ .../dts/allwinner/sun4i-a10-pov-protab2-ips9.dts   |  2 +-
+ arch/arm/boot/dts/allwinner/sun5i-a13-utoo-p66.dts |  1 +
+ .../boot/dts/allwinner/sun6i-a31-hummingbird.dts   |  2 +-
+ arch/arm/boot/dts/allwinner/sun6i-a31s-primo81.dts |  2 +-
+ arch/arm/boot/dts/allwinner/sun8i-t113s.dtsi       | 33 ++++++++
+ arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi     | 14 ++++
+ arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi     | 94 ++++++++++++++++++++++
+ .../boot/dts/allwinner/sun55i-t527-orangepi-4a.dts | 15 ++++
+ .../dts/allwinner/sun20i-d1-lichee-rv-dock.dts     | 12 +++
+ arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts  | 13 +++
+ arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi       |  6 ++
+ arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi      | 31 +++++++
+ arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  | 31 +++++++
+ 14 files changed, 254 insertions(+), 4 deletions(-)
+
+--wG/y4cY9mUj2iJDb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmlyYdsACgkQOJpUIZwP
+JDAZsA//dLHDour+H8TNtM9QdlPNSAgpDbCE9KpA8zVbXepxBPNCcH/y2LR0VV86
+lveUwC3Eabh7FbWWoCLJWmSV7LZBav2NgonwNTBsp/K+cOu+PzN/d9L2KZyZscoo
+2EVdhFFGJ+PMelUYSk3P7Ifya4olDnb+hDS0trMofq627zxgfvpSgOEiriZ2WvRi
+T+qyYZwpHON7rvVR11Vhro1EKmnzEbBo63Sy/YM0y+cORyuaZqKezD0T4NNpmrMb
+FBlcRVgjQaRK0oqBDG2QLJXIEscx8LKoqwpSwt6xcZE1oYjaEVx0xlo+bYGAjJjm
+rdm6xCyERyp4k0wG6QyeHq4JDs8WWHMglu3Brp56TE4CeB9A2Gt6f/KsQ0yw/fdG
+BpDZnM4LQNj5Yb00H1MAa/097xoWoOj8YKK97uzD6HusQ5p998NLv9uu0e+tROyQ
+cfH+AFSIcseC/VhNJmDOooVQ7/V4Vw576Kn/ts+qkTuQcnJo58gwWoV1IrpUTWP7
+W0jpIpaqjG3V9EZipLKlrN/0TDZBI3lpCmVTGw2SqH5JyJB7G1TsRFETyD1EkKYP
+hQArbWyAkyPxVImivOGeO+Y0tA/gYtFgCtpUapjy0p7faiUjZsADT6wIF9IEUJec
+5CHPi+iApKrUrkyQSNbm4ow6JuAryD742Dj8AruxryBwtun/pZc=
+=tA0q
+-----END PGP SIGNATURE-----
+
+--wG/y4cY9mUj2iJDb--
