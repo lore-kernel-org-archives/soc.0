@@ -1,57 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C4E35D600
-	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 17:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61FF385531
+	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 18:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769103840; cv=none; b=AhgRyokhqTfL9FLEgnsCfLlwO29HygG7BAiXqs3L/ESxPKxQEj40w0Oap4WzBab+gA6dXs9uc5w9t3Z5HYShRmBak38RUSNJkvsFY0ZoIyzEPuGTovUgMzQgpg1HJ4NEcVCMh55JxTqXB2xhjWCN5pxy4FZucl49skkPuXUDaLA=
+	t=1769107197; cv=none; b=uPVD1wprx4cMK//cEts6hyhEhF7GfZId7aWljWjsKCC6o1eQkDSaCnG9OxCt2RH6vyjqKHX0kiMt+dGPMMITq4ikPMpKVoPF5IEvAIZotGI6tttkW1+q96vmJ5wrkRRSR55+M2vHtvr/RSvOSsgqEsEey1nl0yeVU5ClDGbuu6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769103840; c=relaxed/simple;
-	bh=wbRigpjM8ddoQDGvi5G72zIe79wSife/9VBP5HYvlkQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AVQaWNUD9W5F+ATznUgaW4JybVjBjTtgEqgoUceSiYc9qXDjdUoGcVHg/sC6bbnrWCkXsJIlxDNnTzHN+vn5W6ozwBc0KwfejBEdGVorpc7Z1hCswr95rXT9Z9R+zEFG2yggmbyWGUWuOzba9+TLdB2pAFd6NjoYcMiIexrBCMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b0rjVAo8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769107197; c=relaxed/simple;
+	bh=C/LJc0P7pSCX6HhTs7JO0p5h6mPdfW06ySxpR5N1kJg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NzZY0VhMFPnuUtCE/9LU3jjwE3mtINjmQ3B2YXONhgWWOhPhjaTzhZHCDBUifADy+MTToFVC6zjnACkLmMpeufqwhvLOHa/5b/XyhLGliQXtgYvaqq3DWCLVTmQcUnGbH+IGyEQp87wZTJSvR04pEZANVNd48f4x5gM4icb9VT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=S92HRQyZ; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b0rjVAo8"
-Received: by smtp.kernel.org (Postfix)
-	id 83D6AC116D0; Thu, 22 Jan 2026 17:43:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDA8C116C6;
-	Thu, 22 Jan 2026 17:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769103838;
-	bh=wbRigpjM8ddoQDGvi5G72zIe79wSife/9VBP5HYvlkQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=b0rjVAo8lp0Tq/aoSqiafnJGQXFrBmA1VCu3hS0/sDVf4yKqvNQxExS76DJUIjOBA
-	 Vsf+BXzsVoEfyXWbxO4jjmQEJQlaJ1b14FEN/Cquux8zfoQ+Z1n161z/s330bEKv8s
-	 ekr5BTDlIVm1ue8RIJOueXCudSYfgGiWRNpi/0GlpN8YIefJW1W8rlic0PSl52cCQa
-	 9WPGPXdS3iIL7gCNq0jvHYUG7j3Q343dHDKsWGxGYzInmEe2oo/OLGVzffwKIQj9YT
-	 cZ3EINk3576foSnkoVAnB/7P5CsawKexcoHhOdU2fWzi5Q/3O9a+/76pJpYwzhegkk
-	 +De6HBnsTmGtg==
-Received: by wens.tw (Postfix, from userid 1000)
-	id C73305FBF7; Fri, 23 Jan 2026 01:43:55 +0800 (CST)
-Date: Fri, 23 Jan 2026 01:43:55 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Allwinner Device Tree Changes for 6.20
-Message-ID: <aXJh2xBXDWFFREMX@wens.tw>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="S92HRQyZ"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8217f2ad01eso1239892b3a.2
+        for <soc@lists.linux.dev>; Thu, 22 Jan 2026 10:39:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769107185; x=1769711985; darn=lists.linux.dev;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eU9nAAzm7tuhsde9kPZ3jwJ1ZSEJF+Z3udZWl8Q5Jwg=;
+        b=S92HRQyZiV4cho2C7QtDYIshGBKaiOx9X/CWJ3n9AKLO6+am9S1fyyevm6VvJ5vOOn
+         ca9sOvTAkJaGdmQuAN11l5wyfREL6q83Rrl5k4wMVU1BQoS7iYjx33euTzrt4Vl/kZwE
+         m2PRAt05ujOhQfOsy70h7T0g6HbekPSmTDv15/JYAB0lNJtyJ6RovWRpd7xZwPvrdjDu
+         2OhDQld6eohjddF++nJlxfNGPgLxvCP4OaQ241jWLd9ggpjjiiznbQ/T07kvcRdZKbrS
+         KpQUsYnu3Og6sfKX+zWLKE/vHMKn42KN0oaH6YXdT5YpKCtPPETq4+It3dBW658LdwPU
+         ipcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769107185; x=1769711985;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eU9nAAzm7tuhsde9kPZ3jwJ1ZSEJF+Z3udZWl8Q5Jwg=;
+        b=b2LtuQ4fduELaPIvK+8TvGNlWT8JYSYqNAUIrZbblY8lEaJkZOQdTZn8qZTZY7i3gW
+         NUUqDBZfZPGgDyggjcmncLLrCOn/GQArvgIK3AOd1kFjGVBRa8XAj6UtwH6x6L1NO4u0
+         DBLVbtRvUbZDyOh8e+/8yaQrOZctWUdg3fxMXvf0Kf8SIpXGWStdoDdtZzF3r4hvLpxn
+         UmLR6MwO0qWSD8unZXy9nFacXPKryXHSTRyHMJRbN/8kh4wDmn97Ffirb4vWo8DhgWA6
+         NMdht0LU76xOMQHxuuqllrujKx0u1/QKFptuVgb1TsIlx4BBqQqR6VF0yomdb9UTXwSZ
+         tuVQ==
+X-Gm-Message-State: AOJu0Yyp4+/u+wyOCHtB5MnQCgdmceGzO7kGZjXffqP+1BfuLU7cLwd8
+	DL7+ZFqDUEW/p6GKRfx3v9WcDzjd0IlwrNFwg6hNnKEQFl27rwQHpOkmgaTqi1itF71BdgYj+5b
+	4yieeaqQ=
+X-Gm-Gg: AZuq6aKnu686klh9tqMEOTHJFzCU1c9GCeyKcO5//KMk3pbmdOp+DSKvrbYeRfAF6B0
+	R66ixgSlqoLc1j4wrFjEt6XOSDTUsqVz3TQhasvY1NYjdvoWyFLbh+YJTmxKHAzjuTBx8pf68Ua
+	cicwNnU4hgQN3h6Xq9+04gTyNTMX1xZiwe1mwedgVf6ge17s19/RrmxoShrzBALN9qDnUmsgoDW
+	fAehOXdowgWW0ycTynJlH+C/jasMsw1z92zttUBqalqrZHvDHJrNLq4TxxpHEJtxPTAxWahT/Au
+	g70OzSyR0frgEZeBfkp+uthIlhsNmzZjQ8V0+24LQ+8Qf0/NZWwW5eOW9kW4Q/hw/pQCSNRu/4/
+	rTMl8DnfKmB1f0YT/eB70KMRTBFgAnrrm8gQtHgy+RMgxfr5n+wuFgK4JkYFBn1ZxHNzslTBS0a
+	AzIqfpDHdoKkYmk8cBhI4=
+X-Received: by 2002:a05:6a20:7485:b0:366:14ac:e1f0 with SMTP id adf61e73a8af0-38e6f83ae57mr387123637.66.1769107184746;
+        Thu, 22 Jan 2026 10:39:44 -0800 (PST)
+Received: from localhost ([71.212.200.220])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c635a3f2ddcsm41909a12.17.2026.01.22.10.39.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jan 2026 10:39:43 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: soc@lists.linux.dev
+Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: dts: OMAP updates for v6.20
+Date: Thu, 22 Jan 2026 10:39:43 -0800
+Message-ID: <7h7bt97aq8.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wG/y4cY9mUj2iJDb"
-Content-Disposition: inline
-
-
---wG/y4cY9mUj2iJDb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
 The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
@@ -59,74 +75,51 @@ The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.20
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.20/dt-signed
 
-for you to fetch changes up to f36e738549d483878ebf4cc9826c46d9dc4aa496:
+for you to fetch changes up to 76f88d2edd9f21acad7be8422069403118708455:
 
-  riscv: dts: allwinner: d1: Add CPU thermal sensor and zone (2026-01-22 22:40:20 +0800)
-
-----------------------------------------------------------------
-Allwinner device tree changes for 6.20
-
-Not many changes this cycle.
-
-- The A523 family of SoCs gained support for SPI controllers.
-- Some cleanup of old ARM device tree files to fix DT binding validation
-  errors.
-- D1 and A100 SoCs gained support for their LED controller. This was
-  from a couple years ago. The driver made it in, but the DT patches
-  were missed.
-- D1 and T113 SoCs gained support for the internal thermal sensor.
+  ARM: dts: omap: dra7: Remove bogus #syscon-cells property (2026-01-05 12:11:31 -0800)
 
 ----------------------------------------------------------------
-Alex Studer (1):
-      riscv: dts: allwinner: d1: Add CPU thermal sensor and zone
+ARM: dts: OMAP updates for v6.20
 
-Chen-Yu Tsai (4):
-      arm64: dts: allwinner: sun55i: Add SPI controllers
-      arm64: dts: allwinner: t527: orangepi-4a: Enable SPI-NOR flash
-      ARM: dts: allwinner: sun5i-a13-utoo-p66: delete "power-gpios" property
-      ARM: dts: allwinner: Replace status "failed" with "fail"
+----------------------------------------------------------------
+Alexander Stein (1):
+      ARM: dts: tps65910: Add gpio & interrupt properties
 
-Samuel Holland (3):
-      arm64: dts: allwinner: a100: Add LED controller node
-      riscv: dts: allwinner: d1: Add LED controller node
-      riscv: dts: allwinner: d1: Add RGB LEDs to boards
+Andreas Kemnade (2):
+      ARM: dts: ti/omap: omap4-epson-embt2ws: add powerbutton
+      ARM: dts: ti/omap: omap*: fix watchdog node names
 
- .../dts/allwinner/sun4i-a10-dserve-dsrv9703c.dts   |  2 +-
- .../dts/allwinner/sun4i-a10-pov-protab2-ips9.dts   |  2 +-
- arch/arm/boot/dts/allwinner/sun5i-a13-utoo-p66.dts |  1 +
- .../boot/dts/allwinner/sun6i-a31-hummingbird.dts   |  2 +-
- arch/arm/boot/dts/allwinner/sun6i-a31s-primo81.dts |  2 +-
- arch/arm/boot/dts/allwinner/sun8i-t113s.dtsi       | 33 ++++++++
- arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi     | 14 ++++
- arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi     | 94 ++++++++++++++++++++++
- .../boot/dts/allwinner/sun55i-t527-orangepi-4a.dts | 15 ++++
- .../dts/allwinner/sun20i-d1-lichee-rv-dock.dts     | 12 +++
- arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts  | 13 +++
- arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi       |  6 ++
- arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi      | 31 +++++++
- arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  | 31 +++++++
- 14 files changed, 254 insertions(+), 4 deletions(-)
+Kory Maincent (TI.com) (1):
+      ARM: dts: Drop am335x-base0033 devicetree
 
---wG/y4cY9mUj2iJDb
-Content-Type: application/pgp-signature; name="signature.asc"
+Rob Herring (Arm) (1):
+      ARM: dts: ti: Drop unused .dtsi
 
------BEGIN PGP SIGNATURE-----
+Vladimir Zapolskiy (1):
+      ARM: dts: omap: dra7: Remove bogus #syscon-cells property
 
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmlyYdsACgkQOJpUIZwP
-JDAZsA//dLHDour+H8TNtM9QdlPNSAgpDbCE9KpA8zVbXepxBPNCcH/y2LR0VV86
-lveUwC3Eabh7FbWWoCLJWmSV7LZBav2NgonwNTBsp/K+cOu+PzN/d9L2KZyZscoo
-2EVdhFFGJ+PMelUYSk3P7Ifya4olDnb+hDS0trMofq627zxgfvpSgOEiriZ2WvRi
-T+qyYZwpHON7rvVR11Vhro1EKmnzEbBo63Sy/YM0y+cORyuaZqKezD0T4NNpmrMb
-FBlcRVgjQaRK0oqBDG2QLJXIEscx8LKoqwpSwt6xcZE1oYjaEVx0xlo+bYGAjJjm
-rdm6xCyERyp4k0wG6QyeHq4JDs8WWHMglu3Brp56TE4CeB9A2Gt6f/KsQ0yw/fdG
-BpDZnM4LQNj5Yb00H1MAa/097xoWoOj8YKK97uzD6HusQ5p998NLv9uu0e+tROyQ
-cfH+AFSIcseC/VhNJmDOooVQ7/V4Vw576Kn/ts+qkTuQcnJo58gwWoV1IrpUTWP7
-W0jpIpaqjG3V9EZipLKlrN/0TDZBI3lpCmVTGw2SqH5JyJB7G1TsRFETyD1EkKYP
-hQArbWyAkyPxVImivOGeO+Y0tA/gYtFgCtpUapjy0p7faiUjZsADT6wIF9IEUJec
-5CHPi+iApKrUrkyQSNbm4ow6JuAryD742Dj8AruxryBwtun/pZc=
-=tA0q
------END PGP SIGNATURE-----
+Yegor Yefremov (1):
+      ARM: dts: omap: enable panic-indicator option
 
---wG/y4cY9mUj2iJDb--
+ arch/arm/boot/dts/ti/omap/Makefile                |   1 -
+ arch/arm/boot/dts/ti/omap/am335x-baltos-leds.dtsi |   1 +
+ arch/arm/boot/dts/ti/omap/am335x-base0033.dts     |  92 -----------------------------------------------------------------------------
+ arch/arm/boot/dts/ti/omap/am3703.dtsi             |  14 ------------
+ arch/arm/boot/dts/ti/omap/am3715.dtsi             |  10 ---------
+ arch/arm/boot/dts/ti/omap/dra7-l4.dtsi            |   1 -
+ arch/arm/boot/dts/ti/omap/omap2430.dtsi           |   2 +-
+ arch/arm/boot/dts/ti/omap/omap3.dtsi              |   2 +-
+ arch/arm/boot/dts/ti/omap/omap3430es1-clocks.dtsi | 237 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts |   5 +++++
+ arch/arm/boot/dts/ti/omap/omap4-l4-abe.dtsi       |   2 +-
+ arch/arm/boot/dts/ti/omap/omap4-l4.dtsi           |   2 +-
+ arch/arm/boot/dts/ti/omap/omap5-l4.dtsi           |   2 +-
+ arch/arm/boot/dts/tps65910.dtsi                   |   4 ++++
+ 14 files changed, 15 insertions(+), 360 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/ti/omap/am335x-base0033.dts
+ delete mode 100644 arch/arm/boot/dts/ti/omap/am3703.dtsi
+ delete mode 100644 arch/arm/boot/dts/ti/omap/am3715.dtsi
+ delete mode 100644 arch/arm/boot/dts/ti/omap/omap3430es1-clocks.dtsi
