@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F26E1E7660
-	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 15:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A081A5B84
+	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 15:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769096406; cv=none; b=JV5eBuP7OTjQTW+601ExV2j0NSEsbvk77jgTx5TOsV7wVixeNU+y2F2JRTA40usUAJNMBfS4jr645JGi2A6y/LeRD+FjR+DjP9ZI6dIk7ajwiPedx4c6kMYjLZH4TfO2M+jxHIhI4mP/4iKfoCwp0eTUK1x+/JWtT6w4XVE95f4=
+	t=1769096540; cv=none; b=TEsETueIBLz5usW1I6aSbKv3N3Yld3UECaCjWIQpT/677fRb5Ysr4uM9MVJ6qBJ4Ex2HQ3EyT9aCoVHkOXNbnC483eFp8SrfPiGyMhayZ/0ZyDSscbEOSvhjSSM5jDuH1Avv0+7pXESwMqKnnmwk7laQIrxbAcF4LwDX36vFH1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769096406; c=relaxed/simple;
-	bh=C7Mi9PoGVmDU4/HclEBpFnCro2Ug+Lv/WjZwexBjJ48=;
+	s=arc-20240116; t=1769096540; c=relaxed/simple;
+	bh=SG2Prtwp4L+m3QwYsWSlSCQgnF9zbRN9SJuVDZSm6Ok=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jjk/ovbW6wFrngWp+vKCixUnEDfWZ2AgGaglLXs/brgnby9+5xjCUDSp8zH5+u9Q404KrtPDswwXKNaDnJWxhj5J+56lZyCyJaWNTGONjdnKANvGst+Hs0Gb4VMKeFf5hRii3SeUFZ13RkhjnNyPwa0BO1RiXYzQn8mlXccRzZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RHFgK3dJ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=eCQRvOC/ExxlRHlAaS9ZlmT393rVBI0e8zMvikdBJfOAj//5ogRlW/qxS7+/WuStsWDWGr0nLJBQvUYwS0Aei7d699jYsnkJJhFIdpI9iKd6cROA6DI7OZNL1hvueMeguYlnlTUF1HJ7TM0bt5SwxwnoRO+a9Yc5oRGYJ3tFwtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UtneR2TD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RHFgK3dJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtneR2TD"
 Received: by smtp.kernel.org (Postfix)
-	id B50EDC19423; Thu, 22 Jan 2026 15:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57C8C116C6;
-	Thu, 22 Jan 2026 15:40:03 +0000 (UTC)
+	id EBD8DC19423; Thu, 22 Jan 2026 15:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F413DC116D0;
+	Thu, 22 Jan 2026 15:42:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769096405;
-	bh=C7Mi9PoGVmDU4/HclEBpFnCro2Ug+Lv/WjZwexBjJ48=;
+	s=k20201202; t=1769096539;
+	bh=SG2Prtwp4L+m3QwYsWSlSCQgnF9zbRN9SJuVDZSm6Ok=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RHFgK3dJNLgm2pbXg7xFLZqImJpX/3wH5mvrlGBQmk0o4rV9F0JkGztYH8RGuCLUv
-	 uxoo23DJiVt+SCaJY8rMK+0PYEjZTwyCn/xhm0ElI55T0Q2BCeV+80UHgXnCmQoFgz
-	 bFWmVbdZ7+hEWqqR6s2QThFHaxvyBKBw0neqrubzO+Hl41wKgahFXZ8XsHx//pvpo2
-	 WP+8mQjEMPP6XhlxvdN45/E5sBbIQlQUTGd8Zk9d13/FEYUlF3/siuDOErulDNsNSt
-	 5ssFwFZ7Sb54cmR8XwOvx80NEgkfhAdul9/FLCJr2ZqbAaPvj16L7xeovd8o6H2zRW
-	 42nkFgaE+j2mQ==
-Message-ID: <7410a807-b68d-411b-b155-1106746e2d4b@kernel.org>
-Date: Thu, 22 Jan 2026 16:40:01 +0100
+	b=UtneR2TDzZERdDO6ISCjAhUweh9cWOieb1NH85iBBRPueBxmQeKIqbe4uku0k1N9X
+	 qu+zpDe8lyFlfvg9Pzlkg5PI49sfDNITiS+w5hTsmHUipcgyl2OhDhYBeAQ6RevEsu
+	 eGGNm74Nl4vqH2E3NaqRSfujEiA4yrhC6Kat69BTpROgf/XkGF0SgFuHDsVi9ULZiw
+	 F4V2n9npZvzVruw78YGzipE90hZzOa5jYvV3byvw3Dc7wqivygX36p0FRg+XL7QYge
+	 eWYefiMxbGqnjDvgiWPgjM1q4yfjDZGhObdqZmgH2OCX1R9KjZjIqE55okSVsuNayd
+	 c+8OYUcWc5zNg==
+Message-ID: <bcb47643-bec3-4a60-bdd4-f182736a6ca7@kernel.org>
+Date: Thu, 22 Jan 2026 16:42:15 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -37,13 +37,11 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] arm64: dts: juno/vexpress: Updates for v6.20/v7.0
-To: Sudeep Holla <sudeep.holla@arm.com>, ARM SoC Team <arm@kernel.org>,
- SoC Team <soc@kernel.org>, ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>
-References: <20260112115021.2551442-1-sudeep.holla@arm.com>
- <20260112115021.2551442-2-sudeep.holla@arm.com>
+Subject: Re: [GIT PULL] Rockchip dts32 changes for 6.20 #1
+To: Heiko Stuebner <heiko@sntech.de>, arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+References: <4560446.MSiuQNM8U4@diego>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -89,31 +87,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260112115021.2551442-2-sudeep.holla@arm.com>
+In-Reply-To: <4560446.MSiuQNM8U4@diego>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/01/2026 12:50, Sudeep Holla wrote:
-> Hi ARM SoC Team,
-> 
-> Please pull !
-> 
-> Regards,
-> Sudeep
-> 
-> -->8
-> 
+On 13/01/2026 14:46, Heiko Stuebner wrote:
 > The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 > 
 >   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/juno-updates-7.0
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.20-rockchip-dts32-1
 > 
-> for you to fetch changes up to f0d0f087227c4b63538e4ed8292f1fa26f8d6633:
+> for you to fetch changes up to e74470cf3101da79666f20186c9406192223e9a8:
 > 
->   arm64: dts: arm: Use hyphen in node names (2026-01-01 17:31:07 +0000)
+>   ARM: dts: rockchip: Add vdec node for RK3288 (2025-12-15 12:21:05 +0100)
+> 
+> ----------------------------------------------------------------
+> HEVC decoder node for RK3288.
+> 
 
 
 It seems pw-bot did not TY this one, so to confirm - I merged this, thanks.
