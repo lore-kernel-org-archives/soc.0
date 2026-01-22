@@ -1,54 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0D636C0B0
-	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 10:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A45242B757
+	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 10:50:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769076501; cv=none; b=L2KhmQdtpn39lwt2Vih6v1oVIFAS8NPdcrbJEvoxsA6w4deTplGqqGDcielVbP+Bw4HQ5mreh1C75iEkmb8Ay0S87aNthqVtBdFudbgE37yFOYgj3N45ioQ6tw9+oKl8n4zXw42J3xQOqHMlOzTs4zzj+1TgZZyJf4Gwth5nZM8=
+	t=1769079010; cv=none; b=hToc6eYwvAjmm7YSgHyKYdN3RKLeIoEISOaZwTBNZWkqVYT3ynlGU/4dfzn2KnLMOrliSZwDfZWOR1DdDymsVNh22BOoZ2QAJBrK721JRBSJY9AzDfygGAWe8WmH+vqBkc7LtOMKL0E0KeH/9V6vX2wfDLs6HzCem2m/piSyNa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769076501; c=relaxed/simple;
-	bh=NS1dUdpfEov7TFYOYmIUueAnbmo+14IrbGqTOzqyWvM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a5dFX+RVRrg5osbXgsIDI93oXjQgjvqdL0HNvBodfn+ZkbVDNx0iajTa+6A0TWiGOmyAkif/+WhryMkvhHVDix1t/XFxbfqxY2/OOY5hjkSOeZH83oRy474bbmGWilOS/Y7ljBwOCWWN9R2g6zaxehgJGkuFrN7Svp5XynN9OTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oHbe6bQS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769079010; c=relaxed/simple;
+	bh=8Eyh7nnIrbvZb5Pt10B1mETd9wjNMQYitpmFWHBJiho=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=mxCZUgSFxBgKwsPl+A2QbAv0WHk3o9RxMTjDXPR/pkxVgaZDHAOrIOhW2Z0ZFSsgjLeBxVzS7k+7X8Sts8FGtr1blODYH+jP0JfTLHXk0ya5Wpcx9ZIrFQcyBuiR8UIPP+RP8RLy7c0rqOwuaFVU73JRw1Pqr7db+W1NjEFx2Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9rID0TT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oHbe6bQS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9rID0TT"
 Received: by smtp.kernel.org (Postfix)
-	id 2BDA1C19424; Thu, 22 Jan 2026 10:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83EB8C116C6;
-	Thu, 22 Jan 2026 10:08:20 +0000 (UTC)
+	id CC26BC2BC87; Thu, 22 Jan 2026 10:50:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61A7C19423;
+	Thu, 22 Jan 2026 10:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769076501;
-	bh=NS1dUdpfEov7TFYOYmIUueAnbmo+14IrbGqTOzqyWvM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oHbe6bQSL4QiwjjO4mUSVMXO5By/hF870UEYDu5DkGHRU9o50dcjo/JKnssq82sJm
-	 Ynhr++5vrrNX2U1GQrBsyggmFgmPBATe3feabngNO1ldImAy/4VQz1hDVR7+okp9Ei
-	 vUmxTMiTZKFVlSqCqBfVoVssmVFCkT2PH0QEuD2/HydQ+v6wSzsA0Jv46pCvJDPb5p
-	 0MHKP5mPQc4SmNO5O0B/JbU+vSJXgbqxeu5d3CdPE1sXkmOngLdtf4ntaPZ/BN5WRd
-	 QHp5Un4f6m8UsDhNEsyLU7LM5ket07ec2BP3sFd/d/FhB+XJVisqv+Vw0vuRPGtZeA
-	 w4qP/JUtFUEYA==
-Date: Thu, 22 Jan 2026 11:08:18 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: arm@kernel.org, soc@kernel.org, Jon Hunter <jonathanh@nvidia.com>, 
-	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [GIT PULL 1/4] dt-bindings: Changes for v6.20-rc1
-Message-ID: <20260122-hidden-goat-of-excellence-a43b9f@quoll>
-References: <20260118080304.2646387-1-thierry.reding@gmail.com>
+	s=k20201202; t=1769079009;
+	bh=8Eyh7nnIrbvZb5Pt10B1mETd9wjNMQYitpmFWHBJiho=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=n9rID0TTtw6vIUzKM5QeVvG3l3tjxstI9P6icJkeddbcZuuIEMxpf+a0LrBMj2jaC
+	 Whq5F+9BWPNVyjfW7k/Zwn7l5nJIGM1RoUXIPMT6tm+h56iKeEFdmBjFGrd1J9l+WC
+	 jwon6R9/39u7vZoHpMVj00m8ggrOPm8Ugt+L7+7zXD+uETai4uVkMiutyZDHJuEuDU
+	 nrKUInZUsmOonY02J2v4RiyRYNf87/eOts+6hcn5c4diqtiDxfZfkg9m80XFY0gEHG
+	 QW3wsCzEh3RrWReKTI/xBtrse2l6wdSt0YuThh91RtJdXOB7hYqn6K5aN1UuI5vmaI
+	 0PpHr3nupteHA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BBBE3808200;
+	Thu, 22 Jan 2026 10:50:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260118080304.2646387-1-thierry.reding@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] nuvoton: arm64 devicetree changes for 6.20
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <176907900635.1663980.9486566577842178899.git-patchwork-notify@kernel.org>
+Date: Thu, 22 Jan 2026 10:50:06 +0000
+References: 
+ <0dddb418ec4d81b30e48a079ecad8a388284cb9f.camel@codeconstruct.com.au>
+In-Reply-To: 
+ <0dddb418ec4d81b30e48a079ecad8a388284cb9f.camel@codeconstruct.com.au>
+To: Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: soc@kernel.org
 
-On Sun, Jan 18, 2026 at 09:03:00AM +0100, Thierry Reding wrote:
-> Hi ARM SoC maintainers,
+Hello:
+
+This pull request was applied to soc/soc.git (for-next)
+by Krzysztof Kozlowski <krzk@kernel.org>:
+
+On Fri, 16 Jan 2026 11:59:01 +1030 you wrote:
+> Hello SoC maintainers,
 > 
 > The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 > 
@@ -56,31 +65,15 @@ On Sun, Jan 18, 2026 at 09:03:00AM +0100, Thierry Reding wrote:
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.20-dt-bindings
-> 
-> for you to fetch changes up to b2788f6320722d6059f849f35a77eb082608c627:
-> 
->   ASoC: dt-bindings: realtek,rt5640: Document port node (2026-01-17 01:58:18 +0100)
-> 
-> Thanks,
-> Thierry
-> 
-> ----------------------------------------------------------------
-> dt-bindings: Changes for v6.20-rc1
-> 
-> This series updates various DT bindings for Tegra architecture,
-> primarily focusing on schema validation fixes and new feature
-> documentation for Tegra234 and Tegra264 SoCs. Key changes include
-> correcting realtek,rt5640 audio codec bindings (adding missing ports,
-> clocks, and jack-detect sources), converting Tegra20 NAND bindings to
-> YAML, and updating memory, DMA, and IOMMU definitions for Tegra264
-> (introducing CMDQV and DBB clock support). Additionally, it resolves
-> legacy warnings for Tegra30/132 display and VI interfaces.
+> [...]
 
-Same comment as was for Geert, I am surprised to see DT bindings as
-separate pull and I see drivers were alerady merged, so I will defer
-entire Tegra pull to Arnd.
+Here is the summary with links:
+  - [GIT,PULL] nuvoton: arm64 devicetree changes for 6.20
+    https://git.kernel.org/soc/soc/c/332bd42e2f80
 
-Best regards,
-Krzysztof
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
