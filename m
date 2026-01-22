@@ -1,66 +1,66 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF47D33343B
-	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 18:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CDD374727
+	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 18:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769107254; cv=none; b=dX+qvdrh78NUS0br4XeZ/3NU4Jtfit4KVvpmuXFOTmmNxIvRFy6RySmXBZXEzXlLPtvfgmPYLFU99e0SC4Y2HjaiFJ+NipXAQesW3wMTo8UxAjU6bMJiHxbihRHYKZ8AkaMu1n5d5VieF1T99YqgN98kj+Wkbt3I+xTUn8LySRU=
+	t=1769107310; cv=none; b=FwLdZOUAGVAl0dNTyz13iH0AYXXvRvwXzWN5vncuMmrCbvHaBO29Jx4Cwwk/Wa+cUoqIemYTrNJv/oBb+Kugr6EkwtD8Qa12BnYKHtbN+oz98IsixW7Fuii+oi+VyEZ5W8EK9CCLI6+SIbbiNBKIdevR0SGjuA5NJ0oSd/CwRsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769107254; c=relaxed/simple;
-	bh=+bey99AjgyNTqzkxXlw+Qjdw77mPPw1bmRZ8ASYrE0E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n3F9qkeNQzyZLDnpyelm/UQLg52eRrbdU2G4IRCLf2uK+Xu/X4XQhJsJdDPue/IPt1vMBKpW4+Bh5YtEDMnKLfx5H29CuSP2ZTAwUV50O8asFuF2h3qWutthriOvdRCHRav1JCdQ8vRBKozlCNf3xnX0wqjDzwZTF1PW+B42ZnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=FQqDEKDh; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1769107310; c=relaxed/simple;
+	bh=c8xIZqGOelDr8vR/kdjqqtA9Lii7KFTLqLW4/OAPLg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eYVEZStwvqt8Qc5ExVJynQAd9/E/lZpU+s6JBBsujYBtCvSW+9c7TeXVsw2BhXVXSlrvgUhGXmf18ABp5/zna6hN40QZcnLTlnwcwmEfoS1JbYshMewHtAwVVlVdxc7iFg9i5PGRloKRNCZdx0RBbxzCYRucyrSbAsPRXdfvE8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=m9iR8NqR; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="FQqDEKDh"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29f102b013fso10651305ad.2
-        for <soc@lists.linux.dev>; Thu, 22 Jan 2026 10:40:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="m9iR8NqR"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-823075fed75so671166b3a.1
+        for <soc@lists.linux.dev>; Thu, 22 Jan 2026 10:41:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769107244; x=1769712044; darn=lists.linux.dev;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769107289; x=1769712089; darn=lists.linux.dev;
         h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Kh3llz159zOHhYjpa3DZZY1B3AUjD9TXdEvBojqy5mg=;
-        b=FQqDEKDhXJ3edBkGO+SqYeNRTYthsvAMeQicJqBwfMHLqL7Yp+LNbwFFKwPBWrAWcL
-         sa3S1IqBZaOhj4bKK4bcoPYHTmHqs5gZoGhQ0lLnUi216ApiRVansjnIQ4QWusfbTYnf
-         Q+fJzGofL1XhpkHKcsJIcilbXhU6LhB3kHsEaqZrgxnv1Krjv30ahP5yRZeVS9O58W5K
-         wAVSedsIh02eVopf2IjklHOEVbaDiY6/aPSLsp9flL0nDBjqOG8JgsOGST+cMVy7gmm/
-         za9UDHHpXQj8d6qI2wYJD1x5vg2jppyRKZZWy9RHSe5c3WTNld1+7wack/S78v0QB6ZZ
-         ID6A==
+        bh=IqerNtZd/2eIPu0s74sVae5mDkPG9QDd8bnivU2GUiA=;
+        b=m9iR8NqRIDArr06pBAy49fGCievii8LCN8ftqvJgfySIks4Ccc7cgTVQ1aX8iM0nUd
+         MW9NdSmMLh9siA/wvhNV6YBk/4xGNFQlMXHo6qewkXE54enUeSxA6HdtbZjYNlj+F+Jk
+         PkQNmwlcqLbKVaK2OhBmNLsu0k3JDFjrLxP6ecjZAwE5N65UcjYGMo1U795ho68iATKc
+         xriNWA2uoGFiYQXU0taX8zA06Wx8xdXYjF4RrRts6astBxhkm8Eg5Dmfl4JIjifkOQ42
+         ncVutZquyEG1rHwGsJmefHcRVqHfXEPQ/3JGVmhsQWuIc0CLSfLNVn24ShJ3pjk1JhBo
+         F+AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769107244; x=1769712044;
+        d=1e100.net; s=20230601; t=1769107289; x=1769712089;
         h=mime-version:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kh3llz159zOHhYjpa3DZZY1B3AUjD9TXdEvBojqy5mg=;
-        b=ip5G79MtxumGr4dn2cV3rBoaaXE6sDzeqK3LXxu02RVBFpOh6U5jcHGeOrY9lr7816
-         c1Zm2qWIJt7aEPMqH0wdm/VW6bDPcsOwvg7IftiSny/Z7B29chCEeuQG7u5jgr0oO6/A
-         AMFWqsXCoiH1W5s0Zs+MS+85f4QNiEekq5ZR277SftjC7Q0tftEs+4Ri20dbUUM3YeSB
-         IBjQnZIPMtoBibLOsf2EKe+HA3gbzF+P+GKycfYvdk4s0LhCrsze891jOySHpMUSVebG
-         t6zprLeExdOHpLRwsjTmJ5GQmV0NNZWQ0PkFi8ZCUisvNu60327B0wnUrYEmsGrjrtbN
-         pRsA==
-X-Gm-Message-State: AOJu0YwFLD1ACWLeSv1W1KvQa00sONsyNEJCGEYJP3SddM9GljGTozLB
-	tRSR6CPi2UieekhOhJpzKKiEowGr7CkJZJyMJeDgc38DosYQ6brVY7D4S3gt8vecqzCmc0YaDja
-	9uy4ki7U=
-X-Gm-Gg: AZuq6aKJhcQQ5xGFCUHiN7CXR+c6Gz1u++e/yM6H1Hlg+2puhc2SE+g6A0TwENQ55hD
-	77Hjw0sl2srPW2bUsh83RgHiD5Jp3ONJDzSd7yrlIyv3LnqSGaiKKIIGbrgruDjCG4N62ciuGFn
-	SABebJPc3GG+WES9PjMp0xhMyGUGMP0IJeICn2rRNi7HdIsTwQubC+ZCB5lTwBTI08Dr/N5bB83
-	5yb63HguYad/EwjVmQISG6shsFFMVIFi3r8QcdAfLbYMM1l4f7vE4MaKGknjBh+p3lzANJgYKQp
-	duN+kpSi2ithJR+ujaPI7Jvi7QEIgjqCSAEudSafv3gnz9Y4AZ0vz7rsBRZNcc8oH1hPoE353JF
-	g4Nkb5qOAsDTe6LMkCFMlg/XYE/g2JlLIlj/YaEcBNpoVeOW0VyPBNnha8AH5iHz0AcOVEzXTPr
-	ZrLVTHxJv2
-X-Received: by 2002:a17:902:e851:b0:29f:1bf:642a with SMTP id d9443c01a7336-2a7fe43ee93mr2949225ad.12.1769107243616;
-        Thu, 22 Jan 2026 10:40:43 -0800 (PST)
+        bh=IqerNtZd/2eIPu0s74sVae5mDkPG9QDd8bnivU2GUiA=;
+        b=R139fsJ4c+anPaxEE6kC4cKt7rA7yCATtaQc/HhW0fpCWVtJNLtyF7feYNVf6kKeM+
+         +Xnwbwh3jfqdg3xdn2lgn3BGU9dbFWEtTrU7asskx+oqdkKcuwbueJlo06PoinEtpm0g
+         fMS13pdGpBoy13Q334Emq1rL25MOqnJvxdGj/AmPZyMRzHQ9rfFbIUqpQk8HTVPTKOA4
+         uEB6bk2gn8Y8H6b9tvojJFL5VmUWbl5Dv6fjqq/WqSrtFQ+B5kuFPv57ZzEhcPG9ybCT
+         gYyJ3yWI0LclGnqZly6yT04sEk5285iVBYpb2/z75tgq/evRM3Mk89GqnTDZ4abudTxM
+         YXsw==
+X-Gm-Message-State: AOJu0Yzl6emu5VWg1AtHRSv8Lg2Z3h0YN4STTcq6ttOVBM2J1U3epnwu
+	gQHazxCKy62NAgtmXWXE7UCEiAjQhonm3yatKvEIDyF/Owqg7mpyW/TKdlK/HZWuo8GdvHIyFKt
+	y3djNJ8I=
+X-Gm-Gg: AZuq6aL4SfWrVUCFs74HfUlUQEtyBLAxbPM5vZhAGX1un1gbznDiv/mLM4vQDSfPHaY
+	bD0ohNdGnYtcsKFM8yv6wHT3G9+GQphYynkq61HO+Izg5OB6ZxQmXW1VcCgOe7IdnP13UFotX/0
+	jtpH9h4VPWT+EekhBrhCG2ADeoof8ltEE0eAeoPBmQbgL9v/7bBKP5IBHTVedflkb92/BTg4kZF
+	omz4kWrFSlm1Q0G3eaLxqdRDtDLj5qz8OGr9kTBMR9dzRvzJJ+vOfCuD/OH7uLziuk5KLdRGG3C
+	x0Kak3PowMRL0Y8YeB6c+ZWUxRIhonAYniFjrbAhkrD2TAEhxQbUfH9VOs5qKAlu1HgfZ8J6FmR
+	TlS3cdXMDgERSxtCK1jT+ZENrD+HS7eSPFSz+AF0vv/LDPAKazisDUyjKUpbCbt2IufQLnBNyZk
+	mtgYvsfooxg0wUdVfKnnU=
+X-Received: by 2002:a05:6a00:2342:b0:821:8629:ef70 with SMTP id d2e1a72fcca58-8218ebb62f2mr3358968b3a.0.1769107288788;
+        Thu, 22 Jan 2026 10:41:28 -0800 (PST)
 Received: from localhost ([71.212.200.220])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7b03945c7sm52280935ad.102.2026.01.22.10.40.42
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231871f2c0sm60366b3a.31.2026.01.22.10.41.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 10:40:43 -0800 (PST)
+        Thu, 22 Jan 2026 10:41:28 -0800 (PST)
 From: Kevin Hilman <khilman@baylibre.com>
 To: soc@lists.linux.dev
 Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: omap: soc updates for v6.20
-Date: Thu, 22 Jan 2026 10:40:42 -0800
-Message-ID: <7h343x7aol.fsf@baylibre.com>
+Subject: [GIT PULL] soc/drivers: bus & hwsplinlock updates for OMAP
+Date: Thu, 22 Jan 2026 10:41:27 -0800
+Message-ID: <7hy0lp5w2w.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -75,22 +75,24 @@ The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.20/soc-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.20/drivers-signed
 
-for you to fetch changes up to dc717e24deb4e626f4ad4896dd722815ef32311a:
+for you to fetch changes up to 3bd4edd67b034f8e1f61c86e0eb098de6179e3f2:
 
-  ARM: omap1: drop unused Kconfig symbol (2026-01-05 12:11:02 -0800)
-
-----------------------------------------------------------------
-ARM: omap: soc updates for v6.20
+  hwspinlock: omap: Handle devm_pm_runtime_enable() errors (2026-01-14 14:36:55 -0800)
 
 ----------------------------------------------------------------
-Randy Dunlap (1):
-      ARM: omap1: drop unused Kconfig symbol
+drivers: bus & hwsplinlock updates for OMAP
 
-Wentao Liang (1):
-      ARM: omap2: Fix reference count leaks in omap_control_init()
+----------------------------------------------------------------
+Haotian Zhang (1):
+      hwspinlock: omap: Handle devm_pm_runtime_enable() errors
 
- arch/arm/mach-omap1/Kconfig   |  1 -
- arch/arm/mach-omap2/control.c | 14 ++++++++++----
- 2 files changed, 10 insertions(+), 5 deletions(-)
+Johan Hovold (2):
+      bus: omap-ocp2scp: fix OF populate on driver rebind
+      bus: omap-ocp2scp: enable compile testing
+
+ drivers/bus/Kconfig                  |  2 +-
+ drivers/bus/omap-ocp2scp.c           | 13 ++-----------
+ drivers/hwspinlock/omap_hwspinlock.c |  4 +++-
+ 3 files changed, 6 insertions(+), 13 deletions(-)
