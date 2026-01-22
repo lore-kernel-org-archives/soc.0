@@ -1,117 +1,132 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91373596F6
-	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 12:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18D430C626;
+	Thu, 22 Jan 2026 14:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769085502; cv=none; b=attb2sRT9Y9Nua6JXoH5VFZ+Je2ysU/Xa6PZLpcwnYDVdd+6hlhqj2oQ7m0iMV9vvjVPfgXI+SD/H20lIcqbk1bWLuiKXMlmPntEMQL8xDIQclfKKhta/2Rlf3ZiEZKeInhReF07nf0fBiQ/uRuAxohHaKSZctmDpQDlECLG4xU=
+	t=1769091847; cv=none; b=k+VvFcVYYSZfEvKmLCSZBokYWb1jXlsIK9zKQoUUNUMkzr8eXFl/ddRMXnsFdBzq9+kc5Pa5LZf8tcU7JQ04Z8O6/94xMZhZ/icQfTH+v5DDUyCI5sC+hn9EhH+mo81xzQnxlpgYAoe7BfODRwcEFvyyFY3yOVeweZu7p1anDNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769085502; c=relaxed/simple;
-	bh=BZu/5Fim3WbSmBgZucW+Oc0ZzQIc/F/G6KlUlmjvOc4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GlTDPMecBlf4e3MtD56G9ArdR7WpC/bjqjY07FMKYAgcq9j+PqSunxFlY8v95FDbhAE+MO9WfF1EgaQVYxw5dCtT12nDboEfIsY1qv2MtjqHkRM+pWK3Mi4h06H5TnUmTyllhc2a79KkqWC6Qss6QvclLvdGpLKVVqY/2iHk2i4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-45c70afbeebso539164b6e.0
-        for <soc@lists.linux.dev>; Thu, 22 Jan 2026 04:38:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769085499; x=1769690299;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NshjYFUffTPn7Y/VWXqwFCdDoXaersEomkK4SDzB2hg=;
-        b=E27QU0xyPGGeYTDQMUQOTGFvOqccBO5xjTaFMEvaFjW7uS+//LjpthFo59NJY6cERp
-         dOntFz/TKqUvlD/PlS0PEjdrpw2TIZdt9DQNdpRqD4m/sW4n8ndxSDEnf0zeZREHdaji
-         vbajLhgcEwKy28BgGvTbxE8Ng3oyiOtVELt78XxDV/5aDZ6WQLKP8brp8flg80LiPLiW
-         cimNX1on64CWl6/PZN8nEux/RDZ8lN1VLY8lBXJNFzYBbBhoWbMrD5dt98T+bq6KrwM8
-         14tP4J2zxZRsbtEtzeP4B33cp6X4yER6aa84rxHedVeTOhNRsWKhwBhlclffeecyx8Q0
-         aKPA==
-X-Gm-Message-State: AOJu0YzTrKQy0xP4GtkLDKty2n+NVIEHiGXfbfpZQ92e225yD7W2xjMV
-	el2WiFwJikWHKhQ/bwJ5hN+dg8rcaugsFIDlcDGN+3OXrwHAgrOowU8QIdHsD4zT
-X-Gm-Gg: AZuq6aIxADtuRK0AuYDVge2Goz/SSuM4YwnkBeXo/ApK65Y32D3C+PLDqjXODgpac2q
-	lfh+74uXVcR0PkbfD8b7OLwBmgXP4K9sPoZrdMEfXKpxZeO41STN345nmS5yPwJzm+AKEqc8wyz
-	s/n+S9mNfHVbXNiyxpNkihMqzWg1GrnqEcjURq4LeZoGhrE5KDVbR8KTetGWp78PSZexVRpaWqO
-	sE53EAdawLeFjnl7CKqIokz2hyJq87WYCmIQ6Dd56IIoZaaBDUtlHFNyhOVuVvBWfIdVKDed/gi
-	9vZW1flR7eARRZFUborubKhGXNXxdcaTBxAxqVkE7vdo73QvGb6jl2CgSieRkQ2smRK7RndmS+n
-	Gzpr9L2x3etA5p1RVkJHRTjMhtngEo2fMo/1qLO1E7kZuhLqMkLPpOPcTDtfv8Ygf6Xa7lxnhVD
-	4VCPc4zhL5kYd7kpq4byoSSFKJMMFyxQ9q3AjEGcGFWuXkg3qw
-X-Received: by 2002:a05:6102:26c3:b0:5ef:b033:8abd with SMTP id ada2fe7eead31-5f50aeab1bdmr2298993137.45.1769078726864;
-        Thu, 22 Jan 2026 02:45:26 -0800 (PST)
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com. [209.85.217.49])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94808c00a92sm1431781241.1.2026.01.22.02.45.26
-        for <soc@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jan 2026 02:45:26 -0800 (PST)
-Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-5f535b24326so186675137.3
-        for <soc@lists.linux.dev>; Thu, 22 Jan 2026 02:45:26 -0800 (PST)
-X-Received: by 2002:a05:6102:304f:b0:5f5:3719:19d8 with SMTP id
- ada2fe7eead31-5f537191b24mr421545137.31.1769078726495; Thu, 22 Jan 2026
- 02:45:26 -0800 (PST)
+	s=arc-20240116; t=1769091847; c=relaxed/simple;
+	bh=9ldknsSqFx/iQzwBf1LlwoaFp95z9BYgWXvBcs7uj6k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gg1mBggnYfaIMw+YVxs8INbBJ3JderZtoXPWCx+tm7qjbpjn4XQGifxIB+uvVjdoQMtmRsSPcDHvseTYrn/acLlbVUN3O7KZ+EzCObdDUREQhv3w7K+tB9c6Xdlm/UYtfi4EpalQE3jyy74Rn/PJyxQS9aifHIJIk6SI+WT52yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqWqPsQD; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqWqPsQD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA46DC116C6;
+	Thu, 22 Jan 2026 14:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769091846;
+	bh=9ldknsSqFx/iQzwBf1LlwoaFp95z9BYgWXvBcs7uj6k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gqWqPsQDVP2cdPbl5caNzMQRq9JVr/7CNirfOa++CtZgh6NphXMU6qrpI58rF02s/
+	 1YHcA5mepIAwS0300uSmojrjEGm81rBmttC7Nl0uTbYb5swf/EsnUlxvMwOuQIBT8P
+	 3XppQt4NxA5sk4OYuCn26LiGz2Ed6IZYbd7f0fLC2ADXLBMXo3lhC1DCEKLSUM7QUA
+	 uAXJcH7/fF++4+iP2Ty+hR8bQPHSpUYeUmASOCgA5JIBnZfA8gZ2woWl9El3AfPPNJ
+	 7fOJfMyRKy0cqtJLyDywMCBJjZ7JYTAX8Tp2QoKJA3aBcBSQLlCBuTyrAfM+MlUu2p
+	 nf1bVqF512K/Q==
+From: Yixun Lan <dlan@kernel.org>
+To: soc@lists.linux.dev
+Cc: Yixun Lan <dlan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RISC-V SpacemiT Devicetrees for v6.20
+Date: Thu, 22 Jan 2026 22:23:37 +0800
+Message-ID: <20260122220523-GYD3596979@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1768559762.git.geert+renesas@glider.be> <cover.1768559767.git.geert+renesas@glider.be>
- <20260122-fragrant-auburn-oxpecker-33aa7b@quoll>
-In-Reply-To: <20260122-fragrant-auburn-oxpecker-33aa7b@quoll>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 22 Jan 2026 11:45:15 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWHJY1774N5m_S99u6ETJdyuj7GdrXv75DRoDty9j8tcg@mail.gmail.com>
-X-Gm-Features: AZwV_Qh9OPSpjre26zYtA49UvfUvRCXHMaoKfRQXbtFLez-kbSzjI0P07of02JY
-Message-ID: <CAMuHMdWHJY1774N5m_S99u6ETJdyuj7GdrXv75DRoDty9j8tcg@mail.gmail.com>
-Subject: Re: [GIT PULL 2/3] Renesas DT binding updates for v6.20
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: soc@lists.linux.dev, soc <soc@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
+Hi Arnd,
 
-On Thu, 22 Jan 2026 at 11:02, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Fri, Jan 16, 2026 at 11:50:17AM +0100, Geert Uytterhoeven wrote:
-> > The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
-> >
-> >   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.20-tag1
-> >
-> > for you to fetch changes up to f3b795d298a280687ed70211d51043ed5fc7a96a:
-> >
-> >   dt-bindings: soc: renesas: Document RZ/N1 GPIO Interrupt Multiplexer (2026-01-15 11:56:09 +0100)
-> >
-> > ----------------------------------------------------------------
-> > Renesas DT binding updates for v6.20
-> >
-> >   - Document the RZ/N1 GPIO Interrupt Multiplexer.
->
-> This belongs to the driver patch (see submitting patches in DT) and is
-> not supposed to be separate pull. If you wanted to share with your DTS
-> branch then maybe just pull it as dependency, but the problem is that
-> Arnd just merged all driver pulls and this one was skipped.
+   Please pull SpacemiT's DeviceTree changes for v6.20
 
-Right, in this particular case including it with my drivers PR would
-have been more appropriate. Sorry for missing that.
+Yixun Lan
 
-> I'll leave this one to Arnd to decide where to pull this.
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
-As soc no longer has a dt-bindings branch, he usually pulls my
-dt-bindings PR just before my dts PR (which he also hasn't pulled yet)
-into the soc dt branch.
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
 
-Gr{oetje,eeting}s,
+are available in the Git repository at:
 
-                        Geert
+  https://github.com/spacemit-com/linux tags/spacemit-dt-for-6.20-1
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+for you to fetch changes up to 5164e95565d3fd508ca8a95351323f5716dfb695:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+  riscv: dts: spacemit: Disable ETH PHY sleep mode for OrangePi (2026-01-21 08:52:03 +0800)
+
+----------------------------------------------------------------
+RISC-V SpacemiT DT changes for 6.20
+
+- Disable Ethernet PHY auto sleep mode
+- Add pinctrl IO power support
+- Add K3 Pico-ITX board
+- Add support for K3 SoC
+- Add DWC USB support
+- Add reset for eMMC(sdhci)/I2C
+- Add PCIe support
+- Support PMIC for Jupiter board
+
+----------------------------------------------------------------
+Alex Elder (2):
+      riscv: dts: spacemit: Add a PCIe regulator
+      riscv: dts: spacemit: PCIe and PHY-related updates
+
+Chukun Pan (1):
+      riscv: dts: spacemit: Disable ETH PHY sleep mode for OrangePi
+
+Encrow Thorne (1):
+      riscv: dts: spacemit: add reset property
+
+Guodong Xu (8):
+      riscv: dts: spacemit: k1: Add "b" ISA extension
+      dt-bindings: riscv: add SpacemiT X100 CPU compatible
+      dt-bindings: timer: add SpacemiT K3 CLINT
+      dt-bindings: interrupt-controller: add SpacemiT K3 APLIC
+      dt-bindings: interrupt-controller: add SpacemiT K3 IMSIC
+      dt-bindings: riscv: spacemit: add K3 and Pico-ITX board bindings
+      riscv: dts: spacemit: add initial support for K3 SoC
+      riscv: dts: spacemit: add K3 Pico-ITX board support
+
+Javier Martinez Canillas (3):
+      riscv: dts: spacemit: Enable i2c8 adapter for Milk-V Jupiter
+      riscv: dts: spacemit: Define fixed regulators for Milk-V Jupiter
+      riscv: dts: spacemit: Define the P1 PMIC regulators for Milk-V Jupiter
+
+Troy Mitchell (1):
+      riscv: dts: spacemit: pinctrl: update register and IO power
+
+Yixun Lan (1):
+      riscv: dts: spacemit: sdhci: add reset support
+
+Ze Huang (3):
+      riscv: dts: spacemit: Add USB2 PHY node for K1
+      riscv: dts: spacemit: Add DWC3 USB 3.0 controller node for K1
+      riscv: dts: spacemit: Enable USB3.0 on BananaPi-F3
+
+ .../bindings/interrupt-controller/riscv,aplic.yaml |   1 +
+ .../interrupt-controller/riscv,imsics.yaml         |   1 +
+ Documentation/devicetree/bindings/riscv/cpus.yaml  |   1 +
+ .../devicetree/bindings/riscv/spacemit.yaml        |   5 +
+ .../devicetree/bindings/timer/sifive,clint.yaml    |   1 +
+ arch/riscv/boot/dts/spacemit/Makefile              |   1 +
+ arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts    |  90 ++++
+ arch/riscv/boot/dts/spacemit/k1-milkv-jupiter.dts  | 135 +++++
+ arch/riscv/boot/dts/spacemit/k1-orangepi-r2s.dts   |   2 +
+ arch/riscv/boot/dts/spacemit/k1-orangepi-rv2.dts   |   2 +
+ arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi       |  33 ++
+ arch/riscv/boot/dts/spacemit/k1.dtsi               | 254 ++++++++-
+ arch/riscv/boot/dts/spacemit/k3-pico-itx.dts       |  29 ++
+ arch/riscv/boot/dts/spacemit/k3.dtsi               | 578 +++++++++++++++++++++
+ 14 files changed, 1116 insertions(+), 17 deletions(-)
+ create mode 100644 arch/riscv/boot/dts/spacemit/k3-pico-itx.dts
+ create mode 100644 arch/riscv/boot/dts/spacemit/k3.dtsi
