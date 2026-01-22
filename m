@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1902F42EEA4
-	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 10:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D162642E002
+	for <soc@lists.linux.dev>; Thu, 22 Jan 2026 10:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769079010; cv=none; b=KcGodtf9ZFSH6xfgvg7qWON2mSJAHGA97rDLVQllleYI78fEuuEY9pa8iDq9p7IiAj26FkBjoLEwdVcY5Bkcn55e2YqlKTfTNiuX7vLiSmyfuyGGy+TMZoGbxX+/dk6chiORQN41RpFwNV+VKygmxKP+9I251aBMOd9WQdqr5zw=
+	t=1769079011; cv=none; b=hhXLhG40GMjsfFeTDz/Mn6/45p9WaqMPe4SbxHMG+C4SJnbFXcB6ZkhkW5af3V8YcSKGWoK6kqYKdW2d+LhC2f3kdDI3bdYrZWRRJs75czv9h+3VWw5Vgo6L48qn//4kzeMMS7vrD8lqnqayZKRSTE48V9fXcY55RSMXPeSh4EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769079010; c=relaxed/simple;
-	bh=TAW0wSQIo95UqSXbEZy5Y8+ePN+ZcRr+aTbnKj41HK8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=thb4Wyre1y/G+xUPHco7xwjfbRPY+D7EIBeJeLB9DPeIMwNEnCc17GXczRJaCJ5khaKlNT0ApeYaFmMbHzd73ooAGvi1FSNeg2rZxrxj5PE3jp2TIgBQ8fQd+nO/Y8+dEz/HqY9qXw8SwqVJZwyPep2EW2VYPJiE8nEpqJtyaPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dzjJAdwa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769079011; c=relaxed/simple;
+	bh=GoioQsZV7ptGb4Id6tz2BvJbm3faxONK6y4wgFFGHqI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=DEMXOGMKlg9tkxf+jpx2SORP73O+ZR9aW00MOtfPPXj6GuCY8agp51fV8jU16r9syrgrcNv8iU07m/aKMrQHnKtrpfuf53W1HgXk2dcsR2uNz/5ylzSVw/drL+mjtUqy+EDC2q6/7tJngLPVSOLUhnnfLBeUxvADLIBm5bv4af8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bY45dVU7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dzjJAdwa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bY45dVU7"
 Received: by smtp.kernel.org (Postfix)
-	id 9A3ECC19424; Thu, 22 Jan 2026 10:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F29C16AAE
-	for <soc@kernel.org>; Thu, 22 Jan 2026 10:50:08 +0000 (UTC)
+	id 56D39C2BC87; Thu, 22 Jan 2026 10:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FEBAC116C6;
+	Thu, 22 Jan 2026 10:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769079008;
-	bh=TAW0wSQIo95UqSXbEZy5Y8+ePN+ZcRr+aTbnKj41HK8=;
-	h=Subject:From:Date:To:Cc:From;
-	b=dzjJAdwaGoTyD0QKlMa+z3cK6gQ7SDPpeXaOySKFCe2y7HF/XzfnCY6wx1PIoMFda
-	 7crlkQHwiE/Vn9gN/FGboJe11nn8oMqnq6qtbcW0b3PbyAZAdxjDty0yKh3jzk/BQc
-	 Hqg70mRN2ZfBQqT7SbWbtXn1fbKL1cYRWhNiB8s8bnYNeWi8MXEvXsskkz5oW7xir/
-	 H397OmzLOY5g7SiK4Ob0iIuMte9iKqNHZknU54S72XlqJvDaElgFo6xlAcv5dy1Pqq
-	 Q3kl2ga9pqfoICC8dKD4D5pEdmV8XRPHs93ThAhwK7t+bDM5iXXwu0uN74PP5b2Tqs
-	 nVYKjn4EVtuLg==
+	s=k20201202; t=1769079011;
+	bh=GoioQsZV7ptGb4Id6tz2BvJbm3faxONK6y4wgFFGHqI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=bY45dVU7tItSj03sdetFWwFDFa5SGir/ezyC8/9d7IpV3JljjLa2JJ2Z6byrxGJDp
+	 tNNydBZ5r2/98th+3Ih4OTU3CJ9vdeM8epOYRh2P/7P3V2YnqbdPuMXFu8MQyrtNNB
+	 UfUF/FeWx6BTh5CGt2rnnVfn8BD36HY+3aPAb7e/FXUt9QlBvbcg2Iwf8X3Ylzsr0j
+	 NudCGbzEd2zwDGip6ph1M5pwZqhetxKkAVap6WBZEIczib8Hb36uItpS/pKLRt8gPE
+	 j3O7h/pnHdfC8ZS7Cw5alKZGAfiqAUJNG4iC4UddjWymlppr094NSYWNwZ47N7wxwp
+	 gKDdcOVdpExeA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 511F93808200;
-	Thu, 22 Jan 2026 10:50:06 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 119983808200;
+	Thu, 22 Jan 2026 10:50:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,46 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Apple SoC DT changes for v6.20
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176907900502.1663980.16621439460601889483.git-patchwork-summary@kernel.org>
-Date: Thu, 22 Jan 2026 10:50:05 +0000
-To: soc@kernel.org
+ <176907900759.1663980.7454700402564281414.git-patchwork-notify@kernel.org>
+Date: Thu, 22 Jan 2026 10:50:07 +0000
+References: <20260118193032.64139-1-sven@kernel.org>
+In-Reply-To: <20260118193032.64139-1-sven@kernel.org>
+To: Sven Peter <sven@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Krzysztof Kozlowski <krzk@kernel.org>:
 
-Patch: [GIT,PULL] nuvoton: arm64 devicetree changes for 6.20
-  Submitter: Andrew Jeffery <andrew@codeconstruct.com.au>
-  Committer: Krzysztof Kozlowski <krzk@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043068
-  Lore link: https://lore.kernel.org/r/0dddb418ec4d81b30e48a079ecad8a388284cb9f.camel@codeconstruct.com.au
+On Sun, 18 Jan 2026 20:30:30 +0100 you wrote:
+> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+> 
+>   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git apple-soc-dt-6.20
+> 
+> [...]
 
-Patch: [GIT,PULL] Apple SoC DT changes for v6.20
-  Submitter: Sven Peter <sven@kernel.org>
-  Committer: Krzysztof Kozlowski <krzk@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043843
-  Lore link: https://lore.kernel.org/r/20260118193032.64139-1-sven@kernel.org
+Here is the summary with links:
+  - [GIT,PULL] Apple SoC DT changes for v6.20
+    https://git.kernel.org/soc/soc/c/c0398be9890d
 
-Patch: [GIT,PULL] aspeed: second batch of arm devicetree changes for 6.20
-  Submitter: Andrew Jeffery <andrew@codeconstruct.com.au>
-  Committer: Krzysztof Kozlowski <krzk@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043078
-  Lore link: https://lore.kernel.org/r/c7002883dbeadf44069ef5e8cf573d9f2aefc899.camel@codeconstruct.com.au
-
-Patch: [GIT,PULL] NXP LPC32xx device tree changes for v6.20
-  Submitter: Vladimir Zapolskiy <vz@mleia.com>
-  Committer: Krzysztof Kozlowski <krzk@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043337
-  Lore link: https://lore.kernel.org/r/20260116131637.101296-1-vz@mleia.com
-
-
-Total patches: 4
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
