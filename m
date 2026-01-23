@@ -1,45 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAB83093C9
-	for <soc@lists.linux.dev>; Fri, 23 Jan 2026 11:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F9A2C0F6E
+	for <soc@lists.linux.dev>; Fri, 23 Jan 2026 11:17:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769167057; cv=none; b=tzqgAQu4Hbf+mqixFMjVu5uS2AE7CphDFSeke2ylmKyOE/NX2CUZemFuc7Du6UxIb2K8t/DpLqvYSh42prJnomzxZpFzWxrrvCiH8uOCmXalh7lXlo3AsEYQL4XOhvv3MoHZH7hEmcFUtGWEnl4bcWAFgS7fD+0iuYpCWkWyYko=
+	t=1769167058; cv=none; b=i+yr82CsdzfFM7OzNIbLx2Z9sEhK6KxE/i1mkeC9LPkC6EjKhfmIOIa8XJclhSiEZ6iYui+dwNJjXkYp6qX00cBdWWYlYX+u5UGYWoEzG8sTj8kiyU6yeX6x5XynP6bnhQUQRLxHUkJIEMB1FkUgZzfHRMnd7cnSclIwrfgUCVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769167057; c=relaxed/simple;
-	bh=Hjdy/bPOqa8HgLmDYLapL/0cxNE4GJDeliqFNgLEYVg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nZqGuF8Bw7kAx7KYPvC6pXOOzVV300QFtHpdZF+x1PHDu7g2RcFW5jGTUFi4qXAPjk+gB/UQZHYwhLLY4IK2Td4WStyJlkhqHdYg2OvkRDq423qj+RHDyeB6g7TCkxCRRWPNKA81yMVHMb8ypy73kWsY3eofJ/6qqPhAPehXlsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=B4l6lMyj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769167058; c=relaxed/simple;
+	bh=ENlMl1bSYsG6/Pc0nHKNqHh4izRF0rIkuDpxCOw7iCI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KpD1JFU58aOQyD794l9iLG8XOvig7HQCAnX6smxQVWDcb+OnaFvQ6kQhOetgzW90PoWI/Y+ylUSMhVHpTvHJZnovdhhWbuL9dfRh9qcoDtCCLHw2J7LXOTQ7/aDqdvdQTgFkKmb0yg4u14QLvjIU1Sf9GU4CVd33C8SIRicmFBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KJmt4Zkf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="B4l6lMyj"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KJmt4Zkf"
 Received: by smtp.kernel.org (Postfix)
-	id 4AC3AC19423; Fri, 23 Jan 2026 11:17:37 +0000 (UTC)
+	id 27813C116D0; Fri, 23 Jan 2026 11:17:38 +0000 (UTC)
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 304C4C19422;
-	Fri, 23 Jan 2026 11:17:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 304C4C19422
+	by smtp.kernel.org (Postfix) with ESMTPS id BBA83C2BC86;
+	Fri, 23 Jan 2026 11:17:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BBA83C2BC86
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1769167047;
-	bh=Hjdy/bPOqa8HgLmDYLapL/0cxNE4GJDeliqFNgLEYVg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=B4l6lMyjVKSTs6d8zVyyGAIRC2KGqgBMXJOjr2UVYf233qPERzW+iaxMxafFcV3JH
-	 Q0UVAvfZYfueJSFgiMRSGhZsjyC2YRF3B+KVAsmOdetCF7q5ZmD6tU/apMPUwaRAGW
-	 ngWNfRRssyGn4Mh0IiE6lkEPMLTBWagRK/OQZgAl7YyZi6ajEHgxbl/DL73pWsPFFi
-	 mtBqvTYC8u1BTL5lJaQo5Wz+qoaeT/ysgYhrTgw84W9QYZeWUWUyuc++zjj/KOJ/oO
-	 qW26YDTgZqFmTdaMq+RorJJgvs6FqDE2A/EMmH9MtYnOpwDw1fgce2hG7RzcRy/Lsy
-	 m98yK/7eEvUlQ==
+	bh=ENlMl1bSYsG6/Pc0nHKNqHh4izRF0rIkuDpxCOw7iCI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KJmt4ZkfuZZ+ROiqdfXOXk0cxTl1nSDtbS8QuZGIwfeWQ5M8jaig8D0x6Zgh2C1rD
+	 gMfhgQBHcHDTd+6R/GA3HatW92WUp21bkXXI2M2SRpo5FSn8x3IK5THdfONVUdM1ls
+	 KA9eEOFuKgKhjYde9zTDdOncFEpkx/KswQlJm7vMkN0gJ7dr2ryK5NucHXWNWQh/4/
+	 XuRYXP1QsawbCvUdvH9QwxnbaB/Q319jWNtHwqwI8ZGijbTWCoMxo6YUmtb+FcXMHR
+	 y5ju6m+2s52BF7jqoF4QswuQdDAvJOdY3uqWtJuUXyFSthoh32IgGqAku1VvPtMOL/
+	 qkkOIT88RNRxw==
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2CBE717E0333;
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 99C8B17E0CB0;
 	Fri, 23 Jan 2026 12:17:27 +0100 (CET)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: arm-soc <arm@kernel.org>,
@@ -47,17 +48,18 @@ To: arm-soc <arm@kernel.org>,
 Cc: matthias.bgg@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [GIT,PULL,1/3] MediaTek ARM64 DTS updates for v6.20
-Date: Fri, 23 Jan 2026 12:17:20 +0100
-Message-ID: <20260123111724.28631-1-angelogioacchino.delregno@collabora.com>
+Subject: [GIT,PULL,2/3] MediaTek driver updates for v6.20
+Date: Fri, 23 Jan 2026 12:17:21 +0100
+Message-ID: <20260123111724.28631-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260123111724.28631-1-angelogioacchino.delregno@collabora.com>
+References: <20260123111724.28631-1-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
@@ -66,146 +68,59 @@ The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ mtk-dts64-for-v6.20
+  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ mtk-soc-for-v6.20
 
-for you to fetch changes up to 25556c12f4d3edc2f614f752f204c3941697b30a:
+for you to fetch changes up to 22ce09ce1af574747fce072c3f62c29c440538d7:
 
-  arm64: dts: mediatek: mt8192: Rename mt8192-afe-pcm to audio-controller (2026-01-19 12:25:34 +0100)
-
-----------------------------------------------------------------
-MediaTek ARM64 Device Tree updates
-
-This adds support for new boards and variants based on different
-already supported MediaTek SoCs, and improves support for current
-boards.
-
-In particular:
- - New machines:
-   - Ezurio Tungsten 510 (MediaTek Genio 510 SoC)
-   - Ezurio Tungsten 700 (MediaTek Genio 700 SoC)
-
-...improvements for already supported SoCs and machines:
- - MT7981b gains support for PCI-Express, USB, Ethernet and for
-   the "GED" WiFi HW offload
-   - OpenWRT One board gains support for the same
- - MT8188/8195/8390/8395 gains support for the DPI1 interface
-   and HDMI output from the SoC's HDMI Tx controller along with
-   its HDMI PHY and DDC IPs, usable on a selection of boards
-   that expose a HDMI connector, namely:
-   - All MT8390 Genio EVK based boards
-   - All MT8395 Genio EVK based boards
-   - Radxa NIO-12L (MT8395)
-
-...and dtbs_check warning fixes for many of the MTK devicetrees,
-including MT6795, MT7981, MT7986, MT7988, MT8173, MT8183, MT8186,
-MT8188, MT8192, and a dts coding style fix for Airoha EN7581-EVB.
-
-This also includes a fix for the new devicetree overlay warnings,
-adding dtbs with applied overlays for all of the devices having
-at least one overlay.
+  soc: mediatek: mtk-cmdq: Add mminfra_offset adjustment for DRAM addresses (2026-01-19 12:57:46 +0100)
 
 ----------------------------------------------------------------
-AngeloGioacchino Del Regno (24):
-      arm64: dts: mediatek: mt8195: Add DPI1, HDMI, HDMI PHY/DDC nodes
-      arm64: dts: mediatek: mt8188: Add DPI1, HDMI, HDMI PHY/DDC nodes
-      arm64: dts: mediatek: mt8390-genio-common: Enable HDMI output
-      arm64: dts: mediatek: mt8395-radxa-nio-12l: Enable HDMI output
-      arm64: dts: mediatek: mt8173: Fix pinctrl node names and cleanup
-      arm64: dts: mediatek: mt8183-evb: Fix dtbs_check warnings
-      arm64: dts: mediatek: mt7981b-openwrt-one: Remove useless cells from flash@0
-      arm64: dts: mediatek: mt8183-jacuzzi-pico6: Fix typo in pinmux node
-      arm64: dts: mediatek: mt8183-pumpkin: Fix pinmux node names
-      arm64: dts: mediatek: mt8173-elm: Fix bluetooth node name and reorder
-      arm64: dts: mediatek: mt8173-elm: Fix dsi0 ports warning
-      arm64: dts: mediatek: mt8173-elm: Remove regulators from thermal node
-      arm64: dts: mediatek: mt8192-asurada: Remove unused clock-stretch-ns
-      arm64: dts: mediatek: mt6795-xperia-m5: Add UHS pins for MMC1 and 2
-      arm64: dts: mediatek: mt6331: Fix VCAM IO regulator name
-      arm64: dts: mediatek: mt6795: Fix issues in SCPSYS node
-      arm64: dts: mediatek: mt6795-xperia-m5: Rename PMIC leds node
-      arm64: dts: mediatek: mt8173-evb: Add interrupts to DA9211 regulator
-      arm64: dts: mediatek: mt7986a: Change compatible for SafeXcel crypto
-      arm64: dts: mediatek: mt7981b-openwrt-one: Add address/size cells to eth
-      arm64: dts: mediatek: mt8186-evb: Add vproc fixed regulator
-      arm64: dts: mediatek: mt7988a: Fix PCI-Express T-PHY node address
-      dt-bindings: arm: mediatek: audsys: Support mt8192-audsys variant
-      arm64: dts: mediatek: mt8192: Rename mt8192-afe-pcm to audio-controller
+MediaTek soc driver updates
 
-Chen-Yu Tsai (2):
-      arm64: dts: mediatek: mt8188-geralt: drop firmware-name from first SCP core
-      arm64: dts: mediatek: mt8183-kukui: Clean up IT6505 regulator supply
+This adds:
+ - A socinfo entry for the MT8371 Genio 520 SoC
+ - Support for the Dynamic Voltage and Frequency Scaling
+   Resource Controller (DVFSRC) version 4, found in the
+   new MediaTek Kompanio Ultra (MT8196) SoC
+ - Initial support for the CMDQ mailbox found in the MT8196.
+ - A memory leak fix in the MediaTek SVS driver's debug ops.
 
-Frank Wunderlich (2):
-      arm64: dts: mediatek: mt7986: add dtbs with applied overlays for bpi-r3
-      arm64: dts: mediatek: mt7988: add dtbs with applied overlays for bpi-r4 (pro)
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (5):
+      soc: mediatek: mtk-dvfsrc: Change error check for DVFSRCv4 START cmd
+      soc: mediatek: mtk-dvfsrc: Add and propagate DVFSRC bandwidth type
+      soc: mediatek: mtk-dvfsrc: Add a new callback for calc_dram_bw
+      soc: mediatek: mtk-dvfsrc: Write bandwidth to EMI DDR if present
+      soc: mediatek: mtk-dvfsrc: Add support for DVFSRCv4 and MT8196
 
-Gary Bisson (5):
-      dt-bindings: vendor-prefixes: Add Ezurio LLC
-      dt-bindings: arm: mediatek: Add Ezurio Tungsten entries
-      arm64: dts: mediatek: mt8188: switch mmc nodes to interrupts-extended
-      arm64: dts: mediatek: add device tree for Tungsten 510 board
-      arm64: dts: mediatek: add device tree for Tungsten 700 board
+Jason-JH Lin (8):
+      mailbox: mtk-cmdq: Add cmdq private data to cmdq_pkt for generating instruction
+      mailbox: mtk-cmdq: Add GCE hardware virtualization configuration
+      mailbox: mtk-cmdq: Add mminfra_offset configuration for DRAM transaction
+      mailbox: mtk-cmdq: Add driver data to support for MT8196
+      soc: mediatek: mtk-cmdq: Add cmdq_get_mbox_priv() in cmdq_pkt_create()
+      soc: mediatek: mtk-cmdq: Add pa_base parsing for hardware without subsys ID support
+      soc: mediatek: mtk-cmdq: Extend cmdq_pkt_write API for SoCs without subsys ID
+      soc: mediatek: mtk-cmdq: Add mminfra_offset adjustment for DRAM addresses
 
-Krzysztof Kozlowski (1):
-      arm64: dts: airoha: Use hyphen in node names
+Louis-Alexis Eyraud (1):
+      soc: mediatek: mtk-socinfo: Add entry for MT8371AV/AZA Genio 520
 
-Louis-Alexis Eyraud (4):
-      arm64: dts: mediatek: mt8390-genio-common: Add HDMI sound output support
-      arm64: dts: mediatek: mt8395-radxa-nio-12l: Add HDMI sound output support
-      arm64: dts: mediatek: mt8395-genio-common: Enable HDMI output
-      arm64: dts: mediatek: mt8395-genio-common: Add HDMI sound output support
+Nicolas Frattaroli (3):
+      dt-bindings: soc: mediatek: dvfsrc: Document clock
+      soc: mediatek: mtk-dvfsrc: Get and Enable DVFSRC clock
+      soc: mediatek: mtk-dvfsrc: Rework bandwidth calculations
 
-Otto Pflüger (1):
-      arm64: dts: mediatek: mt8183: Add missing endpoint IDs to display graph
+Zilin Guan (1):
+      soc: mediatek: svs: Fix memory leak in svs_enable_debug_write()
 
-Rob Herring (Arm) (1):
-      arm64: dts: mediatek: Apply mt8395-radxa DT overlay at build time
-
-Sjoerd Simons (7):
-      arm64: dts: mediatek: mt7981b: Add PCIe and USB support
-      arm64: dts: mediatek: mt7981b-openwrt-one: Enable PCIe and USB
-      arm64: dts: mediatek: mt7981b: Add Ethernet and WiFi offload support
-      arm64: dts: mediatek: mt7981b-openwrt-one: Enable Ethernet
-      arm64: dts: mediatek: mt7981b: Disable wifi by default
-      arm64: dts: mediatek: mt7981b: Add wifi memory region
-      arm64: dts: mediatek: mt7981b-openwrt-one: Enable wifi
-
- .../devicetree/bindings/arm/mediatek.yaml          |    2 +
- .../bindings/arm/mediatek/mediatek,audsys.yaml     |   46 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
- arch/arm64/boot/dts/airoha/en7581-evb.dts          |    6 +-
- arch/arm64/boot/dts/mediatek/Makefile              |   57 +
- arch/arm64/boot/dts/mediatek/mt6331.dtsi           |    2 +-
- .../boot/dts/mediatek/mt6795-sony-xperia-m5.dts    |   50 +-
- arch/arm64/boot/dts/mediatek/mt6795.dtsi           |    3 +-
- .../boot/dts/mediatek/mt7981b-openwrt-one.dts      |  129 +-
- arch/arm64/boot/dts/mediatek/mt7981b.dtsi          |  220 ++-
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi          |    2 +-
- arch/arm64/boot/dts/mediatek/mt7988a.dtsi          |   28 +-
- arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi  |   34 +-
- arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi       |  167 ++-
- arch/arm64/boot/dts/mediatek/mt8173-evb.dts        |   68 +-
- arch/arm64/boot/dts/mediatek/mt8173.dtsi           |   28 +-
- arch/arm64/boot/dts/mediatek/mt8183-evb.dts        |   36 +-
- .../dts/mediatek/mt8183-kukui-jacuzzi-pico6.dts    |    2 +-
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |    6 +-
- arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    |   16 +-
- arch/arm64/boot/dts/mediatek/mt8183.dtsi           |   37 +-
- arch/arm64/boot/dts/mediatek/mt8186-evb.dts        |   13 +
- arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi    |    1 -
- arch/arm64/boot/dts/mediatek/mt8188.dtsi           |   88 +-
- arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi   |    1 -
- arch/arm64/boot/dts/mediatek/mt8192.dtsi           |    2 +-
- arch/arm64/boot/dts/mediatek/mt8195.dtsi           |   85 ++
- .../boot/dts/mediatek/mt8370-tungsten-smarc.dts    |   14 +
- .../boot/dts/mediatek/mt8390-genio-common.dtsi     |  150 ++
- .../boot/dts/mediatek/mt8390-tungsten-smarc.dts    |   22 +
- .../boot/dts/mediatek/mt8390-tungsten-smarc.dtsi   | 1489 ++++++++++++++++++++
- .../boot/dts/mediatek/mt8395-genio-common.dtsi     |  150 ++
- .../boot/dts/mediatek/mt8395-radxa-nio-12l.dts     |  150 ++
- 33 files changed, 2873 insertions(+), 233 deletions(-)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8370-tungsten-smarc.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8390-tungsten-smarc.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8390-tungsten-smarc.dtsi
-
+ Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.yaml |   6 ++
+ drivers/mailbox/mtk-cmdq-mailbox.c                                         |  74 +++++++++++++-
+ drivers/soc/mediatek/mtk-cmdq-helper.c                                     |  77 +++++++++++++-
+ drivers/soc/mediatek/mtk-dvfsrc.c                                          | 364 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------
+ drivers/soc/mediatek/mtk-socinfo.c                                         |   1 +
+ drivers/soc/mediatek/mtk-svs.c                                             |   5 +-
+ include/linux/mailbox/mtk-cmdq-mailbox.h                                   |  19 ++++
+ include/linux/soc/mediatek/mtk-cmdq.h                                      |  93 +++++++++++++++++
+ 8 files changed, 598 insertions(+), 41 deletions(-)
 
