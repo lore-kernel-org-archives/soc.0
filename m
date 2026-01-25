@@ -1,38 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C392A946C
-	for <soc@lists.linux.dev>; Sat, 24 Jan 2026 20:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B927E21ABC1
+	for <soc@lists.linux.dev>; Sun, 25 Jan 2026 20:15:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769284879; cv=none; b=WZ1cYr/vnolO1hDShgi0AK+YAAXGWKU8sV1ghtJ/T8bPKakFtkhbmitzAONG2UnQ1QSFDmn0d7R9xVIoNXlw4qGdnQeGxc2iZcMy1h1u352mxc5/hqSNEYEKpjlzJwUjjEtXmHo55e8D0GrEuieg3zo65khSOf82rFMZnGMtiY0=
+	t=1769372152; cv=none; b=o5t748Nk/1SzVnKPL8Inrzr2VgiStdnLQ5X/11G/XqhA7oASQJXwq+mWuQZjtgTx4tXq9JDG5p9u9TTIzZG7KMPFkIZKAsHOGMjEN2b1cLwurDl1kmKIklMwNc63YZwP9RC5J9zS7TdvZHk+5uA0VE2hIgwMgn3sLqP7MxEmNw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769284879; c=relaxed/simple;
-	bh=vWAkqFd+8+4rfuGqKrFOjnRspyOydTrshpi/s8xSGmM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ba595gHUX2sExQuZExHjZ5wPgjt6HvU4WVp+m6tm1sB/HRlTS0zwIkmS8+TZDwUZyDZG0Vo5jUaWu68d2v122WZECfOTeIKvB+8TsFQHkPhtCsTmrv50qrK5c0BY1/+KbRXZ80VVYFymr8IsZyFz1rM6fa/XvRPjibV+v6tx0d0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJAer8s3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769372152; c=relaxed/simple;
+	bh=vNxC6UtTj1W10uEOM1GRQMoI9lpOlgXLjmJOV5jRTdg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eTWMmBOsqShU7xGvwr3AEYG/Xxgh+5+JtLMGyZz//3lTUhNxWVkC2aQ5rRWavKaygvtjDHRjw1uqkJ8Rx4tlaGVOy2nXjnySDzILIO1yBGrcWY/UhnwyQCf+RdTREgS/ADTThYCOhz8lstCEtS9+RXsIkVXwYTYILshqGueYmoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qH1wAXo1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJAer8s3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 217EDC116D0;
-	Sat, 24 Jan 2026 20:01:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qH1wAXo1"
+Received: by smtp.kernel.org (Postfix)
+	id 7802CC19425; Sun, 25 Jan 2026 20:15:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 240E8C4CEF1;
+	Sun, 25 Jan 2026 20:15:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769284879;
-	bh=vWAkqFd+8+4rfuGqKrFOjnRspyOydTrshpi/s8xSGmM=;
+	s=k20201202; t=1769372152;
+	bh=vNxC6UtTj1W10uEOM1GRQMoI9lpOlgXLjmJOV5jRTdg=;
 	h=From:To:Cc:Subject:Date:From;
-	b=aJAer8s3PItguE9Inc1JCT1Z1N56jmGASBdSeh9A1mU/Fw1Wzqfi5kYHeM7cJ5rxV
-	 o/huK/2IRYpHsTAI4ibxO0qBX4JxdfVL0mpokL3Fy1MdPNSYFAqokCGY4lLwe4ApDd
-	 MUer7tu6MqGm0nIrnzc86ihu2i/O/KMES9+sCZzar7Z7TP1bzStRBZp+Pn20BtcK7E
-	 Qy/CPy92cYXK6UbdktOpE1Sck9yXKR8+lpI9WON4rJcPETEGK+QWmyPXLeMJmGk4Bn
-	 YyOd37Et8ya1UW7lDXPjIFNq2Qp+W7F7jpMTYkw+R7en9yKKjE0aIJUnmTJatrcZ3s
-	 23a8/DMN7Wr0Q==
-From: Dinh Nguyen <dinguyen@kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm/arm64: dts: socfpga: updates for v6.20
-Date: Sat, 24 Jan 2026 14:01:18 -0600
-Message-ID: <20260124200118.2789128-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.42.0.411.g813d9a9188
+	b=qH1wAXo1pnlVRGhueNSahUtd7XIKbHY9J0IDJfGi6WgdDtCLTW8plx4GoL+1kqrCR
+	 jDDDDr4k4d1abxxt2fxw5l14wiMubK/I6yAGJF/U3ckwVhIDlsope7rkHWwyShE8su
+	 ocTqpUyQHed3fcB4pHkvRl6bA3XlORmy3VopGT/uYNPdHWzJg3jwK0z7RCvhx7zTk5
+	 nC66mNjzBlFE3EVKUei8ojuFqW96ubZDVos/3dLyQggA2Yb5BGNQMM/7c0Sl4kGtTq
+	 Cics6VKkxEKUF8JyklzgrwDNOaxJUzLG0Ete8hIe37oy8UrG4PVnXgcuYYSto7yptZ
+	 hYrTlXhQZiSgw==
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: soc@kernel.org
+Cc: arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Sudeep Holla <sudeep.holla@kernel.org>
+Subject: [PATCH] MAINTAINERS: Change Sudeep Holla's email address
+Date: Sun, 25 Jan 2026 20:15:45 +0000
+Message-ID: <20260125201545.3461463-1-sudeep.holla@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -41,72 +45,138 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+Switch to my kernel.org email address going forward.
 
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+Signed-off-by: Sudeep Holla <sudeep.holla@kernel.org>
+---
+ .mailmap    |  3 ++-
+ MAINTAINERS | 22 +++++++++++-----------
+ 2 files changed, 13 insertions(+), 12 deletions(-)
 
-are available in the Git repository at:
+Hi SoC Team,
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.20
+Can you apply this directly ?
 
-for you to fetch changes up to 1a457681c075e1bd894df753087cb4268ce9f9e9:
+Regards
+Sudeep
 
-  arm64: dts: intel: agilex5: Add simple-bus node on top of dma controller node (2026-01-02 07:52:44 -0600)
+diff --git a/.mailmap b/.mailmap
+index 1873cfa15937..584876248c1f 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -779,7 +779,8 @@ Subash Abhinov Kasiviswanathan <quic_subashab@quicinc.com> <subashab@codeaurora.
+ Subbaraman Narayanamurthy <quic_subbaram@quicinc.com> <subbaram@codeaurora.org>
+ Subhash Jadavani <subhashj@codeaurora.org>
+ Sudarshan Rajagopalan <quic_sudaraja@quicinc.com> <sudaraja@codeaurora.org>
+-Sudeep Holla <sudeep.holla@arm.com> Sudeep KarkadaNagesha <sudeep.karkadanagesha@arm.com>
++Sudeep Holla <sudeep.holla@kernel.org> Sudeep KarkadaNagesha <sudeep.karkadanagesha@arm.com>
++Sudeep Holla <sudeep.holla@kernel.org> <sudeep.holla@arm.com>
+ Sumit Garg <sumit.garg@kernel.org> <sumit.garg@linaro.org>
+ Sumit Semwal <sumit.semwal@ti.com>
+ Surabhi Vishnoi <quic_svishnoi@quicinc.com> <svishnoi@codeaurora.org>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a0dd762f5648..17d9472e1f4e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -334,7 +334,7 @@ F:	tools/power/acpi/
+ ACPI FOR ARM64 (ACPI/arm64)
+ M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+ M:	Hanjun Guo <guohanjun@huawei.com>
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ L:	linux-acpi@vger.kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+@@ -350,7 +350,7 @@ F:	drivers/acpi/riscv/
+ F:	include/linux/acpi_rimt.h
+ 
+ ACPI PCC(Platform Communication Channel) MAILBOX DRIVER
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ L:	linux-acpi@vger.kernel.org
+ S:	Supported
+ F:	drivers/mailbox/pcc.c
+@@ -3677,7 +3677,7 @@ N:	uniphier
+ 
+ ARM/VERSATILE EXPRESS PLATFORM
+ M:	Liviu Dudau <liviu.dudau@arm.com>
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+@@ -6506,7 +6506,7 @@ F:	drivers/i2c/busses/i2c-cp2615.c
+ 
+ CPU FREQUENCY DRIVERS - VEXPRESS SPC ARM BIG LITTLE
+ M:	Viresh Kumar <viresh.kumar@linaro.org>
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+ W:	http://www.arm.com/products/processors/technologies/biglittleprocessing.php
+@@ -6602,7 +6602,7 @@ F:	include/linux/platform_data/cpuidle-exynos.h
+ 
+ CPUIDLE DRIVER - ARM PSCI
+ M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ M:	Ulf Hansson <ulf.hansson@linaro.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -9806,7 +9806,7 @@ F:	include/uapi/linux/firewire*.h
+ F:	tools/firewire/
+ 
+ FIRMWARE FRAMEWORK FOR ARMV8-A
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	drivers/firmware/arm_ffa/
+@@ -10504,7 +10504,7 @@ S:	Maintained
+ F:	scripts/gendwarfksyms/
+ 
+ GENERIC ARCHITECTURE TOPOLOGY
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	drivers/base/arch_topology.c
+@@ -15089,7 +15089,7 @@ F:	drivers/mailbox/arm_mhuv2.c
+ F:	include/linux/mailbox/arm_mhuv2_message.h
+ 
+ MAILBOX ARM MHUv3
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ M:	Cristian Marussi <cristian.marussi@arm.com>
+ L:	linux-kernel@vger.kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -23614,7 +23614,7 @@ F:	include/uapi/linux/sed*
+ SECURE MONITOR CALL(SMC) CALLING CONVENTION (SMCCC)
+ M:	Mark Rutland <mark.rutland@arm.com>
+ M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	drivers/firmware/smccc/
+@@ -25378,7 +25378,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
+ F:	drivers/mfd/syscon.c
+ 
+ SYSTEM CONTROL & POWER/MANAGEMENT INTERFACE (SCPI/SCMI) Message Protocol drivers
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ R:	Cristian Marussi <cristian.marussi@arm.com>
+ L:	arm-scmi@vger.kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -26530,7 +26530,7 @@ F:	samples/tsm-mr/
+ 
+ TRUSTED SERVICES TEE DRIVER
+ M:	Balint Dobszay <balint.dobszay@arm.com>
+-M:	Sudeep Holla <sudeep.holla@arm.com>
++M:	Sudeep Holla <sudeep.holla@kernel.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	trusted-services@lists.trustedfirmware.org
+ S:	Maintained
+-- 
+2.43.0
 
-----------------------------------------------------------------
-SoCFPGA DTS updates for v6.20
-- dt-bindings updates:
-	- Add dma-coherent for cdns,hp-nfc and snps,dw-axi-dmac
-	- Add intel,socfpga-agilex5-socdk-modular for the Agilex5 mod board
-	- Move entries in intel,socfpga.yaml into altera.yaml
-	- Add syscon as a fallback for sys-mgr
-
-- Add dma-cohrerent property for Agilex5 NAND and DMA
-- Add support for the Agilex5 modular board
-- Add IOMMUS property for ethernet nodes for Agilex5
-- Use lowercase hex for dts files
-- Add #address-cells and #size-cells for sram
-- Fix dtbs_check warning for fpga-region
-- Move dma controller node for Agilex5 under simple-bus
-
-----------------------------------------------------------------
-Dinh Nguyen (4):
-      dt-bindings: arm: altera: combine Intel's SoCFPGA into altera.yaml
-      dt-bindings: altera: document syscon as fallback for sys-mgr
-      ARM: dts: socfpga: add #address-cells and #size-cells for sram node
-      ARM: dts: socfpga: fix dtbs_check warning for fpga-region
-
-Khairul Anuar Romli (4):
-      dt-bindings: mtd: cdns,hp-nfc: Add dma-coherent property
-      dt-bindings: dma: snps,dw-axi-dmac: add dma-coherent property
-      arm64: dts: socfpga: agilex5: Add dma-coherent property
-      arm64: dts: intel: agilex5: Add simple-bus node on top of dma controller node
-
-Krzysztof Kozlowski (1):
-      arm64: dts: altera: Use lowercase hex
-
-Nazim Amirul (1):
-      arm64: dts: socfpga: agilex5: Add IOMMUS property for ethernet nodes
-
-Niravkumar L Rabara (2):
-      dt-bindings: intel: Add Agilex5 SoCFPGA modular board
-      arm64: dts: socfpga: agilex5: add support for modular board
-
- Documentation/devicetree/bindings/arm/altera.yaml  |  26 +++++
- .../devicetree/bindings/arm/intel,socfpga.yaml     |  40 -------
- .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml  |   2 +
- .../devicetree/bindings/mtd/cdns,hp-nfc.yaml       |   2 +
- .../bindings/soc/altera/altr,sys-mgr.yaml          |   6 +-
- arch/arm/boot/dts/intel/socfpga/socfpga.dtsi       |   6 +-
- .../boot/dts/intel/socfpga/socfpga_arria10.dtsi    |   6 +-
- arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  |   2 +-
- .../boot/dts/altera/socfpga_stratix10_socdk.dts    |   2 +-
- .../dts/altera/socfpga_stratix10_socdk_nand.dts    |   4 +-
- arch/arm64/boot/dts/intel/Makefile                 |   1 +
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     | 130 ++++++++++++---------
- .../dts/intel/socfpga_agilex5_socdk_modular.dts    | 109 +++++++++++++++++
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |   2 +-
- arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |   4 +-
- 15 files changed, 233 insertions(+), 109 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/intel,socfpga.yaml
- create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_modular.dts
