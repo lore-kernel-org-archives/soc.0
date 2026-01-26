@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B95A324A07C
-	for <soc@lists.linux.dev>; Mon, 26 Jan 2026 21:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCD324A07C
+	for <soc@lists.linux.dev>; Mon, 26 Jan 2026 21:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769464224; cv=none; b=Dleh/xqphKNDqy+OraGIPqjnVGW6Bp1e3+5bJE2W0TyiUfGVVKCk5cncTijOANFE8QgD9QKJSUWTS2wcEQA3vSa4FkmHYRVqseVnV1TgdqKxyYG8cscrT9faEQptvsGWRmk3KqbnpEo3JDHLTqz5EePXxxKnE0vycmh53prr0Ds=
+	t=1769464227; cv=none; b=M1nvN7DPnLfQKZeHpHyy7J7fIeTc3tw4M/FkLWHHAX9b5U2wK052kiJPD8WEbIUxFjb8lLoDFgB3kq8t0s2QrY6wYED9TvMAIs2AhWHV44ZOqbbGoxW2SmkdcL0Y5l8XwBc/b5KXZ+u7hQPL/Hv/Iff5hX0i3QlEWfLMeT4IUvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769464224; c=relaxed/simple;
-	bh=itYV7ASCIw+X4smm/QSalIorujXXvSKIilRtl3T89D4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=TBWBAxUlpvuI4ZmfGLEsJSiuOAeIhtcZ/C/4BahebcDEzGdGF+wqiHnd+NrlSwsQuSxmTv8Li0l/DIc+APKD0/dTyZzv0hkxkl/Z/+g2uF9irUfaxJaMgyPcbeNrHdDGrFtsFHuF2lKOFeOH+oLCVnIJWSOHzuw7N27/jX62P+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KatDJV0s; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769464227; c=relaxed/simple;
+	bh=qS9fgrU6WBr2FOLO2ALpWuFSjQNMcez9KDvy3cpS3tg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=S1fYVXfyytigNuVQjMDic6cclLPg/ffnxGTQLqQCm4SjTeOtvg+9HaphZPyRn2ihJTb0N+tV3yoXbxz3JabRFF+7BI6vEkvdBGzkWal91qV4bdeKM9ymp9zltddP8HPocQ/v4hzM+fLbab87UJL1bB7h3rFaNzYaJ5tU29m4TuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A5eaVjhf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KatDJV0s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A5eaVjhf"
 Received: by smtp.kernel.org (Postfix)
-	id 55DC9C19422; Mon, 26 Jan 2026 21:50:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35182C116C6
-	for <soc@kernel.org>; Mon, 26 Jan 2026 21:50:24 +0000 (UTC)
+	id 90C33C19422; Mon, 26 Jan 2026 21:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACC7C116C6;
+	Mon, 26 Jan 2026 21:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769464224;
-	bh=itYV7ASCIw+X4smm/QSalIorujXXvSKIilRtl3T89D4=;
-	h=Subject:From:Date:To:Cc:From;
-	b=KatDJV0sHHTlyoFFa2I9y2Yw7JNpZSIzHuj5Xb8gVYn/OfSg2mmsWBjyafXfLq0oI
-	 bDqJRI/8VOJPZ9YecmTR8GSjHNViwiFMsx4qSXX3cit+tppV7TmGNL3YuAl56drck2
-	 7LZv2gttmJ4qvoHexpPB9uma9YwWLUlo0Em5fQUfrTNnDCtW1ovDFsPCeEQmqwnoXV
-	 DIX/f5eKmZ+b6e5/JpsHn+k+ocN7h2W+hBzSztXVIYOm1topful7Qox+xehUzrlZho
-	 EJm89n5M83xvMCawsg6lHykug/0OmVlMaXs1WOpvh2W/WK3pkCBtBfi4xNkSu7JwkN
-	 YhTSlnvQbQFkQ==
+	s=k20201202; t=1769464227;
+	bh=qS9fgrU6WBr2FOLO2ALpWuFSjQNMcez9KDvy3cpS3tg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=A5eaVjhfQLkYwGLkSmGIqxWodMO2ZQW0PR3FYJlLaxTy6b55GbL8OymwrbDIhJIbS
+	 V7L0zJg2kagj2+zyfVeleANIEtqhzcjbEfXeoAtqAfnwsQH3bpaJUsg0MQWvjH7R+8
+	 T4IWvnEmW8vrkeOAlMsOXRFgAheLcaSAydRZHcyARIDmeocaRYvN6+dD1fLmtQzni5
+	 1x/MadR/vXY+W5lnTpuaWXYJp19bB6XsIrDtcrS8DR662GUnhvNIopZuQuA9U69TDT
+	 WxO9rUBXzpyCIaZJuPozBzxH6dBHEEVlz9K63iH94ou+Msp8WlTAW3v6zya1eBqGKg
+	 WhnadXBCnqSNw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8EA67380A958;
-	Mon, 26 Jan 2026 21:50:19 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11C6A380A958;
+	Mon, 26 Jan 2026 21:50:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,35 +39,38 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH] ARM: dts: samsung: Drop s3c6400.dtsi
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176946421807.190855.8157308212115402907.git-patchwork-summary@kernel.org>
-Date: Mon, 26 Jan 2026 21:50:18 +0000
-To: soc@kernel.org
+ <176946422157.190855.11889331267717629215.git-patchwork-notify@kernel.org>
+Date: Mon, 26 Jan 2026 21:50:21 +0000
+References: <20260117182257.14799-2-krzk@kernel.org>
+In-Reply-To: <20260117182257.14799-2-krzk@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This patch was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: ARM: dts: samsung: Drop s3c6400.dtsi
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043692
-  Lore link: https://lore.kernel.org/r/20260117182257.14799-2-krzk@kernel.org
+On Sat, 17 Jan 2026 19:22:54 +0100 you wrote:
+> From: "Rob Herring (Arm)" <robh@kernel.org>
+> 
+> This .dtsi file is not included anywhere in the tree and can't be
+> tested.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> Link: https://patch.msgid.link/20251212203226.458694-7-robh@kernel.org
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> 
+> [...]
 
-Series: [GIT,PULL,1/2] arm64: dts: cleanup for v6.20/v7.0
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1043691
-  Lore link: https://lore.kernel.org/r/20260117182117.14483-3-krzk@kernel.org
-    Patches: [GIT,PULL,1/2] arm64: dts: cleanup for v6.20/v7.0
-             [2/2] ARM: dts: nuvoton: Minor whitespace cleanup
+Here is the summary with links:
+  - ARM: dts: samsung: Drop s3c6400.dtsi
+    https://git.kernel.org/soc/soc/c/d5e22ed44b0b
 
-
-Total patches: 3
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
