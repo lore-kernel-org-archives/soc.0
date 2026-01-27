@@ -1,79 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65EB424A07C
-	for <soc@lists.linux.dev>; Mon, 26 Jan 2026 21:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA8F149C6F
+	for <soc@lists.linux.dev>; Tue, 27 Jan 2026 07:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769464229; cv=none; b=nA7Gly4DbCKNjSAwi1xjHrpB9Deb8cVDy1/Lh6FFmZEHslqDdZYwFwIQCNSuB1avWS0w4OLeWB3YIIwySJmhlIuE7s64gmFIsvo85zsG+Wu8s4E1byZ1bwA/faZelOPuSlhQpY+OnHKlVAo+9bi7kQbhXZ4L81stpqDsW39Ae/U=
+	t=1769498173; cv=none; b=gBLcwag5ffZd5WwIz1bOUx3g4JoYdCLFMoP/pZwim2dnlctEtG2Pm6E3KOfGrbSos0mFEtd79net6NBWWAf7foP3zGiGoy/087MvucHv0h8Q8JdSYngfXksLl5zePctdVsEUuxekLtwaLNk+dHDnGtd3fThzUj2YUooklmivtz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769464229; c=relaxed/simple;
-	bh=ITilsaIkqyymOT0S/a8bNuoxmKS5qsXQqsWG/2hdrXc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=pvb8UEaxQW8Iq21UZeoSD1W6P7uwOVAlLrvvM5pMIa/jGMZeG0WPjbg+HN0IuXki3pogR6HGsYzHE2ZTCar6D+U1nLzHBIB4v4IER/8BF5tekwEIdA2S0cVVOJvNgdU/mssFbIWhx54ZCvrsu/SFA5/U3ZMBiF2zCy20bSF9t4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rgejLWIa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769498173; c=relaxed/simple;
+	bh=02e7n3+lctEJi09SAlNrz4VUwCcgYNB/BqGIhi/reAc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AwHA2acKKok0DwGPAe4/XA9f3x4rbN6kznLXBdvkbQA0N1u1h6YbqbD4IM6tZuvPjKSYVnRfrnQ9/mypy6CrKBFDtWD37KkFbIA/sHlbHT3y7jUYYleWntfg7ykZAPpe1uSeMcpCyMqzUi/0KjjGx6hl/3buEyodzkNtKyHCJsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BZ3c1toV; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rgejLWIa"
-Received: by smtp.kernel.org (Postfix)
-	id 118E1C19425; Mon, 26 Jan 2026 21:50:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF99CC116C6;
-	Mon, 26 Jan 2026 21:50:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769464229;
-	bh=ITilsaIkqyymOT0S/a8bNuoxmKS5qsXQqsWG/2hdrXc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=rgejLWIaLSGjV+AT4l5gqWde0J/tDaH1uzKQZyEIA2XAtCFGrhZIocHGdmHUvHme3
-	 07pt1HgceRKAvjXyxhfY4zS9a7NW72+CIPrxyB05Z0lY5lqDGlNZSLUm/NxCV4yu9D
-	 gEGbwQVYljH/dsGcYgDk8G0KVXHew5CaO2afcn73ukkPwbvusWJXI3xQWbChtLDFpK
-	 tipmz1vtfhDQZaYpqgGw0QlOd5eOSbUKZFj+W9KxIHbcQmfmGFCkibKQ8L/nILQB9m
-	 wqODtovpfg4Ylo+cysW8A07kRNvP5yp5M2WN3LklE7KZ9vljBdbyqcqBUOSI+GaR0L
-	 7zUmRMk2+h5Gw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BB53380A958;
-	Mon, 26 Jan 2026 21:50:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BZ3c1toV"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2a79ded11a2so32902165ad.3
+        for <soc@lists.linux.dev>; Mon, 26 Jan 2026 23:16:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769498171; x=1770102971; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ecu5YJerF7ppjEFjoeyqLO82/b5nn1WtdkAH1BLTIA0=;
+        b=BZ3c1toVbtxiGQ8VoI4zHAMf7WZW5dlVIHy7S9/V64sqYN7t6m5gK9dChVYgzLMxc2
+         cqTR2ovJ5rTYgA+hP2yKHgv2aN8n9Ln0EzPyrwxQ1jdJzcKKgFQwH46zuN7FirdWr67Z
+         I8tGbtvENOaqpCsHXhXBien9AGH1RU8Tts9dRMdLiTnGDHkFOp3Tporq19nGKgUZWuev
+         g58WlGvIIFYu9Zha+6An7GFIF/uAgJA+/IIpC19y6jPb0mcCU3XGtfLU8LOFP9nEwyae
+         WQP7JZtrBcAat8guwI9fjLciG15pp2OM9+XkZkU0n1z0aHh93+F0nIC80Kcruz5ufhNU
+         lT6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769498171; x=1770102971;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ecu5YJerF7ppjEFjoeyqLO82/b5nn1WtdkAH1BLTIA0=;
+        b=HUJzdfS+gL9RSzOk20srg/t+6xCK+KV9PNqq1/C3HpyMT8DNwqit2v8e3U97JRwvAD
+         QSULBLPCij/RtP4Vye0yVjIdO0+mmse9Jwn5b//e6LId6FQNRBOaIzmnzb1gdZhD5oSP
+         WVOkuDFBym+EHdTUUed61nvj6nXDoNkFH3fTam0VSqzr2j8NjWimlIBPPQhIXf5l4RYW
+         I6lM1FFxOaV3lFSS63hDOu3l8wjxGURGOeUn+52F/AH25a3eeGE2nwCTEl5CH/3Ow9aw
+         yDZbU0OfIY9vOH6zT40LK1dcVQ2XupM4K3+tnbxh6Zmr++HZ0BBbySN7aJLk+/moy1ip
+         RGzA==
+X-Forwarded-Encrypted: i=1; AJvYcCWjsnSR0G+XqouTU9Qq/qmV87VhCB2ZsMXzkq3lEIPls5yj0vVVtVVoQLdD1SV3Ge3K2zE=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzRMckOn23u+WI7/g5KJkkRzGZM6u3GAqK0sxzdOwNmzZqrZX4X
+	SX0mKyMkaAkNuYd7xwBfaVMuvIL72VUCHsaJj13jb+JXxRdb8VggEo4l
+X-Gm-Gg: AZuq6aL98iJ3J1pWz5TiL1wTbZRtbCw0gwTxsehUPA5eaC4Y2l2GMJGQM5Fl7cpxyM5
+	I0BhpeCQvRx+z0z53brDh/CuDx2wr+ra8G22SnX9Bi9vIGXXE79PU8l4CmPSmGxe+3KBK0mIEbX
+	mWqR7ylYFDNI9ddMZ4o9bV0MLdImQtVFs9dc58QhAnr6SSX1G9wyps0y4UwaEWtPO7AA5TWLVui
+	a3ouq3KrOXvUDyOaF68thHJpD7FjwauqPbLasYSXGlTjUUeV+VkIAMkw96IW2d3I24798a/u9f3
+	o6g4e0WFGBKDgfkAw3xS28pKaFfaQwwBjP0ShZFS2lWt6tmDZE+2XLCbIHfR30jRXvjy/+DV5Y2
+	5SFbERss+an4ICPmxNg1uP5ueTILGE/c+TNhuqI3elbLcT6qmPoYYPOrCztRFWxyBChFBOnuhHD
+	dRlN9NQFd+bpAs3gHBa0lWFQ6hvEg7bS+Y+WchxZQJjy9bfINN
+X-Received: by 2002:a17:903:3545:b0:297:c048:fb60 with SMTP id d9443c01a7336-2a870d5d5e3mr7523855ad.25.1769498170464;
+        Mon, 26 Jan 2026 23:16:10 -0800 (PST)
+Received: from cn1dhc-k02 (125-227-180-151.hinet-ip.hinet.net. [125.227.180.151])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a802fb063esm106160505ad.85.2026.01.26.23.16.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jan 2026 23:16:10 -0800 (PST)
+From: Yu-Chun Lin <eleanor15x@gmail.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	james.tai@realtek.com,
+	soc@lists.linux.dev
+Cc: afaerber@suse.de,
+	arnd@arndb.de,
+	linux-arm-kernel@lists.infradead.org,
+	linux-realtek-soc@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	cy.huang@realtek.com,
+	stanley_chang@realtek.com,
+	eleanor.lin@realtek.com
+Subject: [PATCH RESEND v3 0/2] arm64: dts: Add support for Kent SoC family
+Date: Tue, 27 Jan 2026 15:13:59 +0800
+Message-ID: <20260127071530.25426-1-eleanor15x@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] arm64: dts: cleanup for v6.20/v7.0
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <176946422323.190855.8363787806925738971.git-patchwork-notify@kernel.org>
-Date: Mon, 26 Jan 2026 21:50:23 +0000
-References: <20260117182117.14483-3-krzk@kernel.org>
-In-Reply-To: <20260117182117.14483-3-krzk@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+From: Yu-Chun Lin <eleanor.lin@realtek.com>
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Hello,
 
-On Sat, 17 Jan 2026 19:21:16 +0100 you wrote:
-> Hi Arnd and SoC folks,
-> 
-> Various cleanups and minor fixes, some acked by respective maintainers, some
-> just missed (platform is in poor shape).
-> 
-> Best regards,
-> Krzysztof
-> 
-> [...]
+This patch series adds initial Device Tree support for Realtek's Kent SoC
+family, including the RTD1501S, RTD1861B, and RTD1920S variants with their
+respective evaluation boards.
 
-Here is the summary with links:
-  - [GIT,PULL,1/2] arm64: dts: cleanup for v6.20/v7.0
-    (no matching commit)
-  - [2/2] ARM: dts: nuvoton: Minor whitespace cleanup
-    https://git.kernel.org/soc/soc/c/aeec6d68b673
+The series includes:
 
-You are awesome, thank you!
+1. Adds compatible strings for the Kent family.
+2. Add Device Tree files for the Kent SoC, TD1501S Phantom EVB (8GB),
+RTD1861B Krypton EVB (8GB), and RTD1920S Smallville EVB (4GB).
+
+The patches have been validated with 'make dtbs_check' and
+'dt_binding_check' to ensure compliance with DT schema and successful
+compilation.
+
+Cheers,
+Yu-Chun
+---
+Because I haven't received a response from Andreas Färber for over two months,
+as suggested by Arnd, I am bypassing the currently listed maintainer and
+sending to soc@lists.linux.dev.
+
+Yu-Chun Lin (2):
+  dt-bindings: arm: realtek: Add Kent Soc family compatibles
+  arm64: dts: realtek: Add Kent SoC and EVB device trees
+
+ .../devicetree/bindings/arm/realtek.yaml      |  42 +++--
+ arch/arm64/boot/dts/realtek/Makefile          |   7 +-
+ arch/arm64/boot/dts/realtek/kent.dtsi         | 166 ++++++++++++++++++
+ arch/arm64/boot/dts/realtek/rtd1501.dtsi      |  12 ++
+ .../boot/dts/realtek/rtd1501s-phantom-8gb.dts |  25 +++
+ .../boot/dts/realtek/rtd1501s-phantom.dtsi    | 118 +++++++++++++
+ arch/arm64/boot/dts/realtek/rtd1861.dtsi      |  12 ++
+ .../boot/dts/realtek/rtd1861b-krypton-8gb.dts |  25 +++
+ .../boot/dts/realtek/rtd1861b-krypton.dtsi    |  72 ++++++++
+ arch/arm64/boot/dts/realtek/rtd1920.dtsi      |  12 ++
+ .../dts/realtek/rtd1920s-smallville-4gb.dts   |  23 +++
+ .../boot/dts/realtek/rtd1920s-smallville.dtsi | 128 ++++++++++++++
+ 12 files changed, 626 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/realtek/kent.dtsi
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1501.dtsi
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1501s-phantom-8gb.dts
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1501s-phantom.dtsi
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1861.dtsi
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1861b-krypton-8gb.dts
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1861b-krypton.dtsi
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1920.dtsi
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1920s-smallville-4gb.dts
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1920s-smallville.dtsi
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
