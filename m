@@ -1,137 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9392FFF90
-	for <soc@lists.linux.dev>; Tue, 27 Jan 2026 10:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5237E4F881
+	for <soc@lists.linux.dev>; Tue, 27 Jan 2026 10:22:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769509315; cv=none; b=W13pKlHH41b108sNK/T0uvP8xnsQj++QxKokX3yOuZLa8h3FABop3uNyIMe9qm6N1RTDsoAhDq1FZgXe1+vr/Vm9JKjwGbbFkFj0gGz8NTa741WBtkVxnc50pUYXfkLunAirWQNgn0NIts2U7y52YWQXRpLSYEOP72adLuY1iI4=
+	t=1769509376; cv=none; b=cYHsCyH/yK4uEFr3x0D0L0hDMQL6wMf8pAIKtUrpAwiQUbq9svCWZKGNyJ3nV2RLE2eJuOLLyHoDwHQEDsLlWdF1ScBU0tbDNSm/KRiaiHhVcljm+/NCKn7OS/cnc/i93HnGG3vhqO1sP3wczlYIUg5GoJ35b7i5z0iWv5xO6BI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769509315; c=relaxed/simple;
-	bh=/y6Wd8skF/eyBjb1W5X2cj7DAkv/yjDGFdWCh+DTqvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NgscfzhR3mvhokZkv2+1J4NXhoX8KQKtq8Ofp7wdobHE7OAGLSZj7Pz+eUr0Es8cT0B/1ZagB1G/eTKRDjwytcK1LhywGeoZ1bB76gvzASsKpWJ00w8MwcnYPdan3RyPerOd+p+GX9CZZbUq8695w/PtRU1ERx4/j1pXQXHlmr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZW6UhxYB; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZW6UhxYB"
+	s=arc-20240116; t=1769509376; c=relaxed/simple;
+	bh=/svp4PVHzw51Hol85q6Py3sBzjOZEzQ+7ooVo7Qx5qc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PluQZVdMdwtNT3rN4O8jU9uMJBY7lXB5hV1Qbn8mDtvRWYWUuZ3QaH/GrmrHenfcJ7LqmDyVYG9svgh/sGgmZRLTrQKWxgHWulj7/lBDWBiAM7HUOq0AELlQsupkgCteegTj7evWP6nBh9VjZ2zaekBOoSo1xXBVMz6BzlAAPEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id D6B29C2BC86; Tue, 27 Jan 2026 10:21:54 +0000 (UTC)
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 48EB4C16AAE; Tue, 27 Jan 2026 10:22:56 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 53C87C19425
-	for <soc@kernel.org>; Tue, 27 Jan 2026 10:21:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53C87C19425
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1233bb90317so5212258c88.1
-        for <soc@kernel.org>; Tue, 27 Jan 2026 02:21:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769509312; x=1770114112; darn=kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TnKeWPcpe1rU91VMNBn+NfQOk11GPlwYGUqpu12X/mE=;
-        b=ZW6UhxYB/09jy336CWRO1FJD8b900OXRRJSlC9Dq9JG5Fg5MxWga6eP6T5MbiAvdXM
-         69gAOktWlJngPQDcXPVS6VMBjkqpubD8CM1FRVXbzOd7oMkOWUFATa/72ljqdVhfwUTv
-         cf4byz4u8OFctkacsTZLFehH3AenMBnfUZK/MiWYlvycs5TCUc8bnw77g17GEt37sccm
-         MCn0EpW3THn6nxw3fxHxF9jeIZtO+5T0lyewNdvMOOygL5adIG+dGw2Ab1aFVaHjBFe7
-         wE6YWTHKi2LX6pxxnn6Zy10KWN0TvM+78zJf/RIn0MNL0KLAoD1FRq4VeZ34EnQwsGIg
-         I+ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769509312; x=1770114112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TnKeWPcpe1rU91VMNBn+NfQOk11GPlwYGUqpu12X/mE=;
-        b=iHNyTrBx67ij1is1c/B43Lhhl2qgMqfs8SSozqJ/Drg1T+dBJkfo7ohz6bxAe9w3hm
-         nnNZLxHcblq7u3o3DCJcDIcL9/srchbA60bRszeqqRH9gkATM2Qlzs/XBWHA6BVDqs0L
-         ybg1p89w+WCwByr9Fg2URVek1esORSuc3xOELpTe41pIEs9FKIb37IPtTMgSsZ21V8uW
-         0w+EFbOdgtBxJWHQca8XXlDf4wxRsDUsdddOX0howD09eh7jyOIX3Q3hkpofbsFiDD6t
-         OTkSdLPPOAEB85abcWLZrgvzFRf+9ffTbGFdrsO+o/OXwT2wkSZYKmWYAWUIsiiXqbE6
-         ca8g==
-X-Gm-Message-State: AOJu0YyfVx3o51OII2Q5a7fhxeA4eCrFbGux9MYCNOnBVPHVodnFk5lo
-	KeUfRhX+2Gntto5foQPQiCdx7dYeEP3/tZdR0wP4NvN558ZmXbASNIp5yH7wTQ==
-X-Gm-Gg: AZuq6aLZZYolLA1Xc133XpA5PdJs/Oam2i47CsnRyv2bQGQ+hdfNnQOidrKl5NcInZn
-	Ojvok5cteuTbUZl8l6QLP3ZYI1HJZD57QQL+JIBChldSQvo6UTWq2MXMTq19RqjZ/57dTe0M2/J
-	LGwLuZW30/07ix90EoLLh9bPspnJoeHs3xhGoIthXsHq02WdiIE8RVhf2b+LQ+KGefTt5mw2a8x
-	MVdeYOHULkH6iKAtTcQZE0PyW48jMXpKzBW931TUSpJ1xkkRdcxczNZGachWqsawIcM3ISe3QPc
-	dRr2gLMw2OuIBBNPiChFTKm0P+YUs+EAN4b1lQ1eUJWwRci279vX2FjG25B4sNRgN/NzPa7H/6E
-	ueX12Q3Yy+lO00aSmygz2nyBZ4ObZSypYJW50ugh3DtpRkIL1YH0lh2R3x33wOGIbS3c5dhi8hx
-	RLLicJt412da4ljhpXMRfkCUfv7o7IDAz3AJymZM7cCru2SlFXZjgyswKrhQlW/gApX2SYx9ic/
-	Q==
-X-Received: by 2002:a05:7022:123:b0:119:e569:f865 with SMTP id a92af1059eb24-124a0577c42mr662163c88.2.1769509312332;
-        Tue, 27 Jan 2026 02:21:52 -0800 (PST)
-Received: from orome (p200300e41f0ffa00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:fa00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1247d9a4698sm21833187c88.16.2026.01.27.02.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 02:21:51 -0800 (PST)
-Date: Tue, 27 Jan 2026 11:21:46 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@kernel.org
-Subject: Re: [GIT PULL 1/4] dt-bindings: Changes for v6.20-rc1
-Message-ID: <aXiOqLYwBxrvErjP@orome>
-References: <20260118080304.2646387-1-thierry.reding@gmail.com>
- <176901122359.951664.14976320641854335179.git-patchwork-notify@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 7C350C116C6
+	for <soc@kernel.org>; Tue, 27 Jan 2026 10:22:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C350C116C6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vkgDb-0005OS-Kx; Tue, 27 Jan 2026 11:22:43 +0100
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller updates for v6.20
+Date: Tue, 27 Jan 2026 11:22:37 +0100
+Message-ID: <20260127102237.3945322-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2ar2hzk5vjwypbhx"
-Content-Disposition: inline
-In-Reply-To: <176901122359.951664.14976320641854335179.git-patchwork-notify@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-
---2ar2hzk5vjwypbhx
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [GIT PULL 1/4] dt-bindings: Changes for v6.20-rc1
-MIME-Version: 1.0
-
-On Wed, Jan 21, 2026 at 04:00:23PM +0000, patchwork-bot+linux-soc@kernel.or=
-g wrote:
-> Hello:
->=20
-> This pull request was applied to soc/soc.git (for-next)
-> by Arnd Bergmann <arnd@arndb.de>:
->=20
-> On Sun, 18 Jan 2026 09:03:00 +0100 you wrote:
-> > Hi ARM SoC maintainers,
-> >=20
-> > The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027c=
-b1e8:
-> >=20
-> >   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
-> >=20
-> > are available in the Git repository at:
-> >=20
-> > [...]
->=20
-> Here is the summary with links:
->   - [GIT,PULL,1/4] dt-bindings: Changes for v6.20-rc1
->     (no matching commit)
-
-Hi Arnd,
-
-is it too late to back out this particular pull request? I missed that
-Mark had already pulled some of the patches in this branch to the ASoC
-tree, so now we have two version of this (well, actually three because
-Rob had a set of changes that were also cleaning up some warning that
-these patches were) and everyones getting really annoyed.
-
-I think you mentioned at some point that you can't easily undo these
-merged, in which case that's fine too and I'll take the full blame for
-this. But if it's possible, below is an updated pull request.
-
-Thanks,
-Thierry
-
---- >8 ---
+Dear arm-soc maintainers,
 
 The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
@@ -139,83 +55,82 @@ The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-=
-for-6.20-dt-bindings-v2
+  https://git.pengutronix.de/git/pza/linux.git tags/reset-for-v6.20
 
-for you to fetch changes up to d262d030baef287da33344a932639aab5f913c3a:
+for you to fetch changes up to 938ce3b16582657e67f3bd8a7efa59089c467c90:
 
-  dt-bindings: display: tegra: document Tegra30 VI and VIP (2026-01-17 01:3=
-1:19 +0100)
+  reset: spacemit: Add SpacemiT K3 reset driver (2026-01-24 16:53:02 +0100)
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v6.20-rc1
+Reset controller updates for v6.20
 
-This series updates various DT bindings for Tegra architecture,
-primarily focusing on schema validation fixes and new feature
-documentation for Tegra234 and Tegra264 SoCs. Key changes include
-converting Tegra20 NAND bindings to YAML, and updating memory, DMA, and
-IOMMU definitions for Tegra264 (introducing CMDQV and DBB clock
-support). Additionally, it resolves legacy warnings for Tegra30/132
-display and VI interfaces.
+* Add a compatible to the reset-gpio driver, suppress the sysfs bind
+  attributes, and propagate GPIO API errors.
+* Add support for the i.MX8ULP SIM LPAV reset controller.
+* Add RZ/G3S USBPHY suspend/resume support.
+* Enable reset-k230 by default on ARCH_CANAAN
+* Add support for the SpacemiT K3 SoC reset controller.
+* Merge the 'spacemit-clkrst-v6.20-3' tag, shared with the clk tree,
+  as a dependency for the SpacemiT changes.
 
 ----------------------------------------------------------------
-Ashish Mhetre (1):
-      dt-bindings: iommu: Add NVIDIA Tegra CMDQV support
+Bartosz Golaszewski (3):
+      reset: gpio: add the "compatible" property
+      reset: gpio: suppress bind attributes in sysfs
+      reset: gpio: check the return value of gpiod_set_value_cansleep()
 
-Charan Pedumuru (1):
-      dt-bindings: mtd: nvidia,tegra20-nand: convert to DT schema
+Claudiu Beznea (2):
+      reset: rzg2l-usbphy-ctrl: Propagate the return value of regmap_field_update_bits()
+      reset: rzg2l-usbphy-ctrl: Add suspend/resume support
 
-Jon Hunter (1):
-      dt-bindings: tegra: pmc: Update aotag as an optional aperture
+Guodong Xu (4):
+      dt-bindings: soc: spacemit: Add K3 reset support and IDs
+      reset: Create subdirectory for SpacemiT drivers
+      reset: spacemit: Extract common K1 reset code
+      reset: spacemit: Add SpacemiT K3 reset driver
 
-Svyatoslav Ryhel (2):
-      dt-bindings: display: tegra: document Tegra132 MIPI calibration device
-      dt-bindings: display: tegra: document Tegra30 VI and VIP
+Junhui Liu (1):
+      reset: canaan: k230: drop OF dependency and enable by default
 
-Thierry Reding (1):
-      dt-bindings: memory: tegra: Document DBB clock for Tegra264
+Laurentiu Mihalcea (4):
+      reset: imx8mp-audiomix: Drop unneeded macros
+      reset: imx8mp-audiomix: Switch to using regmap API
+      reset: imx8mp-audiomix: Extend the driver usage
+      reset: imx8mp-audiomix: Support i.MX8ULP SIM LPAV
 
-sheetal (1):
-      dt-bindings: dma: Update ADMA bindings for tegra264
+Philipp Zabel (1):
+      Merge tag 'spacemit-clkrst-v6.20-3' into reset/next
 
- .../bindings/arm/tegra/nvidia,tegra186-pmc.yaml    |  11 ++-
- .../display/tegra/nvidia,tegra114-mipi.yaml        |   1 +
- .../bindings/display/tegra/nvidia,tegra20-vi.yaml  |  19 ++--
- .../bindings/display/tegra/nvidia,tegra20-vip.yaml |   9 +-
- .../bindings/dma/nvidia,tegra210-adma.yaml         |  15 ++-
- .../devicetree/bindings/iommu/arm,smmu-v3.yaml     |  27 +++++-
- .../bindings/iommu/nvidia,tegra264-cmdqv.yaml      |  42 +++++++++
- .../memory-controllers/nvidia,tegra186-mc.yaml     |  13 +++
- .../bindings/mtd/nvidia,tegra20-nand.yaml          | 102 +++++++++++++++++=
-++++
- .../bindings/mtd/nvidia-tegra20-nand.txt           |  64 -------------
- MAINTAINERS                                        |   2 +-
- 11 files changed, 225 insertions(+), 80 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/iommu/nvidia,tegra264=
--cmdqv.yaml
- create mode 100644 Documentation/devicetree/bindings/mtd/nvidia,tegra20-na=
-nd.yaml
- delete mode 100644 Documentation/devicetree/bindings/mtd/nvidia-tegra20-na=
-nd.txt
+Yixun Lan (4):
+      clk: spacemit: prepare common ccu header
+      reset: spacemit: fix auxiliary device id
+      Merge tags 'spacemit-clkrst-v6.20-1' and 'spacemit-clkrst-v6.20-2' into spacemit-clkrst-v6.20
+      clk: spacemit: k3: extract common header
 
---2ar2hzk5vjwypbhx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAml4kboACgkQ3SOs138+
-s6FLRg//XsDUpcJM0kfBM7t/pJQkRwZXRjWaejAELwFLvVohhxLeSkHjm2D9Pelb
-WuOBI4Sa1Zo/OnTXvd3p+upXoJe46m+fsI0GJnY8TjWvm+1PCs+EvCXjV/LHcNmi
-Ev9WhuedfrNqq3+gPzn67yLOVbmAIyMIlNf5AEb8ywaulG2FbnYQXOdmqJauM1+h
-UwazQ2dzhxunh8A7xifXHxN5MCJjFt+m+gWdsnAa4ImVfCwsWzcs9xORQ6KVRj9i
-cPSpw4YZfHz1heL0wHn1ouIofgK5LGP3zo/TggU2x14eka+f1uCSOfWi9NG77YIE
-JRhAydUBzfTEW0FR5cMOT/0NfYzyYbnEEwD2ATbRC5JbEyrSNCvZYKYpkqBQl6Xq
-IAFQK4/xAE9USQMn8rNGfiJHCTslqNe1Gx6Wq1hLcFrY/SNfEKNyQLdYFLnfjsSp
-NAiN1aQeyRJ3g6/vI8fhBLo1f08ouGG1+dmLhJnWvHXGDN+/Cy18c3BNU39nXbck
-QZzIRci+b9+pDHNQ1CEz/TvVmQngdO0cpUQ2KqCVVocFXKLgrLrJt1SgXittQWJl
-ZcaXJsEXaAfNLfUhd/4kM4K4LsD2ljr9v1KQUqSyzQWrLgYeUQ0CairVb8I/JxeW
-fEuDIjsZtqG2NqX3o7SRhijz29PIR004ClVrpo+nX4fAseSKlss=
-=qtTg
------END PGP SIGNATURE-----
-
---2ar2hzk5vjwypbhx--
+ .../bindings/soc/spacemit/spacemit,k1-syscon.yaml  |   8 +-
+ drivers/reset/Kconfig                              |  14 +-
+ drivers/reset/Makefile                             |   2 +-
+ drivers/reset/core.c                               |   7 +-
+ drivers/reset/reset-gpio.c                         |   9 +-
+ drivers/reset/reset-imx8mp-audiomix.c              | 169 +++++++++----
+ drivers/reset/reset-rzg2l-usbphy-ctrl.c            | 110 +++++++--
+ drivers/reset/spacemit/Kconfig                     |  36 +++
+ drivers/reset/spacemit/Makefile                    |   5 +
+ drivers/reset/spacemit/reset-spacemit-common.c     |  77 ++++++
+ drivers/reset/spacemit/reset-spacemit-common.h     |  42 ++++
+ .../reset-spacemit-k1.c}                           | 109 +-------
+ drivers/reset/spacemit/reset-spacemit-k3.c         | 233 ++++++++++++++++++
+ include/dt-bindings/reset/spacemit,k3-resets.h     | 171 +++++++++++++
+ include/soc/spacemit/ccu.h                         |  21 ++
+ include/soc/spacemit/k1-syscon.h                   |  12 +-
+ include/soc/spacemit/k3-syscon.h                   | 273 +++++++++++++++++++++
+ 17 files changed, 1103 insertions(+), 195 deletions(-)
+ create mode 100644 drivers/reset/spacemit/Kconfig
+ create mode 100644 drivers/reset/spacemit/Makefile
+ create mode 100644 drivers/reset/spacemit/reset-spacemit-common.c
+ create mode 100644 drivers/reset/spacemit/reset-spacemit-common.h
+ rename drivers/reset/{reset-spacemit.c => spacemit/reset-spacemit-k1.c} (78%)
+ create mode 100644 drivers/reset/spacemit/reset-spacemit-k3.c
+ create mode 100644 include/dt-bindings/reset/spacemit,k3-resets.h
+ create mode 100644 include/soc/spacemit/ccu.h
+ create mode 100644 include/soc/spacemit/k3-syscon.h
