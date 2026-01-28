@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79DB313520
-	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 22:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C654C24CEEA
+	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 22:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769640610; cv=none; b=WUA8tF58xJWw6G2WyCI7KHww3IlTbqHyM5EpsuoG+hgTR0OhZvsUwZT++W1grUu0onn162HdLH41sPksZdzFCMlIBVyI/f8ViWugvSEJ+mw6tCKFJYpYp9PEdEf7EChyputJGtAeXKqSVd0iXB/3tTDbdby548bxbTeawrTn61w=
+	t=1769640611; cv=none; b=nTKvATkf62yF+j0xXMy85mi8+0R6b++3N3oiCkpjZQKMHeXSJhKFoPyxVOLWLLGgPhpSvhTWtyDiOTPLVzNF3e1YrpDxEjNGgOPMjt4W4gAQZS2H07N2wUykcIgb7vpx0vsaZdPIdiTfaAmFQzzBdgYgp+F/KpyEwqVF/uWphVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769640610; c=relaxed/simple;
-	bh=oPjJdM+gAXmAyiZbizmAJgbvhPtFvf4qZawPm3mW2WE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=eEcWHvloLRnueZ6HItTLD6ysorAAz8QtKSXpKUEdKRriwmtyMmoi9z81SWnRLxHYxrZSU24XNxNpDAFNx3IhHAc2vkPXDCh1XRWpjdY1UsfN4xP32tkxaoxEwD3gkeerYufwcfDFxr8WYpfH6PdnCoDfGb1VYy6GCtFRYhUQysg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fr29rSQ1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769640611; c=relaxed/simple;
+	bh=mqLBnlwvUOAYZ6/Eau24CDxAQUJZbNJwNxBNn+RX+Sk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=NpV8m7ZMOB9xV1YM+6yC0SyI4PeQPAXGX2maqamAwWckpR1etcPVz+d/6/o/6vmffWVCDNbhG5sIaS5zoNalWsig0V8U0iEW46+7gr5Tr9EdWTlfsXiVffVsfVGj1VBrahSkoVl0tnO390cR6mTb5n1rB7VBjnFEDD+8HcPFvxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZgkF2vm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fr29rSQ1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZgkF2vm"
 Received: by smtp.kernel.org (Postfix)
-	id 6F5FBC116C6; Wed, 28 Jan 2026 22:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A046C4CEF1
-	for <soc@kernel.org>; Wed, 28 Jan 2026 22:50:10 +0000 (UTC)
+	id 987CCC116C6; Wed, 28 Jan 2026 22:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8CFC4CEF1;
+	Wed, 28 Jan 2026 22:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769640610;
-	bh=oPjJdM+gAXmAyiZbizmAJgbvhPtFvf4qZawPm3mW2WE=;
-	h=Subject:From:Date:To:Cc:From;
-	b=fr29rSQ1hMHJSPTNOoynFwOPIlH8r/i2/FaTjbkx4q0R8MMkb1ynZDlKvUCj/ZVN4
-	 POzPaUPZiV1Il0waVBVr5gQnSZjMsZGJEIhLfXt/v2KgB3vpxAlbgl2ZniPZS9Jrfd
-	 lVuJ9eaQprk29jJ5rqw0fr1DikKb+p0mCZso+4emmZI/GR++J8ktj8LdJ9kDabITJC
-	 bocDWVpglKG8EVydUv6nUWoI7iMsXFeop/GzEWJ5Ez6Beik4DmziWbj1VXRpQJyjTI
-	 LT+D72Qg4vWYJj+5eev5lLCTA1J+Oc6cvdmXkoSLkZti8UpitCIeJf9eN+f/9CoH85
-	 6g08SCvvJD09Q==
+	s=k20201202; t=1769640611;
+	bh=mqLBnlwvUOAYZ6/Eau24CDxAQUJZbNJwNxBNn+RX+Sk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=UZgkF2vm4c+tmcs2Rh3UE+bUvYa+KoCIlyTwxkHUbZobp0XbcxgnnMkmVjgDkvGst
+	 1SoFFT/Xph/YLGMPYJUU/kgkpQwguz5peReS/clrodi07ppR52wYoLY+Sn7OI9cM3Y
+	 GWWwSIRrF2r1gsMAMh8zgoZfWXSTjghhHlc8d2cKkU33Ydl3x9jIE1ObleG3QVG0aK
+	 A45MAtSsTbINnyVNgCmnpUKB4a8Oyd+hhZZwI8cdDb/jySEenMdvqFQijoo8vBko/K
+	 nWm7pno03dgDK67c6T0TEOfLsH3xKlQgg8/hMHGMt7hQHmwIqWN1ENcZjcUwdU5Rct
+	 dvnVUp6MFDeXA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id CB80D39EF953;
-	Wed, 28 Jan 2026 22:50:04 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11AFA39EF953;
+	Wed, 28 Jan 2026 22:50:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,30 +39,39 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH RESEND v3 0/2] arm64: dts: Add support for Kent SoC family
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176964060331.2263224.12762284728687505858.git-patchwork-summary@kernel.org>
-Date: Wed, 28 Jan 2026 22:50:03 +0000
-To: soc@kernel.org
+ <176964060486.2263224.2371223213635434331.git-patchwork-notify@kernel.org>
+Date: Wed, 28 Jan 2026 22:50:04 +0000
+References: <20260127071530.25426-1-eleanor15x@gmail.com>
+In-Reply-To: <20260127071530.25426-1-eleanor15x@gmail.com>
+To: Yu-Chun Lin <eleanor15x@gmail.com>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This series was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Series: arm64: dts: Add support for Kent SoC family
-  Submitter: Yu-Chun Lin <eleanor15x@gmail.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1047404
-  Lore link: https://lore.kernel.org/r/20260127071530.25426-1-eleanor15x@gmail.com
-    Patches: [RESEND,v3,1/2] dt-bindings: arm: realtek: Add Kent Soc family compatibles
-             [RESEND,v3,2/2] arm64: dts: realtek: Add Kent SoC and EVB device trees
+On Tue, 27 Jan 2026 15:13:59 +0800 you wrote:
+> From: Yu-Chun Lin <eleanor.lin@realtek.com>
+> 
+> Hello,
+> 
+> This patch series adds initial Device Tree support for Realtek's Kent SoC
+> family, including the RTD1501S, RTD1861B, and RTD1920S variants with their
+> respective evaluation boards.
+> 
+> [...]
 
+Here is the summary with links:
+  - [RESEND,v3,1/2] dt-bindings: arm: realtek: Add Kent Soc family compatibles
+    https://git.kernel.org/soc/soc/c/d83bcab6842f
+  - [RESEND,v3,2/2] arm64: dts: realtek: Add Kent SoC and EVB device trees
+    https://git.kernel.org/soc/soc/c/b095c27fc874
 
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
