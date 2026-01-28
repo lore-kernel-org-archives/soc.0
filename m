@@ -1,146 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3C3266B72
-	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 18:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B4626B95B
+	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 19:56:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769626104; cv=none; b=alRRoWFWWEY9To92WqRjRPullAm/oN4aHi7wBBzQM2/7L5CQm999Ctso/ZnlxnqUkYIiksR2345DItQoEjU24HVQ8uc7QiUH9lsU5WA1lr059GUREr5BOFe739uSLh3uBNSp2/HLFvjt/7cCranRR0u4aLIdAWKlVgf9TG3py/0=
+	t=1769630214; cv=none; b=I4RGrVmD2rQvjwpJM9w4ft2gPKr2HY09MA4o7yKimrBC7zhPbAKQJfvqn37xMXysNtN7A6z/UAk2ToaEx2iWw1Wnl5x9W/21IrfGlJNthEnaJQ+w2NZE6g1gNuDGDk+bLVobT2Mr9FTkuuSxFWdRiKzfxAZdh6/2Q2l7upIXArc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769626104; c=relaxed/simple;
-	bh=DwmoMkW02KgPmXpKlWuIgYCDvsf8n9DSy3uxJrBURIk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=VjBVPvEZTsdb+ogpmpSCW2u08l7h8RprpozTRaswY8X/Ys59Zlc6UBxeI59mRdAUjbrn8DTCJZisJFedZv6CKFZGx3TxagbNZ95GvHnYj9q25LQVL1OKjY5/l3RHDHLM4pVgEdKdsyDHGkuMzwJVq0dVcEQk7gbplhUvgAVxRD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=szEFWbSe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769630214; c=relaxed/simple;
+	bh=s9evt3/0RZOpoqnYeGlTHyaG+mjdTuEQP+ke1/vYM/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sUhMTF2Z2i/Hp1mMWKZPBI73zqA1PRGc/HDJ7YpntfsXTxjd5joWm1dOnSXzlWpg0CZj26IcMK6bMB4kv6qk2cCfavQK3oRR98aZoHTwAtesN286s6agGeQ+kJg2wLCuvHtBQ7Yf7hgr1FoOhGykvwqd+CXmvXcp7tCmA1FxbPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahkk1Sbk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="szEFWbSe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1978DC4CEF1;
-	Wed, 28 Jan 2026 18:48:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahkk1Sbk"
+Received: by smtp.kernel.org (Postfix)
+	id 5C3A6C16AAE; Wed, 28 Jan 2026 19:56:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C509C4CEF1;
+	Wed, 28 Jan 2026 19:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769626104;
-	bh=DwmoMkW02KgPmXpKlWuIgYCDvsf8n9DSy3uxJrBURIk=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=szEFWbSeWm2yTLi9Bb1lSB7YH6xFhos8EagPUF2UsuHlNIdhT6/MBsTPlSBJAEST/
-	 WhPUdMzJtTsv1fA2h/Md53/YWG+g7QfgYQUYUNXHOPsEmlP4L1cfusUeKMStlTY1dC
-	 a/xpJxq5LSD+DFtNjNLXbhyli7maYpmc42zTgT9Ek8rnyX80xdsZMrNt/pmppAo/X7
-	 ++N5BpXXjBzdSVcqJ+Zb/n78fTaxcI23FoRiuG1SvBKNeeFCD4XNj7TZeJDh1QJ8jh
-	 usJDrhl1isRarHt6H9oDEc4Jx6gYFoNHdTk9oL+bdt6xJ1i3caj1WenjK0CdGSnJqo
-	 MEZEd4K52QNtQ==
-Message-ID: <2b81a667-adad-4960-bc48-f60fbf740620@kernel.org>
-Date: Wed, 28 Jan 2026 19:48:21 +0100
+	s=k20201202; t=1769630214;
+	bh=s9evt3/0RZOpoqnYeGlTHyaG+mjdTuEQP+ke1/vYM/o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ahkk1SbkQoZcm++F+jUVGjhjrBTbvc/XCIrlejld+Fmg60uuPLSu9qt2ZWCU41zOz
+	 UGMAo/gwmghVKbKEa7CA7S1hFWFDGs7DcZrIGCjQ3vspyLgCmWyL5OfMF1sy+vqaEk
+	 mwBT8wWPJZ9yQ+0EKyD7I9v/wbvNU4hK32fP7ABxMfk/V4AQalt9ahy4HLn2WUY3UY
+	 P1aI6ibTHqegs//8gvq66Eyx9V6cmMaSSodmzdFUM5iP9EbwkWDNchxgO8wzVEUaDA
+	 emn6Em6GNHsl2vqXR7Nrz06GYm9yyetoXxgRk+VVM5fkLPveC8/Wuv/NycGe6I0QBf
+	 wx5di5fRcX+9g==
+From: Conor Dooley <conor@kernel.org>
+To: soc@kernel.org
+Cc: conor@kernel.org,
+	Yushan Wang <wangyushan12@huawei.com>,
+	linux-kernel@vger.kernel.org,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH] MAINTAINERS: Add myself as maintainer of hisi_soc_hha
+Date: Wed, 28 Jan 2026 19:56:31 +0000
+Message-ID: <20260128-audition-professed-31d1b66d5b4e@spud>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] arm/arm64: dts: socfpga: updates for v6.20
-To: Dinh Nguyen <dinguyen@kernel.org>, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev
-References: <20260124200118.2789128-1-dinguyen@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260124200118.2789128-1-dinguyen@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=962; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=yMkcBVyTqj9wH0QBKUGmwYVHoKcAFyfrd+ir0zTY+XI=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDJlVme8i500UbBOpX7tJ5tPdeH7pBz1G7NJVl7kbbnYdu HD5ad+GjlIWBjEuBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAExkzSVGhpnH36YzavwJXZ5i pGf3PsqBsXzabiuN5D+SrQuq30a4zWFk2Hzvlcu0OaZPzadwHNHobOG0PXR4ZZtjHatOj1rl1xl 3uQA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-On 24/01/2026 21:01, Dinh Nguyen wrote:
-> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
-> 
->   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.20
-> 
-> for you to fetch changes up to 1a457681c075e1bd894df753087cb4268ce9f9e9:
-> 
->   arm64: dts: intel: agilex5: Add simple-bus node on top of dma controller node (2026-01-02 07:52:44 -0600)
-> 
-> ----------------------------------------------------------------
-> SoCFPGA DTS updates for v6.20
-> - dt-bindings updates:
-> 	- Add dma-coherent for cdns,hp-nfc and snps,dw-axi-dmac
-> 	- Add intel,socfpga-agilex5-socdk-modular for the Agilex5 mod board
-> 	- Move entries in intel,socfpga.yaml into altera.yaml
-> 	- Add syscon as a fallback for sys-mgr
-> 
-> - Add dma-cohrerent property for Agilex5 NAND and DMA
-> - Add support for the Agilex5 modular board
-> - Add IOMMUS property for ethernet nodes for Agilex5
-> - Use lowercase hex for dts files
-> - Add #address-cells and #size-cells for sram
-> - Fix dtbs_check warning for fpga-region
-> - Move dma controller node for Agilex5 under simple-bus
-> 
-> ----------------------------------------------------------------
-> Dinh Nguyen (4):
->       dt-bindings: arm: altera: combine Intel's SoCFPGA into altera.yaml
->       dt-bindings: altera: document syscon as fallback for sys-mgr
->       ARM: dts: socfpga: add #address-cells and #size-cells for sram node
->       ARM: dts: socfpga: fix dtbs_check warning for fpga-region
-> 
-> Khairul Anuar Romli (4):
->       dt-bindings: mtd: cdns,hp-nfc: Add dma-coherent property
->       dt-bindings: dma: snps,dw-axi-dmac: add dma-coherent property
+From: Yushan Wang <wangyushan12@huawei.com>
 
+Add myself as maintainer of HiSilicon SoC HHA driver as I will be
+responsible for this driver.
 
-These are not SoC patches, unless maintainers are unresponsive which I
-believe is not a case here, so they should not be going via this tree.
+Signed-off-by: Yushan Wang <wangyushan12@huawei.com>
+Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
 
-None of this, merged on 15th Dec, was fed to linux-next, so you don't
-even know if this conflicts with maintainer trees thus pushing conflict
-discover unto soc tree.
+soc folks, I only have this in my cache branch so I am sending it as a
+standalone patch.
 
-Not being in the next is already a problem but gets more serious when
-taking other subsystem patches.
+Cheers,
+Conor.
 
-That's my comment, but Arnd was looking at these whether to merge.
+ MAINTAINERS | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5b11839cba9d..1c14a7cfb197 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11366,6 +11366,11 @@ F:	Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs
+ F:	drivers/soc/hisilicon/kunpeng_hccs.c
+ F:	drivers/soc/hisilicon/kunpeng_hccs.h
+ 
++HISILICON SOC HHA DRIVER
++M:	Yushan Wang <wangyushan12@huawei.com>
++S:	Maintained
++F:	drivers/cache/hisi_soc_hha.c
++
+ HISILICON LPC BUS DRIVER
+ M:	Jay Fang <f.fangjian@huawei.com>
+ S:	Maintained
+-- 
+2.51.0
 
