@@ -1,146 +1,144 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E23288C24
-	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 15:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D037C31DD97
+	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 16:56:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769614252; cv=none; b=k1ac82EVNOBQtaauGriBbk5NHPE4mG7GK3vcHdMCglWNfoyfJ4iuSwxh7Z11PwDkNExGXLmula/VuQ+cNVQ/xy2Vdws1H8qDeQ8afgbNcL3ijDE67hzi31j8VrE9Va3czcCtyCgnCreEEqC/7GR2iHMc9ZpBs6yhh8freb7Wkp8=
+	t=1769619371; cv=none; b=GRQUTjH2XiCq3onRIAZ23gtnpLS9uAwYgJe3GyiiBpq7DQ76YM8uTz3FDq3NR4FgdxCyHLpRHqu61S1ng2gYSXC49NhNySogg2788TDjfuHD84WYRvwV88bUmeS+F3e++rxVCbdoT9ZQFKcmOpl9ah6Q6psh3npRfsh2CYV6CCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769614252; c=relaxed/simple;
-	bh=J991PkmjZ7cA51EaGuqYRzLfi0O3QuM9Zcdo95J/bZs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IaGEeBFqdCVBjikz4xZfJm6G6TGxXf9NjuAyctjVId8XYMYFNHh0S3+dSL1IeLBPOcbkIkj+F+vw7zElIW7EykTXqS3W8XaY3d+Gbw6ICDi9WPPid819qZtIsJUt0xJSScP5nAfrCWkmVtAnXIu0JcS0Fmyo5Kd+JZYzcM+nRbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ey0Cgf/B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769619371; c=relaxed/simple;
+	bh=DFPbjUQCBuZxVY7EbLcJ1SV0eDTIkwQEvOof+ATB3fU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=GG4poh4kl7KDulCxcEKkxs5DiHonGi4LTP+VmpDHM4AOLR7MQEC89TYEGW4cO+XLzuC1A0I2a+TjXtLAsSLE60oq7lBMYqCL0ED7AcqHxfWU3Uj3qx5jCVRfATNZFT1iNkB8dAthcwOlW3I2DxILujfiTYhvb8xua9tncDaLizk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=HM95gJQA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TZYWcJac; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ey0Cgf/B"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="HM95gJQA";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TZYWcJac"
 Received: by smtp.kernel.org (Postfix)
-	id 0E365C116C6; Wed, 28 Jan 2026 15:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECEEDC4CEF1;
-	Wed, 28 Jan 2026 15:30:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769614252;
-	bh=J991PkmjZ7cA51EaGuqYRzLfi0O3QuM9Zcdo95J/bZs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Ey0Cgf/BeMmcHmj9Po1fk/yF9Z/LBh3tzQRGuNTcualGu6dgs18PGcZT73ljIOQwN
-	 rdc/+4WGYKPAV9tbIwjeb8CmxBxJfrUS9SDW+ffmc1NoJBgrXEPj+XiZ/c6xaw850m
-	 YC96uVsb6/HqeAIjUe9AX/wv78r5RaNCHHAgP5qrQzW7D8o7xT4OVvONxmGcrc7cSm
-	 Ykg7R+STzZgnSSZBkSdcYr6TQZMN8+pNEKGEggAYbQz3WGbHIV9ZuV2Jlbc/21HeGA
-	 RsuFwGbkJRTs0c7LyJQusnjcDXiqHZrQE/nnu3Lf3zKTjMNiGfBYlACA6+l2oJtvTP
-	 ppQsiycLvJEsQ==
-From: Bjorn Andersson <andersson@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Luca Weiss <luca@lucaweiss.eu>,
-	Abel Vesa <abel.vesa@oss.qualcomm.com>,
-	Alexey Klimov <alexey.klimov@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	David Heidelberg <david@ixit.cz>,
-	Jie Gan <jie.gan@oss.qualcomm.com>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-Subject: [GIT PULL] More Qualcomm Arm64 DeviceTree updates for v6.20
-Date: Wed, 28 Jan 2026 09:30:50 -0600
-Message-ID: <20260128153050.2092039-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.52.0
+	id 8070BC4CEF7; Wed, 28 Jan 2026 16:56:11 +0000 (UTC)
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7FA4FC4CEF1;
+	Wed, 28 Jan 2026 16:56:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7FA4FC4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 6F9267A0178;
+	Wed, 28 Jan 2026 11:56:08 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Wed, 28 Jan 2026 11:56:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1769619368;
+	 x=1769705768; bh=kAoIuZ76fLX272MIHa0oK8kZGDIBNtwKi6fK+0P7sn4=; b=
+	HM95gJQANENw47jSQmkrML24cc3LGnoiEMBwB52bjZE+894R6OadMW25fPUha70u
+	rbfs0T4Gw/VSP1qG5//raxQwuCqYYLSHq7P8utIzHHVSK1UBPcCJVXlu9Aypn9GT
+	yTPYED0BvawHxdmPeOXiNPbNowMvtVmCapEu0pOAEnB2RxxY+/ykYoPGr/hSomka
+	a7qo2XifbhsMmjdOdOrjjBPhtyvac/tvvbuM2ybSvwMZo1Bdwhnm7jKholTpbs73
+	T5g1IIpKnBuN/7Vwg1e+dv8fPeRnUt45yNGd4yFtVkcd+dzKkJE7aBNJAABB0vuH
+	4tSxZe9G76QSwWFbLqv7ow==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1769619368; x=
+	1769705768; bh=kAoIuZ76fLX272MIHa0oK8kZGDIBNtwKi6fK+0P7sn4=; b=T
+	ZYWcJac03Vm3VRGnq/HwAVKQsl+DmWw/W0ci3+LJG582H9q/1Gv1otzc/A7bFV6a
+	7T6LY5lUG2PMV5n+NFvjzZqyhq7DuJfN/0fmE+sak5d5wdN904Tj09AEAJWjxfPV
+	o4vNpGlwBjuZoKStIFEyIfTk1m63AmEtxw09DryANGShJY3llHOz0SCmQSpRYoSY
+	q925ZWk2hWHC/rC9310E+YdGVnKvUdRY6UglHigYd9GpDYciSuK4g8q2qbW9XHq2
+	sSv7zlrrlv04Awdd+rO8maKawN033WmWs5+NJILtrq07mYbIG8rQfTQuhtg91qxH
+	t7w4EUcEMwEkSmCQfSM9g==
+X-ME-Sender: <xms:qD96acyFM1TnuB98-t35jTIaudF5a1RqSHwa6wdAgTa9VgQAe9KDMw>
+    <xme:qD96abETxD91J1mU6boT0IDzSIcJp5kJrpZ4GA3a_0tFuH0v3BAQ3PvG3sbdDRhjH
+    i8-iCwt8ra0X6Vw6zgM_8SNdKcaatpCzBBfe3RbagR8DpQ_jcrzNQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduieefkeeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepkeehjedtjedtledtteegvdeiudduhefggfegudehfeekheduueehjefggedtuefg
+    necuffhomhgrihhnpehgihhthhhusgdrtghomhdpghhithgvvgdrtghomhdpvddtvdegtd
+    eivdefqdhhohifthhoqdhmrghinhhtrghinhgvrhdqlhhinhhugidrmhgupdhkvghrnhgv
+    lhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeekpdhmohguvgepshhm
+    thhpohhuthdprhgtphhtthhopehinhhotghhihgrmhgrsehgmhgrihhlrdgtohhmpdhrtg
+    hpthhtohepshhtrghvihhnshhkhiesghhmrghilhdrtghomhdprhgtphhtthhopegtohhn
+    ohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtohepshhophhhghhosehlihhsthhsrdhlihhnuhigrdguvghvpdhr
+    tghpthhtohepmhhitghhrggvlhesohhrlhhithiikhihrdgtohhmpdhrtghpthhtohepuh
+    hnihgtohhrnhgpfigrnhhgsehouhhtlhhoohhkrdgtohhmpdhrtghpthhtohepghhuohgu
+    ohhnghesrhhishgtshhtrghrrdgtohhm
+X-ME-Proxy: <xmx:qD96abH5DB1SlvWkOWF7kZU9YSxmJJ9kRGxIq0KEfcycp6vRR4nacA>
+    <xmx:qD96aSV08ChQutP0raDVpJ1CCGZQiVhXd0tRQzoD-mojHXk2jmT8xQ>
+    <xmx:qD96aTxAFceFID1lYbkYw82sE9yACItEepI5lWgSsjnBZpvipcng5Q>
+    <xmx:qD96aXQ_yvuCsQ25x9qY1lyD3tO9q82iEgpt3tA8ruGzvAyBIvYfiw>
+    <xmx:qD96aS1gMtcWw4v3vlzvFzUpZrr6kqSzb4OAtFCov76jzl0Tsw_iAuvG>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id F04EB700065; Wed, 28 Jan 2026 11:56:07 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: A1tBEhR27o0V
+Date: Wed, 28 Jan 2026 17:55:31 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Chen Wang" <unicorn_wang@outlook.com>, soc@kernel.org
+Cc: "Conor Dooley" <conor+dt@kernel.org>,
+ "Inochi Amaoto" <inochiama@gmail.com>,
+ "sophgo@lists.linux.dev" <sophgo@lists.linux.dev>,
+ "Guodong Xu" <guodong@riscstar.com>,
+ "Michael Orlitzky" <michael@orlitzky.com>,
+ "Anton Stavinsky" <stavinsky@gmail.com>
+Message-Id: <22023b9a-2a5b-4552-8d9f-3f15a7cc2ba8@app.fastmail.com>
+In-Reply-To: 
+ <MA5PR01MB12500D99CB14A37FBA543DD36FE96A@MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM>
+References: 
+ <MA5PR01MB12500D99CB14A37FBA543DD36FE96A@MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM>
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v6.20
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jan 21, 2026, at 01:46, Chen Wang wrote:
 
-The following changes since commit fc12767c19d49663b13ba2def6e4674df041c8a2:
+> are available in the Git repository at:
+>
+>  =C2=A0 https://github.com/sophgo/linux.git tags/riscv-sophgo-dt-for-v=
+6.20
+>
+> for you to fetch changes up to f16ae81b80ca4e721f4c4ed1f28390115f7721e=
+b:
+>
+>  =C2=A0 riscv: dts: sophgo: sg2044: Add "b" ISA extension (2026-01-20=20
+> 09:03:37 +0800)
+>
+> ----------------------------------------------------------------
+> RISC-V Devicetrees for v6.20
 
-  dt-bindings: mailbox: qcom: Add IPCC support for Kaanapali and Glymur Platforms (2026-01-17 15:35:17 -0600)
+Hi Chen,
 
-are available in the Git repository at:
+I noticed that you are using a new gpg key. Like your old one, it
+does not seem to be on the kernel.org keyring, but I actually
+found the keyid in a blog post you wrote at
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.20-2
+https://gitee.com/unicornx/tblog/blob/master/articles/20240623-howto-mai=
+ntainer-linux.md#%E5%AE%89%E8%A3%85-gpg
 
-for you to fetch changes up to 78c13dac18cf0e6f6cbc6ea85d4f967e6cca9562:
+so I successfully imported that key and verified the signature.
 
-  arm64: dts: qcom: sm6115: Add CX_MEM/DBGC GPU regions (2026-01-21 13:15:50 -0600)
+If you have the chance, it would be great if you could get other
+developers to sign your key and upload it publicly, ideally on
+the kernel.org keyring according to
+https://korg.docs.kernel.org/pgpkeys.html
 
-----------------------------------------------------------------
-More Qualcomm Arm64 DeviceTree updates for v6.20
-
-Enable ADSP FastRPC and add missing GPU memory regions on Agatti.
-Also add the missing GPU regions on SM6115.
-
-Describe the application subsystem watchdog on Hamoa and enable this in
-the EL2 configurations.
-
-Add the camera control interface (CCI) I2C controller on MSM8953, and
-describe the camera regulators and the camera EEPROM on Fairphone FP3.
-
-Specify clock frequency for the i2c4 bus on OnePlus 6, to silence the
-warnings about missing frequency definition.
-
-Add FastRPC and associated heap memory, as well as Coresight, on SM8750
-
-Switch a variety of platforms to use the generic RPMPD_ constants,
-instead of target-specific duplicated, to allow us to drop these from
-the header files.
-
-Drop the invalid opp-shared on the QUP OPP table for Talos.
-
-----------------------------------------------------------------
-Abel Vesa (3):
-      dt-bindings: watchdog: Document X1E80100 compatible
-      arm64: dts: qcom: hamoa: Add the APSS watchdog
-      arm64: dts: qcom: x1-el2: Enable the APSS watchdog
-
-Alexey Klimov (2):
-      arm64: dts: qcom: sm8750: add memory node for adsp fastrpc
-      arm64: dts: qcom: sm8750: add ADSP fastrpc-compute-cb nodes
-
-David Heidelberg (1):
-      arm64: dts: qcom: oneplus-enchilada: Specify i2c4 clock frequency
-
-Dmitry Baryshkov (2):
-      arm64: dts: qcom: agatti: enable FastRPC on the ADSP
-      arm64: dts: qcom: switch to RPMPD_* indices
-
-Jie Gan (1):
-      arm64: qcom: dts: sm8750: add coresight nodes
-
-Konrad Dybcio (2):
-      arm64: dts: qcom: agatti: Add CX_MEM/DBGC GPU regions
-      arm64: dts: qcom: sm6115: Add CX_MEM/DBGC GPU regions
-
-Luca Weiss (5):
-      arm64: dts: qcom: msm8953: Re-sort tlmm pinctrl states
-      arm64: dts: qcom: msm8953: Add CCI nodes
-      arm64: dts: qcom: sdm632-fairphone-fp3: Add camera fixed regulators
-      arm64: dts: qcom: sdm632-fairphone-fp3: Enable CCI and add EEPROM
-      arm64: dts: qcom: sm6350: Add clocks for aggre1 & aggre2 NoC
-
-Viken Dadhaniya (1):
-      arm64: dts: qcom: talos: Drop opp-shared from QUP OPP table
-
- .../devicetree/bindings/watchdog/qcom-wdt.yaml     |    1 +
- arch/arm64/boot/dts/qcom/agatti.dtsi               |   49 +-
- arch/arm64/boot/dts/qcom/hamoa.dtsi                |    8 +
- arch/arm64/boot/dts/qcom/msm8916.dtsi              |    8 +-
- arch/arm64/boot/dts/qcom/msm8917.dtsi              |   10 +-
- arch/arm64/boot/dts/qcom/msm8937.dtsi              |   12 +-
- arch/arm64/boot/dts/qcom/msm8953.dtsi              |  516 +++----
- arch/arm64/boot/dts/qcom/msm8976.dtsi              |    4 +-
- arch/arm64/boot/dts/qcom/msm8998.dtsi              |   16 +-
- arch/arm64/boot/dts/qcom/sdm630.dtsi               |   16 +-
- arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts  |   57 +
- arch/arm64/boot/dts/qcom/sdm660.dtsi               |    2 +-
- .../boot/dts/qcom/sdm845-oneplus-enchilada.dts     |    2 +
- arch/arm64/boot/dts/qcom/sm6115.dtsi               |    8 +-
- arch/arm64/boot/dts/qcom/sm6125.dtsi               |   12 +-
- arch/arm64/boot/dts/qcom/sm6350.dtsi               |    3 +
- arch/arm64/boot/dts/qcom/sm8750.dtsi               | 1431 +++++++++++++++++---
- arch/arm64/boot/dts/qcom/talos.dtsi                |    1 -
- arch/arm64/boot/dts/qcom/x1-el2.dtso               |    4 +
- 19 files changed, 1694 insertions(+), 466 deletions(-)
+    Arnd
