@@ -1,40 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5237E4F881
-	for <soc@lists.linux.dev>; Tue, 27 Jan 2026 10:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C9A36A008
+	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 15:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769509376; cv=none; b=cYHsCyH/yK4uEFr3x0D0L0hDMQL6wMf8pAIKtUrpAwiQUbq9svCWZKGNyJ3nV2RLE2eJuOLLyHoDwHQEDsLlWdF1ScBU0tbDNSm/KRiaiHhVcljm+/NCKn7OS/cnc/i93HnGG3vhqO1sP3wczlYIUg5GoJ35b7i5z0iWv5xO6BI=
+	t=1769612617; cv=none; b=rdmMU5ngQyFUr7RM3dWDUsKN3Ju+UvtdhhSldlR0+krO2ILlbHh6TVw/GoLc6e2rG1d3KA9SZR1y68WFirXDnKehLHT1x7kOoQH3H9Al5ljXY+wYSQ0V2BSHNVTMrzPDfsc7zLuWSh6o3D3RYwdopSre+ueSl0XKaiBTNS/feOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769509376; c=relaxed/simple;
-	bh=/svp4PVHzw51Hol85q6Py3sBzjOZEzQ+7ooVo7Qx5qc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PluQZVdMdwtNT3rN4O8jU9uMJBY7lXB5hV1Qbn8mDtvRWYWUuZ3QaH/GrmrHenfcJ7LqmDyVYG9svgh/sGgmZRLTrQKWxgHWulj7/lBDWBiAM7HUOq0AELlQsupkgCteegTj7evWP6nBh9VjZ2zaekBOoSo1xXBVMz6BzlAAPEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769612617; c=relaxed/simple;
+	bh=SRI/Bhj5iQxuWLS2Y73G5XTyLHgrFBNxPOnmb5dA5zw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CfQjRS+J6wWhHMunw0Fj5PXNLa7hw85zSI68Dk/NIR6t2jlxAsOB2dUZcWkzY3aksFJWRy3yP6ZQLAR7rm5iIkrWNLjqbm5Jw/oJPi3TWlIsoMJm8iY0p2Lx6PEcQB5cDpmgj+Ghbfp4Y0WJvxrXa1IJYhtLrlB3ki2qOPPAiog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OLoWLJsB; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OLoWLJsB"
 Received: by smtp.kernel.org (Postfix)
-	id 48EB4C16AAE; Tue, 27 Jan 2026 10:22:56 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7C350C116C6
-	for <soc@kernel.org>; Tue, 27 Jan 2026 10:22:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C350C116C6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vkgDb-0005OS-Kx; Tue, 27 Jan 2026 11:22:43 +0100
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	kernel@pengutronix.de,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [GIT PULL] Reset controller updates for v6.20
-Date: Tue, 27 Jan 2026 11:22:37 +0100
-Message-ID: <20260127102237.3945322-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.47.3
+	id 72379C116C6; Wed, 28 Jan 2026 15:03:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D50F6C4CEF1;
+	Wed, 28 Jan 2026 15:03:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769612616;
+	bh=SRI/Bhj5iQxuWLS2Y73G5XTyLHgrFBNxPOnmb5dA5zw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OLoWLJsBoBmxjaPnML7nSJiQA7OyXqjyx9+FFNnMGrWMtj0npzizD/S2bk7uWQilu
+	 QKNftvWLH3Y6gdgWqydGgLNuZuQCQY2GlGgbfKKRUuCIzCsDdSHN0e8oXfIr78lagR
+	 0FZY/Y+BSJdYk28ky7M+iP5T7PLDkEXcbZmNHrLapwqFFLRhUjmhI3UKIXVqPuxlYp
+	 LNOVofO+XbrABJfpedRhk/2wgR0v+F+iOvlc6oW6jecMLCugPZTtEBXhK/mo+KFTtA
+	 FNYc8i1dS1tr9w1mWJrlwrdirbj/MynnZlggUokTfs5B2zd3EAwTPBXBzHX/dqQZ84
+	 XaO6R/2XYGvdw==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Rudraksha Gupta <guptarud@gmail.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: [GIT PULL] More Qualcomm Arm32 DeviceTree updated for v6.20
+Date: Wed, 28 Jan 2026 09:03:34 -0600
+Message-ID: <20260128150334.2089748-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -42,95 +46,42 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
 
-Dear arm-soc maintainers,
 
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+The following changes since commit df7c440c904f754d8c94863a910d99e7ed8bbda9:
 
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+  ARM: dts: qcom: msm8974: Start using rpmpd for power domains (2026-01-19 09:40:32 -0600)
 
 are available in the Git repository at:
 
-  https://git.pengutronix.de/git/pza/linux.git tags/reset-for-v6.20
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-6.20-2
 
-for you to fetch changes up to 938ce3b16582657e67f3bd8a7efa59089c467c90:
+for you to fetch changes up to 4506cdf52a806be0d9e1b1c0b6c9bc2909ca8b1c:
 
-  reset: spacemit: Add SpacemiT K3 reset driver (2026-01-24 16:53:02 +0100)
-
-----------------------------------------------------------------
-Reset controller updates for v6.20
-
-* Add a compatible to the reset-gpio driver, suppress the sysfs bind
-  attributes, and propagate GPIO API errors.
-* Add support for the i.MX8ULP SIM LPAV reset controller.
-* Add RZ/G3S USBPHY suspend/resume support.
-* Enable reset-k230 by default on ARCH_CANAAN
-* Add support for the SpacemiT K3 SoC reset controller.
-* Merge the 'spacemit-clkrst-v6.20-3' tag, shared with the clk tree,
-  as a dependency for the SpacemiT changes.
+  ARM: dts: qcom: switch to RPMPD_* indices (2026-01-21 15:05:03 -0600)
 
 ----------------------------------------------------------------
-Bartosz Golaszewski (3):
-      reset: gpio: add the "compatible" property
-      reset: gpio: suppress bind attributes in sysfs
-      reset: gpio: check the return value of gpiod_set_value_cansleep()
+More Qualcomm Arm32 DeviceTree updated for v6.20
 
-Claudiu Beznea (2):
-      reset: rzg2l-usbphy-ctrl: Propagate the return value of regmap_field_update_bits()
-      reset: rzg2l-usbphy-ctrl: Add suspend/resume support
+MSM8226 is switched to generic RPMPD_ indices, to allow dropping the
+duplicate platform-specific constants.
 
-Guodong Xu (4):
-      dt-bindings: soc: spacemit: Add K3 reset support and IDs
-      reset: Create subdirectory for SpacemiT drivers
-      reset: spacemit: Extract common K1 reset code
-      reset: spacemit: Add SpacemiT K3 reset driver
+On MSM8960 two additional GSBIs and I2C controllers are introduced.
+Accelerometer, Magnetometer, NFC and Light/Proximity sensors are then
+enabled on the Samsung Galaxy Express.
 
-Junhui Liu (1):
-      reset: canaan: k230: drop OF dependency and enable by default
+----------------------------------------------------------------
+Dmitry Baryshkov (1):
+      ARM: dts: qcom: switch to RPMPD_* indices
 
-Laurentiu Mihalcea (4):
-      reset: imx8mp-audiomix: Drop unneeded macros
-      reset: imx8mp-audiomix: Switch to using regmap API
-      reset: imx8mp-audiomix: Extend the driver usage
-      reset: imx8mp-audiomix: Support i.MX8ULP SIM LPAV
+Rudraksha Gupta (5):
+      ARM: dts: qcom: msm8960: Add GSBI2 & GSBI7
+      ARM: dts: qcom: msm8960: expressatt: Add Light/Proximity Sensor
+      ARM: dts: qcom: msm8960: expressatt: Add NFC
+      ARM: dts: qcom: msm8960: expressatt: Add Magnetometer
+      ARM: dts: qcom: msm8960: expressatt: Add Accelerometer
 
-Philipp Zabel (1):
-      Merge tag 'spacemit-clkrst-v6.20-3' into reset/next
-
-Yixun Lan (4):
-      clk: spacemit: prepare common ccu header
-      reset: spacemit: fix auxiliary device id
-      Merge tags 'spacemit-clkrst-v6.20-1' and 'spacemit-clkrst-v6.20-2' into spacemit-clkrst-v6.20
-      clk: spacemit: k3: extract common header
-
- .../bindings/soc/spacemit/spacemit,k1-syscon.yaml  |   8 +-
- drivers/reset/Kconfig                              |  14 +-
- drivers/reset/Makefile                             |   2 +-
- drivers/reset/core.c                               |   7 +-
- drivers/reset/reset-gpio.c                         |   9 +-
- drivers/reset/reset-imx8mp-audiomix.c              | 169 +++++++++----
- drivers/reset/reset-rzg2l-usbphy-ctrl.c            | 110 +++++++--
- drivers/reset/spacemit/Kconfig                     |  36 +++
- drivers/reset/spacemit/Makefile                    |   5 +
- drivers/reset/spacemit/reset-spacemit-common.c     |  77 ++++++
- drivers/reset/spacemit/reset-spacemit-common.h     |  42 ++++
- .../reset-spacemit-k1.c}                           | 109 +-------
- drivers/reset/spacemit/reset-spacemit-k3.c         | 233 ++++++++++++++++++
- include/dt-bindings/reset/spacemit,k3-resets.h     | 171 +++++++++++++
- include/soc/spacemit/ccu.h                         |  21 ++
- include/soc/spacemit/k1-syscon.h                   |  12 +-
- include/soc/spacemit/k3-syscon.h                   | 273 +++++++++++++++++++++
- 17 files changed, 1103 insertions(+), 195 deletions(-)
- create mode 100644 drivers/reset/spacemit/Kconfig
- create mode 100644 drivers/reset/spacemit/Makefile
- create mode 100644 drivers/reset/spacemit/reset-spacemit-common.c
- create mode 100644 drivers/reset/spacemit/reset-spacemit-common.h
- rename drivers/reset/{reset-spacemit.c => spacemit/reset-spacemit-k1.c} (78%)
- create mode 100644 drivers/reset/spacemit/reset-spacemit-k3.c
- create mode 100644 include/dt-bindings/reset/spacemit,k3-resets.h
- create mode 100644 include/soc/spacemit/ccu.h
- create mode 100644 include/soc/spacemit/k3-syscon.h
+ arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           |   4 +-
+ .../dts/qcom/qcom-msm8960-samsung-expressatt.dts   | 109 +++++++++++++++++++++
+ arch/arm/boot/dts/qcom/qcom-msm8960.dtsi           |  96 ++++++++++++++++++
+ 3 files changed, 207 insertions(+), 2 deletions(-)
