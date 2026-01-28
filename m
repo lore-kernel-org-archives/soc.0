@@ -1,62 +1,62 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5900B257854
-	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 20:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F73371073
+	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 20:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769632519; cv=none; b=FDaaI9RcDvRGYR7SHO5fbEBKdJjktQiAomcRMIA0oDKq5JBRaANZBK/DCM5+KXxDu8gLlAbH9G9/GuOMo6u7SC2cf45UkRgm8kZTnkoVuicL8eXvvdR1QRWb7kl2EYzO516quFMvDqTM1qtBDIzOU/rKtTyq4wOPDNsZ9JuDFq0=
+	t=1769632521; cv=none; b=Ql9LtVMLnTbBdXGePni+h1JkJaLXvpqhDBC41cKpB8Q4r6PSt3/2SEk3sBIpEytw5ca675uoTzU6TeNRrWVDi4Oxlw8WIBrSeL2Tej8Xu9NbRUwCc2DeHmr7qs/8uuRW2Hu2mU9I/a9fEJ2ZcHM0rHu7gP7ZO9EyYBNKglSoW2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769632519; c=relaxed/simple;
-	bh=D4lsEPEuAdBLjTHnWN02yQj/qChhhrsCdqYTGEgxEp8=;
+	s=arc-20240116; t=1769632521; c=relaxed/simple;
+	bh=AfXB2KiJ3QX8GV9oH0zxHMS1/rDt27lOmxST+ROXcH8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ou100AeMnXkFy3dr1EGaTFDjsajFLSEgVU7L9EO3ignpL0We116iYFjGw8rYlbQ/WEX1ASNF+SYcxfKM9URLRdhpm3D+ZeNxiGDDpmdEQt4jIoVeKdwo+ZqfZV/DwOh+2MK8YKSiufaLb1u3RrcnvalZyjunEOFfZ8okYDiazp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BqHaa0fe; arc=none smtp.client-ip=209.85.221.42
+	 MIME-Version:Content-Type; b=dlW2n5qm110efYgZ3lKLd8N1gzChHKwWwIJ6hpLjQNxbL8vQ98orH2eMQTanZDnBCMeggOchF8Kr7HqdcYYxFdyOdPnF1SVp1tkgiToTqnNLGeNluejAToIKOLXxz5M9N9FB17bSMgsAJ1nT7EpP9hD1uBTK4R88UkmbnEwErSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jnlHdaFx; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqHaa0fe"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-42fb6ce71c7so268606f8f.1
-        for <soc@lists.linux.dev>; Wed, 28 Jan 2026 12:35:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jnlHdaFx"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43590777e22so170951f8f.3
+        for <soc@lists.linux.dev>; Wed, 28 Jan 2026 12:35:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769632514; x=1770237314; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1769632517; x=1770237317; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TG/VYLW8d8WUt5vElKzMRZGMulWbxOL8O7SIiAnHR0Q=;
-        b=BqHaa0fe1SSorcx8u+Xb6KTEV7+Sw7tvLV5xhsBe4fYyNBhwhIzksqhmEOpgXhYi86
-         ixYkp9gjvb3P7pEqDAcCzblS9uP114KI5ffJoo13+XHfP3dyDFXbcfN0Y/D+aBrmE6tN
-         5NPe2MM8w3jJyHTWEb9Gavzjtlithc/xn5VH4mjR9dFdpO133W3ntxmqTRLdLtHFD6ST
-         uGP+6ucTpRTAA98M7lFuly2Z34SET4Be89eZG3glIMcMIzyiVDkp9Rzf2i1tZQQSIwPY
-         driKWOcIGjaHmm4gBDtGOeD6DQflKf0zCejFz95ZtvJEwM7A/gbo7I5PXsS4seUPJTzm
-         SgGQ==
+        bh=MGGndKjUsdib5KMo11y7V39NR6PErPC0l6mWsxXuQFY=;
+        b=jnlHdaFxbgvpKw92C7lrML8BhiQ7Tkab48oQFB8o645QqSPQsYYcpAlAWuJA9X0HKx
+         le56QdaSayDAEmz8jXHpKk0UWxeZXsWskhVwhNLFWLpmEy8RKznrxHCfUpl1mVXgGRvB
+         ufwaA82v5vmffL0HHM2Yeb8z6cHNbncwhGBjuQ4EY6lKup4/Gf32VPHAwe067nmo8S7E
+         P6fY5tGLeuQAj/BBVBKuKY2UgksprFaZueNe+78ymPd5iLEkB+Q9ccSGJAKPdlUxlZJU
+         gKEuMYUuGpQ7d84PsQBViCMpSl8FkfsHROEWOVRPuioymGDnmvNoYKvAmMjWwzw+Tf+p
+         xPyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769632514; x=1770237314;
+        d=1e100.net; s=20230601; t=1769632517; x=1770237317;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=TG/VYLW8d8WUt5vElKzMRZGMulWbxOL8O7SIiAnHR0Q=;
-        b=P0YD6edRzNZfvH+HVEy4UPdUaaemb2sq5I6Xg44cnNm7k1By3vfrKhkfJhZdd4i9rq
-         nswdHRKFt2qb369VyqHvJ315QAM4kWSg5G26PT3yyJe15XzzSjjWtHMvMbxoKNSEIg3e
-         pryz4PNnPUbX2HoPcqfZikh3HRZOwfRvh5K//A7er3CrxAbNZFhYThaKp6Q/K0hh9lTf
-         zPEx+yu1Ku2hlNvdS0qfUUi9qgMKm7b2IVTeuACl+jtVNQ4kHDBZdLVD4vuyd0VKKJDX
-         TwwTVl0HQzkwI1ocE8EWvynYqCtF09pO+/nHSN6rWS8MBlN+4jdprd8iRfRw81P2Km8n
-         7M/g==
-X-Gm-Message-State: AOJu0YymSanfjpP/Hdo00YeqJZlvc/JW95zjvsqIvGYgQQvtj5YxDNV7
-	okl8ue02Izakz8WSITHg5JUYeS6Nk6eooSXGzaLjjkX55Jjoy8XA4dZY
-X-Gm-Gg: AZuq6aJYi4zw9QO1075A+VwDSZdC3ozWvImunXxVpUfPXTz6rspKDe+GZ8NFxmZakmk
-	2JzAQCj/DcKxR3TJ8NKWmmqPvnYw7CSx64Jw2TjfNfg89WalpVxPyLM9AmdO5QYxnK8Z6UKwO2a
-	jP+Rxn08558IoK7myTrWacuwsSF1xKwr1eyBx2TmJleczcWboQcMou/BqeWP9vgT+05AswFnHtD
-	RIPiBmtkjzAOUnMSoXnKIYS9coHNq+4yCcY/+gsnEfEXjxb9r5hTZpS8kv03fQJ0TQnj17IXNWW
-	8GBnlYKyKgAtAqwgcjCnEsnhEz8GQoXznoC5COzC49obNP6iDnjgg3AIAlBh7rqRe0mef6E8y2Z
-	MdeNG5zMmiuyI72dzZWUavWuYtzLyB+MQ67GV2L1GxulhR3kyPNHJ9HWVX3dAUm4FU3Usg13Gu8
-	k8YhPWr/7DNmpUzZF8BlGgjLR7Bc0TGibZgu8=
-X-Received: by 2002:a05:6000:2c04:b0:432:da3b:5941 with SMTP id ffacd0b85a97d-435dd030495mr8986801f8f.21.1769632513968;
-        Wed, 28 Jan 2026 12:35:13 -0800 (PST)
+        bh=MGGndKjUsdib5KMo11y7V39NR6PErPC0l6mWsxXuQFY=;
+        b=KqUdWGDSOz2V/MA+uXvxipQs6hDuRhDQfTEFOX5oojZb27NQVt6V5dtycKhZRLPHGu
+         Is0CDzy3AfzjIzR3pPntJMAwQFF5zS7iePO0BxVG17UEuJ7L/Yx+obHbXj0G4cKFCIcF
+         gsMaw2kKfl7hJ3nB96gmTZxnIu9VJEP1J03Z25XvWNwtvNTYefjx95Ej3u/H2MEr813W
+         8Jp30PSAapZ7GrD7rWmphhXCh+G7Mk0qgaGgxBVfoE/Nle2YKVuXvKqDL2uEfDfH1O6p
+         5WWNpZto2Z2zKzdoR/PaNuQg9Wm7Q3wCogtQEl+jFAF8yRppdOq81yg97MBzW7VpraB+
+         16cw==
+X-Gm-Message-State: AOJu0Yw3wuDZ4XhgV4jMWDTb3YHokuZnhHlg+CnCYXWw96NkSiHVV8Vm
+	A+3FNzndyRrB0jCyYbxJTkrM3v3T9365iQ284uaeZWBvDLBrS6XEiUIN
+X-Gm-Gg: AZuq6aId3soGbXU0ODn4EguC3PSdjl4yq3BV4CZVrBlBr+q0hC1lRk5HmdHL8c+95SG
+	ppxlEQANOSMSWwvao5j8036512Uz3H07nf0KaF2k2QpVn//KcDmW0bkQlV/xcQpGEfN55cQbJNH
+	T+708LoeIFwl4sgR1aJHxvdclWu94weGW1rLsUCYjpTwsGPskiL2wYqveB4PA+XzhDf1Zkx5pdb
+	aiz4fS5SlEYc6RJj8tGwBqdomPoLDkx0/0M0Abm0jnybMMq3YYZ3qUiYzgeDoNuv/d0DewdbaLZ
+	GUuDudia0nsrgNO7YWpQirzfOBFBr/Wi3dFeD/ta/48HA5ivuJZsnnDeRYc5gk2kyg/2talwFfc
+	YF4IZAXVolNkLCXCwfuhIEa6x/EANGrFXzT49sP6f3s7YbkR4dPFSCOeWPDlttA2PxfKxFdnzmo
+	JvZnl8WY5dtGQ0BRtJM0W5Sg2z
+X-Received: by 2002:a5d:5d13:0:b0:435:a7fa:24ae with SMTP id ffacd0b85a97d-435dd06f9d2mr8766859f8f.18.1769632516779;
+        Wed, 28 Jan 2026 12:35:16 -0800 (PST)
 Received: from strix.doe.home ([197.250.227.106])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10ee04csm9577644f8f.12.2026.01.28.12.35.11
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10ee04csm9577644f8f.12.2026.01.28.12.35.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 12:35:13 -0800 (PST)
+        Wed, 28 Jan 2026 12:35:16 -0800 (PST)
 From: =?UTF-8?q?Stefan=20D=C3=B6singer?= <stefandoesinger@gmail.com>
 To: linux-arm-kernel@lists.infradead.org
 Cc: soc@lists.linux.dev,
@@ -64,9 +64,9 @@ Cc: soc@lists.linux.dev,
 	Jun Nie <jun.nie@linaro.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Drew Fustini <fustini@kernel.org>
-Subject: [RFC PATCH v2 5/7] ARM: dts: Add an armv7 timer for zx297520v3.
-Date: Wed, 28 Jan 2026 23:34:53 +0300
-Message-ID: <20260128203455.38569-6-stefandoesinger@gmail.com>
+Subject: [RFC PATCH v2 6/7] ARM: zte: Bring back ZX29 UART support.
+Date: Wed, 28 Jan 2026 23:34:54 +0300
+Message-ID: <20260128203455.38569-7-stefandoesinger@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260128203455.38569-1-stefandoesinger@gmail.com>
 References: <20260128203455.38569-1-stefandoesinger@gmail.com>
@@ -79,59 +79,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The stock kernel does not use this timer, but it seems to work fine. The
-board has other board-specific timers that would need a driver and I see
-no reason to bother with them since the arm standard timer works.
-
-The caveat is the non-standard GIC setup needed to handle the timer's
-level-low PPI.
+This is based on code removed in commit 89d4f98ae90d ("ARM: remove zte
+zx platform"). I did not bring back the zx29-uart .compatible as the
+arm,primecell-periphid does the job.
 
 Signed-off-by: Stefan Dösinger <stefandoesinger@gmail.com>
 ---
- arch/arm/boot/dts/zte/zx297520v3.dtsi | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/tty/serial/amba-pl011.c | 37 +++++++++++++++++++++++++++++++++
+ include/linux/amba/bus.h        |  6 ++++++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/arch/arm/boot/dts/zte/zx297520v3.dtsi b/arch/arm/boot/dts/zte/zx297520v3.dtsi
-index d6c71d52b26c..ecd07f3fb8b3 100644
---- a/arch/arm/boot/dts/zte/zx297520v3.dtsi
-+++ b/arch/arm/boot/dts/zte/zx297520v3.dtsi
-@@ -24,6 +24,15 @@ soc {
- 		interrupt-parent = <&gic>;
- 		ranges;
- 
-+		/* The GIC has a non-standard way of configuring ints between level-low/level
-+		 * high or rising edge/falling edge at 0xf2202070 and onwards. See AP_INT_MODE_BASE
-+		 * and AP_PPI_MODE_REG in the ZTE kernel, although the offsets in the kernel source
-+		 * seem wrong.
-+		 *
-+		 * Everything defaults to active-high/rising edge, but the timer is active-low. We
-+		 * currently rely on the boot loader to change timer IRQs to active-low for us for
-+		 * now.
-+		 */
- 		gic: interrupt-controller@f2000000 {
- 			compatible = "arm,gic-v3";
- 			interrupt-controller;
-@@ -33,5 +42,20 @@ gic: interrupt-controller@f2000000 {
- 			reg = <0xf2000000 0x10000>,
- 			      <0xf2040000 0x20000>;
- 		};
-+
-+		timer {
-+			compatible = "arm,armv7-timer";
-+			interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+				<GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+				<GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+				<GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-+			clock-frequency = <26000000>;
-+			interrupt-parent = <&gic>;
-+			/* I don't think uboot sets CNTVOFF and the stock kernel doesn't use the
-+			 * arm timer at all. Since this is a single CPU system I don't think it
-+			 * really matters that the offset is random though.
-+			 */
-+			arm,cpu-registers-not-fw-configured;
-+		};
- 	};
+diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+index 7f17d288c807..858a0edd3e3b 100644
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -216,6 +216,38 @@ static struct vendor_data vendor_st = {
+ 	.get_fifosize		= get_fifosize_st,
  };
+ 
++static const u16 pl011_zte_offsets[REG_ARRAY_SIZE] = {
++	[REG_DR] = ZX_UART011_DR,
++	[REG_FR] = ZX_UART011_FR,
++	[REG_LCRH_RX] = ZX_UART011_LCRH,
++	[REG_LCRH_TX] = ZX_UART011_LCRH,
++	[REG_IBRD] = ZX_UART011_IBRD,
++	[REG_FBRD] = ZX_UART011_FBRD,
++	[REG_CR] = ZX_UART011_CR,
++	[REG_IFLS] = ZX_UART011_IFLS,
++	[REG_IMSC] = ZX_UART011_IMSC,
++	[REG_RIS] = ZX_UART011_RIS,
++	[REG_MIS] = ZX_UART011_MIS,
++	[REG_ICR] = ZX_UART011_ICR,
++	[REG_DMACR] = ZX_UART011_DMACR,
++};
++
++static unsigned int get_fifosize_zte(struct amba_device *dev)
++{
++	return 16;
++}
++
++static struct vendor_data vendor_zte = {
++	.reg_offset		= pl011_zte_offsets,
++	.access_32b		= true,
++	.ifls			= UART011_IFLS_RX4_8 | UART011_IFLS_TX4_8,
++	.fr_busy		= ZX_UART01x_FR_BUSY,
++	.fr_dsr			= ZX_UART01x_FR_DSR,
++	.fr_cts			= ZX_UART01x_FR_CTS,
++	.fr_ri			= ZX_UART011_FR_RI,
++	.get_fifosize		= get_fifosize_zte,
++};
++
+ /* Deals with DMA transactions */
+ 
+ struct pl011_dmabuf {
+@@ -3081,6 +3113,11 @@ static const struct amba_id pl011_ids[] = {
+ 		.mask	= 0x00ffffff,
+ 		.data	= &vendor_st,
+ 	},
++	{
++		.id	= AMBA_LINUX_ID(0x00, 0x1, 0xffe),
++		.mask	= 0x00ffffff,
++		.data	= &vendor_zte,
++	},
+ 	{ 0, 0 },
+ };
+ 
+diff --git a/include/linux/amba/bus.h b/include/linux/amba/bus.h
+index 9946276aff73..854c962d70f5 100644
+--- a/include/linux/amba/bus.h
++++ b/include/linux/amba/bus.h
+@@ -103,8 +103,14 @@ enum amba_vendor {
+ 	AMBA_VENDOR_ST = 0x80,
+ 	AMBA_VENDOR_QCOM = 0x51,
+ 	AMBA_VENDOR_LSI = 0xb6,
++	AMBA_VENDOR_LINUX = 0xfe,	/* This value is not official */
+ };
+ 
++/* This is used to generate pseudo-ID for AMBA device */
++#define AMBA_LINUX_ID(conf, rev, part) \
++	(((conf) & 0xff) << 24 | ((rev) & 0xf) << 20 | \
++	AMBA_VENDOR_LINUX << 12 | ((part) & 0xfff))
++
+ extern const struct bus_type amba_bustype;
+ 
+ #define to_amba_device(d)	container_of_const(d, struct amba_device, dev)
 -- 
 2.52.0
 
