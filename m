@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C385937105E;
-	Wed, 28 Jan 2026 18:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3C3266B72
+	for <soc@lists.linux.dev>; Wed, 28 Jan 2026 18:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769625715; cv=none; b=k09tEruqh4KHqSBqYXW7rStorYMWFF77/Yh9m1xT3h/vgcqHk1fV3AEZhyc4YySCqe1q8qQDEHvSRCxndStU3x0SDF/YEQEQeIRCHrCEbpx9hZvu06Z9SLIet1WMwyssNi63v5faAJ0HGJx4+ll3LFsJ/LFXjtE6XF0ViqH31GY=
+	t=1769626104; cv=none; b=alRRoWFWWEY9To92WqRjRPullAm/oN4aHi7wBBzQM2/7L5CQm999Ctso/ZnlxnqUkYIiksR2345DItQoEjU24HVQ8uc7QiUH9lsU5WA1lr059GUREr5BOFe739uSLh3uBNSp2/HLFvjt/7cCranRR0u4aLIdAWKlVgf9TG3py/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769625715; c=relaxed/simple;
-	bh=2HSz51MYu6bE9JUeVNOIbB4l0qGxAkvxgkTqyl5c900=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GmdCjE65wZQLO3XIgA9vB5C2ajOLP7ubpkPzlwHae+odjN1dEiW/ic3e+vnBg3ZIN9HxIHxTMwB3GwuwoAmXwbk/GmLlcoX9uu6qvBdW0G6Id6FVHeOMTZh8iFQptO17ARVfHbPmU9EbJucNYA+wWVY6UvhH/yfglJa+VSWFcTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9nH0cRh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769626104; c=relaxed/simple;
+	bh=DwmoMkW02KgPmXpKlWuIgYCDvsf8n9DSy3uxJrBURIk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=VjBVPvEZTsdb+ogpmpSCW2u08l7h8RprpozTRaswY8X/Ys59Zlc6UBxeI59mRdAUjbrn8DTCJZisJFedZv6CKFZGx3TxagbNZ95GvHnYj9q25LQVL1OKjY5/l3RHDHLM4pVgEdKdsyDHGkuMzwJVq0dVcEQk7gbplhUvgAVxRD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=szEFWbSe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9nH0cRh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D5D9C4CEF1;
-	Wed, 28 Jan 2026 18:41:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="szEFWbSe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1978DC4CEF1;
+	Wed, 28 Jan 2026 18:48:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769625715;
-	bh=2HSz51MYu6bE9JUeVNOIbB4l0qGxAkvxgkTqyl5c900=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R9nH0cRhcCPOR9WerIDa4eLGtZ//hGIHbxVz2XDT54Rcyt5hCC+4DhrxzXKFvyz6j
-	 ZpapsmJoA/hvwFgIbKx0mqCz9KSfySGsJ6LfWp8cFOaFaaWKHvHieNa7Toc9URHiQI
-	 UIZdyG9Thv/7rtvy2OHPM6RDw6ZOsgfUVdY6iOCVb49XUlpB5P+ZnOZ7EhM+gUQXqZ
-	 1RG0TIgnJCuBika+c78roQf8RpWReNVzEeVwTsKVckH8ayd6HEvMDw715a1bXLAcqJ
-	 iUDhzaSD3Hofcg0SirGeFOxxSZjoUbB1ke3Cpu8xskIEdkrH/DNOzGjCeOv1VdvC7s
-	 r684Gr4EnlXAA==
-Message-ID: <b3df3e1d-0aa7-4161-a7ae-0a2dfbd34cd5@kernel.org>
-Date: Wed, 28 Jan 2026 19:41:50 +0100
+	s=k20201202; t=1769626104;
+	bh=DwmoMkW02KgPmXpKlWuIgYCDvsf8n9DSy3uxJrBURIk=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=szEFWbSeWm2yTLi9Bb1lSB7YH6xFhos8EagPUF2UsuHlNIdhT6/MBsTPlSBJAEST/
+	 WhPUdMzJtTsv1fA2h/Md53/YWG+g7QfgYQUYUNXHOPsEmlP4L1cfusUeKMStlTY1dC
+	 a/xpJxq5LSD+DFtNjNLXbhyli7maYpmc42zTgT9Ek8rnyX80xdsZMrNt/pmppAo/X7
+	 ++N5BpXXjBzdSVcqJ+Zb/n78fTaxcI23FoRiuG1SvBKNeeFCD4XNj7TZeJDh1QJ8jh
+	 usJDrhl1isRarHt6H9oDEc4Jx6gYFoNHdTk9oL+bdt6xJ1i3caj1WenjK0CdGSnJqo
+	 MEZEd4K52QNtQ==
+Message-ID: <2b81a667-adad-4960-bc48-f60fbf740620@kernel.org>
+Date: Wed, 28 Jan 2026 19:48:21 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,16 +35,10 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3 2/2] arm64: dts: realtek: Add Kent SoC and EVB
- device trees
-To: Yu-Chun Lin <eleanor15x@gmail.com>, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, james.tai@realtek.com, soc@lists.linux.dev
-Cc: afaerber@suse.de, arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
- linux-realtek-soc@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, cy.huang@realtek.com,
- stanley_chang@realtek.com, eleanor.lin@realtek.com
-References: <20260127071530.25426-1-eleanor15x@gmail.com>
- <20260127071530.25426-3-eleanor15x@gmail.com>
+Subject: Re: [GIT PULL] arm/arm64: dts: socfpga: updates for v6.20
+To: Dinh Nguyen <dinguyen@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ soc@lists.linux.dev
+References: <20260124200118.2789128-1-dinguyen@kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -90,44 +84,62 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260127071530.25426-3-eleanor15x@gmail.com>
+In-Reply-To: <20260124200118.2789128-1-dinguyen@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 27/01/2026 08:14, Yu-Chun Lin wrote:
-> +
-> +	reserved_memory: reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
+On 24/01/2026 21:01, Dinh Nguyen wrote:
+> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+> 
+>   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.20
+> 
+> for you to fetch changes up to 1a457681c075e1bd894df753087cb4268ce9f9e9:
+> 
+>   arm64: dts: intel: agilex5: Add simple-bus node on top of dma controller node (2026-01-02 07:52:44 -0600)
+> 
+> ----------------------------------------------------------------
+> SoCFPGA DTS updates for v6.20
+> - dt-bindings updates:
+> 	- Add dma-coherent for cdns,hp-nfc and snps,dw-axi-dmac
+> 	- Add intel,socfpga-agilex5-socdk-modular for the Agilex5 mod board
+> 	- Move entries in intel,socfpga.yaml into altera.yaml
+> 	- Add syscon as a fallback for sys-mgr
+> 
+> - Add dma-cohrerent property for Agilex5 NAND and DMA
+> - Add support for the Agilex5 modular board
+> - Add IOMMUS property for ethernet nodes for Agilex5
+> - Use lowercase hex for dts files
+> - Add #address-cells and #size-cells for sram
+> - Fix dtbs_check warning for fpga-region
+> - Move dma controller node for Agilex5 under simple-bus
+> 
+> ----------------------------------------------------------------
+> Dinh Nguyen (4):
+>       dt-bindings: arm: altera: combine Intel's SoCFPGA into altera.yaml
+>       dt-bindings: altera: document syscon as fallback for sys-mgr
+>       ARM: dts: socfpga: add #address-cells and #size-cells for sram node
+>       ARM: dts: socfpga: fix dtbs_check warning for fpga-region
+> 
+> Khairul Anuar Romli (4):
+>       dt-bindings: mtd: cdns,hp-nfc: Add dma-coherent property
+>       dt-bindings: dma: snps,dw-axi-dmac: add dma-coherent property
 
-Earlier (I removed it from the context) nodes are not ordered according
-to DTS coding style.
 
-> +
-> +		linux,cma {
-> +			compatible = "shared-dma-pool";
-> +			alignment = <0x0 0x400000>;
-> +			alloc-ranges = <0x0 0x0 0x0 0x20000000>;
-> +			size = <0x0 0x2000000>;
-> +			reusable;
-> +			linux,cma-default;
-> +		};
-> +	};
-> +
-> +	cpu_opps: opp-table-cpu {
+These are not SoC patches, unless maintainers are unresponsive which I
+believe is not a case here, so they should not be going via this tree.
 
-It is odd to see this on the board level. This really is SoC or (in your
-case) SoC variant layer.
+None of this, merged on 15th Dec, was fed to linux-next, so you don't
+even know if this conflicts with maintainer trees thus pushing conflict
+discover unto soc tree.
 
-Same for other DTSI.
+Not being in the next is already a problem but gets more serious when
+taking other subsystem patches.
 
-These two issues however are not critical and I did not see other
-worrying things, so I would merge it.
-
-Arnd:
-
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+That's my comment, but Arnd was looking at these whether to merge.
 
 Best regards,
 Krzysztof
