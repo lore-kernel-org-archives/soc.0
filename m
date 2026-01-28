@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE872FD69E;
-	Wed, 28 Jan 2026 18:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C385937105E;
+	Wed, 28 Jan 2026 18:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769625359; cv=none; b=jKA7Q753XCip0QYwc8NCMu9v8yhMs9kcISGSpF8w6Gu3f0c725jPWNWEEG2troAz4b1nI2ty2lsBgkbuG79jqzjXCkByyVq3Qlu1vYFNqmQExP6SHGTbGeUzfxDxsolNPHTWOK74xCOOhGLZ042sVJXp1nMwwNb7jBtLGvrlUh4=
+	t=1769625715; cv=none; b=k09tEruqh4KHqSBqYXW7rStorYMWFF77/Yh9m1xT3h/vgcqHk1fV3AEZhyc4YySCqe1q8qQDEHvSRCxndStU3x0SDF/YEQEQeIRCHrCEbpx9hZvu06Z9SLIet1WMwyssNi63v5faAJ0HGJx4+ll3LFsJ/LFXjtE6XF0ViqH31GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769625359; c=relaxed/simple;
-	bh=XbNIP04prbl4GAz3lpJ67AlR+JvU+oeMJJ4orRFR/vk=;
+	s=arc-20240116; t=1769625715; c=relaxed/simple;
+	bh=2HSz51MYu6bE9JUeVNOIbB4l0qGxAkvxgkTqyl5c900=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CcmeW8DgqcdVfMKM6eBuHhbqJJtV2cuhCgWuqPu/FDc2wPATdLxxgb+Iiy17EeuKJxJ0G7c8Hjcdl4lgwH/hXU38fdP/ayUMixALupBbAAq6AgI9LW8ObVrehO/XkM9+6Ry3OUSMsu3XIxYQWm7GvDPiV3xVW1p79N42xRbEEF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKaW6E0I; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=GmdCjE65wZQLO3XIgA9vB5C2ajOLP7ubpkPzlwHae+odjN1dEiW/ic3e+vnBg3ZIN9HxIHxTMwB3GwuwoAmXwbk/GmLlcoX9uu6qvBdW0G6Id6FVHeOMTZh8iFQptO17ARVfHbPmU9EbJucNYA+wWVY6UvhH/yfglJa+VSWFcTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9nH0cRh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKaW6E0I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B64C4CEF1;
-	Wed, 28 Jan 2026 18:35:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9nH0cRh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D5D9C4CEF1;
+	Wed, 28 Jan 2026 18:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769625359;
-	bh=XbNIP04prbl4GAz3lpJ67AlR+JvU+oeMJJ4orRFR/vk=;
+	s=k20201202; t=1769625715;
+	bh=2HSz51MYu6bE9JUeVNOIbB4l0qGxAkvxgkTqyl5c900=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fKaW6E0I+uSaD18j6ICbYT+M7tzDOIZL7YewvT7gYQrJkHoUUFkc4poXZMYo8MmCD
-	 PpSnbBB/QIRFYm06+/IRSpoydH/28B8C1hcyN/YQ4S3DQErS7YgHNFCV4ZZKH1yI57
-	 F+yuGlJpNMcIes6Ynr0fazjD49WfCU22WJok3gCSzdsprAdPUPUXab/idjfoeU1X4m
-	 ruRaZz5cg84ylT18hYxgFdehF4YqKYtnEd0+hoNeeSF/2FqO3kIDfEmkjs85Tqg99g
-	 kl2xHVdqKkHq3JI6pkTbOfoNINwgzPmkycRsd5xZqcbxIlzFEloJpXHgBtnclo3/dx
-	 wN82AsEjX8uRQ==
-Message-ID: <a09292b2-0c40-497f-8270-b089e499f97d@kernel.org>
-Date: Wed, 28 Jan 2026 19:35:53 +0100
+	b=R9nH0cRhcCPOR9WerIDa4eLGtZ//hGIHbxVz2XDT54Rcyt5hCC+4DhrxzXKFvyz6j
+	 ZpapsmJoA/hvwFgIbKx0mqCz9KSfySGsJ6LfWp8cFOaFaaWKHvHieNa7Toc9URHiQI
+	 UIZdyG9Thv/7rtvy2OHPM6RDw6ZOsgfUVdY6iOCVb49XUlpB5P+ZnOZ7EhM+gUQXqZ
+	 1RG0TIgnJCuBika+c78roQf8RpWReNVzEeVwTsKVckH8ayd6HEvMDw715a1bXLAcqJ
+	 iUDhzaSD3Hofcg0SirGeFOxxSZjoUbB1ke3Cpu8xskIEdkrH/DNOzGjCeOv1VdvC7s
+	 r684Gr4EnlXAA==
+Message-ID: <b3df3e1d-0aa7-4161-a7ae-0a2dfbd34cd5@kernel.org>
+Date: Wed, 28 Jan 2026 19:41:50 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,17 +35,16 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3 1/2] dt-bindings: arm: realtek: Add Kent Soc
- family compatibles
+Subject: Re: [PATCH RESEND v3 2/2] arm64: dts: realtek: Add Kent SoC and EVB
+ device trees
 To: Yu-Chun Lin <eleanor15x@gmail.com>, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, james.tai@realtek.com, soc@lists.linux.dev
 Cc: afaerber@suse.de, arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
  linux-realtek-soc@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, cy.huang@realtek.com,
- stanley_chang@realtek.com, eleanor.lin@realtek.com,
- Conor Dooley <conor.dooley@microchip.com>
+ stanley_chang@realtek.com, eleanor.lin@realtek.com
 References: <20260127071530.25426-1-eleanor15x@gmail.com>
- <20260127071530.25426-2-eleanor15x@gmail.com>
+ <20260127071530.25426-3-eleanor15x@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,26 +90,42 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260127071530.25426-2-eleanor15x@gmail.com>
+In-Reply-To: <20260127071530.25426-3-eleanor15x@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/01/2026 08:14, Yu-Chun Lin wrote:
-> From: Yu-Chun Lin <eleanor.lin@realtek.com>
-> 
-> Define compatible strings for Realtek RTD1501s, RTD1861b and RTD1920s.
-> 
-> Additionally, convert legacy DTS-style comments to YAML description
-> properties, following the pattern from the ARM bindings conversion series
-> [1].
-> 
-> [1] https://lore.kernel.org/lkml/20200622125527.24207-2-afaerber@suse.de/
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Yu-Chun Lin <eleanor.lin@realtek.com>
-> ---
+> +
+> +	reserved_memory: reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
 
-Arnd, FWIW:
+Earlier (I removed it from the context) nodes are not ordered according
+to DTS coding style.
+
+> +
+> +		linux,cma {
+> +			compatible = "shared-dma-pool";
+> +			alignment = <0x0 0x400000>;
+> +			alloc-ranges = <0x0 0x0 0x0 0x20000000>;
+> +			size = <0x0 0x2000000>;
+> +			reusable;
+> +			linux,cma-default;
+> +		};
+> +	};
+> +
+> +	cpu_opps: opp-table-cpu {
+
+It is odd to see this on the board level. This really is SoC or (in your
+case) SoC variant layer.
+
+Same for other DTSI.
+
+These two issues however are not critical and I did not see other
+worrying things, so I would merge it.
+
+Arnd:
 
 Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
