@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08297376BD2
-	for <soc@lists.linux.dev>; Thu, 29 Jan 2026 09:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240C037B40B
+	for <soc@lists.linux.dev>; Thu, 29 Jan 2026 09:51:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769680318; cv=none; b=q654G2cYBuIQgYsCEQ3ulbXaoNwGqK/RUv2ZAXyHFNyq+JVv8YL4c/RpODmRwlFomvxvZCyZzb5cUdzZxlN/M61MQXiqAcvYXm2rzTWeTa3xzKAtWDG6zZRbT3oYIi0yyG9/jfWvrBuGTrxdM9i7r/3yaAl0aofqpN5GW87xbvU=
+	t=1769680319; cv=none; b=T4Y1HY3631+Owm8+kW+DrvF/YxR6A0tCp2jQ8Ea8TequrgU5DUXAZe/HA2JtpQQacku7wr1/5DinIBHKE5YehkVAea2O5aaO8s1p8q/boJBO8GAQdvj+6qXKP67UuaCgEMc9tprzsX1mTuK1sx4Sr52jLgkhkPhyZ0uA16wJchk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769680318; c=relaxed/simple;
-	bh=nDk6xYIF/J6VdxJc0CbtKL2v4/vIZiBswJnLUVpfjkg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=d+ZvACmorV6aJp1wkHC4Cf/XaHeV2elBX100yCGa0POfCLMWZl1uwR3r4sJJmxO5YBnY2k+LxCqr3FQBERLVuUHXvQNg1Ucq2biUdKXYOAft19aiezFW/818aXXgwK8v9ulgSqQff7G2cyO7tbBO+9IsLH45cLVhUdeOuRgBFU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tiDggGaX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769680319; c=relaxed/simple;
+	bh=K4VsMrG5CuRQEE9xMOiny+gXlGLdFr4oL+B9ZKjCQ6A=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=n3ItGsq5auOs3hDSw7XCsN8EVJErxG9SpLvJKLhvVrpmsVfTSICrPyFSJeAJhn/YisX1zyypHgBg5x8yYK5RNUfl5AUKghIfAJNwhrpMk4UJ1yYo0suKnNz+mBhPr6nO/InM31Opb9K3LNlEDKcHXhMoCY/+wAw/cjdnOqlpjB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZvmcpQab; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tiDggGaX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZvmcpQab"
 Received: by smtp.kernel.org (Postfix)
-	id 98DD2C16AAE; Thu, 29 Jan 2026 09:51:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834AAC4CEF7
-	for <soc@kernel.org>; Thu, 29 Jan 2026 09:51:57 +0000 (UTC)
+	id 1C2ACC116D0; Thu, 29 Jan 2026 09:51:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05ED3C4CEF7;
+	Thu, 29 Jan 2026 09:51:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769680317;
-	bh=nDk6xYIF/J6VdxJc0CbtKL2v4/vIZiBswJnLUVpfjkg=;
-	h=Subject:From:Date:To:Cc:From;
-	b=tiDggGaXffjMWP/jNwxmeH+2HLvZNHJPgNCCZxPdB+0bW2KwH/TibX+t8kivuk2FH
-	 TY8InsgX9+D/iCfkVcUvBzC89GCco0vZx76CiE8RR6GMBXBtttgJQOuPiNlkFN7eLY
-	 hVv/Vtv2PM+uxMsIIHjjTMoQ0DlMaQLxyznYP/t/TEdJOUlsMmd7pCIqS08sZljVKe
-	 xtQKX5++Bde/NzDqQc4YBBnpDm0nf5PjbWE+ORg9Jxom7JL6zjAhX4Z32MTyGa9bZy
-	 nn3DTG8Zzc3u8sKM+JAwc+eIDifNtB7wLbUGJD7zWx3GmxQHKMGJlPZC3HfIJJWK2q
-	 VS4ChXVERxSIA==
+	s=k20201202; t=1769680319;
+	bh=K4VsMrG5CuRQEE9xMOiny+gXlGLdFr4oL+B9ZKjCQ6A=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ZvmcpQabOkUHqwZ6cKoXfoGO7I6d23y+TVgxhzD31YVkDFRhNQljgprgWGdsZcB5J
+	 bT8VU6UtNWgugf9aOND7J1m/0pWnp/vPkTimkia0BAoooyU0RvEOw+qiZoRVMao52f
+	 gsfLjbuSruW5toacT+7/aHahRx386PbXmyY6xovXBSkbG3j9/E/j4vQnLDwDufkH+E
+	 8+HfnridSn5asjIK3UBJjRyAzZ+mAnQ6gIUWuty/+EsmeZf9IfwgeAP8qgSuTnGSBE
+	 BrgwqudeNdmrVEazJi+YYELXCROAE0MNrd7DESvqzQDBe1Vrb/LcnrbKzdaqTqebAu
+	 1KwXYM2TOUNbA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8B6E380AADF;
-	Thu, 29 Jan 2026 09:51:51 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4EB6D380AADF;
+	Thu, 29 Jan 2026 09:51:53 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,36 +39,38 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH 1/2] ARM: defconfig: move entries
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <176968031048.2433421.17905535193040374086.git-patchwork-summary@kernel.org>
-Date: Thu, 29 Jan 2026 09:51:50 +0000
-To: soc@kernel.org
+ <176968031184.2433421.9110844699505584084.git-patchwork-notify@kernel.org>
+Date: Thu, 29 Jan 2026 09:51:51 +0000
+References: <20260112153255.795553-1-arnd@kernel.org>
+In-Reply-To: <20260112153255.795553-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This series was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Series: [1/2] ARM: defconfig: move entries
-  Submitter: Arnd Bergmann <arnd@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1041279
-  Lore link: https://lore.kernel.org/r/20260112153255.795553-1-arnd@kernel.org
-    Patches: [1/2] ARM: defconfig: move entries
-             [2/2] ARM: defconfig: turn off CONFIG_EXPERT
+On Mon, 12 Jan 2026 16:32:54 +0100 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Some Kconfig files got rearranged, so change the defconfig file
+> to put everything back in the order used by 'make savedefconfig'.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> [...]
 
-Patch: riscv: defconfig: spacemit: k3: enable clock support
-  Submitter: Conor Dooley <conor@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1048236
-  Lore link: https://lore.kernel.org/r/20260128-sitter-crazily-184c1a7606db@spud
+Here is the summary with links:
+  - [1/2] ARM: defconfig: move entries
+    https://git.kernel.org/soc/soc/c/ee1ab82ee032
+  - [2/2] ARM: defconfig: turn off CONFIG_EXPERT
+    https://git.kernel.org/soc/soc/c/6d925df98181
 
-
-Total patches: 3
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
