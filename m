@@ -1,125 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1AF3612D8
-	for <soc@lists.linux.dev>; Sat, 31 Jan 2026 17:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677A4258CD9
+	for <soc@lists.linux.dev>; Mon,  2 Feb 2026 09:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769881618; cv=none; b=ldsZrc8s0TlKe8pxTdQTBS4B5dwGfM2dzGKlwdoAMuAbNml0X56xFHpaEGdfhB2BA1zp3EY+39RTLfYsNEQdI4436ijy+pphZ6StpjPtN8oVTpWaD2/FwajKUlDzE/SSh1bs4SRELLLAxZNUG2ujw61n5nmuLn31jYAZR9ELZu0=
+	t=1770023355; cv=none; b=bKEXIw9fSI1Zx68zTX5XTObqZq9VnTZOdBL6h1hNgD8x+FXCBL+UfHZ1wG4S6VKfny9wotB4SDT/usEMXIBeHYj//nQjf6kkl2B+H/BxlqSyajLiuQlavmzQ0VKm9TGTJQsbyj0uu5X7YtrLHWd1xJpEtOoiDlI5tMYn7Fb8j9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769881618; c=relaxed/simple;
-	bh=XJXhKDKIdbjjqxopEmAWWGnKUg42p9kFs2Ta8M/uoKs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=t+Y8AP6XnVADW13z/AZB64zGdyFagxf/mbQs1aXY5bCAOYsJH6E0BkRbGaGNIecvacjEOjQ88yPw/33FBz5aUZysPkBp/Gsh9x13T0NKdkR7UfAHLqTu4c8M158Z8vQB9Cub6kA9feLNgNN+Omk/M0TZNS0lDatlr8eCTMpZ+/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERBXpdRn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770023355; c=relaxed/simple;
+	bh=/InJPHvERGCp1LsWMayuS4ifK01C+WuQcizR58ez5zo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OYj6rOG9LCruILrWH/qmmIf5rvw93j3xUNbNOZCPV2kScokrJMPQE3AYVWK0v3DpcFqND421NJusfT+Cq1Dq2ElwlH4sfh6bVwW8V4MFJKiW66LhQOlTN+QQjAK8LBRbO/vD2eSow836FI6OUsiTvMqUXAPM4faSrpSzjzj1l4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fb27v97j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERBXpdRn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED9AC4CEF1;
-	Sat, 31 Jan 2026 17:46:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fb27v97j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066B6C2BC87
+	for <soc@lists.linux.dev>; Mon,  2 Feb 2026 09:09:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769881617;
-	bh=XJXhKDKIdbjjqxopEmAWWGnKUg42p9kFs2Ta8M/uoKs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ERBXpdRnPBX/6AOoFv2uuS1g/k6bexCua0jdu7KM82bFqIUWxP3BP3ZtEnyZwFtUg
-	 tK7zOUS4t1W/rWEodPg1iUK+Ws9RajyGMVaCSu4E4Rw/hzp2SKWUvTwrn4FHW2WBbh
-	 p9yVJpwC79HRUI+qlpbOOA2rcnfZxZdzFKkMmGtu/IaK8j4G/RyT9UJd8tLtT+q5KC
-	 7ma5UfBled1ikcbA9SW0u2B0AXZuguA2uI5JwI5Ox870SRqKjLPyy2S59MJ/LXoPVO
-	 ZFyGbIIiqL7pktUlR5RkZ4hHdFb+1hzs//iiTv2zaP3p979RayFTkf6PIGaF2nQaXV
-	 K/CWuZayigIow==
-From: Dinh Nguyen <dinguyen@kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL v2] arm/arm64: dts: socfpga: updates for v6.20, version 2
-Date: Sat, 31 Jan 2026 11:46:56 -0600
-Message-ID: <20260131174656.30403-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.42.0.411.g813d9a9188
+	s=k20201202; t=1770023355;
+	bh=/InJPHvERGCp1LsWMayuS4ifK01C+WuQcizR58ez5zo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fb27v97jb7yojGjO654DODgvw1pdwG8+XtoNd5LeLCeapI5/YLEhgsXknrAweZs7H
+	 OZsgwYOprhM9N4p/oc+5IpRANR+UJWKKQAbtAZGJ9GezKq6vFHVNTkXpU/XRj0MG1h
+	 x5W/wZFtXsLEnTctapdgLnIs0hhMzqIOwhnkyO9qsfIAeQtFAv2uMRRysXjBAokfpM
+	 JOTyp0YohpHQCob7NTC/jfCqTilRz6qt4dTtf0XbTvcVtC7uoz7XT7KuWGxMMR5o0k
+	 3OIYBREEWpjiz4e9pxP9JgK/YKzRkGKYjSolLiQuj3uTOkuAZFwBMk0cBtK9IqZcCB
+	 bo1zETTCTNnyQ==
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-649523de905so6135970d50.1
+        for <soc@lists.linux.dev>; Mon, 02 Feb 2026 01:09:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWeoSzIJW9p6OYQT44mgSSciWj5VWwlsCAqcu2zVBj+B5pRiq3QkOMDtOQ/gxC8Hu2EVIM=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzpZ2+GZH9syia3A/qMrTjVhn4u0UTpWyAFtIeXOXExG9DmA323
+	KH6dwGO+vjFQ7ugYBsXGAvLwL3lmyAdez90LFHc5WqckOCdZTZ/2/moF/rlJHu/xpYZ8tb8iK8z
+	dOY+Va79ZvRZUQ9Fwee3RCe83t4/+Edw=
+X-Received: by 2002:a05:690e:118a:b0:649:4621:92a3 with SMTP id
+ 956f58d0204a3-649a8e90d32mr8031455d50.45.1770023354348; Mon, 02 Feb 2026
+ 01:09:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260128203455.38569-1-stefandoesinger@gmail.com>
+ <20260128203455.38569-2-stefandoesinger@gmail.com> <CAD++jLn+ipz62Miki7VZNa_QestDNMtzmFK_zdLcY4deCweG8w@mail.gmail.com>
+ <1848649.VLH7GnMWUR@strix>
+In-Reply-To: <1848649.VLH7GnMWUR@strix>
+From: Linus Walleij <linusw@kernel.org>
+Date: Mon, 2 Feb 2026 10:09:03 +0100
+X-Gmail-Original-Message-ID: <CAD++jLn6WCnqcoRwrGv3X3tqx=weBdobu-QJ-jdSxOSPVjN_eA@mail.gmail.com>
+X-Gm-Features: AZwV_QiXXxRz81uzVh_2upCA4sYYxurDk7-L4zykHjdd2gbxVYQpKymeIjnMhMU
+Message-ID: <CAD++jLn6WCnqcoRwrGv3X3tqx=weBdobu-QJ-jdSxOSPVjN_eA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/7] ARM: zte: Add zx297520v3 platform support.
+To: =?UTF-8?Q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
+Cc: Jun Nie <jun.nie@linaro.org>, linux-arm-kernel@lists.infradead.org, 
+	soc@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>, Drew Fustini <fustini@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi soc maintainers,
+Hi Stefan,
 
-This is version 2 of the PR that had dt-bindings for dma and mtd patches[1]. This
-version has those patches removed and I'm taking them through the respective
-maintainer's tree.
+On Fri, Jan 30, 2026 at 5:38=E2=80=AFPM Stefan D=C3=B6singer
+<stefandoesinger@gmail.com> wrote:
+> Andre Przywara suggested switching to 64 bit via the Reset Management
+> Register. The RMR seems to do nothing on this hardware (https://
+> lists.infradead.org/pipermail/linux-arm-kernel/2026-January/1099787.html =
+is my
+> reply in the archives).
+>
+> We don't have board schematics or datasheets, but I guess AA64nAA32 is
+> hardwired to 32 bit. Maybe a GPIO pin can control it, but it doesn't look=
+ like
+> it. We also know of no way to reset the CPU without resetting the rest of=
+ the
+> board. (since RMR doesn't seem to work)
 
-Thanks,
-Dinh
-[1] https://lore.kernel.org/soc/7c6de5dc-8396-4793-a4fa-184bfe4096f3@kernel.org
+How typical. Well maybe this is just a new breed of 32bit machine
+after all.
 
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+> In my previous research I came across the suggestion to do an eret from E=
+L3 to
+> EL3 and set SCR_EL3.RW to 1. We'd obviously need to set ELR_EL3 to point =
+to 64
+> bit code. However, I haven't actually seen a working example of that and =
+my
+> own attempts just ended up locking up the CPU. I don't know where I came
+> across the suggestion the first time.
 
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+It would be my intuitive idea as well. After all, ERET is the way we do a l=
+ot
+of things, such as start processes in user mode. But if it doesn't work,
+well then it doesn't :/
 
-are available in the Git repository at:
+I don't have any other ideas than to proceed with a 32bit port.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.20_v2
-
-for you to fetch changes up to 42a8d7d72185247c0bbada1d2c44bef743ee6a5d:
-
-  dt-bindings: intel: Add Agilex eMMC support (2026-01-30 09:50:07 -0600)
-
-----------------------------------------------------------------
-SoCFPGA DTS updates for v6.20, version 2
-- dt-bindings updates:
-	- Add intel,socfpga-agilex5-socdk-modular for the Agilex5 mod board
-	- Add intel,socfpga-agilex-emmc for the Agilex eMMC daughter board
-	- Move entries in intel,socfpga.yaml into altera.yaml
-	- Add syscon as a fallback for sys-mgr
-
-- Add dma-cohrerent property for Agilex5 NAND and DMA
-- Add support for the Agilex5 modular board
-- Add IOMMUS property for ethernet nodes for Agilex5
-- Use lowercase hex for dts files
-- Add #address-cells and #size-cells for sram
-- Fix dtbs_check warning for fpga-region
-- Move dma controller node for Agilex5 under simple-bus
-- Add support for the Agilex eMMC daughter board
-
-----------------------------------------------------------------
-Dinh Nguyen (4):
-      dt-bindings: arm: altera: combine Intel's SoCFPGA into altera.yaml
-      dt-bindings: altera: document syscon as fallback for sys-mgr
-      ARM: dts: socfpga: add #address-cells and #size-cells for sram node
-      ARM: dts: socfpga: fix dtbs_check warning for fpga-region
-
-Khairul Anuar Romli (2):
-      arm64: dts: socfpga: agilex5: Add dma-coherent property
-      arm64: dts: intel: agilex5: Add simple-bus node on top of dma controller node
-
-Krzysztof Kozlowski (1):
-      arm64: dts: altera: Use lowercase hex
-
-Nazim Amirul (1):
-      arm64: dts: socfpga: agilex5: Add IOMMUS property for ethernet nodes
-
-Ng Tze Yee (2):
-      arm64: dts: socfpga: agilex: add emmc support
-      dt-bindings: intel: Add Agilex eMMC support
-
-Niravkumar L Rabara (2):
-      dt-bindings: intel: Add Agilex5 SoCFPGA modular board
-      arm64: dts: socfpga: agilex5: add support for modular board
-
- Documentation/devicetree/bindings/arm/altera.yaml  |  27 +++++
- .../devicetree/bindings/arm/intel,socfpga.yaml     |  40 -------
- .../bindings/soc/altera/altr,sys-mgr.yaml          |   6 +-
- arch/arm/boot/dts/intel/socfpga/socfpga.dtsi       |   6 +-
- .../boot/dts/intel/socfpga/socfpga_arria10.dtsi    |   6 +-
- arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  |   2 +-
- .../boot/dts/altera/socfpga_stratix10_socdk.dts    |   2 +-
- .../dts/altera/socfpga_stratix10_socdk_nand.dts    |   4 +-
- arch/arm64/boot/dts/intel/Makefile                 |   2 +
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     | 130 ++++++++++++---------
- .../dts/intel/socfpga_agilex5_socdk_modular.dts    | 109 +++++++++++++++++
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |   2 +-
- .../boot/dts/intel/socfpga_agilex_socdk_emmc.dts   | 105 +++++++++++++++++
- arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |   4 +-
- 14 files changed, 336 insertions(+), 109 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/intel,socfpga.yaml
- create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_modular.dts
- create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex_socdk_emmc.dts
+Yours,
+Linus Walleij
