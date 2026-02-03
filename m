@@ -1,135 +1,116 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524FA304BB8
-	for <soc@lists.linux.dev>; Mon,  2 Feb 2026 17:38:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA27156C6A
+	for <soc@lists.linux.dev>; Tue,  3 Feb 2026 02:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770053923; cv=none; b=hwUUnrS3uLyNpyMSZmkctOwH7hoDrzwOdwVZukYytAGCDIpYyVr+Yh34HW3u3fHHkt4+M0cv990KRk/kkFmbpnEP5/CSfCgDbgcAqPQLkmO/+3IFwJfKr8OkqfFrzXgCyhCJdrzsGMVJcyG4KED2rFF6Fcu2jRMWcVobnTpymt0=
+	t=1770087459; cv=none; b=U3jZ/fWoMiZNvLVP8Z4QKuNx5elBtcxAbz5qgeqzvnYA2jLzEa7FOMrGEr6eO1QcPHOupDIlXg/nx9+Z3NFvBMWc1nafYNKOMRYCBHUyl9SSXpehoPCoKb0OhoObzA/5+LD6bp1DRmWzNZAj5kMthmJ7MMMj3wyPnrshAuq0BV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770053923; c=relaxed/simple;
-	bh=FNaZywdV0xBaS8Xb0STRBySFYMmYW0gUfv06+Gp6u3k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e3w4IjBf1R88c650zGVnUuvrx9FLEmXi7TL61483kIh9RGhC/h9vW4CNA8UQKo4p6/BMXhG4N0T9ILCs4lPX4DehZxbnDNy2fFXIbtkW2lZCSUy9uKLrFcVItYcYdJrqEv9uVHzlfHR5n5EbFmxkALtJd7R35NZB7bJQhAdz450=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gAmMbIit; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770087459; c=relaxed/simple;
+	bh=k9cR3G+PJSfE37UeQ68RBhjrTADJObLs/02JvNcFNXA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=b4CqpHN9kzE+OaRRiM+s1R3PIH+G+bXgBYqSvBgUrA75pjtvA+Y7UHEzA5BHtPwmltFLhGyKpWTS8d0pBu9+9zfTKKBB+iBK+Gu5jbjcUz/j+m/6Os5qXKlkAe4LWVT3+7WIoIlO1qMhF1GHwUZBloUGzMO0OIIfmZM+p06+edc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YndZp4oS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gAmMbIit"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4801eb2c0a5so46122225e9.3
-        for <soc@lists.linux.dev>; Mon, 02 Feb 2026 09:38:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770053921; x=1770658721; darn=lists.linux.dev;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=s0gyTF7HDQLKl/NQKBiqUu7tUq7oC19o2sx5CsrD/90=;
-        b=gAmMbIitMzyQA8oZa8sPbM8tUN06V9E1rfwX9XHxmEnnC8V6wwViwkO2gryZnRUFSi
-         E8WTcMKxJvx8AUQJHFsCDtOa9k9XM3WB9C1K3nlcpGyxnrFhiuKrjnEo96G6o6HrCb/5
-         24MxSGmilFx6ctN4eZltHnTcLelJRZZBIE+weilo6jRzMIGpzKs83u6I3QLnutoCJ20M
-         R3rHVyMkoPkm44BrCBI5m6LdaR6IKCFX7YScx6v7whtyasaPWQU+POrC8WhN+Gql8+UA
-         y4eFav8GJeBAKsCS2ZuYpNyO8BcshqDJ+qVCg2aQNP/StLGgnXXHjcWvgheUGquAHXdY
-         gymw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770053921; x=1770658721;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s0gyTF7HDQLKl/NQKBiqUu7tUq7oC19o2sx5CsrD/90=;
-        b=JJmrqzDFXy8gSPSjV6H9q1TsuXwK1nu39YzEj1yjn48VO291YxcTYs9598RNydTjVM
-         k1XhPLGdy6sSjAVNOf0dQnw9L2c6iBIGwbQDlEhFggL8uF15lBwbylBET5Elxpx3hGs0
-         kDQpVsPSgv7fVhagrBqobZKdedOYCiRd/h01LC1RpjKIdFzAh28KpXKgMNeVmr25JRnk
-         HFCrjC7u+HjPLWLr/+n+Dh7iA0gV0RsJjNqUsAPWwEyMX93vgCCk/MUpQplWOsygcejK
-         hXHG8yRW+CN5SsyyYH6gOf8DOm7Mt4dbcbUfbZDRM4FtsmqngiteXLQt5cEV5LHInqV8
-         E7yg==
-X-Forwarded-Encrypted: i=1; AJvYcCXjmylPlJeGR7XeZCKfeha3PN5M/GsejPp6v5QVdXJnO1LWQxfmLVuKw2GeyI9NHzs2rGY=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxqg8QRFEzg804E1K+ufrhJSMU7AD/8p7/xeB4cgthMn6rJdZoE
-	7v2sLmD99ufLTyO8GgRP2w2XgWyauLxQN2jvimv7zK/09MW9tuUJHzW5
-X-Gm-Gg: AZuq6aKBB3qxO0Wdjcvu+ekX/DhsnXAZhzZrxCxdKm62GCaQiI6wmMZdy3EWEx2H9/D
-	1ihHTya8yYEleoYzqskot1BJyhnPMqDOzJcnkjt8LfooPUSDGaoSFeCJbozBPI/ouybRA4OiV9R
-	Bm4xroPoG5XzgR7Tocgv9i+5CklmHKag5e8VXFtrDGZ38LIjEmJPtd5z7rh4/YtgJd+uquYRWzT
-	J7N7pryXeblTvSSNudflzGmIvHJmN3sTkomLBvgCAyMONTJ3NcG57/90D2fXu2QvBoRAbG74NFN
-	6iujofGbx6a+Lxtx/WGpDAikmTmsDt/6dWwf3KeoAXmn5RKoC6K8dGpWFhvtVYLZA00Y0RuAF+S
-	F/Tp5QPncjT9aDlZnKch4+p+On0abccvn3nc/hcxTkBURbAR/bq3yQ4RAa6t6JcCqt1LyPr/luS
-	NC6dpdF/3hF36sQHDvbCrABlrt
-X-Received: by 2002:a05:600c:4ed0:b0:479:1ac2:f9b8 with SMTP id 5b1f17b1804b1-482db481b45mr150644815e9.21.1770053920464;
-        Mon, 02 Feb 2026 09:38:40 -0800 (PST)
-Received: from strix.localnet ([197.250.227.116])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e131cf4asm46449032f8f.28.2026.02.02.09.38.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 09:38:39 -0800 (PST)
-From: Stefan =?UTF-8?B?RMO2c2luZ2Vy?= <stefandoesinger@gmail.com>
-To: Linus Walleij <linusw@kernel.org>
-Cc: Jun Nie <jun.nie@linaro.org>, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
- Drew Fustini <fustini@kernel.org>
-Subject: Re: [RFC PATCH v2 1/7] ARM: zte: Add zx297520v3 platform support.
-Date: Mon, 02 Feb 2026 20:38:29 +0300
-Message-ID: <6235462.lOV4Wx5bFT@strix>
-In-Reply-To:
- <CAD++jLn6WCnqcoRwrGv3X3tqx=weBdobu-QJ-jdSxOSPVjN_eA@mail.gmail.com>
-References:
- <20260128203455.38569-1-stefandoesinger@gmail.com> <1848649.VLH7GnMWUR@strix>
- <CAD++jLn6WCnqcoRwrGv3X3tqx=weBdobu-QJ-jdSxOSPVjN_eA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YndZp4oS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7068AC116C6;
+	Tue,  3 Feb 2026 02:57:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770087458;
+	bh=k9cR3G+PJSfE37UeQ68RBhjrTADJObLs/02JvNcFNXA=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=YndZp4oSlflNB1o2wkRKHVU1ddKVbVpgqMXnGRFJqYZVaURxFHlhn3wOy7HfMzTp/
+	 GGkBBG+4ClVyUAnTmSQRnXeicXoAOAUMizl/mezeWINvfRC2+G1QRyFDgxMWK+w7bL
+	 c7V9E/eqjdrb7K7TVeVWljYdIRaLZOltDfSd51s+DX4cp8t4OTuhvGdGrAB8R9bznT
+	 9KgDyr7cSUgzjwIMmILI4Pj6mv/FXjG6X/G9KsL1UDIGRQEPFa1wFHCRsyVMWLW6lS
+	 Ytuv1GlLBwhkI805Gw3ymeqh5VrP8AGlBqBJ/hyFiZSUhs9ghZq/5U06zSkoN1atu6
+	 13wAXaYO36XBg==
+Message-ID: <bc4d75bd-3d72-42c3-93bc-e9659b36f1bb@kernel.org>
+Date: Mon, 2 Feb 2026 20:57:37 -0600
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5074665.31r3eYUQgx";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-
---nextPart5074665.31r3eYUQgx
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Stefan =?UTF-8?B?RMO2c2luZ2Vy?= <stefandoesinger@gmail.com>
-To: Linus Walleij <linusw@kernel.org>
-Date: Mon, 02 Feb 2026 20:38:29 +0300
-Message-ID: <6235462.lOV4Wx5bFT@strix>
-MIME-Version: 1.0
-
-Am Montag, 2. Februar 2026, 12:09:03 Ostafrikanische Zeit schrieben Sie:
-> Hi Stefan,
-
-> I don't have any other ideas than to proceed with a 32bit port.
-
-Yeah that's what I'll do.
-
-Thanks for the help to everyone, I think I have enough guidance to disappear 
-into my hacking cave for a while. I also received some feedback from people 
-with different versions of this hardware, and as expected some things are 
-working and some aren't. I'll probably spend the next few weeks or months 
-trying to understand those devices better and submit my patches once they are 
-ready for closer review. Since this is an evening hobby (and learning) project 
-it might take a while.
-
-Cheers,
-Stefan
-
---nextPart5074665.31r3eYUQgx
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQJPBAABCAA5FiEEQxb0tqoFWyeVMl1sPRO8yFRPGiIFAmmA4RUbFIAAAAAABAAO
-bWFudTIsMi41KzEuMTEsMiwyAAoJED0TvMhUTxoiLuUQAJovSVKo6Frb2L0eYfZz
-03MBUuJUxhKyn71lRHcK6teYCVDmZZDFRCwXMRcT3fYBJDOGJ/zaOwJDLv2w8ESM
-+wARokuTJbP/k8qXwdrmOUUxSHhMbBz9lJvdh/NRjeCHmHCHDHBYImVa7DVV57kX
-u6zrA0I8xfQSXBDHCclxw7/EPDRWIqiYBIzsgqmBmS/ATTMgoyxu6kIOR8ct22kZ
-rXamZq5xuurxqehTGANVVs/CgugpIR1WMVaUPSMDfEnikvDghScKrOKdLQZ2Oe5a
-htFXLUIHneqnCgiXWh5xriMgdN38rAKJ8VzmeoUCR/BlFANqmmZ90eTvjH1oFIfM
-qU4nciXrKMZomoexrNcDPzm8lqYa5EYcuhdF0mjtVzDhQUQzFIyW3UYDIL4caqTe
-ic92sLHT9HXScWnlF+3ZLOUOS0MEAzI/ub4pqezCSEL+r2mRUVIdnPCBvjUgeVuX
-TtGlfjpVQCcKJRcK9p5k8sA1q3GAS1Taq3g3SzdQAOjVavhGWBiFMxgrsJpbNV83
-VCbPfkArHwVxle/v7Xouxg61VFbs5axc9cBDpvSWLVntgeFgGnYFKhM+jY1Q8Pow
-p8pH3XACwwcVZO0/Bfob8yMj8n0l+MvfalbEG4ANTFot0Lf61cM24wx+oXf2aOVN
-bgabrZ2+eRfAeyyvSGFmLdfv
-=3Xo1
------END PGP SIGNATURE-----
-
---nextPart5074665.31r3eYUQgx--
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL v2] arm/arm64: dts: socfpga: updates for v6.20, version
+ 2
+Content-Language: en-US
+To: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
+References: <20260131174656.30403-1-dinguyen@kernel.org>
+From: Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20260131174656.30403-1-dinguyen@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
+On 1/31/26 11:46, Dinh Nguyen wrote:
+> Hi soc maintainers,
+> 
+> This is version 2 of the PR that had dt-bindings for dma and mtd patches[1]. This
+> version has those patches removed and I'm taking them through the respective
+> maintainer's tree.
+> 
+> Thanks,
+> Dinh
+> [1] https://lore.kernel.org/soc/7c6de5dc-8396-4793-a4fa-184bfe4096f3@kernel.org
+> 
+> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+> 
+>    Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.20_v2
+> 
+> for you to fetch changes up to 42a8d7d72185247c0bbada1d2c44bef743ee6a5d:
+> 
+>    dt-bindings: intel: Add Agilex eMMC support (2026-01-30 09:50:07 -0600)
+> 
+> ----------------------------------------------------------------
+> SoCFPGA DTS updates for v6.20, version 2
+> - dt-bindings updates:
+> 	- Add intel,socfpga-agilex5-socdk-modular for the Agilex5 mod board
+> 	- Add intel,socfpga-agilex-emmc for the Agilex eMMC daughter board
+> 	- Move entries in intel,socfpga.yaml into altera.yaml
+> 	- Add syscon as a fallback for sys-mgr
+> 
+> - Add dma-cohrerent property for Agilex5 NAND and DMA
+> - Add support for the Agilex5 modular board
+> - Add IOMMUS property for ethernet nodes for Agilex5
+> - Use lowercase hex for dts files
+> - Add #address-cells and #size-cells for sram
+> - Fix dtbs_check warning for fpga-region
+> - Move dma controller node for Agilex5 under simple-bus
+> - Add support for the Agilex eMMC daughter board
+> 
+> ----------------------------------------------------------------
+> Dinh Nguyen (4):
+>        dt-bindings: arm: altera: combine Intel's SoCFPGA into altera.yaml
+>        dt-bindings: altera: document syscon as fallback for sys-mgr
+>        ARM: dts: socfpga: add #address-cells and #size-cells for sram node
+>        ARM: dts: socfpga: fix dtbs_check warning for fpga-region
+> 
+> Khairul Anuar Romli (2):
+>        arm64: dts: socfpga: agilex5: Add dma-coherent property
+>        arm64: dts: intel: agilex5: Add simple-bus node on top of dma controller node
+> 
+> Krzysztof Kozlowski (1):
+>        arm64: dts: altera: Use lowercase hex
+> 
+> Nazim Amirul (1):
+>        arm64: dts: socfpga: agilex5: Add IOMMUS property for ethernet nodes
+> 
+> Ng Tze Yee (2):
+>        arm64: dts: socfpga: agilex: add emmc support
+>        dt-bindings: intel: Add Agilex eMMC support
+
+Please disregard this PR. I made a mistake with one of the patches. I 
+will send a follow-up v3.
+
+Sorry for the churn.
+
+Dinh
 
