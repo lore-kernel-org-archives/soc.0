@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5CC25A2A4
-	for <soc@lists.linux.dev>; Fri, 13 Feb 2026 15:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68450225775
+	for <soc@lists.linux.dev>; Fri, 13 Feb 2026 16:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770998139; cv=none; b=h92W0fDCzJ6vzctIIQjfBD6csTsTJQYtYalZxSbLKJV4wyWNWAko3i3nTz08mzxgcm3eGP3G0h3+q8D1hJaU8GhRO9uYN9mt6otJkvOyS2XXUkAbeFllXsjOxp/c3BcXEc1l1zHhqsMReDbcY+A3YVNdr1ghcONm9RG+KSqegIo=
+	t=1770998632; cv=none; b=iEvP+dIXNy0/91bLxthLdqBO08W+/GJfBQJt6IsCuha+pdu9gfWe78Ik6Nmz0YoZu7aywO4MOi2lCvtXYPvNmYnV+kPrVGYWQ3ufyBj9TlnYR2VTiq8mXV0YEeIulpZnX4VFHaDZbLhD9K2EDLHQlVBn/IBAvP/PFqHlV4RG7oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770998139; c=relaxed/simple;
-	bh=Q/nO6Sx2GTyW72r7kuDcUyFCJB9hVjRlIUBTwMG0eNA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
-	 In-Reply-To:Content-Type; b=VSspDpVRD03YIameeT4hdnxYzr3kfGlZU2r4uvNkyKW2vFFTB0mlYWEQbftYhuYyOufaQD73fyDyrrmd88MgHgh/rSN2Pm0aYoHGagZ101TDApZFSXFT43VY53Nt8KJ9afHN60ycMpvyzD7sKfMGqGDHj4qYEI7S1LA4gfznZho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GjWknvkz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770998632; c=relaxed/simple;
+	bh=odlojMx3qMyWKPR8XdiQyzidUO/YvlWWV3K7E4/PER8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=u/wOKMrQYotaYquYuxsh5KhEa9KKnGIQhyQcOWt5j3+K54upi4KqCfMxkLJfadMWUOGHgdZKw6ssHOToOnIrotFuPSqaTkCzEfBUmT/49lVfkey88GEBiz2P9UuCL2w3pfLtz4BnRGrKlN616liL/ENGX7LOihvXXUEpf3QGREI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hkncu3km; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GjWknvkz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08912C116C6;
-	Fri, 13 Feb 2026 15:55:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hkncu3km"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130E5C116C6;
+	Fri, 13 Feb 2026 16:03:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770998138;
-	bh=Q/nO6Sx2GTyW72r7kuDcUyFCJB9hVjRlIUBTwMG0eNA=;
-	h=Date:Subject:From:To:References:In-Reply-To:From;
-	b=GjWknvkz0I0BdQvk9VG581uUacmh+ElT0t+HiigwqTJ+1ZQaNKCrVuPjmYYi4g3AX
-	 94jYTye0vKdLUtbSJ4nvfxVrRjmraUDA9WyKS5pfRGcEF56gW11yJ3a0qEGF5tXOfj
-	 N9F1OKYC/sYFxMpVfqHmnMLNXvc5t74k0C66OzJG3NKLpXqGR7kZBWe/ExVuP+KC8H
-	 SMxI8K5DFL4YNfwKl4j9L7cGsGzFRYDsTP3GA7IdWUb9qOLnTn7aU78MUpdEZS9KMV
-	 vY7DlsmIQCILc4ub7r8oelbenHqtUwd9j0RtP6T39PBejeJt7/V5Et7uXsDvP7hgeD
-	 3ir2X7XSiadYA==
-Message-ID: <f26c16f9-b05b-48a8-9dba-57ee7f0710ee@kernel.org>
-Date: Fri, 13 Feb 2026 16:55:36 +0100
+	s=k20201202; t=1770998632;
+	bh=odlojMx3qMyWKPR8XdiQyzidUO/YvlWWV3K7E4/PER8=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=Hkncu3kmVvS/KGiXAdjcG1O8DDpjHExxFpRk9ltjjS7x18mjle44qavwfRkqf2oSF
+	 FiaSGz3y4UwOqF3w8LLHDF9arRV1StnrE7YAcREIaI7D5h7OjA3pydpD9T4xguWxH9
+	 39RT8szBZuBZjMNisS73rVgcxewqZTQP8JS/xhuOGffV499Axltrzq7w9Ffql9iILN
+	 pbg2fn4exYwl/oNqrI9D6uJ0Ry01McyFT1AhsyxeBeA34pxxI/zR5ktOHNAgjDTZED
+	 nMZKepz5jgufsBeA5zPyDu858XtHVrhZlJ03t8TBvIQTUmWZPpPxGBwoOUM3cbu5dP
+	 5qyq4lhYpLsZw==
+Message-ID: <dab3bfc2-adfc-44c8-a1f6-7f02acfe8cfc@kernel.org>
+Date: Fri, 13 Feb 2026 17:03:49 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,14 +35,12 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] arm/arm64: dts: socfpga: updates for v6.20
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [GIT PULL v3] arm/arm64: dts: socfpga: updates for v6.20, version
+ 3
 To: Dinh Nguyen <dinguyen@kernel.org>, linux-arm-kernel@lists.infradead.org,
  soc@lists.linux.dev
-References: <20260124200118.2789128-1-dinguyen@kernel.org>
- <2b81a667-adad-4960-bc48-f60fbf740620@kernel.org>
- <7c6de5dc-8396-4793-a4fa-184bfe4096f3@kernel.org>
- <2fe11d07-2b95-4c38-8cac-183fd88dabe9@kernel.org>
+References: <20260203033211.149355-1-dinguyen@kernel.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -87,35 +85,68 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <2fe11d07-2b95-4c38-8cac-183fd88dabe9@kernel.org>
+In-Reply-To: <20260203033211.149355-1-dinguyen@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 05/02/2026 09:49, Krzysztof Kozlowski wrote:
->>>
->>>
->>> These are not SoC patches, unless maintainers are unresponsive which I
->>> believe is not a case here, so they should not be going via this tree.
->>>
->>> None of this, merged on 15th Dec, was fed to linux-next, so you don't
->>> even know if this conflicts with maintainer trees thus pushing conflict
->>> discover unto soc tree.
->>>
->>> Not being in the next is already a problem but gets more serious when
->>> taking other subsystem patches.
->>>
->>> That's my comment, but Arnd was looking at these whether to merge.
->>>
->>
->> Apologies! I did not hear any feedback from those maintainers nor did I 
->> remind them, so that's my fault. Let me rework this PR and take those 
->> patches through the respective maintainer's tree.
+On 03/02/2026 04:32, Dinh Nguyen wrote:
+> SoCFPGA DTS updates for v6.20, version 3
+> - dt-bindings updates:
+> 	- Add intel,socfpga-agilex5-socdk-modular for the Agilex5 mod board
+> 	- Add intel,socfpga-agilex-emmc for the Agilex eMMC daughter board
+> 	- Move entries in intel,socfpga.yaml into altera.yaml
+> 	- Add syscon as a fallback for sys-mgr
 > 
+> - Add dma-cohrerent property for Agilex5 NAND and DMA
+> - Add support for the Agilex5 modular board
+> - Add IOMMUS property for ethernet nodes for Agilex5
+> - Use lowercase hex for dts files
+> - Add #address-cells and #size-cells for sram
+> - Fix dtbs_check warning for fpga-region
+> - Move dma controller node for Agilex5 under simple-bus
+> - Add support for the Agilex eMMC daughter board
 > 
-> The bigger problem is that none of these were in the next. You need to
-> solve this problem.
+> ----------------------------------------------------------------
+> Dinh Nguyen (4):
+>       dt-bindings: arm: altera: combine Intel's SoCFPGA into altera.yaml
+>       dt-bindings: altera: document syscon as fallback for sys-mgr
+>       ARM: dts: socfpga: add #address-cells and #size-cells for sram node
+>       ARM: dts: socfpga: fix dtbs_check warning for fpga-region
+> 
+> Khairul Anuar Romli (2):
+>       arm64: dts: socfpga: agilex5: Add dma-coherent property
+>       arm64: dts: intel: agilex5: Add simple-bus node on top of dma controller node
+> 
+> Krzysztof Kozlowski (1):
+>       arm64: dts: altera: Use lowercase hex
+> 
+> Nazim Amirul (1):
+>       arm64: dts: socfpga: agilex5: Add IOMMUS property for ethernet nodes
+> 
+> Ng Tze Yee (2):
+>       arm64: dts: socfpga: agilex: add emmc support
+>       dt-bindings: intel: Add Agilex eMMC support
+> 
+> Niravkumar L Rabara (2):
+>       dt-bindings: intel: Add Agilex5 SoCFPGA modular board
+>       arm64: dts: socfpga: agilex5: add support for modular board
+> 
 
-This still did not improve, at least as of yesterday's next.
+I checked few of here and none of them were in the next at the time you
+sent pull request, even though some were sent and applied long time ago.
+
+Like this one - applied on 24th Dec:
+https://lore.kernel.org/all/4bd0643c-b9d4-49fa-92a5-f8878f75d1e1@kernel.org/
+
+but never in the next.
+
+In case if something is not clear: there must be in the linux-next at
+shortest interval after you apply the patches, so the NEXT linux-next
+after you apply.
+
+I already commented about this on 28 Jan and then again on 5 Feb. I
+don't understand why I need to ask three times about this, but that's
+the last time I ask/remind.
 
 Best regards,
 Krzysztof
