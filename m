@@ -1,63 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADF8322A00;
-	Wed, 11 Feb 2026 05:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53C134D4E6
+	for <soc@lists.linux.dev>; Fri, 13 Feb 2026 12:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770787133; cv=none; b=SmrLsXzf/6rtR4fIS0gd6Oi3dX1banfyL2zvwiFLnro7uu1ytEmAqXdiiAopuacQR2o2mM1JEcdCqUKQROVRsY0DRUCmokl5bYatLgxeFFLxsKrOfwaCpnSSC+lUHbWBHwr1cTTTrdtQi4UGH6NEn2Y1/Cp70MzbtASOLgMXMSc=
+	t=1770985220; cv=none; b=SeNXu3QjFdyZbxVVjz3lHtEa8j5MeHVvUOlzbaKyjh4d+t2L7OI5sYjN4avdzYXtxavu57pLjbSrejwYBklqjdQXXvC4SrysEU70hCR48lIfPczab/9PgzSXjvY5lcq7S9rZCWIKYAdGGBLTgogo60eFn3xTyogzbxzFntPbxu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770787133; c=relaxed/simple;
-	bh=doziiPU4GaF+MOSaYoYSMDV/GysXWiDL2SF/9lPR9WE=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=tNEIwKGU5EPACAeMZPoyy2o4PDpzcEqGWSzK6GujfeeveYC9AdXm+5MXm/c7DomEltj4SQBq9tdMfBDJe1woDFKSbBOg6o8k8JvZ4gz0eqCHfrgnw1YqvsDUA8zNO+WwGY0Z10V6l88jNpLKATlWxhbzYCiTPHZLis6IkWra2ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A2aKME2P; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770985220; c=relaxed/simple;
+	bh=mRj5YS/dbQQfv6rmffWCjJcONP8Aig83NSsn4JexlVA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pc7Nxcp7HZpIZkXWNpwt9yM7qiKVE6rvK5O4CfICxQVZL+dUO64tXfuEH6curK8Co8e0eB5HRW8L+DUtcqRV28PEO1mKqkM2nBNkj3QFqt4NklUEkqutJrp73l4N8HFaZWY4C4PAIpvTDncJccYQxA6u2CYIJ/9zvoPCk4HTK40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m37q9ytr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A2aKME2P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76685C4CEF7;
-	Wed, 11 Feb 2026 05:18:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m37q9ytr"
+Received: by smtp.kernel.org (Postfix)
+	id 8788EC16AAE; Fri, 13 Feb 2026 12:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B2DC116C6;
+	Fri, 13 Feb 2026 12:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770787133;
-	bh=doziiPU4GaF+MOSaYoYSMDV/GysXWiDL2SF/9lPR9WE=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=A2aKME2PD90cq6OLA+1t09f7BE/PmS3BiLQVAMxw0/c5+acevVhu04Sjx9u+htrZJ
-	 4H7tBjq1pbf9/GI/orWZjfOdHF+O9fx17VgyzFCy5+XtyQYpwj1PLUFg1DVTfUJ4C3
-	 xLPbB9ChxP2fzp0w6mya9pA9arK0glkjjZaQXtgvRVUMKbseIECqSXT9pcNsGFAdTR
-	 I/uXN4Ff0ZffP2mojkCPR8SLPlUeOKUWXzPSbMt6I+CSBmWyPICZ5nQ0tTypzwaRD2
-	 4TudLWDptd7J+7bPZV9U35mxCUyZFqbztt/pp71nVbZ4WTMaV3U3fX+qzSC4h0EIfj
-	 LdshbKyUeNFig==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C2192380AA50;
-	Wed, 11 Feb 2026 05:18:49 +0000 (UTC)
-Subject: Re: [GIT PULL 4/4] soc: devicetree updates for 7.0
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <a9a6b840-5a4f-4d27-8b34-da82657e5c9d@app.fastmail.com>
-References: <a34ea40f-e0d3-459b-8233-9f87f6cd73e5@app.fastmail.com> <a9a6b840-5a4f-4d27-8b34-da82657e5c9d@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <a9a6b840-5a4f-4d27-8b34-da82657e5c9d@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-7.0
-X-PR-Tracked-Commit-Id: f51d34065de4f29fd237276a49cad06ac7356a55
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6589b3d76db2d6adbf8f2084c303fb24252a0dc6
-Message-Id: <177078712837.18664.14238075137899174735.pr-tracker-bot@kernel.org>
-Date: Wed, 11 Feb 2026 05:18:48 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+	s=k20201202; t=1770985220;
+	bh=mRj5YS/dbQQfv6rmffWCjJcONP8Aig83NSsn4JexlVA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=m37q9ytrj7hRF7yZqySYYxgA7Nnsk+Tg1N4OY6jYBbUcRVIpnjr3Awih6iGQLkY0r
+	 yf8ZPDs4x/r/ysMwkvc3euJr6sepFJRTpK7I4uMElqomSc3Cr5HIAMPl+yb8GLFBxb
+	 RA4tF2ke9mNQDbohTKPcwnPje5mMPQ28CsnX85MluwzMz1sSz+MXvXBXic4X26Mlhe
+	 hU2oYAAqpFMzfPUdcl+oEFg9rQD7QvXE7Wr08tvz0FyurDazx1hSW7WvnMqXTrEjey
+	 PvFarKGdV/2pCho4pZd0haQO9KsmOQoLKmcp5AOqVrd0LA+dXeP4cUbKUQLItN95u3
+	 s1KbahlkU0U8g==
+Date: Fri, 13 Feb 2026 12:20:16 +0000
+From: Conor Dooley <conor@kernel.org>
+To: soc@kernel.org
+Cc: conor@kernel.org, jonathan.cameron@huawei.com,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RISC-V soc fixes for v7.0-rc1
+Message-ID: <20260213-stole-economist-d5b0ac711d42@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1bHQZNbPCAIvSPgV"
+Content-Disposition: inline
 
-The pull request you sent on Tue, 10 Feb 2026 18:09:21 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-7.0
+--1bHQZNbPCAIvSPgV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6589b3d76db2d6adbf8f2084c303fb24252a0dc6
+Hey folks,
 
-Thank you!
+Nothing super urgent here, but figured I'd send before -rc1 in case
+there's a second new content PR this window and you can squeeze them
+in. Otherwise, of course this can just go into whatever regular fixes
+PR occurs later in the cycle.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Cheers,
+Conor.
+
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-soc-fixes-for-v7.0-rc1
+
+for you to fetch changes up to 0528a348b04b327a4611e29589beb4c9ae81304a:
+
+  cache: ax45mp: Fix device node reference leak in ax45mp_cache_init() (2026-02-06 19:54:40 +0000)
+
+----------------------------------------------------------------
+RISC-V soc fixes for v7.0-rc1
+
+drivers:
+Fix leaks in probe/init function teardown code in three drivers.
+
+microchip:
+Fix a warning introduced by a recent binding change, that made resets
+required on Polarfire SoC's CAN IP.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+----------------------------------------------------------------
+Conor Dooley (1):
+      riscv: dts: microchip: add can resets to mpfs
+
+Felix Gu (2):
+      cache: starfive: fix device node leak in starlink_cache_init()
+      cache: ax45mp: Fix device node reference leak in ax45mp_cache_init()
+
+Zilin Guan (1):
+      soc: microchip: mpfs: Fix memory leak in mpfs_sys_controller_probe()
+
+ arch/riscv/boot/dts/microchip/mpfs.dtsi     |  2 ++
+ drivers/cache/ax45mp_cache.c                |  4 ++--
+ drivers/cache/starfive_starlink_cache.c     |  4 ++--
+ drivers/soc/microchip/mpfs-sys-controller.c | 13 +++++++++----
+ 4 files changed, 15 insertions(+), 8 deletions(-)
+
+--1bHQZNbPCAIvSPgV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaY8XAAAKCRB4tDGHoIJi
+0ukwAP9U3k8dWwMY8LV6dorfZ+gwYjZ3OeZNfxsaz2YoLhGpTwD/Q0v3VCZ2EbNu
+Crx4v2DxOQw4BBRKUu8BC+DgwTuz2Aw=
+=MF+S
+-----END PGP SIGNATURE-----
+
+--1bHQZNbPCAIvSPgV--
