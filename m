@@ -1,33 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019A61CAA7D;
-	Fri, 20 Feb 2026 07:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB1D39A7EA
+	for <soc@lists.linux.dev>; Tue, 24 Feb 2026 12:52:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771574347; cv=none; b=TtdJ3xXN6ytfwuwBJ3dcgYLj5N3mUBcj2fX609qwfnnlAbkAsgR2ZpUu4sjieF8I+zRPFjFyFtpOxAvLmc/B/ZXjZqM1MhT7BNOaOG2T0lDCxJr+2DIxYq6tlXroTAoLC2IjgRuc3ASTRRiXOtfxsgQSd8psepJnXbJOAwRzoE4=
+	t=1771937530; cv=none; b=lYhR/su01Kxx1e8oW3T1NZzH6mJFy8Y62QavBA9M1+tgPz6TeQh+4QA2QhEqttbnfZoja7zXqbPVqU/x1FlQ62e3dtqGfJ8a6cWExFYnkPx56Pll4QZl0VYFWQUcpZCDtKw12DSz2Ka7JS1XBvGcqnqrn0+FXFnd3IC9rldO8Zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771574347; c=relaxed/simple;
-	bh=lDQ0b+sTAGg3y6l33+zv8ZajpmXBxuTOm2cp0/LRUkg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b3kKd9khZ46OuYzsZt0HjPMJUbD3kVRazLUTItBb703mY4fxN+38wySa/w+Yj1k264gAHKHXwsDj2XKJNGzhpQGdwnO7nHHtIpT5QIVrpmT374Nm76cf4FKyXNdYzZwiR4GcgPB58JF53YAK66VrGh3anmZWpbcISrEllACwoi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T43ialCd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771937530; c=relaxed/simple;
+	bh=g/7y2rXmvkKfH/G0KbA6QgJBJUX2lwbV+InkRJINX64=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=mjk+xsm/ojENlwPl6z34OQOFCuIQspb98gOArvfTWVUD01mEW8bj4kItsvFJoDHR5At1G51o7/1xtLbe80ZljQG2eHASWth5xAlts5jDiYgFpRZI9wVRARGS4G8lvLVL2Oqa9aFyNs1T6qF6Zn1FvaI5uLuvUoUWAQdcK234kRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GR501j1u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T43ialCd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5889CC2BCB1;
-	Fri, 20 Feb 2026 07:59:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GR501j1u"
+Received: by smtp.kernel.org (Postfix)
+	id B303FC116D0; Tue, 24 Feb 2026 12:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92774C19424;
+	Tue, 24 Feb 2026 12:52:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771574346;
-	bh=lDQ0b+sTAGg3y6l33+zv8ZajpmXBxuTOm2cp0/LRUkg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=T43ialCd3U7XhTtIhR1yazjBAEjf5VvK0XGC2u7WAqzvDnI74OC0VVDpIzY0YFyTV
-	 c+S7AO0BGL20RacTKwl723nHx6/Ps9cmXFb+OPQeJw1yUJK8pbykuNJskxvzABM5hl
-	 ZoDhO5cWvOJ0lWQrKyFIPPP1Q5158J0qRSWPkKjeNzbcvKuNiFDxb8/VVCv7Rz8JOL
-	 Rcxthowhc72X/gSjXtHWiFMnPy4TyMxgyD1vb7Yb1c3aTu7ZuDablUZkxhGmINjDz3
-	 gdsbJWtQrEr4wlKrB8xUVvzs2mB7kZaC/idc5YvaF53kLuYrGvx5QJHiS6OnGp8XZZ
-	 hdXk5fST/7Lgg==
-Message-ID: <ecb5dc62-bea3-478b-82cb-f74a6eb6f330@kernel.org>
-Date: Fri, 20 Feb 2026 08:59:02 +0100
+	s=k20201202; t=1771937529;
+	bh=g/7y2rXmvkKfH/G0KbA6QgJBJUX2lwbV+InkRJINX64=;
+	h=Date:From:Subject:To:Cc:From;
+	b=GR501j1uIbm2CH1slVFigjmebamF103Gqavrxso0wYoiaiVekel5E7pG/9sPYA+Ko
+	 P/5ZWHOkelKl4WVlaObzRxVMXgCZijFrTIvGcRFIIQ+7GRqUeFMjJNCfYzOrLuNnWw
+	 PH6mI6T5Wf07qHafdq1fKNXiVUAJ8rvGKvlDpJZK68L+hj4ly92XGYEobH351nuE0b
+	 a6AkbM+TtmaNHAE0m+TLdgWeagp/X0Tdl8JfLBoaMGWhoJqHdelrMJfmL811xWLnqp
+	 wBWIlBjTKSesVsBTWuQ9cUILgZ52KLjsJlT6MtOCgcJ/bbCG30CAkpVpMBHM+mnWb/
+	 +KhxSYb/bNFAA==
+Message-ID: <741919dd-743b-4f6f-b43a-8a107fd31754@kernel.org>
+Date: Tue, 24 Feb 2026 13:52:04 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,77 +36,49 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] MAINTAINERS: Update Axiado reviewer
-To: Karthikeyan Mitran <kmitran@axiado.com>, arnd@arndb.de
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, pbolisetty@axiado.com, twei@axiado.com,
- Harshit Shah <hshah@axiado.com>
-References: <20260206-axiado-ax3000-soc-maintainers-change-v1-1-a39ad47eb185@axiado.com>
- <20260220044550.4152148-1-kmitran@axiado.com>
- <20260220044550.4152148-3-kmitran@axiado.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260220044550.4152148-3-kmitran@axiado.com>
-Content-Type: text/plain; charset=UTF-8
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Subject: [GIT PULL] SOC FSL Fixes for 7.0
+To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Language: fr-FR
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 20/02/2026 05:45, Karthikeyan Mitran wrote:
-> From: Prasad Bolisetty <pbolisetty@axiado.com>
-> 
-> I am working for the Axiado SoC platform drivers. Adding myself
-> and adding email alias for reviewer
+Hi Arnd,
 
-1. Much more is happening in this patch.
+Please pull the following Freescale Soc Drivers fixes for 7.0
 
-2. First you send patches for review to the mailing lists. Only then,
-AFTER THE REVIEW, you send them to soc@ list.
+Thanks
+Christophe
 
-Please read maintainer soc profile.
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
-Best regards,
-Krzysztof
+   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/chleroy/linux 
+tags/soc_fsl-7.0-2
+
+for you to fetch changes up to 3f4e403304186d79fddace860360540fc3af97f9:
+
+   soc: fsl: cpm1: qmc: Fix error check for devm_ioremap_resource() in 
+qmc_qe_init_resources() (2026-02-23 14:49:27 +0100)
+
+----------------------------------------------------------------
+FSL SOC Fixes for 7.0
+
+- Fix a race condition in Freescale Queue and Buffer Manager.
+- Fix a trivial error verification in CPM1
+
+----------------------------------------------------------------
+Chen Ni (1):
+       soc: fsl: cpm1: qmc: Fix error check for devm_ioremap_resource() 
+in qmc_qe_init_resources()
+
+Richard Genoud (1):
+       soc: fsl: qbman: fix race condition in qman_destroy_fq
+
+  drivers/soc/fsl/qbman/qman.c | 24 ++++++++++++++++++++++--
+  drivers/soc/fsl/qe/qmc.c     |  4 ++--
+  2 files changed, 24 insertions(+), 4 deletions(-)
