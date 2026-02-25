@@ -1,84 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB1D39A7EA
-	for <soc@lists.linux.dev>; Tue, 24 Feb 2026 12:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631663921FD
+	for <soc@lists.linux.dev>; Wed, 25 Feb 2026 10:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771937530; cv=none; b=lYhR/su01Kxx1e8oW3T1NZzH6mJFy8Y62QavBA9M1+tgPz6TeQh+4QA2QhEqttbnfZoja7zXqbPVqU/x1FlQ62e3dtqGfJ8a6cWExFYnkPx56Pll4QZl0VYFWQUcpZCDtKw12DSz2Ka7JS1XBvGcqnqrn0+FXFnd3IC9rldO8Zk=
+	t=1772013994; cv=none; b=G9Fh8FTJZsjFawxej5Ps65resfOOtmvihR1c4z6QNP3LQR7DUr/xBe3VoutlERfFnnXmmHV3U4EuBFzKP17YhwfmYy4M9bN68WEPZxvwkZJ6JaLt3RDbKLC+qVPIjsOVk3z/dsCGbdbDQqOCqI2l6xLzI3OnP18x8mNbphCzF3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771937530; c=relaxed/simple;
-	bh=g/7y2rXmvkKfH/G0KbA6QgJBJUX2lwbV+InkRJINX64=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=mjk+xsm/ojENlwPl6z34OQOFCuIQspb98gOArvfTWVUD01mEW8bj4kItsvFJoDHR5At1G51o7/1xtLbe80ZljQG2eHASWth5xAlts5jDiYgFpRZI9wVRARGS4G8lvLVL2Oqa9aFyNs1T6qF6Zn1FvaI5uLuvUoUWAQdcK234kRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GR501j1u; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772013994; c=relaxed/simple;
+	bh=VZQwLOh/Olo2mgtTAwMGYE5FITYtWVXemnbXakJWlQ0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MLHuaN7aTtnuwOop350OH8MRf5OlNu/KqVoAIitg5kB5uVqc0MBmur/fHax3UTbaI5DdiBox8KbzjmJQ9YRVOlFwehqkj2hYF+jCUZcPLkR+y2Otx8iiLTAD4abreo6vpxHw0S/TMeYXHZ50U9mDrEfz5aG+E6GakCVNlTbWBMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=ciJ9FPX2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GR501j1u"
+	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="ciJ9FPX2"
 Received: by smtp.kernel.org (Postfix)
-	id B303FC116D0; Tue, 24 Feb 2026 12:52:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92774C19424;
-	Tue, 24 Feb 2026 12:52:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771937529;
-	bh=g/7y2rXmvkKfH/G0KbA6QgJBJUX2lwbV+InkRJINX64=;
-	h=Date:From:Subject:To:Cc:From;
-	b=GR501j1uIbm2CH1slVFigjmebamF103Gqavrxso0wYoiaiVekel5E7pG/9sPYA+Ko
-	 P/5ZWHOkelKl4WVlaObzRxVMXgCZijFrTIvGcRFIIQ+7GRqUeFMjJNCfYzOrLuNnWw
-	 PH6mI6T5Wf07qHafdq1fKNXiVUAJ8rvGKvlDpJZK68L+hj4ly92XGYEobH351nuE0b
-	 a6AkbM+TtmaNHAE0m+TLdgWeagp/X0Tdl8JfLBoaMGWhoJqHdelrMJfmL811xWLnqp
-	 wBWIlBjTKSesVsBTWuQ9cUILgZ52KLjsJlT6MtOCgcJ/bbCG30CAkpVpMBHM+mnWb/
-	 +KhxSYb/bNFAA==
-Message-ID: <741919dd-743b-4f6f-b43a-8a107fd31754@kernel.org>
-Date: Tue, 24 Feb 2026 13:52:04 +0100
+	id 21145C2BC86; Wed, 25 Feb 2026 10:06:34 +0000 (UTC)
+Received: from mail-m32121.qiye.163.com (mail-m32121.qiye.163.com [220.197.32.121])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id AA3B7C19422;
+	Wed, 25 Feb 2026 10:06:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA3B7C19422
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=thundersoft.com
+Received: from albert-OptiPlex-7080.. (unknown [112.65.126.162])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 34ea9e542;
+	Wed, 25 Feb 2026 18:06:18 +0800 (GMT+08:00)
+From: Albert Yang <yangzh0906@thundersoft.com>
+To: arnd@arndb.de,
+	soc@kernel.org,
+	krzk@kernel.org
+Cc: krzk+dt@kernel.org,
+	robh@kernel.org,
+	conor+dt@kernel.org,
+	gordon.ge@bst.ai,
+	bst-upstream@bstai.top,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	yangzh0906@thundersoft.com
+Subject: [PATCH v6 0/2] arm64: dts/defconfig: enable BST C1200 eMMC
+Date: Wed, 25 Feb 2026 18:06:11 +0800
+Message-ID: <20260225100613.3791261-1-yangzh0906@thundersoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Subject: [GIT PULL] SOC FSL Fixes for 7.0
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Language: fr-FR
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9c944384ee09cckunm3fc0fc0ab1afd4
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZGh5CVh5CTBlJSRoZHkhIGVYVFAkWGhdVEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlKSklVTU5VSklNVUpNSVlXWRYaDxIVHRRZQVlPS0hVSktJT09PSFVKS0
+	tVSkJLS1kG
+DKIM-Signature: a=rsa-sha256;
+	b=ciJ9FPX2EJtRPysbD09Eyvd0xqGHEqHj14sgdDsIHh/VurM3f1fEX6egq7jVOizDqZI6J1ROMRLSklHdeI07j4rILWZmqIBxK/9aiKI9IB2ot1gXkO1JDKEjKd2o1D4XU3VmFLynfR4jqX4JF4/lsdwJ/3CPyaleeHNAU/J1fFQ=; s=default; c=relaxed/relaxed; d=thundersoft.com; v=1;
+	bh=Qu97ogafe1ECz7tJtaU8qCPiTT7cxwgF9c/P5/qbe5U=;
+	h=date:mime-version:subject:message-id:from;
 
-Hi Arnd,
+This series adds DTS and defconfig support for the eMMC controller
+on Black Sesame Technologies C1200 SoC, split from the v5 MMC series [1].
 
-Please pull the following Freescale Soc Drivers fixes for 7.0
+The MMC driver patches (dt-bindings, sdhci bounce buffer, BST SDHCI driver,
+and MAINTAINERS update) have been applied to mmc-next by Ulf Hansson [2].
+These remaining DTS and defconfig patches are submitted to the SoC tree.
 
-Thanks
-Christophe
+Changes since v5:
+- Patch 2 (defconfig): fix CONFIG_MMC_SDHCI_BST ordering to match Kconfig
+  position (between CONFIG_MMC_SDHCI_TEGRA and CONFIG_MMC_SDHCI_F_SDH30),
+  as pointed out by Krzysztof Kozlowski. Confirmed via savedefconfig.
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+[1] https://lore.kernel.org/lkml/20260123095342.272505-1-yangzh0906@thundersoft.com/
+[2] https://lore.kernel.org/lkml/CAPDyKFrcXFAiYouOpjDx3NN-xWACU9jAzEfTU2m_-yvQ9SpC_A@mail.gmail.com/
 
-   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+Albert Yang (2):
+  arm64: dts: bst: enable eMMC controller in C1200 CDCU1.0 board
+  arm64: defconfig: enable BST SDHCI controller
 
-are available in the Git repository at:
+ .../dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts    | 19 +++++++++++++++++++
+ arch/arm64/boot/dts/bst/bstc1200.dtsi         | 18 ++++++++++++++++++
+ arch/arm64/configs/defconfig                  |  1 +
+ 3 files changed, 38 insertions(+)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/chleroy/linux 
-tags/soc_fsl-7.0-2
 
-for you to fetch changes up to 3f4e403304186d79fddace860360540fc3af97f9:
+base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
+-- 
+2.43.0
 
-   soc: fsl: cpm1: qmc: Fix error check for devm_ioremap_resource() in 
-qmc_qe_init_resources() (2026-02-23 14:49:27 +0100)
-
-----------------------------------------------------------------
-FSL SOC Fixes for 7.0
-
-- Fix a race condition in Freescale Queue and Buffer Manager.
-- Fix a trivial error verification in CPM1
-
-----------------------------------------------------------------
-Chen Ni (1):
-       soc: fsl: cpm1: qmc: Fix error check for devm_ioremap_resource() 
-in qmc_qe_init_resources()
-
-Richard Genoud (1):
-       soc: fsl: qbman: fix race condition in qman_destroy_fq
-
-  drivers/soc/fsl/qbman/qman.c | 24 ++++++++++++++++++++++--
-  drivers/soc/fsl/qe/qmc.c     |  4 ++--
-  2 files changed, 24 insertions(+), 4 deletions(-)
