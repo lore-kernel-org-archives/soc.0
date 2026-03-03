@@ -1,103 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2251C375AB8
-	for <soc@lists.linux.dev>; Tue,  3 Mar 2026 09:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E35738C2C2
+	for <soc@lists.linux.dev>; Tue,  3 Mar 2026 09:51:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772530915; cv=none; b=Bu64W78dcB60YCliH6+yjCRw7cnE/565Pjg0qA9mPPw/nkKy+TJzC9dX7kg9kQ+TVcZ5R6DEwM8iXMkWGqhrP5PK/T1lWCLqAMc4KyHOqXWHB+3bq6KkxqPNR3UyFjCwpxDs+H8alKQkMRbx3Omwr74j4v1UOQCmWG6AABAsFZc=
+	t=1772531517; cv=none; b=s4EWw5fa2+p1mu2xhaHp6yHKXdX5kRhWDruIC00fXeCOlW3Q2iGe2Sms6INLEv1kG9L7JF2NEvmUpEpK+sLNAfQVDjIHja2S5hPx/9H1cBSEZCXUdFOTZjMeX782QLU+E3bHI9aRqntb5QjqfMSkbBp3jHepHceA5yx93NNMbgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772530915; c=relaxed/simple;
-	bh=RBO3R16O0sDAGsLWLLL9G0J//Gc7/3lkaAYridPyYBA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DLftaz18ZLea3Cv2FOwbMzKl5kNHv99QxEFQDxa9YIVeeKfm/1mbKczT50khCi4Go7txAiLspA5QsYJ9GEjKtkizlPWRwj0ohT0F/fAwGNsFJ9bZ46vugLgQu5uSNONbYjSJWT2mItiJA7YSWCR9TWVCPWDuNOdbznX9YlSwasI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C43Bl11F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772531517; c=relaxed/simple;
+	bh=XalzPg49RXPyVEL2vPgmeWZTYucUbBJT1qg2QsW/c+8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R+otE4+G+7SMqhg/RpXIj0mne5Iv0sfy+p33Ep/TMnOZ6iZUxC4cKMoSnBwya1RV9LgEv8ZEdtglNYnfSZUGrfSD6oU/KXPoqWa1SUwKcBEnvvvmG62SFdV3rz3/Ive7eLZ2kIg4PW8KoMzG4LETfbP2zNoEV2mJT/I3Yi+hXSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GoH7joOC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C43Bl11F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GoH7joOC"
 Received: by smtp.kernel.org (Postfix)
-	id E850AC2BCAF; Tue,  3 Mar 2026 09:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B480DC116C6;
-	Tue,  3 Mar 2026 09:41:53 +0000 (UTC)
+	id 27F40C2BC87; Tue,  3 Mar 2026 09:51:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1293DC2BCAF
+	for <soc@kernel.org>; Tue,  3 Mar 2026 09:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772530914;
-	bh=RBO3R16O0sDAGsLWLLL9G0J//Gc7/3lkaAYridPyYBA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C43Bl11Fv1b2oDw9+Am9xI7rkvTPmRbLKcTPeNJ9A0M5b24nahBp/rBy8WyZA9X1Q
-	 tPRDlX7ExdkD+CSwgmv15TOy1Xo76IWXqokc91CRUoDEoBuk9CEGBBCD/n/eyXKPjC
-	 TrS4tYYKLMj0od/ZkolSjos+a3d1hAlOexoupCnH+VqDHtvTBLQUIBIezH01Qay/Yd
-	 dz2Fr6TJ9/VEUT81sDYfUzabH485KwBKH/1XkvatQVJClZijFqe+rZPE+jsRp4OTsh
-	 iVZfxqa30CMn64Kno5+nZ48g5PqPajyXRTtJW8QNRqfHebkbF4NO60JIbGqR9pxO+V
-	 SKyQJJXCVzvgQ==
-Date: Tue, 3 Mar 2026 09:41:51 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Linus Walleij <linusw@kernel.org>
-Cc: soc@kernel.org, jonathan.cameron@huawei.com,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] RISC-V soc fixes for v7.0-rc1
-Message-ID: <20260303-crazy-shrink-ef2c085c99c4@spud>
-References: <20260213-stole-economist-d5b0ac711d42@spud>
- <CAD++jLkDHh_WozDAot4c=1kYwy24sjH9-5_i8-Vmi6oXLp9wUw@mail.gmail.com>
+	s=k20201202; t=1772531517;
+	bh=XalzPg49RXPyVEL2vPgmeWZTYucUbBJT1qg2QsW/c+8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GoH7joOCySk24GfJYOEUgPCGWouI/vwOX6grONmyRS64hxQdQzh0TMlr+lAIn+aYW
+	 3LpI/dS59JdGCkA1BiirilgvB8YiXWl/h1i0NdoQX3MxJP80MqcsyJI+m40tbJ3/Aa
+	 +NJEki5b3tZY2ePxtOGVfN8RPgQTAeZMLvK0ngTv8Q2lHpeDBQygXWDUxj/KuySS1j
+	 DtFHdJXerxgLm7l03r4Vo4izSDB+kBMPTy/XKLVrw73ATHxK0Tzl7xox2YUqtzysef
+	 5O1vqn3Y2UaHh5wJeE0ydwSSy7YEpx7n7bYRABhPOpMc4cVGiL+F/Q6WFZajiyv+eP
+	 uqwjOwXWTsweA==
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-64ae2ce2fe1so4565695d50.1
+        for <soc@kernel.org>; Tue, 03 Mar 2026 01:51:57 -0800 (PST)
+X-Gm-Message-State: AOJu0YzoGc+NfsXojKiWlO3T7Gait+EaiuOCfQR105w/WeZ2fQ5I36a3
+	qxz6v4Dzr6i05JxOD43BWjA9bPv4zKs+qiMZOz7Uytc3HwMzQRqHvSLDTL/Cwf3PtMy/IAIjUpY
+	QpUkDl8H+B6CGCHc0iI4CZ+DXnCsUB6E=
+X-Received: by 2002:a05:690e:418b:b0:649:b535:46ab with SMTP id
+ 956f58d0204a3-64cc2224edbmr12429538d50.49.1772531516289; Tue, 03 Mar 2026
+ 01:51:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="WGuT6KOIaKQwVd6I"
-Content-Disposition: inline
-In-Reply-To: <CAD++jLkDHh_WozDAot4c=1kYwy24sjH9-5_i8-Vmi6oXLp9wUw@mail.gmail.com>
-
-
---WGuT6KOIaKQwVd6I
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20260213-stole-economist-d5b0ac711d42@spud> <CAD++jLkDHh_WozDAot4c=1kYwy24sjH9-5_i8-Vmi6oXLp9wUw@mail.gmail.com>
+ <20260303-crazy-shrink-ef2c085c99c4@spud>
+In-Reply-To: <20260303-crazy-shrink-ef2c085c99c4@spud>
+From: Linus Walleij <linusw@kernel.org>
+Date: Tue, 3 Mar 2026 10:51:44 +0100
+X-Gmail-Original-Message-ID: <CAD++jLnsT7B5FO1ThYS+NgdZh5E=ALnE-V3k-TiGw3JEYv8dwg@mail.gmail.com>
+X-Gm-Features: AaiRm50_zRIl3DDZ8TPCxh3-gQQ3XT2N6HjNPMgWYnCBTJLoWzssuKdnbu3f9Bs
+Message-ID: <CAD++jLnsT7B5FO1ThYS+NgdZh5E=ALnE-V3k-TiGw3JEYv8dwg@mail.gmail.com>
+Subject: Re: [GIT PULL] RISC-V soc fixes for v7.0-rc1
+To: Conor Dooley <conor@kernel.org>
+Cc: soc@kernel.org, jonathan.cameron@huawei.com, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 03, 2026 at 09:15:14AM +0100, Linus Walleij wrote:
-> Hi Conor,
->=20
-> On Fri, Feb 13, 2026 at 1:20=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
->=20
-> > Conor Dooley (1):
-> >       riscv: dts: microchip: add can resets to mpfs
-> >
-> > Felix Gu (2):
-> >       cache: starfive: fix device node leak in starlink_cache_init()
-> >       cache: ax45mp: Fix device node reference leak in ax45mp_cache_ini=
-t()
-> >
-> > Zilin Guan (1):
-> >       soc: microchip: mpfs: Fix memory leak in mpfs_sys_controller_prob=
-e()
->=20
-> You have DTS fixes mixed up with cache/SoC fixes, this is
-> a bit unorthodox, is there some hard dependency or can you send
-> the DTS fix separately?
+On Tue, Mar 3, 2026 at 10:41=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
+te:
 
-There's no dependency of course, I'll split it out.
-Ordinarily I would always split them, but I'd swear I was told at one
-point that since fixes were on one branch in the soc tree that it was
-okay for me to do the same. In this case I did it on one branch to be
-less work to get onto a potential fixes PR that went out before -rc1.
+> There's no dependency of course, I'll split it out.
+> Ordinarily I would always split them, but I'd swear I was told at one
+> point that since fixes were on one branch in the soc tree that it was
+> okay for me to do the same. In this case I did it on one branch to be
+> less work to get onto a potential fixes PR that went out before -rc1.
 
->=20
-> I guess we could also split it off manually ... I'm just a bit insecure
-> with that.
->=20
-> Yours,
-> Linus Walleij
+You might be right about that, I'm learning myself.
 
---WGuT6KOIaKQwVd6I
-Content-Type: application/pgp-signature; name="signature.asc"
+Perhaps you know more about this process than me,
+despite me being one of the SoC maintainers now :P
 
------BEGIN PGP SIGNATURE-----
+Let's see what the others say.
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaaasyAAKCRB4tDGHoIJi
-0rKhAQDsHwQDCU1cb9YoTXmjbsk/nlwiWAA9XdCAYXBWmaWzZwEA51dZkTd6WlVD
-8SX3PkhsEhUTNejz2QU5fbOBNq83lA8=
-=ypO9
------END PGP SIGNATURE-----
-
---WGuT6KOIaKQwVd6I--
+Yours,
+Linus Walleij
