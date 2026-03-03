@@ -1,128 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02BD324B23
-	for <soc@lists.linux.dev>; Sun,  1 Mar 2026 13:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE0D30B514
+	for <soc@lists.linux.dev>; Tue,  3 Mar 2026 07:07:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772370728; cv=none; b=dZRrIaN2anLXurPz1v050433eVlMWXfP8W7y20ZDdPFNoaD9ahchB0mQu7yelULY9w78AWPRZo0rf+NrabAn2jg6un8Wb0vHrn73Egj6k/YFzwlPrx5bXglJYJN0TJRIG9uCryt2UUl4tQtj2ak0CKnAHT5zynvpxTBd0qRwDQc=
+	t=1772521626; cv=none; b=J+Pd0rxngYk5r/PpwsnO1pXFbFUPmnfIkgJlSgpK4R7Ksp+uCWHRni50vuZ20B77gql1fAIA5d9U2ovRizmOD7Ia1dagFdhmV8BR1RmLbbiosQBpSM++k4Ha+oVe9Mlh1u6yW+IoJOS8VbIXea4WD7RHyhpZZWZ16+KD7/LgbmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772370728; c=relaxed/simple;
-	bh=QxpYqEriI/iMqXBW19wHPzJAIDNmx2/LIrcdUt374O8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BbObrk4qELR5XgqxPXoh3WRWhyH9VCz7Sfg1M5zkJoDmgf0tR+cG23bsWo70VRgRrvO7JArmVw1NR5/eMU9yQP0eNt+CyJ/xoLzq5OA2jrTe6bT9s66B2S9n2rUn9FOxI8EbWqP03poP4pmv0nGz0+M6r4Bu7Bcd3MtFqTL2gNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MXKMp+tR; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MXKMp+tR"
+	s=arc-20240116; t=1772521626; c=relaxed/simple;
+	bh=eVNij862v85tR6MBDOa2teZvuozAxO+pCCEnMOL6Oz0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uYsBWU7Ymwx40PZVpCfw+avcGq7QgAIrwVjlS6gJRWV5VTGqQc8qWo8vZu/RZhhiCZcF8+JQQGxEKTjZX7wW+SAqXr0fgo+aPwEK6GSw2NMStnPA4LtOT+1Rp+iGFdnEw64EMhOZZlh0y/Bd/lShGO6dr2mRyNo79KXfWsiu5bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 660BFC19422; Sun,  1 Mar 2026 13:12:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D03C116C6;
-	Sun,  1 Mar 2026 13:12:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772370728;
-	bh=QxpYqEriI/iMqXBW19wHPzJAIDNmx2/LIrcdUt374O8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MXKMp+tRWJ4JwvJkO3xT4co71sY4DEl7Zwy/x+7C3qhl8nrZfi/EiuRY6ShNCagEE
-	 yGzQxYT1tiwBo95UoqMv389S+HzEnC8YHPJkMaCleASZKhx84N5nuwBp8ZUGpp49Tn
-	 te4uhTuj2CdXW77UwxuZuQVvB/6PtarL6d4OvlVBDNIBQCPqPfd9A6ujSLxdLch1PH
-	 pUBLzUU6OoNvSJqdL+cLt/mu3kfSQNbDx9eJgLJYwE93dfKz0tISwltiGruj33C9wI
-	 8ZWbJYCg27pLTSyLyuSnofuluEcmVfXc8j3sA+lC+DFq0PgNL74l/9kPA5gvvmHJDP
-	 XGadXlDcKd0Mw==
-Message-ID: <12058c14-67c7-4b43-bbbc-ef0ccb813e61@kernel.org>
-Date: Sun, 1 Mar 2026 14:12:03 +0100
+	id 9AF70C2BC87; Tue,  3 Mar 2026 07:07:05 +0000 (UTC)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.kernel.org (Postfix) with ESMTP id 7DD6FC116C6;
+	Tue,  3 Mar 2026 07:07:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7DD6FC116C6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [223.64.68.227])
+	by gateway (Coremail) with SMTP id _____8AxgsCSiKZp8_AWAA--.10050S3;
+	Tue, 03 Mar 2026 15:06:58 +0800 (CST)
+Received: from kernelserver (unknown [223.64.68.227])
+	by front1 (Coremail) with SMTP id qMiowJCxWeCRiKZp14VNAA--.16604S2;
+	Tue, 03 Mar 2026 15:06:58 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	loongarch@lists.linux.dev,
+	soc@kernel.org,
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH] soc: loongson: loongson2_guts: Use of_root instead of own reference
+Date: Tue,  3 Mar 2026 15:06:42 +0800
+Message-ID: <20260303070642.2785715-1-zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/2] arm64: dts/defconfig: enable BST C1200 eMMC
-To: Albert Yang <yangzh0906@thundersoft.com>, arnd@arndb.de, soc@kernel.org
-Cc: krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org,
- gordon.ge@bst.ai, bst-upstream@bstai.top,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260225100613.3791261-1-yangzh0906@thundersoft.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260225100613.3791261-1-yangzh0906@thundersoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxWeCRiKZp14VNAA--.16604S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/1tbiAQEPCGmmeEEBzQAAs9
+X-Coremail-Antispam: 1Uk129KBj93XoW7trWkWr4DtrWDGr1rCw47Jrc_yoW8WF13pF
+	sakay5KF4Utrs7u3s8Aa48Wa4Yk3y0ga9xJF4xJws7WF98A3W7Wry3JF1Yvr4fZFy8C34U
+	XFyvg3yUCa4UWrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8czVUUUUUU==
 
-On 25/02/2026 11:06, Albert Yang wrote:
-> This series adds DTS and defconfig support for the eMMC controller
-> on Black Sesame Technologies C1200 SoC, split from the v5 MMC series [1].
-> 
-> The MMC driver patches (dt-bindings, sdhci bounce buffer, BST SDHCI driver,
-> and MAINTAINERS update) have been applied to mmc-next by Ulf Hansson [2].
-> These remaining DTS and defconfig patches are submitted to the SoC tree.
-> 
-> Changes since v5:
-> - Patch 2 (defconfig): fix CONFIG_MMC_SDHCI_BST ordering to match Kconfig
->   position (between CONFIG_MMC_SDHCI_TEGRA and CONFIG_MMC_SDHCI_F_SDH30),
->   as pointed out by Krzysztof Kozlowski. Confirmed via savedefconfig.
-> 
+There is already a global of_root reference. Use that instead of getting
+one on our own. We don't need to care about the reference count either
+this way.
 
-Please do not send patches to soc@ for review. It is explicitly
-documented - read:
+Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+---
+ drivers/soc/loongson/loongson2_guts.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-"The main SoC maintainers can be reached via the alias soc@kernel.org
-only in following cases:
+diff --git a/drivers/soc/loongson/loongson2_guts.c b/drivers/soc/loongson/loongson2_guts.c
+index 16913c3ef65c..d32ec0748b12 100644
+--- a/drivers/soc/loongson/loongson2_guts.c
++++ b/drivers/soc/loongson/loongson2_guts.c
+@@ -92,7 +92,7 @@ static u32 loongson2_guts_get_svr(void)
+ 
+ static int loongson2_guts_probe(struct platform_device *pdev)
+ {
+-	struct device_node *root, *np = pdev->dev.of_node;
++	struct device_node *np = pdev->dev.of_node;
+ 	struct device *dev = &pdev->dev;
+ 	const struct loongson2_soc_die_attr *soc_die;
+ 	const char *machine;
+@@ -109,11 +109,8 @@ static int loongson2_guts_probe(struct platform_device *pdev)
+ 	if (IS_ERR(guts->regs))
+ 		return PTR_ERR(guts->regs);
+ 
+-	/* Register soc device */
+-	root = of_find_node_by_path("/");
+-	if (of_property_read_string(root, "model", &machine))
+-		of_property_read_string_index(root, "compatible", 0, &machine);
+-	of_node_put(root);
++	if (of_property_read_string(of_root, "model", &machine))
++		of_property_read_string_index(of_root, "compatible", 0, &machine);
+ 	if (machine) {
+ 		soc_dev_attr.machine = devm_kstrdup(dev, machine, GFP_KERNEL);
+ 		if (!soc_dev_attr.machine)
 
-1. There are no platform-specific maintainers."
-
-So are you claiming now that BST is unmaintained? Because if so, we will
-mark it for removal.
-
-First you send patches for review to the mailing lists. Only then,
-AFTER THE REVIEW, you send them to soc@ list.
-
-Please read maintainer soc profile.
-
-Best regards,
-Krzysztof
+base-commit: 862ad12fb14cdad9c647100fbc16f7d8171b4470
+-- 
+2.52.0
 
