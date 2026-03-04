@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C3C272E56
-	for <soc@lists.linux.dev>; Wed,  4 Mar 2026 21:00:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28DA272E56
+	for <soc@lists.linux.dev>; Wed,  4 Mar 2026 21:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772658044; cv=none; b=Kbmdt2rwmwJoWpxt5Kdiw/otbt3WnoG0b1yVQ39Hx78eIBotV2oXUYCcn8EZ9nVBzlIiOaCj03CPOHqKoF1U8glObvsISOmfHn1fHsuVvGG0H2JD44QMlVQ+tC6CcSaD98ACVwvChXxp5dEP/LONkk1Hpx7T0EXyuSjalxfRQrA=
+	t=1772658046; cv=none; b=otdYmNu+kcN54brvfECqFLIkcCd1ie2sLZcdq9hPQ1CZ9bYbmQv0ZJMwIiT4CmHDGlbU8ub7V0wnLrtXWX63MhkuKRgoVZbwK8acSC60VKNLPERHkOI86uvME0tNOdnbyFsrHBVlDKW+oNh4KEz4g1y2VM40U/5al3zY8UTxn+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772658044; c=relaxed/simple;
-	bh=VBoTlKzHTUPEqkzGieuCpEfFY4dyXzhQmEImFjsu3Qo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=oHfiuJzOqZLVX1WvrXJDQnl6Ob/N8ui9raeihc86uLhnOlmhk+0ALXg0gwx/k1mdWgnm7uwCVgBU4DDi0uMuBHLHMGBjsIkJuQvVEZno43C/XRUqmNP2hAA78Cfvvk045fpXvkiR+7+x7EHVvj3w3FO8u+fgqTr0yNVFh7tDFfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SbY7FKsY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772658046; c=relaxed/simple;
+	bh=y7CK5POFAEgC1HlE5I3vfD1n1LKBeH31zVK6x2hgUx0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PlXXEGnLtbtajTPaIE1CNFPR9Sywxzqc2bpj5a2BeXkhy2cw+HluZXxggOQLZPx0ccWh0W4BJ7CwESMWw2Q4BJTUMKr6vY1RYxdOCKE7sL0I68hz7aNglzgnK/JxitlBI7bvEGFj9Azj7xgl+YNNEQLbMKgNu5u9zi1Y7YXd8q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P5g/kF0O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SbY7FKsY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P5g/kF0O"
 Received: by smtp.kernel.org (Postfix)
-	id 727A5C2BC86; Wed,  4 Mar 2026 21:00:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C57DC19425
-	for <soc@kernel.org>; Wed,  4 Mar 2026 21:00:44 +0000 (UTC)
+	id 9FC05C2BC86; Wed,  4 Mar 2026 21:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E2EC4CEF7;
+	Wed,  4 Mar 2026 21:00:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772658044;
-	bh=VBoTlKzHTUPEqkzGieuCpEfFY4dyXzhQmEImFjsu3Qo=;
-	h=Subject:From:Date:To:Cc:From;
-	b=SbY7FKsYujEtA2bEbsfWBAyrJSnTtVMYx3xL3vpuPmLZNtzKQrnV7wKpyC98vfLbE
-	 GZ8Qwh0saBl40wWKGGvWQANV1ezplSLDeIEgcLEPhC6yuObAeWm+sSOcXLREBHabZA
-	 9nD9t+EnysBfsZU6C0N3rlFCQdsBQFs+VL4tBklcQbXkFDyhowl12aO9LALfFzPDqV
-	 6yLPqH+oA5PHACrIM4GQqAz+YcjuVuP/ZMtgt+M6B6uYlzlFTGonPEmpvzbPCz95L9
-	 pvj4RETtjzRSCI+ohuvI7hNXOd604FIxxQkWzTBIrtpHmLv6A7dAWXKj+fsUmwTUVW
-	 4YaEnJy5quk8g==
+	s=k20201202; t=1772658045;
+	bh=y7CK5POFAEgC1HlE5I3vfD1n1LKBeH31zVK6x2hgUx0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=P5g/kF0Oy3pb2cSClUhr1ckwWnjbCNLqu7naJsyoGiDwg7FGavmfR2TPrs8bkGid8
+	 akireIkj8sUWyaQlBNg71eBPq1zZZztWuXmiYZsTthfYuVvTxWjlj0uev49Af4MGBO
+	 8I9DCJq69stpI/oriScThdyzLqwX7GFjZoGBzDZDT/HBZ8Tv81HKNV4KSgqyu4HW4k
+	 HgZowJgvxHVEj4rcVZl/+prp3LJKErhuoxnSG5a0ZAnHYKw2JwdYfLxpfFANcdJAfY
+	 DqYPPsn6CCcLa/i/BEgZRCQyE0SMmLa6sae4RuQQVJtnW89y44dm/yRJwx2WgWG/Ob
+	 LOjr00vJfsdKg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 05BB53808200;
-	Wed,  4 Mar 2026 21:00:46 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FF1E3808200;
+	Wed,  4 Mar 2026 21:00:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,28 +39,36 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] SOC FSL Fixes for 7.0
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <177265804449.2385795.15327161406737797096.git-patchwork-summary@kernel.org>
-Date: Wed, 04 Mar 2026 21:00:44 +0000
-To: soc@kernel.org
+ <177265804605.2385795.12510176579358930958.git-patchwork-notify@kernel.org>
+Date: Wed, 04 Mar 2026 21:00:46 +0000
+References: <741919dd-743b-4f6f-b43a-8a107fd31754@kernel.org>
+In-Reply-To: <741919dd-743b-4f6f-b43a-8a107fd31754@kernel.org>
+To: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] SOC FSL Fixes for 7.0
-  Submitter: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1057232
-  Lore link: https://lore.kernel.org/r/741919dd-743b-4f6f-b43a-8a107fd31754@kernel.org
+On Tue, 24 Feb 2026 13:52:04 +0100 you wrote:
+> Hi Arnd,
+> 
+> Please pull the following Freescale Soc Drivers fixes for 7.0
+> 
+> Thanks
+> Christophe
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] SOC FSL Fixes for 7.0
+    https://git.kernel.org/soc/soc/c/4bc732b00a9f
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
