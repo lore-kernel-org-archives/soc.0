@@ -1,141 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A177D3264CB
-	for <soc@lists.linux.dev>; Thu,  5 Mar 2026 13:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4637346773;
+	Thu,  5 Mar 2026 22:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772717190; cv=none; b=SQVkPyF25eKYuXCaO04iS6Csehch3QMTb+cHX3rbkC0qRmsxw07pA3yBP4Y7QeiH6NOwqRhA0PxQ77zG55D9AJwNtbeBKETjmtpKOYN4m87FWfqlbv7DBhwuYSt4mwUtVL3ZNlmayIrxsE0mFdoQWSvU0E/1/t22MfbywtrTqvw=
+	t=1772749525; cv=none; b=hWxfDFjIbd+rIFsCbBRf/bjl790d9cy7tCucZialRI7hKamgWUn4shlQetcxj/9B3GEwTvgeDIWQfTmi9z9zDOHlKzsJwvkBwGXUD5FBBnboGfAVDVbE+tqJoGZUBnQau/FCCaPFa84S3LoznA+TIQ7vQVqtVinK+4rP/wsNMKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772717190; c=relaxed/simple;
-	bh=30AjMuR4/+j5+hXlsjLpuVmKb1uH8ow2npoh0OFD+bY=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=pJu9dsJuwfpvs52QUnCIe1HMWUb8j3UYnEXV9T0kBI2JSW/Vkaijbaod343qYrOqZmkov/lvXS/hVhkiykJHWfWD87ChDMI2LmOXKmnhbwi6OV4xXhNOf1MdtwT9A6rMM9z4PijvoodIChE0V/gJfotYvI7uvytAJniBHxPfM28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=PDUcRcjY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DmLjiiKi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772749525; c=relaxed/simple;
+	bh=M1XQ6GPIPdpR5MeXci4ZnCAHWBSdef3r642MG2Lpw68=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=TUxSBA5dCY2mdNtw1mjzUWx2Q9Gr3IggxfWzk2AQRXGRzuAtwiZWwVORFuaaoIgzhakH2wvdPBH5ubsgp6TmnIcSIWDAEKulkCySNP/LXYR4CQBeCr1Iipyp37H2zljJtIfRG/OSPBZooXqzj4kgEj/3GhCizu86H63qhwUwPcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TY2ObdWe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="PDUcRcjY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DmLjiiKi"
-Received: by smtp.kernel.org (Postfix)
-	id 46547C19423; Thu,  5 Mar 2026 13:26:30 +0000 (UTC)
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0809FC116C6;
-	Thu,  5 Mar 2026 13:26:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0809FC116C6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 1B790EC0592;
-	Thu,  5 Mar 2026 08:26:27 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Thu, 05 Mar 2026 08:26:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1772717187;
-	 x=1772803587; bh=s2HoU5gYG3iEDH/ODUYOKG32ATI9XP9B3HnmAGJenf0=; b=
-	PDUcRcjYXR93wC8/uQeCk1KB8exCL89IoOlAQH+kEJriPV78CmUdJTspLFcKHxoc
-	6SpG8vrlNF7BuYo1CF8+5QvDgGRIMt5QJzZ+bhybdpSQGzdzc89EgniRSf+LYAWv
-	hxKQdhIDCxjY2xUrmlDbT9gQQIlG7Zzmxt19J8m4ExVeYEIG0lMLM8MS13tsfF3l
-	9PhaupHOUKIpCHQ4cugBAyeciQXGrtm4xVvmLUoqSimyE3nGcthrjbhBbnPxLEEh
-	NBw5r9NwcZ/rFXlXbcK4Pb9NiUx7QI+tZid+qwBPMoqnS2rSTCkMlkXcfW3MuGhG
-	NGO5YK6edWqfL4bhuwNmMg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1772717187; x=
-	1772803587; bh=s2HoU5gYG3iEDH/ODUYOKG32ATI9XP9B3HnmAGJenf0=; b=D
-	mLjiiKiFvr4EdJ9XWHoDkOr7iwYnGNZJ55TXmn456qLZ6aUv+69tz8AZ/rJ+jxZs
-	gAXtdp/g/NRQegs76sJSl6GoJL3a0v9HhYU5daRA6QWG4oKN9fczLhRko2hXSbwI
-	gsokhBlc2lEyopW17EPQeSydY+S5la6hhCYxRvro0vOvK84AIrJfswTeUECkK/ty
-	3MRbYq7buLHuddMzLmPfYZOH4Q3+EvkwJWQtFeSKsgLPnBDtk6T0AZyyf/5OnZTd
-	pnOjcAgCrLdipcbYqZxqTXXfZAcwLsTyw61ax0VdLOVm+PuzE+SkqqIG9Z5vU8aL
-	b9RkEmuxSxv5gBK7Waong==
-X-ME-Sender: <xms:goSpaR_0YarC5ff8sEoHT2AsLZESe-nT5h9Bt7qy68_w_Yu-_0Vj6A>
-    <xme:goSpaQifK1cuxRkPneFCIog8w8cUuu7EipBud1Jli0GAg4B0gY6nt4c_AXGZVayq1
-    JmT4Q-RX3QtSwqfE21mwyghsjAH1oVvYXvdkWhvCQd2PhCe_Fpvatg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvieeihedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepiedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepjhhonhgrthhhrghnrdgtrghmvghrohhnsehhuhgrfigvihdrtghomh
-    dprhgtphhtthhopegtohhnohhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhn
-    uhhsfieskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtoheplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggr
-    ugdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrgh
-X-ME-Proxy: <xmx:goSpaXf9_YyBQjiyxvl-WyL6wctH298uyLTRW86Nl2tTKDkdT0gu8A>
-    <xmx:goSpaYL0waQAEajZCvC2pVV8xuInMEVNjerQ5yNZNpTzfHZxaYLa3Q>
-    <xmx:goSpafhdIprAGdTXzGXXUsEy7zAKQW4_F3oOg98aMpPJD0EQB7G35Q>
-    <xmx:goSpaeTWfDCX9rfRognCCjoIzTxUQnJp3m-FEnwmO0xL4Cr22Z51Hw>
-    <xmx:g4SpaZ-r-vXBSWOvWoec3FvAt-UG0uomBSnGHnpA4BOF25VRtoVZMpNI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 7BFCD700065; Thu,  5 Mar 2026 08:26:26 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TY2ObdWe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F70C116C6;
+	Thu,  5 Mar 2026 22:25:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772749524;
+	bh=M1XQ6GPIPdpR5MeXci4ZnCAHWBSdef3r642MG2Lpw68=;
+	h=From:Date:Subject:To:Cc:From;
+	b=TY2ObdWeT6qjYHC0ZFyPdxCgF0HtRJeIndNGH1ffg5Lh/468BnncTSiAKpf3ovbnr
+	 o8q3JJ73aJBYMfJ+AF5wnRSnBX365ZAt/xLv89E1AaLQRGw/CP7i81i8tZwVtAphEw
+	 p9DJlrEF8MWpmC8EJSK5t/cp2adGEf6k8HIV5x4UyZzsmC+eMVS3tFGIFq7QuoIkvP
+	 nWTjhGcGtC1bvgaUu06uYWwYED8xL/dY/lPd5PBbFpkY0HpJsbJPMfOKecS6J887Dz
+	 Mp7OJZESw6+vDOZRwHVQLHw1a56F/jG31PsNEjltDwkvK8tJVDW10nabe6ytmv4DCD
+	 cRz4nuttAbOKA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 05 Mar 2026 15:25:18 -0700
+Subject: [PATCH] ARM: multi_v7_defconfig: Drop duplicate CONFIG_TI_PRUSS=m
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AkBvdCgULreF
-Date: Thu, 05 Mar 2026 14:26:03 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Walleij" <linusw@kernel.org>, "Conor Dooley" <conor@kernel.org>
-Cc: soc@kernel.org, "Jonathan Cameron" <jonathan.cameron@huawei.com>,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-Id: <e6297b8b-17c9-47a0-a481-ca064313f6b0@app.fastmail.com>
-In-Reply-To: 
- <CAD++jLnsT7B5FO1ThYS+NgdZh5E=ALnE-V3k-TiGw3JEYv8dwg@mail.gmail.com>
-References: <20260213-stole-economist-d5b0ac711d42@spud>
- <CAD++jLkDHh_WozDAot4c=1kYwy24sjH9-5_i8-Vmi6oXLp9wUw@mail.gmail.com>
- <20260303-crazy-shrink-ef2c085c99c4@spud>
- <CAD++jLnsT7B5FO1ThYS+NgdZh5E=ALnE-V3k-TiGw3JEYv8dwg@mail.gmail.com>
-Subject: Re: [GIT PULL] RISC-V soc fixes for v7.0-rc1
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260305-arm-defconfig-drop-duplicate-ti-pruss-v1-1-2839e3b42a8b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNQQ7CIBBA0as0s3YSqNaFVzEugBnqGKWEgcak6
+ d1FXb7N/xsoF2GFy7BB4VVUltRhDwOEu0szo1A3jGY8m6OZ0JUXEsewpCgzUlkyUstPCa4yVsF
+ cmipGezKBJnLeW+itXDjK+/e53v7W5h8c6jcO+/4B3UyVvYkAAAA=
+X-Change-ID: 20260305-arm-defconfig-drop-duplicate-ti-pruss-f140cd5dabb1
+To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Linus Walleij <linusw@kernel.org>
+Cc: Drew Fustini <fustini@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, soc@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1164; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=M1XQ6GPIPdpR5MeXci4ZnCAHWBSdef3r642MG2Lpw68=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJmrmC4df/xMxTD6wfHp0tHpO7SD1mZtm7sj/NZbnwubr
+ 6/OMK9j7ShlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATmTydkeHrkR63lFYbSUGv
+ YN/bx56oKXucv3aui/N4SvViZd41aY0M/2wFp85ZZRW/X+nVXB57U4Mj03malFPNOD8uS9k52Ss
+ 4jxcA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, Mar 3, 2026, at 10:51, Linus Walleij wrote:
-> On Tue, Mar 3, 2026 at 10:41=E2=80=AFAM Conor Dooley <conor@kernel.org=
-> wrote:
->
->> There's no dependency of course, I'll split it out.
->> Ordinarily I would always split them, but I'd swear I was told at one
->> point that since fixes were on one branch in the soc tree that it was
->> okay for me to do the same. In this case I did it on one branch to be
->> less work to get onto a potential fixes PR that went out before -rc1.
->
-> You might be right about that, I'm learning myself.
->
-> Perhaps you know more about this process than me,
-> despite me being one of the SoC maintainers now :P
->
-> Let's see what the others say.
+Commit ee1ab82ee032 ("ARM: defconfig: move entries") added a duplicate
+instance of CONFIG_TI_PRUSS=m, causing a Kconfig warning:
 
-The pull requests for -next have to be split because they go
-to torvalds as separate branches, but for bug fixes, I never
-made this a rule so far.
+  arch/arm/configs/multi_v7_defconfig:1152:warning: override: reassigning to symbol TI_PRUSS
 
-I just merged Conor's PR before I saw this thread, and decided
-not to undo the merge because it's fine for the current way we
-send the upstream PRs.
+Drop the first instance, as the second instance added by the
+aforementioned change is where savedefconfig puts it.
 
-We could consider changing the process though and having two
-separate fixes branches for DT and non-DT changes, as I tend
-to have to write two descriptions for one tag anyway, and
-it would be more natural to send the fixes separately.
+Fixes: ee1ab82ee032 ("ARM: defconfig: move entries")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/arm/configs/multi_v7_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-There are already some maintainers that send split fixes PRs
-anyway, but we'd have to make sure to communicate it to everyone
-before we make it a general requirement.
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index f75d75cf91c8..70d05f74049e 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -279,7 +279,6 @@ CONFIG_TI_CPSW_SWITCHDEV=y
+ CONFIG_TI_CPTS=y
+ CONFIG_TI_KEYSTONE_NETCP=y
+ CONFIG_TI_KEYSTONE_NETCP_ETHSS=y
+-CONFIG_TI_PRUSS=m
+ CONFIG_TI_PRUETH=m
+ CONFIG_XILINX_EMACLITE=y
+ CONFIG_SFP=m
 
-      Arnd
+---
+base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
+change-id: 20260305-arm-defconfig-drop-duplicate-ti-pruss-f140cd5dabb1
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
