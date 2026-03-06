@@ -1,94 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4637346773;
-	Thu,  5 Mar 2026 22:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2F136B059
+	for <soc@lists.linux.dev>; Fri,  6 Mar 2026 15:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772749525; cv=none; b=hWxfDFjIbd+rIFsCbBRf/bjl790d9cy7tCucZialRI7hKamgWUn4shlQetcxj/9B3GEwTvgeDIWQfTmi9z9zDOHlKzsJwvkBwGXUD5FBBnboGfAVDVbE+tqJoGZUBnQau/FCCaPFa84S3LoznA+TIQ7vQVqtVinK+4rP/wsNMKE=
+	t=1772811102; cv=none; b=T9SfFbAVDbriIAR3n7U/R3UrhhFjKj4b4aVM5fMvsZDNwGKSZy1JOSVgbgNflOOXzfA0jzkJApUv4uXjCLqnqSS/LpgDshF20CIXWRVOLeSnQFU15SrUq74tGUEgdq798UKzomwirsgKLzi59bm/SzVtovfMpb5rq4z7PIvYtOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772749525; c=relaxed/simple;
-	bh=M1XQ6GPIPdpR5MeXci4ZnCAHWBSdef3r642MG2Lpw68=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=TUxSBA5dCY2mdNtw1mjzUWx2Q9Gr3IggxfWzk2AQRXGRzuAtwiZWwVORFuaaoIgzhakH2wvdPBH5ubsgp6TmnIcSIWDAEKulkCySNP/LXYR4CQBeCr1Iipyp37H2zljJtIfRG/OSPBZooXqzj4kgEj/3GhCizu86H63qhwUwPcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TY2ObdWe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772811102; c=relaxed/simple;
+	bh=K54Feh0f9P2/C8XDds58ZJ6/9dZ6sc9mvXKVseax/4M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KLaAwKc0lAMmPICzNHhX4qJcoEZIzVQ3mxkNXqmlg1/My3wLmzUNsEgUOj+cF/qKvcVRKFkZY/Q911nmnz7yKi8Yqk6zPI3qMnB53E0JbpZ41W8mEXqmBVp42LQsAtnSYLanbnMavoHSxs8aeQAZi04Vk21Ha0ri3UB1J6pBIIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=FghcCxJG; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TY2ObdWe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F70C116C6;
-	Thu,  5 Mar 2026 22:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772749524;
-	bh=M1XQ6GPIPdpR5MeXci4ZnCAHWBSdef3r642MG2Lpw68=;
-	h=From:Date:Subject:To:Cc:From;
-	b=TY2ObdWeT6qjYHC0ZFyPdxCgF0HtRJeIndNGH1ffg5Lh/468BnncTSiAKpf3ovbnr
-	 o8q3JJ73aJBYMfJ+AF5wnRSnBX365ZAt/xLv89E1AaLQRGw/CP7i81i8tZwVtAphEw
-	 p9DJlrEF8MWpmC8EJSK5t/cp2adGEf6k8HIV5x4UyZzsmC+eMVS3tFGIFq7QuoIkvP
-	 nWTjhGcGtC1bvgaUu06uYWwYED8xL/dY/lPd5PBbFpkY0HpJsbJPMfOKecS6J887Dz
-	 Mp7OJZESw6+vDOZRwHVQLHw1a56F/jG31PsNEjltDwkvK8tJVDW10nabe6ytmv4DCD
-	 cRz4nuttAbOKA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 05 Mar 2026 15:25:18 -0700
-Subject: [PATCH] ARM: multi_v7_defconfig: Drop duplicate CONFIG_TI_PRUSS=m
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="FghcCxJG"
+Received: from localhost.localdomain (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 5446622A3A;
+	Fri,  6 Mar 2026 16:31:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1772811097;
+	bh=oKbch+KhkvyosRD0j6QhDe+o5sMa38/e30u48THoCP0=; h=From:To:Subject;
+	b=FghcCxJGAh5ajqHSqacpSD8/LuALJYMy/9FSxbx0TWrnNAc8fKCSijOKI3AEl9xVJ
+	 ZrJ3m21h4IRuJfxaCXxMvDg0nFtbC83Dr8rtc6N3AoXEj5c8nJ8ydC+GKwsXkbfPBA
+	 PRZnaQmiegimKbQOPOEcyeJdL9+4KZYTWKaDE9VcHaHdI9Qu71ZWkneNB9UhLJZhZa
+	 53HWptRrKGhlWOXggdUpR1fBqiSSGAAMmMPliwGnBoooqm9uR1HNF7ZGHwwBSRzmPq
+	 u/z6/EKPRm9U+NgrHe4pJXkNqM1l1sczQl65KfVhuOmnusKQqlG3fsCFfnHlelk8+t
+	 kRSTeVoOjsmcg==
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Drew Fustini <fustini@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>
+Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	soc@lists.linux.dev
+Subject: [PATCH] arm64: defconfig: Enable configurations for Toradex Aquila AM69
+Date: Fri,  6 Mar 2026 16:31:17 +0100
+Message-ID: <20260306153130.102972-1-francesco@dolcini.it>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260305-arm-defconfig-drop-duplicate-ti-pruss-v1-1-2839e3b42a8b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNQQ7CIBBA0as0s3YSqNaFVzEugBnqGKWEgcak6
- d1FXb7N/xsoF2GFy7BB4VVUltRhDwOEu0szo1A3jGY8m6OZ0JUXEsewpCgzUlkyUstPCa4yVsF
- cmipGezKBJnLeW+itXDjK+/e53v7W5h8c6jcO+/4B3UyVvYkAAAA=
-X-Change-ID: 20260305-arm-defconfig-drop-duplicate-ti-pruss-f140cd5dabb1
-To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Linus Walleij <linusw@kernel.org>
-Cc: Drew Fustini <fustini@kernel.org>, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, soc@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1164; i=nathan@kernel.org;
- h=from:subject:message-id; bh=M1XQ6GPIPdpR5MeXci4ZnCAHWBSdef3r642MG2Lpw68=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJmrmC4df/xMxTD6wfHp0tHpO7SD1mZtm7sj/NZbnwubr
- 6/OMK9j7ShlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATmTydkeHrkR63lFYbSUGv
- YN/bx56oKXucv3aui/N4SvViZd41aY0M/2wFp85ZZRW/X+nVXB57U4Mj03malFPNOD8uS9k52Ss
- 4jxcA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: 8bit
 
-Commit ee1ab82ee032 ("ARM: defconfig: move entries") added a duplicate
-instance of CONFIG_TI_PRUSS=m, causing a Kconfig warning:
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-  arch/arm/configs/multi_v7_defconfig:1152:warning: override: reassigning to symbol TI_PRUSS
+Enable the configurations needed for Aquila AM69 SoM and compatible
+carrier boards.
 
-Drop the first instance, as the second instance added by the
-aforementioned change is where savedefconfig puts it.
+ - CONFIG_SENSORS_AMC6821, needed for the fan controller on the clover
+   and dev carrier board (as module).
+ - CONFIG_POWER_RESET_GPIO and CONFIG_POWER_RESET_GPIO_RESTART needed
+   for poweroff and restart functionalities (as built-in, it's not
+   possible to set them as 'm').
 
-Fixes: ee1ab82ee032 ("ARM: defconfig: move entries")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
- arch/arm/configs/multi_v7_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/configs/defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index f75d75cf91c8..70d05f74049e 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -279,7 +279,6 @@ CONFIG_TI_CPSW_SWITCHDEV=y
- CONFIG_TI_CPTS=y
- CONFIG_TI_KEYSTONE_NETCP=y
- CONFIG_TI_KEYSTONE_NETCP_ETHSS=y
--CONFIG_TI_PRUSS=m
- CONFIG_TI_PRUETH=m
- CONFIG_XILINX_EMACLITE=y
- CONFIG_SFP=m
-
----
-base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
-change-id: 20260305-arm-defconfig-drop-duplicate-ti-pruss-f140cd5dabb1
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 4ed70ab7ee85..af679604d9ed 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -729,6 +729,8 @@ CONFIG_GPIO_MACSMC=m
+ CONFIG_GPIO_MAX77620=y
+ CONFIG_GPIO_SL28CPLD=m
+ CONFIG_GPIO_AGGREGATOR=m
++CONFIG_POWER_RESET_GPIO=y
++CONFIG_POWER_RESET_GPIO_RESTART=y
+ CONFIG_POWER_RESET_MACSMC=m
+ CONFIG_POWER_RESET_MSM=y
+ CONFIG_POWER_RESET_QCOM_PON=m
+@@ -757,6 +759,7 @@ CONFIG_SENSORS_PWM_FAN=m
+ CONFIG_SENSORS_RASPBERRYPI_HWMON=m
+ CONFIG_SENSORS_SA67MCU=m
+ CONFIG_SENSORS_SL28CPLD=m
++CONFIG_SENSORS_AMC6821=m
+ CONFIG_SENSORS_INA2XX=m
+ CONFIG_SENSORS_INA3221=m
+ CONFIG_SENSORS_TMP102=m
+-- 
+2.47.3
 
