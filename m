@@ -1,33 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3633322B8F;
-	Sat,  7 Mar 2026 10:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C72A344DAA
+	for <soc@lists.linux.dev>; Sat,  7 Mar 2026 10:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772878360; cv=none; b=S1siHNrsPzPcYhVIK4EGkFqsuHnJibVjBq7VgsQ5ZHtPEnK8j/reE5MiEAFPM+Lf1nl/nDfgyqZrXZ57VjOwiC40RnOn/GCS5EN0rH/tmKe0RJMgDC04WA7hXMh2OZeqaiuFx3/tFehjWc81yWl+1pExW8xFOuwRtTk7M/UDgeU=
+	t=1772878490; cv=none; b=stgL/xX9wkca+PfpvInDwet1YJwspdY70Z1f5R53SdI/QSyGGsga/JwxBfGYjNbLB1HX39/cIhzgvZYQkkXgF1n4JtlHRYLfao5OLMwU4ibaiCJHu5JgFQQqm8JRBYTvm5IVOAIrJQeTaux6cRqYmE5yL3Do4oG5i7lhJ2k0XSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772878360; c=relaxed/simple;
-	bh=eUQNtOaM5l9D1b93eFj3kCCwDlN+rPF8wPvNCP8OYEI=;
+	s=arc-20240116; t=1772878490; c=relaxed/simple;
+	bh=pYo+aFs7KqnzLIbe4dqJCgpWEmLZ/GbYhfq0AZyFlSI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oh+y6FGqg4rc7gr88/PR7CPbPKL4HCM8eb6hOcRpLzMXX9YukOcV2j0LkmBDinaLBge9kvugvrjhPNMUQ6y++/fMOZea46tper5UpmzYEZi5Mjz4/rIOPLt+rc47whMD9BsPbS5w70LYFhQUrxcGoqbctL409VccbZq8Pd4EwEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsJjsHvN; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=FjxXzTpGM7vaE/bnxMJjTd3v0oHEof4IgLbVxCQbLYMCewF0GlsdwUWXiLf+b2gtL6hgxNuhNoMdtex3IQKHyobjO0XErV9upqhGxu7LvJBaTH3MbC+W+g2yybFhKD1naZUpbICNUf83TjtPBI8V/IdNOxn3qvDSdb96G9K7TpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YapQ9uqP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsJjsHvN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0556C19422;
-	Sat,  7 Mar 2026 10:12:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YapQ9uqP"
+Received: by smtp.kernel.org (Postfix)
+	id 00AC3C2BC9E; Sat,  7 Mar 2026 10:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7579C19422;
+	Sat,  7 Mar 2026 10:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772878359;
-	bh=eUQNtOaM5l9D1b93eFj3kCCwDlN+rPF8wPvNCP8OYEI=;
+	s=k20201202; t=1772878489;
+	bh=pYo+aFs7KqnzLIbe4dqJCgpWEmLZ/GbYhfq0AZyFlSI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JsJjsHvNIxJlJovCxfa/JfpOBXm5YliJKMRtYfE4vxyMXdIjQ4u2szIIb0N+oD6I2
-	 LAUCn6zVjPi5uaqOZqFK7nNN3U+JtY6CZXbO+HvU6hfXqo+bwBTrGJMWKorfG1sUxb
-	 nnlxl9HAZwIMQBBdKXgxKEx81jDFn9QQZZRhUEY0ja0OqSsDAhf2yuSQnuvLzUyxx0
-	 IqPYCsxvciFKRrrH7YFKg/uQK1kFA6RuXSJzL75VSOSAPCZgmTpCHOoN2mIwPh77av
-	 Vg5XkntWeXOLQE5x0NZoaBIdMYlOzRJvMQlQQ6kiURY477oRUeIToFtviASLV/LQFa
-	 jmNDvs1dlBRqQ==
-Message-ID: <4d016247-7060-48cc-ac86-1103df6a9b08@kernel.org>
-Date: Sat, 7 Mar 2026 11:12:34 +0100
+	b=YapQ9uqPbcqlS3iTOB7dykcs77uVb400zODjXj3aSFZFm1Jb35XpKB0gMv3nNgMi3
+	 hMyAQGn43V8jY9iZ6qYlsBmdloDcfrtvMcgCTTLITnl6NcScLmmEz9ikhHjwMrC7Fb
+	 0xpxmM8e565VDh7JjfjqHTegzIrTzQrJeMR6bZyYTW2LQgYtCn8Jno/l4e5MOEHmrQ
+	 n5K+sBrh0EVUwC2lH9d9dRtu5aFfThbCbDIeC0u5xWPdU/RZ70nnGeRDN/uIdcKH0f
+	 lV3y/sVxXsWD/lJTgIlZ3Va0MrhU58WiZDOQHGsktwx4gIkYvDpoEe3xL2JUX1+DCl
+	 NZVF91/dWu+6Q==
+Message-ID: <f0baa480-cd6d-42ad-bdb9-92cb793d774e@kernel.org>
+Date: Sat, 7 Mar 2026 11:14:46 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,17 +37,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] arm64: defconfig: Enable configurations for Toradex
- Aquila AM69
-To: Francesco Dolcini <francesco@dolcini.it>, Arnd Bergmann <arnd@arndb.de>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>,
- Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
- Tero Kristo <kristo@kernel.org>
-Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev
-References: <20260306153130.102972-1-francesco@dolcini.it>
+Subject: Re: [PATCH] soc: loongson: loongson2_guts: Use of_root instead of own
+ reference
+To: Binbin Zhou <zhoubinbin@loongson.cn>, Binbin Zhou
+ <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>,
+ Yinbo Zhu <zhuyinbo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+ loongarch@lists.linux.dev, soc@kernel.org
+References: <20260303070642.2785715-1-zhoubinbin@loongson.cn>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,27 +90,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260306153130.102972-1-francesco@dolcini.it>
+In-Reply-To: <20260303070642.2785715-1-zhoubinbin@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 06/03/2026 16:31, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+On 03/03/2026 08:06, Binbin Zhou wrote:
+> There is already a global of_root reference. Use that instead of getting
+> one on our own. We don't need to care about the reference count either
+> this way.
 > 
-> Enable the configurations needed for Aquila AM69 SoM and compatible
-> carrier boards.
-> 
->  - CONFIG_SENSORS_AMC6821, needed for the fan controller on the clover
->    and dev carrier board (as module).
->  - CONFIG_POWER_RESET_GPIO and CONFIG_POWER_RESET_GPIO_RESTART needed
->    for poweroff and restart functionalities (as built-in, it's not
->    possible to set them as 'm').
-> 
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+
 
 Please follow standard defconfig submission rules, so as explained in
-maintainer soc profile - not sending directly to soc@. How did you even
-get that email address?
+maintainer soc profile document: you are not supposed to send patches
+soc@ for review.
 
 Best regards,
 Krzysztof
+
