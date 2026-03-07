@@ -1,94 +1,117 @@
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2F136B059
-	for <soc@lists.linux.dev>; Fri,  6 Mar 2026 15:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3633322B8F;
+	Sat,  7 Mar 2026 10:12:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772811102; cv=none; b=T9SfFbAVDbriIAR3n7U/R3UrhhFjKj4b4aVM5fMvsZDNwGKSZy1JOSVgbgNflOOXzfA0jzkJApUv4uXjCLqnqSS/LpgDshF20CIXWRVOLeSnQFU15SrUq74tGUEgdq798UKzomwirsgKLzi59bm/SzVtovfMpb5rq4z7PIvYtOk=
+	t=1772878360; cv=none; b=S1siHNrsPzPcYhVIK4EGkFqsuHnJibVjBq7VgsQ5ZHtPEnK8j/reE5MiEAFPM+Lf1nl/nDfgyqZrXZ57VjOwiC40RnOn/GCS5EN0rH/tmKe0RJMgDC04WA7hXMh2OZeqaiuFx3/tFehjWc81yWl+1pExW8xFOuwRtTk7M/UDgeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772811102; c=relaxed/simple;
-	bh=K54Feh0f9P2/C8XDds58ZJ6/9dZ6sc9mvXKVseax/4M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KLaAwKc0lAMmPICzNHhX4qJcoEZIzVQ3mxkNXqmlg1/My3wLmzUNsEgUOj+cF/qKvcVRKFkZY/Q911nmnz7yKi8Yqk6zPI3qMnB53E0JbpZ41W8mEXqmBVp42LQsAtnSYLanbnMavoHSxs8aeQAZi04Vk21Ha0ri3UB1J6pBIIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=FghcCxJG; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+	s=arc-20240116; t=1772878360; c=relaxed/simple;
+	bh=eUQNtOaM5l9D1b93eFj3kCCwDlN+rPF8wPvNCP8OYEI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oh+y6FGqg4rc7gr88/PR7CPbPKL4HCM8eb6hOcRpLzMXX9YukOcV2j0LkmBDinaLBge9kvugvrjhPNMUQ6y++/fMOZea46tper5UpmzYEZi5Mjz4/rIOPLt+rc47whMD9BsPbS5w70LYFhQUrxcGoqbctL409VccbZq8Pd4EwEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsJjsHvN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="FghcCxJG"
-Received: from localhost.localdomain (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 5446622A3A;
-	Fri,  6 Mar 2026 16:31:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1772811097;
-	bh=oKbch+KhkvyosRD0j6QhDe+o5sMa38/e30u48THoCP0=; h=From:To:Subject;
-	b=FghcCxJGAh5ajqHSqacpSD8/LuALJYMy/9FSxbx0TWrnNAc8fKCSijOKI3AEl9xVJ
-	 ZrJ3m21h4IRuJfxaCXxMvDg0nFtbC83Dr8rtc6N3AoXEj5c8nJ8ydC+GKwsXkbfPBA
-	 PRZnaQmiegimKbQOPOEcyeJdL9+4KZYTWKaDE9VcHaHdI9Qu71ZWkneNB9UhLJZhZa
-	 53HWptRrKGhlWOXggdUpR1fBqiSSGAAMmMPliwGnBoooqm9uR1HNF7ZGHwwBSRzmPq
-	 u/z6/EKPRm9U+NgrHe4pJXkNqM1l1sczQl65KfVhuOmnusKQqlG3fsCFfnHlelk8+t
-	 kRSTeVoOjsmcg==
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Drew Fustini <fustini@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>
-Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev
-Subject: [PATCH] arm64: defconfig: Enable configurations for Toradex Aquila AM69
-Date: Fri,  6 Mar 2026 16:31:17 +0100
-Message-ID: <20260306153130.102972-1-francesco@dolcini.it>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsJjsHvN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0556C19422;
+	Sat,  7 Mar 2026 10:12:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772878359;
+	bh=eUQNtOaM5l9D1b93eFj3kCCwDlN+rPF8wPvNCP8OYEI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JsJjsHvNIxJlJovCxfa/JfpOBXm5YliJKMRtYfE4vxyMXdIjQ4u2szIIb0N+oD6I2
+	 LAUCn6zVjPi5uaqOZqFK7nNN3U+JtY6CZXbO+HvU6hfXqo+bwBTrGJMWKorfG1sUxb
+	 nnlxl9HAZwIMQBBdKXgxKEx81jDFn9QQZZRhUEY0ja0OqSsDAhf2yuSQnuvLzUyxx0
+	 IqPYCsxvciFKRrrH7YFKg/uQK1kFA6RuXSJzL75VSOSAPCZgmTpCHOoN2mIwPh77av
+	 Vg5XkntWeXOLQE5x0NZoaBIdMYlOzRJvMQlQQ6kiURY477oRUeIToFtviASLV/LQFa
+	 jmNDvs1dlBRqQ==
+Message-ID: <4d016247-7060-48cc-ac86-1103df6a9b08@kernel.org>
+Date: Sat, 7 Mar 2026 11:12:34 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] arm64: defconfig: Enable configurations for Toradex
+ Aquila AM69
+To: Francesco Dolcini <francesco@dolcini.it>, Arnd Bergmann <arnd@arndb.de>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>,
+ Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Tero Kristo <kristo@kernel.org>
+Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ soc@lists.linux.dev
+References: <20260306153130.102972-1-francesco@dolcini.it>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260306153130.102972-1-francesco@dolcini.it>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Francesco Dolcini <francesco.dolcini@toradex.com>
+On 06/03/2026 16:31, Francesco Dolcini wrote:
+> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> 
+> Enable the configurations needed for Aquila AM69 SoM and compatible
+> carrier boards.
+> 
+>  - CONFIG_SENSORS_AMC6821, needed for the fan controller on the clover
+>    and dev carrier board (as module).
+>  - CONFIG_POWER_RESET_GPIO and CONFIG_POWER_RESET_GPIO_RESTART needed
+>    for poweroff and restart functionalities (as built-in, it's not
+>    possible to set them as 'm').
+> 
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Enable the configurations needed for Aquila AM69 SoM and compatible
-carrier boards.
+Please follow standard defconfig submission rules, so as explained in
+maintainer soc profile - not sending directly to soc@. How did you even
+get that email address?
 
- - CONFIG_SENSORS_AMC6821, needed for the fan controller on the clover
-   and dev carrier board (as module).
- - CONFIG_POWER_RESET_GPIO and CONFIG_POWER_RESET_GPIO_RESTART needed
-   for poweroff and restart functionalities (as built-in, it's not
-   possible to set them as 'm').
-
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 4ed70ab7ee85..af679604d9ed 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -729,6 +729,8 @@ CONFIG_GPIO_MACSMC=m
- CONFIG_GPIO_MAX77620=y
- CONFIG_GPIO_SL28CPLD=m
- CONFIG_GPIO_AGGREGATOR=m
-+CONFIG_POWER_RESET_GPIO=y
-+CONFIG_POWER_RESET_GPIO_RESTART=y
- CONFIG_POWER_RESET_MACSMC=m
- CONFIG_POWER_RESET_MSM=y
- CONFIG_POWER_RESET_QCOM_PON=m
-@@ -757,6 +759,7 @@ CONFIG_SENSORS_PWM_FAN=m
- CONFIG_SENSORS_RASPBERRYPI_HWMON=m
- CONFIG_SENSORS_SA67MCU=m
- CONFIG_SENSORS_SL28CPLD=m
-+CONFIG_SENSORS_AMC6821=m
- CONFIG_SENSORS_INA2XX=m
- CONFIG_SENSORS_INA3221=m
- CONFIG_SENSORS_TMP102=m
--- 
-2.47.3
-
+Best regards,
+Krzysztof
