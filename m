@@ -1,71 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDC7242925;
-	Sat, 14 Mar 2026 11:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913F134214F
+	for <soc@lists.linux.dev>; Sat, 14 Mar 2026 18:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773488127; cv=none; b=sftM6Db8GzLeKgyWBff3pJH9G8kAwzgbprYvcDZ0GMVKEbzJMLK1aUg7KCYHhnAMaldbEZ8FW77I5busSgBn1Ebjwe55U2z4YBTs/I8ZwaPU2l61QahdSrq+mzZqE8y2ss5jYt4FG/IY0Jx/5eOIE0uCLpl5VMeQ1UC5ad37D4k=
+	t=1773513685; cv=none; b=S5qfI/p9jgXqW3NviwXwuBqOHpXhlXUjWh7au5wpNsqZ+dIJZNupG7g5Nq+j1t8u1KwpQRJRYVgJcNlUnFIgWRgYUeqwBCGlFRwDVogAfDY+Lxy0Qpw4aomThcY6RFmBcKJ9/htrHoEx+gm67bZpIthFlt+9s8UkvigL6W2RDPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773488127; c=relaxed/simple;
-	bh=GdeoLiMA8CXFq4sEcs5A46LTC+bCki0pRPFIvoquzJw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Vo0ISqVOqcpjPkJ7tYlF+wTwNHAAsocRTZnTrTBac6/ne3ihhj04vV8ENRrZzfyILlnxhd2+EgHeGb0oiZ6W3uiOcPkpRcoaq1rUcLsvqtiMsZC/v4NP23D+9Flz/crfze7hk4mi7VA35AKn50V68GDDzgv5diydj3eCOLUDges=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MKIrvyyH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773513685; c=relaxed/simple;
+	bh=NowV5ZKBVly0NLSWd/qqNK9XA4e3fOMD/l2d/YOuZxE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FVNoKkDWiU1aMv67N44iqyJQr3HdnurhyryvQqV60ue83cqdF47HC4m4ikvrOegg+xlJtDXSofgdVtMZHCiamPII3VSGOOSlodqy56gU/TOT6yHdEu5pVJ9r6rT+CPZkT1ZgLSv8m/NVQIcpPKvSsZivIOyliWMNa8jubC23Jxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=rqpLy3bf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MKIrvyyH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F65C116C6;
-	Sat, 14 Mar 2026 11:35:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773488126;
-	bh=GdeoLiMA8CXFq4sEcs5A46LTC+bCki0pRPFIvoquzJw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=MKIrvyyH9CrmOreJeW6kGQPYzcwgwK9RS3SUJJy5xcGGO0PECSQF6P9P1rAo0+YTA
-	 2vAk+yBNfqnu9tAtTA2nKu6HMa9OwT0Q5ljbuOWNngsNPuZnfV6Ngp1vIV3OrAejuO
-	 CEXn/dy3GMPTVL0RKZ4iREOMGJffy1GQ6MsqcYfM8JzWAJEziSDsKDdQBcd5J6SBIp
-	 AyLPUMtHX8Jf0KYxdS3mr+wEILNPK0pb6l3Vq0wfcX7ya744Gh5NJGXr7Y3baP1v2F
-	 SqhoDbVul4Tm6EGBlaqCavnJFmzBwwzYZuXDNSrr4+qPF686A8tbVvREaJhcCmzKQ4
-	 xE3wHR2FaE8xg==
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Linus Walleij <linusw@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Drew Fustini <fustini@kernel.org>, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, soc@lists.linux.dev
-In-Reply-To: <20260305-arm-defconfig-drop-duplicate-ti-pruss-v1-1-2839e3b42a8b@kernel.org>
-References: <20260305-arm-defconfig-drop-duplicate-ti-pruss-v1-1-2839e3b42a8b@kernel.org>
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: Drop duplicate
- CONFIG_TI_PRUSS=m
-Message-Id: <177348812490.386756.6377774746208273431.b4-ty@kernel.org>
-Date: Sat, 14 Mar 2026 12:35:24 +0100
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="rqpLy3bf"
+Received: by smtp.kernel.org (Postfix)
+	id 3950BC2BC86; Sat, 14 Mar 2026 18:41:25 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 18879C116C6;
+	Sat, 14 Mar 2026 18:41:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 18879C116C6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=NJgmVqDKyi3M0P5AVrJpUB/6e5CaH26d3M8p3nfhSGg=; b=rqpLy3bfMnxLc4ptzdGEVOx4nS
+	3cvmrPOIOQlYhskL7UMTdYondSwDoFwEUgSajZuUeouUBHVNI8qUIE6EtjeroAWaKaMJ4PZM2sQMt
+	lih/cWVPxz+92Q55gURNigXMARCkU3EFGSin2A6JBlUW9Dux9Nue6jww7QtL2ZTkrah1njaRTsI1W
+	kGwG1f3MZEwg1eeKgn9QSDPFIgniEP7WJRfOv/BpROMU6+NcGzoJhNmwrayYJBrtOe+2iDxrhL9AG
+	lf7PgDE1Vz3NsHK1r+xPCCMr2/fQnq7rOFK2fRitltIUX26hc1T1kijIfQ1x0aeGGFTRNAe9IZs2J
+	Xdz9442w==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip driver fixes for 7.0 #1
+Date: Sat, 14 Mar 2026 19:41:19 +0100
+Message-ID: <4719110.LvFx2qVVIh@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
+
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.0-rockchip-drvfixes1
+
+for you to fetch changes up to 24ed11ee5bacf9a9aca18fc6b47667c7f38d578b:
+
+  soc: rockchip: grf: Add missing of_node_put() when returning (2026-02-22 23:27:20 +0100)
+
+----------------------------------------------------------------
+Fixing a missing of_node_put() call.
+
+----------------------------------------------------------------
+Shawn Lin (1):
+      soc: rockchip: grf: Add missing of_node_put() when returning
+
+ drivers/soc/rockchip/grf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 
-On Thu, 05 Mar 2026 15:25:18 -0700, Nathan Chancellor wrote:
-> Commit ee1ab82ee032 ("ARM: defconfig: move entries") added a duplicate
-> instance of CONFIG_TI_PRUSS=m, causing a Kconfig warning:
-> 
->   arch/arm/configs/multi_v7_defconfig:1152:warning: override: reassigning to symbol TI_PRUSS
-> 
-> Drop the first instance, as the second instance added by the
-> aforementioned change is where savedefconfig puts it.
-> 
-> [...]
-
-Applied, thanks!
-
-[1/1] ARM: multi_v7_defconfig: Drop duplicate CONFIG_TI_PRUSS=m
-      https://git.kernel.org/soc/soc/c/9e22e9c4a5bd208a2d17f0b1a8414c170b4e5939
-
-Best regards,
--- 
-Krzysztof Kozlowski <krzk@kernel.org>
 
