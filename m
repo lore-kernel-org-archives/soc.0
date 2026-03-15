@@ -1,65 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8A21A6820
-	for <soc@lists.linux.dev>; Sat, 14 Mar 2026 18:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DA381AA8
+	for <soc@lists.linux.dev>; Sun, 15 Mar 2026 19:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773513938; cv=none; b=Z7y7bQNff92zIzonrEIpL4TgLarLn9UD4C6d9hbitiXcdMpwaHBnd1qgO1qw3wPViyL+1I0qoa6qT1qO2mJs0dA1FwX1gTmwBXqKXr0ZKUsBqZYIJwlXIK2M9RUsMXgY6T9kenS55ED3xiXkxjLOKPNNXhQaNqkSv3XGDTyynJs=
+	t=1773601834; cv=none; b=JNv0mSE7qSfRbB56WI4kKYUIptSQDJk1naE/xeEeJ5BWosYHMDdHN5h0IDLTAdtZNVg3xxOBpAS0Lmup5od9e9eeLbBQJ2otgZh6qToAVrNxj11hXLrN1kkzveXByB/D9sZLNaxVRzW+bq7yOtOgcBNfmCLhCYrXKCP5N1JGmq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773513938; c=relaxed/simple;
-	bh=5vVrPfjQQjHttowno1NR6a+4Cb29pxHcshSMyHYH8HI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bEWUR3/8ZGxn+2CcnymeXE7/7Kbe9MfuZcyMwcLeFrjhLzjZZlRdhBX+zNzHCRupbnXLV7avtVRdflsH5USzW09sKxxxbYbmT5sN6X2ZvyVCQi5dUYZRkgl04awx9DwpfGYA9CCkpJPEZ6a9aWmAa+JbQBO3d+jRkmY4Ct6zBHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Jj9xgp1g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773601834; c=relaxed/simple;
+	bh=IthiWArBSLDgAMO0bvZ9kc3iO/llybx5j9goMv6GKII=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jegABvDX/DZOQ1U1I9liHJ6TYgQ0uc9zFdySF0V6V3Dg2Y/VBEoJ4YsiqyArmIYzZzg0vzYxKri0033lI8Ya7S+z+AbzRJyKru70Vhr2MNo97hK1kwAiNQHaHqnnOhnXHXYlMzblLMp7CB0QGuselzE6+z2Ph2Hfu3m+cXgiOZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nwo7VzHV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Jj9xgp1g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nwo7VzHV"
 Received: by smtp.kernel.org (Postfix)
-	id CD034C2BC87; Sat, 14 Mar 2026 18:45:37 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9779CC116C6;
-	Sat, 14 Mar 2026 18:45:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9779CC116C6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=kE6rooa9lpNkvv+MRXc7iLpUu314ODoCUYLjOHYbKho=; b=Jj9xgp1gGQy3wARyMmNTlprcun
-	k6xqBSey9NBlP2aQ06vcaBmY1CWnZuXhMRA+qtsKB95C+KvME0ASEnOgk3IekAWWJtoJu9nx0rSM+
-	vw7NpNUsi5+2FiKvvDFGnwioEu9kDsYFB0jykcyt95AjShSbl7g0/Gj9nfYTlY0At4f79uVy3/GJ4
-	vSfGsJd6VGFJfzB/NSnJS+BsE557O8omCzTAayx6p6LsTVmdXQb6rA9deEKSjviTmN4bpieve2XdY
-	QDknAC0EymnX6y9lyoA48jchIeiR8Jd+HVfcq9TBOoSa0/nHg57umw4e6G6wY5GoREh6tuUho/CS3
-	jvvcQ5xQ==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 7.1 #1
-Date: Sat, 14 Mar 2026 19:45:34 +0100
-Message-ID: <13966995.uLZWGnKmhe@phil>
+	id 23BBDC19425; Sun, 15 Mar 2026 19:10:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7545C4CEF7;
+	Sun, 15 Mar 2026 19:10:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773601834;
+	bh=IthiWArBSLDgAMO0bvZ9kc3iO/llybx5j9goMv6GKII=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Nwo7VzHVJgyoCQvU4OxaefNjEGgkRLBJg94h5tYV62b9QvA+AKnYOKQds31SCdr1v
+	 YhMsvP7NP3hB/OubbhR4JEisMZT/BC9OMiymAaJM1tIen5gN9fXQbGDan8aca3K78b
+	 +4kHHiIv3M4qYCqkIWRkFRxmtKAEvAp5MnKN4cNl6wamBfgSWWex4Ph1H2mL+c9KNm
+	 44ZB/82qdCSzUH7lTfY6Vvcu0vsV1jiwwIzUjKxMs2AISAYhwA/e8rL/hOKQZ9IXuR
+	 PAnNj1/RdQ6EOc9e5eRcQ+eRdJVT8E3lw7Iult/6fAmjJrOerOJc+QpCIDwHom++uR
+	 RrNLZHiT9UzDQ==
+Date: Sun, 15 Mar 2026 12:10:32 -0700
+From: Drew Fustini <fustini@kernel.org>
+To: soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Linus Walleij <linusw@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+	Icenowy Zheng <zhengxingda@iscas.ac.cn>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>, Conor Dooley <conor+dt@kernel.org>,
+	Michal Wilczynski <m.wilczynski@samsung.com>,
+	Yao Zi <ziyao@disroot.org>, Han Gao <rabenda.cn@gmail.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RISC-V T-HEAD Devicetrees for v7.1
+Message-ID: <abcEKCNIA9wDgIcE@x1>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-
-Hi soc maintainers,
-
-please find below Rockchip DT changes for the merge-window for 7.1 .
-
-So far only arm64 changes :-)
-
-
-Please pull.
-Thanks
-Heiko
-
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
@@ -67,106 +59,27 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.1-rockchip-dts64-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/thead-dt-for-v7.1
 
-for you to fetch changes up to d7787a77cf8b129304f590233032556dec10dfc6:
+for you to fetch changes up to 9c99a784d9117a192ebf779d4f72ebec435ada97:
 
-  arm64: dts: rockchip: enable vicap dvp on wolfvision pf5 io expander (2026-03-13 21:39:34 +0100)
-
-----------------------------------------------------------------
-New boards: RK3576-EVB2, OneThing Edge Cube
-New soc-peripherals: DisplayPort on RK3576
-New overlays: TSx33 device-revisions, HD702E display/touchscreen on
-NanoPC-T4
-
-And as always a number of per-board changes for added or enabled
-peripherals, added supplies, things moved to more fitting positions.
+  riscv: dts: thead: lichee-pi-4a: enable HDMI (2026-03-14 09:19:26 -0700)
 
 ----------------------------------------------------------------
-Alexey Charkov (1):
-      arm64: dts: rockchip: Add analog audio switches to RK3576 EVB1
+T-HEAD Devicetrees for 7.1
 
-Andy Yan (1):
-      arm64: dts: rockchip: Add DisplayPort dt node for rk3576
+Update the T-Head TH1520 RISC-V SoC device tree to support the
+Verisilicon DC8200 display controller (called DPU in manual) and the
+Synopsys DesignWare HDMI TX controller. In addition, enable HDMI output
+for the LicheePi 4a board.
 
-Chaoyi Chen (4):
-      dt-bindings: arm: rockchip: Add rk3576 evb2 board
-      arm64: dts: rockchip: Add rk3576 evb2 board
-      arm64: dts: rockchip: Fix sdmmc pwren pinctrl for rk3576-evb2
-      arm64: dts: rockchip: Enable displayport for rk3576 evb2
+Signed-off-by: Drew Fustini <fustini@kernel.org>
 
-Chris Morgan (1):
-      arm64: dts: rockchip: add Awinic aw87391 amplifiers for Anbernic RG-DS
+----------------------------------------------------------------
+Icenowy Zheng (2):
+      riscv: dts: thead: add DPU and HDMI device tree nodes
+      riscv: dts: thead: lichee-pi-4a: enable HDMI
 
-Heiko Stuebner (8):
-      arm64: dts: rockchip: Add port subnodes to RK356x SATA controllers
-      arm64: dts: rockchip: add overlay for qnap-ts433 device revision
-      arm64: dts: rockchip: add overlay for qnap-ts233 device revision
-      arm64: dts: rockchip: add overlay for qnap-ts133 device revision
-      arm64: dts: rockchip: use gated-fixed-clock for pcie-refclk on rk3588-jaguar
-      arm64: dts: rockchip: use gated-fixed-clock for pcie-refclk on rk3588-tiger
-      arm64: dts: rockchip: add pinctrl for clk-generator GPIO on rk3588-tiger
-      arm64: dts: rockchip: Make Jaguar PCIe-refclk pin use pull-up config
-
-Hugh Cole-Baker (1):
-      arm64: dts: rockchip: add pwm-fan for NanoPC-T6
-
-Jun Yan (3):
-      dt-bindings: vendor-prefixes: Add Shenzhen OneThing Technologies Co., Ltd.
-      dt-bindings: arm: rockchip: Add OneThing Edge Cube series
-      arm64: dts: rockchip: Add OneThing Edge Cube series
-
-Michael Riesch (1):
-      arm64: dts: rockchip: enable vicap dvp on wolfvision pf5 io expander
-
-Robin Murphy (4):
-      arm64: dts: rockchip: Move RK3399 eDP pinctrl to boards
-      arm64: dts: rockchip: Add overlay for FriendlyElec HD702E
-      arm64: dts: rockchip: Clean up NanoPi-R2S Plus gmac2io
-      arm64: dts: rockchip: Describe HDMI supplies for nanopi4 boards
-
-Samuel Holland (2):
-      arm64: dts: rockchip: Add battery and charger on rk3566-pinenote
-      arm64: dts: rockchip: Enable GPU on rk3566-pinenote
-
-Shawn Lin (2):
-      arm64: dts: rockchip: add node name for RK3588_PD_RKVDEC0/1 and RK3588_PD_VENC0/1
-      arm64: dts: rockchip: Add supply for pd_rkvdec and pd_venc on rk3388-evbs
-
- .../devicetree/bindings/arm/rockchip.yaml          |    9 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
- arch/arm64/boot/dts/rockchip/Makefile              |   22 +
- .../boot/dts/rockchip/rk3328-nanopi-r2s-plus.dts   |   17 -
- arch/arm64/boot/dts/rockchip/rk3399-base.dtsi      |    3 +-
- .../boot/dts/rockchip/rk3399-gru-chromebook.dtsi   |    2 +
- .../boot/dts/rockchip/rk3399-nanopc-t4-hd702e.dtso |   96 ++
- arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi   |    2 +
- .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |    2 -
- .../dts/rockchip/rk3399-sapphire-excavator.dts     |    2 +
- .../dts/rockchip/rk3566-onething-edge-cube.dts     |  342 +++++++
- arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi  |   31 +
- .../dts/rockchip/rk3566-qnap-ts133-pcb-13.dtso     |   64 ++
- .../boot/dts/rockchip/rk3568-anbernic-rg-ds.dts    |   44 +-
- .../dts/rockchip/rk3568-qnap-ts233-pcb-12-11.dtso  |   93 ++
- .../dts/rockchip/rk3568-qnap-ts433-pcb-12-10.dtso  |  151 +++
- .../rk3568-wolfvision-pf5-io-expander.dtso         |   20 +
- arch/arm64/boot/dts/rockchip/rk356x-base.dtsi      |   27 +-
- arch/arm64/boot/dts/rockchip/rk3576-evb1-v10.dts   |    1 +
- arch/arm64/boot/dts/rockchip/rk3576-evb2-v10.dts   | 1071 ++++++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3576.dtsi           |   28 +
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      |    8 +-
- arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts   |   16 +
- arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts     |   21 +-
- arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi |   39 +
- arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi     |   27 +-
- arch/arm64/boot/dts/rockchip/rk3588s-evb1-v10.dts  |   16 +
- 27 files changed, 2093 insertions(+), 63 deletions(-)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4-hd702e.dtso
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-onething-edge-cube.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-qnap-ts133-pcb-13.dtso
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-qnap-ts233-pcb-12-11.dtso
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-qnap-ts433-pcb-12-10.dtso
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-evb2-v10.dts
-
-
-
+ arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts | 25 +++++++++
+ arch/riscv/boot/dts/thead/th1520.dtsi             | 66 +++++++++++++++++++++++
+ 2 files changed, 91 insertions(+)
