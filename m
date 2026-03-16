@@ -1,78 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC056279324
-	for <soc@lists.linux.dev>; Mon, 16 Mar 2026 07:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE92334DCFD
+	for <soc@lists.linux.dev>; Mon, 16 Mar 2026 07:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773645135; cv=none; b=Df1iTxfShPhD5SM9a504a0UxEdtW8LRIVIH/3fR+ucP93fL1SafWvxpRa//J42LQxt06y1bc4ub41oDTKbftWEnwlhhNcih64gOjVHKAnxhiCjgHeRBSBH7z8YP/r4XgiLMlbowa5fmorrBzqAxM3WjhuZkt2k0KZ5kMmISaJhY=
+	t=1773646915; cv=none; b=chi5HhpIc+Z5KpEw8JA6SefPlAJQleK5geEeaxqGD+3+JJnzxFYLP09FaTCevDrcYH0s45TTs+Y1v3khXSoeXoL+slRUsC2vFk4uLg2Vxp9b+TthScXdxKOP8tsWW3WDTstAn/jr1/X8cnP/ohG807EQhG/OmXi2Hja5T8JiD38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773645135; c=relaxed/simple;
-	bh=gU3Vwbv6Cllx1JMnyE2sAgxfdvCb3m7inq0xMeA+qFw=;
+	s=arc-20240116; t=1773646915; c=relaxed/simple;
+	bh=+zvclJsj6P2p7cnxkJrMQ65XYWfboyRRpd059Hp5mM8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jZ/0Qbpfr+MoQFl6njPjyV3jH7rpvjhowgTZ1/fKvg223ULD+3/tRyqhhaGReIei636CICTVL2Q6Ysvx0gQTqJhEKusSIEhDW1WyuzInQ4Aj9aBRFQE7/MHEBi9eBbqoOKboZ0J7utdj9425bv3nXGcgg/Ax5fKpQK8/mgiiaHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WBby+rM0; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=qamZe06eSMZFJGkZRUL28zGXnP4PTN/djL3M+AYxHQWOusqF3GZzAe3hm4ftkOY2RGdjfyvftrUFvevqrWCBPzJhEBc/x4fXRSMnbfXUfPRd5ddc9iZs0wgexf3NIkYXQG16qnhXB63udyVwEU1+ao0vWxmEhSEyYdUBRb0ftKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D3I2L+cs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WBby+rM0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D3I2L+cs"
 Received: by smtp.kernel.org (Postfix)
-	id 7788EC2BC9E; Mon, 16 Mar 2026 07:12:15 +0000 (UTC)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	id 88D8CC19425; Mon, 16 Mar 2026 07:41:55 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8E914C19425
-	for <soc@kernel.org>; Mon, 16 Mar 2026 07:12:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E914C19425
+	by smtp.kernel.org (Postfix) with ESMTPS id A3C96C19421
+	for <soc@kernel.org>; Mon, 16 Mar 2026 07:41:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A3C96C19421
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5a0fc5e2c59so4749905e87.1
-        for <soc@kernel.org>; Mon, 16 Mar 2026 00:12:14 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a12f88d839so4351771e87.0
+        for <soc@kernel.org>; Mon, 16 Mar 2026 00:41:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773645133; x=1774249933; darn=kernel.org;
+        d=linaro.org; s=google; t=1773646913; x=1774251713; darn=kernel.org;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eq6ELLjGNJ8R4s2BpmTpbSt0Wq3B9jPYaS+2zlsM9NA=;
-        b=WBby+rM08TaKfjaEco0JlzANHC6k1GPByc5eT2/GRigjUq5kmQeDh2iPq1j/sx+fre
-         ztLKmSwwcp0drIvMI1vphRm0ZFXKFwr7bGK1Eq7LvZJPUlE3sqFgMUPgL/SFhxqed45P
-         XwU9lDKbRHpTK0RmVNMdSeadvra0CdlZeCy1Nnf3r+jK1w6QLK5+99chQtrbqS5G2vtD
-         31TYMQ0t9id3KGNn6g1rlK56ub+NpETTDJE4YVHGzVrs+KruVst7Qm+WnRSSfGwItW0D
-         RN74p5JFwk7C2t1q/KGBUGf5bpNU2Vg4gs9zA/SwcpkgoSMVMKxJsrfQtgS81j37uE7D
-         qbvw==
+        bh=X9f0vpOSz6vqueLKXbDkbiM4ufWrBYHfcY6Ykd+DFfA=;
+        b=D3I2L+cs+6aHl4aNxTXM4jkOYfoSAiKcprKnmexrQk2d+fh8/BMdHzYvuNvTwWA4Ta
+         WnXzmOR1Kt5cxeSmWol1g0A3Cvpg0HztC4TgDvGMHVYLht2KbuPwvQ2kkchdQ6MZ7FoL
+         9IeF/b86aCTLF+6N2PPeZ1Ro0vD0GK+PF/Oj5fyeXXm4zAJSnPQ8nocRl7X3yTiMgCM7
+         NKjTzbnARHBdGD0B9XJOEQouT7P0i+/G7vOK5p2OhM8Qy0tKvMJiqxOKoeENYGSvW8wn
+         WMY7awiAtf2NXMiS1k6ewGzwDJ3IvYo0hVw9aQizIUWWU4oJByvwQutcG0Is3kQP95KG
+         jNBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773645133; x=1774249933;
+        d=1e100.net; s=20251104; t=1773646913; x=1774251713;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eq6ELLjGNJ8R4s2BpmTpbSt0Wq3B9jPYaS+2zlsM9NA=;
-        b=JwAVfDVOnP1TwRPkG3SX1B3dGn54ob95/J3y/koF8LJO0zYL5p8G+AsTMb3EDPKq2T
-         8I0i+8tvTsE6a7pA+rZzlUW/UmxEpiAaCIBGV47VafWr5Wo6aP3BEUMkrOTVWSUurJ/N
-         4Zjm/8pqle2lhkQepUHef6Kb+SjrgdkTD8UNAJLzMysmpx6/nX/ly73zWTW/zTDxrwOl
-         EkxhDZeYP0x6QemVDs0cvA5DvD4j5l/S/BKVty/7aITmur+nnhHjf41WA9EUMeD0HmNU
-         ZnmKG52mLJupVuF2nIlMwclG0siN+zNdNjbaAs5IPyA0xKiWTViv6rJ38E4/7+u2NFNy
-         StTg==
-X-Forwarded-Encrypted: i=1; AJvYcCXRFtdjqW0pruIpRzN5SLVRBC9n866Q0ticisjsDoiJJYAm2JT5sVOCMnsZAxnXjon7Ihk=@kernel.org
-X-Gm-Message-State: AOJu0YwANAomO+8+0EYcdfIQ20zk4n/jYnYRsCFgZlUP2BDzINRfPWPo
-	t1DFTCO9NV5As4WDe2tq1tHBbMUHFjTszeiCwatF8eYMxiFZxsbbnAJs6uD7CNd8vrQ=
-X-Gm-Gg: ATEYQzxyLOI+7VPgREirzT5y57XVOe66Gk7TV+5UqApRzyfEPkiRtwGcPJAs7JbOmIJ
-	Apjk1nU/FUtbAaWWu4EaTUvrUq9toMRjrEL3XJOJUOrykk/bphaIjFJZXSY125Jtnr4QTGXkp+5
-	3SELdQkJt3Tvi1hsT4y3KV3GtpoXmHc8O31RGqlBXIfjr4/h+xnm+404bNDAsdXGWp9x75mf0QZ
-	z5StAnptxKqCcvIVa1kmxykU4kZOIPAeQTOXFKvoMBn4DVIUvF9gLj5xC1wvS0VsOuZmdbB28dO
-	w5C0gb8ZUOLj97zwiLWozaH6Ohik0m0p/TE+USH9BtapfeD57tfU7sDdtRZ7s0DwYhw1b7tlmZs
-	/GicTy6urSYCEzLLCJ+sxizIhRnM12Z3hfGvRJBlRrbnQnXCUJYwBmKehTlTqxc1R2VwnmUE1xH
-	vlQH0nF3npsnZYd/q9qNXaKhY1j1+HNhIbes7V8BjebGu/fOXKf8EDc0ktJP1pXjYFaIK8MHRi2
-	EoO0yjsSy71/toHxH4=
-X-Received: by 2002:a05:6512:2244:b0:5a1:8b9:6d12 with SMTP id 2adb3069b0e04-5a162afb89emr4516634e87.24.1773645132499;
-        Mon, 16 Mar 2026 00:12:12 -0700 (PDT)
+        bh=X9f0vpOSz6vqueLKXbDkbiM4ufWrBYHfcY6Ykd+DFfA=;
+        b=D8YMEJgHuSdSL+8zYpiJvKw/jwLL5YALf9+vGMuWu4dyNpruQLwrz7wTlCUx4Hka7q
+         rzzMe6bUXIkVJpZQ70/yH5JN2ZcyW15IX1vkKlzDCV/pksQHcpT6sm50dbQUJsgKvYKG
+         aWDFfnaUroUpSit16bUMqTxvaFpIaxHyOgejhpqOlnTiPWRmSEoBVBVHKldRGUkAvRbw
+         ehcaPUuqXtV26Om4L7BPjLcwCq38AJPjCDJD1FFy9+j3QGxwPQ/YqyUQWBQyKScru8YP
+         FO5YlS/I5lQfaz1rWCfdqzPr9dKZwnxNiBvBWeLRwL72N7dR5wCEVqOw7rVn3t/bXv7X
+         upCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVR00f2NoQjVdITyFY+02VtBxbfOL6fOQlrKqUr7SceUotzBdUdlTDDnCzMLpLaLt+b+LY=@kernel.org
+X-Gm-Message-State: AOJu0YzMQH9SDltrs6HxKTgPryZSnOpqSFQKH9FZjBcJmS9iLXYrgIl7
+	2KHUk5MEVYe/lD7SLFbrGS7z3h+ZHfVPQBLHzREwxOXyVEwW8wvzzaW7MntVEzyRQaE=
+X-Gm-Gg: ATEYQzzdgzw+dL2C5dcoyQFUxOl3wo3J0e7fZ8WM5qpkvqkrRo41BrTUxqMbPYGnsOv
+	saiXqVChI5EZIB/D4vyZ9toXxOniRvuk6nI+K3U+6APYoxhhB4jrYC5CwuXSwQk+yRaF/okNpbf
+	XSwGqwYfOnC8KGoUe5q7b+5to9c+E5f01cYO9ypawLV8p/rraMtPaea79Wy5UuF/BJ2QoOyHzFK
+	MRPwz1mz05Z0CSKrdBls1U61l8f+eHcrbm/dHP+YgCPxcvFPQt8/01UNE+JqbTgtWNpyvu6jTWC
+	g2epNwzV+rQPvo6SML4iP6AN15Dd2+3eP1/XNQT8xsZXwSdR1gR2dCOqR3TS9e0DhPV2FuBmi6c
+	3JYQzQGd2VbH5qnGBtVSmwNMxlsYfoDoR4qwAmu2qOyvsBHLYGaksq9O4uaEmW4FGYanV9IzJcW
+	ygz63lywSAgZfHpF38m5BVDvXSdydd/JJUegSNLOB6DUYph7mOLvqFnS0GGq6ozZJCNApYo2UyT
+	7RXttbTRr92RvLVW40=
+X-Received: by 2002:a05:6512:3443:b0:5a1:2738:faa1 with SMTP id 2adb3069b0e04-5a16271006bmr2643778e87.17.1773646912633;
+        Mon, 16 Mar 2026 00:41:52 -0700 (PDT)
 Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a15981e963sm2810529e87.64.2026.03.16.00.12.11
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a171a41c8csm97838e87.62.2026.03.16.00.41.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 00:12:11 -0700 (PDT)
-Date: Mon, 16 Mar 2026 08:12:10 +0100
+        Mon, 16 Mar 2026 00:41:52 -0700 (PDT)
+Date: Mon, 16 Mar 2026 08:41:50 +0100
 From: Jens Wiklander <jens.wiklander@linaro.org>
 To: arm@kernel.org, soc@kernel.org
 Cc: linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] OP-TEE fix for 7.0
-Message-ID: <20260316071210.GA2470832@rayden>
+Subject: [GIT PULL] TEE shared memory fix for 7.0
+Message-ID: <20260316074150.GA2474723@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -84,9 +84,8 @@ Content-Disposition: inline
 
 Hello arm-soc maintainers,
 
-Please pull this patch fixing a use-after-free race in the OP-TEE driver
-where a client exiting prematurely could free a request still being
-processed by the supplicant.
+Please pull this patch removing the refcounting of kernel pages within
+the TEE shared memory helper. 
 
 Thanks,
 Jens
@@ -97,21 +96,21 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
 are available in the Git repository at:
 
-  gitolite.kernel.org:pub/scm/linux/kernel/git/jenswi/linux-tee tags/optee-fix-for-v7.0
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-fix-for-v7.0
 
-for you to fetch changes up to 387a926ee166814611acecb960207fe2f3c4fd3e:
+for you to fetch changes up to 08d9a4580f71120be3c5b221af32dca00a48ceb0:
 
-  tee: optee: prevent use-after-free when the client exits before the supplicant (2026-03-02 14:36:50 +0100)
-
-----------------------------------------------------------------
-OP-TEE fix for v7.0
-
-Fix a use-after-free race between client and supplicant by serializing
-request access with the supplicant mutex.
+  tee: shm: Remove refcounting of kernel pages (2026-03-03 09:03:04 +0100)
 
 ----------------------------------------------------------------
-Amirreza Zarrabi (1):
-      tee: optee: prevent use-after-free when the client exits before the supplicant
+TEE shared memory update for 7.0
 
- drivers/tee/optee/supp.c | 107 ++++++++++++++++++++++++++++++++---------------
- 1 file changed, 74 insertions(+), 33 deletions(-)
+Remove refcounting of kernel pages in register_shm_helper() to support
+slab allocations.
+
+----------------------------------------------------------------
+Matthew Wilcox (1):
+      tee: shm: Remove refcounting of kernel pages
+
+ drivers/tee/tee_shm.c | 27 ---------------------------
+ 1 file changed, 27 deletions(-)
