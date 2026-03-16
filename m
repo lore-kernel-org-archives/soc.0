@@ -1,116 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE92334DCFD
-	for <soc@lists.linux.dev>; Mon, 16 Mar 2026 07:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AFA3563C4
+	for <soc@lists.linux.dev>; Mon, 16 Mar 2026 08:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773646915; cv=none; b=chi5HhpIc+Z5KpEw8JA6SefPlAJQleK5geEeaxqGD+3+JJnzxFYLP09FaTCevDrcYH0s45TTs+Y1v3khXSoeXoL+slRUsC2vFk4uLg2Vxp9b+TthScXdxKOP8tsWW3WDTstAn/jr1/X8cnP/ohG807EQhG/OmXi2Hja5T8JiD38=
+	t=1773648966; cv=none; b=mIkYGYYEl8MUBEDN5KXRT2up2TXWVILg1XC66pJyaDSONFLXWyiCkgNr09YS39b9IbgTP8HlZSV37HBSzwTfLebWGkFKvAqT2p63uxwe1ivo1zBSdSEWO6Of6Zkb2/Sea6/Fpm/e8vvkjLxDpgkXUNxZwkKmwpYimx7IW7xZtrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773646915; c=relaxed/simple;
-	bh=+zvclJsj6P2p7cnxkJrMQ65XYWfboyRRpd059Hp5mM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qamZe06eSMZFJGkZRUL28zGXnP4PTN/djL3M+AYxHQWOusqF3GZzAe3hm4ftkOY2RGdjfyvftrUFvevqrWCBPzJhEBc/x4fXRSMnbfXUfPRd5ddc9iZs0wgexf3NIkYXQG16qnhXB63udyVwEU1+ao0vWxmEhSEyYdUBRb0ftKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D3I2L+cs; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D3I2L+cs"
-Received: by smtp.kernel.org (Postfix)
-	id 88D8CC19425; Mon, 16 Mar 2026 07:41:55 +0000 (UTC)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A3C96C19421
-	for <soc@kernel.org>; Mon, 16 Mar 2026 07:41:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A3C96C19421
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a12f88d839so4351771e87.0
-        for <soc@kernel.org>; Mon, 16 Mar 2026 00:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773646913; x=1774251713; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X9f0vpOSz6vqueLKXbDkbiM4ufWrBYHfcY6Ykd+DFfA=;
-        b=D3I2L+cs+6aHl4aNxTXM4jkOYfoSAiKcprKnmexrQk2d+fh8/BMdHzYvuNvTwWA4Ta
-         WnXzmOR1Kt5cxeSmWol1g0A3Cvpg0HztC4TgDvGMHVYLht2KbuPwvQ2kkchdQ6MZ7FoL
-         9IeF/b86aCTLF+6N2PPeZ1Ro0vD0GK+PF/Oj5fyeXXm4zAJSnPQ8nocRl7X3yTiMgCM7
-         NKjTzbnARHBdGD0B9XJOEQouT7P0i+/G7vOK5p2OhM8Qy0tKvMJiqxOKoeENYGSvW8wn
-         WMY7awiAtf2NXMiS1k6ewGzwDJ3IvYo0hVw9aQizIUWWU4oJByvwQutcG0Is3kQP95KG
-         jNBQ==
+	s=arc-20240116; t=1773648966; c=relaxed/simple;
+	bh=6J6jIiMws+sldd1rr8KuW/unMB6Pf7N1kVnkcrX5N0U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cc/khsmKzIaCVpkmyVbt9wadfBDTc+jRV0qHXo/u2uSymSSzWftPgZEMJjzRMg96S391vw5YfIu71ctrvLi+togTzCQmQgaHKxP79i4Iq3SPmVHBZ8enV9FLGwILXFUph1BMNKmQXslJVBpn5ZZAgwT6dZyQmDnX7Crz/NZaREc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-94aca174532so901254241.3
+        for <soc@lists.linux.dev>; Mon, 16 Mar 2026 01:16:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773646913; x=1774251713;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X9f0vpOSz6vqueLKXbDkbiM4ufWrBYHfcY6Ykd+DFfA=;
-        b=D8YMEJgHuSdSL+8zYpiJvKw/jwLL5YALf9+vGMuWu4dyNpruQLwrz7wTlCUx4Hka7q
-         rzzMe6bUXIkVJpZQ70/yH5JN2ZcyW15IX1vkKlzDCV/pksQHcpT6sm50dbQUJsgKvYKG
-         aWDFfnaUroUpSit16bUMqTxvaFpIaxHyOgejhpqOlnTiPWRmSEoBVBVHKldRGUkAvRbw
-         ehcaPUuqXtV26Om4L7BPjLcwCq38AJPjCDJD1FFy9+j3QGxwPQ/YqyUQWBQyKScru8YP
-         FO5YlS/I5lQfaz1rWCfdqzPr9dKZwnxNiBvBWeLRwL72N7dR5wCEVqOw7rVn3t/bXv7X
-         upCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVR00f2NoQjVdITyFY+02VtBxbfOL6fOQlrKqUr7SceUotzBdUdlTDDnCzMLpLaLt+b+LY=@kernel.org
-X-Gm-Message-State: AOJu0YzMQH9SDltrs6HxKTgPryZSnOpqSFQKH9FZjBcJmS9iLXYrgIl7
-	2KHUk5MEVYe/lD7SLFbrGS7z3h+ZHfVPQBLHzREwxOXyVEwW8wvzzaW7MntVEzyRQaE=
-X-Gm-Gg: ATEYQzzdgzw+dL2C5dcoyQFUxOl3wo3J0e7fZ8WM5qpkvqkrRo41BrTUxqMbPYGnsOv
-	saiXqVChI5EZIB/D4vyZ9toXxOniRvuk6nI+K3U+6APYoxhhB4jrYC5CwuXSwQk+yRaF/okNpbf
-	XSwGqwYfOnC8KGoUe5q7b+5to9c+E5f01cYO9ypawLV8p/rraMtPaea79Wy5UuF/BJ2QoOyHzFK
-	MRPwz1mz05Z0CSKrdBls1U61l8f+eHcrbm/dHP+YgCPxcvFPQt8/01UNE+JqbTgtWNpyvu6jTWC
-	g2epNwzV+rQPvo6SML4iP6AN15Dd2+3eP1/XNQT8xsZXwSdR1gR2dCOqR3TS9e0DhPV2FuBmi6c
-	3JYQzQGd2VbH5qnGBtVSmwNMxlsYfoDoR4qwAmu2qOyvsBHLYGaksq9O4uaEmW4FGYanV9IzJcW
-	ygz63lywSAgZfHpF38m5BVDvXSdydd/JJUegSNLOB6DUYph7mOLvqFnS0GGq6ozZJCNApYo2UyT
-	7RXttbTRr92RvLVW40=
-X-Received: by 2002:a05:6512:3443:b0:5a1:2738:faa1 with SMTP id 2adb3069b0e04-5a16271006bmr2643778e87.17.1773646912633;
-        Mon, 16 Mar 2026 00:41:52 -0700 (PDT)
-Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a171a41c8csm97838e87.62.2026.03.16.00.41.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 00:41:52 -0700 (PDT)
-Date: Mon, 16 Mar 2026 08:41:50 +0100
-From: Jens Wiklander <jens.wiklander@linaro.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE shared memory fix for 7.0
-Message-ID: <20260316074150.GA2474723@rayden>
+        d=1e100.net; s=20251104; t=1773648962; x=1774253762;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EmTefij6xVk2JRb0OyDr5LMzX/ACr1ha2wKgEcc1/H8=;
+        b=dfjFGgX/I+TZB+HAkSv6v5h2YdViH6/8pH07WOGrExontWg/WT2gROh6k5MttF1lyZ
+         SJMxNUipAXVdFBM75m8QHQvbHLB8nR+GyXgxb14sDH2NwhcuRcpF3U7Xl0UkV6jpQsBb
+         j4lQmlw/tONkiC+AgeHZgWDfX4F08hpR1+MJIFhYaCRtHEk38BrPuArMn5EvLKh1Pvfu
+         f7hOAb4r+GnObT0F+1yFxS1nv6ng2ZViLFM0yCpyj2yUI8wccRfgf31HCoW374YWoaQ8
+         j7Gi6NYQchyskiMHFIMcBxGnK6QXqhmVDhBfhK4V/GA2CVVOgrHWbVNv8zDAOVrPWk5R
+         aBZQ==
+X-Gm-Message-State: AOJu0YzB/gsDiW42yy5RVsSP0oW/kG6CmdqyZLMkoGH8E6inODch1t6z
+	9xdE+WzSexMkMv3uJM+haodu4fdtKU0m2d8wJAIJJclUxL55rF8Vk/Ak3+D1DJLs
+X-Gm-Gg: ATEYQzyHbWkWIJfHTwv+kQvD8Gr5cFRPylyun9MQI7uICIUGbkN9rPgiUpAK7DSuM3a
+	tVorPryAdEevBSyNGLqi6lr0eC4cS38WYNDdtibk1Fcf6HiljIGwM/R/Rrc5C2ZcpNPpbd6f3Wt
+	5zo8RBTyKwDBwLdBZK6BBmkwR07VVYLYywM8mMe0JeRoTNhJPU3PXmXRmrNY6o+bGKfJNSqqxJw
+	KcqxeKV5WBg2T2OmKR8PN5U+7XylZeDlFNM6JqkTW0lYzmI+U5zF3c/XrqyWLXQOvmw2aPLliM5
+	ocXVQm1GH4phA+Dnj4h4nomf5jfYytCUWNlyNU9plMcBN0I9ELfizXhjlIgnhF5dmmn/09ub3Ju
+	egAtvGnzEyKMz14BoWEYBYe3dVb2VIQZM2g5zn0qte7G23cgJnrB16DPs8XaF8ko0Rhw2croVOc
+	0vKoTcwGEalW3Bur3N6+pgvdk1YYojV2zcUO6nlSqDIqiyYZQc5IZ/La7fcTVM1mSm
+X-Received: by 2002:a05:6102:162b:b0:5ff:e39d:9f9b with SMTP id ada2fe7eead31-6020e24556emr4498946137.16.1773648962234;
+        Mon, 16 Mar 2026 01:16:02 -0700 (PDT)
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-601f31e7520sm5754955137.4.2026.03.16.01.16.02
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 01:16:02 -0700 (PDT)
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-56af30dde0cso1596168e0c.2
+        for <soc@lists.linux.dev>; Mon, 16 Mar 2026 01:16:02 -0700 (PDT)
+X-Received: by 2002:a05:6122:659e:b0:56b:8d2a:8c8f with SMTP id
+ 71dfb90a1353d-56b8d2a9d66mr528332e0c.11.1773648961820; Mon, 16 Mar 2026
+ 01:16:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <cover.1773399669.git.geert+renesas@glider.be> <cover.1773399675.git.geert+renesas@glider.be>
+ <20260314-arboreal-bold-vicugna-cdca27@quoll>
+In-Reply-To: <20260314-arboreal-bold-vicugna-cdca27@quoll>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 16 Mar 2026 09:15:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVg_no3Y65D=E9pmPZ=vxOfcJ8hKC2Jd7W8J2Bxrt8V5w@mail.gmail.com>
+X-Gm-Features: AaiRm53Rv5kBqmNlsxPfaTacL6gnOFBZ2evKRoyLQgMqcyEYrLLjn0WDPu1UeIk
+Message-ID: <CAMuHMdVg_no3Y65D=E9pmPZ=vxOfcJ8hKC2Jd7W8J2Bxrt8V5w@mail.gmail.com>
+Subject: Re: [GIT PULL 4/4] Renesas DTS updates for v7.1
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: soc@lists.linux.dev, Magnus Damm <magnus.damm@gmail.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello arm-soc maintainers,
+Hi Krzysztof,
 
-Please pull this patch removing the refcounting of kernel pages within
-the TEE shared memory helper. 
+On Sat, 14 Mar 2026 at 12:13, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> On Fri, Mar 13, 2026 at 12:13:00PM +0100, Geert Uytterhoeven wrote:
+> > The following changes since commit 85c2601e2c2feb60980c7ca23de28c49472f61f1:
+> >
+> >   arm64: dts: renesas: r8a78000: Fix out-of-range SPI interrupt numbers (2026-03-06 13:15:21 +0100)
+> >
+> > are available in the Git repository at:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v7.1-tag1
+> >
+> > for you to fetch changes up to 0928a28daf017504e14920f4131bb99e3bc39dba:
+> >
+> >   ARM: dts: renesas: armadillo800eva: Add wakeup-source to st1232 (2026-03-13 11:00:48 +0100)
+>
+> Next analysis tells me:
+>
+> Days in linux-next:
+> ----------------------------------------
+>  1 | ++ (2)
+>  2 | ++++++ (6)
+>  3 |
+>  4 |
+>  5 | ++++++++++++++++++++++ (22)
+>
+> Please keep non-fix patches in the next for at least 3 next releases, so
+> you are sure any community tests/complains reached you. It is
+> unreasonable to expect that community will test your for-next patch
+> immediately the next day.
 
-Thanks,
-Jens
+Sorry, you are just soo much quicker than Arnd ;-)
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> I merged other pulls but this one I will leave for few days more.
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+Thanks!
 
-are available in the Git repository at:
+Gr{oetje,eeting}s,
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-fix-for-v7.0
+                        Geert
 
-for you to fetch changes up to 08d9a4580f71120be3c5b221af32dca00a48ceb0:
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-  tee: shm: Remove refcounting of kernel pages (2026-03-03 09:03:04 +0100)
-
-----------------------------------------------------------------
-TEE shared memory update for 7.0
-
-Remove refcounting of kernel pages in register_shm_helper() to support
-slab allocations.
-
-----------------------------------------------------------------
-Matthew Wilcox (1):
-      tee: shm: Remove refcounting of kernel pages
-
- drivers/tee/tee_shm.c | 27 ---------------------------
- 1 file changed, 27 deletions(-)
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
