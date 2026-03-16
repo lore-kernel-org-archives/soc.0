@@ -1,98 +1,119 @@
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2735C372EC8
-	for <soc@lists.linux.dev>; Mon, 16 Mar 2026 08:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4F532E13B
+	for <soc@lists.linux.dev>; Mon, 16 Mar 2026 08:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773649535; cv=none; b=mtkkvRyUIJuKibfoNgmPgWaF0ZBvBOOPOSSDnl+1W3EY3R2ICJtvZgGEQwIwbPGnFSHrtAq9gSD6diIUuRwr9LL/tiqCBXxcv5KIy7P0aesuuG2Ds9oZ3HABuYU3Fw4ImKmiOYRRZf02e6AGE43Jbfgy80RRWsNj1kcMsM0b9CU=
+	t=1773651082; cv=none; b=AFNguEneE7lyLI9490ur46DAxe99/NHyoP5dGM/rriST+AXiNB3KttzXCGKXnf5EqS9SEx8ukswxbCtmL9oMh+SfRrJAY3yyOJwZpILIfUARr7YtNvQPqoZ1EiMYOU4bbmunwudJceqKOSAm2Ic+QBVQJLvkj5TlxIBnX8xxSz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773649535; c=relaxed/simple;
-	bh=b3D2cvYxaRTwimRhpTqSoEI3N106GPgqUDVsPffvnA4=;
+	s=arc-20240116; t=1773651082; c=relaxed/simple;
+	bh=27Xb/PjJ4oY9n6sievhbObmM/x8nGuiMHd/6chr7M+Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t+6lJLNLtKqlpEHJ309UGLp+d3QPuSmnBleCfOH8K5xjx+P0deDfqax7WDasGBJfAP1O2X6I79a/vLgg2g9GzH1u/Fr7QBp3zSclUklwgf2aQARguagDrKs9CqdRwTuXroYxg2AZvjQulkmq+S4xFia97vKf7qv//gmWulebvVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.51
+	 To:Cc:Content-Type; b=oG4JugiOScmdGTZLZOcV3KSv+T9JWMHxvIJjQwYzaJNaHF3M45Qg48bi/fWEgjy/1M8DPRYmzoq+yFJQJKTydMo/+Jg9OpZeugN1lkmJyL/kOTxT3AAk5CxgxFIxuEobMy4Qg2Sc5a0+Paf5YQzaZ/Uv3kl5L8fWIhCegcWtQ3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-94ab69af6c8so3017363241.0
-        for <soc@lists.linux.dev>; Mon, 16 Mar 2026 01:25:33 -0700 (PDT)
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-5675d609621so3675482e0c.2
+        for <soc@lists.linux.dev>; Mon, 16 Mar 2026 01:51:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773649533; x=1774254333;
+        d=1e100.net; s=20251104; t=1773651080; x=1774255880;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+8w1ZWnLMf6F4C87k8bElJ70YpWAqTRI9KRHLM4iWmQ=;
-        b=R52cv0RvjgxMPNCNySWfvYzHBEyjQR/M8k/1jIC8zNTDKJ6UGlW5p5sqBSzf515mWc
-         iIJWmbxa5i4p8wJBdi7dnazp9iaGnwUgxgHxi6cX0hOEuNMk0DH8GRcE0mydwYCow0F0
-         m3dvNnzWm0ysgr5mad4ZSi1PCvKspKVFwdc/0hBTD/kpz0Scthi+btEl1YT28Ol80+cR
-         2if4qBZMmBKGqHwnyeEHJoakeKueus2c2f06KInnZ48vg1VicpqwldZgR/qDgqVw37lQ
-         m3qHi5QOIfeb/ruCVsJus89eVt32qklskHZ08lz9jwmJEZuZt2KpktRnqv85I1YFgrCo
-         zO4Q==
-X-Gm-Message-State: AOJu0YwOPWqeDA74VprOPOM5qcN0iYqf8xxr/lVhf8mUWLWkDYweZxQB
-	VhWYMr1uZNb+qIThNC2IiZxrcuOdjgEwFtE0pzZwTW632hazrfIdI+lJgRGAe5N2
-X-Gm-Gg: ATEYQzz/sAXeasq79FecWpUpplTtIxmYIAyfP/aRrHGr68dXgOHvl/r8wS7piDSai+e
-	Hm1KAWt+CLYLbzGvL46wkZHf306rcrCxQrANM736pMwj5AfJf6VaJ+1sy+0h5eBnJlpKR0DCXra
-	34qvquWJ7sLMMjNUstfGUYJvrUFXN9EX3y3ZPmc5WkFge8uyJMI0AA6z7tMsy3Z/hP+NmE2rURu
-	oqmlhMVzjsExdLwGII1y6JrxEiwRpg2/tb6PNgKJMDGxz5i7w+Kf6v+KuF1a5kaU3fCpFQZF1bG
-	dHr7WBS/gARGZc8KXCK6DVrSSo0HC3O9qdfn3xyux/Y6lYwHHrV9pj7BPNuAQ81iIR66jge9y6j
-	jKl7Ine5ow8psf7a2tWEfkrsMzJGlIV/ytf+v7Gg2mAPHjeP7BYfK/bqAHx3Yxv3gDtGwyddNSn
-	F/3QTwXxjwF/TiRBFTrB/2m9izTfMxNR0bw5OiPwJCZ/adPToKowOX4p8vvYJw
-X-Received: by 2002:a05:6102:1625:b0:5f7:246c:7d59 with SMTP id ada2fe7eead31-601f4a77791mr6617951137.18.1773649533081;
-        Mon, 16 Mar 2026 01:25:33 -0700 (PDT)
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94ecfd41fd9sm5552035241.8.2026.03.16.01.25.32
+        bh=Ni27tE4Uc17PebqPukQD2Audc02oOzEQcH3vVp9B4BQ=;
+        b=PmrIXEhk0ZYdodQga0HcHke6vYr12UFz7gRKGBbimku3FZRQXtla8tUOjyokA4i6Uk
+         c7lb3MZp39PWsKxGRsym266awuVv5OWg+/XwJ6cPxOduSY+J5gkp5XzgKhK1qo6jx46R
+         Zkg1hVYfd+fpnkdTA+i3J4CDwzLHmnr2MNG8vABiLpqZK60WCWANQVsOwd73V1mueMZw
+         G9WQzi8SLawPBU4Pk36tW26HoeCE2JJx3+cfqRWsOl8BUjvIZGZbvBY7fa+q0z0shDqH
+         /OjkFgpWjwE5NMlpfve/1PF/r7htj+N6MagRjqrg4K+3MGAmqXh3gTJ1vYvMVkuDZrZF
+         K57Q==
+X-Gm-Message-State: AOJu0YzagAjUnxE2pptRtLbdQgPDi7hlsHC02Eunc+NDmL2icCXr47Rf
+	G+zoaSclau+ZTlL6weeCp12sjPWZfLNgFGR0u4sfXe429R6s9U+mckiYsxbquc6O
+X-Gm-Gg: ATEYQzxLYKaTtVJYTz5rtP5ZLOyi2061LVbPhrCJhBZSyl1t9ObkBZSo77VQ9oEBI3d
+	KSlVwEXKC6HbIHBmxFZfPslPrH7E5ZHcO2QY9UjGRj2PcYu9k3mtTYBk1/bqD6y/cYAeTYe2qVS
+	urr9chiwL9qLK4v2ygwqfBeIZ1LrOk4aGJ7iWjr/xtlRVHHyjqGVwXNTfWLbe9fYqg5Fd8YWG8m
+	/q2ZlNiwI6t7CT2AKn6JsXqt2ke7o1pdh0yhe0Xq+GydbISgzXTDdf99/qa52MoXTcik/4KbCxk
+	fG+DFSf24XBl2JwWHm/5W6bdvh1CSEfnaCreDhbsj86RY8/kefCmTv0ITkaR25rQCBMqe7LIRcK
+	b2EXUMsJKToDEXVh5Z8/FTpWkDdYkjd+LE8StqtcmJUZEz3zJ4v9jmGSobS4o4bEZVn4b6iqaTk
+	gXpH37yKwcKxgzqcWJzTIuTOv8jEqxpKdxx2P7ypy9CURa9/NjIUGtHk+q9OSd
+X-Received: by 2002:a05:6122:82a3:b0:56b:8ba0:fd6a with SMTP id 71dfb90a1353d-56b8ba122bfmr673015e0c.0.1773651079757;
+        Mon, 16 Mar 2026 01:51:19 -0700 (PDT)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56b4645d132sm7423227e0c.11.2026.03.16.01.51.19
         for <soc@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Mar 2026 01:25:32 -0700 (PDT)
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5fff13d5a19so3887196137.0
-        for <soc@lists.linux.dev>; Mon, 16 Mar 2026 01:25:32 -0700 (PDT)
-X-Received: by 2002:a05:6102:6ce:b0:5ff:bb36:891f with SMTP id
- ada2fe7eead31-601f4ab98d5mr6344003137.20.1773649532209; Mon, 16 Mar 2026
- 01:25:32 -0700 (PDT)
+        Mon, 16 Mar 2026 01:51:19 -0700 (PDT)
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-950c41532e1so714022241.1
+        for <soc@lists.linux.dev>; Mon, 16 Mar 2026 01:51:19 -0700 (PDT)
+X-Received: by 2002:a05:6102:6cc:b0:5fd:f2ad:c653 with SMTP id
+ ada2fe7eead31-6020e2cde73mr5380780137.16.1773651078892; Mon, 16 Mar 2026
+ 01:51:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1773399669.git.geert+renesas@glider.be> <cover.1773399675.git.geert+renesas@glider.be>
- <44491e75-4c73-4c8b-bc34-888d1e047cff@kernel.org> <CAMuHMdWLOCvKfp4bULzm6N_3u1Mh831Z0EW++8473wvs29MRHQ@mail.gmail.com>
- <b5d2f9a6-8039-48fb-8d7e-ee7823c504e3@kernel.org>
-In-Reply-To: <b5d2f9a6-8039-48fb-8d7e-ee7823c504e3@kernel.org>
+References: <cover.1773399669.git.geert+renesas@glider.be> <cover.1773399673.git.geert+renesas@glider.be>
+ <20260314-quick-gray-saluki-0f96ff@quoll>
+In-Reply-To: <20260314-quick-gray-saluki-0f96ff@quoll>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 16 Mar 2026 09:25:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW9dNT99N2UWbh+-YTdhafQtBRz_xE7iX2pA2O+KC-eiQ@mail.gmail.com>
-X-Gm-Features: AaiRm51dZoP08rSkEPZA2qRhTlGCqYmiKD1mwKQ8Vzj_OaeTy2G1pzJ_lXZLAZU
-Message-ID: <CAMuHMdW9dNT99N2UWbh+-YTdhafQtBRz_xE7iX2pA2O+KC-eiQ@mail.gmail.com>
-Subject: Re: [GIT PULL 4/4] Renesas DTS updates for v7.1
+Date: Mon, 16 Mar 2026 09:51:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXJx14SDXq7oQ-m-576GRQztRybs1HSinzf03ttvF3c_g@mail.gmail.com>
+X-Gm-Features: AaiRm51SoosmbfwaefU6BPqSHDNLBprafGmdntJh4QZy8XCfS9j5Er_XSACDcgM
+Message-ID: <CAMuHMdXJx14SDXq7oQ-m-576GRQztRybs1HSinzf03ttvF3c_g@mail.gmail.com>
+Subject: Re: [GIT PULL 3/4] Renesas DT binding updates for v7.1
 To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: soc@lists.linux.dev, Magnus Damm <magnus.damm@gmail.com>, 
 	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Krzystof,
+Hi Krzysztof,
 
-On Mon, 16 Mar 2026 at 09:22, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On 16/03/2026 09:18, Geert Uytterhoeven wrote:
-> > On Sat, 14 Mar 2026 at 12:23, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >> On 13/03/2026 12:13, Geert Uytterhoeven wrote:
-> >>> The following changes since commit 85c2601e2c2feb60980c7ca23de28c49472f61f1:
-> >>>
-> >>>   arm64: dts: renesas: r8a78000: Fix out-of-range SPI interrupt numbers (2026-03-06 13:15:21 +0100)
-> >>
-> >> Also nothing explains me what is this, IOW, why this is not RC1. Pull
-> >> request email has place at the beginning where you explain such things
-> >> and I can easily locate or understand the base.
+Thanks for your comments!
+
+On Sat, 14 Mar 2026 at 12:09, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> On Fri, Mar 13, 2026 at 12:12:59PM +0100, Geert Uytterhoeven wrote:
+> > Renesas DT binding updates for v7.1
 > >
-> > Let's readd the part you cut, which is also present in the cover letter:
+> >   - Document RZ/G3L SoC variants, the RZ/G3L SYSC block, and RZ/G3L
+> >     SMARC SoM and Carrier-II EVK boards.
 > >
-> >>> Note that this PR is based on "[GIT PULL] Renesas SoC fixes for v7.0".
+> > ----------------------------------------------------------------
+> > Biju Das (2):
+> >       dt-bindings: soc: renesas: Document RZ/G3L SoC variants, SMARC SoM and Carrier-II EVK
 >
-> Ah... no one reads cover letters :) so I expected that information here,
-> before the pull boilerplate. I guess this depends on scripting, so it's
-> fine. I will look for cover letters in the future.
+> This is DTS branch patch.
 
-As I wrote above, it was also mentioned in the PR itself.
+It is a DT bindings patch.
+
+> >       dt-bindings: soc: renesas: renesas,rzg2l-sysc: Document RZ/G3L SoC
+>
+> This is drivers. Splitting it into additional branch is not making it
+> easier. I don't know where is this supposed to be merged. I will take it
+> to drivers, but in the future, please do not put DTS bindings into
+> driver bindings.
+
+This is also a DT bindings patch.
+
+DT bindings are soft dependencies for drivers and DTS.
+DT binding definitions (I don't have any this time) are hard
+dependencies for drivers, DTS, and examples and DT bindings.
+Arnd merges dt-bindings PRs in the soc DTS branch.
+
+> See also submitting patches in DT dir.
+
+So the second commit is subject to II.3:
+
+  3) For a series going through multiple trees, the binding patch should be
+     kept with the driver using the binding.
+
+In this particular case, I could have included it in my drivers branch.
+Where do I put SoC-specific DT binding changes that are not picked
+up by anyone else (I don't have any this time)?
+
+Thanks!
 
 Gr{oetje,eeting}s,
 
