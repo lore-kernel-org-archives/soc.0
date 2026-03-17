@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB38035836F
-	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 09:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75E435EDBA
+	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 09:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773738700; cv=none; b=P6qJIytV6ZSmcM/wov4m3MdEoIRALzFFbdxY2T+Gs+m0tFrRsV/6/waZQd7cRXiERvBbNpG7AOrhpqwrMTUvRmrWeqiXJf5sgNgws/wH4w3DbMeCkIeoSY/6Eg+bUxoms6BvdZjasSUVrym+xAOl4AkBcYcNxGDVgXmiUIz/N5Q=
+	t=1773739173; cv=none; b=CpVm7+CKA9STaQlyCcu4/c+rGtmLInyNbtWYmcLHalTemSxqekeU0w/jslYwmBBC73sDr1ktXYDP1em+72Nobjmuc56kIU0HrEDDQb3ikokVjvQsHZDYyQxFOAzewRrUzHK2Yw2ERrCXTJV2pQS3Q92DSOTsR0BigMaB/bPoPCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773738700; c=relaxed/simple;
-	bh=BzmkYmqk+b2RtlUzCdKWXMzHPnRFieI71IicbZl0NgE=;
+	s=arc-20240116; t=1773739173; c=relaxed/simple;
+	bh=be6va4WwPnBFOMfW6Lq/Dypb11IupWJmaZIo3CJTq3I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZRsen2hkvRHxAftg8N5mXAjn8Xtyh9ozIo8FMwfmKWpcRGF9NvlyRk2zojF9bVkut9A25bsBKUMLSsNYC8ctsSxptwDQJp1hZ8b89Hihouxthn7i2SEISwC2RpkmDDwyn5vogUui0yCzz3uOYvo7Er5TGpgEW5opTHxk+egYqHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvfH09Ox; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=UgxWX0otUtvU6nKgu/5Bp9sCbVQItWPgHjTRJ1qobau3TNS52x89/jH2X3MKgU5kYveZ9OC2cnvb/2aqhIeauajJzFNFj9uMe2zQl5zCmfoCLFNStSow6C6EiCkXcoDmqeYzIfr+DN9+bBn7dov0olIc1TmbqdgBu3zvejrNuug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKRDp3Ci; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvfH09Ox"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKRDp3Ci"
 Received: by smtp.kernel.org (Postfix)
-	id A497DC2BC9E; Tue, 17 Mar 2026 09:11:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DCBC4CEF7;
-	Tue, 17 Mar 2026 09:11:38 +0000 (UTC)
+	id B0F19C2BCAF; Tue, 17 Mar 2026 09:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9C8C4CEF7;
+	Tue, 17 Mar 2026 09:19:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773738700;
-	bh=BzmkYmqk+b2RtlUzCdKWXMzHPnRFieI71IicbZl0NgE=;
+	s=k20201202; t=1773739172;
+	bh=be6va4WwPnBFOMfW6Lq/Dypb11IupWJmaZIo3CJTq3I=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fvfH09OxPAvRaBYMrJKcAXFUYB48JQx8i2ukLbEZCkgje2HfdhFxCuK/C/Ngafy8i
-	 tG6asppJKODyIRXkzx+NgYSs5bVDQV7f+WMGerog6qN8/Uj95V8QLlWstuwJODkP0R
-	 +Pgmb53IiI+WrsKw/HZN90LCqq3HmjV52/r6RojY5/b/PgO3woqQEm2zJfIn5pTVpF
-	 NIf6lUc6tpw7lDttMWrSDt/47CjNZA2LIZaCTAILNyygh9ptM/Oz/9kazsu/He5scB
-	 Zazt6GeX7QFAnztzYmfAHUykXFdep+kJvbkOcCLIXLwi0bKjSQUYnpwARle1dOyPQ3
-	 yuOKGE1VuRWlg==
-Message-ID: <0234dc75-b042-4408-bbad-a777c0bddb3f@kernel.org>
-Date: Tue, 17 Mar 2026 10:11:37 +0100
+	b=fKRDp3CiCzpbQ2NbDVx5XifGID6bUaoSSRNjp1UPT46LKIGfGMvW1SbwOzAhfMVA4
+	 MkBDwCQ3wkeGnMzFu4OrPumJJOD9wGFtTWwPrgjcCqBGdmmRJP6TkIf1LbbaJiIfxm
+	 OSu7eMEHza0kNOZBFS5YuSz8ZSr7cnKdCilryx5nwv4ljCPUtLIusZZGr7FM32NFLf
+	 OacMYpwCUDxlybUuYVrqdbDNqWSEzQSodjKne+cs/lXji2Y8JyQ6qFrgHm5JuLfFpd
+	 MD02OKfLwHJEsgwfMkhyd/tYvYqNJhgQw67hO4pjyjpqaV5YvRt/kWv/Nd4QAmio01
+	 1Z6ecKGi9B4aA==
+Message-ID: <aa9d42ad-c480-4fc8-b8be-1a0c505b4293@kernel.org>
+Date: Tue, 17 Mar 2026 10:19:29 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -37,15 +37,12 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL 0/4] Renesas SoC updates for v7.1
-To: Geert Uytterhoeven <geert@linux-m68k.org>,
- Konstantin Ryabitsev <mricon@kernel.org>
-Cc: soc@lists.linux.dev, soc <soc@kernel.org>,
- Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org,
- linux-renesas-soc@vger.kernel.org
-References: <cover.1773399669.git.geert+renesas@glider.be>
- <20260317-spirited-mahogany-swift-b1ac53@quoll>
- <CAMuHMdX4wKWPvRR=BBAr+1wAK2ZmW3kKxEN4W_vwNyGuzB=-gw@mail.gmail.com>
+Subject: Re: [GIT PULL] Rockchip dts fixes for 7.0 #1
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+References: <5055064.GXAFRqVoOG@phil>
+ <20260317-clever-flat-wolverine-313a4c@quoll> <10817796.nUPlyArG6x@phil>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,60 +88,101 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <CAMuHMdX4wKWPvRR=BBAr+1wAK2ZmW3kKxEN4W_vwNyGuzB=-gw@mail.gmail.com>
+In-Reply-To: <10817796.nUPlyArG6x@phil>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 17/03/2026 09:46, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Tue, 17 Mar 2026 at 09:33, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->> On Fri, Mar 13, 2026 at 12:12:56PM +0100, Geert Uytterhoeven wrote:
->>> This is my first pull request for the inclusion of Renesas SoC updates
->>> for v7.1.
+On 17/03/2026 10:05, Heiko Stuebner wrote:
+> Am Dienstag, 17. März 2026, 09:45:30 Mitteleuropäische Normalzeit schrieb Krzysztof Kozlowski:
+>> On Sat, Mar 14, 2026 at 07:42:38PM +0100, Heiko Stuebner wrote:
+>>> Hi SoC maintainers,
 >>>
->>> It consists of 4 parts:
+>>> please find a below some Rockchip fixes for the current 7.0 release-cycle.
+>>> And in the next PR, even one driver-fix this time.
+>>>
+>>> Please pull
+>>>
+>>> Thanks
+>>> Heiko
+>>>
+>>>
+>>> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+>>>
+>>>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+>>>
+>>> are available in the Git repository at:
+>>>
+>>>   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.0-rockchip-dtsfixes1
+>>>
+>>> for you to fetch changes up to 2ed11ad1c2b4c191cb2ed6741be127eb99f8634f:
+>>>
+>>>   arm64: dts: rockchip: Correct Joystick Axes on Gameforce Ace (2026-03-12 20:52:53 +0100)
+>>>
+>>> ----------------------------------------------------------------
+>>> A big number of changes fixing dt-schema issues on the ARM32 side,
+>>> fixes for the Gameforce-Ace to make the hardware work properly
+>>> (including thermals) as well as fixing issues both on Beelink A1 (spdif)
+>>> and Pinebook Pro (Wifi) by reverting the commits that created the issues
+>>>
+>>> ----------------------------------------------------------------
+>>> Chris Morgan (2):
+>>>       arm64: dts: rockchip: Correct Fan Supply for Gameforce Ace
+>>>       arm64: dts: rockchip: Correct Joystick Axes on Gameforce Ace
+>>>
+>>> Fabio Estevam (11):
+>>>       ARM: dts: rockchip: Remove rockchip,grf from rk3288 tsadc
+>>>       ARM: dts: rockchip: Move PHY reset to ethernet-phy node on rk3036 boards
+>>>       ARM: dts: rockchip: Fix RTC compatible on rk3288-phycore-rdk
+>>>       ARM: dts: rockchip: Use mount-matrix on rk3188-bqedison2qc
+>>>       ARM: dts: rockchip: Remove invalid regulator-property from rk3288-veyron
 >>
->> I think pw-bot did not reply to any of these pulls, but I applied now
->> all of them.
+>> Not a fix.
+>>
+>>>       ARM: dts: rockchip: Fix the Bluetooth node name on rk3288-veyron
+>>
+>> Not a fix. This is a pure style change. Fixes for current cycle means
+>> either important issues being fixed or errors introduced in current
+>> cycle.
+>>
+>> Changing style from one to another is not a fix.
+>>
+>>>       ARM: dts: rockchip: Fix the trackpad supply on rk3288-veyron-jerry
+>>>       ARM: dts: rockchip: Add missing the touchscreen interrupt on rk3288-phycore-rdk
+>>>       ARM: dts: rockchip: Fix RTC description on rk3288-firefly-reload
+>>
+>> Not a fix. Style of node name is not a bug, otherwise describe user
+>> visible (not "internal tools" visible) impact.
+>>
+>>>       ARM: dts: rockchip: Fix GMAC description n RK3288 boards
+>>>       ARM: dts: rockchip: Fix LED node names on rk3288-phycore-rdk
+>>
+>> Several other are questionable as well, since they were in DTS for long
+>> time. Please also read Linus' explanation here from some time ago - if
+>> the issue is for long time and no one cared, then changing it is a normal
+>> development.
+>>
+>> Several changed pieces here look like 3 or more years old, so does not
+>> fit criteria of current cycle fix at all.
+>>
+>> Please split the pull.
 > 
-> That is correct: no replies from the pw-bot.
-> renesas-dts-for-v7.1-tag1 does not seem to be in soc/for-next yet,
-> perhaps you forgot to push? No need to confirm if that is true,
+> I do remember in the past, changes that reduced the number of
+> dt-checker errors were considered fixes, but it seems that has
+> changed, so I'll split that accordingly.
 
-I pushed for-next a bit after this email.
+It is subjective and of course dtbs_check fix for issue introduced in
+current cycle is a RC-fix. I am pretty sure that many maintainers would
+pull all above to RC, but I follow a bit stricter interpretation just
+like Linus explained it:
 
-The workflow is far from optimal, because it has two stages:
-1. Iterate over each pull email, check, merge and eventually push only
-this branch,
+https://lore.kernel.org/lkml/CA+55aFyvW38WU93CqegHiKt-ReO8yNfAOUGZRFGY3-Aq0UsETw@mail.gmail.com/
 
-2. Merge to for-next and document the merges for internal
-accounting/tracing. I guess I could merge it after each stage (1) above.
+https://lore.kernel.org/all/CAHk-%3DwgFuoHpMk_Z_R3qMXVDgq0N1592%2BbABkyGjwwSL4zBtHA@mail.gmail.com/
 
-The bigger problem is lack of replies from pw-bot.
-
-
-@Konstantin,
-I use modified Rob's script to go over patch/pull queue in Patchwork:
-https://patchwork.kernel.org/project/linux-soc/list/?state=*
-
-I deal with them one-by-one, so when I finish merging, I want to be sure
-that Patchwork status is updated, thus through the script I mark it
-"Accepted".
-Like this one:
-https://patchwork.kernel.org/project/linux-soc/patch/cover.1773399675.git.geert+renesas@glider.be/
-
-Around then - can be just before or after - I push the updated branch to
-git.kernel.org. I fear that because the pull is manually updated in
-Patchwork to "Accepted", pw-bot ignores it and does not send the
-notification.
-
-Is it feasible to change pw-bot so it will notify even if it is marked
-as "Accepted"? Or any ideas how to change the flow to have both:
-A. pw-bot reply,
-B. Be 100% sure that Patchwork status is updated (allow my manual update
-via script)?
-
+So the issues were there probably for many years and fixes do not have
+user-visible impact, thus they look like regular improvement of poor
+code. Just like I evaluated dtbs_check findings in 2024 - 50% of
+warnings are style.
 
 Best regards,
 Krzysztof
