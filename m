@@ -1,110 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0697539B483
-	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 08:46:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36D738E5FB
+	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 08:48:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773737198; cv=none; b=aDZFYwdEWZt4PcJcOrKadFKfUERG+jsS87RMzaCZ4S4wJ+DIvrcZwxfGgaXzSnBuJnkLqnofYFLRMpLtnGXxmEoBDFXUsN1IdBMeRZmRPFbVPLtQ5AwA6FkAVNGbD5TdUr4k1/N8j35vR3UyRXYAlkN/T1B2MEBdnSsn8I/vW1U=
+	t=1773737312; cv=none; b=WJGzVcsQWLakTDsxpm16uBcaQYxIq/YBf/niqeL2OYpbjKmkqfJEgDgxGq9lliGnxlXFVNw1qWQBIQMhyGqaI5vZkAmBJx26xlDkBhLH+1AMmZbF7R9VacbsqmkIuJfccByPL6s3WyQksouTYkM7cQWXdy/GDc5O/B5VuO76hl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773737198; c=relaxed/simple;
-	bh=fsSLl0utw0kSOjDU4o9OujfyZbzihSmnCKdOLX2Z70A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n1/RW+jyd3hHLURd7C1NXqO82Mj22ooF62oyxElnZdu0TyWBuBoF4gCStxJ26JJYOdH2Zwaohb/tWZzCIebzf8Bb7u1xDCaR2bvaOquuCthEF2lz32i2xzDP/bqVwL0xO3SxR9AtdFcU0WVWUc6+hC+Qk8in+S1HAO3Rx3x6/es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773737312; c=relaxed/simple;
+	bh=tDo9OmIfiT5G3x5H5qI/bsN8tjRVgdhgQfHqmc1A6Hs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HN6o92Ssb/kk6kp9f/v8xURXXlWxtnQ5N5FOEo6WIQGV3VNpnV+YQQjb1xHl5qZBNUK9keYk7SDDn9oLfdJN4umiMUQ6LgHjnmabb1d0K609zlWJVomTNz+GX84qwNHEVXrwzBqvB1+8j3+MxKRY0yn6UHs5RCrd2n3SjliZdxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=laEyObRa; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="laEyObRa"
 Received: by smtp.kernel.org (Postfix)
-	id C2F9CC19425; Tue, 17 Mar 2026 08:46:37 +0000 (UTC)
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 15E46C4CEF7
-	for <soc@kernel.org>; Tue, 17 Mar 2026 08:46:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 15E46C4CEF7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-5674d8be45eso2051171e0c.1
-        for <soc@kernel.org>; Tue, 17 Mar 2026 01:46:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773737196; x=1774341996;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S1dFAsgiIjJwbzkv4iAkhLhnDR/uX1wmLjNNPR+w9HA=;
-        b=g3eJi9lC/qr48P6zA0icuxYaIXnX6E5LRXFH3yUGvw50nu3w6KAIyArfEJdDdeMd0f
-         G+TOd750PTQk2ysv8H52dPMVNHz0VA3GuYRQdDjy7fWrZ6OBuJGoj/zcEVhhTSXEWHwh
-         h6AN38stUPCw1cfH2fnuSBzKrEJ9lOLLfZFQBucDxJNxYDziLqQ2k79jm5+sIMcmb+fR
-         2IQIGx3Z8Wt5BudelAcYE053J3jQZr0oXG1gIxa7qM6H0J81CyqwLqy1HeGRiZgdizVu
-         pKh+IBbASWrY9g2RCvypeSvQVPdfbKaq1qJmbSW0r3ya/m21l+0njRC6vC6/uF2KQjIe
-         JW6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVgbbH0t9AN81bhQxVmLXJyzjAPELz6HxkpiG55M9Lg2ZsiX1ajclJmBBVivs+aQ8IcFPk=@kernel.org
-X-Gm-Message-State: AOJu0YxC7NoFPUkEXgD9+vE/RcIkiek6ydZ/Qtl2WOyB5uZLdo+hhG2h
-	+X1n9Jxz0EOHBxcNfd8b2y+0yycmzIBHIRhIFz+hGz4pVQu8kdpBLztC10s5BDVx
-X-Gm-Gg: ATEYQzzhII1eKNcOS5sVORWnq6UHAwcV1NPZoxqdNNgaCVRpCax+nZbHfgO7nhFIYr4
-	XRgmRpEtOTbpArv/MNFFvH7s5A29FmEObXerCbUcG27BaOlr7Y1YRj7k6rWiJT08kYAJXLYzhI/
-	/EwOc5k9qnVSGDPPvbO7ntT+fBZd+CBC6d3VNh3KijBF4es5EarRvdL/6fETLc3MSQ3TJOTyUug
-	mwMAfhgNHezw0zaGBMERAmErTSnSVaW6rqdyxcF1KxL4Cv0W0DnLjvPWz0oWxL4aN77tqFNtakq
-	JfY/Zia680QJrrzwB3XgBAalSKwPPU7GcjC9Z9nszy5mcfXp2i2wGDkniD3KaNqTnP8ufKQmG1p
-	5Zrdg+h9OJKxZoRWJH/5X9nv1ivjrSmGH2ZXRtC/RiTnUE/lrDrbcdn9wrRi3Ug07cio2nRBA1z
-	5QeiVnRxJIQ4i9yiBuu7TIes7PdVa49ODuOmekjb0Oiqrbf5QGbfPGKtp/mbDm
-X-Received: by 2002:a05:6122:9005:b0:56b:8399:c3 with SMTP id 71dfb90a1353d-56b83990755mr2772855e0c.14.1773737195918;
-        Tue, 17 Mar 2026 01:46:35 -0700 (PDT)
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56b84300190sm3104126e0c.18.2026.03.17.01.46.35
-        for <soc@kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2026 01:46:35 -0700 (PDT)
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-5ffa0b23a60so1738942137.0
-        for <soc@kernel.org>; Tue, 17 Mar 2026 01:46:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWUbgiMn9qIN+pZAd0wfpIWzXlnWjcdTCfiVN+8im5svNf8Njpm7+FyjlDq/FzxYQelKSU=@kernel.org
-X-Received: by 2002:a05:6102:b0f:b0:5ff:8b8:9f89 with SMTP id
- ada2fe7eead31-6020e682490mr6012940137.35.1773737195424; Tue, 17 Mar 2026
- 01:46:35 -0700 (PDT)
+	id BAB01C2BCB0; Tue, 17 Mar 2026 08:48:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212EAC4CEF7;
+	Tue, 17 Mar 2026 08:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773737312;
+	bh=tDo9OmIfiT5G3x5H5qI/bsN8tjRVgdhgQfHqmc1A6Hs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=laEyObRactQ5CBD7PtTv3zIoevfgiUwGfSazVh/UIZI5QYKl8MTU5/Tvrpdi+K7Pj
+	 cc6BqNwaelGiGBLdCgFqGsxkVUfd8AqIUsxmYMBYr2DRvgOook17Un2v0V5EL+dLCQ
+	 ftlGMlakXdzZPMREs013dieOJ/cMIxvA6fL0wFDarokubAE/IaTfFmZSupSpKI6nw/
+	 w8FEU8iJOakGe4TSTKJWz++Q0DMeAwl877ANPlGrlM6JtKBdhBvDq+v+4xb3UKKY+e
+	 ofViXdFqoLcPZu0RRRuiCAFW1kZNXQCcUadwRPMDHaKqVtSXHCU8uQWKuTEUhFBO4K
+	 KTM8wnPTdOh7w==
+Date: Tue, 17 Mar 2026 09:48:30 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 7.1 #1
+Message-ID: <20260317-impetuous-attentive-penguin-43a503@quoll>
+References: <13966995.uLZWGnKmhe@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1773399669.git.geert+renesas@glider.be> <20260317-spirited-mahogany-swift-b1ac53@quoll>
-In-Reply-To: <20260317-spirited-mahogany-swift-b1ac53@quoll>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 17 Mar 2026 09:46:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX4wKWPvRR=BBAr+1wAK2ZmW3kKxEN4W_vwNyGuzB=-gw@mail.gmail.com>
-X-Gm-Features: AaiRm518-F2BTcrALlb72his_SW49wZkbqH0hdFeWMeWLkKc2Nwvr-LXzIlrumI
-Message-ID: <CAMuHMdX4wKWPvRR=BBAr+1wAK2ZmW3kKxEN4W_vwNyGuzB=-gw@mail.gmail.com>
-Subject: Re: [GIT PULL 0/4] Renesas SoC updates for v7.1
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: soc@lists.linux.dev, soc <soc@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <13966995.uLZWGnKmhe@phil>
 
-Hi Krzysztof,
+On Sat, Mar 14, 2026 at 07:45:34PM +0100, Heiko Stuebner wrote:
+> Hi soc maintainers,
+> 
+> please find below Rockchip DT changes for the merge-window for 7.1 .
+> 
+> So far only arm64 changes :-)
+> 
+> 
+> Please pull.
+> Thanks
+> Heiko
+> 
+> 
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> 
+>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.1-rockchip-dts64-1
 
-On Tue, 17 Mar 2026 at 09:33, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Fri, Mar 13, 2026 at 12:12:56PM +0100, Geert Uytterhoeven wrote:
-> > This is my first pull request for the inclusion of Renesas SoC updates
-> > for v7.1.
-> >
-> > It consists of 4 parts:
->
-> I think pw-bot did not reply to any of these pulls, but I applied now
-> all of them.
+Next analysis reports:
 
-That is correct: no replies from the pw-bot.
-renesas-dts-for-v7.1-tag1 does not seem to be in soc/for-next yet,
-perhaps you forgot to push? No need to confirm if that is true,
-I'll notice tomorrow ;-)
-Thanks!
+Days in linux-next:
+----------------------------------------
+ 1 | + (1)
+ 2 |
+ 3 |
+ 4 | + (1)
 
-Gr{oetje,eeting}s,
+Please keep changes in next for at least few releases, in case of
+development pulls. Allow community to actually test your code before you
+send it to upstream maintainer. We are early in the cycle, so there is
+no need to rush changes which were almost not in next.
 
-                        Geert
+I will leave pull for later (not reviewed yet).
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Best regards,
+Krzysztof
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
