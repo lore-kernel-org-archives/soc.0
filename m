@@ -1,128 +1,171 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CC339D6D5;
-	Tue, 17 Mar 2026 09:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3562437EFE2
+	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 10:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773741213; cv=none; b=echm0eyF/R5dJi7nKmEiGT2DBEp88bUegJsIUxaz7EJflmroe8vwFHoofVklSYYovOvha7WZLX7ETmVeSvdJrt90lUMyxXYJoJ05znshR0VL4MDlXlAWaiCtv+knIWtDYV/LQpXmu5wTJDsN/kxxazvwfsR3e+HQ8MWTGVGwe4k=
+	t=1773741770; cv=none; b=qP+wCAZn0XmdQJFKAFDZI16Q61angKUb23Y/o5KZIteewWa+6TZWwhvFEBghYzGuuo4G1PyizmX09h0uuj92TYk+OaFGLw1i2RzjFAEMBLBhw49JqdnX60CYwl9+47xW/zSskFQ0Spd6SrgQgHZzy3O+q78a8NjRvn0eSnUVNas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773741213; c=relaxed/simple;
-	bh=lvTj9FI5N2EKRsJMc1HzB6JFMEGudkjHKx3OFuSywvA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=tJ6OTHT+lWNT26+E+f17bPXYo10e7rSaRDk1i3P1EFPWOElUDdpS8YoR/+IWTEknS+lE3dWlGyR2IFUW0bvawUmP7tu8FdzpG+dAsr82uCMFApf44l6WVOHfqR7+DWy8PVf0PRjbTOOPEMQIGf9AeWZ31rRK+T0plX0x/XJDSFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGVBg3UU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773741770; c=relaxed/simple;
+	bh=/yjM0B/21ksLvUSpPQe8vh9+2xhY1H13R+B+5Z9acBk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qsTPgxQESU4evkUHVjWMz1nHQSBAqynyAOdKPBnZ+PTs267/ascmyl74z5t+bu/WV1LRqGwCLhLsEtRGyq7Arc4yUnQo6FHP3SfuWjcvWbFXCAXnO5f7nBEccCp9G2MApZq2SPWDQ8RnejOeWpF0cBrS1gaeL6uL3wezPqwFB/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=LgP3QfHf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGVBg3UU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A63C19425;
-	Tue, 17 Mar 2026 09:53:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773741213;
-	bh=lvTj9FI5N2EKRsJMc1HzB6JFMEGudkjHKx3OFuSywvA=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=GGVBg3UUJ4T4YZihBXHwBey/Snpk9DIdBaG0ctWJ42SXHunPinPE+yWAM48FMshAN
-	 dhAc69UBKYIV5RQ5oWpaf2lO6AKMDE28zV0CrrqttSjeR0QzuFpdBXYp3NzgHJu7Zu
-	 oyJ/XS8rrCfCLQcKixO9SA7AKsmUgMz5me9JIisBJxBXOcIqe2LEYRzxF/87DvsyS2
-	 fp3kzhITkPd4pTeb7HW8/oK1DJucv7ntiZuXfb59ZizGaHHV/3WhdWGTQ0kvU2hn/a
-	 yW3JXc+Id5E4wUbcOKW9qyQEFlHSLjFkrNFVwp/ItTwGrTCVmUrbikMnQADTNXwIFP
-	 sZ2WpuOsxfF4Q==
-Message-ID: <69927bd8-d476-4a24-91af-f21cdc0bce80@kernel.org>
-Date: Tue, 17 Mar 2026 10:53:29 +0100
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="LgP3QfHf"
+Received: by smtp.kernel.org (Postfix)
+	id E2580C2BC9E; Tue, 17 Mar 2026 10:02:49 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C3DD0C4CEF7;
+	Tue, 17 Mar 2026 10:02:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3DD0C4CEF7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=kVSAKNPWFaVjAvCtb6poHFlHo32MFz9vQGa3WsfvRMM=; b=LgP3QfHfOOYMNSRMLjnLoFRFAa
+	ZCDb16yFn4AYA3tDWxE0CFUeDIiFC4NxMxix+jDDlDzm7goSZaEg7muiykq02mgzgm/4pctchpZ75
+	MQ6AOfUMGYpw1H6U8uc1tfbMBWxRehX6wF88fh7EWDORMFBrzFlzQI/L6uGneN8v5nELhdGDPTm2I
+	H5XtgeA+5+V5EukXV+sRWIOsH+Ey0+MiC0QYhtL3wrlq2PBNKsECLGszqHmyW/hSDtteNeYMI1QAW
+	/M+Lp7uqYobYf6/Rq1/wWqxfcpZ7yU5BPA2djnbJh/+KMCY09AXRR3g+p4ENQIdyaBNT68CbUlWeu
+	+/gjaZmw==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Rockchip dts fixes for 7.0 #1
+Date: Tue, 17 Mar 2026 11:02:46 +0100
+Message-ID: <3682281.iIbC2pHGDl@phil>
+In-Reply-To: <aa9d42ad-c480-4fc8-b8be-1a0c505b4293@kernel.org>
+References:
+ <5055064.GXAFRqVoOG@phil> <10817796.nUPlyArG6x@phil>
+ <aa9d42ad-c480-4fc8-b8be-1a0c505b4293@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL 3/4] Renesas DT binding updates for v7.1
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: soc@lists.linux.dev, Magnus Damm <magnus.damm@gmail.com>,
- linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org
-References: <cover.1773399669.git.geert+renesas@glider.be>
- <cover.1773399673.git.geert+renesas@glider.be>
- <20260314-quick-gray-saluki-0f96ff@quoll>
- <CAMuHMdXJx14SDXq7oQ-m-576GRQztRybs1HSinzf03ttvF3c_g@mail.gmail.com>
- <bdefa3d7-353c-4aa1-a013-685b46773fe7@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <bdefa3d7-353c-4aa1-a013-685b46773fe7@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On 17/03/2026 10:29, Krzysztof Kozlowski wrote:
-> 
->>
->>> See also submitting patches in DT dir.
->>
->> So the second commit is subject to II.3:
->>
->>   3) For a series going through multiple trees, the binding patch should be
->>      kept with the driver using the binding.
->>
->> In this particular case, I could have included it in my drivers branch.
->> Where do I put SoC-specific DT binding changes that are not picked
->> up by anyone else (I don't have any this time)?
-> 
-> What is "SoC-specific"? You put the DT binding with the user, that was
-> always the rule and that is implied by submitting patches. If you do not
-> have any user, why would you pick that up?
+Am Dienstag, 17. M=C3=A4rz 2026, 10:19:29 Mitteleurop=C3=A4ische Normalzeit=
+ schrieb Krzysztof Kozlowski:
+> On 17/03/2026 10:05, Heiko Stuebner wrote:
+> > Am Dienstag, 17. M=C3=A4rz 2026, 09:45:30 Mitteleurop=C3=A4ische Normal=
+zeit schrieb Krzysztof Kozlowski:
+> >> On Sat, Mar 14, 2026 at 07:42:38PM +0100, Heiko Stuebner wrote:
+> >>> Hi SoC maintainers,
+> >>>
+> >>> please find a below some Rockchip fixes for the current 7.0 release-c=
+ycle.
+> >>> And in the next PR, even one driver-fix this time.
+> >>>
+> >>> Please pull
+> >>>
+> >>> Thanks
+> >>> Heiko
+> >>>
+> >>>
+> >>> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5=
+b5f27f:
+> >>>
+> >>>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> >>>
+> >>> are available in the Git repository at:
+> >>>
+> >>>   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchi=
+p.git tags/v7.0-rockchip-dtsfixes1
+> >>>
+> >>> for you to fetch changes up to 2ed11ad1c2b4c191cb2ed6741be127eb99f863=
+4f:
+> >>>
+> >>>   arm64: dts: rockchip: Correct Joystick Axes on Gameforce Ace (2026-=
+03-12 20:52:53 +0100)
+> >>>
+> >>> ----------------------------------------------------------------
+> >>> A big number of changes fixing dt-schema issues on the ARM32 side,
+> >>> fixes for the Gameforce-Ace to make the hardware work properly
+> >>> (including thermals) as well as fixing issues both on Beelink A1 (spd=
+if)
+> >>> and Pinebook Pro (Wifi) by reverting the commits that created the iss=
+ues
+> >>>
+> >>> ----------------------------------------------------------------
+> >>> Chris Morgan (2):
+> >>>       arm64: dts: rockchip: Correct Fan Supply for Gameforce Ace
+> >>>       arm64: dts: rockchip: Correct Joystick Axes on Gameforce Ace
+> >>>
+> >>> Fabio Estevam (11):
+> >>>       ARM: dts: rockchip: Remove rockchip,grf from rk3288 tsadc
+> >>>       ARM: dts: rockchip: Move PHY reset to ethernet-phy node on rk30=
+36 boards
+> >>>       ARM: dts: rockchip: Fix RTC compatible on rk3288-phycore-rdk
+> >>>       ARM: dts: rockchip: Use mount-matrix on rk3188-bqedison2qc
+> >>>       ARM: dts: rockchip: Remove invalid regulator-property from rk32=
+88-veyron
+> >>
+> >> Not a fix.
+> >>
+> >>>       ARM: dts: rockchip: Fix the Bluetooth node name on rk3288-veyron
+> >>
+> >> Not a fix. This is a pure style change. Fixes for current cycle means
+> >> either important issues being fixed or errors introduced in current
+> >> cycle.
+> >>
+> >> Changing style from one to another is not a fix.
+> >>
+> >>>       ARM: dts: rockchip: Fix the trackpad supply on rk3288-veyron-je=
+rry
+> >>>       ARM: dts: rockchip: Add missing the touchscreen interrupt on rk=
+3288-phycore-rdk
+> >>>       ARM: dts: rockchip: Fix RTC description on rk3288-firefly-reload
+> >>
+> >> Not a fix. Style of node name is not a bug, otherwise describe user
+> >> visible (not "internal tools" visible) impact.
+> >>
+> >>>       ARM: dts: rockchip: Fix GMAC description n RK3288 boards
+> >>>       ARM: dts: rockchip: Fix LED node names on rk3288-phycore-rdk
+> >>
+> >> Several other are questionable as well, since they were in DTS for long
+> >> time. Please also read Linus' explanation here from some time ago - if
+> >> the issue is for long time and no one cared, then changing it is a nor=
+mal
+> >> development.
+> >>
+> >> Several changed pieces here look like 3 or more years old, so does not
+> >> fit criteria of current cycle fix at all.
+> >>
+> >> Please split the pull.
+> >=20
+> > I do remember in the past, changes that reduced the number of
+> > dt-checker errors were considered fixes, but it seems that has
+> > changed, so I'll split that accordingly.
+>=20
+> It is subjective and of course dtbs_check fix for issue introduced in
+> current cycle is a RC-fix. I am pretty sure that many maintainers would
+> pull all above to RC, but I follow a bit stricter interpretation just
+> like Linus explained it:
+>=20
+> https://lore.kernel.org/lkml/CA+55aFyvW38WU93CqegHiKt-ReO8yNfAOUGZRFGY3-A=
+q0UsETw@mail.gmail.com/
+>=20
+> https://lore.kernel.org/all/CAHk-%3DwgFuoHpMk_Z_R3qMXVDgq0N1592%2BbABkyGj=
+wwSL4zBtHA@mail.gmail.com/
+>=20
+> So the issues were there probably for many years and fixes do not have
+> user-visible impact, thus they look like regular improvement of poor
+> code. Just like I evaluated dtbs_check findings in 2024 - 50% of
+> warnings are style.
 
-Actually I want to correct myself or explain more. If you document ABI
-for existing driver with DTS user of the ABI, but without driver change,
-e.g. new front compatible when using already documented fallback, I
-would keep the change in the driver branch, even  though technically the
-DTS is the user of new compatible. That is what I was always doing at least.
 
-Why? Because I expect there might be a next patchset with binding+driver
-adding new fallback to the same binding, which would have to go via
-driver branch because of mentioned submitting patches rule. Therefore if
-I put that first binding in DTS branch and in the future I want to put
-next change in the driver branch I would have unnecessary conflicts.
+Thanks for the explanation. As I said, I'll adapt the PR accordingly :-) .
+
+Heiko
 
 
-Best regards,
-Krzysztof
