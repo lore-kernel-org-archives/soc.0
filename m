@@ -1,58 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E207F2836E
-	for <soc@lists.linux.dev>; Mon, 16 Mar 2026 09:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4CE388E54
+	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 08:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773652366; cv=none; b=LByOC7HweLAPWy0nYZGBzZqwTzPb5i8YSUb53DCcylK4WLL97xfZ9w1St8K2h50VrTStPWksp0zIn82mb0dKZGTV3U0ViQLIV/PUcsBjkD0TFfTirh5sqUkRt4TpkrEilTmWOYqgREpMUjugvnup9XWB5OThI+FPKjfC3NZAb/E=
+	t=1773734602; cv=none; b=VisbRFPl2pj9A2ZhGQEIOb1IRWVRnBXE7Sh5YM9D4b4hAUm2pD27t7OXkzltmOWL7Ym0lPf3bThKeIbADnAPTo/sHh5nYlZsi/XqkISywhz+DAXCQbjU1e24kW23/fpJM3NyNPY/GInd8bhSIXhxEbwZkKoo1dwKBRyYwU/aBhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773652366; c=relaxed/simple;
-	bh=go02ixgSL20Ux92tuJRbD1N4w8blsx267fjWxefHE9k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SukkJNlD0JMAeIt5ZUujFi9v4Ip2f/qQTxzKvCkCHRKO9pU+zrUzSP8aTxxBFeB1v/7b8eLLcFoHb2b3uV9iCNBgtl75cs/6uGOu0rko+sXUJ35nxEP2kv1WIfRS2zTGxDuso8DdPdq+QOic0jVw5OyS7d7PhjO4tdx0iYxlmGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=sl7cOmPx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773734602; c=relaxed/simple;
+	bh=C2n3Bh4IMnS+Db8fN1VzLFfIHd2WnC9Bb8dscoV8+YM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U9Ycw9ciOoTjOL3an6sq5/RKASXZ3+p3dLx8TnG4JSf5H+bFGKlEmpWSbXXIlGzURZnSf0eFgMM/6hlrSwxjYu1iVqSgPTnBhEuSZI1KkcBqY2vv7l8Y1ZjzcHGGqTpLm8qJC856F3OPt45fXdkUVHFsO4bj1yl5jkPNyxa8Rqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=idjx2NFw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="sl7cOmPx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="idjx2NFw"
 Received: by smtp.kernel.org (Postfix)
-	id A7EB1C2BCAF; Mon, 16 Mar 2026 09:12:45 +0000 (UTC)
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 36B80C19421
-	for <soc@kernel.org>; Mon, 16 Mar 2026 09:12:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36B80C19421
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 267284E426D0;
-	Mon, 16 Mar 2026 09:12:35 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id EDEDE5FC4A;
-	Mon, 16 Mar 2026 09:12:34 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 80135103680A9;
-	Mon, 16 Mar 2026 10:12:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773652354; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=XMdyJKTxV9bkaRt+aS+VoCDjmIeGU1rx1qmRc6qB+O4=;
-	b=sl7cOmPxOBByV2Wg/r9auwL1PSRhZ5BhyW7EYgNtKJjC5vkTdWs5Bda+nDMzbykfNj0OWy
-	GVouwCYuWsT9pONEmnyovcdPq+s46bK7P281V1Lh53fhgD7cOdtfhODVkbPX7vDWa+u7sM
-	M2Aypbq9t65k9dGtVIXwnb2QRG4dFPKSSWYExteVnOFQ2FuHHTxCW3JeZGqKnLOQgbYVQz
-	diQ9ulCLwTleo7FBxYlvR9JBp+n9i05yZ/qr1JQHPwtR1Ed7gpALebf5AE4Xqc9Y5hudiA
-	6DHeY3l3TmyDTQMGLQ6KONrnobcMvomSSm95DMCjdYqpWaVAyqAiAsGJ9qSvDw==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org, Andrew
- Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] ARM: mvebu: fixes for v7.0 (#1)
-In-Reply-To: <20260314-illustrious-origami-pronghorn-964508@quoll>
-References: <87sea3680w.fsf@BLaptop.bootlin.com>
- <20260314-illustrious-origami-pronghorn-964508@quoll>
-Date: Mon, 16 Mar 2026 10:12:30 +0100
-Message-ID: <87ms085e9t.fsf@BLaptop.bootlin.com>
+	id 08495C2BCAF; Tue, 17 Mar 2026 08:03:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63666C4CEF7;
+	Tue, 17 Mar 2026 08:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773734601;
+	bh=C2n3Bh4IMnS+Db8fN1VzLFfIHd2WnC9Bb8dscoV8+YM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=idjx2NFwSiLqX2HOhxAHnHgvc9dAM0s6kh/RGJTk6QtOqAn6dPXI458stw8Cyyqn/
+	 nF1r8IWBF6PlOtGf6R4Hv8V5uLgIGtrwM9KpSXICqmEo5eCnw6Ph3LQ4DjUfWK4yIZ
+	 t+/wePKghcIRf3gERl8EMEf/GUXqDpDkickBMwCd6UdE1bvXvu4X5+H+HwNUxeAOgv
+	 G4sSwX4blcJ1O8/dzZ7hnCB1Ix66CZdAHPaJxVGWyFzvdknIIzYNggyRG52b5roUFO
+	 AiwSSKCXZNxdaqbHNFprTDjPCmIiXu7uctdGHCaQznW0JpHYrmLdg+KvuvO4r1W8BU
+	 0tWU9or2O+NFA==
+Date: Tue, 17 Mar 2026 09:03:19 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: soc@kernel.org, arm@kernel.org, Fabio Estevam <festevam@gmail.com>, 
+	kernel@pengutronix.de, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [GIT PULL] i.MX fixes for 7.0
+Message-ID: <20260317-jumping-corgi-of-defense-038bcd@quoll>
+References: <20260312153557.3338430-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -60,58 +44,32 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Disposition: inline
+In-Reply-To: <20260312153557.3338430-1-Frank.Li@nxp.com>
 
-Hello Krzysztof,
+On Thu, Mar 12, 2026 at 11:35:54AM -0400, Frank Li wrote:
+> From: Frank Li <Frank.li@nxp.com>
+> 
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> 
+>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux.git tags/imx-fixes-7.0
+> 
+> for you to fetch changes up to 04d00f57c168153758d2c6a2395d20aadc785e3e:
+> 
+>   arm64: dts: imx8mq-librem5: Bump BUCK1 suspend voltage up to 0.85V (2026-03-06 11:19:41 -0500)
 
-> On Fri, Mar 13, 2026 at 04:53:03PM +0100, Gregory CLEMENT wrote:
->> Hi,
->>=20
->> Here is the first pull request for fixes for mvebu for v7.0.
->>=20
->> Gregory
->>=20
->> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f=
-27f:
->>=20
->>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
->>=20
->> are available in the Git repository at:
->>=20
->>   git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/=
-mvebu-fixes-7.0-1
->>=20
->> for you to fetch changes up to edb7efa767da8bb82d724b85178be251ec4e060e:
->>=20
->>   dt-bindings: arm64: add Marvell 7k COMe boards (2026-03-13 16:41:11 +0=
-100)
->>=20
->> ----------------------------------------------------------------
->> mvebu fixes for 7.0 (part 1)
->>=20
->> - Add bindings to validate the device tree that has already been merged.
->
-> Merged when? Why is this a fix not a development (e.g. documenting
-> something 10 years old)?
->
-> Please write informative pull requests. You want to here provide the
-> context WHY maintainer should take this as fixes.
+Hooks fail.
 
-Okay, I will add a reference to the thread and a summary. In short, a
-new device tree has been merged without the binding, which caused
-warnings when running dtbs_checks and annoyed Rob.
+Commit 587096ada520 ("Revert "ARM: dts: imx: move nand related property under nand@0"")
+	committer Signed-off-by missing
 
-Regards,
+Please implement basic checks from beginnners maintainer guide (LPC
+2023).
 
-Gregory
+Best regards,
+Krzysztof
 
->
-> Best regards,
-> Krzysztof
->
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
