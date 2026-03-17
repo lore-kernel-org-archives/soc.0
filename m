@@ -1,108 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C1C3451CF
-	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 09:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB38035836F
+	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 09:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773738532; cv=none; b=ry7UoI6xcZ+qvzO+mX0Ya5aXPdgCJH8FKzm1dCYoNfOCXAQAR19quQFfautTkHVDzHFGcIrF6wWceUu6U2AA5WCBzXCpJP5/06dj2IUx4YkSY8ScVzhlpWx4YLlbPuoWu9tjfWPVRIGn7m9+rWp3zgkC2OPBe+3JkGZB6EHiSho=
+	t=1773738700; cv=none; b=P6qJIytV6ZSmcM/wov4m3MdEoIRALzFFbdxY2T+Gs+m0tFrRsV/6/waZQd7cRXiERvBbNpG7AOrhpqwrMTUvRmrWeqiXJf5sgNgws/wH4w3DbMeCkIeoSY/6Eg+bUxoms6BvdZjasSUVrym+xAOl4AkBcYcNxGDVgXmiUIz/N5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773738532; c=relaxed/simple;
-	bh=Yh7w0GULXsUtsxQyVqeTx4DqRsYtHW1YHRE4G/PnOxY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cvTxm/uUwjZGiEdf7kJ0LwUVjZ6v9XZepum9U0QYn0Bqb5Ew+wgcZsJZ9jEHcQMam2g3C16cJpRh/dNPimwwDuQ05ik0zhS4B6gelHnStm+c+ByqJc3FhSBpkWDel1s7NEbgMJwbc1jtzYX675b0QyId85H9Kvd5QDV1QWP+5Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=BPlZNlmf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773738700; c=relaxed/simple;
+	bh=BzmkYmqk+b2RtlUzCdKWXMzHPnRFieI71IicbZl0NgE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZRsen2hkvRHxAftg8N5mXAjn8Xtyh9ozIo8FMwfmKWpcRGF9NvlyRk2zojF9bVkut9A25bsBKUMLSsNYC8ctsSxptwDQJp1hZ8b89Hihouxthn7i2SEISwC2RpkmDDwyn5vogUui0yCzz3uOYvo7Er5TGpgEW5opTHxk+egYqHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvfH09Ox; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="BPlZNlmf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvfH09Ox"
 Received: by smtp.kernel.org (Postfix)
-	id A0DEEC2BCAF; Tue, 17 Mar 2026 09:08:51 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7B748C4CEF7;
-	Tue, 17 Mar 2026 09:08:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B748C4CEF7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=RmR20+HOUCm1UbnC886tHfKXPT4oDC9ABYMrrw1uIq8=; b=BPlZNlmf8H+uMknFzE+4Zff0JT
-	Y8N3+8qOYbsakjtr/tiiTCLhNzOmODl6A2NYgXv8fBWBnSvfeQQ7SxU2dxLeVYcfFlUSiXl5hZ4tK
-	J/e5sd4mZ/SPZ70TInHUSjMOfh4/i75M5PooA47ni4mw1OCOErIsCM+dceJvGjEBGlA36SYEjYaPa
-	ohP7sNXfpayYHXBM4ydFCVnBBUfTxlwq5d5OHu+G+Of5WfKUZHmMBJVlp7VaYcHGyD73/ftzv66hK
-	nU7mgrGF5l6d5192A7rJw0/BQo+WqaO+0MsrD7y8C4CsEW/vYQU4ZhFrdtXGyGkQRpr/9I2pA2bZG
-	merpDMig==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 7.1 #1
-Date: Tue, 17 Mar 2026 10:08:48 +0100
-Message-ID: <2031768.PYKUYFuaPT@phil>
-In-Reply-To: <20260317-impetuous-attentive-penguin-43a503@quoll>
-References:
- <13966995.uLZWGnKmhe@phil>
- <20260317-impetuous-attentive-penguin-43a503@quoll>
+	id A497DC2BC9E; Tue, 17 Mar 2026 09:11:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DCBC4CEF7;
+	Tue, 17 Mar 2026 09:11:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773738700;
+	bh=BzmkYmqk+b2RtlUzCdKWXMzHPnRFieI71IicbZl0NgE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fvfH09OxPAvRaBYMrJKcAXFUYB48JQx8i2ukLbEZCkgje2HfdhFxCuK/C/Ngafy8i
+	 tG6asppJKODyIRXkzx+NgYSs5bVDQV7f+WMGerog6qN8/Uj95V8QLlWstuwJODkP0R
+	 +Pgmb53IiI+WrsKw/HZN90LCqq3HmjV52/r6RojY5/b/PgO3woqQEm2zJfIn5pTVpF
+	 NIf6lUc6tpw7lDttMWrSDt/47CjNZA2LIZaCTAILNyygh9ptM/Oz/9kazsu/He5scB
+	 Zazt6GeX7QFAnztzYmfAHUykXFdep+kJvbkOcCLIXLwi0bKjSQUYnpwARle1dOyPQ3
+	 yuOKGE1VuRWlg==
+Message-ID: <0234dc75-b042-4408-bbad-a777c0bddb3f@kernel.org>
+Date: Tue, 17 Mar 2026 10:11:37 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL 0/4] Renesas SoC updates for v7.1
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Konstantin Ryabitsev <mricon@kernel.org>
+Cc: soc@lists.linux.dev, soc <soc@kernel.org>,
+ Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org,
+ linux-renesas-soc@vger.kernel.org
+References: <cover.1773399669.git.geert+renesas@glider.be>
+ <20260317-spirited-mahogany-swift-b1ac53@quoll>
+ <CAMuHMdX4wKWPvRR=BBAr+1wAK2ZmW3kKxEN4W_vwNyGuzB=-gw@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <CAMuHMdX4wKWPvRR=BBAr+1wAK2ZmW3kKxEN4W_vwNyGuzB=-gw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Am Dienstag, 17. M=C3=A4rz 2026, 09:48:30 Mitteleurop=C3=A4ische Normalzeit=
- schrieb Krzysztof Kozlowski:
-> On Sat, Mar 14, 2026 at 07:45:34PM +0100, Heiko Stuebner wrote:
-> > Hi soc maintainers,
-> >=20
-> > please find below Rockchip DT changes for the merge-window for 7.1 .
-> >=20
-> > So far only arm64 changes :-)
-> >=20
-> >=20
-> > Please pull.
-> > Thanks
-> > Heiko
-> >=20
-> >=20
-> > The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5=
-f27f:
-> >=20
-> >   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
-> >=20
-> > are available in the Git repository at:
-> >=20
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.=
-git tags/v7.1-rockchip-dts64-1
->=20
-> Next analysis reports:
->=20
-> Days in linux-next:
-> ----------------------------------------
->  1 | + (1)
->  2 |
->  3 |
->  4 | + (1)
->=20
-> Please keep changes in next for at least few releases, in case of
-> development pulls. Allow community to actually test your code before you
-> send it to upstream maintainer. We are early in the cycle, so there is
-> no need to rush changes which were almost not in next.
+On 17/03/2026 09:46, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
+> 
+> On Tue, 17 Mar 2026 at 09:33, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>> On Fri, Mar 13, 2026 at 12:12:56PM +0100, Geert Uytterhoeven wrote:
+>>> This is my first pull request for the inclusion of Renesas SoC updates
+>>> for v7.1.
+>>>
+>>> It consists of 4 parts:
+>>
+>> I think pw-bot did not reply to any of these pulls, but I applied now
+>> all of them.
+> 
+> That is correct: no replies from the pw-bot.
+> renesas-dts-for-v7.1-tag1 does not seem to be in soc/for-next yet,
+> perhaps you forgot to push? No need to confirm if that is true,
 
-okay, will adapt to the faster pacing of PRs getting looked at.
+I pushed for-next a bit after this email.
 
-In the past I was trying to make Arnd's life easier (not sure if that
-helped or not) with the PR available, so that he could get to them when
-he had time.
+The workflow is far from optimal, because it has two stages:
+1. Iterate over each pull email, check, merge and eventually push only
+this branch,
+
+2. Merge to for-next and document the merges for internal
+accounting/tracing. I guess I could merge it after each stage (1) above.
+
+The bigger problem is lack of replies from pw-bot.
 
 
-Heiko
+@Konstantin,
+I use modified Rob's script to go over patch/pull queue in Patchwork:
+https://patchwork.kernel.org/project/linux-soc/list/?state=*
+
+I deal with them one-by-one, so when I finish merging, I want to be sure
+that Patchwork status is updated, thus through the script I mark it
+"Accepted".
+Like this one:
+https://patchwork.kernel.org/project/linux-soc/patch/cover.1773399675.git.geert+renesas@glider.be/
+
+Around then - can be just before or after - I push the updated branch to
+git.kernel.org. I fear that because the pull is manually updated in
+Patchwork to "Accepted", pw-bot ignores it and does not send the
+notification.
+
+Is it feasible to change pw-bot so it will notify even if it is marked
+as "Accepted"? Or any ideas how to change the flow to have both:
+A. pw-bot reply,
+B. Be 100% sure that Patchwork status is updated (allow my manual update
+via script)?
 
 
-
-
-
+Best regards,
+Krzysztof
