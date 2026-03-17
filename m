@@ -1,35 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75E435EDBA
-	for <soc@lists.linux.dev>; Tue, 17 Mar 2026 09:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9DB39B49F;
+	Tue, 17 Mar 2026 09:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739173; cv=none; b=CpVm7+CKA9STaQlyCcu4/c+rGtmLInyNbtWYmcLHalTemSxqekeU0w/jslYwmBBC73sDr1ktXYDP1em+72Nobjmuc56kIU0HrEDDQb3ikokVjvQsHZDYyQxFOAzewRrUzHK2Yw2ERrCXTJV2pQS3Q92DSOTsR0BigMaB/bPoPCg=
+	t=1773739794; cv=none; b=JOTulsr/p9HOo/g9fhgg4I54XCHEGIvw+GQJCTWpCg5vHOJRnemQV0SpTolPbUuqdXI5ouR8b4NhX7ktEQKV85QD9FRsVasbHkdGVcs/hTedxStQsLZD1eju146udy/Ik2vVm3/5isUSBA0hIWlGYpoGi1IAw7Zzv0CVcS7GOc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739173; c=relaxed/simple;
-	bh=be6va4WwPnBFOMfW6Lq/Dypb11IupWJmaZIo3CJTq3I=;
+	s=arc-20240116; t=1773739794; c=relaxed/simple;
+	bh=in4VyGB0AnZoJApG7MiVWwveHRL9EwDvdLfCcNsaZGU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UgxWX0otUtvU6nKgu/5Bp9sCbVQItWPgHjTRJ1qobau3TNS52x89/jH2X3MKgU5kYveZ9OC2cnvb/2aqhIeauajJzFNFj9uMe2zQl5zCmfoCLFNStSow6C6EiCkXcoDmqeYzIfr+DN9+bBn7dov0olIc1TmbqdgBu3zvejrNuug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKRDp3Ci; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=XnolMluZF9lXAepor2mzQaTUF5cGxTVpzyAK67h3kWo99lFgg7+BlBEmOjMPbM3E1xuXICpqHcfZ0DfYOo3/pF4I0pi8dx4DhdKhXM+REc/K9x4qExP2ohsfBZcgzXPT8Cp9ChjZ/KUiiF5HzwWXukAk3Rx37zAp1DiEjUun8Do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i39UqYTF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKRDp3Ci"
-Received: by smtp.kernel.org (Postfix)
-	id B0F19C2BCAF; Tue, 17 Mar 2026 09:19:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9C8C4CEF7;
-	Tue, 17 Mar 2026 09:19:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i39UqYTF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE5BC4CEF7;
+	Tue, 17 Mar 2026 09:29:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773739172;
-	bh=be6va4WwPnBFOMfW6Lq/Dypb11IupWJmaZIo3CJTq3I=;
+	s=k20201202; t=1773739793;
+	bh=in4VyGB0AnZoJApG7MiVWwveHRL9EwDvdLfCcNsaZGU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fKRDp3CiCzpbQ2NbDVx5XifGID6bUaoSSRNjp1UPT46LKIGfGMvW1SbwOzAhfMVA4
-	 MkBDwCQ3wkeGnMzFu4OrPumJJOD9wGFtTWwPrgjcCqBGdmmRJP6TkIf1LbbaJiIfxm
-	 OSu7eMEHza0kNOZBFS5YuSz8ZSr7cnKdCilryx5nwv4ljCPUtLIusZZGr7FM32NFLf
-	 OacMYpwCUDxlybUuYVrqdbDNqWSEzQSodjKne+cs/lXji2Y8JyQ6qFrgHm5JuLfFpd
-	 MD02OKfLwHJEsgwfMkhyd/tYvYqNJhgQw67hO4pjyjpqaV5YvRt/kWv/Nd4QAmio01
-	 1Z6ecKGi9B4aA==
-Message-ID: <aa9d42ad-c480-4fc8-b8be-1a0c505b4293@kernel.org>
-Date: Tue, 17 Mar 2026 10:19:29 +0100
+	b=i39UqYTFvobLTkeCKufdsA1I3JxL/zcQTHqm6KuPXpZHqGFkThQJ9YKm/HgZnImIW
+	 Ua5xiZPdb4qzSJpv+0FxyougBPylpOM64SdwSaQDJA1QDIdvATRsr7esppoLrDfeap
+	 LF4uPV09LG9A31CZZ9CTw3yZdhoWkHVqlBH5HcwGc4s15t0HvtZZm2Z0GBDHYqePzs
+	 P4H6KFnx0R7aHj9XsO9yl0h7Uog2UbK7E9Qc9hIWNIpqnYe/ou3RojZTy+ShDXAnzg
+	 dNVM+UOqQG4pTCE8YqZjYsMd7RmncJTKks4a1oMuCfOKkCocOQ2OskTtc/dQDqPRiJ
+	 jC85qAyB4hKuA==
+Message-ID: <bdefa3d7-353c-4aa1-a013-685b46773fe7@kernel.org>
+Date: Tue, 17 Mar 2026 10:29:50 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -37,12 +35,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Rockchip dts fixes for 7.0 #1
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-References: <5055064.GXAFRqVoOG@phil>
- <20260317-clever-flat-wolverine-313a4c@quoll> <10817796.nUPlyArG6x@phil>
+Subject: Re: [GIT PULL 3/4] Renesas DT binding updates for v7.1
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: soc@lists.linux.dev, Magnus Damm <magnus.damm@gmail.com>,
+ linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org
+References: <cover.1773399669.git.geert+renesas@glider.be>
+ <cover.1773399673.git.geert+renesas@glider.be>
+ <20260314-quick-gray-saluki-0f96ff@quoll>
+ <CAMuHMdXJx14SDXq7oQ-m-576GRQztRybs1HSinzf03ttvF3c_g@mail.gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -88,101 +88,93 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <10817796.nUPlyArG6x@phil>
+In-Reply-To: <CAMuHMdXJx14SDXq7oQ-m-576GRQztRybs1HSinzf03ttvF3c_g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 17/03/2026 10:05, Heiko Stuebner wrote:
-> Am Dienstag, 17. März 2026, 09:45:30 Mitteleuropäische Normalzeit schrieb Krzysztof Kozlowski:
->> On Sat, Mar 14, 2026 at 07:42:38PM +0100, Heiko Stuebner wrote:
->>> Hi SoC maintainers,
->>>
->>> please find a below some Rockchip fixes for the current 7.0 release-cycle.
->>> And in the next PR, even one driver-fix this time.
->>>
->>> Please pull
->>>
->>> Thanks
->>> Heiko
->>>
->>>
->>> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
->>>
->>>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
->>>
->>> are available in the Git repository at:
->>>
->>>   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.0-rockchip-dtsfixes1
->>>
->>> for you to fetch changes up to 2ed11ad1c2b4c191cb2ed6741be127eb99f8634f:
->>>
->>>   arm64: dts: rockchip: Correct Joystick Axes on Gameforce Ace (2026-03-12 20:52:53 +0100)
->>>
->>> ----------------------------------------------------------------
->>> A big number of changes fixing dt-schema issues on the ARM32 side,
->>> fixes for the Gameforce-Ace to make the hardware work properly
->>> (including thermals) as well as fixing issues both on Beelink A1 (spdif)
->>> and Pinebook Pro (Wifi) by reverting the commits that created the issues
->>>
->>> ----------------------------------------------------------------
->>> Chris Morgan (2):
->>>       arm64: dts: rockchip: Correct Fan Supply for Gameforce Ace
->>>       arm64: dts: rockchip: Correct Joystick Axes on Gameforce Ace
->>>
->>> Fabio Estevam (11):
->>>       ARM: dts: rockchip: Remove rockchip,grf from rk3288 tsadc
->>>       ARM: dts: rockchip: Move PHY reset to ethernet-phy node on rk3036 boards
->>>       ARM: dts: rockchip: Fix RTC compatible on rk3288-phycore-rdk
->>>       ARM: dts: rockchip: Use mount-matrix on rk3188-bqedison2qc
->>>       ARM: dts: rockchip: Remove invalid regulator-property from rk3288-veyron
->>
->> Not a fix.
->>
->>>       ARM: dts: rockchip: Fix the Bluetooth node name on rk3288-veyron
->>
->> Not a fix. This is a pure style change. Fixes for current cycle means
->> either important issues being fixed or errors introduced in current
->> cycle.
->>
->> Changing style from one to another is not a fix.
->>
->>>       ARM: dts: rockchip: Fix the trackpad supply on rk3288-veyron-jerry
->>>       ARM: dts: rockchip: Add missing the touchscreen interrupt on rk3288-phycore-rdk
->>>       ARM: dts: rockchip: Fix RTC description on rk3288-firefly-reload
->>
->> Not a fix. Style of node name is not a bug, otherwise describe user
->> visible (not "internal tools" visible) impact.
->>
->>>       ARM: dts: rockchip: Fix GMAC description n RK3288 boards
->>>       ARM: dts: rockchip: Fix LED node names on rk3288-phycore-rdk
->>
->> Several other are questionable as well, since they were in DTS for long
->> time. Please also read Linus' explanation here from some time ago - if
->> the issue is for long time and no one cared, then changing it is a normal
->> development.
->>
->> Several changed pieces here look like 3 or more years old, so does not
->> fit criteria of current cycle fix at all.
->>
->> Please split the pull.
+On 16/03/2026 09:51, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
 > 
-> I do remember in the past, changes that reduced the number of
-> dt-checker errors were considered fixes, but it seems that has
-> changed, so I'll split that accordingly.
+> Thanks for your comments!
+> 
+> On Sat, 14 Mar 2026 at 12:09, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>> On Fri, Mar 13, 2026 at 12:12:59PM +0100, Geert Uytterhoeven wrote:
+>>> Renesas DT binding updates for v7.1
+>>>
+>>>   - Document RZ/G3L SoC variants, the RZ/G3L SYSC block, and RZ/G3L
+>>>     SMARC SoM and Carrier-II EVK boards.
+>>>
+>>> ----------------------------------------------------------------
+>>> Biju Das (2):
+>>>       dt-bindings: soc: renesas: Document RZ/G3L SoC variants, SMARC SoM and Carrier-II EVK
+>>
+>> This is DTS branch patch.
+> 
+> It is a DT bindings patch.
 
-It is subjective and of course dtbs_check fix for issue introduced in
-current cycle is a RC-fix. I am pretty sure that many maintainers would
-pull all above to RC, but I follow a bit stricter interpretation just
-like Linus explained it:
+I speak about branches. You quoted submitting patches in DT, but that is
+implied. I already know it, I was making changes there and I already use
+that document as arguments in multiple discussion, so please assume I
+know it and my comments reflect that knowledge. I actually assumed that
+you also knew it.
 
-https://lore.kernel.org/lkml/CA+55aFyvW38WU93CqegHiKt-ReO8yNfAOUGZRFGY3-Aq0UsETw@mail.gmail.com/
+DT binding patch should go with the patch using the binding. So DT
+binding for board is clearly a DTS branch patch.
 
-https://lore.kernel.org/all/CAHk-%3DwgFuoHpMk_Z_R3qMXVDgq0N1592%2BbABkyGjwwSL4zBtHA@mail.gmail.com/
+> 
+>>>       dt-bindings: soc: renesas: renesas,rzg2l-sysc: Document RZ/G3L SoC
+>>
+>> This is drivers. Splitting it into additional branch is not making it
+>> easier. I don't know where is this supposed to be merged. I will take it
+>> to drivers, but in the future, please do not put DTS bindings into
+>> driver bindings.
+> 
+> This is also a DT bindings patch.
 
-So the issues were there probably for many years and fixes do not have
-user-visible impact, thus they look like regular improvement of poor
-code. Just like I evaluated dtbs_check findings in 2024 - 50% of
-warnings are style.
+But for which code? Driver or DTS?
+
+> 
+> DT bindings are soft dependencies for drivers and DTS.
+> DT binding definitions (I don't have any this time) are hard
+> dependencies for drivers, DTS, and examples and DT bindings.
+> Arnd merges dt-bindings PRs in the soc DTS branch.
+
+Then this should not be a separate branch, because:
+
+1. No benefits - you did not solve any soft dependency. Your DTS branch
+is non-bisectable from dtbs_check point of view and you as maintainer of
+that tree should try to make it bisectable, meaning: "bindings go before
+user" like explained in what you quoted further.
+
+And please also read rest of submitting patches, although it is in part
+for "submitters" but explains the concept:
+
+" 5) The Documentation/ portion of the patch should come in the series
+before the code implementing the binding."
+
+"6) Any compatible strings used in a chip or board DTS file must be
+previously documented in the corresponding DT binding file"
+
+Previously means "before", so your DTS branch is failing above.
+
+2. It is additional effort to handle this, because instead of merging
+one branch, I need to merge two.
+
+> 
+>> See also submitting patches in DT dir.
+> 
+> So the second commit is subject to II.3:
+> 
+>   3) For a series going through multiple trees, the binding patch should be
+>      kept with the driver using the binding.
+> 
+> In this particular case, I could have included it in my drivers branch.
+> Where do I put SoC-specific DT binding changes that are not picked
+> up by anyone else (I don't have any this time)?
+
+What is "SoC-specific"? You put the DT binding with the user, that was
+always the rule and that is implied by submitting patches. If you do not
+have any user, why would you pick that up?
 
 Best regards,
 Krzysztof
