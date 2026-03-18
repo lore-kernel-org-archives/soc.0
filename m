@@ -1,77 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 443CF3A4F2A
-	for <soc@lists.linux.dev>; Wed, 18 Mar 2026 13:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3236D3B894E
+	for <soc@lists.linux.dev>; Wed, 18 Mar 2026 13:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773839413; cv=none; b=oV4zSRfNw7Hng1Ol+5g5fLhrET+bcbIiVEDwHujXA3bS/3xXF2vn40Zg/Ic0klAFuhCLLjtXFFK+PDaLxW2NYjvTmztBlwjR3zHdIxE8CM3l9Qc6KDh9fkYD0OJC7RgFIL+0kZpdAAvabVxs5MOv+uidMYxerk9gBRauwE4TdAM=
+	t=1773839598; cv=none; b=ACOirVDjVOtiORhpOtHa1T0pmjHXpRw5MUiUylW2uK6gQiT/8tkzs6eaMYnaqLazw0usxgi7USJK1+PlYw29aVGhtLdWAWWPWXjMBY8QN76oFBI28FbNKj/ME6N4U8Kg6/XSjljgQg7nclmtCvQl0gC5UdPSFvIEluIh06X9bJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773839413; c=relaxed/simple;
-	bh=zqSsRdw6zsdpe9GEIZhiaNi8VayfdEJgPtE+NBc9Yps=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qKm4D5zDCC4itXWrW6QsTsxO/WR0FFwRICXM0SQu/3+LN8gO8XVehXtS0I7RkNiyTMg9kdwLInQAUxabU9UTHlHxQW+1aiJ9l+srLDurrBD+E77ccJOyjx5ZdUY+8aCa1r7KIVumnAzjfcgINY48JJp5kQ8R4eWnZVggs0f4CiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b8MLJXQj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773839598; c=relaxed/simple;
+	bh=NX0i+ij86deX8RbTokJUQeqDzJfLPrMx1aezo1r00rE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=sTwgH2RWxZYmvsmz/KzgATQEykWE8858Z00lG7BVI34mjm/3/k8ANNmxh8k9nqxJhnIgWL0HzNEk96B6rclEXQhj0cHt+Dpd+bcbQeEb7gGxPPCpC+cETBEJg7KYZ6+EVHkPNCko3evmNnjGEYLl2nVGgNTLpV2bWanyTXA1uA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kClG5K0v; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ojjzm/PG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8MLJXQj"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kClG5K0v";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ojjzm/PG"
 Received: by smtp.kernel.org (Postfix)
-	id B4C88C2BCAF; Wed, 18 Mar 2026 13:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F091C19424;
-	Wed, 18 Mar 2026 13:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773839412;
-	bh=zqSsRdw6zsdpe9GEIZhiaNi8VayfdEJgPtE+NBc9Yps=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=b8MLJXQjQKtI64xddCmsMKgplk8wVnwkxDRy7PzjbFmJbQfYwCfh91dOhSLw/h//9
-	 DwYRiUwNiCf+nPlIxUCGQwQTPCxrPKAbrUN1caF+hPv2OvLHZR6NNLADDI4cPdHWmQ
-	 e8QK4bmS0c8uA1Pnl98Uh0W5fPWZqmNuL/vNkH4qQqn0RMRx1RCtFRxz8HgoemN8HU
-	 0MZyY5F4S8y9xbQMqAypadNCcI1yRkw1CbK2QlwZjPIXcxckkvbBNA+jthPyxIFFDO
-	 lVIRblk57vxthYaBf58OvrY7fSMmYwVBBumwXeAmVhs3RVuD9hVVYbAqfI4E3IAR+/
-	 NX5leVi8QyG5g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CDC43808200;
-	Wed, 18 Mar 2026 13:10:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id C586FC19421; Wed, 18 Mar 2026 13:13:17 +0000 (UTC)
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7268DC2BCAF;
+	Wed, 18 Mar 2026 13:13:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7268DC2BCAF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 22852140003C;
+	Wed, 18 Mar 2026 09:13:15 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Wed, 18 Mar 2026 09:13:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1773839595;
+	 x=1773925995; bh=VlgYJgsDCBdT6+klGD6mIBOkkF0hpYpPSTTnp614c+0=; b=
+	kClG5K0voMFVJe0RdNsGoElR6tTjdN/4t57vRI3Wtb1SlFpF/hIhH8yS7ZzEMXnD
+	MI+mU0h/Ee5SHKY3oaGxImASkOql/1Tnt+RzVEIJ9mWTVEYS2jylWyR9D49uY0PD
+	7bl3uuHGKdo1IDX3KGp94T3Icw6buy2YJPnk8z5Ngr6AA7LnSDDaaZUUCvkViJkp
+	A1WzyQ1OXDrc/vp+D0LqxylrdpiKCm0SQWBEFQ4Uy4k/mgrbjeh6a18dirz8zzyL
+	jkOyxjF4WZumQZW4ic91+5vMyH2GOYo2ZMwBh9XDFglMOTS52OxxuQ4q9cOi4g2z
+	HgaBZW6d5nWm0aBJSP/usg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1773839595; x=
+	1773925995; bh=VlgYJgsDCBdT6+klGD6mIBOkkF0hpYpPSTTnp614c+0=; b=o
+	jjzm/PGl3extuXmk3Ru6u9xenEiU1GUWpuhOjCo1Lc22KCc2phDp9vgElzQAE2sJ
+	oC4DZaC0cK4Blf3ex/7qxER9oB3c/PVnrBB03e+Itj70lJYxfUHwo3WNpKsh6dlw
+	ambVa59LOZau1IIJ0ZJGKc5PcXCgYGD0X/yhOjz4DWJokcf/RwotR7hxiSguA0MI
+	bcyuFstn50Jaq8qAIrrgFw5pmk+TT4XYQdVnGEHoXa4eo9IZt7qOWZmsFIbvJo+8
+	d4KlIVBBarm4JIpTeaDXhLcrJBALq0I+JSyJQwq6g62SkeFHB6Kjon5af7fse6KF
+	6GyOBEmUJYZv3cUGfPypg==
+X-ME-Sender: <xms:6qS6aRqC8tA0UQnXmsSOIx5He35Iiax4kg8YacnNc0uwtcfXJVq1DA>
+    <xme:6qS6aeeUqy9TA5xlvVp1MxLDU7LOOGeQ3qqZ1kBuvwRIRkS9GldZDIo9EmiM8_4C_
+    wyguBtZY47yILg5JthWCa8gwBJw0csllrPIOjlJFnYr2NxoetosFQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdegvddvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeekkeelffejteevvdeghffhiefh
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
+    phhtthhopeekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmrghgnhhushdrug
+    grmhhmsehgmhgrihhlrdgtohhmpdhrtghpthhtohepkhhriihksehkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehmrhhitghonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsh
+    hotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghgvvghrtheslhhinhhugidqmhei
+    kehkrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsth
+    hsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhi
+    nhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvgh
+    gvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:6qS6aYaDyvZetvab10yx898IsxA_bWHRqm1CTquLmC0OWS7Ltmr3lQ>
+    <xmx:6qS6aV9EoKxCH56LXprt-icmkrdYqEXlxKi4nkhRIm7tCQ7StOxMtQ>
+    <xmx:6qS6aWlLXG4mQC5mXxW8inX558QE4fqGoj_31wK9OCM6lraLP_9NXQ>
+    <xmx:6qS6aSwnZYmhkb15Yr5k5oxtfuH0yun27qAg4ObX_dJChhj9faFP_A>
+    <xmx:66S6adQSB0rgHb7crFvRUEGrUS2Gm5T2u2Bz7sUZvVd2ALXppk-lCZPB>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D2CD4700069; Wed, 18 Mar 2026 09:13:14 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] TEE shared memory fix for 7.0
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <177383940429.290957.5635748572555525866.git-patchwork-notify@kernel.org>
-Date: Wed, 18 Mar 2026 13:10:04 +0000
-References: <20260316074150.GA2474723@rayden>
-In-Reply-To: <20260316074150.GA2474723@rayden>
-To: Jens Wiklander <jens.wiklander@linaro.org>
-Cc: soc@kernel.org
+X-ThreadId: AYTw_54MFalk
+Date: Wed, 18 Mar 2026 14:12:44 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Konstantin Ryabitsev" <mricon@kernel.org>
+Cc: soc@lists.linux.dev, soc <soc@kernel.org>,
+ "Magnus Damm" <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Message-Id: <d8365648-2ee2-40fe-b6fa-c52ed5e42f44@app.fastmail.com>
+In-Reply-To: <a4cad30f-0f29-4bf6-b69d-a38ebe05828c@app.fastmail.com>
+References: <cover.1773399669.git.geert+renesas@glider.be>
+ <20260317-spirited-mahogany-swift-b1ac53@quoll>
+ <CAMuHMdX4wKWPvRR=BBAr+1wAK2ZmW3kKxEN4W_vwNyGuzB=-gw@mail.gmail.com>
+ <0234dc75-b042-4408-bbad-a777c0bddb3f@kernel.org>
+ <a4cad30f-0f29-4bf6-b69d-a38ebe05828c@app.fastmail.com>
+Subject: Re: [GIT PULL 0/4] Renesas SoC updates for v7.1
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Wed, Mar 18, 2026, at 13:56, Arnd Bergmann wrote:
+> On Tue, Mar 17, 2026, at 10:11, Krzysztof Kozlowski wrote:
+>> On 17/03/2026 09:46, Geert Uytterhoeven wrote:
+>>
+>> @Konstantin,
+>> I use modified Rob's script to go over patch/pull queue in Patchwork:
+>> https://patchwork.kernel.org/project/linux-soc/list/?state=*
+>>
+>> I deal with them one-by-one, so when I finish merging, I want to be sure
+>> that Patchwork status is updated, thus through the script I mark it
+>> "Accepted".
+>> Like this one:
+>> https://patchwork.kernel.org/project/linux-soc/patch/cover.1773399675.git.geert+renesas@glider.be/
+>>
+>> Around then - can be just before or after - I push the updated branch to
+>> git.kernel.org. I fear that because the pull is manually updated in
+>> Patchwork to "Accepted", pw-bot ignores it and does not send the
+>> notification.
+>>
+>> Is it feasible to change pw-bot so it will notify even if it is marked
+>> as "Accepted"? Or any ideas how to change the flow to have both:
+>> A. pw-bot reply,
+>> B. Be 100% sure that Patchwork status is updated (allow my manual update
+>> via script)?
+>
+> In my experience, the pw-bot reply always happens at the same time as
+> the update in the patchwork state, we either get both or nothing.
+>
+> The way I've used it in the past was to let pw-bot handle the replies.
+> If anything was missing htere, I would know that I had to send a
+> manual reply and update the status.
+>
+> I suspect that setting the status to Accepted first would stop this
+> from working, but right now the pwbot interaction appears to be
+> broken regardless of the status update, i.e. it only handles
+> patches but not pull requests at all.
+>
+> Konstantin, this seems to have broken around the time you modified
+> pwbot to handle git:// URL rewrites earlier this year. Previously
+> it only ever caught commit messages that had the exact same URL
+> as the pull request message, IIRC you said that it should now handle
+> the case where a git:// URL gets turned into a https:// one, but
+> the actual result appears to be that no pull requests get matched
+> at all.
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+Update: this one did get marked as 'Accepted' by pwbot, and
+it sent the reply, so either it's back to working correctly,
+or there is something else that makes it only work sometimes:
 
-On Mon, 16 Mar 2026 08:41:50 +0100 you wrote:
-> Hello arm-soc maintainers,
-> 
-> Please pull this patch removing the refcounting of kernel pages within
-> the TEE shared memory helper.
-> 
-> Thanks,
-> Jens
-> 
-> [...]
+https://patchwork.kernel.org/project/linux-soc/patch/20260316074150.GA2474723@rayden/
 
-Here is the summary with links:
-  - [GIT,PULL] TEE shared memory fix for 7.0
-    https://git.kernel.org/soc/soc/c/b3315ba042f2
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+     Arnd
