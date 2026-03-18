@@ -1,114 +1,204 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB6F3D9022;
-	Wed, 18 Mar 2026 14:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0453DD501
+	for <soc@lists.linux.dev>; Wed, 18 Mar 2026 14:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773844550; cv=none; b=f48bd74MCYfuZIoHeE0NEn/C+daGYMa47fgbLpbFYR2qj1a/BAbzfU8JM9dsR1XNa9WIUD8auLnuIKu3jmV8cKUrNncUhvoArWW6Wu2r/Sz7Ltoo33Z0BM1SpiTuY/576LWZYqud9xiFChwtRSLuyTiGgonjCyZUWanW6ghHX3s=
+	t=1773844931; cv=none; b=VrAhcLWBHhlcyzi7oKTCqxnpn39XTPO69zuvqtLvBaXjlEJJJX6EWDgxFmQRm13J264/uKlA8P+6qPo1uddTjQ3qsAqbvvvb/WIZJNqa9x0XYcqYf3qX++k0WIPwxiySDzsJfg+G//r4pPmYlsRZLqg6taphvMwRBAgpFi/7XtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773844550; c=relaxed/simple;
-	bh=BgxfAggB9YPvHKFm5rDACGCDL1qHjhWfT7gkPQPt5TY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d1v+kEkmOLHWRH/as3Rl2898oR1VyB/CRwRL9wGBTSJna03UPjjk5tmXBLsKlKb0AYAJd8U/7KGagunO1d1I4FmqzWH+T6Jqd54hx9Lg7EEFjuiu8maMRnYg2KD7ROih+RKqVFuJf9C5rIpvc/iT7zu+HgeKTp6iOt2bh12s+Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZbXGOqpi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773844931; c=relaxed/simple;
+	bh=FWqfIqLBCqcDLw5/Rd3PfnXAze7SKztZSmyfSkCavyI=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=mJQ6lnxwbkfkz1dgdkBsQmZJ5olAS+YmpnImqNmCP0dwhEJpTA19YVnKr30YISltx95v9Shk0604s+hMqc3usUUAI7nE/LypGK9vxKiZu+kNg2LPkVy+3SnNHitUxoWwMK49XyQxgDl0yWfYu5yZuzEOEDqpeAi3DSxuCn6qNhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Tk7ykoOe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=h+H+o9/L; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZbXGOqpi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2873C19421;
-	Wed, 18 Mar 2026 14:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773844549;
-	bh=BgxfAggB9YPvHKFm5rDACGCDL1qHjhWfT7gkPQPt5TY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZbXGOqpiwSrDGCoLUa/m+3U1ie7YTZTRZTfYv3yu2HfLLRBn+9eCzBodJhKfcqsJQ
-	 evYUCoRalA0PaH8PIMntvDtdmZ2WWrQ+ZSFtA6icQjkWk1ak+tBONFKg7Uje9zNjuY
-	 aO9SrYzMpcuzpDLN4NHeRc6e+NZ/LxAYjfQ3L5KoHSyk3FKxtl5yV9meJHGIPo61el
-	 Mp6+5Q3MAnU2JrolghFQm0ssk8I3oDRaSO3wejnvAX6XQbt54xQt4G8tG2pgPrgbGs
-	 btnMccw5K51K9tEykvjflaDfai2AdisFcPEfZYlfavnrNULfiR09dZFoy/PqnTrV8h
-	 Ty9e1bKacEurA==
-Message-ID: <506ae434-e7f2-4fb6-9667-1a6d4315754d@kernel.org>
-Date: Wed, 18 Mar 2026 15:35:45 +0100
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Tk7ykoOe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="h+H+o9/L"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id AEB711400207;
+	Wed, 18 Mar 2026 10:42:08 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Wed, 18 Mar 2026 10:42:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1773844928; x=1773931328; bh=vS
+	zDjyJNks6QPStNfUc+wlwDqAdgG1JJRQ/ke1UWmTQ=; b=Tk7ykoOek8zc4nZwOQ
+	NHdO+mFM8rWC0UxThOP/g530WZyLgsHxT+icx6/WfX8tEPAHdCxxgdR1vwvidSQ6
+	gEwk4xj5yKUI8D/rLezI2edLr+iyuaUiwXX5sE9S/kQc4RXPYc+p8s+rClC2AN4P
+	2PR+rky1vMOyTzktPBRSiJOpm57Og+V0N5hZPTTyYMxjqXF+wwEi1nZ0PoSo6HNM
+	x61m+1VhUQZwL9247eosu2ebkN5K9iwYAmM39WCorGz/DzZhPhEkpALuIqTb2DRK
+	2qzpg9rZW09yQPU3gsMVVeJqwgcNa30oLAkH4OLQtCKOovpyo3n2ewltQflXPABg
+	zamQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1773844928; x=1773931328; bh=vSzDjyJNks6QPStNfUc+wlwDqAdg
+	G1JJRQ/ke1UWmTQ=; b=h+H+o9/LlWpgC2nrfBLBA60PlzBqC2BkLvV5r0Tb5/A9
+	5m/8rEZ80KlrUrGz2SxsdZSRO8b8xSA0ataN2SJn30ImNAyrteIQ7NJwhj9LAGvU
+	L63fDRPiAY7gtJKLa10G0n7HfKzKQBYtVK+3DmH2SDM7mtNhyIi62Xlp9GYoytR3
+	FiHQn6/Qn6gE5xoDsKUhiayqvcCBo/B0JK4N49yA03rJHCa47L3rBQY3wxVDv4Tl
+	YUs4dt/Rikby94g7L23ou9Bkxygua8Kro+OQ3XmK91WmlI1WCbiQtRGTgMHnYz61
+	pC3JqV7eGCRTowK2UpVyWLwz6nHBre9zgilfxIdtvQ==
+X-ME-Sender: <xms:wLm6aW1gyEkBRKQhEVuA0JG4Uo42BxtQizr9HG_Hz_OsWRoxGzmNFg>
+    <xme:wLm6aT7Q_bZf9K7u6uCLqjDk5fVJZWesrk9M4I8JsReaPiYx3nQXFcdbXNapVv8sQ
+    N7EKAR9aVlrnern_95ewFAXBHjKOHG4eatoalTJROjlUDFr7q9_bEk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdeggedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkffutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
+    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
+    epgefggefgieehieduffekieefheevteffueehgfehueetgfevteejkeehfedvtdehnecu
+    ffhomhgrihhnpehkvghrnhgvlhdrohhrghdpphgvnhhguhhtrhhonhhigidruggvnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
+    rhhnuggsrdguvgdpnhgspghrtghpthhtohepgedpmhhouggvpehsmhhtphhouhhtpdhrtg
+    hpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdp
+    rhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrg
+    guvggrugdrohhrghdprhgtphhtthhopehsohgtsehlihhsthhsrdhlihhnuhigrdguvghv
+    pdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorh
+    hg
+X-ME-Proxy: <xmx:wLm6aYg1shuOE8UwAU7xoj5QEhpMlNeywFtecgXAuFRnEZ8xOFtkwg>
+    <xmx:wLm6aX7hhUu09ZeJQo2JrtiQ7Y4bHJBZUw5AyxO40eWoflgeZnPSfQ>
+    <xmx:wLm6aYbJ0jcmjIR34SvjeM2H5SPnH3S-ZXOvq663pyNsE6gn_He73Q>
+    <xmx:wLm6aU5c96ZYESKAw2aZPkdIoev9dfihakxitKt7hFEfdi-QEEhPnw>
+    <xmx:wLm6aWLly9eINSZY59JQKboM8pX3Lz7v10lQKeRjz741bBagkzo0848S>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 621C5700065; Wed, 18 Mar 2026 10:42:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] arm64: dts: realtek: Fix memory node unit-address
- mismatch
-To: Arnd Bergmann <arnd@arndb.de>, =?UTF-8?B?WXUtQ2h1biBMaW4gW+ael+elkA==?=
- =?UTF-8?B?5ZCbXQ==?= <eleanor.lin@realtek.com>,
- linux-kernel@vger.kernel.org, linux-realtek-soc@lists.infradead.org,
- afaerber@suse.com, Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linus Walleij <linusw@kernel.org>
-Cc: Drew Fustini <fustini@kernel.org>, =?UTF-8?B?Q1lfSHVhbmdb6buD6Ymm5pmP?=
- =?UTF-8?Q?=5D?= <cy.huang@realtek.com>,
- Stanley Chang <stanley_chang@realtek.com>,
- =?UTF-8?B?SmFtZXMgVGFpIFvmiLTlv5fls7Bd?= <james.tai@realtek.com>,
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
-References: <20260318114047.2804171-1-eleanor.lin@realtek.com>
- <405a9783-0f77-4ce0-8288-43eaada09cff@kernel.org>
- <e4c0187e-566b-42fb-920c-3cf73ed6cd6a@app.fastmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <e4c0187e-566b-42fb-920c-3cf73ed6cd6a@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
+Date: Wed, 18 Mar 2026 15:41:48 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <33f46e61-6f3c-4aa4-9821-a0dca6babb89@app.fastmail.com>
+Subject: [GIT PULL] soc: fixes for 7.0
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 18/03/2026 15:28, Arnd Bergmann wrote:
-> 
-> As Andreas has not replied to the MAINTAINERS updated, I would
-> prefer to merge both that and this patch in the bugfix branch
-> for 7.0.
-> 
-> Krzysztof, can you also dig out your older patches and resend
-> those to James and Yu-Chun for review?
+The following changes since commit 11439c4635edd669ae435eec308f4ab8a0804808:
 
-My old stuff is already merged, I funneled it via my cleanup pulls. :)
+  Linux 7.0-rc2 (2026-03-01 15:39:31 -0800)
 
-Best regards,
-Krzysztof
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.0
+
+for you to fetch changes up to df3ef89d7ef8185fa719812e2d175b83112aa315:
+
+  Merge tag 'scmi-fixes-7.0' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes (2026-03-18 14:06:34 +0100)
+
+----------------------------------------------------------------
+soc: fixes for 7.0
+
+The firmware drivers for ARM SCMI, FF-A and the Tee subsystem, as well
+as the reset controller and cache controller subsystem all see small
+bugfixes for reference ounting errors, ABI correctness, and NULL pointer
+dereferences.
+
+Similarly, there are multiple reference counting fixes in drivers/soc/
+for vendor specific drivers (rockchips, microchip), while the freescale
+drivers get a fix for a race condition and error handling.
+
+The devicetree fixes for Rockchips and NXP got held up, so for the moment
+there is only Renesas fixing problesm with SD card initialization, a
+boot hang on one board and incorrect descriptions for interrupts and
+clock registers on some SoCs. The Microchip polarfire gets a dts fix
+for a boot time warning.
+
+A defconfig fix avoids a warning about a conflicting assignment.
+
+----------------------------------------------------------------
+Arnd Bergmann (6):
+      Merge tag 'riscv-soc-fixes-for-v7.0-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into arm/fixes
+      Merge tag 'soc_fsl-7.0-2' of https://git.kernel.org/pub/scm/linux/kernel/git/chleroy/linux into arm/fixes
+      Merge tag 'reset-fixes-for-v7.0' of https://git.pengutronix.de/git/pza/linux into arm/fixes
+      Merge tag 'tee-fix-for-v7.0' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+      Merge tag 'ffa-fix-7.0' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
+      Merge tag 'scmi-fixes-7.0' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
+
+Chen Ni (1):
+      soc: fsl: cpm1: qmc: Fix error check for devm_ioremap_resource() in qmc_qe_init_resources()
+
+Claudiu Beznea (2):
+      reset: rzg2l-usbphy-ctrl: Check pwrrdy is valid before using it
+      arm64: dts: renesas: rzg3s-smarc-som: Set bypass for Versa3 PLL2
+
+Conor Dooley (1):
+      riscv: dts: microchip: add can resets to mpfs
+
+Cristian Marussi (1):
+      firmware: arm_scmi: Fix NULL dereference on notify error path
+
+Fabrizio Castro (1):
+      arm64: dts: renesas: r9a09g057: Remove wdt{0,2,3} nodes
+
+Felix Gu (3):
+      cache: starfive: fix device node leak in starlink_cache_init()
+      cache: ax45mp: Fix device node reference leak in ax45mp_cache_init()
+      firmware: arm_scpi: Fix device_node reference leak in probe path
+
+Geert Uytterhoeven (2):
+      arm64: dts: renesas: r8a78000: Fix out-of-range SPI interrupt numbers
+      firmware: arm_scmi: Spelling s/mulit/multi/, s/currenly/currently/
+
+Krzysztof Kozlowski (2):
+      Merge tag 'renesas-fixes-for-v7.0-tag1' of https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/fixes
+      Merge tag 'v7.0-rockchip-drvfixes1' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
+
+Lad Prabhakar (4):
+      arm64: dts: renesas: rzt2h-n2h-evk: Add ramp delay for SD0 card regulator
+      arm64: dts: renesas: rzv2-evk-cn15-sd: Add ramp delay for SD0 regulator
+      arm64: dts: renesas: r9a09g077: Fix CPG register region sizes
+      arm64: dts: renesas: r9a09g087: Fix CPG register region sizes
+
+Matthew Wilcox (1):
+      tee: shm: Remove refcounting of kernel pages
+
+Nathan Chancellor (1):
+      ARM: multi_v7_defconfig: Drop duplicate CONFIG_TI_PRUSS=m
+
+Richard Genoud (1):
+      soc: fsl: qbman: fix race condition in qman_destroy_fq
+
+Shawn Lin (1):
+      soc: rockchip: grf: Add missing of_node_put() when returning
+
+Yeoreum Yun (1):
+      firmware: arm_ffa: Remove vm_id argument in ffa_rxtx_unmap()
+
+Zilin Guan (1):
+      soc: microchip: mpfs: Fix memory leak in mpfs_sys_controller_probe()
+
+ arch/arm/configs/multi_v7_defconfig                |  1 -
+ arch/arm64/boot/dts/renesas/r8a78000.dtsi          | 16 ++++++------
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi         | 30 ----------------------
+ arch/arm64/boot/dts/renesas/r9a09g077.dtsi         |  4 +--
+ arch/arm64/boot/dts/renesas/r9a09g087.dtsi         |  4 +--
+ arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi   |  2 +-
+ .../boot/dts/renesas/rzt2h-n2h-evk-common.dtsi     |  1 +
+ arch/arm64/boot/dts/renesas/rzv2-evk-cn15-sd.dtso  |  1 +
+ arch/riscv/boot/dts/microchip/mpfs.dtsi            |  2 ++
+ drivers/cache/ax45mp_cache.c                       |  4 +--
+ drivers/cache/starfive_starlink_cache.c            |  4 +--
+ drivers/firmware/arm_ffa/driver.c                  |  8 +++---
+ drivers/firmware/arm_scmi/notify.c                 |  4 +--
+ drivers/firmware/arm_scmi/protocols.h              |  4 +--
+ drivers/firmware/arm_scpi.c                        |  5 ++--
+ drivers/reset/reset-rzg2l-usbphy-ctrl.c            |  3 +++
+ drivers/soc/fsl/qbman/qman.c                       | 24 +++++++++++++++--
+ drivers/soc/fsl/qe/qmc.c                           |  4 +--
+ drivers/soc/microchip/mpfs-sys-controller.c        | 13 +++++++---
+ drivers/soc/rockchip/grf.c                         |  1 +
+ drivers/tee/tee_shm.c                              | 27 -------------------
+ 21 files changed, 69 insertions(+), 93 deletions(-)
