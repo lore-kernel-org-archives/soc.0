@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C741DEED8
-	for <soc@lists.linux.dev>; Wed, 18 Mar 2026 13:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E731A330330
+	for <soc@lists.linux.dev>; Wed, 18 Mar 2026 13:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773841811; cv=none; b=gZ5tLnrC6FVC/cNF3f54hUNi8rNGZy+BNb3qok57y6KnBWw3O1C+xUkkQWnOSQIcqr7dEFg5gaFrQcUbKy7VH5OZI/UU9Ok71xA7N5iZ8xdzzkjCDPpw9VdDuK6Byqbt4hegicAa7P/YgxCHtoferFSUeJA2UdpdqlRM7y8h2pE=
+	t=1773841813; cv=none; b=M8zY50xv1M4pS9m5ADcp1enanOJ4AIyL/TIC6adXhJck2KVW+0/RrYeJ9MdWD/un9uovTWbJdKGaMrZR5tIL/9VuNB5xBK10k8wkpFjlh+iNEMmj/wl2yVAa2qgH3dsgrjCakIL3OiZdE5C89lwgwPD0hTduRVMy0JKdwkXXSts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773841811; c=relaxed/simple;
-	bh=vvGKk/n04ifofrKkE0g617pwSbt5616Tc8y3b2J4EkA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=rgJ8S5v2QJJ0s4AycoEnMGLdgf77quE4YkJpoj6NVqsgLSg4T5iRNGirjkIPVeDflF2zYKRzSV17+hxMPCAC6H4Rrv3qm53mjXmzQyxXPJTSoizk4Biygprp3UFQA7R1OtQtMjxazS+aqVuU4LAOB6jsp8aAqBX2wnNVh/I648Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMXDy4qy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773841813; c=relaxed/simple;
+	bh=Qj+KXJ80AuMPzSv/DLL5iv92KC6q7XjTCp/iuW+eNy4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PpXSJt5Li0OYUjzC+mbfAe6VSVHPGoEJ6cdxcKDbSX9E19lixEZG07tCKaJPKL6ZtULefFzYoa4lBc5MqLk0JYg9SXcQ3HHXV6Bzsos4W6DWnxAXTOdwAJFuw9Z9ZplpmeLfnopNjRnGqfMdj667UGCwo6dCj6Be3vAQPNV+y9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=epcgnTdB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMXDy4qy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="epcgnTdB"
 Received: by smtp.kernel.org (Postfix)
-	id 7C21FC2BC87; Wed, 18 Mar 2026 13:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6638BC19421
-	for <soc@kernel.org>; Wed, 18 Mar 2026 13:50:11 +0000 (UTC)
+	id A5D39C2BCAF; Wed, 18 Mar 2026 13:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F243C19424;
+	Wed, 18 Mar 2026 13:50:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773841811;
-	bh=vvGKk/n04ifofrKkE0g617pwSbt5616Tc8y3b2J4EkA=;
-	h=Subject:From:Date:To:Cc:From;
-	b=nMXDy4qyeZQXvQQBfJrxGAuIKPy4GRJk89r0dNnRnxmRsDeBCLzM4NTRoUbCmPung
-	 Jf4lEbPTVs/nNvNwVtfvdUMuJ1N0PL6GpCg/c7tc5e2/QVlNnE1tl4N0eEk9SOHmwO
-	 yZJMoaGfitLExNsYlPm0dk3igJlRfhJvMoGgGjYG0PlwnPiZZL2YCnnw/ZZUII6lZQ
-	 lGtyP2o7s4USKSCHg3Faaymjrvu7bI/FdZy1kLz58w5qjPypuQ1gUjSH4HyynrLSt1
-	 QimHSCWnLfnpLdxx6VxF9ubuxbIfYx5/uTu2Hk2lO6hMCVXOwkcGC3YESL0j29ksG7
-	 u2nahwC5MowPQ==
+	s=k20201202; t=1773841812;
+	bh=Qj+KXJ80AuMPzSv/DLL5iv92KC6q7XjTCp/iuW+eNy4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=epcgnTdBtTjE1Gsqa4a3AIQTzy6p/5NTjw1rhIN+DDYcKsDjCJA4zHSUC+YLZ1ANw
+	 BzfSAubQ5VyLPtQ6vi69Mo9XySOIe2bvsXK4L95hvUhEYaxcuv/c6ADBVNafejFdg1
+	 fMfWDjltxXSC9jjcyKzIgFonhMh/DYmGxMZ9rRZ8sE4fqv1oDxRrwVV9MviEivQVG3
+	 lYbRIQBZd4djzTDqY1KIDMpdkD+dfJp0katKswxT43bT9COxJzEBoQfQx0hSdcnnu7
+	 jn1qm0JpdSyY9bHqem6ofep2/tgp5QfxVdvqlZse4+Qxb747rnv/CThQxAr2vgy0cg
+	 rtfglqqvPtWUA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FFCF3808200;
-	Wed, 18 Mar 2026 13:50:04 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CD6D3808200;
+	Wed, 18 Mar 2026 13:50:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,34 +39,36 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] firmware: arm_ffa: Fix for v7.0
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <177384180290.304324.13054232313305910323.git-patchwork-summary@kernel.org>
-Date: Wed, 18 Mar 2026 13:50:02 +0000
-To: soc@kernel.org
+ <177384180428.304324.493500439383225722.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Mar 2026 13:50:04 +0000
+References: <20260317101115.3873019-1-sudeep.holla@kernel.org>
+In-Reply-To: <20260317101115.3873019-1-sudeep.holla@kernel.org>
+To: Sudeep Holla <sudeep.holla@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] firmware: arm_ffa: Fix for v7.0
-  Submitter: Sudeep Holla <sudeep.holla@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1067893
-  Lore link: https://lore.kernel.org/r/20260317101115.3873019-1-sudeep.holla@kernel.org
+On Tue, 17 Mar 2026 10:11:12 +0000 you wrote:
+> Hi ARM SoC Team,
+> 
+> Please pull !
+> 
+> Regards,
+> Sudeep
+> 
+> [...]
 
-Patch: [GIT,PULL] firmware: arm_scmi: Fixes for v7.0
-  Submitter: Sudeep Holla <sudeep.holla@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1067894
-  Lore link: https://lore.kernel.org/r/20260317101155.3873122-1-sudeep.holla@kernel.org
+Here is the summary with links:
+  - [GIT,PULL] firmware: arm_ffa: Fix for v7.0
+    https://git.kernel.org/soc/soc/c/dfc80d650be7
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
