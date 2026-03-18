@@ -1,125 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C7A3921C7;
-	Wed, 18 Mar 2026 11:46:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744E63D6CDE
+	for <soc@lists.linux.dev>; Wed, 18 Mar 2026 12:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773834409; cv=none; b=G7sHKDx2mURHr5jryF/BGfieezJrDlqFWm5m/KZAhrpKw2ujK+fYT6sY54ZRcZcGCjvdbBhkAMXFQ2N/4qb5qkjlzFsZlUb/Ib64/fOPklxT9p2LuIBAM64whXlGLdixs+o78OaObcb77bvu/NC7s4SOnFEFy7yGRIRu3obW3Fk=
+	t=1773837607; cv=none; b=Jtt/EGxJbWFWOtGymOsQBqFqy1km+4wcnXnTLvCdaf7+HKEmZ5FTztPg6cc8UcXz0tb+L5Gl1ZKKl43d7K9ZMiSwHuWF0LvAXc3lGH3o+UEkJv0FDMh3EIO86Yk0oehnkrOPpQ52crbP7s2rzsJS5lObif5UShDdZUG0uz7/BkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773834409; c=relaxed/simple;
-	bh=YdqcVOMvGiZxV7Rx6pqMknMd3DCOgubBl3cdsMfOnB0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gYbGb4YE0zisZ2ns10WILrrz29qpCXvZvWUNT+Ja+YmMLf4raS7WBOm6RUjctO8NBQsY3c0lBVH7V9jWV4f+SLkTWqkdrmQS0TJipZ48PGZAVb7zCk8AjvIlABmU1BPbRWDhNqptPrQ+4hBzkempYxsfTICy+mOmkg8PXd/kE9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMCBl0Nm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773837607; c=relaxed/simple;
+	bh=i/1jwDk0sovQQuJUSKLnpcR1rx3CYYzEU0IxDZZb48Q=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=TTl/o1woYYN2IWZ5xtcLhW2NRingiWm2iXJFTCwdhxy5ZH6/VBugFbnGW05k6AdrRIB8dxpPGY6+idKEvJs1b8JnG8uTOgcH4IYctH3yBSk+81rmYDnXEgNQPWwZ+YEIolFt8dDyx74gsVtWps6BOhzyKSYBjwWKcctIBIvy3Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=tjlZ4MWe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fVCS1m1q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMCBl0Nm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36004C19421;
-	Wed, 18 Mar 2026 11:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773834408;
-	bh=YdqcVOMvGiZxV7Rx6pqMknMd3DCOgubBl3cdsMfOnB0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OMCBl0Nmc/pNTT/sHPO/DxewCzak/UCTi2SsrpWsY4qJt5hrYN2KGCV+ICpUo2rkG
-	 EX+S6TfEW8Lc/TnI38W1210j1GPrUNRji47niJ+OHkHfHLpDDLg0FH2WjGYSvD3M01
-	 skTrJ35UB/ZdPxO061u+COaXuywXde1wGVPAbE7H7/uZWLtHNwWidJ5ZLvrhZH6gm7
-	 De4eZrVFBu6Ng7coZQLWrMeWYmqaVfvqUrwuNE7cjhU72EvZV8sg7Ebxhzt9tcfUfr
-	 2sMenR7vE47yuZnoWFeQ034b2NziMnxnXbh1xObXsJYnjXyEtjvhqzU5cZGXMN86aH
-	 9FPVsZ3BtW5SQ==
-Message-ID: <405a9783-0f77-4ce0-8288-43eaada09cff@kernel.org>
-Date: Wed, 18 Mar 2026 12:46:44 +0100
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="tjlZ4MWe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fVCS1m1q"
+Received: by smtp.kernel.org (Postfix)
+	id 2FBE2C2BCAF; Wed, 18 Mar 2026 12:40:07 +0000 (UTC)
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B7925C2BC87;
+	Wed, 18 Mar 2026 12:40:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7925C2BC87
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 691191400227;
+	Wed, 18 Mar 2026 08:40:03 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Wed, 18 Mar 2026 08:40:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1773837603;
+	 x=1773924003; bh=cMsP1ViDg5+W4pJB6stHHF7Nl0q4BrWqMobLx0PpOAk=; b=
+	tjlZ4MWe9PaM979xGZvpvNsGyZ/AcWs0oRo5lCY0nNNZTObdfy2AIUokOCi4GAxW
+	H6MOK50dkD+vRbRimLBrlAP5uKx7W1rp+1HKHnpM4dwWzolLutF3/uCegCEp4VVM
+	a5M+oD2hxc0TTSm6i3toB8nD+PcnZacwHbnFzXYUeXCVbPYBzv56vuRXbnSYXlhM
+	wg+WWG0pKJnKOEbxRM5I2Im3D1DGBWU9Vfl0pK9FC5EjrhHWUFif1P8hHiDzadg9
+	boCkEygOIt+Sr2IwEMR/358IY6XXeiPu5gRcR6s/I1FEVqkvR728p9AHJQIQaU36
+	noJBkbDUkndEWQ49jXJqJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1773837603; x=
+	1773924003; bh=cMsP1ViDg5+W4pJB6stHHF7Nl0q4BrWqMobLx0PpOAk=; b=f
+	VCS1m1qtsMUmrQTaAcRDredHvUIGbCx5+Gsbjj3mrTtLxqwEeA+3mt6LIwarVfeZ
+	xEf0Ocb3D3pUo7pDCAZ+Wv4fTE3phDx5xf+sxTp5cYcqX9jxuDRJlarP5oNCSm5b
+	TfJgMam/vEdrfaxoZXtFa9wQmazap6eVepyGUO8HnO87TN7DE3Ancth9/+hNHSnE
+	m1/5g/9oyGh/ju1mBlzkIrKWFgpsajSHGHbZ+FN0I/J/ZIrfIhOUJa+eiet5s4GL
+	El4jOFf4aLUy9GSGunJU+lYtDzNWNpvW978BxjdzZf0W/2RTMA3O+3UK0jyRa67s
+	mVT6Z4/easmFiJW/wy9Ww==
+X-ME-Sender: <xms:I526aUZoKAr2ABc8Bxq6p-V-WeNALCsnCskTLGNQeGNmJybXXzftaA>
+    <xme:I526aaMd-lBZV4M7fUmyzKYEAyntinqC62SRHWUNdAmRz_DTCkZ_AFtplEGsP0xKJ
+    9Cf2sMZ_kTj-eEqn8iNNoDL2p9k35EaQMPiNOgLF8S4TrpWPeBQc-Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdegudehucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepledpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepfihilhhlhiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhope
+    grrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikheskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhumh
+    hithdrghgrrhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjvghnshdrfihikhhl
+    rghnuggvrheslhhinhgrrhhordhorhhgpdhrtghpthhtohepohhpqdhtvggvsehlihhsth
+    hsrdhtrhhushhtvggufhhirhhmfigrrhgvrdhorhhgpdhrtghpthhtohepmhdrfhgvlhhs
+    tghhsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnh
+    gvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:I526afrMwZuND3ODxHRPsRascj4bUDDvq8TAE6I1mfmg-dPE2LgTnQ>
+    <xmx:I526aaGYxkPrEBwQfcbCGFahSc6_62DYojymnYBpddGE-s3jsq7Bjw>
+    <xmx:I526ac6eImRoTkQwCKpbaF_DS_elu1kcH2MkehticNzO248xGMfvEQ>
+    <xmx:I526aaeYHj9TzXIm5QQfV1iFH9_tL7v1I1EHBsgOtVC0uO_VkKst8A>
+    <xmx:I526aRhtQBjnMD8dbafW_JKe82g3aF5s8m2gPD8jY7mKzCZI0rE8lbIg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E93D0700065; Wed, 18 Mar 2026 08:40:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] arm64: dts: realtek: Fix memory node unit-address
- mismatch
-To: Yu-Chun Lin <eleanor.lin@realtek.com>, linux-kernel@vger.kernel.org,
- linux-realtek-soc@lists.infradead.org, afaerber@suse.com, arnd@arndb.de,
- alexandre.belloni@bootlin.com, linusw@kernel.org
-Cc: fustini@kernel.org, cy.huang@realtek.com, stanley_chang@realtek.com,
- james.tai@realtek.com, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev
-References: <20260318114047.2804171-1-eleanor.lin@realtek.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260318114047.2804171-1-eleanor.lin@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AeiqtKTVlxuV
+Date: Wed, 18 Mar 2026 13:39:41 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Marco Felsch" <m.felsch@pengutronix.de>,
+ "Jens Wiklander" <jens.wiklander@linaro.org>
+Cc: "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Sumit Garg" <sumit.garg@kernel.org>, "Matthew Wilcox" <willy@infradead.org>,
+ arm <arm@kernel.org>, soc@kernel.org, linux-kernel@vger.kernel.org,
+ op-tee@lists.trustedfirmware.org
+Message-Id: <c3f1a10d-8437-4d17-8dfc-286935ba9e51@app.fastmail.com>
+In-Reply-To: 
+ <dfidrflp5p637dqnn2e6sqr6gbp47gimjlkechjjtlbr7re2e4@kgwofxcumhes>
+References: <20260316074150.GA2474723@rayden>
+ <20260317-illustrious-finicky-frog-90a86c@quoll>
+ <CAHUa44HXjrPbPv0sBxzrW6o1iQVWdp2p-1-jroukZ8dxSvPmMg@mail.gmail.com>
+ <dfidrflp5p637dqnn2e6sqr6gbp47gimjlkechjjtlbr7re2e4@kgwofxcumhes>
+Subject: Re: [GIT PULL] TEE shared memory fix for 7.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On 18/03/2026 12:40, Yu-Chun Lin wrote:
-> The memory node unit-address should match the first address in the reg
-> property. Correct the unit-address from @40000 to @50000 to align with the
-> actual base address (0x50000) defined in the reg property.
-> 
-> Fixes: b095c27fc874 ("arm64: dts: realtek: Add Kent SoC and EVB device trees")
-> Signed-off-by: Yu-Chun Lin <eleanor.lin@realtek.com>
-> ---
-> This patch series is sent to both Realtek and ARM SoC maintainers.
-> While Andreas Färber is listed as the Realtek maintainer, there has been
-> limited activity recently.
+On Tue, Mar 17, 2026, at 13:53, Marco Felsch wrote:
+> On 26-03-17, Jens Wiklander wrote:
+>> 
+>> I'm under the impression that it is a fix rather than an improvement.
+>> However, since it has been stewing for a while, it's clearly not
+>> urgent. I don't have anything specific on the bug fix, other than that
+>> we're supposed to stop taking those refcounts. Perhaps Sumit, Marco,
+>> or Matthew can add something?
+>
+> It's a long outstanding fix regarding memory page management. The
+> userspace gets informed about this memory API misuse via a warning print
+> incl. a backtrace. This gets triggered only if userspace uses OP-TEE
+> trusted-keys or the OP-TEE EFI variables. Therefore I would like to get
+> it into 7.0 but 7.1 fine too.
 
-Unfortunately nothing new, likely two years ago I was also complaining
-on lack of maintenance on Realtek, but the solution is not to send
-patches to soc@.
+Yes, that is clearly a bugfix. I think we'd also want this to be
+marked 'Cc: stable@vger.kernel.org' as it should also apply
+to 6.18-LTS and 6.19. Greg tends to also pick up bugfixes that
+don't have this, but it's generally better to be explicit here,
+especially when it's not obvious what the impact of the fix is.
 
-Solution to that would be to remove the platform, for example. Or work
-on maintainership.
+I've merge the pull request now. If you think this should be
+in 6.18-lts and Greg doesn't pick it up by himself, maybe
+let him know about it.
 
-Did anyone from Realtek offered reviews to my patches posted 3 and 2
-years ago? I don't see that.
-
-Kent SoC was accepted under condition this will improve.
-
-I drop this from soc patchwork and please do not send code for review
-there, but either fix the lack of involvement from Realtek or let's drop
-the platform if Realtek does not care.
-
-Best regards,
-Krzysztof
+      Arnd
