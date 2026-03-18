@@ -1,150 +1,114 @@
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB163CE494
-	for <soc@lists.linux.dev>; Wed, 18 Mar 2026 14:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB6F3D9022;
+	Wed, 18 Mar 2026 14:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773844153; cv=none; b=F0PCCQXwXMqKqjz92rTvq6YURrmqB/j8a3xOn4Ncd9fDx+8COEArhJUiaVNa5PRg+lBU6UB6txaPW9k2WqmwWlVSaxREZBU2PiZANhUqK2JndAmeRINwA2q49WCobtj24XS2bSXOR8ROHXCMMLWiyJl/UTeitbgrBjkGHwtkfTc=
+	t=1773844550; cv=none; b=f48bd74MCYfuZIoHeE0NEn/C+daGYMa47fgbLpbFYR2qj1a/BAbzfU8JM9dsR1XNa9WIUD8auLnuIKu3jmV8cKUrNncUhvoArWW6Wu2r/Sz7Ltoo33Z0BM1SpiTuY/576LWZYqud9xiFChwtRSLuyTiGgonjCyZUWanW6ghHX3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773844153; c=relaxed/simple;
-	bh=IFDdMPDpNL5enCihTZbaZboOl706ehGGcrAAwJ9YJto=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Kws3/B4xmJN53yET5ffa8O+7OJ9+J6t7vXp3aWfEpQbTmgfkR3wbstu3YQO5nP6WZUAWWTh66qoC3WrhSD+uy6z30BFKyudTjwqutGAXL0oQwZlOZiBKya0CbO3dc/E/4UsEsXE/ZYvINxXpGeQSEIe3AM+EJkRDl5WllLgMWYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kE7XbrDo; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TgdlHS2M; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1773844550; c=relaxed/simple;
+	bh=BgxfAggB9YPvHKFm5rDACGCDL1qHjhWfT7gkPQPt5TY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d1v+kEkmOLHWRH/as3Rl2898oR1VyB/CRwRL9wGBTSJna03UPjjk5tmXBLsKlKb0AYAJd8U/7KGagunO1d1I4FmqzWH+T6Jqd54hx9Lg7EEFjuiu8maMRnYg2KD7ROih+RKqVFuJf9C5rIpvc/iT7zu+HgeKTp6iOt2bh12s+Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZbXGOqpi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kE7XbrDo";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TgdlHS2M"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id A78AA14001E3;
-	Wed, 18 Mar 2026 10:29:11 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Wed, 18 Mar 2026 10:29:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1773844151;
-	 x=1773930551; bh=ZF546ExVdkQ5ArVhjKR5umS+gc+eyL+L55GnLaFRRW0=; b=
-	kE7XbrDojBzfXPvloseSsh+3IqcTvHv4DXsJlS96elasH/sO24zlypLvcpx23GLl
-	HH5nWOG20+UtRGGxXze6NNLpoih2/6TXuhl24QP/Axkap/1ss0km8AoYzOKDipjB
-	s9OKtt9+f9VlIBuI9RsSBMJwa6vsTGdsu0mZVw5iSfYTxfl3W6q61R/SyLTrA3En
-	eJuVxBhY0ZYONfQsiFzViFYk6p7uIljozQSLf1zcCDHgQOgesQ3ibpL14FYnGsq3
-	SMlJxSsC5nSVECiUF0rMDqeotJRi7WdMnWh1+2q2nPSjSnyG2ubXILCWK9eTJJfJ
-	2Hxdpt4yIm7zjV7cCwqykA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1773844151; x=
-	1773930551; bh=ZF546ExVdkQ5ArVhjKR5umS+gc+eyL+L55GnLaFRRW0=; b=T
-	gdlHS2Miju98tMCtqeP5xGuBIEvYRd8Fxp1Gyohb4R8AAIsx4Wz7XLaSwiRqb9aO
-	t/Gse5usS3Bh9RiHx05Os0KhSQlvY+qaLD530uUbcvaHB3JLdRFf6MggF9AREZPH
-	bfnUe4LteIfJHOqauKexOTf8/S5VOMjtDkQdbjrmBNcgDKVOqH7jS5uXWnRu9wXr
-	kSNKH0XbplRmPn46SJppEc+vnQNBvxRhw6NBe5mT5pLD6HIMVDN3XS/4wzo77kFp
-	hUJ5o8I46vR1vPGAFhbYRwHzX+NACydOPOUnauUYNGEslyd9R6MY8KXqisNO1GJp
-	UZnAgZelzVjIDt81N4iYQ==
-X-ME-Sender: <xms:t7a6adCcwektrn5OIKuvP2Yp37gpTfm4PFQI1qgrHeWwH_MQNngrHg>
-    <xme:t7a6aWV4oUXkXcnWYVwc1Ufki_LqHHhCTgfN3YsmKJJxDeukgP-OTdFamkWlEpzzt
-    GS3ND_eHFencbTstl4CKmNgoEJupcwFPZMQT-erBwS2AlRhGASQlg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdegfeejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepkedvuefhiedtueeijeevtdeiieejfeelvefffeelkeeiteejffdvkefgteeuhffg
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
-    phhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghlvgigrghnug
-    hrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehfuhhsthhi
-    nhhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikheskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtoheplhhinhhushifsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehl
-    ihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
-    dprhgtphhtthhopehlihhnuhigqdhrvggrlhhtvghkqdhsohgtsehlihhsthhsrdhinhhf
-    rhgruggvrggurdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidrug
-    gvvhdprhgtphhtthhopegthidrhhhurghnghesrhgvrghlthgvkhdrtghomhdprhgtphht
-    thhopegvlhgvrghnohhrrdhlihhnsehrvggrlhhtvghkrdgtohhm
-X-ME-Proxy: <xmx:t7a6aT8zv2YxEl2cEKNiqgFtYZ9xMBC5_GFNNSU7T1fwNW1o7mP3kw>
-    <xmx:t7a6aU6zB5hXV8QXBYFv1papV7YVgnLtlho68noEj9jAMOHYbbqGhQ>
-    <xmx:t7a6aUb0sbWG4HOMd19A3BgvusBhdw1rjR3SHkkyw35hI7FAEx-lIA>
-    <xmx:t7a6ae8k4sAGCmKmnoLDFjS6f2eP2GAN4KuyDLu76877lJn_cnPO1Q>
-    <xmx:t7a6aRXvajgXlyT6ogHVOv1YTq_mLJRAQTYvzQDkyEHRsWrq2JJps5zD>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 4FDDC700065; Wed, 18 Mar 2026 10:29:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZbXGOqpi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2873C19421;
+	Wed, 18 Mar 2026 14:35:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773844549;
+	bh=BgxfAggB9YPvHKFm5rDACGCDL1qHjhWfT7gkPQPt5TY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZbXGOqpiwSrDGCoLUa/m+3U1ie7YTZTRZTfYv3yu2HfLLRBn+9eCzBodJhKfcqsJQ
+	 evYUCoRalA0PaH8PIMntvDtdmZ2WWrQ+ZSFtA6icQjkWk1ak+tBONFKg7Uje9zNjuY
+	 aO9SrYzMpcuzpDLN4NHeRc6e+NZ/LxAYjfQ3L5KoHSyk3FKxtl5yV9meJHGIPo61el
+	 Mp6+5Q3MAnU2JrolghFQm0ssk8I3oDRaSO3wejnvAX6XQbt54xQt4G8tG2pgPrgbGs
+	 btnMccw5K51K9tEykvjflaDfai2AdisFcPEfZYlfavnrNULfiR09dZFoy/PqnTrV8h
+	 Ty9e1bKacEurA==
+Message-ID: <506ae434-e7f2-4fb6-9667-1a6d4315754d@kernel.org>
+Date: Wed, 18 Mar 2026 15:35:45 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: Aj4MA5-83_jg
-Date: Wed, 18 Mar 2026 15:28:30 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Krzysztof Kozlowski" <krzk@kernel.org>,
- =?UTF-8?Q?Yu-Chun_Lin_=5B=E6=9E=97=E7=A5=90=E5=90=9B=5D?= <eleanor.lin@realtek.com>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] arm64: dts: realtek: Fix memory node unit-address
+ mismatch
+To: Arnd Bergmann <arnd@arndb.de>, =?UTF-8?B?WXUtQ2h1biBMaW4gW+ael+elkA==?=
+ =?UTF-8?B?5ZCbXQ==?= <eleanor.lin@realtek.com>,
  linux-kernel@vger.kernel.org, linux-realtek-soc@lists.infradead.org,
- afaerber@suse.com, "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Linus Walleij" <linusw@kernel.org>
-Cc: "Drew Fustini" <fustini@kernel.org>,
- =?UTF-8?Q?CY=5FHuang=5B=E9=BB=83=E9=89=A6=E6=99=8F=5D?= <cy.huang@realtek.com>,
- "Stanley Chang" <stanley_chang@realtek.com>,
- =?UTF-8?Q?James_Tai_=5B=E6=88=B4=E5=BF=97=E5=B3=B0=5D?= <james.tai@realtek.com>,
+ afaerber@suse.com, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Linus Walleij <linusw@kernel.org>
+Cc: Drew Fustini <fustini@kernel.org>, =?UTF-8?B?Q1lfSHVhbmdb6buD6Ymm5pmP?=
+ =?UTF-8?Q?=5D?= <cy.huang@realtek.com>,
+ Stanley Chang <stanley_chang@realtek.com>,
+ =?UTF-8?B?SmFtZXMgVGFpIFvmiLTlv5fls7Bd?= <james.tai@realtek.com>,
  linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
-Message-Id: <e4c0187e-566b-42fb-920c-3cf73ed6cd6a@app.fastmail.com>
-In-Reply-To: <405a9783-0f77-4ce0-8288-43eaada09cff@kernel.org>
 References: <20260318114047.2804171-1-eleanor.lin@realtek.com>
  <405a9783-0f77-4ce0-8288-43eaada09cff@kernel.org>
-Subject: Re: [PATCH] arm64: dts: realtek: Fix memory node unit-address mismatch
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ <e4c0187e-566b-42fb-920c-3cf73ed6cd6a@app.fastmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <e4c0187e-566b-42fb-920c-3cf73ed6cd6a@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 18, 2026, at 12:46, Krzysztof Kozlowski wrote:
-> On 18/03/2026 12:40, Yu-Chun Lin wrote:
->> The memory node unit-address should match the first address in the reg
->> property. Correct the unit-address from @40000 to @50000 to align wit=
-h the
->> actual base address (0x50000) defined in the reg property.
->>=20
->> Fixes: b095c27fc874 ("arm64: dts: realtek: Add Kent SoC and EVB devic=
-e trees")
->> Signed-off-by: Yu-Chun Lin <eleanor.lin@realtek.com>
->> ---
->> This patch series is sent to both Realtek and ARM SoC maintainers.
->> While Andreas F=C3=A4rber is listed as the Realtek maintainer, there =
-has been
->> limited activity recently.
->
-> Unfortunately nothing new, likely two years ago I was also complaining
-> on lack of maintenance on Realtek, but the solution is not to send
-> patches to soc@.
->
-> Solution to that would be to remove the platform, for example. Or work
-> on maintainership.
+On 18/03/2026 15:28, Arnd Bergmann wrote:
+> 
+> As Andreas has not replied to the MAINTAINERS updated, I would
+> prefer to merge both that and this patch in the bugfix branch
+> for 7.0.
+> 
+> Krzysztof, can you also dig out your older patches and resend
+> those to James and Yu-Chun for review?
 
-They have already offered to take over maintainership, see
+My old stuff is already merged, I funneled it via my cleanup pulls. :)
 
-https://lore.kernel.org/lkml/3ab263bfa4904b428245152b83340363@realtek.co=
-m/
-
-> Did anyone from Realtek offered reviews to my patches posted 3 and 2
-> years ago? I don't see that.
->
-> Kent SoC was accepted under condition this will improve.
->
-> I drop this from soc patchwork and please do not send code for review
-> there, but either fix the lack of involvement from Realtek or let's dr=
-op
-> the platform if Realtek does not care.
-
-As Andreas has not replied to the MAINTAINERS updated, I would
-prefer to merge both that and this patch in the bugfix branch
-for 7.0.
-
-Krzysztof, can you also dig out your older patches and resend
-those to James and Yu-Chun for review?
-
-       Arnd
+Best regards,
+Krzysztof
