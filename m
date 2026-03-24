@@ -1,127 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFD72E040D;
-	Tue, 24 Mar 2026 13:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556B738C43D
+	for <soc@lists.linux.dev>; Tue, 24 Mar 2026 13:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774358435; cv=none; b=Wh1lUaJmpxoT6rvhrs4gQ7EgZM0Nme5qMWVmtmxiG1YXeHmoT5Tp4/jp86IEs6yxx4c0MDqSMtJi+IOAdiXZRhSH9LzkePiyVHYwgIjnP1NqZRd8jL810BDLAg+Iftw24uv9GD+exEmos9W43Lk1U2ij3Ixim/+cp6BZwzDv3Mc=
+	t=1774359059; cv=none; b=KZjIe1KCsjVHQmT5njTkLeh0t/+evtyFgL5TCkLzQPrGK1/sq4krlT06Mcsoi79jculW3R7mwENgJKTcXEyJjrvnvJtUoMESq7d9yP9hLSK+YD+5fWdPoKOjI7usAfKG6pqNOphsqnn/1QDouSrtWgA7B2JPerj1znkkqU0ofT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774358435; c=relaxed/simple;
-	bh=y9Qi9TED49iQ0lf1cvUnVGu4qg1OfCLPZNIEGzqhp0w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b9GKgmy0LE5H18/NJ1GJBrrYhQzPjK9QyB28bawqthO78ZSFI13NKOlB6P2mkCfqHTob3p83K3JVW+UZaa4Y4ShsliuKKUEKr0raREeSeMYRYWj58avkUGMtTsWiOGE3RMfaupsQgCUDOLyss4z0wnsKJavRWJgakG4FBKJz+hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tH88miOB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774359059; c=relaxed/simple;
+	bh=ps5VTXqoSaxRQSODgfzno6Phc/AIFnVXZFcO74FSICw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cSr+ytO6arckL9HpJ8nmlelWUXWOA/fkf8Oj1nxs+ofSm7Ybz182keXcptkcNemmHzzszbDaImNAfTb8fk86xbm76JUAgUkgMUtKKReKrlNWfocn/rX2ti4wH3ExZ71uneSee+kq8XWZ2nR0XrxQI1u3ITpnhz0mKjv9MRJCr8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F7kI8FCz; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tH88miOB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B294EC19424;
-	Tue, 24 Mar 2026 13:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774358434;
-	bh=y9Qi9TED49iQ0lf1cvUnVGu4qg1OfCLPZNIEGzqhp0w=;
-	h=From:To:Cc:Subject:Date:From;
-	b=tH88miOB2khXWWjd/tyy5xNp73WGOvP4eseuS/pWtzoVvjfvTVvpGh1AIPYxJDsd7
-	 cUjYHJBx5Bn08Y4okUpgxIwbEzAlv9TgWGYdHFZJ3ycBfU42w7e81AXNLGcyZDnGM1
-	 juMx0sPihVtFae4kSjkUr88gAngzFJR1L+sBlfIGYiDA2hXlG3vKJVCTeqNkqplp3e
-	 CGDVa8QB7olBfAxP9/jSndi8BLN/KZHv7ft1rw4Sm2SmueBKMWt7NC3fS8AcevkDPX
-	 m8pxqIMRS8ag3djvSASb8zaKwJQ+z1fh8TO/JnEBaeBxzGz6XUK9AFYwrPoRE4ePQj
-	 r0Xon4cXTfUQw==
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Drew Fustini <fustini@kernel.org>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memory: drivers for v7.1
-Date: Tue, 24 Mar 2026 14:20:28 +0100
-Message-ID: <20260324132028.65350-2-krzk@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F7kI8FCz"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ad4d639db3so17527405ad.0
+        for <soc@lists.linux.dev>; Tue, 24 Mar 2026 06:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774359056; x=1774963856; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9iKCvDxPU4e1QcvYZGXsXfBq0hdgl0iM7/+HP8gM9eA=;
+        b=F7kI8FCzUI1nWeSUaCRPMTRY2QqNUQDwiOMZ2Kx3JkJz/JiTMcUx1Wn2TL3AdmQtdt
+         hDDhF8JKtGJ32rIBK7PQVvnlXQFTENwDCfOLaeuGHQFXM/ZTESW/3KQr1PJmQESuIIRe
+         8lM0q4y1/trsZHRZNhaKH/B2I9rLVENNhlICYzCDrlyQKNgaOGCEgUXeANwjdJxJf8Kf
+         B/vDzGw+ZvfvrluLiYsreAXw1+3RyssYLH3YoOG/lwRwucT5ABf6A/4OwQz0Bbm3WzQE
+         9cSxTtssU0bPmF4eJTDUdjLkBmyRJs5OT7qR7HpN34FqZP049S39IfYJJPU/tpQb15/l
+         Bnsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774359056; x=1774963856;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9iKCvDxPU4e1QcvYZGXsXfBq0hdgl0iM7/+HP8gM9eA=;
+        b=paxccge50rxCdvb6QOSCFefD4PbpnTwH39kPVd6VLK+dm3z1sZfz93+gw51CqEgNBm
+         BejduLmfUI2H32K/pISIBikydtx0NO1dqWP/xEdRF73Zc1Q7Eh1LP1DQ1m8tpzyLlV9Q
+         6NE096g03XB4F+bfVanOx8Jf+PFYpeyOCUPRzWh1NZQhrP9Wl0P00NrS+D8776LJuTFg
+         OMP06noPlXo5K5KQOzYYC587JLa9JaPet/mvgtyc4oghv10fAfjr1cglDA92Zds4rMuF
+         cedjknvNspLNM8Hamslcn/L9WJLBcXi1hriZwl2yUyrfarSNsidcXf/ni1VV2/+GoPlr
+         6wsA==
+X-Forwarded-Encrypted: i=1; AJvYcCV5eglE688Sep5WTlnUz/GAwxD8FV3pVkTN0F0r+lvbFmLzcISsWUwjKRCgV6X1kam5vCY=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzT/xmoDN5lqaf8VQDHLUPLvwgKwY8+KwI2qD4D0Nq1N6IHNazU
+	L9WeeNNigabg05ABc7w/W71rtprzSSP2LQjaU1vVhYLwNHt4HSSDRDSO
+X-Gm-Gg: ATEYQzxeSRxThdUyTnzf7UIvNhRM+G6d3BqYlgxonCDua2JZkFuWp3r4440mxAcEixH
+	1Zo3ukphynFas88Kl2Sn2sEvPn+eZB/YEuvqfr0TI5tiw8FeVITrH+M586tLnHmzMxSGO9wXXfd
+	qCx/T8nfjCM+2ryrMpOvwphF9zUz6Jlgw5qjE3rDJelfAqKLIaWgqbaizB7ofn/MWtaWepZqzJL
+	c5MJnTvLdvXtoO9gBM/yIVGFW99yqUQBBIlJeeKQQ0CEh8zVsmxJgnf7b67JTOizAAQt/zpqxsA
+	lX6mCN2k00sKILAg5hrglYqQs0/Wgfp2AxFkpWQ7VwHPRCKB712iQIQwAQdI1CbUt5UYm8TMz8M
+	2WGDkP27gj2QJvNED6F3/TvZqW4kN23GJs/DJfJceIiQrg8iCRlNOYtk4za3npfE0T8vD67KSmq
+	Aj2LGd8RXGKJiwvbg1K5mLE84nN4jambcSDajKU7vGdYYV5U1LAcD/uzWT2N4=
+X-Received: by 2002:a17:903:380b:b0:2ae:504c:ae8a with SMTP id d9443c01a7336-2b082724a85mr165419795ad.16.1774359055635;
+        Tue, 24 Mar 2026 06:30:55 -0700 (PDT)
+Received: from localhost ([103.70.166.143])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c743a7ffafdsm9821747a12.7.2026.03.24.06.30.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2026 06:30:54 -0700 (PDT)
+Date: Tue, 24 Mar 2026 19:00:49 +0530
+From: Gopi Krishna Menon <krishnagopi487@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Daniel Baluta <daniel.baluta@nxp.com>, rafael@kernel.org, 
+	daniel.lezcano@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com, robh@kernel.org, 
+	krzk+dt@kernel.org, vireshk@kernel.org, conor+dt@kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, simona.toaca@nxp.com, d-gole@ti.com, 
+	m-chawdhry@ti.com
+Subject: Re: [PATCH 2/2] ARM: dts: st: spear: fix dtbs warning on spear
+ thermal sensor
+Message-ID: <acKEJrB6vc9wfd1k@toolbx>
+References: <20260323133814.14152-1-krishnagopi487@gmail.com>
+ <20260323133814.14152-3-krishnagopi487@gmail.com>
+ <20260324-smoky-radical-hyrax-1274a9@quoll>
+ <cd3400ce-295e-450f-b650-6715142ccbde@nxp.com>
+ <5a9f84fe-5827-48e7-8e4e-699cf8ae4776@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3637; i=krzk@kernel.org; h=from:subject; bh=y9Qi9TED49iQ0lf1cvUnVGu4qg1OfCLPZNIEGzqhp0w=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpwo+cFuBPdqHdh0hXhxCA55RLiFYm+bgLBKg8i Nzt/oAjeruJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCacKPnAAKCRDBN2bmhouD 17wZEACEW939WDzNQkxq3SAnaZFejO2eSBwABYopj2SEeAKbkfWc4LQ/OeuMGX7Y+YNiiWMrW+C uH2sUZAUqh9tYnpL8AZf2JB5ZZMdrD+CABfvDz4csfGhI5JPsApcTg5gFEx2pXI9YJFnZOQvkNz KR3khBFU2gcAh320w73db9h68siIKyc5wPya5EPIJe3GU9wg8tksreYYkRtAB9o7RRftUjO9T5E YHEep9dmEaB1ra+eGXVJrUXQtJ3jVqGRLIB9u2tZ4VfZv3soFSiweKMKEPmJrgGUY8tKi9TmFF7 FUu3ByAUYTYW61tLFfGDmqCcCboqdWDzFtRy10/RYbgW/ofdPYPAoVy7dodAircKrYDcYfJcbMz 46v9roGy5FS7qXpuZqMCOQFaQ+SOgd7xUEB8mpHEJNlaWuW1ZgHSwCnVt0T4j9PEpcLs8qzMqsz VX1Vg4/Eet4qjEx5BOqG4AB/MAfXin4wrdaWlXjAe3kd+VxLWPCLFGzp2Wle0b2znKEFw8dBUTg ZFhBGFkS68AzbnkA4/Olh+sJmWgdbsCl1J/WOamsUllB8z5ah0sEG3jeSKwtT48YcLIYSK/0Jzq 0d+sv6un1BkvRzEUnQSZ3G88UdIHsJAyTqPLNufPv8+pQfsIAS9YcwUmvGMSW0FLQEtD0uXr8VY 7Gzr2bXydNVYGcQ==
-X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <5a9f84fe-5827-48e7-8e4e-699cf8ae4776@kernel.org>
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+On Tue, Mar 24, 2026 at 11:01:05AM +0100, Krzysztof Kozlowski wrote:
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> On 24/03/2026 11:00, Daniel Baluta wrote:
+> > On 3/24/26 11:26, Krzysztof Kozlowski wrote:
+> >> On Mon, Mar 23, 2026 at 07:08:09PM +0530, Gopi Krishna Menon wrote:
+> >>> Running DTBS checks on st/spear1340-evb.dtb results in the following
+> >>> warning:
+> >>>
+> >>> thermal@e07008c4 (st,thermal-spear1340): Unevaluated properties are not allowed ('thermal_flags' was unexpected)
+> >>>   from schema $id: http://devicetree.org/schemas/thermal/st,thermal-spear1340.yaml
+> >> How is it possible if there is no such file?
+> >>
+> >> Did you just add new warning in patch #1 and then claim in patch #2 that
+> >> you fix it?
+> >>
+> >> You completely miss the point why this change is needed: how could the
+> >> DTS work before? It could not. And that should be your justification for
+> >> the patch, with explanation why it could not work.
+> > 
+> > Correct me if I'm wrong but I think there was a hidden bug here 
+> > 
+> > drivers/thermal/spear_thermal.c:spear_thermal_probe:
+> > 
+> >       if (!np || !of_property_read_u32(np, "st,thermal-flags", &val)) {
+> > »       »       dev_err(&pdev->dev, "Failed: DT Pdata not passed\n");                                                                                                                         
+> > »       »       return -EINVAL;
+> > »       }
+> > 
+> > So, the driver was checking for the correct property as pointed by 
+> 
+> Yes
+> 
+> > 
+> > bindings/thermal/spear-thermal.txt but the dts was using the wrong
+> 
+> No, DTS had two properties - correct one and incorrect.
+> 
 
-are available in the Git repository at:
+Yup, spear13xx is included by spear1310.dtsi and spear1340.dtsi both of
+which have st,thermal-flags correctly defined. When working on this
+patch, after converting the binding, I ran dtbs check and upon seeing
+dtbs warning immediately fixed it thinking it was complaining because
+st,thermal-flags (thermal_flags) was written incorrectly. (Which is not
+incorrect as st,thermal-flags was there in the final node but there was one
+additional property named thermal_flags as well which is not allowed as
+UnevaluatedProperty is set to false). 
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-7.1
+Also I dont think we have to override the st,thermal-flags property in
+spear1310.dtsi as the flags value is same in spear13xx.dtsi and
+spear1310.dtsi (0x7000).
 
-for you to fetch changes up to 82169065ffb07577075a5088b313d78673ded331:
+> > 
+> > property name: arch/arm/boot/dts/st/spear13xx.dtsi » » » thermal@e07008c4 { » » » » compatible = "st,thermal-spear1340"; » » » » reg = <0xe07008c4 0x4>; » » » » thermal_flags = <0x7000>; » » » }; And because this check is wrong:
+> > 
+> >       if (!np || !of_property_read_u32(np, "st,thermal-flags", &val)) {
+> > 
+> > people really didn't notice it.
+> > 
+> > The check should be:
+> > 
+> >       if (!np || of_property_read_u32(np, "st,thermal-flags", &val)) {
+> > »       »       dev_err(&pdev->dev, "Failed: DT Pdata not passed\n");                                                                                                                         
+> > »       »       return -EINVAL;
+> > »       }
+> > 
+> > So, this actual patch has uncovered a bug! 
+> 
+> Yes. Driver also has bug, so probably was never working. The point is
+> whatever commit is doing, the dtbs_check warning is not the
+> justification, because it was introduced by this patchset.
+> 
 
-  memory: tegra: Add MC error logging support for Tegra264 (2026-03-07 18:02:48 +0100)
+Please correct me if I am wrong Krzysztof but should i send a seperate patch
+fixing the thermal_flags property (Not connected to these converted
+bindings)?.
 
-----------------------------------------------------------------
-Memory controller drivers for v7.1
+Also, is it necessary to set additionalProperties to true? I am not able to
+figure out if that is needed.
 
-1. TegraMC:
- - Few fixes for older issues - missing clock on Tegra264,
-   missing enabling of DLL for Tegra30 and Tegra124.
- - Simplify the code in a few places.
- - Rework handling interrupts on different variants and add support for
-   error logging on Tegra 264.
+> Best regards,
+> Krzysztof
 
-2. Drop Baikal SoC bt1-l2-ctl driver, because SoC support is being
-   removed tree-wide.
-
-----------------------------------------------------------------
-Andy Shevchenko (2):
-      memory: bt1-l2-ctl: Remove not-going-to-be-supported code for Baikal SoC
-      dt-bindings: cache: bt1-l2-ctl: Remove unused bindings
-
-Florian Fainelli (1):
-      memory: brcmstb_memc: Expand LPDDR4 check to cover for LPDDR5
-
-Ketan Patil (6):
-      memory: tegra: Group error handling related registers
-      memory: tegra: Group register and fields
-      memory: tegra: Add support for multiple IRQs
-      memory: tegra: Group SoC specific fields
-      memory: tegra: Prepare for supporting multiple intmask registers
-      memory: tegra: Add MC error logging support for Tegra264
-
-Krzysztof Kozlowski (4):
-      memory: renesas-rpc-if: Simplify printing PTR_ERR with dev_err_probe
-      memory: tegra-mc: Drop tegra_mc_setup_latency_allowance() return value
-      memory: tegra-mc: Simplify printing PTR_ERR with dev_err_probe
-      memory: tegra-mc: Use %pe format
-
-Mikko Perttunen (2):
-      memory: tegra124-emc: Fix dll_change check
-      memory: tegra30-emc: Fix dll_change check
-
-Thierry Reding (1):
-      memory: tegra: Add support for DBB clock on Tegra264
-
- .../bindings/cache/baikal,bt1-l2-ctl.yaml          |  63 ----
- drivers/memory/Kconfig                             |  11 -
- drivers/memory/Makefile                            |   1 -
- drivers/memory/brcmstb_memc.c                      |   8 +-
- drivers/memory/bt1-l2-ctl.c                        | 323 ----------------
- drivers/memory/renesas-rpc-if.c                    |   8 +-
- drivers/memory/tegra/mc.c                          | 135 ++++---
- drivers/memory/tegra/mc.h                          | 155 +++++---
- drivers/memory/tegra/tegra114.c                    |  18 +-
- drivers/memory/tegra/tegra124-emc.c                |   2 +-
- drivers/memory/tegra/tegra124.c                    |  40 +-
- drivers/memory/tegra/tegra186-emc.c                |   8 +
- drivers/memory/tegra/tegra186.c                    |  22 +-
- drivers/memory/tegra/tegra194.c                    |  22 +-
- drivers/memory/tegra/tegra20.c                     |  31 +-
- drivers/memory/tegra/tegra210.c                    |  21 +-
- drivers/memory/tegra/tegra234.c                    |  22 +-
- drivers/memory/tegra/tegra264.c                    | 420 ++++++++++++++++++++-
- drivers/memory/tegra/tegra30-emc.c                 |   6 +-
- drivers/memory/tegra/tegra30.c                     |  18 +-
- include/soc/tegra/mc.h                             |  40 +-
- 21 files changed, 809 insertions(+), 565 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/cache/baikal,bt1-l2-ctl.yaml
- delete mode 100644 drivers/memory/bt1-l2-ctl.c
+Thanks,
+Gopi Krishna Menon
