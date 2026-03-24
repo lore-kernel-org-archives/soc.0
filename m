@@ -1,178 +1,100 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C758A36F40D
-	for <soc@lists.linux.dev>; Tue, 24 Mar 2026 13:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B825F38A288
+	for <soc@lists.linux.dev>; Tue, 24 Mar 2026 13:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774359280; cv=none; b=KkCwDR8CkgvsaCkpfVlXn9ZZ3dJEtDaM/Ir8fZE3blupkAD4GUym6jq3SZOroHDEhfksSmVj+TwGGV/ZHCMFmcDmE7nmpymXObkCx5AkNhBzMJOYx9gv1iFtdhU/b7E+Ww7K9lZv6LmrMXpmX+X+K7UV2RrLfeNL4b3eyo7tg9A=
+	t=1774360349; cv=none; b=nQvInOntxAf0fWDkJNipFdcaiyqNuSIdZmYZZimT74X90UM3jyOyl9txOmgTMVe267ngpl3l+Pam4RizwVBGFUqueKrUyxPileC8dsBTCNEZ0q+Qpr0f8EZsucqe/Yt1b3dlXXZcLRr0Azn+v+WlYleev99TQn2hQlV3RuFiPtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774359280; c=relaxed/simple;
-	bh=Ydl90mdBaMZbcLqO4exUiw7RWgcNaF0oWnbQlH1GFPY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gJR25BgcaVxpiUaoeqYT1eFpQiqYFnTLbb3LGDboah2NfnciVuz/aAXwZrdOWYWXnFWfQxJF65tjoixMx1TyDxMx01s73FY95yVX65vtEX7dgevMOc3ECG1F03CRMinyVjkn3Lt+GQQYgA7G3wDsXO0Z82B0rj4QY7OUdBP24tI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jeMDoI7f; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774360349; c=relaxed/simple;
+	bh=94g3Jg52tfyyaalRLEEVRBjds2/VXmSCbqO88/kuIRM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=neMGzZhCXWrkMLCvnx6NXZ8js6VWiHULfAm1hjsyyFUMonqKYX8K96pAa8CowvC5J6NVfubRd+eAO94yh7EUGx+PnC3QLW6L9eR0DaSaekp0qGhFWqRBBd8PsooSPc+3rN8huCjl6e5T3c3CDo/g8LFjSmJVU3ogcyG2ciFQV9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Br2n+bfW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jeMDoI7f"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2b0abdde280so4005925ad.1
-        for <soc@lists.linux.dev>; Tue, 24 Mar 2026 06:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774359278; x=1774964078; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0DRTw1k/Deyd3qw7jRPAvPgHwcdUHnkDo3iNQs7+2Vs=;
-        b=jeMDoI7fg5KP728I2cTpJ2fqjo7BGftSBzuGW2Nr/mlPxS3khE5l+k3DxqzY4XwixG
-         NufETO2VFWCUshNf/O7KUQTJzffwLy+N43z3cMirh3eRuXPIjgx+aJa5fwDaGCXgvYkV
-         TLALRr19EGk214YvYs64zYSb9NfSXXcVWwoT+Xf29wleive66rM1Xk+YmlV93aAIGOcZ
-         3KiIU87/o5Rg1fZ5Mjv9vu8Zaq9eKUIgR3Chv9987iJLyWpJfM6GS6NMzQVIEn8b5pWt
-         ufPt/G303b/sk6ktsnsc1g74K6YVAnxJpDCVoVkwTy43hZ0DrQCtVAoW50y7LqSB0e5n
-         VxIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774359278; x=1774964078;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0DRTw1k/Deyd3qw7jRPAvPgHwcdUHnkDo3iNQs7+2Vs=;
-        b=L/SQEL0whPLcbxfa2mtVHjL+u92qN96NS+/U8cXJSrxpQPrsDB6ilQekIms09vP+WA
-         IDeb7G1X4CYAU16PM7e5EESmkx7Bu7iblwSCAwz7tte1uE78YL1d7Su+5tG+8bgXe1y/
-         vardLishANf4Nn1VV/08tDwvznzz4gLOU4JDE+WDz+R5fZ1kcR8b73PsoYG/lfi06zqd
-         8rsYLTisOopJgjZwrjQYVIwzymzyzzebibk0eI6kZNHHfQhixsoU0l7jnqMnuxjXkB5G
-         vxOAQIiWnL/8kYWrWbhXHSmvDrOfdnVqiy7D4PUsLxTsThfwY2AYORDJvPAZmSVuSw2k
-         5ARQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXFlaFY4/Q91hjSz/m+Y5+gIaprpV8Cc4TxqftYf/bHB4nWRh47zrpiFB30KUeJpzVJU6g=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy3sqY11vamequQXmLk8TSr3iCRliIz73jPpITEL04Q/1jMg3Ju
-	02ViuubTKA3MqckYBpmO6CFEwf4eMkI3Ccq2hqPuSwQEZhrFVutfjAf+
-X-Gm-Gg: ATEYQzzNB2QN9GEUkECmLlAMHpDZ96/PF8kf8rXHbcs4h/K4DP7jwTBnskl/VfGIHeb
-	OD6MDRZ8HQVXPG6opOYgZ1tkKjmEC81npekNPWAeP4ddUfTAPM2iF1A4YBDhoXjpCGSi4Iut9MR
-	cFYelw5x1oVp5KNAU8Fq5xERaMZwyYN/Jvf9cfpIIBNulex1wDHiA8tfe1yfJYz5RlQ+Cys7QdO
-	J3EDi8iggl8TKxvFLmRuOC7EwBVdHxDZIHBqpdZBLe8c5MX6TS7YuAHIc8m5LR1pJPkWR8cdGfQ
-	IDiA/QZurhzzkuWHonnJiUSgLnRX0vlKrkS0C5IgDoLIXMR1d+O4FfzK8cY5VYqF9JUnUAkcgpg
-	2Dwqv7ljpwxifXe65OPZ+2p9VdjdUJ8mt2vXWfGgsrkSBMavWz9bdbCIHEDCBVrb2sNKHyahnsl
-	4/3N9bAQOUQOqh+VHPlbYc6g0BRaUd6ZT9bDYSKTCNW0reQLbW/UPN4ackaPU=
-X-Received: by 2002:a17:902:ce82:b0:2ae:47c9:68b9 with SMTP id d9443c01a7336-2b0827ea2edmr157633805ad.49.1774359277914;
-        Tue, 24 Mar 2026 06:34:37 -0700 (PDT)
-Received: from localhost ([103.70.166.143])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08366b5besm148426185ad.55.2026.03.24.06.34.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 06:34:37 -0700 (PDT)
-Date: Tue, 24 Mar 2026 19:04:32 +0530
-From: Gopi Krishna Menon <krishnagopi487@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Daniel Baluta <daniel.baluta@nxp.com>, rafael@kernel.org, 
-	daniel.lezcano@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com, robh@kernel.org, 
-	krzk+dt@kernel.org, vireshk@kernel.org, conor+dt@kernel.org, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, simona.toaca@nxp.com, d-gole@ti.com, 
-	m-chawdhry@ti.com
-Subject: Re: [PATCH 2/2] ARM: dts: st: spear: fix dtbs warning on spear
- thermal sensor
-Message-ID: <acKSzjiPNSbcpKrx@toolbx>
-References: <20260323133814.14152-1-krishnagopi487@gmail.com>
- <20260323133814.14152-3-krishnagopi487@gmail.com>
- <20260324-smoky-radical-hyrax-1274a9@quoll>
- <cd3400ce-295e-450f-b650-6715142ccbde@nxp.com>
- <5a9f84fe-5827-48e7-8e4e-699cf8ae4776@kernel.org>
- <acKEJrB6vc9wfd1k@toolbx>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Br2n+bfW"
+Received: by smtp.kernel.org (Postfix)
+	id 6A73FC4AF0D; Tue, 24 Mar 2026 13:52:29 +0000 (UTC)
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 9E5B5C2BC87;
+	Tue, 24 Mar 2026 13:52:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E5B5C2BC87
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1774360345;
+	bh=94g3Jg52tfyyaalRLEEVRBjds2/VXmSCbqO88/kuIRM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Br2n+bfWa86iLGjFkIKN3RXN70ujcfb5BBGlJ72iAEPgKZfE7mXdNCAt3y5CCgyjA
+	 mZOcyi2mcQPViWimIfZcQXVGr19CjvgsYAOBMYoDZXHZ7FtDIZ7prhuVJ4vvNrbBne
+	 Z7dLzKzSbTWeIKV2TJkBHanxNz6/+3dbteGRV7ig8j6iAJ8E4JnTUJ963dleOyCQRY
+	 hrwstTi04oV+K4s3/TnPwBc5b/TSYdX2G0wCpWg+Lo4ldPa82DyMjHFdiLBqzHgIqu
+	 lHygSjtJb+uTCx1k93vYMoHfeZjMT3X7x0CA6dCaL9C09ApJfZ+inXHJR/Ya8CbLFb
+	 XewNfOpBZ++bg==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 92CBA17E5A12;
+	Tue, 24 Mar 2026 14:52:25 +0100 (CET)
+Message-ID: <b8b9ad39-0e9e-4c38-b080-85153b2a66d1@collabora.com>
+Date: Tue, 24 Mar 2026 14:52:25 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <acKEJrB6vc9wfd1k@toolbx>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT,PULL,1/2] MediaTek ARM64 Device Tree updates for v7.1
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: arm-soc <arm@kernel.org>, soc <soc@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ matthias.bgg@gmail.com
+References: <20260320085641.15843-1-angelogioacchino.delregno@collabora.com>
+ <20260321-aspiring-real-foxhound-4a18e7@quoll>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20260321-aspiring-real-foxhound-4a18e7@quoll>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 24, 2026 at 07:00:49PM +0530, Gopi Krishna Menon wrote:
+Il 21/03/26 12:07, Krzysztof Kozlowski ha scritto:
+> On Fri, Mar 20, 2026 at 09:56:38AM +0100, AngeloGioacchino Del Regno wrote:
+>> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+>>
+>>    Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+>>
+>> are available in the Git repository at:
+>>
+>>    https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-dts64-for-v7.1
+>>
+>> for you to fetch changes up to 820ed0c1a13c5fafb36232538d793f99a0986ef3:
+>>
+>>    arm64: dts: mediatek: mt7986a: Fix gpio-ranges pin count (2026-03-12 13:32:17 +0100)
+> 
+> Days in linux-next:
+> ----------------------------------------
+>   0 | +++ (3)
+> 
+> With 0 days in next, you cannot really react on any bug reports.
+> 
 
-> On Tue, Mar 24, 2026 at 11:01:05AM +0100, Krzysztof Kozlowski wrote:
-> 
-> > On 24/03/2026 11:00, Daniel Baluta wrote:
-> > > On 3/24/26 11:26, Krzysztof Kozlowski wrote:
-> > >> On Mon, Mar 23, 2026 at 07:08:09PM +0530, Gopi Krishna Menon wrote:
-> > >>> Running DTBS checks on st/spear1340-evb.dtb results in the following
-> > >>> warning:
-> > >>>
-> > >>> thermal@e07008c4 (st,thermal-spear1340): Unevaluated properties are not allowed ('thermal_flags' was unexpected)
-> > >>>   from schema $id: http://devicetree.org/schemas/thermal/st,thermal-spear1340.yaml
-> > >> How is it possible if there is no such file?
-> > >>
-> > >> Did you just add new warning in patch #1 and then claim in patch #2 that
-> > >> you fix it?
-> > >>
-> > >> You completely miss the point why this change is needed: how could the
-> > >> DTS work before? It could not. And that should be your justification for
-> > >> the patch, with explanation why it could not work.
-> > > 
-> > > Correct me if I'm wrong but I think there was a hidden bug here 
-> > > 
-> > > drivers/thermal/spear_thermal.c:spear_thermal_probe:
-> > > 
-> > >       if (!np || !of_property_read_u32(np, "st,thermal-flags", &val)) {
-> > > »       »       dev_err(&pdev->dev, "Failed: DT Pdata not passed\n");                                                                                                                         
-> > > »       »       return -EINVAL;
-> > > »       }
-> > > 
-> > > So, the driver was checking for the correct property as pointed by 
-> > 
-> > Yes
-> > 
-> > > 
-> > > bindings/thermal/spear-thermal.txt but the dts was using the wrong
-> > 
-> > No, DTS had two properties - correct one and incorrect.
-> > 
-> 
-> Yup, spear13xx is included by spear1310.dtsi and spear1340.dtsi both of
-> which have st,thermal-flags correctly defined. When working on this
-> patch, after converting the binding, I ran dtbs check and upon seeing
-> dtbs warning immediately fixed it thinking it was complaining because
-> st,thermal-flags (thermal_flags) was written incorrectly. (Which is not
-> incorrect as st,thermal-flags was there in the final node but there was one
+OUCH!!!
 
-I meant 'incorrect' here not 'not incorrect'
+Sorry about that, I didn't notice that my for-next didn't get pushed when I tried
+to actually push it (and I was 100% convinced that I had checked after pushing).
 
-> additional property named thermal_flags as well which is not allowed as
-> UnevaluatedProperty is set to false). 
-> 
-> Also I dont think we have to override the st,thermal-flags property in
-> spear1310.dtsi as the flags value is same in spear13xx.dtsi and
-> spear1310.dtsi (0x7000).
-> 
-> > > 
-> > > property name: arch/arm/boot/dts/st/spear13xx.dtsi » » » thermal@e07008c4 { » » » » compatible = "st,thermal-spear1340"; » » » » reg = <0xe07008c4 0x4>; » » » » thermal_flags = <0x7000>; » » » }; And because this check is wrong:
-> > > 
-> > >       if (!np || !of_property_read_u32(np, "st,thermal-flags", &val)) {
-> > > 
-> > > people really didn't notice it.
-> > > 
-> > > The check should be:
-> > > 
-> > >       if (!np || of_property_read_u32(np, "st,thermal-flags", &val)) {
-> > > »       »       dev_err(&pdev->dev, "Failed: DT Pdata not passed\n");                                                                                                                         
-> > > »       »       return -EINVAL;
-> > > »       }
-> > > 
-> > > So, this actual patch has uncovered a bug! 
-> > 
-> > Yes. Driver also has bug, so probably was never working. The point is
-> > whatever commit is doing, the dtbs_check warning is not the
-> > justification, because it was introduced by this patchset.
-> > 
-> 
-> Please correct me if I am wrong Krzysztof but should i send a seperate patch
-> fixing the thermal_flags property (Not connected to these converted
-> bindings)?.
-> 
-> Also, is it necessary to set additionalProperties to true? I am not able to
-> figure out if that is needed.
-> 
-> > Best regards,
-> > Krzysztof
-> 
-> Thanks,
-> Gopi Krishna Menon
+Krzysztof, thanks for making me notice, that was completely unintentional.
+
+I re-pushed the for-next branch exactly a second ago; that should give it some good
+time in -next ... or well, otherwise, we can always delay those commits for v7.2 or
+for fixes.
+
+Cheers,
+Angelo
