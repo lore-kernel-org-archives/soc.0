@@ -1,74 +1,45 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F7E39B948
-	for <soc@lists.linux.dev>; Tue, 24 Mar 2026 04:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853F73BBA06;
+	Tue, 24 Mar 2026 08:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774325256; cv=none; b=lWkmZkYggZ3loV4hZPIbkTfli5S/Lfq5TwtEdYyP1ug0BJJnOOcy2BFUPHdUtSBXFDURDKClvlmFRUp7KpE3gE/pJKy9Gag59biBwDpmkCfB5M0xqYaXJK8ZnfURowZ0uJ4BaUw6ri39dDHGB8ChoNseR16d3srtsmkdxDKJfKA=
+	t=1774341887; cv=none; b=slCiyIO8Trq9uSmRHNZ+oS/IFKe3XuekKO6g1QBw0OEgZ0XavkFkNehOVH6IIDVLVipSpzsjPmCvvp6/gJX+i2w45Pw8RwhiO1pdgz7zWGna6yP2vEJ/QAwON9HApKxwgjPnu/F8UXnD6LW9P9weHQMs+2CZ+n2Cx0Tm9wpZsyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774325256; c=relaxed/simple;
-	bh=9CGkjdaf9efUWmVF8DkWsBSG/mNOtkaQY4XZbz1OfAE=;
+	s=arc-20240116; t=1774341887; c=relaxed/simple;
+	bh=cGtYVl2fr+pZ5FWp8Z9AvNZ6p0dL5XfRSVVR4HUPRow=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VGOwATIlG3B0Q8CQf1Bnszc8kdivNp0l5X6XFaUk6oKw52rqB7kBhK1Oyig8r79kCPIsJ3GV7AT1/5wiNztEwhsjPQXMOLeVG5ju4vGP/z02/r4yQOTsVZ5DN2+mHnpmnhkVylXR+O6a77Vraj3id5qoubwBHZwjXZhHM3EzE+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NnTFIMT4; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=dgZaXZE6gsrs/hCEx39J+4iv6vj10kP0whCe1uU/aApKwvybYZ39AD5oq/tGGtFlur+hgPZKK0Nj7VsiA86URwUK8oT1EH299/q+VtAqdBTJxW87RzFa5y1B2xn6VqkArKVCBdgAAb9OFOpkjKDvgEU6NnfWjYCUYB+q6EoAv/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUBIdu39; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NnTFIMT4"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-824c9da9928so5351577b3a.3
-        for <soc@lists.linux.dev>; Mon, 23 Mar 2026 21:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1774325254; x=1774930054; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=m7SqHnHYZqEYtwdh+YkC9S161bBgEEEQDmxfAGwav9w=;
-        b=NnTFIMT4GBNQ1ZV2RaKUG0lx6jtxzkiaqhbUKpmp3MfztugCxIEc3m8dYJSIfjCh8b
-         C892QdQQnIDbaITNhjWoRMUo8+yQL2Au0RNox7EzfjdOWG5LKRc3q6BmdtOzzDxGm0Yn
-         5K+EA8SM54Kk7Wd+hsC0XLbIb2JM+iXvgw9X8jb5woFtyVjLKvvbbD5UouIx8oY7s7dh
-         GnlgCT+xLmUFXq4jBcKbmDvicHOb+WtVMjtmU1Ey/0PIS9M75nTT0+hyrsL4OU0So9mr
-         WCLr4eydPJ5PaHgtvbusvUHfL/biBQ/wpJSSyRPKIyR7lX6V0huOfrFBYD2z3aDIJDsg
-         x90A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774325254; x=1774930054;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m7SqHnHYZqEYtwdh+YkC9S161bBgEEEQDmxfAGwav9w=;
-        b=JIi40rRrHC2vXfG7NFakfErHkkAIlttJIAmKvm3hJ6miNycLW6A2ifRhI3hpaOkS0X
-         u1CwJ1Qsrmg/hwmpYQSLUjR1/QZbliRxDvFNKktJsn17qSuYlsGUGNDa0uycN2p+pYI4
-         0JFVLtT+V9GdmqP8eYKDyeaCzZm11t0RHLyfqCTBFtqLamUsIl6Ir3ZW4EczKbbRpBzZ
-         BkZ47IvZcqy0ki4rYdnCwsG3TQWdhwp7f7wZrCUryVnAVeH752JhIFZRTTC2s73vGq6X
-         hgXF/+i30q3SknNc/KJHtlPQY6jQ+YDp5Rr4lXvXpjUVXxJCT3heLDbsAB1/pJsbJDbV
-         BvqA==
-X-Forwarded-Encrypted: i=1; AJvYcCURrTSUr5myFX0tg2h5jV552IqyLMzJ/b8s2xxXh2dkvthsNN2Covs3oRL8P9zUlWG/bAY=@lists.linux.dev
-X-Gm-Message-State: AOJu0YwK4kxB22X6MluaAeUCmNITXZEZXGqoAOTS9yesFNaxylRTmyBo
-	9btYb1+xmHXG2YeW1LYKjW0f+bpY1gbTfZGQMr0nZjFpXjJYc+wYNgno0IrNokuz54k=
-X-Gm-Gg: ATEYQzwA9naw0A3vcuAGgNLgbYVBPcypnznC+fqikmjJl2Y5X4vr6k2SSJJeiOZ++c8
-	n+qaX2KzfCKJMMn8TmU4NZnhuHT8H+gbEULV6ch9iDfCKnMLcUNYgV5wOVUuAqB6uPfy+7Unjsr
-	hM/ZRZv8chtyBqIt6uxoen3Q5qZO1JCTW8so5SOdw5GLGuM4zXQDiwO9DKdLunbYBddAm6faBEo
-	Y6Jbq+ByLWi2YyLnSL1lK6ocmS1h6iWziJj6j9rER+gIfwa9lQwQa0grvgRaLxgd/VUIQ/W0ZeS
-	F84cygs6rSPhaau7RssfbrGsUfR0cEujUCipWfUFdiTgL1LxuWAmOvpbcwsRDkST4HTbGX0wFye
-	C3gVELsF3GXmSgvcTns+GYWKEfGMOQWtmm4eX5ZCw7xLbW9fkwhkUDOJGrPnNEifRY77ctt2shQ
-	oBthkGAgjQ0t1sBicEnonOcpJYGHxNpG8J4jA=
-X-Received: by 2002:a05:6a00:3bec:b0:82c:2155:5b6d with SMTP id d2e1a72fcca58-82c21556203mr7996673b3a.12.1774325253941;
-        Mon, 23 Mar 2026 21:07:33 -0700 (PDT)
-Received: from localhost ([122.172.81.200])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0409bf65sm10979176b3a.34.2026.03.23.21.07.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 21:07:33 -0700 (PDT)
-Date: Tue, 24 Mar 2026 09:37:30 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Gopi Krishna Menon <krishnagopi487@gmail.com>
-Cc: rafael@kernel.org, daniel.lezcano@kernel.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, vireshk@kernel.org, 
-	conor+dt@kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
-	daniel.baluta@nxp.com, simona.toaca@nxp.com, d-gole@ti.com, m-chawdhry@ti.com
-Subject: Re: [PATCH 0/2] dt-bindings: thermal: st,thermal-spear1340: convert
- to dtschema
-Message-ID: <n6jllrlsu5fatso5geeyjgiuefzj7qclkpsptgpowdy6splnip@re32x6zwepsp>
-References: <20260323133814.14152-1-krishnagopi487@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUBIdu39"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CAFBC19424;
+	Tue, 24 Mar 2026 08:44:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774341886;
+	bh=cGtYVl2fr+pZ5FWp8Z9AvNZ6p0dL5XfRSVVR4HUPRow=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GUBIdu398BiRjrZ4jdlaWApaETC0kyBH2SUeSOJzeTumDNfmfuLdQwIrAJSeqkPME
+	 dcH039wHpQDz54H/MKvp+DGYDYQGAb1QrzZuEYloXXLPzO+f8hiU01bWaLNoaO24Af
+	 u0o2n/NBCviC49TkEpcltOF7CuvXlZ9qEwnMyJwN7460s/HHUjsbAX6wc1mKc7SGp5
+	 B2V3/HDGmsTXPvpaSKuncOc/k+9wrBJWddv0sJpbq+wZRNqRfaOsKqMVytDycQNxhI
+	 ClYpU/+d2Xk1r2MY/KRJv5vs9+phlmeAoAjpfoLmjsus/vB71DA6Oyak+7M/OusJ2v
+	 NGguAufLBE48A==
+Date: Tue, 24 Mar 2026 09:44:41 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
+	arnd@arndb.de
+Cc: mark.rutland@arm.com, bjorn.andersson@oss.qualcomm.com,
+	konrad.dybcio@oss.qualcomm.com, mani@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Sudeep Holla <sudeep.holla@arm.com>, soc@lists.linux.dev
+Subject: Re: [PATCH] firmware: psci: Set pm_set_resume/suspend_via_firmware()
+ for SYSTEM_SUSPEND
+Message-ID: <acJO+fhjeguDZaRa@lpieralisi>
+References: <20251231162126.7728-1-manivannan.sadhasivam@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -77,31 +48,75 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260323133814.14152-1-krishnagopi487@gmail.com>
+In-Reply-To: <20251231162126.7728-1-manivannan.sadhasivam@oss.qualcomm.com>
 
-On 23-03-26, 19:08, Gopi Krishna Menon wrote:
-> This patch series converts SPEAr Thermal Sensor bindings to DT schema
-> and renames thermal_flags property in spear13xx.dtsi to
-> st,thermal-flags to fix the unevaluated property warning in
-> st/spear1340-evb.dts.
-> 
-> Note:
-> * This patch is part of the GSoC2026 application process for device tree bindings conversions
-> * https://github.com/LinuxFoundationGSoC/ProjectIdeas/wiki/GSoC-2026-Device-Tree-Bindings
-> 
-> 
-> Gopi Krishna Menon (2):
->   dt-bindings: thermal: st,thermal-spear1340: convert to dtschema
->   ARM: dts: st: spear: fix dtbs warning on spear thermal sensor
-> 
->  .../bindings/thermal/spear-thermal.txt        | 14 --------
->  .../thermal/st,thermal-spear1340.yaml         | 36 +++++++++++++++++++
->  arch/arm/boot/dts/st/spear13xx.dtsi           |  2 +-
->  3 files changed, 37 insertions(+), 15 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/thermal/spear-thermal.txt
->  create mode 100644 Documentation/devicetree/bindings/thermal/st,thermal-spear1340.yaml
+[+Arnd, arm-soc - to pick this up please]
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+On Wed, Dec 31, 2025 at 09:51:26PM +0530, Manivannan Sadhasivam wrote:
+> From: Konrad Dybcio <konradybcio@kernel.org>
+> 
+> PSCI specification defines the SYSTEM_SUSPEND feature which enables the
+> firmware to implement the suspend to RAM (S2RAM) functionality by
+> transitioning the system to a deeper low power state. When the system
+> enters such state, the power to the peripheral devices might be removed. So
+> the respective device drivers must prepare for the possible removal of the
+> power by performing actions such as shutting down or resetting the device
+> in their system suspend callbacks.
+> 
+> The Linux PM framework allows the platform drivers to convey this info to
+> device drivers by calling the pm_set_suspend_via_firmware() and
+> pm_set_resume_via_firmware() APIs.
+> 
+> Hence, if the PSCI firmware supports SYSTEM_SUSPEND feature, call the above
+> mentioned APIs in the psci_system_suspend_begin() and
+> psci_system_suspend_enter() callbacks.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> [mani: reworded the description to be more elaborative]
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> ---
+> 
+> This patch was part of an old series that didn't make it to mainline due to
+> objections in the binding and exposing CPU_SUSPEND as S2RAM patches:
+> https://lore.kernel.org/all/20241028-topic-cpu_suspend_s2ram-v1-0-9fdd9a04b75c@oss.qualcomm.com/
+> 
+> But this patch on its own is useful for platforms implementing the S2RAM
+> feature in PSCI firmware. So I picked it up, tested on Qcom X1E T14s and
+> resending it.
+> 
+>  drivers/firmware/psci/psci.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
--- 
-viresh
+Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index 38ca190d4a22..e73bae6cb23a 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -539,12 +539,22 @@ static int psci_system_suspend(unsigned long unused)
+>  
+>  static int psci_system_suspend_enter(suspend_state_t state)
+>  {
+> +	pm_set_resume_via_firmware();
+> +
+>  	return cpu_suspend(0, psci_system_suspend);
+>  }
+>  
+> +static int psci_system_suspend_begin(suspend_state_t state)
+> +{
+> +	pm_set_suspend_via_firmware();
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct platform_suspend_ops psci_suspend_ops = {
+>  	.valid          = suspend_valid_only_mem,
+>  	.enter          = psci_system_suspend_enter,
+> +	.begin          = psci_system_suspend_begin,
+>  };
+>  
+>  static void __init psci_init_system_reset2(void)
+> -- 
+> 2.48.1
+> 
