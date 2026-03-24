@@ -1,122 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853F73BBA06;
-	Tue, 24 Mar 2026 08:44:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E253D6465;
+	Tue, 24 Mar 2026 09:26:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774341887; cv=none; b=slCiyIO8Trq9uSmRHNZ+oS/IFKe3XuekKO6g1QBw0OEgZ0XavkFkNehOVH6IIDVLVipSpzsjPmCvvp6/gJX+i2w45Pw8RwhiO1pdgz7zWGna6yP2vEJ/QAwON9HApKxwgjPnu/F8UXnD6LW9P9weHQMs+2CZ+n2Cx0Tm9wpZsyI=
+	t=1774344381; cv=none; b=hhEi8CwkNTV2NMYq82i0fp9Vqb2H5/MDvQAQsqwGN5t4bVbOVg7vSmtXoDwZYOhQUpXVG+nDJmxpdSsi+QonN2IBcRodGDsgRTF8ZK9ns8b2fU/kndiWHHLJYT9lhAk4lyYUcoFjfgA8r7Nr0Ip3LA/TPeey2FOgqplIJnuMxMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774341887; c=relaxed/simple;
-	bh=cGtYVl2fr+pZ5FWp8Z9AvNZ6p0dL5XfRSVVR4HUPRow=;
+	s=arc-20240116; t=1774344381; c=relaxed/simple;
+	bh=4kWn0YZJb4i01Ir/4InQFgfX4Z1CwGSc0CpGCKJSBVM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dgZaXZE6gsrs/hCEx39J+4iv6vj10kP0whCe1uU/aApKwvybYZ39AD5oq/tGGtFlur+hgPZKK0Nj7VsiA86URwUK8oT1EH299/q+VtAqdBTJxW87RzFa5y1B2xn6VqkArKVCBdgAAb9OFOpkjKDvgEU6NnfWjYCUYB+q6EoAv/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUBIdu39; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=JtY575a6tip9xjPVD3L7saoV7fcIVRLYelR1Es3WDmo9zgjDyNvNl1idlSNl2GEO6l/pxGy+6PHjrXVZpgiMz6F4m1B/tHEMyaxPLeAlvpAK6rdnajtCcwg8LsQjXNg5+R3JDdK6YVBaEiGbRg3tAHSN3QgThG0wJz7Qb378vwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XgbZ5flO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUBIdu39"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CAFBC19424;
-	Tue, 24 Mar 2026 08:44:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XgbZ5flO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC89C19424;
+	Tue, 24 Mar 2026 09:26:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774341886;
-	bh=cGtYVl2fr+pZ5FWp8Z9AvNZ6p0dL5XfRSVVR4HUPRow=;
+	s=k20201202; t=1774344380;
+	bh=4kWn0YZJb4i01Ir/4InQFgfX4Z1CwGSc0CpGCKJSBVM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GUBIdu398BiRjrZ4jdlaWApaETC0kyBH2SUeSOJzeTumDNfmfuLdQwIrAJSeqkPME
-	 dcH039wHpQDz54H/MKvp+DGYDYQGAb1QrzZuEYloXXLPzO+f8hiU01bWaLNoaO24Af
-	 u0o2n/NBCviC49TkEpcltOF7CuvXlZ9qEwnMyJwN7460s/HHUjsbAX6wc1mKc7SGp5
-	 B2V3/HDGmsTXPvpaSKuncOc/k+9wrBJWddv0sJpbq+wZRNqRfaOsKqMVytDycQNxhI
-	 ClYpU/+d2Xk1r2MY/KRJv5vs9+phlmeAoAjpfoLmjsus/vB71DA6Oyak+7M/OusJ2v
-	 NGguAufLBE48A==
-Date: Tue, 24 Mar 2026 09:44:41 +0100
-From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
-	arnd@arndb.de
-Cc: mark.rutland@arm.com, bjorn.andersson@oss.qualcomm.com,
-	konrad.dybcio@oss.qualcomm.com, mani@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>, soc@lists.linux.dev
-Subject: Re: [PATCH] firmware: psci: Set pm_set_resume/suspend_via_firmware()
- for SYSTEM_SUSPEND
-Message-ID: <acJO+fhjeguDZaRa@lpieralisi>
-References: <20251231162126.7728-1-manivannan.sadhasivam@oss.qualcomm.com>
+	b=XgbZ5flOMOM0DOOaoa9asHdHwqPMbkAPF/BFyPi6SGFqxqv6LvKJRLnYf/1/cmxSM
+	 GJq9ASMBuGA+274txopcYntJZ9cJ8uB0/dHPNqdl7xYFdE3LAsQlRtHyv7SsYddSgq
+	 dRzSrxTc2MtnWiBtRov8cm8sNtXM8si3Q1vQkXtbUnsrrN9AYkarwHkK7Dpr4kdsEb
+	 IBrewTBbkwRo9K1yLHOKHBjuun0ksO5BgNli5lh+UadJpc9NH06Gpvz5tHmc7Apxmi
+	 uvvasKFHyuLzRTJnuLj+bqr14apLQwXmTd9afb6P1acgaSQrfYtWWoQ+UsEererpTx
+	 vzNxi2GnGa5TQ==
+Date: Tue, 24 Mar 2026 10:26:17 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Gopi Krishna Menon <krishnagopi487@gmail.com>
+Cc: rafael@kernel.org, daniel.lezcano@kernel.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, vireshk@kernel.org, 
+	conor+dt@kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+	daniel.baluta@nxp.com, simona.toaca@nxp.com, d-gole@ti.com, m-chawdhry@ti.com
+Subject: Re: [PATCH 2/2] ARM: dts: st: spear: fix dtbs warning on spear
+ thermal sensor
+Message-ID: <20260324-smoky-radical-hyrax-1274a9@quoll>
+References: <20260323133814.14152-1-krishnagopi487@gmail.com>
+ <20260323133814.14152-3-krishnagopi487@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251231162126.7728-1-manivannan.sadhasivam@oss.qualcomm.com>
+In-Reply-To: <20260323133814.14152-3-krishnagopi487@gmail.com>
 
-[+Arnd, arm-soc - to pick this up please]
+On Mon, Mar 23, 2026 at 07:08:09PM +0530, Gopi Krishna Menon wrote:
+> Running DTBS checks on st/spear1340-evb.dtb results in the following
+> warning:
+> 
+> thermal@e07008c4 (st,thermal-spear1340): Unevaluated properties are not allowed ('thermal_flags' was unexpected)
+>   from schema $id: http://devicetree.org/schemas/thermal/st,thermal-spear1340.yaml
 
-On Wed, Dec 31, 2025 at 09:51:26PM +0530, Manivannan Sadhasivam wrote:
-> From: Konrad Dybcio <konradybcio@kernel.org>
-> 
-> PSCI specification defines the SYSTEM_SUSPEND feature which enables the
-> firmware to implement the suspend to RAM (S2RAM) functionality by
-> transitioning the system to a deeper low power state. When the system
-> enters such state, the power to the peripheral devices might be removed. So
-> the respective device drivers must prepare for the possible removal of the
-> power by performing actions such as shutting down or resetting the device
-> in their system suspend callbacks.
-> 
-> The Linux PM framework allows the platform drivers to convey this info to
-> device drivers by calling the pm_set_suspend_via_firmware() and
-> pm_set_resume_via_firmware() APIs.
-> 
-> Hence, if the PSCI firmware supports SYSTEM_SUSPEND feature, call the above
-> mentioned APIs in the psci_system_suspend_begin() and
-> psci_system_suspend_enter() callbacks.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> [mani: reworded the description to be more elaborative]
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> ---
-> 
-> This patch was part of an old series that didn't make it to mainline due to
-> objections in the binding and exposing CPU_SUSPEND as S2RAM patches:
-> https://lore.kernel.org/all/20241028-topic-cpu_suspend_s2ram-v1-0-9fdd9a04b75c@oss.qualcomm.com/
-> 
-> But this patch on its own is useful for platforms implementing the S2RAM
-> feature in PSCI firmware. So I picked it up, tested on Qcom X1E T14s and
-> resending it.
-> 
->  drivers/firmware/psci/psci.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+How is it possible if there is no such file?
 
-Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Did you just add new warning in patch #1 and then claim in patch #2 that
+you fix it?
 
-> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> index 38ca190d4a22..e73bae6cb23a 100644
-> --- a/drivers/firmware/psci/psci.c
-> +++ b/drivers/firmware/psci/psci.c
-> @@ -539,12 +539,22 @@ static int psci_system_suspend(unsigned long unused)
->  
->  static int psci_system_suspend_enter(suspend_state_t state)
->  {
-> +	pm_set_resume_via_firmware();
-> +
->  	return cpu_suspend(0, psci_system_suspend);
->  }
->  
-> +static int psci_system_suspend_begin(suspend_state_t state)
-> +{
-> +	pm_set_suspend_via_firmware();
-> +
-> +	return 0;
-> +}
-> +
->  static const struct platform_suspend_ops psci_suspend_ops = {
->  	.valid          = suspend_valid_only_mem,
->  	.enter          = psci_system_suspend_enter,
-> +	.begin          = psci_system_suspend_begin,
->  };
->  
->  static void __init psci_init_system_reset2(void)
-> -- 
-> 2.48.1
-> 
+You completely miss the point why this change is needed: how could the
+DTS work before? It could not. And that should be your justification for
+the patch, with explanation why it could not work.
+
+Best regards,
+Krzysztof
+
