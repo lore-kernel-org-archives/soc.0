@@ -1,95 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080E63806D8
-	for <soc@lists.linux.dev>; Mon, 23 Mar 2026 21:58:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F7E39B948
+	for <soc@lists.linux.dev>; Tue, 24 Mar 2026 04:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774303109; cv=none; b=ieE7/JOiRm59L9RQvP+l1NSSc5skZOIyoO6gyRnAsdd1gMKCepyRBStncPX6Jz4LwAK9LIK0AMn8iNkC/N81xHWdCaJKsIAVjK8sKvVnX0d1v2WXsDnbUiuNox9iZagkCZFByCGgndW9pcYLocuwtJ7FLnIOrunSNo51tbFHvlI=
+	t=1774325256; cv=none; b=lWkmZkYggZ3loV4hZPIbkTfli5S/Lfq5TwtEdYyP1ug0BJJnOOcy2BFUPHdUtSBXFDURDKClvlmFRUp7KpE3gE/pJKy9Gag59biBwDpmkCfB5M0xqYaXJK8ZnfURowZ0uJ4BaUw6ri39dDHGB8ChoNseR16d3srtsmkdxDKJfKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774303109; c=relaxed/simple;
-	bh=vPN3WGnmq41No0tsAs9XyjOR3VJF06YVISvkQOyucQo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nZq6msmVAMt0YltzD23clhUhWwrzPaRvbPILq7IJK9Q3/4YkUd6uq9hkjxkO0wiuiWvhjhcwB1m1/mGYdv5eaNnmfz5weUgbTE4p8tpmalGPiPGXGaSq7MjUiFmLV7iuQoeHKq1JgaDrs/maJg9ugIM0Ct6VfZUWf2VGYs8okT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=fYnCXAOY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774325256; c=relaxed/simple;
+	bh=9CGkjdaf9efUWmVF8DkWsBSG/mNOtkaQY4XZbz1OfAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VGOwATIlG3B0Q8CQf1Bnszc8kdivNp0l5X6XFaUk6oKw52rqB7kBhK1Oyig8r79kCPIsJ3GV7AT1/5wiNztEwhsjPQXMOLeVG5ju4vGP/z02/r4yQOTsVZ5DN2+mHnpmnhkVylXR+O6a77Vraj3id5qoubwBHZwjXZhHM3EzE+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NnTFIMT4; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="fYnCXAOY"
-Received: by smtp.kernel.org (Postfix)
-	id 0188AC2BCB1; Mon, 23 Mar 2026 21:58:29 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3E6D9C2BC9E;
-	Mon, 23 Mar 2026 21:58:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E6D9C2BC9E
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=lKibSiaGto2/xLCXJNRfo8lYxMCoZ0ZsNgmqb7Kzbys=; b=fYnCXAOY8tEejWvoaP03EBSdXk
-	Ih63aNmwLCAvfAx12lE8ySuBFghzfiDa0ujd5Q+Splhfb8oHZraD3qqK/xiYKiXxEXxqHFeKPmgiA
-	wa9R64Dh6sXQKUUQZ4Ls6p1gb9ZhyyDbiJ0rrzW+nLAV8sBikWZAsEnVEY+Fe/3aqbvMXG4wy+Ly1
-	zd0KIX0mi4Msx05CmgIQWyxXqYMbJWLpUauof2nRPhOBXObZlu9foUf+mnh584PYAItbp4rpRko5y
-	tTw9V6HwgaG+cp5M8W2xfp+7JZljbfdE1hTdTrPyKWgaKVZ9Fp9H6cA1HyUv8KpMPtK934NxDBZhE
-	D/F4aSHg==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL v2] Rockchip dts fixes for 7.0 #1
-Date: Mon, 23 Mar 2026 22:58:16 +0100
-Message-ID: <5057236.GXAFRqVoOG@phil>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NnTFIMT4"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-824c9da9928so5351577b3a.3
+        for <soc@lists.linux.dev>; Mon, 23 Mar 2026 21:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1774325254; x=1774930054; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m7SqHnHYZqEYtwdh+YkC9S161bBgEEEQDmxfAGwav9w=;
+        b=NnTFIMT4GBNQ1ZV2RaKUG0lx6jtxzkiaqhbUKpmp3MfztugCxIEc3m8dYJSIfjCh8b
+         C892QdQQnIDbaITNhjWoRMUo8+yQL2Au0RNox7EzfjdOWG5LKRc3q6BmdtOzzDxGm0Yn
+         5K+EA8SM54Kk7Wd+hsC0XLbIb2JM+iXvgw9X8jb5woFtyVjLKvvbbD5UouIx8oY7s7dh
+         GnlgCT+xLmUFXq4jBcKbmDvicHOb+WtVMjtmU1Ey/0PIS9M75nTT0+hyrsL4OU0So9mr
+         WCLr4eydPJ5PaHgtvbusvUHfL/biBQ/wpJSSyRPKIyR7lX6V0huOfrFBYD2z3aDIJDsg
+         x90A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774325254; x=1774930054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m7SqHnHYZqEYtwdh+YkC9S161bBgEEEQDmxfAGwav9w=;
+        b=JIi40rRrHC2vXfG7NFakfErHkkAIlttJIAmKvm3hJ6miNycLW6A2ifRhI3hpaOkS0X
+         u1CwJ1Qsrmg/hwmpYQSLUjR1/QZbliRxDvFNKktJsn17qSuYlsGUGNDa0uycN2p+pYI4
+         0JFVLtT+V9GdmqP8eYKDyeaCzZm11t0RHLyfqCTBFtqLamUsIl6Ir3ZW4EczKbbRpBzZ
+         BkZ47IvZcqy0ki4rYdnCwsG3TQWdhwp7f7wZrCUryVnAVeH752JhIFZRTTC2s73vGq6X
+         hgXF/+i30q3SknNc/KJHtlPQY6jQ+YDp5Rr4lXvXpjUVXxJCT3heLDbsAB1/pJsbJDbV
+         BvqA==
+X-Forwarded-Encrypted: i=1; AJvYcCURrTSUr5myFX0tg2h5jV552IqyLMzJ/b8s2xxXh2dkvthsNN2Covs3oRL8P9zUlWG/bAY=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwK4kxB22X6MluaAeUCmNITXZEZXGqoAOTS9yesFNaxylRTmyBo
+	9btYb1+xmHXG2YeW1LYKjW0f+bpY1gbTfZGQMr0nZjFpXjJYc+wYNgno0IrNokuz54k=
+X-Gm-Gg: ATEYQzwA9naw0A3vcuAGgNLgbYVBPcypnznC+fqikmjJl2Y5X4vr6k2SSJJeiOZ++c8
+	n+qaX2KzfCKJMMn8TmU4NZnhuHT8H+gbEULV6ch9iDfCKnMLcUNYgV5wOVUuAqB6uPfy+7Unjsr
+	hM/ZRZv8chtyBqIt6uxoen3Q5qZO1JCTW8so5SOdw5GLGuM4zXQDiwO9DKdLunbYBddAm6faBEo
+	Y6Jbq+ByLWi2YyLnSL1lK6ocmS1h6iWziJj6j9rER+gIfwa9lQwQa0grvgRaLxgd/VUIQ/W0ZeS
+	F84cygs6rSPhaau7RssfbrGsUfR0cEujUCipWfUFdiTgL1LxuWAmOvpbcwsRDkST4HTbGX0wFye
+	C3gVELsF3GXmSgvcTns+GYWKEfGMOQWtmm4eX5ZCw7xLbW9fkwhkUDOJGrPnNEifRY77ctt2shQ
+	oBthkGAgjQ0t1sBicEnonOcpJYGHxNpG8J4jA=
+X-Received: by 2002:a05:6a00:3bec:b0:82c:2155:5b6d with SMTP id d2e1a72fcca58-82c21556203mr7996673b3a.12.1774325253941;
+        Mon, 23 Mar 2026 21:07:33 -0700 (PDT)
+Received: from localhost ([122.172.81.200])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0409bf65sm10979176b3a.34.2026.03.23.21.07.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 21:07:33 -0700 (PDT)
+Date: Tue, 24 Mar 2026 09:37:30 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Gopi Krishna Menon <krishnagopi487@gmail.com>
+Cc: rafael@kernel.org, daniel.lezcano@kernel.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, vireshk@kernel.org, 
+	conor+dt@kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+	daniel.baluta@nxp.com, simona.toaca@nxp.com, d-gole@ti.com, m-chawdhry@ti.com
+Subject: Re: [PATCH 0/2] dt-bindings: thermal: st,thermal-spear1340: convert
+ to dtschema
+Message-ID: <n6jllrlsu5fatso5geeyjgiuefzj7qclkpsptgpowdy6splnip@re32x6zwepsp>
+References: <20260323133814.14152-1-krishnagopi487@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323133814.14152-1-krishnagopi487@gmail.com>
 
-Hi SoC maintainers,
+On 23-03-26, 19:08, Gopi Krishna Menon wrote:
+> This patch series converts SPEAr Thermal Sensor bindings to DT schema
+> and renames thermal_flags property in spear13xx.dtsi to
+> st,thermal-flags to fix the unevaluated property warning in
+> st/spear1340-evb.dts.
+> 
+> Note:
+> * This patch is part of the GSoC2026 application process for device tree bindings conversions
+> * https://github.com/LinuxFoundationGSoC/ProjectIdeas/wiki/GSoC-2026-Device-Tree-Bindings
+> 
+> 
+> Gopi Krishna Menon (2):
+>   dt-bindings: thermal: st,thermal-spear1340: convert to dtschema
+>   ARM: dts: st: spear: fix dtbs warning on spear thermal sensor
+> 
+>  .../bindings/thermal/spear-thermal.txt        | 14 --------
+>  .../thermal/st,thermal-spear1340.yaml         | 36 +++++++++++++++++++
+>  arch/arm/boot/dts/st/spear13xx.dtsi           |  2 +-
+>  3 files changed, 37 insertions(+), 15 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/spear-thermal.txt
+>  create mode 100644 Documentation/devicetree/bindings/thermal/st,thermal-spear1340.yaml
 
-As requested by Krzysztof, here is a more condensed PR.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Changes in v2 are that I dropped fixes for dt-schema errors and fixes
-for commits introduced not closesly to the current release. These have
-been moved to the current branches.
-
-The Pinebook regression fix actually also is for a commit from august
-last year, but fixes an actively tracked regression, so maybe carries
-a bit more weight.
-
-
-Please pull
-
-Thanks
-Heiko
-
-
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
-
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.0-rockchip-dtsfixes1-v2
-
-for you to fetch changes up to 29d1f56c4f3001b7f547123e0a307c009ac717f8:
-
-  Revert "arm64: dts: rockchip: Further describe the WiFi for the Pinebook Pro" (2026-02-22 23:28:06 +0100)
-
-----------------------------------------------------------------
-Revert to fix a regression that breaks Wifi support for a large part
-of Pinebook Pro users (multiple Wifi chipsets).
-
-----------------------------------------------------------------
-Heiko Stuebner (1):
-      Revert "arm64: dts: rockchip: Further describe the WiFi for the Pinebook Pro"
-
- arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts | 18 ------------------
- 1 file changed, 18 deletions(-)
-
-
-
+-- 
+viresh
