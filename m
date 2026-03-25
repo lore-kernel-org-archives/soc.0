@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336931E492D
-	for <soc@lists.linux.dev>; Wed, 25 Mar 2026 16:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3903D523E
+	for <soc@lists.linux.dev>; Wed, 25 Mar 2026 16:01:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774454438; cv=none; b=R8Ry/T7BFQY8jRtnXeLRiVTahM8TJS+wVg4WOd85Y5laenxNDX+HGm2ZscB1jiPVro0+q8P4eqKet0/Ja+m2ico2Rgk94msPYXPQRoL5iBvqMerYJurxzwMfYhXseDb36AMfXOT0t9EOPgs0WT/e/d9C37E17z6nVVq8l9LFvmM=
+	t=1774454470; cv=none; b=CaIyyC1xkpIqCNGz+XZ0Uv/c68AzFQVoJHmANOUKYVdBIU6vJL6e0exS2dW5mnwUXEy9SSquU6R+MQlm0Og0ydMO3bjYU6Q/NF3DzMY9vZpg/dd2YpjiGP+rGZJV83sOptRJCBCCvdO0whNlrHgeFvinBH71XlNuyzpHi3ImioM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774454438; c=relaxed/simple;
-	bh=xQezrSndPPUacdy/MK97EgDqQ0wsautz6vO1I8UUloY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u2LQI48kPo16Rl1bXzIdwkqeAADTL5+4oS8m4Yb5z/jPpP6tlJuSXW0F/ll2C+RZmYdd2ghcbZlWUbIRxYEGfE/V9J16ASeXeRwebRr3Bwy31M3og6SF4UHt5lyGsTtNhOstDyy+VRDO95N0W9CTCuG+1qa3PRBBp+hVjvR96a4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k4Lb8zAO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774454470; c=relaxed/simple;
+	bh=LfNoREmWlpHbohY+uXMlBTfKpK6tUoS4osyTxIVRhZU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SvCKqhK4ui1BUyV0MTCfU9pZwnynoW/n0eeraCGKRzEYvzfL8ifC/iZAzDCxUj45O+NGFHl89lfWz+UqsioxXm2Y90tj4nOr3etUEAIczUb4ngOLTSQ2WEyF6cXqRJ9qAXTAG3HH7a8YmmBwPk0AGuhKEIo4nDlYD7NMGqi+g0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FzOcXT//; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k4Lb8zAO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FzOcXT//"
 Received: by smtp.kernel.org (Postfix)
-	id CEC6DC2BCB0; Wed, 25 Mar 2026 16:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC95C4CEF7;
-	Wed, 25 Mar 2026 16:00:36 +0000 (UTC)
+	id A61EFC4AF0B; Wed, 25 Mar 2026 16:01:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5172EC4CEF7;
+	Wed, 25 Mar 2026 16:01:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774454437;
-	bh=xQezrSndPPUacdy/MK97EgDqQ0wsautz6vO1I8UUloY=;
+	s=k20201202; t=1774454470;
+	bh=LfNoREmWlpHbohY+uXMlBTfKpK6tUoS4osyTxIVRhZU=;
 	h=From:To:Cc:Subject:Date:From;
-	b=k4Lb8zAOP3bn7AOkVSEt1zFlpeVJUnYgPO0OQb4Wci9qG6Ed+P0ao6fZw0vnClJxN
-	 rPUkclIVvRhx0J1B3dhwcCU1k9PsmioeY55+rJEoIHMegES3avd49FeZ8fRlKTJNAx
-	 BkyMAUZvS2XyOFhn/G1oO61vkHCtwjk2FANwCTF+0mvJ0eDR1qWjCQCTSPRNB3/tkW
-	 uhRwxCfo8SOmuEF18Bcwpa+6gw5TPQDtVC82GSJ528kdE0qHFdbnkIqt/Z/ek3ELlp
-	 u2cN0qZfEbV/BSyIv+haoBV+vKd9yuhWlDIyFvjhGKGlblEy7ShFgR5raD/mdXuWEG
-	 6p+dKX77sxqVQ==
+	b=FzOcXT//TcFlpcMcwGwiJFGiAKq1a0YsBuXWf+H+6CzThS74lyDtFUoE1ICWLlxnl
+	 8ltN9R0MkgKpCndZBQdCFnv0A+4UoyQWJk9JfPeukdrPKHqmlgrhfyrXQd8NWw+Nq+
+	 jR5C6tIzFAWmaVphs+KE4XwV9Tl00jnXZzkQ8eTXj83oCpsNys40je8z+ol3WLmPWV
+	 eMmOCQ6GCRQsMAty+8sX3LnD28Wardv79/5gJjD3OgrVW5/En13bciL2xz7qy4fmP5
+	 rDJN+uv/RjjqEgmBxicZAK9ckdMPd/hVcA0J9Vzk81kt9C/Fhdat1V8vHtCS7+PTyU
+	 zyG9hN8o+6deQ==
 From: Sudeep Holla <sudeep.holla@kernel.org>
 To: ARM SoC Team <arm@kernel.org>,
 	SoC Team <soc@kernel.org>,
+	arm-scmi@vger.kernel.org,
 	ALKML <linux-arm-kernel@lists.infradead.org>
 Cc: Sudeep Holla <sudeep.holla@kernel.org>,
 	Arnd Bergmann <arnd@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Liviu Dudau <liviu.dudau@arm.com>
-Subject: [GIT PULL] arm64: dts: juno/fvp: Updates for v7.1
-Date: Wed, 25 Mar 2026 16:00:21 +0000
-Message-ID: <20260325160027.4115793-1-sudeep.holla@kernel.org>
+	Cristian Marussi <cristian.marussi@arm.com>
+Subject: [GIT PULL] firmware: arm_scmi: Updates for v7.1
+Date: Wed, 25 Mar 2026 16:00:59 +0000
+Message-ID: <20260325160104.4115956-1-sudeep.holla@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -62,54 +62,45 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/juno-updates-7.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-7.1
 
-for you to fetch changes up to 87599f1843d3baa4083dc9dd01c95826b536de24:
+for you to fetch changes up to 0a7ec808abecaf0d5c3ecc0d1b87d58f29c85604:
 
-  arm64: dts: arm/corstone1000: Add corstone-1000-a320 (2026-03-23 10:03:28 +0000)
-
-----------------------------------------------------------------
-Armv8 Juno/FVP/Vexpress updates for v7.1
-
-1. The primary addition is initial support for Zena CSS that includes:
-   a new binding compatibility, a shared `zena-css.dtsi` description, and
-   an FVP device tree.
-
-2. Extension of Corstone-1000 FVP platform support with binding updates
-   to add the new `arm,corstone1000-a320-fvp` platform, and the
-   `arm,corstone1000-ethos-u85` NPU integration.
-
-Overall, this combines new platform enablement with some DTS layout
-cleanup for Arm reference FVP based systems.
+  firmware: arm_scmi: Support loop control in quirk code snippets (2026-03-17 07:30:22 +0000)
 
 ----------------------------------------------------------------
-Debbie Horsfall (3):
-      dt-bindings: arm: Add Zena CSS compatibility
-      arm64: dts: zena: Add support for Zena CSS
-      arm64: dts: zena: Move SRAM into SoC and memory node out of SoC
+Arm SCMI updates for v7.1
 
-Rob Herring (Arm) (5):
-      dt-bindings: arm,corstone1000: Add "arm,corstone1000-a320-fvp"
-      dt-bindings: npu: arm,ethos: Add "arm,corstone1000-ethos-u85"
-      arm64: dts: arm/corstone1000: Move cpu nodes
-      arm64: dts: arm/corstone1000: Move FVP peripherals to separate .dtsi
-      arm64: dts: arm/corstone1000: Add corstone-1000-a320
+This batch mainly improves SCMI robustness on systems where the SCP does
+not generate completion interrupts, and includes two small follow-up
+cleanups in the SCMI core.
 
- .../devicetree/bindings/arm/arm,corstone1000.yaml  |  15 +-
- .../devicetree/bindings/arm/arm,vexpress-juno.yaml |  10 +
- .../devicetree/bindings/npu/arm,ethos.yaml         |   2 +-
- arch/arm64/boot/dts/arm/Makefile                   |   2 +
- arch/arm64/boot/dts/arm/corstone1000-a320-fvp.dts  |  15 +
- arch/arm64/boot/dts/arm/corstone1000-a320.dtsi     |  91 +++
- arch/arm64/boot/dts/arm/corstone1000-fvp.dts       |  96 +--
- arch/arm64/boot/dts/arm/corstone1000-fvp.dtsi      |  44 ++
- arch/arm64/boot/dts/arm/corstone1000-mps3.dts      |  13 +
- arch/arm64/boot/dts/arm/corstone1000.dtsi          |  13 -
- arch/arm64/boot/dts/arm/zena-css-fvp.dts           |  63 ++
- arch/arm64/boot/dts/arm/zena-css.dtsi              | 769 +++++++++++++++++++++
- 12 files changed, 1054 insertions(+), 79 deletions(-)
- create mode 100644 arch/arm64/boot/dts/arm/corstone1000-a320-fvp.dts
- create mode 100644 arch/arm64/boot/dts/arm/corstone1000-a320.dtsi
- create mode 100644 arch/arm64/boot/dts/arm/corstone1000-fvp.dtsi
- create mode 100644 arch/arm64/boot/dts/arm/zena-css-fvp.dts
- create mode 100644 arch/arm64/boot/dts/arm/zena-css.dtsi
+The main functional change adds support for the new DT property
+'arm,no-completion-irq'. When present for mailbox/shared-memory based
+SCMI implementations, the driver forces SCMI operations into polling
+mode so affected platforms can continue to operate even with broken
+firmware interrupt behavior.
+
+In addition, it
+ - replaces open-coded size rounding in the base protocol path with
+   round_up() for clarity, with no functional change
+ - updates the SCMI quirk snippet macro implementation so quirk handlers
+  can use break and continue directly when invoked inside loop contexts
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      firmware: arm_scmi: Support loop control in quirk code snippets
+
+Marek Vasut (2):
+      dt-bindings: firmware: arm,scmi: Document arm,no-completion-irq property
+      firmware: arm_scmi: Implement arm,no-completion-irq property
+
+Peng Fan (1):
+      firmware: arm_scmi: Use round_up() for base protocol list size calculation
+
+ Documentation/devicetree/bindings/firmware/arm,scmi.yaml | 10 ++++++++++
+ drivers/firmware/arm_scmi/base.c                         |  4 ++--
+ drivers/firmware/arm_scmi/common.h                       |  4 ++++
+ drivers/firmware/arm_scmi/driver.c                       |  4 ++++
+ drivers/firmware/arm_scmi/quirks.h                       |  8 ++++----
+ 5 files changed, 24 insertions(+), 6 deletions(-)
