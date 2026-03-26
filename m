@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59453876AB
-	for <soc@lists.linux.dev>; Thu, 26 Mar 2026 11:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1449034FF6C
+	for <soc@lists.linux.dev>; Thu, 26 Mar 2026 11:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774523625; cv=none; b=kbmcFwMS+dto+AF6D3q5aqSswLU0t2mKd7wh0X7Dvu+Fmw138Z2ntf1vnxtyn5D0t8+siWavczI7Q1Jb9r5oGgHGpJJaKsJoe/SPUj5p8QOFdeAI7rHH+T1InzvwYNFhdaod5UZ4xHaN/KmGpbBfJPZwuSiM5hQ+8fAHXSfT+q0=
+	t=1774524103; cv=none; b=i5SkDFzJHnWZ+0TgZf7CiOQ0JnFBvYLmFmGBt53muHjCmoAs5zLIdkO77z9eAxdRwH8LDzxh1AvQ9QWk0K+DffJD1WzloFUYY3wcvpaUigkayZgT+9HHVhGQlfJtAqyhC6ZPQdNIVQsd2W26yYNQouvD7wTIbn50E6mb6Czqez4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774523625; c=relaxed/simple;
-	bh=IwGS7scWtDYJHHjUFe2o0klWiLuIEDxH1PZg+1+e2sk=;
+	s=arc-20240116; t=1774524103; c=relaxed/simple;
+	bh=fI3zTkRfJyu9iUjRRxGqt4eJvukvwwoupPnLtdRJbn0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mM9a412Udl0bLKf7G7zg5O+TmmyQT69oS7DqqsAHf8E0v/dBfvsxwDYKZAxcOise7nqPwzHydoQaRzk4BOt6o+dGbcutkLKvcny+d2z1ELucTumTGRYGeo2gk0LMA3skZSkEZ0aPaGbeYxMmoVEWkpmki6ZxRF2AVqn2nqRkfZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nCSAoKxg; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=PMfFxO+gxFbYcbXamLUUsLtdMAG7HnqRTW3uRbrTq2Iwy8rLYPO2Be6q6/geoxmB6Qct/xCt/9GRfFbox3RaOvEVovTHg1ZJo9zgqRnluyd0IKTl0EblNaoyu5moLuXTqeAMgKKKqdyprrcjapJJzbVXFfCL9IQCzly+3r8FNgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tNR7wnCL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCSAoKxg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tNR7wnCL"
 Received: by smtp.kernel.org (Postfix)
-	id B2C39C2BC87; Thu, 26 Mar 2026 11:13:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D81C116C6;
-	Thu, 26 Mar 2026 11:13:42 +0000 (UTC)
+	id D4238C2BC87; Thu, 26 Mar 2026 11:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C1DC116C6;
+	Thu, 26 Mar 2026 11:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774523624;
-	bh=IwGS7scWtDYJHHjUFe2o0klWiLuIEDxH1PZg+1+e2sk=;
+	s=k20201202; t=1774524102;
+	bh=fI3zTkRfJyu9iUjRRxGqt4eJvukvwwoupPnLtdRJbn0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=nCSAoKxgY8n5hX+Uz3VEPy9mbROEixyuBWn4Plz21Sn0dODnZ7IEpYtA2OpN7mhXY
-	 T9IqBiLX3Gn9cnwbh+hkkgTCN7v3grl3V+JozXa9jrGRJU4Ufcccikt+fWywoVx4pK
-	 uV/L2Pm41Q7Vti1/sddkryyqMZKiHKfCZsxLFyJRtU9CZ5JKm+hdrxdhgHygOZTP/h
-	 JBx9cNEcKZMvlqnDNhG8YEJ7zgbueL4IrPg/GhJpi0R60l6DWmaIVbNuOh5RfrkxB1
-	 uQGlFMObP/exitw7I/89Q0MgznIzVSZWyoigHm+5MKrmRZGT0bwQxplad85T3+w7xG
-	 SUB7AR3zsxHzQ==
-Date: Thu, 26 Mar 2026 11:13:40 +0000
+	b=tNR7wnCLjznjormCld4fxdNzMAvGF//DekN/ubCk4baLlKjAyOxPUR5euqWXowkD3
+	 Kfh/7+LG+oxpPe9dpnkQg1jtMZv4c7X/TWC5PeH39SaRKk6l5iHt4n/FN/St2No3GB
+	 0jW9COhCrC/LU1zxhhyshxb1VhpQLhe6w9FcEAc6MMiOyc7hYWnhLNi43kndu+RDzd
+	 PEF+kVTBoXvn8B22YP1Bk+kk8d9y2a88P8Fr4YGHDtnRRZy5Fb3dOhrcg2E5cCLj+i
+	 8G5gPzWUwB/JexrnQfwU0ZNb2DieOyJ2JyR5HQrYTy0HySwQY3WA3fJ8LgNwXSEJGX
+	 ltUyPdXDtw04g==
+Date: Thu, 26 Mar 2026 11:21:39 +0000
 From: Conor Dooley <conor@kernel.org>
 To: soc@kernel.org
 Cc: conor@kernel.org, linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] ~RISC-V~Starfive devicetrees fixes for v7.0-rc6
-Message-ID: <20260326-astrology-rephrase-836ec663228b@spud>
+Subject: [GIT PULL] ~RISC-V~Microchip soc fixes for v7.0-rc6
+Message-ID: <20260326-vertebrae-relatable-adfa3baabfd6@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -42,17 +42,21 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jOVA/8ZDBYynMp1D"
+	protocol="application/pgp-signature"; boundary="zbUJx0RWubwazLAx"
 Content-Disposition: inline
 
 
---jOVA/8ZDBYynMp1D
+--zbUJx0RWubwazLAx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey folks,
 
-Please pull a small fixes PR.
+Another small PR here, worth pointing out that the exact contents has
+been in linux-next but not as these commit hashes yet, I squashed a
+fixup patch just now that I hadn't realised got pushed without being
+squashed. Might be worth letting it marinate for a few days if that's
+a concern.
 
 Cheers,
 Conor.
@@ -63,40 +67,44 @@ The following changes since commit 0528a348b04b327a4611e29589beb4c9ae81304a:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-fixes-for-v7.0-rc6
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-soc-fixes-for-v7.0-rc6
 
-for you to fetch changes up to 305f2865bd034146b2eebc77c27fc50d8d79778d:
+for you to fetch changes up to c7596f9001e2b83293e3658e4e1addde69bb335d:
 
-  riscv: dts: starfive: jh7110-common: fix jh7110 SoC boot from SD-card. (2026-03-19 16:00:13 +0000)
+  firmware: microchip: fail auto-update probe if no flash found (2026-03-26 11:14:11 +0000)
 
 ----------------------------------------------------------------
-RISC-V devicetrees fixes for v7.0-rc6
+RISC-V soc fixes for v7.0-rc6
 
-Starfive:
-Two fixes for the SD cards on the Mars CM Lite.
+Microchip:
+More resource leak fixes for unlikely scenarios, and a change to the
+auto-update "firmware" driver to prevent it probing on systems with
+engineering silicon where it cannot be used.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Heinrich Schuchardt (1):
-      riscv: dts: starfive: Milk-V Mars CM Lite broken-cd
+Conor Dooley (1):
+      firmware: microchip: fail auto-update probe if no flash found
 
-Ilya Sorochan (1):
-      riscv: dts: starfive: jh7110-common: fix jh7110 SoC boot from SD-card.
+Felix Gu (2):
+      soc: microchip: mpfs-control-scb: Fix resource leak on driver unbind
+      soc: microchip: mpfs-mss-top-sysreg: Fix resource leak on driver unbind
 
- arch/riscv/boot/dts/starfive/jh7110-common.dtsi           | 1 +
- arch/riscv/boot/dts/starfive/jh7110-milkv-marscm-lite.dts | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/firmware/microchip/mpfs-auto-update.c | 10 ++++++----
+ drivers/soc/microchip/mpfs-control-scb.c      |  6 ++++--
+ drivers/soc/microchip/mpfs-mss-top-sysreg.c   |  6 ++++--
+ 3 files changed, 14 insertions(+), 8 deletions(-)
 
---jOVA/8ZDBYynMp1D
+--zbUJx0RWubwazLAx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCacUU5AAKCRB4tDGHoIJi
-0t+KAP9HVGkJX8FC4N8a4WE1UvLQLpZrF1Kmxuixb0BDyKB5awEA3quQTryt9l5W
-VRD7jvpDTuxAQFfucN2Xu7HumY2U6wU=
-=ElcV
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCacUWwwAKCRB4tDGHoIJi
+0kcNAP0bX0T7NpKnIi48ujNlv4IW/mPjopUf2sRIkqzeS/qoDwD8DlqUFU+ctFHF
+ih8iC06d93AvfnqUHIQC3lztuXiTwQM=
+=l9Xw
 -----END PGP SIGNATURE-----
 
---jOVA/8ZDBYynMp1D--
+--zbUJx0RWubwazLAx--
