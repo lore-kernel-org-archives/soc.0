@@ -1,40 +1,40 @@
 Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECB821CC5C
-	for <soc@lists.linux.dev>; Thu, 26 Mar 2026 03:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4925838CFF5
+	for <soc@lists.linux.dev>; Thu, 26 Mar 2026 03:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774494598; cv=none; b=qir3L7HOIsfamW7poP2SaRPofVt2SxASGkaKm++JZsXvLkpGrkth4iawmLukSZVZNBzRw48b8a3u5blaU6/88HinkjXpU40j+wThuXPD+1LSEF2bzX/mw/DrFhtp6dOG9ofN7eRy9QLymuPAz4OeAbH+C75E1cTjiYKX4/+LL7k=
+	t=1774495567; cv=none; b=Z0xLjtG9DGwZWUuyTp63pb/xSr/BuoEQ90KbcrrhgNpKQJqRnep+QLvNtqDwse/qpudO29l3VdIsYWNzZ/lsjXfx0+6yOkMZH/Vzco6Bz65QdhLt/XbZREvYKrjzXeEFnCvCcD6VLENkbDtlAQErXrNrnehjGaayXW6n26dEN70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774494598; c=relaxed/simple;
-	bh=HuO+1F5N9PkdMqS3xGDPWZAChmffsBIoyU9fvdhNwgY=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=I+vLV7tnoKoXQls0zaxOIB21zdJ+Aj3K9iolvlcBN63tF/wzSQo38liTA4nWfo7SbiKfVaEAZoVN6Klp4cPcimveMevH4rPvaWFT8iVufEh5HRgynfrAVVUK8tjfTx5fExLaweR2n7MTGsz2PmmbDKHGDZpheks2MntyLha2uvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=h9tzlO7H; arc=none smtp.client-ip=203.29.241.158
+	s=arc-20240116; t=1774495567; c=relaxed/simple;
+	bh=XPyQn7AKeRzYI+PxKlQqwAOzT36C54xYudlCXZFa68o=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=J3+kHWnIeGl8t1jzxZXXTB02ww/m0nB07ifudBiqBUk51yWyrz/wy8n+FTQxeuDA9xTqdYXSMLVCI7FcOhdE8vLpxOSu8q9ne7MO985LbB8Hz/qgFdW+1GveSAbDVEUBKfaKG1mu6mkiZONlQyJBCCCLPJ6VvuAV9y/QB/wymaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=EOR0wMes; arc=none smtp.client-ip=203.29.241.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="h9tzlO7H"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="EOR0wMes"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1774494593;
-	bh=zeUGGTYgyK94YprNuLur3t1PD0YGNWfrDQg8S912Lhw=;
+	d=codeconstruct.com.au; s=2022a; t=1774495564;
+	bh=eB+dLsG5tXfnyNIFXfqQOMNtjQr+D5glJc3VgXXmzsk=;
 	h=Subject:From:To:Cc:Date;
-	b=h9tzlO7HVgpr7TKHSJj2CHl/BXQSp9jqI2Idzj2KXDfaP9GRr3XW/JDYKM0u5cwD/
-	 rAA0ZCHXMqJykP5jihSrlPCB+p2DRCPC2is/7Nt3BEEEiG8iaNUhw0VzzhQUb+ybuL
-	 YgrBjRkV3afc/awiiW+4sMx4JNX+oy44V0aHCI6f0cjMDjzbge+L+hymQFLVRASKX1
-	 tjbspCnVMe5sjoc4ax7V7pDunlpEiV1mJ1uDDs8n5xIfThKsMYqfpJrU3JJVQ2i/Uf
-	 l+D3SScdqg9BWOnhEfN5usNLs3nxOjJNn3OVJOdUYt2p/iKeWTWc8Hbs4hvgCcTZX0
-	 TXl6HbAEMfkZA==
+	b=EOR0wMesdSerzGer9QZ3uJSHa96ISOkKd/JLd+h6xt0wovzpoeic096Drj2uVMemy
+	 jEQjI7RRhvADgnBKnNloQuEClQpWoSksAjGnA/cQMtHh+0FydaCtHbhvsyWvg//XUq
+	 cqGyGvWV7ZOc0Z9n0pW2VBIr+ALXaOrlkLeFjuIMX49YMmIvpm0ApWprGbV0MlfMv2
+	 nGVy4g4HkiChklNJ0s5q2b3NA1ya+j/GRxoZxPVD3nzvS9pQGDwrcHwQpOG1F6Rt7C
+	 kjf2pu/yAxt89bNWLqHmHeKF1NlA86DgRZnLs/JueF5onfqBmDFz0x1WOWqj5BsBJH
+	 AUo2McuK1U74Q==
 Received: from [192.168.68.115] (unknown [180.150.112.60])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 5929E645CA;
-	Thu, 26 Mar 2026 11:09:53 +0800 (AWST)
-Message-ID: <df8ef5ea7b9e254658934c18de20fd9805a82d74.camel@codeconstruct.com.au>
-Subject: [GIT PULL] aspeed: first batch of devicetree changes for v7.1
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 3F53A645CA;
+	Thu, 26 Mar 2026 11:26:04 +0800 (AWST)
+Message-ID: <8d8d5f9f7f8ee803ab14c4b3405d74b305a2ab81.camel@codeconstruct.com.au>
+Subject: [GIT PULL] nuvoton: first batch of arm64 devicetree changes for v7.1
 From: Andrew Jeffery <andrew@codeconstruct.com.au>
 To: soc <soc@lists.linux.dev>
-Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+Cc: linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org, 
 	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
-Date: Thu, 26 Mar 2026 13:39:52 +1030
+Date: Thu, 26 Mar 2026 13:56:03 +1030
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-0+deb13u1 
@@ -47,11 +47,9 @@ MIME-Version: 1.0
 
 Hello SoC maintainers,
 
-Here's the first batch of ASPEED devicetree changes for v7.1.
+Just the one Nuvoton devicetree change for v7.1
 
 Please pull.
-
-Cheers,
 
 Andrew
 
@@ -62,60 +60,24 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f=
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed=
--7.1-devicetree-0
+  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/nuvoto=
+n-arm64-7.1-devicetree-0
 
-for you to fetch changes up to 76b4ec8efdc3887cdbf730da2e55881fc1a18770:
+for you to fetch changes up to 6ee3f20368a4a6198988a54c1a744cbae1354359:
 
-  ARM: dts: aspeed: anacapa: Add retimer EEPROMs (2026-02-23 12:02:22 +1030=
-)
-
-----------------------------------------------------------------
-aspeed: first batch of devicetree changes for v7.1
-
-New platforms:
-
-- Asus Kommando IPMI card
-- Asrock Paul IPMI card
-
-Updated platforms:
-
-- Anacapa (Meta): NFC and EEPROMs
-- MSX4 (Nvidia): 128M layout for the alternate boot flash
+  arm64: dts: nuvoton: drop unused syscon property from watchdog node (2026=
+-02-23 09:43:36 +1030)
 
 ----------------------------------------------------------------
-Anirudh Srinivasan (4):
-      dt-bindings: arm: aspeed: Add Asus Kommando IPMI card
-      ARM: dts: aspeed: Add Asus Kommando IPMI card
-      dt-bindings: arm: aspeed: Add Asrock Paul IPMI card
-      ARM: dts: aspeed: Add Asrock Paul IPMI card
+nuvoton: first batch of arm64 devicetree changes for v7.1
 
-Carl Lee (1):
-      ARM: dts: aspeed: anacapa: add NFC device
+Just the one change this time, dropping syscon properties where they weren'=
+t
+defined.
+----------------------------------------------------------------
+Tomer Maimon (1):
+      arm64: dts: nuvoton: drop unused syscon property from watchdog node
 
-Dirk Chen (1):
-      ARM: dts: aspeed: anacapa: Add retimer EEPROMs
-
-Marc Olberding (1):
-      ARM: dts: aspeed: Add 128M alt flash layout to NVIDIA MSX4
-
- Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml        |   2 ++
- arch/arm/boot/dts/aspeed/Makefile                               |   2 ++
- arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-paul-ipmi-card.dts   | 131 ++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-++++++++
- arch/arm/boot/dts/aspeed/aspeed-bmc-asus-kommando-ipmi-card.dts | 117 ++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-anacapa.dts        |  22 ++++=
-+++++++++++
- arch/arm/boot/dts/aspeed/aspeed-bmc-nvidia-msx4-bmc.dts         |   1 +
- arch/arm/boot/dts/aspeed/openbmc-flash-layout-128-alt.dtsi      |  32 ++++=
-++++++++++++++++++
- 7 files changed, 307 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-paul-ipmi-ca=
-rd.dts
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-asus-kommando-ipmi-=
-card.dts
- create mode 100644 arch/arm/boot/dts/aspeed/openbmc-flash-layout-128-alt.d=
-tsi
+ arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi | 3 ---
+ 1 file changed, 3 deletions(-)
 
