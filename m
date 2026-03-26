@@ -1,75 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2010D36B047
-	for <soc@lists.linux.dev>; Thu, 26 Mar 2026 09:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D7634EEE5
+	for <soc@lists.linux.dev>; Thu, 26 Mar 2026 09:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774515981; cv=fail; b=ZTO9huJQL5ibeuB1j3Zt509VgCuXC6/nVgI+NQM0EaQ8QoRjQ1n+9Aw/89sBlEOsi7gLR3h+xGr+MPpBBl1kEB33meAS8FYPaokU5aQhrTCYfrzHpydN+exSik9BXZwKldAWxrjPq/iHXLuYpxqCUX/S7LybDfUGTGHja9WH5nA=
+	t=1774516090; cv=fail; b=cgcmfqxjfYp27H9DqCoqQtESSJGDf0JaeLAL89pF86lSPwgAFtCOnbmr9mkwZZ9DFdp0e1oUgaEL1OmpWngtfnlzAZ3q2XuagR+ru7PhOdad/aLoPKzlvHZ/xFJVYvNzttKKIavfeEMhIhxpgC/6e2ld/KxnOYNKwm9B7ecWaME=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774515981; c=relaxed/simple;
-	bh=lIBm7pb1c7D8IOQghb21Xkk2xb7tvzcb/2iuQQcxjGE=;
-	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=EVkoV5vbKaGDAtUwp7pi0rGrjgUh5A0OmFSXtE7I1kRktWS4OXR5/Sjoy76auwD/pAJTCZ7bSkGyjA3okQwPvk+LtwSRXqNwuTp0XDhv1iH/9nd3OKtX3AhvV4JT7/a7zmV1fBgOPnJmSS8FSobfqrUDFchZL2KQtROMiFio5Ls=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=PUHgDJhV; arc=fail smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774516090; c=relaxed/simple;
+	bh=lKWWbHpOwovMksxwLBPQeDDAWGW5ktkOsCjALg0xBf8=;
+	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=OYusm0lHqvnd7Oc3LQV0H1mAsDLYExJafQN6n9SHUJdAj7zDoGIGc0HUIRAVI3XMpwfvQ2u+TYn4nAyXpgwQAGdcNn+TSWJtJ2ktBrjiKqjgBnwCyO9lTewAZa3lA/gkQygSAvfugbFtE3w80fo5zNKL8lg5KMXn1EnsxPjt7jA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=JfVL7IYJ; arc=fail smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="PUHgDJhV"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="JfVL7IYJ"
 Received: by smtp.kernel.org (Postfix)
-	id DA6D6C2BCB1; Thu, 26 Mar 2026 09:06:20 +0000 (UTC)
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013025.outbound.protection.outlook.com [52.101.83.25])
+	id 37975C2BCB1; Thu, 26 Mar 2026 09:08:10 +0000 (UTC)
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012039.outbound.protection.outlook.com [52.101.66.39])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 92B6CC116C6;
-	Thu, 26 Mar 2026 09:06:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 92B6CC116C6
+	by smtp.kernel.org (Postfix) with ESMTPS id 8079FC116C6;
+	Thu, 26 Mar 2026 09:08:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8079FC116C6
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vUYAf40+G6rHV9vW4LxusWZX9NLaEkz8szGgCPb026h8pA+Pu9FyfnDQknVq0hZMjNv6szAsf1VgW4ERxSOTAFPwpuZNuXqOL/8pMhm2hqOuaGbth5DFmEbeIJWAdxhX2r3djAyruL6hAuuQlWBqlSSEfSPJ3DbPHwF7T2Q0FwJAGwIiXBZet3iiVgMqjYFsPgPHE3cx4/LMIR+zJw0+eaZllSoDOBdDsqrb0PSL8NjAKbQyBoFrtYRC73U7FypxQF/DBNLvPldoN6o/jfUr1WBG2Jr/V1CPXtlc0/FLv7SWzff3SulpH0vfOdX0bE3x/twcmEyaLxNSb0aLKOuNNg==
+ b=xP7PJZNxAVEUk3UfrFngTsxyBle8JGGRgqK8ZS+AfEOj9qYdwxWsTueX1lmnQHOYWh0TDXJLJfYy8FgppwvwsJmPZYLTvtIS3814wUVPB0EJ2eUZ9hRkzXI2+au09MAZIB7ErgOWa7zAkxHDsqyRb7KZXV74Umbd0G9X0E8IctJ4k7ge1ThL4wqNINCL7pQ3i0PtBHzoNXH9w/e+rK+vlg/pg3iNRMJiSBsFbmpl280MnKeS3ZJFQYpFtzhDCoUaIc3x5bbKAEgYyj5weDHghzVvXy0WchROeNKAOG+zMowMc54LGPNMmpi3gj3vWnnph8PxEAwVRifCV4jRRdGatQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=goJY3W2COt2O5Fk3XW0jKUudrTc+wUYmk/YTYbbmyDA=;
- b=aadSTpZhbFFcMRM0aYO+dRXpXdzorXJLOlphOZw8zcRlgrW8LYlD/i7I7xjKQnHzlcd2hJ0tZRInFp5cJHwEyrQh/fZfzzUmkK0TAghR3aHM1SEB6SCy8erE2V+NVwCjr8gpt5FmCbvUNC/xiL5rEUrndXxtXjDp+dhZpS5RIIrKvRQ6ygdVvj8jJjDIU+J/Np+ai48QE/Su60ofrWfQUDT5tvEamv+4GsacueKPH4MXGSxWpOrW3mgFl4UWKhRDiPDOREKR1q1lWjFX53fxwoIHk4ZsIbnQOicvGPWmzXzbTeyc4Dn7qbP8ttxM/IdSaO38yPegEw1P8xeoOH2sYQ==
+ bh=bF7SNflttrKvW6VMVU70rQTclPX8WkcsbZvthLjUd2g=;
+ b=pmZ+e9kaouPqKSZzTTj8XuVjmnDK3njOGlDtYz8DCEQfdxU3JXtrx2VH5Q1KW07qoZZ4hZHigZu40c9d6ow0tzDJoO7sVut9Qi7AI7N404hB5c7n9V8ok1gV+R0mRKgQmwpAmDVQE25hR+Adsb7crh+sNJgXqURnDdpGWbMfAY88kmi1Xjf0QUknFifH9HYesW/jLTGHu/kcs3xNtH5GPgkg5gFWLdvGgOWH0ho4Xk7TM/ymNLuc+qg4Zrwd1NHTsFlsOcIjY42A0LtGsrPMMfulhChl8sUbF37bYkzN3QicEB0WBHAzjbVBUlL0hW5sgWHJ6SAX3L1TBIs7tYBT7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 164.130.1.59) smtp.rcpttodomain=arndb.de smtp.mailfrom=foss.st.com;
+ 164.130.1.60) smtp.rcpttodomain=arndb.de smtp.mailfrom=foss.st.com;
  dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=goJY3W2COt2O5Fk3XW0jKUudrTc+wUYmk/YTYbbmyDA=;
- b=PUHgDJhVHpGJUZdBTLW3kX5RXBlzS8PSj471vfhpNqv3kxuFoq9Bgm7TucUEL4RIjyqrDX/lWoyrU1mH4AzUQKw3VdsJ951X4TsyMd4b/xlns1u1ubaPSnq5Zg9BWVHc8uNZwFOaceWrNONh2T2czWdYzdFqbn38PwD8se0tXbxuMLDlkZ43fbZpuwQRfQDLsWXlcDYRgZeryil9hdWhEFLCr6gWA4SmKFLA0SqXFgkyS4InzpD2LaTgkiuWmuHv9lAP7tilqh2Hmqhk4MpDIezlWUKVVEPC2E7gIP5Zsd8Z+Aqwy2qWktwMmWCOVvIsDj18yNi6/1EJhz0Ejv0ibQ==
-Received: from DUZPR01CA0312.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4ba::8) by DB5PR10MB7667.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:10:489::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Thu, 26 Mar
- 2026 09:06:12 +0000
-Received: from DU6PEPF0000B61D.eurprd02.prod.outlook.com
- (2603:10a6:10:4ba:cafe::23) by DUZPR01CA0312.outlook.office365.com
- (2603:10a6:10:4ba::8) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend Transport; Thu,
- 26 Mar 2026 09:06:03 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.59)
+ bh=bF7SNflttrKvW6VMVU70rQTclPX8WkcsbZvthLjUd2g=;
+ b=JfVL7IYJ9orXggkgKUKzm90h6Wh/9MY4eUNMO4evZwDfaMQcDAm5LKB8TjlvdSJiax/MkzXxE2prnYoMX31dMVIaqHS5mEC/mpgWCd7XY22PcYjBeqcB14rp9ZxmRKtVKghU1yjhLPHcpst+Damc7u2XwUgX4R3FBSaOprjfu28/GDz4YOxlm0AoLqxIeQdq9s1+R+chuHJElJuyc5+LcxJ5au8Hw3LXJnpNGdzbCSKIVZF37PZZD+QJN8f7GYexDjlSmN98as97l6/599/B8OYHFIA2dj3LTquaNFks80zfyv1Fg7GdqH0SSNDmYvYUtIneBs9sTXpQgCJLRoZhJA==
+Received: from DUZPR01CA0160.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4bd::20) by GV2PR10MB9824.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:150:30b::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Thu, 26 Mar
+ 2026 09:08:00 +0000
+Received: from DB1PEPF00039233.eurprd03.prod.outlook.com
+ (2603:10a6:10:4bd:cafe::8d) by DUZPR01CA0160.outlook.office365.com
+ (2603:10a6:10:4bd::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.33 via Frontend Transport; Thu,
+ 26 Mar 2026 09:08:00 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.60)
  smtp.mailfrom=foss.st.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=none header.from=foss.st.com;
 Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
- designate 164.130.1.59 as permitted sender) receiver=protection.outlook.com;
- client-ip=164.130.1.59; helo=smtpO365.st.com;
-Received: from smtpO365.st.com (164.130.1.59) by
- DU6PEPF0000B61D.mail.protection.outlook.com (10.167.8.137) with Microsoft
+ designate 164.130.1.60 as permitted sender) receiver=protection.outlook.com;
+ client-ip=164.130.1.60; helo=smtpO365.st.com;
+Received: from smtpO365.st.com (164.130.1.60) by
+ DB1PEPF00039233.mail.protection.outlook.com (10.167.8.106) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.21 via Frontend Transport; Thu, 26 Mar 2026 09:06:12 +0000
-Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpo365.st.com
- (10.250.44.71) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9723.19 via Frontend Transport; Thu, 26 Mar 2026 09:08:00 +0000
+Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpO365.st.com
+ (10.250.44.72) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Thu, 26 Mar
- 2026 10:07:02 +0100
+ 2026 10:08:34 +0100
 Received: from [10.48.86.79] (10.48.86.79) by STKDAG1NODE2.st.com
  (10.75.128.133) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Thu, 26 Mar
- 2026 10:04:09 +0100
-Message-ID: <c1de351b-6272-4903-8231-d92e5190a60c@foss.st.com>
-Date: Thu, 26 Mar 2026 10:04:08 +0100
+ 2026 10:05:55 +0100
+Message-ID: <6af7bfa8-dd73-4d12-9c3a-b2d62a8e3a38@foss.st.com>
+Date: Thu, 26 Mar 2026 10:05:55 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -83,44 +83,44 @@ To: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@baylibre.com>,
 CC: <alexandre.torgue@foss.st.com>, "linux-stm32@st-md-mailman.stormreply.com"
 	<linux-stm32@st-md-mailman.stormreply.com>
 From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Subject: [GIT PULL] STM32 Bus firewall for v7.1
+Subject: [GIT PULL] STM32 DT changes for v7.1#1
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: ENXCAS1NODE2.st.com (10.75.128.138) To STKDAG1NODE2.st.com
  (10.75.128.133)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU6PEPF0000B61D:EE_|DB5PR10MB7667:EE_
-X-MS-Office365-Filtering-Correlation-Id: aeaf6a04-28d7-417a-1bdc-08de8b16ed90
+X-MS-TrafficTypeDiagnostic: DB1PEPF00039233:EE_|GV2PR10MB9824:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1bfe3576-188f-402e-94c8-08de8b172dd3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|36860700016|1800799024|56012099003|18002099003;
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700016|376014|56012099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	VZve60M65Horwm/3cGiC2XO6/7zf75RKvumj+6nTa+Zv/+H1DCNEsD+5XH04QrxTUBo/REEDqf2lgScygX9L0Y7b9U7q1KP7ne0M5jevWId49Iexf/TeMzQC3UmTX4s8Zm9/sF1qkfojs/KMaR/No7Wm3m6h1z1dRhfOVVo9Aymwo5M4vqLSEaCUP1U7wXbt0zFS/ezCkd0pLSILyajtC6VZaQmd8qOJPeMADRCgu6/ZRjBemAtecvFlCxSxbVfcALdh2UXxRNHDSDGU3sduim762r6SsENiz3FpFHom2GbTnhph+m3yLl1D66Az6xO5ix83WdYL8188F1pUwzpbyjp/5QS3PgsV5FR0HbHQLUG00F8ER13fI/A4bvtO+udhGigqYJCwDTRcAcuk/FgRAFInhNiYk+c0RD85mTs2hToJrwhvoC6SWKI0jsfVDg3rXP1aiUGTLoK7/ffsTvbG1w5fvJ6Tixs+l28X3xUI0SEsfKg99nHp7OJ/3Boj+9+UBM3Lvs4RxApOZnGuUNlEvgnP6f6V2b+LH/ZQXZaiIAdmrJqNrjSHeh7f6DKVt4BYJoHRTM8cpLoySv2p++INWh42U16T+mTNHs3bLk2DPVu4WCpWMUSca9RN+sD50LRam4ZWpVFS8nr2C1pX81N3epz1xx3zt0w/DPS8y2BuRi5rMlow7tauDUryUVJbopkZ80hn81RXNxVA2MNactXIYnP4latM6Rdx70YPWK8QAE+xINjrPepIHUDYeGc3YMiKOPMl4VSeSwCzUqfBzj8CQQ==
+	eW3ztc/kDXHdrxc+ZsSFIQqFQFxZcGVGexydWPq0SJcCXZmS8t8lS2ic4DokBAo6cZM1XKMkdSi6HzvnXcp7HQlxbagPpVK6dI7F788eRI8FKwO6M1asLt7wKW5+DDvjctwSTKHCHyHaqA0DBMq4ye3WxLy1Mgs1YfkrOnck0a64/kJYzeRHCJ17yZtnNcTPiytDp3Xbh2k0WcjmC/gEe8yA/ZwoQT+panpLgwCD9BusKmgLwVIuvV6YoE/Euu622eeG6dI3NuD1MASr04LhqD48mu+nqUCjVELcU9Q7f4UmPtqIzxxTgp+xnG2NY5Di9IGWZbqlRiE5uGRmuUVCmSWj4KECi7kufqwXfWGzPL4CpkWtC7Zs8639fxrzi7dGqEix7VJU3xS/F+NmP489YKwWTnHJTU/pgX3aObDOUD2U/8wFn7MLGNE3HCCHHxJE4NtLp+uh3COM40d9j0lqqZrqstmu1cuhXANUPk0s438V7gQwP1Phy6XwpsHYbQ8hZ7bbrMvwWb2c/zOv9HECGI5CWwFKgvaLLp8ea8VceMTinniexblo5G8YgQSJsIOBLEU0mlKHOGDKq/iMRRO+X5IqBAFZNdeHIUFB6UIOlVqAgA8CKRRoPGjiI4BY2hT6t8/osv/bAwNTosqjHL9F3l4xoj+6iRsRm4phCW8LA+327rxoiDCUzW0R7n1feebWXyPTrgDdLt/v9T1r7cw+uSC1WGnh2rkmGhawz3wakRAdbPLroh4isVryYG+iriw1R6BlfDeaJFKqxUCvkztsxg==
 X-Forefront-Antispam-Report:
-	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700016)(1800799024)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:164.130.1.60;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700016)(376014)(56012099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	02OiUvNEpvIu9R2mhdhI7juRMcy54ZHuUKdLJC5tQCWOUwzU8iwnOlQNhXhcM8xrROJv9oRr8BmC/uVN55XFJQIWA1KrZrvJC8CiUHgi9z4uw1No5tYFCoSJhnqVxBPp9e6WhDfVHiF67+qiwb1WOSo7Ak25C0KWV8zggQWFe0h/RbOyiYpaYSYLSi8KJMS0+InTeBvqkqU3snrmFvbxfxYkj/elMn2OZWRHzB7V5UYkSZlI1AjQ/5IOSWEKJoozmcw8pTp/TbvmWP9C0bsX/3gbtOXc6+mnZaEHb1S9fcF3z4yCHkdES7RDxp9VGgByW44zreKuC8KOzPf3N0FpZ1HcHqDtzJDMxhzicwG+aVQG8u9rV6Gc5l8BnMC9XdO+AOXbZKdgJt/5HdJgx+Il36XbS1q1Pb1H0aTA4+QMjTafdjZ+craZqCBrBEFLzxmO
+	LSUUHnpNa7Ysj+noWcf80Y/k+uKNg7eZBJfO4fmDup09qN75O6ZFpzqK6aVnXRp7kmoh1k7npMjM+YHKKFRwOhZWiKg49t4rv/KEGH8uPxq8F7oo2RXGIEYnuAnEH2LAyUYO3MLZV/gjiXawFtt7EGP8G3SqSGFCIXTnYDcjha7Zl4Q8xKvYmgUv7RTNG1zhrXONdm+sdRAJJ5Dz5A2SraYS1sb2b7MhAkVJbnPE/dUs2nB/CVeXhuZBsEVXxCVYykZFNZSuLFFtedfzqrYP099EvuLJmUM2pe/AWDK0uY+g5vBavGakgykGFtN7Tt3im1RcVla8YkA5k76oNhdjZ0KUvmPnSt3er355SnzC7VbqdewQxv2bvlXzMIRQNJMrf0/sWUCXqbgeYQUo+k1dgiVbFvVhsa5gfPO+G78hgJM82TjcEiT3QxTlHtrIoJ/i
 X-OriginatorOrg: foss.st.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2026 09:06:12.3194
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2026 09:08:00.1468
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aeaf6a04-28d7-417a-1bdc-08de8b16ed90
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1bfe3576-188f-402e-94c8-08de8b172dd3
 X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.59];Helo=[smtpO365.st.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.60];Helo=[smtpO365.st.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DU6PEPF0000B61D.eurprd02.prod.outlook.com
+	DB1PEPF00039233.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR10MB7667
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR10MB9824
 
-Hi Arnd,
 
-Please consider the first round of STM32 firewall bus patch-set. DT part 
-for STM32 MPU SoC will come with the STM32 DT pull request.
+Hi ARM SoC maintainers,
 
-Regards
+Please consider this first round of STM32 DT changes for v7.1 cycle.
+
+Thanks
 Alex
 
 
@@ -131,96 +131,263 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 are available in the Git repository at:
 
    git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
-tags/stm32-bus-firewall-for-7.1-1
+tags/stm32-dt-for-7.1-1
 
-for you to fetch changes up to 348741a97c28d7679fb1e204aeec0d6305fc6817:
+for you to fetch changes up to 407b861f4d0cd3ac2ce1b98e6e09fbc7aff29b09:
 
-   pinctrl: stm32: add firewall checks before probing the HDP driver 
-(2026-03-25 17:40:22 +0100)
+   arm64: defconfig: Enable STMicroelectronics STM32 display support 
+(2026-03-25 17:37:49 +0100)
 
 ----------------------------------------------------------------
-STM32 Firewall bus for v7.1, round 1
+STM32 DT for v7.1, round 1
 
 Highlights:
 ----------
-Stm32 SoCs embed debug peripherals such as Coresight. These peripherals
-can monitor the activity of the cores. Because of that, they can be
-used only if some features in the debug configuration are enabled.
-Else, errors or firewall exceptions can be observed. Similarly to
-the ETZPC(on stm32mp1x platforms) or the RIFSC(on stm32mp2x platforms),
-debug-related peripherals access can be assessed at bus level to
-prevent these issues from happening.
 
-The debug configuration can only be accessed by the secure world.
-That means that a service must be implemented in the secure world for
-the kernel to check the firewall configuration. On OpenSTLinux, it is
-done through a Debug access PTA in OP-TEE [1].
-To represent the debug peripherals present on a dedicated debug bus,
-create a debug bus node in the device tree and the associated driver
-that will interact with this PTA.
+- MPU:
+   - STM32MP13:
+     - Introduce and enable debug bus on DK board.
+     - Enable Coresight on DK board.
+     - Add DT overlays for DH board.
+     - Add Wakeup capabilities on I2C nodes.
 
-Plus some fixes.
+   - STMP32MP15:
+     - ST:
+       - Enable DCMI DMA chaining to improve performances.
+       - Introduce and enable debug bus on EV and DK board.
+       - Enable Coresight on EV and DK board.
+
+     - DH:
+       - Add DT overlays for DH board.
+
+     - Phytec:
+       - Rename "Phycore" to "phyboard-sargas" DT files and introduce
+         SOM device tree file.
+       - Fix and enhance current support.
+
+   - STM32MP21:
+     - Add Bsec support.
+
+   - STM32MP23:
+     - Add LTDC and LVDS support and enable display on STM32MP235F-DK
+       board.
+
+   - STM32MP25:
+     - Enable display on STM32MP235F-DK board.
 
 ----------------------------------------------------------------
-Clément Le Goffic (1):
-       bus: firewall: move stm32_firewall header file in include folder
+Alain Volmat (10):
+       ARM: dts: stm32: add sram node within stm32mp151.dtsi
+       ARM: dts: stm32: enable DCMI DMA-MDMA chaining on stm32mp157c-ev1.dts
+       ARM: dts: stm32: update i2c nodes interrupt/dma in stm32mp151
+       ARM: dts: stm32: update i2c nodes interrupt/wakeup-source in 
+stm32mp131
+       arm64: dts: st: update i2c nodes interrupt/wakeup-source in 
+stm32mp251
+       arm64: dts: st: update i2c nodes interrupt/wakeup-source in 
+stm32mp231
+       arm64: dts: st: add i2c2 pinmux nodes in stm32mp25-pinctrl.dtsi
+       arm64: dts: st: disable DMA usage for i2c on stm32mp257f-ev1
+       arm64: dts: st: describe i2c2 / i2c8 on stm32mp257f-dk
+       arm64: dts: st: describe i2c2 / i2c8 on stm32mp235f-dk
 
-Gatien Chevallier (8):
-       bus: rifsc: fix RIF configuration check for peripherals
-       dt-bindings: document access-controllers property for coresight 
-peripherals
-       dt-bindings: pinctrl: document access-controllers property for 
-stm32 HDP
-       dt-bindings: bus: document the stm32 debug bus
-       bus: stm32_firewall: allow check on different firewall controllers
-       bus: stm32_firewall: add stm32_firewall_get_grant_all_access() API
-       drivers: bus: add the stm32 debug bus driver
-       pinctrl: stm32: add firewall checks before probing the HDP driver
+Amelie Delaunay (3):
+       ARM: dts: stm32: fix misalignments in nodes of stm32mp151
+       ARM: dts: stm32: fix misalignments in nodes of stm32mp131
+       arm64: dts: st: omit unused pinctrl groups from stm32mp25 dtb files
 
-Krzysztof Kozlowski (1):
-       bus: stm32_firewall: Simplify with scoped for each OF child loop
+Christophe Parant (11):
+       ARM: dts: stm32: phycore-stm32mp15: Rename device tree files
+       ARM: dts: stm32: phyboard-sargas: Introduce SoM device tree
+       dt-bindings: arm: stm32: Modify STM32MP15x Phytec board items types
+       ARM: dts: stm32: Add new pinmux groups for phyboard-sargas and 
+phycore
+       ARM: dts: stm32: phyboard-sargas: Fix uart4 and sai2 pinctrl
+       ARM: dts: stm32: phycore-stm32mp15: qspi: Fix memory map and pinctrl
+       ARM: dts: stm32: phycore-stm32mp15: Add dummy memory-node
+       ARM: dts: stm32: phyboard-sargas: Move aliases from dts to dtsi
+       ARM: dts: stm32: phycore-stm32mp15: Disable optional SoM peripherals
+       ARM: dts: stm32: phyboard-sargas and phycore: Fix coding style issues
+       ARM: dts: stm32: phyboard-sargas and phycore: Add optional interfaces
 
-Thorsten Blum (1):
-       bus: rifsc: Replace snprintf("%s") with strscpy
+Gatien Chevallier (5):
+       arm: dts: stm32: introduce the debug bus for stm32mp1x platforms
+       arm: dts: stm32: enable the debug bus on stm32mp1x boards
+       arm: dts: stm32: enable CoreSight on stm32mp15xx-dkx boards
+       arm: dts: stm32: enable CoreSight on the stm32mp157c-ev1 board
+       arm: dts: stm32: enable CoreSight on the stm32mp135f-dk board
 
-  Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml 
-  |   3 +++
-  Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml |   3 +++
-  Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml 
-  |   3 +++
-  Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml 
-  |   3 +++
-  Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml 
-  |   3 +++
-  Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml 
-  |   3 +++
-  Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml 
-  |  76 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml 
-  |   6 +++++
-  MAINTAINERS 
-  |   1 +
-  drivers/bus/Kconfig 
-  |  10 +++++++++
-  drivers/bus/Makefile 
-  |   1 +
-  drivers/bus/stm32_dbg_bus.c 
-  | 250 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  drivers/bus/stm32_etzpc.c 
-  |   3 +--
-  drivers/bus/stm32_firewall.c 
-  |  59 ++++++++++++++++++++++++++++++++++++++----------
-  drivers/bus/stm32_rifsc.c 
-  |  61 ++++++++++++++++++--------------------------------
-  drivers/pinctrl/stm32/pinctrl-stm32-hdp.c 
-  |  14 ++++++++++++
-  {drivers => include/linux}/bus/stm32_firewall.h 
-  |   0
-  include/linux/bus/stm32_firewall_device.h 
-  |  26 +++++++++++++++++++++
-  18 files changed, 472 insertions(+), 53 deletions(-)
+Marek Vasut (1):
+       ARM: dts: stm32: Add DT overlays for DH STM32MP13xx/STM32MP15xx DHSOM
+
+Olivier Moysan (1):
+       ARM: dts: stm32: remove i2c dma properties in stm32mp157c-ev1
+
+Patrice Chotard (2):
+       arm64: dts: st: add bsec support to stm32mp21
+       arm64: dts: st: add bootph-all in bsec node to stm32mp215f-dk
+
+Raphael Gallais-Pou (9):
+       arm64: dts: st: add ltdc support on stm32mp231
+       arm64: dts: st: add ltdc support on stm32mp235
+       arm64: dts: st: add lvds support on stm32mp235
+       arm64: dts: st: add clock-cells to syscfg node on stm32mp231
+       arm64: dts: st: describe power supplies for stm32mp235f-dk board
+       arm64: dts: st: enable display support on stm32mp235f-dk board
+       arm64: dts: st: describe power supplies for stm32mp257f-dk board
+       arm64: dts: st: enable display support on stm32mp257f-dk board
+       arm64: defconfig: Enable STMicroelectronics STM32 display support
+
+  Documentation/devicetree/bindings/arm/stm32/stm32.yaml 
+                           |   8 +++--
+  arch/arm/boot/dts/st/Makefile 
+                           | 129 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+  arch/arm/boot/dts/st/stm32mp131.dtsi 
+                           | 156 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------
+  arch/arm/boot/dts/st/stm32mp135f-dk.dts 
+                           |  24 +++++++++++++
+  arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso 
+                           |  85 
+++++++++++++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi 
+                           | 164 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp151.dtsi 
+                           | 236 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------
+  arch/arm/boot/dts/st/stm32mp153.dtsi 
+                           |  68 ++++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp157c-ev1.dts 
+                           |  59 +++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/{stm32mp157c-phycore-stm32mp1-3.dts => 
+stm32mp157c-phyboard-sargas-rdk.dts} |  24 ++-----------
+  arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtso                      |  61 ++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-rpi7inch.dtso                      |  31 +++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan1-x6.dtso 
+                           |  10 ++++++
+  arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan2-x6.dtso 
+                           |  10 ++++++
+  arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtso 
+                           |  17 +++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtso 
+                           |  17 +++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-ov5640-x7.dtso 
+                           |  89 
+++++++++++++++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtso 
+                           |  24 +++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtso 
+                           |  10 ++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi                        |  75 +++++++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi.dtsi 
+                           |  74 +++++++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtso 
+                           |  27 ++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dtso 
+                           |  24 +++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso                 |  26 ++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtso 
+                           |  35 +++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtso 
+                           |  19 ++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtso 
+                           |  66 +++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtso                    |  28 +++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtso 
+                           |  13 +++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi 
+                           |  72 --------------------------------------
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-548-200-x2-mi0700s4t-6.dtso               |  35 +++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-553-100-x2-tst043015cmhx.dtso             |  35 +++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso               |   8 +++++
+  arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi 
+                           |   6 ----
+  arch/arm/boot/dts/st/stm32mp15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi 
+                           |  97 
++++++++++++++++++++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi 
+                           |  40 +++++++++++++++++++++
+  arch/arm/boot/dts/st/stm32mp15xx-phyboard-sargas.dtsi 
+                           | 285 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  arch/arm/boot/dts/st/{stm32mp157c-phycore-stm32mp15-som.dtsi => 
+stm32mp15xx-phycore-som.dtsi}    | 341 
++++++++++++++++++++++++++++++++++++----------------------------------------------------------------------------------------------------------------------------------------------
+  arch/arm64/boot/dts/st/stm32mp211.dtsi 
+                           |  16 +++++++++
+  arch/arm64/boot/dts/st/stm32mp215f-dk.dts 
+                           |   4 +++
+  arch/arm64/boot/dts/st/stm32mp231.dtsi 
+                           |  31 ++++++++++++++---
+  arch/arm64/boot/dts/st/stm32mp235.dtsi 
+                           |  18 ++++++++++
+  arch/arm64/boot/dts/st/stm32mp235f-dk.dts 
+                           | 130 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi 
+                           |  63 +++++++++++++++++++++++++++++++--
+  arch/arm64/boot/dts/st/stm32mp251.dtsi 
+                           |  24 ++++++++-----
+  arch/arm64/boot/dts/st/stm32mp257f-dk.dts 
+                           | 130 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts 
+                           |   6 ++++
+  arch/arm64/configs/defconfig 
+                           |   4 +++
+  48 files changed, 2526 insertions(+), 428 deletions(-)
   create mode 100644 
-Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
-  create mode 100644 drivers/bus/stm32_dbg_bus.c
-  rename {drivers => include/linux}/bus/stm32_firewall.h (100%)
+arch/arm/boot/dts/st/stm32mp13xx-dhcor-dhsbc-overlay-rb-tft32-v2.dtso
+  rename arch/arm/boot/dts/st/{stm32mp157c-phycore-stm32mp1-3.dts => 
+stm32mp157c-phyboard-sargas-rdk.dts} (58%)
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-otm8009a.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-644-100-x6-rpi7inch.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan1-x6.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-fdcan2-x6.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c1-eeprom-x6.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-i2c2-eeprom-x6.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-ov5640-x7.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-avenger96-overlay-spi2-eeprom-x6.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-drc02-overlay-wifi-rsi.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-overlay-panel-dpi.dtsi
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-460-200-x11.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-497-200-x12.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x21.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-531-100-x22.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-560-200-x12.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-638-100-x12-rpi7inch.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2-overlay-672-100-x18.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-548-200-x2-mi0700s4t-6.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-553-100-x2-tst043015cmhx.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso
+  create mode 100644 
+arch/arm/boot/dts/st/stm32mp15xx-dhsom-overlay-panel-dsi-rpi7inch.dtsi
+  create mode 100644 arch/arm/boot/dts/st/stm32mp15xx-phyboard-sargas.dtsi
+  rename arch/arm/boot/dts/st/{stm32mp157c-phycore-stm32mp15-som.dtsi => 
+stm32mp15xx-phycore-som.dtsi} (53%)
