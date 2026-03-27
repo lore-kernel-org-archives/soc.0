@@ -1,78 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884BD3EC2EF
-	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 13:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DEF2957B6
+	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 13:19:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774617252; cv=none; b=dsS4bs/zBGgw/YdSmET3F8ZXXfOd65cY6oQaR5RuzNVt4qj8TD+p5McDtObNTB897fe2B0baMvhqj5PvQkOfgA1wcp2KArYrC3pMbL6RjGh6ICs9Iqt6SMK2dBNKKD8bYCErYMRycuI3nFvqexL2jjC4RjehZqiwPpBZqzQM1HM=
+	t=1774617555; cv=none; b=GLsVvu/6MMjQiAeGhH9xRjpFFScJwdjDsaPqC9x461INeXI3MOCt38dvtZgfEfsA8sc2Yi2Lmka9ZZ7xmy2HrdPyKBlPy50bQJmxuqH0wvdvIhtJFrUW+3Tjd0A4udUBkaHQGFPRWQJauJOj1q8JaY0y5a80+yE760OCfou2GHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774617252; c=relaxed/simple;
-	bh=YrSq98m0+IuN/dB5V3lvaa1Q5iX/J5mxrf1Ih/huEmo=;
+	s=arc-20240116; t=1774617555; c=relaxed/simple;
+	bh=i9qygRuM/xKd0U1GultvW3Xaf67NxSGnnJA65i7/THc=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ea/3fnrEHtb+feRchwU7Z8j2p+WvGngNPANWcPa9LJtiUCqFrAedG1TFHJK/Z+i1D5LRMk/zgcSMXp7tWHSym1H0p33F9IEqbYFMhZOGmH32z2CQHeZAhXy2UYN23M8n9Bg/szrKesjcVag/JIfuWn1Qmi/9d/MiaInibwHntKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oD6MJdsw; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=OrJq6K0fFA8wu7w38+wwWos0gvea2wgQhCAPNI9jssqTGQ5kg1g4HJt/SRCjjLXFI8Loth7tA8QayuDhH++MQ8dURzL0swcojF0m3vY4OuGoMxCAy77a+fVS3f/gdhBLUp3BB+1pJ5+FYxWX0IFhAzoSrtmF9aL5+/9P9CikL2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u1udthRX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oD6MJdsw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u1udthRX"
 Received: by smtp.kernel.org (Postfix)
-	id 8085FC2BCB0; Fri, 27 Mar 2026 13:14:12 +0000 (UTC)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	id DBCC5C19423; Fri, 27 Mar 2026 13:19:14 +0000 (UTC)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B0C8CC2BC87
-	for <soc@kernel.org>; Fri, 27 Mar 2026 13:14:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B0C8CC2BC87
+	by smtp.kernel.org (Postfix) with ESMTPS id E4888C2BC9E
+	for <soc@kernel.org>; Fri, 27 Mar 2026 13:19:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E4888C2BC9E
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-59dcdf60427so2437290e87.3
-        for <soc@kernel.org>; Fri, 27 Mar 2026 06:14:11 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5a2a75393e2so970140e87.2
+        for <soc@kernel.org>; Fri, 27 Mar 2026 06:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1774617250; x=1775222050; darn=kernel.org;
+        d=linaro.org; s=google; t=1774617552; x=1775222352; darn=kernel.org;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kz8SaXeiyhxC27qAG3dP6iPPGTlVaK8A49rXAhagzVU=;
-        b=oD6MJdsw4kix8cvjosTW9hu/4XzuA8WLXZ6aGg4pnJyoq4ORyI969zOwVT0cgvRT8R
-         riUwEXDrvkOHtV/7ynitfdJh1DB3NPaM0JGs3gBNfP5l7TSbdG7wQzTLwAzDUk0W6FIi
-         /jngvbGdxrSruYqIBjdn3slObkhUE5yNDBNOQ+lNdFzfVSUAmLlTZ0lMk3FL25mY1jq6
-         gXsX6BITI2DPn8i6vbCwElzIWwioYy+J7QDw3hp+BwudmwABkMKbh/qQtWyCpZhbNY6F
-         rNs0b49EXevCP2THUiTlixREczfPNysMtf244aLOVxlGulnz91iPcOpL452HXr84HWOD
-         akIg==
+        bh=lNPO0O5wBEOqvcK8fttMdKDC05vxT3rrIFTuOlOpTto=;
+        b=u1udthRX9CUIjy4wRZnGwPdLG4vJl1/66vdWuUaBpVsEJietUxGIFzhZTGEsTq918k
+         d2vrT5jS9ayAhjANl+DUHMTzrNoIRVc1HeHELd2SiSAbK3zz1UC7qmeI0zWNNWAtOB3A
+         b0uTaPUNoemGCg8q8Hoi3L2WP6QALiZdkg0/zluhgOpR++/hS/0prykM4Id+R9USrRDm
+         +J3EIH5OvxW06LZnhwBVUqCVwsuwWs/fE+50ui+pELlVF1OhjQc4QkanVOt5JPFpUYxd
+         v1EtjIeqCvfSGv+2IyoOrPlLsbq7XhiUHWKU5nVXbpBT5Rn/pA+BRTFRpF3l4cp7j7w6
+         lZ0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774617250; x=1775222050;
+        d=1e100.net; s=20251104; t=1774617552; x=1775222352;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kz8SaXeiyhxC27qAG3dP6iPPGTlVaK8A49rXAhagzVU=;
-        b=OlMdiOi8OeyZaEoRpkiHh793dyFrptmZSayUvNtGnLyvXyV4dA/gavc7y2xat24Zbp
-         45Xr/gISVxa9PuxhPeteglw/EhwFCUBkh5sJ6lAWH5kCqkZ0dO+kVrewJwP6HuCgihRF
-         xqHZM4Rp0GptxzOG6DsbTBPq8sVd8/teR62qFQX3NZR7qR7QkJzPjwjcmhnzvIqZHD73
-         zBMbpkx46eUzIVHPk7VCKcQE8Z1yBmQu0r6joiLennB/WOYaMG4Wz6SZQoMIKFQbiKTl
-         MFCixJuFLulvcL69LofsPfvXSNTWMV4O69gm5cAy0cFL7I2knsWNA97kwrNCXJX05hQI
-         /sKg==
-X-Forwarded-Encrypted: i=1; AJvYcCXm/TH6Zze7Kpk1Q7L1uS7B0+LgsK5DI+8oTH7708wFwnClh6b/uYU9+ntZrDsFoz7Aw3E=@kernel.org
-X-Gm-Message-State: AOJu0YxxSX6/64WOHCHg62jyoslm5SGx2Jb94kPnmhvYi/PP/QBufgv1
-	LnTDzGtcXdZbNlNaCDz9sh2B4YhWXniE6Cz3+nQfpaWX4MwpbheU2nocHtSd4kMygsw=
-X-Gm-Gg: ATEYQzxGGxcpGrZXi6EPqL5UYXjO3y7a0sUTxB9BDDfSYBHWfef+2G+g3kpHcDsDKSt
-	e+hXu5LmOSVyJpAS9ErztYl7VP4VW2iWjHqFfVA24pf0bOhqaYpk5qs6BJ6vyNEJsJwS9JwR7iS
-	R/8U1uYngAI84v12+dxEh1jSQJCzCpDr8QqPqwsY8cW8usQoM+Kg17lsuiPjm5gZD50QeGfCMHu
-	H4Bj3Zcje9QJhQe7l7RMlutY0WJ9x6u+Fbomn2uKrWFwbWU36x3LF0VMiFpCL6CXdn+UUxogr9a
-	683Ie/HSYwCcI4pfUxEiOWDHJXZQV4SlieWjDXSO3mR7sMAU4//PwTGy6+aVXPYxfkJBPBp/t/C
-	akRIQq9pQLFMrGlbi69AJXMLXMY0jW1XVdsLvON6QrBT2MuiH+68Sc5nVK/1z7nny0mqqIXrLx4
-	HRDkbgihTj9D2KamNO1IYzPSN5rc+gkKxke6vBkWMOf+vtAo2BOFroNOuKnRI2KmToekailCWBh
-	B8rxFEgh4XvyDGVIZg=
-X-Received: by 2002:a05:6512:3c87:b0:5a1:18b4:6c47 with SMTP id 2adb3069b0e04-5a2ab59d4d3mr790105e87.0.1774617249654;
-        Fri, 27 Mar 2026 06:14:09 -0700 (PDT)
+        bh=lNPO0O5wBEOqvcK8fttMdKDC05vxT3rrIFTuOlOpTto=;
+        b=o4H0Z6uTg5Veb4fX14wHwtYzBXrUZRvZ9rqSRkSwhFTHo+BUL9UPu71G/bzaQDFSN4
+         RZu/iMVjtShvxjcpkjL9XzeU0HaE7cf71Bdktra1udtRPs3uCF1XEuruWeoldOwNkb0F
+         Z34zmWwk5ujQKKba34CDeAX/Qc1KSqbl3Iqs8HteI77fGig4Ig9HdXkIiRMNPe1ynTy1
+         0dvVZDK9PYvgOJASfNdLH3nqRP7pNDgmuorQRK4vR+2vQ+TRGx3qT0SE5otKd65a2t6/
+         NiAf6rwantbrfkjRz8StZUwRJjpQC1a7DqXF5KgU2ncecttpton49qDdMAaKOa90b00l
+         no1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWRoIAHUF2y5RNhJbgOIELUcCFICFKNTg9AcI/tZhiP1yP7rsC2vSmhVtOF2F/kdJhUb2M=@kernel.org
+X-Gm-Message-State: AOJu0YyQ5UDqO3biNaB5eXqoX5ZVCycHRfWi6xzyxD7AMdZSJykexw3a
+	eoVoUyCa0AdiYY78Fk3He/h1xzNBcgSAq86zlBjPhm+x4sY7E2RorFsQ3v7T7h79cRI=
+X-Gm-Gg: ATEYQzzNLqzYsAyL0sDDQQNJ385OITVPrmL+Hs5OgwP5VxRIGgaQmR5rZfVEw75/T91
+	rv21w0urnC6NAEBnRBcGNw1TTSFjuxn0yAqyah5IRyBDqq1mbsttxyfQE6Ejo8gtt91XOGsYqHd
+	O9u+qq1MRnZ4Mnc/ZK7Trcr9nh7fXWs+M3Tp8zckthcHwOX6HFZvZnPEF3dx/+xpSyt5OBjiEeJ
+	tARTRslCgC9Uu+72lYTnDcuDpgNn2h1VOEF0RWeER7dBaYjD8MjgchSozj6McwBkLWMqNQk9yf/
+	bFQa/F2thVli8g4TIAozXaW81NVZ9sDIUvucEUibzFGTTVM8JIA/+0JqSpbmbsALGr955YIfoCV
+	m9djsp1jX88zEZOYDi/VY0M2gA1glXoqzta9CbxQu2ao8ZKLOSIol5C+hvynftknVVUw32O0sx/
+	exOAYDVukvtroqzUDaGyk3W19cMnQwkCxplTK5/v2btYjSO0GHVAW4GYQKOUSprzAG2pEZWj+BH
+	niMm334v9VAFDHkcOI=
+X-Received: by 2002:a05:6512:3b8f:b0:5a2:a355:aa4e with SMTP id 2adb3069b0e04-5a2ab927773mr1250457e87.31.1774617551953;
+        Fri, 27 Mar 2026 06:19:11 -0700 (PDT)
 Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2a063efd5sm1345298e87.12.2026.03.27.06.14.08
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2a36b5af5sm1175274e87.49.2026.03.27.06.19.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 06:14:08 -0700 (PDT)
-Date: Fri, 27 Mar 2026 14:14:07 +0100
+        Fri, 27 Mar 2026 06:19:11 -0700 (PDT)
+Date: Fri, 27 Mar 2026 14:19:09 +0100
 From: Jens Wiklander <jens.wiklander@linaro.org>
 To: arm@kernel.org, soc@kernel.org
 Cc: linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE update for 7.1
-Message-ID: <20260327131407.GA3248701@rayden>
+Subject: [GIT PULL] OP-TEE update for 7.1
+Message-ID: <20260327131909.GA3249645@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -84,7 +84,7 @@ Content-Disposition: inline
 
 Hello soc maintainers,
 
-Please pull this small patch cleaning up kernel-doc comments in tee_core.h.
+Please pull this small patch simlifying the OP-TEE context matching logic.
 
 Thanks,
 Jens
@@ -95,20 +95,20 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-for-v7.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/optee-for-v7.1
 
-for you to fetch changes up to e416e7fa417b2d2604c1526a2f9cc38da7ced166:
+for you to fetch changes up to 8c6e843f1c26a0b12720cab02f785c46450b6adc:
 
-  tee: clean up tee_core.h kernel-doc (2026-03-13 08:22:54 +0100)
-
-----------------------------------------------------------------
-TEE update for 7.1
-
-Clean up tee_core.h kernel-doc to eliminate build warnings
+  optee: simplify OP-TEE context match (2026-03-04 08:33:31 +0100)
 
 ----------------------------------------------------------------
-Randy Dunlap (1):
-      tee: clean up tee_core.h kernel-doc
+OP-TEE update for 7.1
 
- include/linux/tee_core.h | 30 ++++++++++++++++--------------
- 1 file changed, 16 insertions(+), 14 deletions(-)
+Simplify TEE implementor ID match logic
+
+----------------------------------------------------------------
+Rouven Czerwinski (1):
+      optee: simplify OP-TEE context match
+
+ drivers/tee/optee/device.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
