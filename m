@@ -1,173 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109E93B52F7
-	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 08:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD652FF155
+	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 08:52:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774599582; cv=none; b=mMB8LFjlWLpX43K/ZGEPy65IlXOzCOkJ+OMS23sVT6zkU9/Wlo4nV7QUOdNrhFpTAO8UoA9bXSz0LC8sCLg2XBWFY12WDMPUfNy9BQhkdPWGY2yscBzN5UM6SPPARXC4PMQ56VNr2PkGtNqSDsvRfw0/6YrUhlLijXpAkRwK3FI=
+	t=1774601571; cv=none; b=PKPGKfxA4u44LDXfy4lk+xccfuOrFiYw3zsXG346k7QMjoWQvaNehnyWs4bZ59GE0QDzj6zHwky+HtOYnZhqd9oHliPqL+08+TltTAom2DL2MT47yOq3D1KHQ1g8UUGLKuvn0nJwPytHnI2ItbFCjJYKAL2Ed1RlMXR/x55tBxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774599582; c=relaxed/simple;
-	bh=Tlrf9YQPpCEgfXEni1AJghCk6IXwsSp1qRIuz6TrIYI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P6Sxjkbyy7ofXgGYcJYXqoWAV/0pA88t9P9jiAC72fofzRah9Lq53A4ciVnLBxdVFmPzl3DHWHsoyf/cdXmmg1jP7vx9FOi/uqlH29A1Vt17hycWvyZF4fcjroLsth4csDieqqVosPTs8PLlTaL4mxfHeLg6kSkhmCheFrKlovI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e99zTECU; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e99zTECU"
+	s=arc-20240116; t=1774601571; c=relaxed/simple;
+	bh=jxxRgKpfxEvp77H5FRxPple/0zkWZ9vpz2rvXeyZ/QM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=klReSZoJshcC5NLj9FELrADhf3J+PsM6uS0xzykY56Hc+nCPzEtSL40EWVbIuKT2GLhlMEIzymDlU701g6NAYRd0Qd13E+TzfJuGB+qfEjdmT1EFXOY7edklHm+11xRvI2ctmA5MwOVroNGgGnMYl7j+pNr1/o2+NYYZnwXlMMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 9F583C19423; Fri, 27 Mar 2026 08:19:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D48C2BC87;
-	Fri, 27 Mar 2026 08:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774599581;
-	bh=Tlrf9YQPpCEgfXEni1AJghCk6IXwsSp1qRIuz6TrIYI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=e99zTECUo1GWDxJCQjbuZr14lTWUZG8QtA6IbyQJ1NYaNHhOIyAzZ+kNtv+WOupiO
-	 j1RrXWhKXc2wtT67tHlF9lhiFVDpbE159fs6IrFkbE0VktjG1hBxBbKOEl+pGlOMZP
-	 s8g2F1v9aMv8Vb4MBQukTAKy8PxRO9+4QJ9hvWQLnv97WY4UIe0rAJQ93Dv0JI1eDe
-	 DC4EPqXv0cWg4tip0AKbKE2gudNKoBVvFNor0xeBgxv4v4hqcfmJ4cFEQYQVwpjaPI
-	 0w08T2QiXydDvbbnMpwBX4F55GSUk2Pw9eD+U+Gr61hEbW4c7dgxVKZKbBh7NtMx8c
-	 UFVXkvLUfgEig==
-Message-ID: <d7eb716d-9b9c-4474-a9ca-d44e96c46fc8@kernel.org>
-Date: Fri, 27 Mar 2026 09:19:37 +0100
+	id 35B6AC2BC9E; Fri, 27 Mar 2026 08:52:51 +0000 (UTC)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id ED832C19423
+	for <soc@kernel.org>; Fri, 27 Mar 2026 08:52:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ED832C19423
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a2792e8799so283894e87.1
+        for <soc@kernel.org>; Fri, 27 Mar 2026 01:52:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774601568; x=1775206368;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IRXASae8rN7IgVnVI5FCS0dcfVmSoJg6Qz5lniabiXI=;
+        b=jmT/NPrkwj9UnvjC3/0I7j91gEJPeioAoPgZSdQFL+ZvmS4SCbMdgQJ6CnqpGhijqX
+         EENnUjKv4Nel+QuSO2x1ree7/fXFwyxDuF0h1bJ3cKSjZeYj+zVRaYm2OEm4FI9NFqg1
+         LhSo8wL2vviXFE/rpXy7sV5coHEDxC49yh5cn1tEctaKAhWj3HQsQebqEs5bfz2Suzfg
+         j8D1Kt2COGBObLFTpogye0vxKzPvNRWMnNTN18jh+Q/jib1wtMrlE5zpjvbOvLEXW95L
+         kl0V7wehMkp+bVmFbtMuEuTybr8p0Qu2iyJH2sXvNeI6SuAfF7LEEokfab7bphrPKFf+
+         lo5g==
+X-Gm-Message-State: AOJu0YxvdDGYkZ8UuGVYVTjvmA2eyT7NJlc5oNV9uIo/fnBK6/fOiJaQ
+	aIPCQvxAbiMrQNJjlBaZDfytaatnhAdD6Oupvn6QZV+usEzR36/Eg4LH
+X-Gm-Gg: ATEYQzwGRHX38aKzaytK64518HJK1g4O53atoErRzD1CnNWS5xe+RU2ujzY73ikJ9w8
+	kRZ2mJo0EJPc6WrNFq917UQJDnzv+DfUFwzGt0Q+b+JxDYNGkXpnCbGoTlUl0Y2tcRe1y8EtbLI
+	ZYUTXY1x5phsdCjQyv61SdoUZg3yZIVF2Quczvogg/v4fi1MN77TmST72lngp+XCoab1v+rIYNo
+	gHqkVP9uBySph1jToeNiRtxlsXfvmPMagY/DQIoPnZNfAhRgTd+OMyy87Qu2XctUSUGQYk0JDZD
+	ku6PQJKrLRnHmGj3vofCHxUlQyq2Dat5fKvLBB2LeFgN7+H+hGNMJg0I0eRqDO1ffwwBRLeZwGJ
+	lbnkKMQiemwkxQonB5FW8cJVCrx+TR7XE8y98s8p87lFhfb/sgEKHZlRvm3JXwLAW+QuuntNNQj
+	xyMtOAOAio8p6OI1wlJHGGagOHZR5uoiJBurTaC506dX1vSUE=
+X-Received: by 2002:a05:6512:124b:b0:5a1:38c4:424e with SMTP id 2adb3069b0e04-5a2ab92aa0amr336078e87.7.1774601567731;
+        Fri, 27 Mar 2026 01:52:47 -0700 (PDT)
+Received: from localhost ([176.106.245.85])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2a0689283sm1252299e87.44.2026.03.27.01.52.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Mar 2026 01:52:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 27 Mar 2026 11:52:45 +0300
+Message-Id: <DHDFR4K758TP.291K17J2J5VL7@altlinux.org>
+Cc: <soc@kernel.org>, <linux-riscv@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, "Hal Feng" <hal.feng@starfivetech.com>,
+ "Conor Dooley" <conor@kernel.org>, "Heinrich Schuchardt"
+ <heinrich.schuchardt@canonical.com>
 Subject: Re: [GIT PULL] ~RISC-V~Starfive devicetrees fixes for v7.0-rc6
-To: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
- E Shattow <e@freeshell.de>
-Cc: soc@kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, Hal Feng <hal.feng@starfivetech.com>,
- Ilya Sorochan <k0tran@altlinux.org>, Conor Dooley <conor@kernel.org>
+From: "Ilya Sorochan" <k0tran@altlinux.org>
+To: "E Shattow" <e@freeshell.de>
+X-Mailer: aerc
 References: <20260326-astrology-rephrase-836ec663228b@spud>
  <4dd4ffe6-307a-442b-ae99-50c88d4e5b84@freeshell.de>
  <20260326-viscous-rigor-4beb18f77eec@spud>
  <9ec329b9-144f-4896-a89c-3af0b23e631e@canonical.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <9ec329b9-144f-4896-a89c-3af0b23e631e@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <DHCYMK8FEH10.1Y1YWLL3J1HSK@altlinux.org>
+ <ff792101-61e3-4470-9c5c-eea375edc9fa@freeshell.de>
+In-Reply-To: <ff792101-61e3-4470-9c5c-eea375edc9fa@freeshell.de>
 
-On 26/03/2026 16:44, Heinrich Schuchardt wrote:
->>
+> On 3/26/26 12:27, Ilya Sorochan wrote:
+>> On Thu, Mar 26, 2026 at 07:36:07AM -0700, E Shattow wrote:
+>>> ...
 >>> I have done an ~80%+ analysis on Ghidra decompilation of the JH-7110
 >>> BootROM, and openly invite anyone that would like to help get this
->>> effort to 100% is welcome to so that we may publish and refer to this
->>> for technical competence. I do not object to the community supporting
->>> this deprecated capability if there is any real documentation not based
->>> on rumors and memes; but no one has offered to do take a moment to do
->>> this most basic of fact finding. Evidently the StarFive maintainer(s)
->>> have refused to support this, GPL non-compliance persists and only a
->>> rough description from Hal has been written to the U-Boot developer mail
->>> list that does not match my analysis, all while complaining about the
->>> capability not being supported going forward.
->>>
->>> I object to this PR it is NAK from me on the basis of stuffing this in
->>> sideways without technical justification or review. Also I do object to
-> 
-> Concerning technical justification it is clear:
-> 
-> Distro images have been supplied with U-Boot on SD-card for years and 
-> the recent work in Linux and U-Boot broke booting them. This needs to be 
-> fixed.
-> 
->>
->> The technical justification seemed to me to be multiple people saying "we
->> need this added so that u-boot can use the sd-card". The patch has been
->> on the list for over three weeks at this point, so there was definitely
->> opportunity to comment on it. I don't think I have been unreasonable
->> here. If current U-Boot needs it, then I'd still like to have it merged.
->> If you work pulls through and this becomes no-longer required, then I'd
->> be happy to take it back out again.
->>
->>> "riscv: dts: starfive: Milk-V Mars CM Lite broken-cd" as this goes the
->>> wrong way around, it does not describe the hardware; if some external
->>> carrier boards cannot deal with the capability of the Mars CM
->>> system-on-module having card detect line then that should be dealt with
->>> as a dtbo per-carrier board and not be replaced in the dts by a
->>> broken-cd, although at least we had this discussion and Conor made a
->>> decision with all the facts and discussion available.
->>>
-> 
-> As my patch points out the CD line is broken because it does not conform 
-> to the standard established by Raspberry.
+>>> ...=20
+>> Appreciate the effort!
+>> However I can't see how this is related.
+>
+> Your patch was sent to a minimum audience which perhaps if you are a
+> first time contributor is understandable but I would have hoped between
+> you, Heinrich reviewing, and Conor accepting the patch someone would
+> have noticed that scripts/get_maintainer.pl was either not used or some
+> overzealous trimming of CC is going on! Also this is probably the
+> dozenth time I have explained at great length to Heinrich my concerns so
+> it is deeply disappointing to miss this opportunity for contributing, I
+> guess I consider it disrespectful though maybe no fault of your own
+> there Ilya for wanting your hardware to continue working as you
+> expected? I get that... there is in no way any desire to discourage
+> anyone from posting patches or fixes, this particular situation is a
+> headache for me... maybe I'm the problem okay because I cannot reverse
+> engineer a whole BootROM on my own, I only get to 80% and then people
+> have their own motivations and reasons for not wanting to spend any time
+> to do this properly? :)
 
-Initial E Shattow answer is not placed under specific commit, so I can
-only guess that it is about "riscv: dts: starfive: Milk-V Mars CM Lite
-broken-cd".
+Sorry, I'm not trying to be disrespectful. Yes, it's my first time. Kernel =
+docs
+bewarn of spamming therefore I trimmed CC based on the assumption that thos=
+e who
+interested in devicetrees are present in devicetree lists. I guess it is no=
+t
+true which seems strange to me, but okay.
 
-The commit touches only DTS, not DTSO, so how can you claim that a DTS
-file change breaks some completely other board (Raspberry)?
+I'm not asking to support this feature properly. It would be nice to have b=
+ut
+it is hard and StarFive is not making it any easier. However I'm asking to =
+keep
+it working while you can if you can. It worked for me and other people and =
+we
+would appreciate if you can delay breaking it as long as possible.
 
-This DTS file is nowhere included (and should not be).
+>> I traced this property a little in the U-Boot repo:
+>> - 503fc8548197 Hal added it to VisionFive v1.3b (with mmc pins)
+>> - 6bbe95ef7208 Hal moved it (and other common things) into
+>>   jh7110-common-u-boot.dtsi
+>> - 27f617019dd0 E removed it with jh7110-common-u-boot.dtsi
+>> - 762f85bb2e36 Tom squash-updated upstream dts
+>>=20
+>> New device trees did not contain this property. This is how they were in=
+troduced
+>> into the Linux: b127dbf9e1ebbfbcded4 ("riscv: dts: starfive: Add mmc nod=
+es on
+>> VisionFive 2 board")
+>>=20
+>> I do not know if this miss is intentional or not. However it would be ni=
+ce to
+>> be able to boot from SD-card again.
+>
+> There is already nothing to prevent you from booting Linux from SD-card,
+> with U-Boot SPL and U-Boot Main located in SPI Flash as is recommended
+> by StarFive officially.
 
-Of course maybe the true question would be why anyone described a hat as
-DTS file...
+Yes. However I'm implying the deprecated SDIO3.0 way. I agree that this wou=
+ld be
+nice to have in the commit message - if this what are you talking about.
 
-> 
-> E. we know that by chance you have found a base board that ignores the 
-> standard.
-> 
-> Your patch 4cce8b2503ab5 made my standard compliant baseboard unusable. 
+> I'm glad you sent a patch, but I still object for the other reasons
+> mentioned.
 
-DTS of some board is a final product, so it cannot be applied to a
-baseboard, that's pretty messed DTS tree...
-
-> My patch in the pull request does not stop your board from booting but 
-> re-enables mine.
-> 
-> Best regards
-> 
-> Heinrich
-
-
-Best regards,
-Krzysztof
+I'm glad to talk to competent people in this space, however I still hope th=
+at
+the kernel will refrain from breaking this feature until it is really neces=
+sary.
