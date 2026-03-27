@@ -1,45 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD1837C0EB
-	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 11:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFE734F26F
+	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 11:57:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774612404; cv=none; b=havVuJrHolV+dc+Oxz9SsKilSb/6M8yXNkt9+upEPj3iHnZaWKRA3c09hr6n4C2WW2aGS7K8kIL3Cf4BSaWqztymyXoBI1eNV6XctYhK0IGiSQ6PJhak/MILl7ErQuRuy0gXwEkmtods3EGOnIpqz6cnkpc11CEA6m9/VM9s3VI=
+	t=1774612626; cv=none; b=jfNeATQAHmyH0di6ZovyGEL98n50RqbMtd1aRBw3XJzP2kMFTM/y0ME6xXREygqg5R7C4QwaPBh7dVzxoEre5PJ4oSz5527cnlksTqucg8stlv9lcASQudQiEWTm7NexGvu+Sdazq8xJ4SqQ530dIPZ6GyodZugWwRxhnmzh5Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774612404; c=relaxed/simple;
-	bh=0Rc6QMs+lYNi4jCX1Pmmc73oJrF8z9ofWC+hGzYSaW0=;
+	s=arc-20240116; t=1774612626; c=relaxed/simple;
+	bh=y1RW/9S9unAXA+oodhH5vVUMi8x3886TICOzSz9gIiU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jG/WP44xVDRrnIf8hU094Cwt77mC4PfrBsOdxOKhyEtCT4LUX+rv4SrhIvr6tePeOKjYFb9sHAn5j6ajxBqKZXDsSymOH9xHsgMLBMI5feMUGggb8mGJ4ovy9aI2Q28LYCnPJf8zhTmL/JBIJ1LI0rf3vd25EWrNziM20HVfwI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJTUcxJh; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=bm2vM0/lgY2Sumu2VZ2W855nrb69W+e+Rz1I+i+cTZRsMDqigpb4V99zqUjKovsGKWhC5CmgD2UccnxNrr0i+2v3g8ayCL4ApFwwha5GGz78ye5Eqi1KLEupWEZGJiR58Tsx6ISjqKNv3LXvNpL+BWf5aHTsknI1V70EQQoa3hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6E2y2gB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJTUcxJh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6E2y2gB"
 Received: by smtp.kernel.org (Postfix)
-	id 47FF1C2BC87; Fri, 27 Mar 2026 11:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C310C19423;
-	Fri, 27 Mar 2026 11:53:23 +0000 (UTC)
+	id 98D74C2BC9E; Fri, 27 Mar 2026 11:57:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A7DC19423;
+	Fri, 27 Mar 2026 11:57:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774612404;
-	bh=0Rc6QMs+lYNi4jCX1Pmmc73oJrF8z9ofWC+hGzYSaW0=;
+	s=k20201202; t=1774612625;
+	bh=y1RW/9S9unAXA+oodhH5vVUMi8x3886TICOzSz9gIiU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LJTUcxJhahvhGQtZ0KWLSiVfCsyWChBmsTnYv4iPgEF7NJR3yiwSmtAXHZM3ka0dx
-	 uWaa7D3v/FcPCvFCnnMCCCz2ocFlN0VcZsDtDkGye08sr97RInghtUCgW65Yudpg91
-	 wedZhzpOqSHiREk1XWMlEefBN13IYDI3v56/9iMHTzSYF5xy60strpZsZZqw9vS+dl
-	 F7Cb9DXwHjBtCRKL7pC276LsDBpwZmuWk3AsPlOi3TA2Q+pl+227CRGZTlcMAhrrCy
-	 nI80uQlnY4PKEQ46u/dd787GCfHiEDeOF5GGxlLXOSn4CuIPU6RNDySqN7u0DdagHh
-	 9xb0d06Ocaspg==
-Date: Fri, 27 Mar 2026 12:53:21 +0100
+	b=D6E2y2gBO/BU0CDdIMOXmOhlBjIXaP9lyFu3dxakbPk4wxVR+igCBAP64Gl0g9Flz
+	 gbpzWq8ZNTfWLZBo/cadPLVW+4ZxietRThPixyENWsd9tu4FSR1N+Bj1jAz0+pcOhC
+	 DYTmS4Cgj10BLQWELxHbPnsk6oEMt+kFTXdVXRtV3l0KoEvvnxUhbAQaiOpMlPFiOW
+	 0h7qwfwEhVAlhiPE8/wrMys8gTgUjqeRfbVtaV+qAPtKc8YF8kcBsK1lDM9dGkndD5
+	 EcuhOfZ3fbhHMN4bSKYEc/jrJGVNt8oHt+yQIvu1+KCX0Y4mf9qANLI50KRkStITFn
+	 0NEyO23vkv2Ew==
+Date: Fri, 27 Mar 2026 12:57:03 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: soc@kernel.org, Rosen Penev <rosenp@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Linus Walleij <linusw@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, William Zhang <william.zhang@broadcom.com>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	linux-arm-kernel@lists.infradead.org, arnd@arndb.de, khilman@kernel.org, 
-	bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [GIT PULL 1/2] Broadcom devicetree changes for 7.1
-Message-ID: <20260327-lurking-amazing-pudu-114fe8@quoll>
-References: <20260323190239.1890505-1-florian.fainelli@broadcom.com>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL v2] Rockchip dts fixes for 7.0 #1
+Message-ID: <20260327-lumpy-mule-of-health-7efec3@quoll>
+References: <5057236.GXAFRqVoOG@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -48,32 +44,41 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260323190239.1890505-1-florian.fainelli@broadcom.com>
+In-Reply-To: <5057236.GXAFRqVoOG@phil>
 
-On Mon, Mar 23, 2026 at 12:02:38PM -0700, Florian Fainelli wrote:
+On Mon, Mar 23, 2026 at 10:58:16PM +0100, Heiko Stuebner wrote:
+> Hi SoC maintainers,
+> 
+> As requested by Krzysztof, here is a more condensed PR.
+> 
+> Changes in v2 are that I dropped fixes for dt-schema errors and fixes
+> for commits introduced not closesly to the current release. These have
+> been moved to the current branches.
+> 
+> The Pinebook regression fix actually also is for a commit from august
+> last year, but fixes an actively tracked regression, so maybe carries
+> a bit more weight.
+> 
+> 
+> Please pull
+> 
+> Thanks
+> Heiko
+> 
+> 
 > The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 > 
 >   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-7.1/devicetree
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.0-rockchip-dtsfixes1-v2
 > 
-> for you to fetch changes up to 220bdfcb4b4788f57faa2c28454d8b2dd3bcab6c:
+> for you to fetch changes up to 29d1f56c4f3001b7f547123e0a307c009ac717f8:
 > 
->   ARM: dts: BCM5301X: EA9200: specify partitions (2026-03-20 16:57:31 -0700)
+>   Revert "arm64: dts: rockchip: Further describe the WiFi for the Pinebook Pro" (2026-02-22 23:28:06 +0100)
 
-Four days after:
-
-Days in linux-next:
-----------------------------------------
- 0 | ++++++++++++++++ (16)
-
-...
-
-Commits with 0 days in linux-next (16 of 19: 84.2%)...
-
-Are you sure your tree is included in the next?
+Thanks, applied
 
 Best regards,
 Krzysztof
