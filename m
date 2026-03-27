@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7DB3DC4BB
-	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 09:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8960E33F5AF
+	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 10:50:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774605001; cv=none; b=k9ciWnNCZ3ZmP9j+NLv73F8YjNWP78O8gFckc82N28zKQ/2115AE3hG3LaPG9HAIZp5t27gNyHrRagKiDrxeijMxk6Ku1gR/3gED/R21i8qnav0jvG2gbICGX52VbZal61Y2eUbjpUQJUeT3Latu7BDdMRGTqBFtn8Ku7iS10R4=
+	t=1774608643; cv=none; b=ST6ti6wGGgRr5Hi9pTfng+YbSqlR+7lXeavf+NXvhgCugWArDIMTD8Izrp4vJIbMLrysBmFMdXzhhuPatcbikFOCnf04f3Gw7xnUTgmdOfTm8WFYSZnqbmMQqqJCQPnhod6XVdbDDJime1PS7lM/5JeVPDIPC5nKwgL7XDIGTac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774605001; c=relaxed/simple;
-	bh=q0u95jyxNvuY/NCP7l8rLO87IMpiwzeywfU9c/8coF8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bxv5SeXA+NS54yzigbyqSDc8Dlpqkx9su0zWQOlg2Ud1yCt2EsCu9OBRB9Z57WRzbLNUkT+mxlDNghK7caiZ09fPdPJPqWQsCO5SZbLdof8EHdKLBA+L0z742zukmB5ZzoCSIPL6Qle7p5A5wBY5OUBwoWw8swkcrXQM0Yey1ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PriI7bSb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774608643; c=relaxed/simple;
+	bh=BR94oOYuwHSvdfYsGIh0e14YaDhN/vmr31ydp4Se3Wo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Pvq3wTDDDn4uLoumPD5L25KKKX7bd+kfmhEvlmb+nIVVGIFSk50tQSLZ1otiixp6EFZBjfZ4hb1tFSTJXaqnkfbUuxDmgDOfey0Wa97CRRv7YBD2qTts6TuB0v7VScoCABy7cC/d0skYN8cDeHORxIaxRQydPdREjCXbtMbpYTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajEGXjfX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PriI7bSb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajEGXjfX"
 Received: by smtp.kernel.org (Postfix)
-	id 947FDC4AF09; Fri, 27 Mar 2026 09:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFBBFC2BC87;
-	Fri, 27 Mar 2026 09:49:59 +0000 (UTC)
+	id 4CDAEC2BC86; Fri, 27 Mar 2026 10:50:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B3AEC19423;
+	Fri, 27 Mar 2026 10:50:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774605001;
-	bh=q0u95jyxNvuY/NCP7l8rLO87IMpiwzeywfU9c/8coF8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PriI7bSbkltMOnwGu7H2oskS1hLN4iH+CYSiavsTFhNVUY/O7IfVLF2HYe1vlbAoq
-	 BopydmNIZysMVOBA7QZybvgNAt9QOEyVn+vcMTQ8H562C3hOxb5D/p/kzdV7bTViHc
-	 in488Xcec2Up344ywj0LZRsUI83xWo5VWMcoxPGX0e5wO+l9cKsgtmYiF64iGrQ22C
-	 fACazR6tSFpKQBNi+Ic1NY1z+ooD7MRwocisqOILwkQ6z4paLo77+3T993KZBAqtpL
-	 pJUyI75btANK5TVFssvZIwbf42VXXGrzXB/Eq0kKcp13pq6gfKten6kcE5ot6OmeJ4
-	 7Wp6I5nwbVAhQ==
-Message-ID: <c88af06a-596c-4793-a043-dcb018c2c95b@kernel.org>
-Date: Fri, 27 Mar 2026 10:49:58 +0100
+	s=k20201202; t=1774608643;
+	bh=BR94oOYuwHSvdfYsGIh0e14YaDhN/vmr31ydp4Se3Wo=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=ajEGXjfXtwCs0WUCRIQxwx7vSql9pXjQORpApTc4S77/rMAw9Hprxl12MI2Wn+K5C
+	 Zg9xI86HT9tFYmyIsndnWDoGomCZuJ5a+WNUhsYtsNPjxzpJ2qmI1Ft3lR+e6sTC9L
+	 tmH9NJwPmRTPBoTzOPnf7/fpu/UIwQQ03O7UHon7Z8hQfk5kv71K4IiTqPDeo667Ll
+	 g1Yl5rcHdFX44X6oLUF2Jp/Wh7yHq0d5L7InMZyHFoE42OQHAYEwtvMBSWM2Gp8taj
+	 7xIenD0wh6vz6lvrR6dumkz+fwbPK4spsedPwpeGVGXZsTCsFfA14VpbzVbzT8pYdd
+	 KKAYU1AfrWw5g==
+Message-ID: <8c411e55-7043-4987-bd6b-cb5b139902c5@kernel.org>
+Date: Fri, 27 Mar 2026 11:50:39 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -38,6 +38,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [GIT PULL] ~RISC-V~Starfive devicetrees fixes for v7.0-rc6
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Conor Dooley <conor@kernel.org>
 Cc: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
  E Shattow <e@freeshell.de>, soc@kernel.org, linux-riscv@lists.infradead.org,
@@ -49,7 +50,7 @@ References: <20260326-astrology-rephrase-836ec663228b@spud>
  <9ec329b9-144f-4896-a89c-3af0b23e631e@canonical.com>
  <d7eb716d-9b9c-4474-a9ca-d44e96c46fc8@kernel.org>
  <20260327-tapestry-frightful-de17113da7d3@spud>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <c88af06a-596c-4793-a043-dcb018c2c95b@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -94,47 +95,58 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260327-tapestry-frightful-de17113da7d3@spud>
+In-Reply-To: <c88af06a-596c-4793-a043-dcb018c2c95b@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 27/03/2026 10:45, Conor Dooley wrote:
-> 
->> The commit touches only DTS, not DTSO, so how can you claim that a DTS
->> file change breaks some completely other board (Raspberry)?
+On 27/03/2026 10:49, Krzysztof Kozlowski wrote:
+> On 27/03/2026 10:45, Conor Dooley wrote:
 >>
->> This DTS file is nowhere included (and should not be).
->>
->> Of course maybe the true question would be why anyone described a hat as
->> DTS file...
->>
+>>> The commit touches only DTS, not DTSO, so how can you claim that a DTS
+>>> file change breaks some completely other board (Raspberry)?
 >>>
->>> E. we know that by chance you have found a base board that ignores the 
->>> standard.
+>>> This DTS file is nowhere included (and should not be).
 >>>
->>> Your patch 4cce8b2503ab5 made my standard compliant baseboard unusable. 
+>>> Of course maybe the true question would be why anyone described a hat as
+>>> DTS file...
+>>>
+>>>>
+>>>> E. we know that by chance you have found a base board that ignores the 
+>>>> standard.
+>>>>
+>>>> Your patch 4cce8b2503ab5 made my standard compliant baseboard unusable. 
+>>>
+>>> DTS of some board is a final product, so it cannot be applied to a
+>>> baseboard, that's pretty messed DTS tree...
 >>
->> DTS of some board is a final product, so it cannot be applied to a
->> baseboard, that's pretty messed DTS tree...
-> 
-> The cm-lite is a rpi compute module compatible device, the base boards
-> don't have any devices on them in a lot of cases and just provide
-> physical connectors, so there's no point having a distinct dts for every
-> baseboard of that type.
-> https://www.waveshare.com/product/cm4-io-base-a.htm
-> 
-I saw the picture and it looked like it should never be a DTS, because
-it is not usable on its own. You cannot run it.
+>> The cm-lite is a rpi compute module compatible device, the base boards
+>> don't have any devices on them in a lot of cases and just provide
+>> physical connectors, so there's no point having a distinct dts for every
+>> baseboard of that type.
+>> https://www.waveshare.com/product/cm4-io-base-a.htm
+>>
+> I saw the picture and it looked like it should never be a DTS, because
+> it is not usable on its own. You cannot run it.
 
-Things which you cannot run, are not DTS. There is only one known to me
-exception for SoM being a DTS - Renesas SMARC something - because Geert
-explained to me that you can run that SoM without carrier board.
 
-And because this was a DTS commit, then adding broken-cd because of
-baseboard troubles is WRONG.
+... although what I found earlier was different. I typed the model name
+from DTS "Milk-V Mars CM Lite" and it gave me this:
 
-This is supposed to by DTSI included by carrier DTS or DTSO applied to
-every carrier board.
+https://milkv.io/mars-cm
+which misses the "Lite" suffix.
+
+What you pasted is called "Mini Base Board (A) Designed for Raspberry Pi
+Compute Module 4" and it also does not have "Lite" in the name and
+picture does not have the SoM.
+
+I am confused now and I do not know what the DTS "Milk-V Mars CM Lite"
+is. Answering to this is crucial, because it determines whether this
+particular deviec has broken-cd or not.
+
+Arguments that something else has broken-cd, thus you add such property
+to "Milk-V Mars CM Lite" are obviously wrong.
+
+
 
 
 Best regards,
