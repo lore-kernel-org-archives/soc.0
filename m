@@ -1,46 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC193469E6
-	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 11:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C705387357
+	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 11:48:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774611735; cv=none; b=FlQetu9CBY544XNR1iKuPOdbNn04KWCpNvbZO+F3QT4EcKqOlOnVHMii8GKKksIzHy/KDi+s4H2hPC6psRDPf9E74JVPyQY98PNdHglRnoYyW+Z5A4pvuhHWIbXdEiDkGiYiMrzhsJ/XkzPsz59qtVUC7YTZGE5q+AM3joOLzpI=
+	t=1774612132; cv=none; b=N7XkGepq0rfXQ86mVodmsT5w1qsARh1+cqRvyTx7tIVXAIeh6n2bV0sPZWbrSNU6ASiSYvxWzCU5g8WtwS8VuRtXOUXrjxzZk/rM5fD/+wOSJ7i43I1uFQdOs6pyKcC101h37jiT0oF+ea+nirDESKzDkiDqhuhK7szyTCuasho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774611735; c=relaxed/simple;
-	bh=QFl4kqD1CXMDcmig90mgvgQHa4TAFpGhjWa9ypPBZVw=;
+	s=arc-20240116; t=1774612132; c=relaxed/simple;
+	bh=xrRUKmyhPCiuaYTlCMRj3a13WH/c8JFo0ZT68nAbLLs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tIfK0NssvhLLjMz5UduM/u5mFi/6qYYN5hXoueGo/t4tf9suZcpqngR++t9jpumvOFJ8GNda+T7Wk5B8uRvrY75yQqqm+fwbHDj1GCaa3amfhKCJz9wyxaqvL7ITc1ZS0sIN1i5y4Gctsx3wiFbpmslW/jpyVNzgaCmyN/QSJ9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s1L6hU7T; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OoeK9zV9B/S+x3qNzxzhOxhVL44MD/SeSXnJZC+SiZVdec3aqdoI2pNnlHpJKXUN0sTURJXxQEYDZBqBsXVMeI53FL7Es39zHuuN5n3SOBdac1jxTqhc60bwEdGJOEqaTdELYRQ6zGzNXTt7irmdRqOdSJe5GhJHtZYa8lrCnB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UIfAGL5b; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s1L6hU7T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UIfAGL5b"
 Received: by smtp.kernel.org (Postfix)
-	id E0D9FC2BCB2; Fri, 27 Mar 2026 11:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AEB4C19423;
-	Fri, 27 Mar 2026 11:42:14 +0000 (UTC)
+	id C2616C2BCB2; Fri, 27 Mar 2026 11:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B04C19423;
+	Fri, 27 Mar 2026 11:48:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774611734;
-	bh=QFl4kqD1CXMDcmig90mgvgQHa4TAFpGhjWa9ypPBZVw=;
+	s=k20201202; t=1774612131;
+	bh=xrRUKmyhPCiuaYTlCMRj3a13WH/c8JFo0ZT68nAbLLs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s1L6hU7TSlEUEytoAbYnGtCrx/F00Ih8LsQL7hcSWLsnvSOsKYrt9CN9zt4QJ7OOb
-	 DUN/8Syqyff8FBYTSOPJ07peDbQGs5zWxRtS6yXFvf2E575BgGFdgD000mBe8gd1OG
-	 P4ob3xC3hjfE5tbWB0B4rrXgOiyx9ncNdu7f/Ez7RSkkQrmvtpEfnMKzlrW5nFvpPs
-	 Ixu2hW0LzmflkhSQhjarSDkRZgZhKBAKCx4d02PWgdugvxbrPRZPQkRabjVTMB2Lvu
-	 pl3N6T+KkhPdcKtBXp7fSX+X4zADpEd5XRRIBdnVUH6S3yIk/j7R0EOs8bbMlvE0un
-	 LyfjiuGqBZq0A==
-Date: Fri, 27 Mar 2026 12:42:12 +0100
+	b=UIfAGL5bsDFl/7OUfYvUXfQWmeN1NrUqSkTBeECB7gsq29WEN3+OQF+0c0GnYujOT
+	 uxhBvUTXPT28xIjm4jLFPp1hSqEzLgsWhKOhoCdqM9OinatkE1YJcCWk1ToOh/VdbD
+	 jt3FhUXqiCjFZ+PTdvo9Tbj/3cG1p+4/XFXHP9bnfT0rwW5SydyjIs8DQ3BOED3CzA
+	 fu/D5WyV+2k2vjkto/2Xj0S/8FTBvyuXXsJGfbEnxDOARKBDHjB5+LRshW05LiX2gO
+	 WT1Iv0ZWjpaAGcGZwzhS+ZaxuPuDOVu05Q+iXWYKKy0ZYBuU/AmVFAYrHykM6lLEXA
+	 TKy8KxLrAPpVA==
+Date: Fri, 27 Mar 2026 12:48:49 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Drew Fustini <fustini@kernel.org>
-Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Linus Walleij <linusw@kernel.org>, 
-	Icenowy Zheng <uwu@icenowy.me>, Icenowy Zheng <zhengxingda@iscas.ac.cn>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>, 
-	Fu Wei <wefu@redhat.com>, Conor Dooley <conor+dt@kernel.org>, 
-	Michal Wilczynski <m.wilczynski@samsung.com>, Yao Zi <ziyao@disroot.org>, Han Gao <rabenda.cn@gmail.com>, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] RISC-V T-HEAD Devicetrees for v7.1
-Message-ID: <20260327-tricky-translucent-copperhead-bf3ac7@quoll>
-References: <abcEKCNIA9wDgIcE@x1>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: arm-soc <arm@kernel.org>, soc <soc@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com
+Subject: Re: [GIT,PULL,1/2] MediaTek ARM64 Device Tree updates for v7.1
+Message-ID: <20260327-enthusiastic-narwhal-of-vigor-bb4ac5@quoll>
+References: <20260320085641.15843-1-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -49,22 +44,25 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <abcEKCNIA9wDgIcE@x1>
+In-Reply-To: <20260320085641.15843-1-angelogioacchino.delregno@collabora.com>
 
-On Sun, Mar 15, 2026 at 12:10:32PM -0700, Drew Fustini wrote:
+On Fri, Mar 20, 2026 at 09:56:38AM +0100, AngeloGioacchino Del Regno wrote:
 > The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 > 
 >   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/thead-dt-for-v7.1
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-dts64-for-v7.1
 > 
-> for you to fetch changes up to 9c99a784d9117a192ebf779d4f72ebec435ada97:
+> for you to fetch changes up to 820ed0c1a13c5fafb36232538d793f99a0986ef3:
 > 
->   riscv: dts: thead: lichee-pi-4a: enable HDMI (2026-03-14 09:19:26 -0700)
+>   arm64: dts: mediatek: mt7986a: Fix gpio-ranges pin count (2026-03-12 13:32:17 +0100)
+> 
+> ----------------------------------------------------------------
+> MediaTek ARM64 DeviceTree updates
 
-Thanks, applied (dropping the SoB from tag - no code is in the tag).
+Thanks, applied both.
 
 Best regards,
 Krzysztof
