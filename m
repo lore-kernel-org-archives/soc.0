@@ -1,35 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9101E3CFF49
-	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 08:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E118029BDB1;
+	Fri, 27 Mar 2026 08:06:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774598519; cv=none; b=JrC6xjFx+hOl/beoO1+PmdOCubLf9M3D7Ev9ikOBcVPcyv+58AFtortSqxV9cRSbQAENKGSI6P0/PbzJrbUwBNkKmZKP9RcwnCGS4wAH+BxCjxdIJNwgdV8JXr4z3vlMntWvl6O50sW7UzdWpTRdZyub7li7h8qg7SCNz/sTQtg=
+	t=1774598782; cv=none; b=q3SI+3pRdCSRTgeYzrQzSFt1luOeYvvLT8DV3cJV6PIUpbi13X2clRvHN9qcVkl5nTCYpDHBODOjN21p2ZerA3rC8R7NtmNVw7Kqe11cNnTtFa7jTwiciTGeueNYkSzcTG1QH+KABUAwEVfYJ360obO0O9VHChHTpEseL/GMhUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774598519; c=relaxed/simple;
-	bh=zL1tzQ8Jn+sA4lHQNs41A0FQn6vC45xOTefrpy+bc8o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SFObUU12lKnryymD6rxxn4Bgjbwhz+N2sz5bu0LdmqA2ut6QTaiT1CsS+Ymk9kbRyqh7dUuYiUsO+RVT5zqLu3y1i6oWn6Ypc3bHC0cXt1fQCpfSoSM8BL0kIrXtrxBRzEFofOiDS8bxfcytAHO2sN8xPMionJWVAnp1jWkBRys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=smsy1RdB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774598782; c=relaxed/simple;
+	bh=njKLNuR8F4kyTMpII2tsNrl/hXxecE2PvnaTzQJZtic=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Bc2hJOEASwaHZtAX1l45iNPY8tk0/ux70wHHYAQiZfNhSFCLih+K1WHCMBA6PcBrgkQnBiRNpth8jHVx6aHWh7862NUAqgUSKUoPxBZEdEoPbRVYEUyB2oonjbJmlLBChoByfk2sUdP1QWedFcubBPCv2PFL09FR0iVUYyeyC+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCqkCgid; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="smsy1RdB"
-Received: by smtp.kernel.org (Postfix)
-	id 1BDE2C2BC9E; Fri, 27 Mar 2026 08:01:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C60C19423;
-	Fri, 27 Mar 2026 08:01:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCqkCgid"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA64EC19423;
+	Fri, 27 Mar 2026 08:06:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774598519;
-	bh=zL1tzQ8Jn+sA4lHQNs41A0FQn6vC45xOTefrpy+bc8o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=smsy1RdBcwzuc1O2+WRN+wfApxWKuc5ww9DJIcjS9S7y8vVNifX2GQ5Qfj5o+UvSS
-	 9eDgy8V2hz6igFh0tbnSqKq33RftgNNdS8Y2UW83y80v7rtgbiohZz0Xe/IIXm9NOK
-	 cvLQlJyX8XRt7OCwMAZAWE2ffrtk4DN8O/HWAUBDrW/h6/r48rqGiWtqchnEIJEvin
-	 ybiuIZ50YQGuSoP/nd+4vHy1ede7MHmXI7MAYU9RD1KAWlwqPXaYx6A5HsdBjv9mfo
-	 d+BuWQW95mh/tbcs6xGfIDiRpwRc5KHj0nxOorYp+ACevS+m2yj8Hr0UAqCYbFnpeE
-	 UU/gYYXuNCcZA==
-Message-ID: <31bfba49-2cc8-439c-b08c-f75b853fe993@kernel.org>
-Date: Fri, 27 Mar 2026 09:01:54 +0100
+	s=k20201202; t=1774598781;
+	bh=njKLNuR8F4kyTMpII2tsNrl/hXxecE2PvnaTzQJZtic=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=WCqkCgid/OOnGXWRG/cvpWIxhajPVZ6HPwC4aSApD5qCrFgsG5HBrVarjxaXbJKpG
+	 nxxH1MqFKvsA5kE1kcf12H+1DfJ7lqjwJmlX3CmPnPmxxKyXjSOBWhqUF1mphw6YmN
+	 Ho/E9gEejG1eNl5TpHobhDhfhehT5ovp7tC+9zkS/eQKscz6MKFv6C+wHN75b42B+B
+	 88PmA+lzCqi+/7jpfVf9V84MiVwBjNbJEfnv8UlbCxchJ2GFF64C2mClpCfcRqndPe
+	 JTkgDtxGviYWAc3n1INlAH1Pu8pVU62PEjdUa4mN2UYz3/XZ1fai3Y36XKNvUrrCFr
+	 eC894nM/NXDZw==
+Message-ID: <85b9e8d1-c970-4032-a331-76323e368a92@kernel.org>
+Date: Fri, 27 Mar 2026 09:06:15 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -37,14 +35,19 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree fixes for v7.0
-To: Bjorn Andersson <andersson@kernel.org>, arm@kernel.org, soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Arnd Bergmann <arnd@arndb.de>, Sumit Garg <sumit.garg@oss.qualcomm.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>,
- Daniel J Blueman <daniel@quora.org>, Ravi Hothi <ravi.hothi@oss.qualcomm.com>
-References: <20260326133845.66761-1-andersson@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: st,thermal-spear1340: convert
+ to dtschema
 From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Gopi Krishna Menon <krishnagopi487@gmail.com>
+Cc: rafael@kernel.org, daniel.lezcano@kernel.org, rui.zhang@intel.com,
+ lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org,
+ vireshk@kernel.org, conor+dt@kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
+ daniel.baluta@nxp.com, simona.toaca@nxp.com, d-gole@ti.com, m-chawdhry@ti.com
+References: <20260323133814.14152-1-krishnagopi487@gmail.com>
+ <20260323133814.14152-2-krishnagopi487@gmail.com>
+ <20260324-belligerent-armadillo-of-camouflage-e52f7b@quoll>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -89,33 +92,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260326133845.66761-1-andersson@kernel.org>
+In-Reply-To: <20260324-belligerent-armadillo-of-camouflage-e52f7b@quoll>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/03/2026 14:38, Bjorn Andersson wrote:
+On 24/03/2026 10:30, Krzysztof Kozlowski wrote:
+> On Mon, Mar 23, 2026 at 07:08:08PM +0530, Gopi Krishna Menon wrote:
+>> +properties:
+>> +  compatible:
+>> +    const: st,thermal-spear1340
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  st,thermal-flags:
+>> +    description: flags used to enable thermal sensor
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - st,thermal-flags
+>> +
+>> +unevaluatedProperties: false
 > 
-> ----------------------------------------------------------------
-> Daniel J Blueman (1):
->       arm64: dts: qcom: hamoa/x1: fix idle exit latency
-> 
-> Loic Poulain (2):
->       arm64: dts: qcom: monaco: Fix UART10 pinconf
->       arm64: dts: qcom: monaco: Reserve full Gunyah metadata region
-> 
-> Ravi Hothi (1):
->       arm64: dts: qcom: qcm6490-idp: Fix WCD9370 reset GPIO polarity
-> 
-> Sumit Garg (3):
->       dt-bindings: display: msm: qcm2290-mdss: Fix iommus property
+> additionalProperties: true
 
-This introduces a known warning, which I already reported and pinged you
-TWICE on IRC, including yesterday. I did not indicate that my fix is for
-current cycle, because I did not know that troubling commit is part of
-the fixes branch.
+Thanks for pinging me on IRC about this - it should be:
 
-No, I am not taking a known warning without fix, especially that the fix
-is right there.
+additionalProperties: false
 
 Best regards,
 Krzysztof
