@@ -1,41 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFE734F26F
-	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 11:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4D133C186
+	for <soc@lists.linux.dev>; Fri, 27 Mar 2026 12:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774612626; cv=none; b=jfNeATQAHmyH0di6ZovyGEL98n50RqbMtd1aRBw3XJzP2kMFTM/y0ME6xXREygqg5R7C4QwaPBh7dVzxoEre5PJ4oSz5527cnlksTqucg8stlv9lcASQudQiEWTm7NexGvu+Sdazq8xJ4SqQ530dIPZ6GyodZugWwRxhnmzh5Gk=
+	t=1774612822; cv=none; b=bZoLB3cGOYLvqewBRs6vvB5GRQ3KZKp5kHEZkKiXkx3BPF/eD7PBYePG4yZASV1GhxvxgenNZzWqiRjgwxCSAz5PdbChH8puQmwPTrnmROvPUQPTIrKRNuswA0eyZp0jKhCyQGMkBPEmsX+eMjR6e/dgJMDCSKOwjnl0ReTltNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774612626; c=relaxed/simple;
-	bh=y1RW/9S9unAXA+oodhH5vVUMi8x3886TICOzSz9gIiU=;
+	s=arc-20240116; t=1774612822; c=relaxed/simple;
+	bh=Hgu8cRYk4SE3289kzFso0+E7966W6uLpPsOi8UON7d8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bm2vM0/lgY2Sumu2VZ2W855nrb69W+e+Rz1I+i+cTZRsMDqigpb4V99zqUjKovsGKWhC5CmgD2UccnxNrr0i+2v3g8ayCL4ApFwwha5GGz78ye5Eqi1KLEupWEZGJiR58Tsx6ISjqKNv3LXvNpL+BWf5aHTsknI1V70EQQoa3hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6E2y2gB; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=oovXUptr5Xtinthqv36G8gP9heBoGEjLMGJ7YIzW0DmeAPOaKORDvKryx5NMnlI2mb9Wo7qI6ZrwYwRpcYVdoq/ZztCkrCW3LJZTFtYsF3azbE3odPeMI1YPkgOtEapHP4rfWkgP00RluczF9aQ374q06SlgNl4P8twODXrfGNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rK1EzE/v; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6E2y2gB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rK1EzE/v"
 Received: by smtp.kernel.org (Postfix)
-	id 98D74C2BC9E; Fri, 27 Mar 2026 11:57:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A7DC19423;
-	Fri, 27 Mar 2026 11:57:04 +0000 (UTC)
+	id 26BC0C2BC9E; Fri, 27 Mar 2026 12:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF40CC19423;
+	Fri, 27 Mar 2026 12:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774612625;
-	bh=y1RW/9S9unAXA+oodhH5vVUMi8x3886TICOzSz9gIiU=;
+	s=k20201202; t=1774612822;
+	bh=Hgu8cRYk4SE3289kzFso0+E7966W6uLpPsOi8UON7d8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D6E2y2gBO/BU0CDdIMOXmOhlBjIXaP9lyFu3dxakbPk4wxVR+igCBAP64Gl0g9Flz
-	 gbpzWq8ZNTfWLZBo/cadPLVW+4ZxietRThPixyENWsd9tu4FSR1N+Bj1jAz0+pcOhC
-	 DYTmS4Cgj10BLQWELxHbPnsk6oEMt+kFTXdVXRtV3l0KoEvvnxUhbAQaiOpMlPFiOW
-	 0h7qwfwEhVAlhiPE8/wrMys8gTgUjqeRfbVtaV+qAPtKc8YF8kcBsK1lDM9dGkndD5
-	 EcuhOfZ3fbhHMN4bSKYEc/jrJGVNt8oHt+yQIvu1+KCX0Y4mf9qANLI50KRkStITFn
-	 0NEyO23vkv2Ew==
-Date: Fri, 27 Mar 2026 12:57:03 +0100
+	b=rK1EzE/vxBy/JHy81zZVnf3hh5uMjBNOTIncXF9ngGwsUjxbirTRYTh3xBzsjxE/L
+	 ZUedbn041wbp0MLFxEPR0Inaw9+NQroS0t8soQZH7cU0BP6/rirX9aJUxscOV0RlNF
+	 ArjqsX02yx2AMa/zv6i64xzcdnAKUIy67PMyyDdxVbx1+7sq+1j1GSf26hVnpTPp4e
+	 wJ5mY8Eg3OUdDhjPZIFMl53Y3tQtdzgKg+FzwOk8dBILjp7766QdP72TFtoizloHkG
+	 XrnMc0igtf4YFkZrU86BVh6Hn5crpOKnaskJVLdXthrWCzIVxi27sLMuxuOmT1CPST
+	 pfdhWs6KmXMaA==
+Date: Fri, 27 Mar 2026 13:00:19 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL v2] Rockchip dts fixes for 7.0 #1
-Message-ID: <20260327-lumpy-mule-of-health-7efec3@quoll>
-References: <5057236.GXAFRqVoOG@phil>
+To: Sudeep Holla <sudeep.holla@kernel.org>
+Cc: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>, 
+	ALKML <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@kernel.org>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>
+Subject: Re: [GIT PULL] arm64: dts: juno/fvp: Updates for v7.1
+Message-ID: <20260327-screeching-oxpecker-of-popularity-deac89@quoll>
+References: <20260325160027.4115793-1-sudeep.holla@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -44,27 +45,17 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5057236.GXAFRqVoOG@phil>
+In-Reply-To: <20260325160027.4115793-1-sudeep.holla@kernel.org>
 
-On Mon, Mar 23, 2026 at 10:58:16PM +0100, Heiko Stuebner wrote:
-> Hi SoC maintainers,
+On Wed, Mar 25, 2026 at 04:00:21PM +0000, Sudeep Holla wrote:
+> Hi ARM SoC Team,
 > 
-> As requested by Krzysztof, here is a more condensed PR.
+> Please pull !
 > 
-> Changes in v2 are that I dropped fixes for dt-schema errors and fixes
-> for commits introduced not closesly to the current release. These have
-> been moved to the current branches.
+> Regards,
+> Sudeep
 > 
-> The Pinebook regression fix actually also is for a commit from august
-> last year, but fixes an actively tracked regression, so maybe carries
-> a bit more weight.
-> 
-> 
-> Please pull
-> 
-> Thanks
-> Heiko
-> 
+> -->8
 > 
 > The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 > 
@@ -72,11 +63,25 @@ On Mon, Mar 23, 2026 at 10:58:16PM +0100, Heiko Stuebner wrote:
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.0-rockchip-dtsfixes1-v2
+>   git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/juno-updates-7.1
 > 
-> for you to fetch changes up to 29d1f56c4f3001b7f547123e0a307c009ac717f8:
+> for you to fetch changes up to 87599f1843d3baa4083dc9dd01c95826b536de24:
 > 
->   Revert "arm64: dts: rockchip: Further describe the WiFi for the Pinebook Pro" (2026-02-22 23:28:06 +0100)
+>   arm64: dts: arm/corstone1000: Add corstone-1000-a320 (2026-03-23 10:03:28 +0000)
+> 
+> ----------------------------------------------------------------
+> Armv8 Juno/FVP/Vexpress updates for v7.1
+> 
+> 1. The primary addition is initial support for Zena CSS that includes:
+>    a new binding compatibility, a shared `zena-css.dtsi` description, and
+>    an FVP device tree.
+> 
+> 2. Extension of Corstone-1000 FVP platform support with binding updates
+>    to add the new `arm,corstone1000-a320-fvp` platform, and the
+>    `arm,corstone1000-ethos-u85` NPU integration.
+> 
+> Overall, this combines new platform enablement with some DTS layout
+> cleanup for Arm reference FVP based systems.
 
 Thanks, applied
 
