@@ -1,118 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7B11FF1C7;
-	Sun, 29 Mar 2026 09:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BEE3603CF
+	for <soc@lists.linux.dev>; Sun, 29 Mar 2026 12:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774776853; cv=none; b=dsGzoQ2XhBshE7n9YC1obcVhkrc+dWkoc1rJ7I+pGA558KRKmVAwjklWhzYjLU4TUAZj+w5c6cvviANS62e41t4FDrZ1VH2ir62YJgPtcCQ1dAn1uSIc6zmAo5c+3knpyBqfzSMUhmJ7E3mJJGYE67oqn0SORP6Syv1el8ACFFg=
+	t=1774787704; cv=none; b=QOZUw38nnbSOcjppQm+mJLgBe0vZIxYXzMlNEnjUGAhTIo5Fw04WueJSju7Bs11JJ0KakDUrrKC4/G7pLaBdz5O79GZo/+iLdZWp0/4Zxo/gNvGb8dXTvE46awBeeRphajX2hBCw+xTBkugs1M3aNvrIi77SXKaXOU2EprAJ8lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774776853; c=relaxed/simple;
-	bh=LS/QS7iV0n5jm5cv+YwNJ0MZWhINJTrzTF0fp02kI70=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=BvoPPuAyN57TUN89jiR8EgJ1YkOFEuL4IWjHeMyGrVbt3hD3KSCLt4q9Vd5Qxq8363XZ8xBgoFdkGYwl48owrVSCYEmY1IhH6CsHwO4y+KEgt9n5ksgEVgEp6LO602x9yxqouF5gtjADZ+GWxhVZo12ko6kArMtxs140uMYhbDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oVVI+Esl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774787704; c=relaxed/simple;
+	bh=oitH4XdOfl+jmDNpdoZa/ejnZrlCgKiTDVXgtFcA4oA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hYu/p3LohLlpUs9ArAtib8J/ki+MEYr+GdGkpdehKMIyetluPM2yeG9TW5EIWn9mVu4ESDLsG3mbO2rr/Ac4e7O2MzZ9GXWgqprJx7hqx7Y6izukkt0mtg4wxi72AGP8SEPTBK0UK2PKobqcbTgMWNg+BxAAkcXRZEwN7DxzIDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ARyI54hn; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oVVI+Esl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67384C116C6;
-	Sun, 29 Mar 2026 09:34:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774776853;
-	bh=LS/QS7iV0n5jm5cv+YwNJ0MZWhINJTrzTF0fp02kI70=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=oVVI+EslkEIG5fSNKKAQ9G+G98f7FnmtWgFwRVslpJyY3WoqgxbDJ0A2p+j8o4IOz
-	 JvATu000ZIY3qN0aHG5PQpB/XJV8bZAEQ4dvZHxOiiAQuXSejVgHctq1lH1oOEMGbD
-	 jdx3OIrqKUOoaeDsC11DtQxsLvsz6cv94/0PLxgU9ipr69g6P6qD7CYxfIkTYirhEa
-	 F3q3dMpf1E+SWOt8JZN1nFmXsJCApIE997iroleo4qv9ISl6vruLgP22FwPIBBYnnZ
-	 zxU0mgW3pHptd9u1pR81oKUsapJaug1LnV4qijFPiWtI4cBOQzpkzur4npy/25uAgf
-	 jIHgTpLs0k/Aw==
-Message-ID: <9c162b3f-59d3-4fcd-893c-5efd625732d7@kernel.org>
-Date: Sun, 29 Mar 2026 11:34:07 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ARyI54hn"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a8fba3f769so14265075ad.2
+        for <soc@lists.linux.dev>; Sun, 29 Mar 2026 05:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774787703; x=1775392503; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=09DmEJZvX6q03iOvlAg7HJKVIb4nx37LesonFOCNgHw=;
+        b=ARyI54hnewgvv5gyPg3eKFj2ALpty5F/6XgPZAqsceJsXURpPNHOzJp1Th28Sp+C/w
+         SOiWNx53maJzXspSZ1hv9g4lGZ9weU4RX3ijCCs9SWY5bR1MuyEeZf59/XVCTP2H1zEP
+         KvucKWcMhmFS3QUUwlPANzdxZOdrCeaYFuwm5OeKlkhfw01XDhdVEulDrPzUYOIN/OPs
+         c5wOI+zOyj36L8Ko/nlDSpcCMWUGU25SpR2ziAbn9GvYWVGYaEK2OTgETmJfA4cqN5u9
+         7wM0yxHEcMr0AFc5dDOW8EIh4ChX/CdWbQwmho3xyW8SrsIdd0VXIiQQvEl+JebPyNUa
+         /Buw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774787703; x=1775392503;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=09DmEJZvX6q03iOvlAg7HJKVIb4nx37LesonFOCNgHw=;
+        b=PFn+76o6hKcCFzzhoKhEmSZIgoyUVJl9MXKgR2xZCd2zw0UPOfR7enB7yq8kpoBySe
+         17XdWPsa99l0YBYITMrfZmkMFNWaGrH5OIRJSPFiVRS9aL22DmbBRoY4lmGp3gbsaPZ2
+         xGI8pwsEaseTL8SKwMGzP5WO+lD9KPPmGpe3RCOagajPM8IQPnL2SZfX6+a3mPuYCNsj
+         Ggkj96c3JVy0zsZSZFDGT15y1HYvgFuW/RK6OLjtkp3NgCogYYj6oFfitByRyWjcehXh
+         1nc1RkYbftlOBBBw3lSTXvez9zzueH53U1v/9YeocxFurogzw7gq/NRR2zDCdRQVz+NB
+         KV/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVTH8W0WIiLiHJPHVUft7LmsQ8Exy+r5czLUqzQvWb7HIcqKBdzY+tWDAxm5m0TlHZ/o9Y=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwDlb1VLYHCsjEP+j/uSM3taklXpvNFUoqPUpWJ9nvyqS6eyfJN
+	NthMsHZDQi5ukjJ9dPgN5FoUeiQOjly8JtmOHDvMoMBL+LjHwy5N/bGf
+X-Gm-Gg: ATEYQzwYHEk883B1heK8UFINULRBrc+nABX1QJTV9lfkwZFsIyJsj1UYhIpTmRG2zQ/
+	SinOr4ZwnzZ5yLXBnE7msWHI3GsqtGdpdpKWuFZR09enew0K/4JVatVozPuEbQovqA1Ek3zvNBs
+	/JhD7V99Kj7We40PrhzolHb0MpBSZek22aCtbEzjJtNxrP6ZqoibdXBLWKMPPbIDleKaKUROkIi
+	fUEbke+/egmx3O3I0gj+WOARXimw3q5VCaoPKln8gQRiVcQ61MriyGynOZFH5MeNekMgsAqNLQk
+	rqZAZbORA0BIyRvRfh0RYIC8HXg0jOaxgRHHSwqq29mt+sfaugBb7j4B+WVvB8FdOE8DpwOJnjU
+	pmG4Us/Ea6nX4sQehjbRQLbh8TEVatkenuGla/IJOWtoEX+siE9tQvXbaUDisqh3rprmjcDX6Tz
+	L1ht2ZFxMMvzXqoX8m2jqDFE3zDKPa2ulas0hZ9F1419m1Os+LwTOA17DSjamG8Z6LBjmumfR99
+	3A=
+X-Received: by 2002:a17:902:e54f:b0:2b0:6df2:8cd2 with SMTP id d9443c01a7336-2b0cdc239a3mr94457085ad.19.1774787702960;
+        Sun, 29 Mar 2026 05:35:02 -0700 (PDT)
+Received: from toolbx.gk.pfsense.com ([103.70.166.143])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427afbe0sm58709665ad.72.2026.03.29.05.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2026 05:35:02 -0700 (PDT)
+From: Gopi Krishna Menon <krishnagopi487@gmail.com>
+To: rafael@kernel.org,
+	daniel.lezcano@kernel.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	vireshk@kernel.org,
+	conor+dt@kernel.org
+Cc: Gopi Krishna Menon <krishnagopi487@gmail.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	soc@lists.linux.dev,
+	daniel.baluta@nxp.com,
+	simona.toaca@nxp.com,
+	d-gole@ti.com,
+	m-chawdhry@ti.com
+Subject: [PATCH v3 0/2] dt-bindings: thermal: st,thermal-spear1340: convert to dtschema
+Date: Sun, 29 Mar 2026 18:04:42 +0530
+Message-ID: <20260329123449.309814-1-krishnagopi487@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] ARM: dts: st: spear: rename thermal_flags to
- st,thermal-flags
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Gopi Krishna Menon <krishnagopi487@gmail.com>
-Cc: rafael@kernel.org, daniel.lezcano@kernel.org, rui.zhang@intel.com,
- lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org,
- vireshk@kernel.org, conor+dt@kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
- daniel.baluta@nxp.com, simona.toaca@nxp.com, d-gole@ti.com, m-chawdhry@ti.com
-References: <20260329061523.98346-1-krishnagopi487@gmail.com>
- <20260329061523.98346-3-krishnagopi487@gmail.com>
- <20260329-starfish-of-eternal-storm-f16de5@quoll>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260329-starfish-of-eternal-storm-f16de5@quoll>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 29/03/2026 11:31, Krzysztof Kozlowski wrote:
-> On Sun, Mar 29, 2026 at 11:45:20AM +0530, Gopi Krishna Menon wrote:
->> st,thermal-flags is a required property in SPEAr Thermal Sensor node,
->> which is incorrectly written as thermal_flags in spear13xx.dtsi.
->>
->> Rename thermal_flags to st,thermal-flags to fix the property name
-> 
-> Does this have an impact? If yes, then why no fixes? If no, then why
-> not? How this could ever worked? Maybe this is completely unnecessary.
-> 
-> We already talked about this and I don't get why this change is neeeded
-> and why we discuss the same problem.
+This patch series converts SPEAr Thermal Sensor bindings to DT schema
+and removes the thermal_flags property from spear13xx.dtsi.
 
-and by "this change" I meant, "rename" part, instead of "removal".
+Changes since v2:
+- Reword the commit message and subject to correct explanation in patch 2
+- No changes in patch 1
+Changes since v1:
+- Changed unevaluatedProperties to additionalProperties in the binding
+- Reword the commit message and subject in the second patch
 
-Your task is analyze entire code, understand what was wrong and provide
-proper solution.
+Note:
+* This patch is part of the GSoC2026 application process for device tree bindings conversions
+* https://github.com/LinuxFoundationGSoC/ProjectIdeas/wiki/GSoC-2026-Device-Tree-Bindings
 
-Best regards,
-Krzysztof
+Gopi Krishna Menon (2):
+  dt-bindings: thermal: st,thermal-spear1340: convert to dtschema
+  ARM: dts: st: spear: remove undocumented thermal_flags property
+
+ .../bindings/thermal/spear-thermal.txt        | 14 --------
+ .../thermal/st,thermal-spear1340.yaml         | 36 +++++++++++++++++++
+ arch/arm/boot/dts/st/spear13xx.dtsi           |  1 -
+ 3 files changed, 36 insertions(+), 15 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/spear-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/st,thermal-spear1340.yaml
+
+-- 
+2.52.0
+
