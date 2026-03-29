@@ -1,32 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D496833D6D3;
-	Sat, 28 Mar 2026 12:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2053A2BD5A7
+	for <soc@lists.linux.dev>; Sun, 29 Mar 2026 06:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774699876; cv=none; b=itzJsB+PB04mLo7f7ZI2eW2pEfYW1j4nBRBnCqaNxRPWmDyYOmfwn9FDdlQFJZ8ITB+pSyC1DYZdG6kq7Rrp0FvjQzw7i1RSISuxdFObT1sTnmSx3jmkS/ahrpiAIs2d1p0TJhvDHHtwHCQx4EHIPwJWqlFYDR7bdXt3kJPTADU=
+	t=1774764939; cv=none; b=iqASW3TkkoWsHCuk0JK0UKTr822dbgCPz+rXe76g/AKYE/rpoaH+I3+k09h9gZgYCq+VskSvFVPuV5FPkVBmqao1/aq9la9G2zWyaNq6MXJHcsIGT5P/SZaIo4O3V0AQlvCMNHXQFF1JwqoHRCksaXCdm8elDjHSU4qauzaxcgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774699876; c=relaxed/simple;
-	bh=fvBsFhuRYde5J/SUt+kmTmoaFwac7li+2oalBOGCssA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K3Ur7OjOMvxAsHaZVIfltEkA7A9J+cOMajoYZfuoXBH7qgSPHtoHMuqfVkqFANEtuJHQhdxrq7ICNr+B25VwmjdkRUJr6NWG5cfD/hqciYejM/+iVOVLnmgGdqUOtcyC4oEIetuU3J0o6ekKZC3Euzf9agkgx1TOoa3qy8YYGlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73435C19424;
-	Sat, 28 Mar 2026 12:11:15 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
+	s=arc-20240116; t=1774764939; c=relaxed/simple;
+	bh=tLCX5T/5BD+D5hhrc5IQpY464+LnQSj92xbe4tJBm+Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AjaHeZ7yENIUTbXg5wNzESZwbzmlsOJIq2EGLeVJlRWIj+7QWIUyyDkAfdQ4H7L2CwlxnWlDaw/15BVoW7gg5XgTBC5vfWJnh4pJ389ZsDDOLx1qUFXNmMOuFqHuewVS9FBkeMHCdDbgKDdO1lz5vjURBruuhNgF+/wsZdI8Eo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bq13yBaJ; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bq13yBaJ"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-824c9da9928so2341689b3a.3
+        for <soc@lists.linux.dev>; Sat, 28 Mar 2026 23:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774764937; x=1775369737; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rpxvjrCfKfWKOT/ha83hU/ESLCv8PWJ47jL6ccG2o9A=;
+        b=bq13yBaJsYOb3yJ5Guf5/ut2hbuJVnVtaK/gAOuPkzsIRf8ILjjUGaEbE+ylcq+zXU
+         aZYCr82VyJ35JAl30LVtMheP800h60x4NwqfhnlBHdmUbzHxPVnD7VikZ88R/AFiHc3O
+         JDniIiTrFyZcR/9Ffo2fzEkbvQxndYRkZKJrcCXvCF0Q8odxihsPul3eNMfCBmRWlBb+
+         evTsOTYq7LdElc3WIUA1MF2FUKw9RjLL5RDqC/sSEy394pvS2WnNhQ0e2YMpe9UMdJsU
+         hnr4WAXtfiiiwEOLTCviRj6TJ5GVw5Yi9nQU624AbaAO3W//uEtwYGDq9uBHp4GGkzUh
+         RyXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774764937; x=1775369737;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rpxvjrCfKfWKOT/ha83hU/ESLCv8PWJ47jL6ccG2o9A=;
+        b=Zw94tBtSrhXFTeGstNdPWT9OkVVG9tztOuZLTmgFPonQ66Y8IGS06nriIsZBLzDUgQ
+         8ejWecJj/IVp/WJK1HOSFXkXAceA2DlrGrjsyExyACEGo5qqOpcZH1VBjjMu1JUrxpPo
+         Aza/rC3SyeB6i1VvS11MW1vraS+KUls2B118eQIxbRosgNDjf5x4veo7bSVvX7YHkIWW
+         RI1DUBzJbyo6VoxqbJd6mtjbY4S3Vy07fLVZQOz7+aIYTXGgeBl6NivvOS5pcS9iX9RJ
+         ajA9NxCXhh156bgLN/DiZUNNfTWuyB+C3GCLwiSPcGvf2NLuDaQPvkBVjrTeHI8UDnO+
+         8tug==
+X-Forwarded-Encrypted: i=1; AJvYcCWOEPbqL4RMNGgAr9KKh8JFwrbHUUOx4X8yx/u3bVqcM1cfKTFNK5m/4bG2Hj1zl6uqetE=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxHE5oZfZGCai8gr3AxYlOe8XrEvdkZlpfXNyrLEENkmzlUwCZC
+	3dBrJe2OZpYxHYXLHfvQmyrOD6bVQpmfO+9hjpSBmpOqUhtOqrzzQLKY
+X-Gm-Gg: ATEYQzzVuywZvPVsPXX/DWWmM46cQ3kV+ohAJ3vtYWw/H8fW50Gsr9qTswm2IHyeBe5
+	nAmVIe+i6QIxtJBXcpFH5jtMMTWoJr5nYGZq/h2UmjNJY0ywuXGXUKNTDI/Q+L2kp/xDrvnV0qL
+	4v7sz8Oc3ZW9XRx54WW/xakURHi/Lm+60semN48EGAL86t03PEFUfPsCiBDffuVfcBZneGgkrqB
+	ISAK5lH4UyXlOUvhoH+IPgbJmfd3nrhanXtbvZEeVOz2vpDJcJZVARDhB7IDO/SPbDOMGxmI/Lq
+	6ehPtAuUbJyALfxqphfaMBkIE3aQxw6v1rQUPv38mSGV/ffH5VoBLFWTtgpBlsN9AD5PKZzpzn8
+	GEH8u/tBd83fA+9BfID8vT7y7XLWcbNaWXph+tMUp6fUnOUcY9CpIA+h4W/gU4INrednA+vIKp8
+	Wzd9jgBVwWW2KZOIvwpOmeaCzs5BN9VN6iNs/xSUT4TB0igd+UEH4SeXJYXgm0XMUQpxSqVTzpW
+	p6smXGcYbrGRA==
+X-Received: by 2002:a05:6a00:3e16:b0:823:b1f:892e with SMTP id d2e1a72fcca58-82c9607f5b1mr7817427b3a.43.1774764937194;
+        Sat, 28 Mar 2026 23:15:37 -0700 (PDT)
+Received: from toolbx.gk.pfsense.com ([103.70.166.143])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca8436f19sm3709731b3a.9.2026.03.28.23.15.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Mar 2026 23:15:36 -0700 (PDT)
+From: Gopi Krishna Menon <krishnagopi487@gmail.com>
+To: rafael@kernel.org,
+	daniel.lezcano@kernel.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	vireshk@kernel.org,
+	conor+dt@kernel.org
+Cc: Gopi Krishna Menon <krishnagopi487@gmail.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/3] Renesas DTS updates for v7.1 (take two)
-Date: Sat, 28 Mar 2026 13:11:06 +0100
-Message-ID: <cover.1774606542.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1774606536.git.geert+renesas@glider.be>
-References: <cover.1774606536.git.geert+renesas@glider.be>
+	soc@lists.linux.dev,
+	daniel.baluta@nxp.com,
+	simona.toaca@nxp.com,
+	d-gole@ti.com,
+	m-chawdhry@ti.com
+Subject: [PATCH v2 0/2] dt-bindings: thermal: st,thermal-spear1340: convert to dtschema
+Date: Sun, 29 Mar 2026 11:45:18 +0530
+Message-ID: <20260329061523.98346-1-krishnagopi487@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,142 +88,30 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 0928a28daf017504e14920f4131bb99e3bc39dba:
+This patch series converts SPEAr Thermal Sensor bindings to DT schema
+and corrects the thermal_flags property in spear13xx.dtsi to
+st,thermal-flags.
 
-  ARM: dts: renesas: armadillo800eva: Add wakeup-source to st1232 (2026-03-13 11:00:48 +0100)
+Changes since v1:
+- Changed unevaluatedProperties to additionalProperties in the binding
+- Reword the commit message and subject in the second patch
 
-are available in the Git repository at:
+Note:
+* This patch is part of the GSoC2026 application process for device tree bindings conversions
+* https://github.com/LinuxFoundationGSoC/ProjectIdeas/wiki/GSoC-2026-Device-Tree-Bindings
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v7.1-tag2
 
-for you to fetch changes up to be3810a2ebc0c81303a15392097bac9ee0cd6297:
+Gopi Krishna Menon (2):
+  dt-bindings: thermal: st,thermal-spear1340: convert to dtschema
+  ARM: dts: st: spear: rename thermal_flags to st,thermal-flags
 
-  ARM: dts: renesas: Drop KSZ8041 PHY C22 compatible strings (2026-03-26 20:00:35 +0100)
+ .../bindings/thermal/spear-thermal.txt        | 14 --------
+ .../thermal/st,thermal-spear1340.yaml         | 36 +++++++++++++++++++
+ arch/arm/boot/dts/st/spear13xx.dtsi           |  2 +-
+ 3 files changed, 37 insertions(+), 15 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/spear-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/st,thermal-spear1340.yaml
 
-----------------------------------------------------------------
-Renesas DTS updates for v7.1 (take two)
+-- 
+2.52.0
 
-  - Add DT overlay support for the MayQueen PixPaper display on the
-    Yuridenki-Shokai Kakip board,
-  - Add Ethernet PHY interrupt support for the RZ/T2H and RZ/N2H EVK
-    boards,
-  - Add SPI and PCIe support for the RZ/G3E SoC and the RZ/G3E SMARC EVK
-    board,
-  - Add DT overlay support for the WaveShare 13.3" 1920x1080 DSI
-    Capacitive Touch Display and the Olimex MIPI-HDMI adapter on the
-    Retronix Sparrow Hawk board,
-  - Drop several superfluous C22 Ethernet PHY compatible strings,
-  - Remove WDT nodes meant for other CPU cores on the RZ/V2N SoC,
-  - Remove unavailable LVDS panel support for the Beacon ReneSoM base
-    board,
-  - Add initial support for the RZ/G3L (R9A08G046) SoC, and the RZ/G3L
-    SMARC SoM and EVK boards,
-  - Add Versa3 clock generator support for the RZ/V2H EVK development
-    board,
-  - Miscellaneous fixes and improvements.
-
-----------------------------------------------------------------
-Adam Ford (1):
-      arm64: dts: renesas: beacon-renesom: Remove LVDS Panel
-
-Biju Das (5):
-      dt-bindings: clock: renesas,rzg2l-cpg: Document RZ/G3L SoC
-      arm64: dts: renesas: Add initial DTSI for RZ/G3L SoC
-      arm64: dts: renesas: Add initial support for RZ/G3L SMARC SoM
-      arm64: dts: renesas: renesas-smarc2: Move usb3 nodes to board DTS
-      arm64: dts: renesas: Add initial device tree for RZ/G3L SMARC EVK board
-
-Fabrizio Castro (1):
-      arm64: dts: renesas: r9a09g056: Remove wdt{0,2,3} nodes
-
-Geert Uytterhoeven (2):
-      arm64: dts: renesas: rzt2h-rzn2h-evk: Fix GMAC pins sort order
-      Merge tag 'renesas-r9a08g046-dt-binding-defs-tag1' into renesas-dts-for-v7.1
-
-Herve Codina (Schneider Electric) (1):
-      ARM: dts: r9a06g032: Add #address-cells to the GIC node
-
-John Madieu (3):
-      arm64: dts: renesas: r9a09g047: Add PCIe node
-      arm64: dts: renesas: r9a09g047e57-smarc-som: Add PCIe reference clock
-      arm64: dts: renesas: r9a09g047e57-smarc: Enable PCIe
-
-Lad Prabhakar (4):
-      arm64: dts: renesas: r9a09g077m44-rzt2h-evk: Clarify SD0 power jumpers
-      arm64: dts: renesas: r9a09g087m44-rzn2h-evk: Clarify SD0 power jumper setup
-      arm64: dts: renesas: r9a09g087m44-rzn2h-evk: Add PHY interrupt support
-      arm64: dts: renesas: r9a09g077m44-rzt2h-evk: Add PHY interrupt support
-
-Marek Vasut (8):
-      arm64: dts: renesas: sparrow-hawk: Add overlay for WaveShare Display 13.3"
-      arm64: dts: renesas: Drop RTL8211E PHY C22 compatible strings
-      arm64: dts: renesas: Drop RTL8211F PHY C22 compatible strings
-      arm64: dts: renesas: Drop KSZ9131 PHY C22 compatible strings
-      arm64: dts: renesas: Fix KSZ9131 PHY bogus txdv-skew-psec properties
-      ARM: dts: renesas: r8a7742-iwg21d-q7-dbcm-ca: Drop KSZ8081 PHY C22 compatible string
-      ARM: dts: renesas: rza2mevb: Drop RTL8201F PHY C22 compatible string
-      ARM: dts: renesas: Drop KSZ8041 PHY C22 compatible strings
-
-Ovidiu Panait (1):
-      arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Add versa3 clock generator node
-
-Scott Murray (1):
-      arm64: dts: renesas: sparrow-hawk: Add overlay for Olimex MIPI-HDMI adapter
-
-Tommaso Merciai (2):
-      arm64: dts: renesas: r9a09g047: Add RSPI nodes
-      arm64: dts: renesas: r9a09g047e57-smarc: Enable RSPI0
-
-Wig Cheng (1):
-      arm64: dts: renesas: r9a09g057h48-kakip: Add pixpaper display overlay
-
- .../bindings/clock/renesas,rzg2l-cpg.yaml          |  40 ++-
- arch/arm/boot/dts/renesas/r7s9210-rza2mevb.dts     |   3 +-
- .../boot/dts/renesas/r8a7742-iwg21d-q7-dbcm-ca.dts |   3 +-
- arch/arm/boot/dts/renesas/r8a7743-sk-rzg1m.dts     |   3 +-
- arch/arm/boot/dts/renesas/r8a7745-sk-rzg1e.dts     |   3 +-
- arch/arm/boot/dts/renesas/r8a7790-lager.dts        |   3 +-
- arch/arm/boot/dts/renesas/r8a7790-stout.dts        |   3 +-
- arch/arm/boot/dts/renesas/r8a7791-koelsch.dts      |   3 +-
- arch/arm/boot/dts/renesas/r8a7791-porter.dts       |   3 +-
- arch/arm/boot/dts/renesas/r8a7793-gose.dts         |   3 +-
- arch/arm/boot/dts/renesas/r8a7794-alt.dts          |   3 +-
- arch/arm/boot/dts/renesas/r8a7794-silk.dts         |   3 +-
- arch/arm/boot/dts/renesas/r9a06g032.dtsi           |   1 +
- arch/arm64/boot/dts/renesas/Makefile               |  11 +
- .../boot/dts/renesas/beacon-renesom-baseboard.dtsi |  74 -----
- .../arm64/boot/dts/renesas/beacon-renesom-som.dtsi |   3 +-
- arch/arm64/boot/dts/renesas/cat875.dtsi            |   3 +-
- arch/arm64/boot/dts/renesas/hihope-rzg2-ex.dtsi    |   3 +-
- .../r8a779g3-sparrow-hawk-olimex-dsi-hdmi.dtso     |  92 ++++++
- .../r8a779g3-sparrow-hawk-ws-display-13in.dtso     |  88 ++++++
- arch/arm64/boot/dts/renesas/r9a08g046.dtsi         | 212 +++++++++++++
- arch/arm64/boot/dts/renesas/r9a08g046l48-smarc.dts |  37 +++
- arch/arm64/boot/dts/renesas/r9a08g046l48.dtsi      |  13 +
- arch/arm64/boot/dts/renesas/r9a09g011-v2mevk2.dts  |   3 +-
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi         | 153 +++++++++
- arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts |  38 +++
- arch/arm64/boot/dts/renesas/r9a09g056.dtsi         |  30 --
- .../boot/dts/renesas/r9a09g056n48-rzv2n-evk.dts    |   8 +-
- .../boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts    |  33 +-
- .../dts/renesas/r9a09g057h48-kakip-pixpaper.dtso   |  39 +++
- arch/arm64/boot/dts/renesas/r9a09g077.dtsi         |  18 ++
- .../boot/dts/renesas/r9a09g077m44-rzt2h-evk.dts    |  71 +++--
- arch/arm64/boot/dts/renesas/r9a09g087.dtsi         |  18 ++
- .../boot/dts/renesas/r9a09g087m44-rzn2h-evk.dts    |  71 +++--
- arch/arm64/boot/dts/renesas/renesas-smarc2.dtsi    |  12 +-
- arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi   |   6 +-
- arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi  |   3 +-
- arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi  |   6 +-
- arch/arm64/boot/dts/renesas/rzg3e-smarc-som.dtsi   |  21 +-
- arch/arm64/boot/dts/renesas/rzg3l-smarc-som.dtsi   |  20 ++
- include/dt-bindings/clock/renesas,r9a08g046-cpg.h  | 342 +++++++++++++++++++++
- 41 files changed, 1267 insertions(+), 235 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779g3-sparrow-hawk-olimex-dsi-hdmi.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779g3-sparrow-hawk-ws-display-13in.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/r9a08g046.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a08g046l48-smarc.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a08g046l48.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g057h48-kakip-pixpaper.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzg3l-smarc-som.dtsi
- create mode 100644 include/dt-bindings/clock/renesas,r9a08g046-cpg.h
