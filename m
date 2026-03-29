@@ -1,88 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E5D379999
-	for <soc@lists.linux.dev>; Sun, 29 Mar 2026 15:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FDB40DFDF
+	for <soc@lists.linux.dev>; Sun, 29 Mar 2026 18:44:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774797069; cv=none; b=PLHkSDwctwirIxATESXmPPF6YxuJUaMwRrUI42h1T2wngV4v59grYMgbK/nAggmOd6XneforCo2WqdPYL5AMDRCale3qp+B4AMOivIPByowrTVNAlROv4a/JxwCw6+aIJ8ri5jBHzYnEXtUlglXp+vzP9vAklto205S0y6QsFzE=
+	t=1774809853; cv=none; b=P5CzrQ4DzHIicP9Uqy9YjVm1PwDRhLdPc33YevMuy/X/1ghtDSth1XQhoUx2DiTHASWRckRicfXSO20AEDRO87pSkbS3A7Ggk8kdEVKBNlO+ZFNB2Tcr/5x7fyMI/D2XaHiUU3uVuPHo9lFS7yaXSxTYn7L/GdbgmScsT9jeVz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774797069; c=relaxed/simple;
-	bh=48O06jw41mdFWfzz7EZIRuUwiyu34of3gLO+Z+5DX9U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GKbxongu//wXbo22dYsqIdX3MqQVPkss+yrpu9Wu9owm8NhHCUOVSEGHo1y8spdGTVGlG8xLuTqU3+q6K4qDsPjHEs65SfMlEgU9PxdXo/RyOS8xJWC1jen1B6XRm09ljbr2X5ncjQGkiNEiHOcHadslA0V0pGaA0kkeJhtuEfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAAt5zP9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774809853; c=relaxed/simple;
+	bh=A7qxJ2hT4DkPy0kLPUOXaYDP7gwmFTJJDSrdzgfZeyk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XKGuHjcOU+TJVqiCKPOAnBKx4E4qU39OKwn3wKlXuQayqZ+rmaqC8T9sOgEBoj9YJux+HAruHFNyXAwtJ5uSL18vkthL6RRHx8i4DqQSPdDW48rBN70nkO8XZ0PPn5AWDR/ERfVDJuZXHkbgW7HadbTUM/JICnePqr3O00TnLWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=feSHdLXJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAAt5zP9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="feSHdLXJ"
 Received: by smtp.kernel.org (Postfix)
-	id 89848C2BCB3; Sun, 29 Mar 2026 15:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14A32C116C6;
-	Sun, 29 Mar 2026 15:11:08 +0000 (UTC)
+	id 47E42C2BCB3; Sun, 29 Mar 2026 18:44:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC58C116C6;
+	Sun, 29 Mar 2026 18:44:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774797069;
-	bh=48O06jw41mdFWfzz7EZIRuUwiyu34of3gLO+Z+5DX9U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DAAt5zP9x1B1zJc01c09CLZyU02+98UDTZrLobQfzigELVdHNbs/kS3BMZCLBU9Rw
-	 5JVqbjlZJ5XCENTd8T0cgZUu5Qlf6x49StTWQq4gDgTMtjIFnM1uYJag6gTxnNNmdV
-	 QXD35rZf9DOL0pMU0ZlwXDXGCiH8YfeNGaTEtubvxlsY89PMnTvYmjQDUJAZGgR5An
-	 yBYBzNoUd3TCGTuXPTJ+sp8upKPoTzxY4jh6faRuKN5SWJDFqsyqgWYXzi5+8NAaLU
-	 yAUq63ZdNNXZu9Jg4O1Uip8GkZUxOoMWSWXCVPsh83qCP6FtnEp/0+Zl9mgizOIaG4
-	 25KmnYrBjRpfQ==
-From: Thierry Reding <thierry.reding@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 7/7] arm64: tegra: Default configuration changes for v7.1-rc1
-Date: Sun, 29 Mar 2026 17:10:44 +0200
-Message-ID: <20260329151045.1443133-7-thierry.reding@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260329151045.1443133-1-thierry.reding@kernel.org>
-References: <20260329151045.1443133-1-thierry.reding@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1774809853;
+	bh=A7qxJ2hT4DkPy0kLPUOXaYDP7gwmFTJJDSrdzgfZeyk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=feSHdLXJmSuhFm+2gPkUoqmuFqZtEtZ1cNs7DGLRhBd1YyVq4T0cNPgxLbAxAq42m
+	 0fVU1pV9Ulm0vScwTDZkBaqBeaEi3MRKkSCTOKJaS4vPw/3aO8czPOl7gcYH6dN1VL
+	 rwRlAThjWqOR55xMvbriGpRB5gZnxT6M5apDM37QnhSS8rJh1v17D51CKBvvUsYF6H
+	 S7kNrxThZD5gmUvGskhqHPk1t85eXZKajNDxdvb57OMn1QfC1FtfxiuvErYj0Y/J+T
+	 D6ahhsTSAA0VDVUNfLycUzT3Jp+bUFPBU3SzeM7LbJDfi99qsgCDQCqoJjAwv4I0qN
+	 RpjZIQXv799lw==
+Date: Sun, 29 Mar 2026 11:44:11 -0700
+From: Drew Fustini <fustini@kernel.org>
+To: soc@kernel.org
+Cc: devicetree@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>,
+	Han Gao <rabenda.cn@gmail.com>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org,
+	Icenowy Zheng <zhengxingda@iscas.ac.cn>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Michal Wilczynski <m.wilczynski@samsung.com>,
+	Yao Zi <ziyao@disroot.org>, Guo Ren <guoren@kernel.org>,
+	linux-riscv@lists.infradead.org,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Fu Wei <wefu@redhat.com>,
+	Robert Mazur <robert.mazur@imgtec.com>
+Subject: [GIT PULL] RISC-V T-HEAD Devicetrees for v7.1, part 2
+Message-ID: <acly+68IaK1lWE2p@x1>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Thierry Reding <thierry.reding@gmail.com>
+Two minor improvements that weren't ready when I sent the originall pull
+request. They have now been tested in next. No problem if it is too late
+for this cycle.
 
-Hi ARM SoC maintainers,
+Thanks,
+Drew
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+The following changes since commit 9c99a784d9117a192ebf779d4f72ebec435ada97:
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+  riscv: dts: thead: lichee-pi-4a: enable HDMI (2026-03-14 09:19:26 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-7.1-arm64-defconfig
+  git://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/thead-dt-for-v7.1-p2
 
-for you to fetch changes up to c655a14958363aea8a1d0bbf3358fcee7f89a210:
+for you to fetch changes up to 74ec3d52c0035b662ec295bef2bbffad68446391:
 
-  arm64: tegra: defconfig: Drop redundant ARCH_TEGRA_foo_SOC (2026-03-25 10:49:46 +0100)
-
-Thanks,
-Thierry
+  riscv: dts: thead: beaglev-ahead: enable HDMI output (2026-03-25 09:20:38 -0700)
 
 ----------------------------------------------------------------
-arm64: tegra: Default configuration changes for v7.1-rc1
+T-HEAD Devicetrees for 7.1, part 2
 
-Drop the various ARCH_TEGRA_*_SOC options from the default configurations
-since they are now enabled by default for ARCH_TEGRA.
+Additional updates to T-Head device trees for v7.1:
+
+ - Enable the display pipeline for the TH1520-based BeagleV Ahead board
+   by adding the HDMI connector node, connecting it to the HDMI
+   controller, and activating the DPU and HDMI nodes.
+
+ - Add coefficients to the TH1520 PVT node as the values in the TH1520
+   manual differ from the defaults in the driver.
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      soc/tegra: Make ARCH_TEGRA_SOC_FOO defaults for NVIDIA Tegra
-      arm64: tegra: defconfig: Drop redundant ARCH_TEGRA_foo_SOC
+Icenowy Zheng (1):
+      riscv: dts: thead: th1520: add coefficients to the PVT node
 
-Thierry Reding (1):
-      Merge branch 'for-7.1/soc' into for-7.1/arm64/defconfig
+Robert Mazur (1):
+      riscv: dts: thead: beaglev-ahead: enable HDMI output
 
- arch/arm64/configs/defconfig |  7 -------
- drivers/soc/tegra/Kconfig    | 11 +++++++++++
- 2 files changed, 11 insertions(+), 7 deletions(-)
+ arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 25 ++++++++++++++++++++++
+ arch/riscv/boot/dts/thead/th1520.dtsi              |  4 ++++
+ 2 files changed, 29 insertions(+)
