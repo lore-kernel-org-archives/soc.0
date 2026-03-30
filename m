@@ -1,134 +1,204 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9A33C873A
-	for <soc@lists.linux.dev>; Mon, 30 Mar 2026 11:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774871196; cv=none; b=rKELrJM7AmtSbiyGuPVIohhKx9+Vh77rXYv6ySwXXgoXeqjRRm2Z+PYwX87FkXDFDC3sqLhhp06N9D97brhFJR+RgCK4rVZLGq+/nWcDZxZsKsWD+Tggf0S/PxpO8TCqFi7W6dT0t+cX35f8JA49nTMh6HUmp4o9B93XOXwgbm0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774871196; c=relaxed/simple;
-	bh=vNBRaBmxUML/9tvCHr/F0jTWJtIo36Ls04uYN9WKbQI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ho/nCtT2QrDSAt5tQP0U7Ef4vLI9D0aqClQxUudwt77UYpNoPyZSP6szQs9NTH6M6pirImjV0oa4JfpySxdETu+VkQo23Xl0yJUif82kpx7z0dT8cVtSX7dw5sT4gCvJ9DUVWdW1w+sM+h6LOGrHW8r0cLoPkz9dWYh54zU6PD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RzEby+oS; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC723CA4BD
+	for <soc@lists.linux.dev>; Mon, 30 Mar 2026 14:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774880112; cv=fail; b=FLns/Sc7VMTBBQUNsK6jIf1367Ww/FhoJlmqbxVqKJYOHoqYKO9bud4OMHWtwWHpIpqaRj9iXtGj6piFOpxDOxGVpWVvSD4vNbaQbF4/31wsN+7Md0+j0tWIZot7Gx98GK9i3//MsUhRrs+pfHIZut9RDkohWWwqzFO0MpVmO0E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774880112; c=relaxed/simple;
+	bh=jLmXCeMrdI42yiMQRGH2c1HtuisThy7mLeIHDeGADKw=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=id5KY4hprNsg2i0GZiGachAe062jrBEbOb5rl2N/eJsHpDOvQkfupib262eHdwPkin1u33EmE4gReJH90b2SMkRHioh2RuN5VCR4eImpkF8WFoCM8ms0YL9nYAwrSTGX62+Z9bcakjFZTiwHX2J7PjF+qTTzV6mmGez+3PHEMhI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=TyYgh+Rw; arc=fail smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RzEby+oS"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="TyYgh+Rw"
 Received: by smtp.kernel.org (Postfix)
-	id E4855C2BCB1; Mon, 30 Mar 2026 11:46:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352A2C4CEF7;
-	Mon, 30 Mar 2026 11:46:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774871195;
-	bh=vNBRaBmxUML/9tvCHr/F0jTWJtIo36Ls04uYN9WKbQI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RzEby+oS5hA4ztdP34lTC7HWqKiGaf/mX4Vhjw+MUqBJEDsuhk5mFAmOzDfkKzvuQ
-	 +QhapPlgi64ILY8d/7zHw7il3PFnTdTlL4zSIpbhn9NslzspcGbnrSAhPuhG9FJF1F
-	 8T+gkBHx7KNETahPZmqOtH1KfevNMi/+VU/zIWqKiSST9cGYV72b+yQZVbLPoAns/d
-	 8dkvNPzp4OvfpBw/Iiz53+m8fBuYeamO0Mge+OFJWmj3KFrmvNURy9lVzNBxbcv83V
-	 exJkhvCkNd/i3SsEPts3FG20y23kIyf4oe84eBrtvnYrvkO9weKJGQd8/vTMNR5NRi
-	 PI2P1yAPaGAug==
-Message-ID: <058d79b7-3d4c-4f0a-a95f-b2e3582a4fa7@kernel.org>
-Date: Mon, 30 Mar 2026 13:46:32 +0200
+	id 6309FC2BCB2; Mon, 30 Mar 2026 14:15:12 +0000 (UTC)
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010024.outbound.protection.outlook.com [52.101.69.24])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A1269C4CEF7;
+	Mon, 30 Mar 2026 14:15:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1269C4CEF7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=m9gDEASAV3xWpoukDr7Yf1iXiLHqgfLQvEL8T1AMUN2oJrrTMUspETmSsmOB8dXjPbL4ue19gKg93bd/FZ05WzA2HqWi2zUDxa2JGNO+xodB7f26qBTglMJhQdzKMQvUlNH4LGU2ulsxoVN6ZSmv42O7j5ksJIBBTxZNKWJQNhSOWwan3/+AM5ObLLh7sEjxA3fe7PlMv7YFoYpthz8QVZ5Jul5d6hLgLLZoEmZ9v4BvxH8JcyAFpXH8Shnsv8b6Ad4rlTgW/spRDL4XmRLpX+09wgbQs1LKMabDkMypZezgaUjL8JzX+wwh5ApJcZ9vhn759dURanrN+QWee9qvPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=44hlU2jwjJLzw2tAfS5LC4Q7lBxT3bNSTDF668Fue54=;
+ b=g4HIXgNoBo8TOMqf2fqSk8Bg7BOSNd2iZIjOehs8sqMAYm1LMMQF1YEnFlt5hNAsANXATuQiE8IX8tk+zqIQUV7lQ1VDvUoFGgrZQVjVJhnqkdDo+xPXrGe690PvLgGAiacqLV9Q5AOJvXVVXY0x55696TwXsYb5D7/3pA2gls5DiTBLvSIsRVIZ43iD/2dKaIXcm8Z/KCGnST2LA4rkL17guabRFDSS8BKA8xxBEut5PKhJxD4Rmu+FecfbFk2TJEEP4gbIhCmpNDL7jt5cJaVvWRKQ6gK6L7lj9LVMlrgeUjEAHSPuhMNW+NoqP4jrxbFz58NQMtIcpXMNpZvqrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=44hlU2jwjJLzw2tAfS5LC4Q7lBxT3bNSTDF668Fue54=;
+ b=TyYgh+RwaTToTZdw5P2Ck/uDhP908NnlE+te/BaFdORhYqsc0tOw6E+9S27+il400Px4tkfCBMrKDi+gF4Q1ZK5HVK3zstgcNbqsOmRD1xC8UHlHM1gu1YFO1xJ7fead2JmtEo2yUaKvF5GsHnZK8EFnCUUthN4y2tjrIcuhgqu7wavLJaDO2jH7rN7C7gEVZ5zq1BNEy69QYzwTPpt62A7yz4rrXMImshP5xLQO4CPGYRdsUHzqQbODs8f6G2aQ1By3JKds7Np+booNy7kJEli28cPFuI0t8phNnffwa+plCos38Tc8KhYj2kyCP+h21ZwZYE+4F4QLCWpDa81VqQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
+ by PA1PR04MB12223.eurprd04.prod.outlook.com (2603:10a6:102:55f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.24; Mon, 30 Mar
+ 2026 14:15:04 +0000
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
+ 14:15:04 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Frank.Li@nxp.com,
+	Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	kernel@pengutronix.de,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 3/4] i.MX dt binding changes for v7.1
+Date: Mon, 30 Mar 2026 10:14:36 -0400
+Message-ID: <20260330141444.3789193-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PH8PR22CA0023.namprd22.prod.outlook.com
+ (2603:10b6:510:2d1::21) To PA4PR04MB9366.eurprd04.prod.outlook.com
+ (2603:10a6:102:2a9::8)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL 4/7] ARM: tegra: Device tree changes for v7.1-rc1
-To: Thierry Reding <thierry.reding@kernel.org>, arm@kernel.org, soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
- Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20260329151045.1443133-1-thierry.reding@kernel.org>
- <20260329151045.1443133-4-thierry.reding@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260329151045.1443133-4-thierry.reding@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|PA1PR04MB12223:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5e7f4b6a-d6e7-45ad-7664-08de8e66bd18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|19092799006|1800799024|52116014|376014|38350700014|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	5FwibVvILJoDLziwe7J0AIhDv3/5gpLj+eqYhR8//bQ+wjEBBbB6tKX8Fe3Tvh2HXjgXirko3ibD5aedgqDz70bYE5CYYmDff76P4tOdCJvvPnqs3fm51ZAtDcLPJbAHdagNeaCBjDRl859V2oKRbk8SZ/ZcINUjC4WnLitgLm+KvBfOwJdX+XlphIFO9Xpvkb/dvPQqPxZz8jHWbnVeQ8lHInlxs+o/oy1iPAiY/0K6HyUQ9eXuuZEm9yp9wIPPiW5QqHEolyXYbbf78SE5usuESazd8HNk53MBmpERZHW+cs9OR4P09qfoDFpFoleKQPxjCTP2qzeolTl5e+x0BPs7iBThFkT8FEtJXUFuVGBsQmSX/iajdpHJglAUpCIGe7tDIrRCJgkJPbBs3PHoMhJqHm/PsEJAf58oHxRud2T/hcU2xJ2CXXnAdw0fIVUShgrEaD6kPQYpOgLEMV9xKPJQgiSP5aeJsT9OSYMijnFHUS9RRhPEnj186uQ9fHN4G6ZEf3QovOZTTGsF5DPdUfXYs2a5iuefymH7IKj1wekEeJy8ewk2tSaXQwzhDf+xjWVtMyTTSOpw0ISDrb0rPl+wOPJszq9vKVRPGw1zB0bz/+oIJVETt6rN+ta/pHZkytS7PMeFxPEDVEbDQNlvztNObs2lmMKBGteMMIk03fiPVd7D0v+bsUwtL6yeqW6C9Gi9f8GHn4KxbWwM5UGcBIBXzpe07yspUv2yoakbm1XMlOYGVD1s3iOgRgvAuJI54BKwsKhbI6xf9/DkO/qdEjrZzrmBefsehf70U+glDOo=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(1800799024)(52116014)(376014)(38350700014)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?OKx7sjT7lbKRjXK12wplKPiqvp/wDWlhWA3V+XlCQPWdd6AmgIF+MP3ry5js?=
+ =?us-ascii?Q?NCO57bLYwjyLb2nwfd9TsI2bXatOwpjqPP68KVuPMtfz0XevwaQNbF/tQING?=
+ =?us-ascii?Q?Bk8RmeqcYZJS2ZABEJj07vCPYfW5Ykvlqmm7lcYLoJDXUAVX+ipll8ZUlF5C?=
+ =?us-ascii?Q?O1ETRbGv3NsdSpVAMrNM1ca2VDfovcfiyvPrBi2BvVb3PW+e2KAZMdDh3NIK?=
+ =?us-ascii?Q?2rUHUj7U83ungc2rmIE2Rmgpg3EfybF0u5DEF+Isl7jhD85WaY6gqtd2+uhR?=
+ =?us-ascii?Q?MRO77LotuOx7qubrRxS4zFhn3Zo1bfQiGBGjKkpd9/qXIJCzli10ifYuyu3l?=
+ =?us-ascii?Q?q4EEqRxAIbW5VLh1vhczC/lvutK8l1epY7KiuLrKMyIqTqtJbEm8/S9etuLZ?=
+ =?us-ascii?Q?UsAQyqJL77rZa5srlJwMFmgqbsQfeWUYNZSB6zToUmhVuFdXPowB8XF/OSi+?=
+ =?us-ascii?Q?wXr820yX0LBpHikK5OEoCmp8MHXnvTe/HZ8znP+OjFoUWO8W7GZiF8b7NKXH?=
+ =?us-ascii?Q?Yl/ppQjbMxx60X/HW9QoLqgdKuLKG1XRRBcbVeur/EAtyMyu9KgZGthuSVfA?=
+ =?us-ascii?Q?8UH+HHCz2iDGoBtWT2eg/l9vgcdEa4qW+oUycsr9/96JIQBcZ/Z8cKm1BT+r?=
+ =?us-ascii?Q?bd/gcFKfXe8vOUNfhOvwPoZB1S6CkauIA4rNeO+mOWTyvM8SG7NWkVmPnNxA?=
+ =?us-ascii?Q?r5aWMlePwhiqNMnSZ0ubIWSVb5hiCNxJw3CXLYTh3tIHE9aA4QxNNyVSRwj7?=
+ =?us-ascii?Q?058VWdHltvwlVXddY9h9ZGJF78UOM7woPPMn30GQoogDh9uG3tmOcIfLZfkV?=
+ =?us-ascii?Q?jkQbc6SXIOG7uGuEpyQlbj+/hNBdTbHsGbCOOWqvtPYuzKEOH/JhYGIOLBUK?=
+ =?us-ascii?Q?1JsE/algY6zd9yROUoi1nAGCxJJ75Rv/gV1MGAtLLXEdU1DmVcIkwTp0ltbQ?=
+ =?us-ascii?Q?46ZkaWa/bvvj+//76MhljJKONjFQf2rt0ytR1VILZXnj21EVI9nx7J24XNBI?=
+ =?us-ascii?Q?oeihmcgtFPIZrEAltrdMAL/K41D841ZjlQG9Sa5b6Pr206alZP3MvqR+8MsN?=
+ =?us-ascii?Q?QasUTDsZilxceRCFtEKsTIc+Lvx3Q0CYZwOzDyW5Scx6IPhO03P3pzAWk0KB?=
+ =?us-ascii?Q?w5vnKZ0cp/wY34oTJ3KBPKAWM6ddOVo3O4mGEqT+R/q1625cFk8YhuRKGJhH?=
+ =?us-ascii?Q?yd5BGFTGUupFF645EU77BNL/BnkyMX/w9DYyJnlhEENk3BxjumAHTVEwkgLF?=
+ =?us-ascii?Q?5mYXmCP5IU0a3zsFPGFid5a2yJcXyS7A8qBDdMRuoIaQgH7WkDFkA0TvmvEu?=
+ =?us-ascii?Q?+8aVjled5GADU+f4AhqqaCFGgYCt+BKXqP083HCOt6/1vT4s4MI+XDcdAuz6?=
+ =?us-ascii?Q?WXzozyCiRsm6d1DM1Qq73VtUhnLtegrYFB1MaVQ2/dGDctrVhOy72PowVAPJ?=
+ =?us-ascii?Q?kZsSsw1eEXt/xVQlvRlY0uZiMPeaAHj56OdCcURJTxHLuh5lcyY0+5fhAoml?=
+ =?us-ascii?Q?uyXh+owRV/ty1kpwGHB73hFweQXDTyDK2BjlSH5NYdIhmNSBVK3c+ZL1gkrk?=
+ =?us-ascii?Q?nqIRwIUc4FNqLe7ptNbPfmH4NC6Hx8h5J3AY2HcHk6gZ1kMsl5DP7ZxCienL?=
+ =?us-ascii?Q?ckPszEnwtEzz/zeUNfUlqaZaJSV6pPm8jt2Ep+uwqxkHqQVYKVDyac7ihQk7?=
+ =?us-ascii?Q?vwA/wfgsUk7XfPAGO3QC2MHkj2fuG/CiXmxP+Vdrc3apJEWo?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e7f4b6a-d6e7-45ad-7664-08de8e66bd18
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 14:15:04.5157
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jYp2a16gZ/1A3pISaWh+Sie7LG88jS36FLVTfLY73uEutZLFvekPLKSx8JI+PTcfRd6NCuv4f+w3Rx1IRqe7Vg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB12223
 
-On 29/03/2026 17:10, Thierry Reding wrote:
-> ----------------------------------------------------------------
-> ARM: tegra: Device tree changes for v7.1-rc1
-> 
-> Various improvements for Tegra114 boards, as well as some legacy cleanup
-> for PAZ00 and Transformers devices.
-> 
-> ----------------------------------------------------------------
-> Dmitry Torokhov (1):
->       ARM: tegra: paz00: Configure WiFi rfkill switch through device tree
-> 
-> Svyatoslav Ryhel (8):
->       ARM: tegra: Add SOCTHERM support on Tegra114
->       ARM: tn7: Adjust panel node
->       ARM: tegra: lg-x3: Add panel and bridge nodes
->       ARM: tegra: lg-x3: Add USB and power related nodes
->       ARM: tegra: lg-x3: Add node for capacitive buttons
->       ARM: tegra: Add ACTMON node to Tegra114 device tree
->       ARM: tegra: Add External Memory Controller node on Tegra114
->       ARM: tegra: transformers: Add connector node
-> 
->  arch/arm/boot/dts/nvidia/tegra114-tn7.dts        |  13 +-
->  arch/arm/boot/dts/nvidia/tegra114.dtsi           | 221 +++++++++++++++++++++++
->  arch/arm/boot/dts/nvidia/tegra20-paz00.dts       |   8 +
->  arch/arm/boot/dts/nvidia/tegra30-asus-tf600t.dts |  21 ++-
->  arch/arm/boot/dts/nvidia/tegra30-lg-p880.dts     |  23 +++
->  arch/arm/boot/dts/nvidia/tegra30-lg-p895.dts     |  33 ++++
->  arch/arm/boot/dts/nvidia/tegra30-lg-x3.dtsi      | 174 +++++++++++++++++-
->  arch/arm/mach-tegra/Makefile                     |   2 -
->  arch/arm/mach-tegra/board-paz00.c                |  56 ------
->  arch/arm/mach-tegra/board.h                      |   2 -
->  arch/arm/mach-tegra/tegra.c                      |   4 -
+From: Frank.Li@nxp.com
 
-Why does the DTS branch has mach code? Tag message mentions legacy
-cleanup only and such cleanup should not cause mixing independent
-hardware description (DTS) with drivers.
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
-Best regards,
-Krzysztof
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux.git tags/imx-bindings-7.1
+
+for you to fetch changes up to e54390aae6887151ff67526af45382beb889f99a:
+
+  dt-bindings: arm: fsl: add Verdin iMX95 (2026-03-26 12:17:45 -0400)
+
+----------------------------------------------------------------
+i.MX dt-bindings update for 7.1:
+
+- New board support: Verdin iMX95, MBa93xxLA-MINI, TQMa95xxLA, S32N79
+  SoC/RDB, i.MX8MP audio board (version 2), SolidRun i.MX8M, TQMa8x,
+  GOcontroll Moduline IV/Mini, FRDM-IMX91S, Variscite DART-MX91,
+  i.MX93 Wireless EVK, Variscite DART-MX95.
+- fsl,irqsteer add nxp,s32n79-irqsteer support.
+- fsl,imx93-media-blk-ctrl add dbi-bridge.
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      dt-bindings: arm: fsl: add bindings for TQMa8x
+
+Ciprian Marian Costea (2):
+      dt-bindings: interrupt-controller: fsl,irqsteer: add S32N79 support
+      dt-bindings: arm: fsl: Add NXP S32N79 SoC and RDB board
+
+Ernest Van Hoecke (1):
+      dt-bindings: arm: fsl: add Verdin iMX95
+
+Frank Li (1):
+      dt-bindings: arm: lpc: add missed lpc43xx board
+
+Josua Mayer (1):
+      dt-bindings: arm: fsl: Add various solidrun i.MX8M boards
+
+Liu Ying (1):
+      dt-bindings: soc: imx93-media-blk-ctrl: Add PDFC subnode to schema and example
+
+Markus Niebel (1):
+      dt-bindings: arm: add bindings for TQMa95xxLA
+
+Martin Schmiedel (1):
+      dt-bindings: arm: fsl: add MBa93xxLA-MINI
+
+Maud Spierings (1):
+      dt-bindings: arm: fsl: Add GOcontroll Moduline IV/Mini
+
+Peng Fan (1):
+      dt-bindings: fsl: imx7ulp-smc1: Add #clock-cells property
+
+Shengjiu Wang (1):
+      dt-bindings: arm: fsl: Add compatible for i.MX8MP audio board (version 2)
+
+Sherry Sun (1):
+      dt-bindings: arm: fsl: Add i.MX93 Wireless EVK board
+
+Stefano Radaelli (2):
+      dt-bindings: arm: fsl: add Variscite DART-MX95 Boards
+      dt-bindings: arm: fsl: add Variscite DART-MX91 Boards
+
+Yanan Yang (1):
+      dt-bindings: arm: fsl: Add FRDM-IMX91S board
+
+ .../bindings/arm/freescale/fsl,imx7ulp-pm.yaml     |  5 ++
+ Documentation/devicetree/bindings/arm/fsl.yaml     | 86 ++++++++++++++++++++++
+ .../devicetree/bindings/arm/nxp/lpc32xx.yaml       | 22 ++++++
+ .../interrupt-controller/fsl,irqsteer.yaml         |  4 +-
+ .../bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml | 78 ++++++++++++++++++++
+ 5 files changed, 194 insertions(+), 1 deletion(-)
