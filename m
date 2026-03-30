@@ -1,84 +1,168 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16526277C9D
-	for <soc@lists.linux.dev>; Mon, 30 Mar 2026 11:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1AE3C65F7
+	for <soc@lists.linux.dev>; Mon, 30 Mar 2026 11:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774870127; cv=none; b=gGMFKs2DIhgPfQlHrtNSqEsGqqdvj/pKm6FSoY6T3gCO48yH8UiX0QAJr2/lmgGZcZc9sRluKylCnKPgnlcCHONmTPg/yHt8SpcxssWbq71N0InVGoAs8fE+igrMshW1Rdqw9Rfsbu8qI2Nv1RlGnuFrz/7xjDzewAnpB2WcdxI=
+	t=1774870792; cv=none; b=avWPP5mGIKt87UPKrqHhJU/0eZaAQGDnDllIxEpgu7rmyk34gvukp3drTGqX1k65m7c7dgbPLWaMDW9O8aAi1x7Ov3bfjj/xHvhehJ0GYLMQ6yVudjvBPWsx3DKnLu6ycTPusNLDGzEDRwA9xHC7aPQl945IcHO7pFkUQVL35G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774870127; c=relaxed/simple;
-	bh=/kIe06bQ1ZqdXxCqLUyAT+Aw6K5Z0TFaajwnV5ej9X4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=azug/OJBfFH1t51zJvhd5CxFsBogaijEGPp8f8oboUlx7JUJC8t14+foH165NBlN1Xj87bajvlUfEihRdJkne7IsFRe5KE9f+yeYZVNzJMu/XtoAkuHsBY8OMIUNw11fTbAustGiehiw9ZpoCikJjJK4F6k0eVJS9wJdezGBhNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQyvAvve; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774870792; c=relaxed/simple;
+	bh=b/ampavt86PAu57HuZv/UNHbgnlk14x5mFwNDCZ00cA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GjYW6V71uNgboo3VqxIpQugWOtGoaupZJSsKdyaajXdnrG/3lw1Hwn3rgeLNP2nPK6nzAlIBRo61kNpQRpVeWcAP+hfjpk75IDYq4b+ptySKMaXwAE1JkSba4xXUP+DXTTZOaGRi8QvtcVIEOWYEHzMSkqnmd5/mPy1HozDjCHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LkjdYa9F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQyvAvve"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DAF6C4CEF7;
-	Mon, 30 Mar 2026 11:28:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LkjdYa9F"
+Received: by smtp.kernel.org (Postfix)
+	id B89F1C2BCB1; Mon, 30 Mar 2026 11:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1098AC4CEF7;
+	Mon, 30 Mar 2026 11:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774870126;
-	bh=/kIe06bQ1ZqdXxCqLUyAT+Aw6K5Z0TFaajwnV5ej9X4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=eQyvAvve9HFbrQsXGQxGSG6EM+gbhlTHeZT76QlEzJZrdjr8+w9z9oiGe5kN55Csv
-	 t/OXGvNeAc5vAWQ8Q9BiipvxAbdzHgLQoEtXyIP4NOSU25u4AGQxHVBD3qoFM3G2v3
-	 zQKW+Jp92QfqYLe4hQhWXqDnOFQeh3NFbUL/WzlwBZefNiBOB/Y6ohwYezg5wC0t6r
-	 TIndDZc4UaOr1NjSV5DuNwSLjkDtKXy2widMLlaMk229wZuHz4qZh6sFpJwYooNf5i
-	 hsF7h78jBUENKLs1IjFZo/OLP/GgdQwFQWVGFKVYgX3VjrzGfMHfCm2ScVA4AKbsFv
-	 GrMZRdwgGzGJA==
-From: Dinh Nguyen <dinguyen@kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm64: dts: socfpga: updates for v7.1
-Date: Mon, 30 Mar 2026 06:28:44 -0500
-Message-ID: <20260330112844.240664-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.42.0.411.g813d9a9188
+	s=k20201202; t=1774870792;
+	bh=b/ampavt86PAu57HuZv/UNHbgnlk14x5mFwNDCZ00cA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LkjdYa9FevU1z0t+WxRQ78dGym4f2C2/8GwAgO9/SIrcKe2nhP9nxMncnPsMP6Y3P
+	 /bbRW61zXsGFM0f2hAal2XyFE+cIa06DyMHQZ43E0bUwGssoy33l5qpwQLLmEcigDi
+	 +PHP+wBLRLCO02RZ5c15qMp+tNK33OXmTYYAyVaSjkHBsyjE61vbbpCaflBEug4fzv
+	 l2hmB5A7cV3Q2Hw7I6k7SrujAfDWJbVFxhtFWC32aAMNyCX89V8HdsAU61W5Iz/46R
+	 GUh3w5AJjVG2PaapdVbLxRfmcWWGT3i3PZa53NwUzc8zFHfhcYPG7Ksq2iMGkPNBvh
+	 jp0LOJK/kHxiQ==
+Message-ID: <406ca5ed-4a3e-48ba-94ad-d88c53b09299@kernel.org>
+Date: Mon, 30 Mar 2026 13:39:49 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL 1/7] dt-bindings: Changes for v7.1-rc1
+To: Thierry Reding <thierry.reding@kernel.org>, arm@kernel.org, soc@kernel.org
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+ Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20260329151045.1443133-1-thierry.reding@kernel.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260329151045.1443133-1-thierry.reding@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+On 29/03/2026 17:10, Thierry Reding wrote:
+> From: Thierry Reding <thierry.reding@gmail.com>
+> 
+> Hi ARM SoC maintainers,
+> 
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> 
+>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-7.1-dt-bindings
+> 
+> for you to fetch changes up to bed2f5b4de6c6fd8f8928f6373ad92e8795c370f:
+> 
+>   dt-bindings: arm: tegra: Document Jetson AGX Thor DevKit (2026-03-28 01:05:24 +0100)
+> 
+> Thanks,
+> Thierry
+> 
+> ----------------------------------------------------------------
+> dt-bindings: Changes for v7.1-rc1
+> 
+> This contains a few conversions to DT schema along with various
+> additions and fixes to reduce the amount of validation warnings.
+> 
+> Included are also a new binding for the PCIe controller found on
+> Tegra264 as well as compatible strings for the Jetson AGX Thor
+> Developer Kit.
+> 
+> ----------------------------------------------------------------
+> Sumit Gupta (1):
+>       dt-bindings: arm: tegra: Add Tegra238 CBB compatible strings
+> 
+> Svyatoslav Ryhel (1):
+>       dt-bindings: display: tegra: Document Tegra20 HDMI port
+> 
+> Thierry Reding (9):
+>       dt-bindings: pci: Document the NVIDIA Tegra264 PCIe controller
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+Why are you taking subsystem patches? This was posted on 26th of March
+and was not acked by PCI maintainers.
 
-are available in the Git repository at:
+How the bindings should go is already documented, so there is no
+question here.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_updates_for_v7.1
+The question was whether you can take them if subsystem maintainer is
+non-responsive and yes, you can. You gave PCI maintainers one day before
+applying it.
 
-for you to fetch changes up to 9d29bcefcdbec4498fe0539e6d8a4e7962d92489:
 
-  arm64: dts: intel: agilex5: Drop CPU masks from GICv3 PPI interrupts (2026-03-10 21:10:05 -0500)
+>       dt-bindings: phy: tegra-xusb: Document Type C support
 
-----------------------------------------------------------------
-SoCFPGA DTS updates for v7.1
-- dt-bindings updates:
-	- Document fallback compatible for Stratix10 SoCDK eMMC board
-	- Document compatible for the Agilex5 SoCFPGA modular board
+No acks, but that is waiting for one month so it is fine.
 
-- Add emmc support for the Stratix10
-- Drop CPU masks from the GICv3 PPI interrupts for Agilex5
+>       dt-bindings: clock: tegra124-dfll: Convert to json-schema
+>       dt-bindings: interrupt-controller: tegra: Fix reg entries
+>       dt-bindings: arm: tegra: Add missing compatible strings
+>       dt-bindings: phy: tegra: Document Tegra210 USB PHY
+>       dt-bindings: memory: Add Tegra210 memory controller bindings
+>       dt-bindings: memory: tegra210: Mark EMC as cooling device
 
-----------------------------------------------------------------
-Dinh Nguyen (1):
-      dt-bindings: intel: Add Agilex5 SoCFPGA modular board
+That's even my subsystem and I did not ack it. You did not even sent it
+to me as requested by MAINTAINERS file (+dt is ignore alias), so
+obviously I did not even had a chance to ack it.
 
-Geert Uytterhoeven (1):
-      arm64: dts: intel: agilex5: Drop CPU masks from GICv3 PPI interrupts
+And we even had few days ago talk were I explained you how these
+bindings must go. Seeing pull request completely ignoring that
+discussion is just huge surprise.
 
-Ng Tze Yee (2):
-      dt-bindings: altera: Add fallback compatible for Stratix 10 SoCDK eMMC variant
-      arm64: dts: socfpga: stratix10: Add emmc support
+No, it cannot go in. Send patches to proper maintainers first.
 
- Documentation/devicetree/bindings/arm/altera.yaml  |  7 ++
- arch/arm64/boot/dts/altera/Makefile                |  1 +
- .../boot/dts/altera/socfpga_stratix10_socdk.dts    | 67 +-----------------
- .../boot/dts/altera/socfpga_stratix10_socdk.dtsi   | 71 +++++++++++++++++++
- .../dts/altera/socfpga_stratix10_socdk_emmc.dts    | 81 ++++++++++++++++++++++
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     |  8 +--
- 6 files changed, 166 insertions(+), 69 deletions(-)
- create mode 100755 arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dtsi
- create mode 100755 arch/arm64/boot/dts/altera/socfpga_stratix10_socdk_emmc.dts
+Best regards,
+Krzysztof
