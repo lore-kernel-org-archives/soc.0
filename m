@@ -1,97 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FDB40DFDF
-	for <soc@lists.linux.dev>; Sun, 29 Mar 2026 18:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F6A33D4E9;
+	Mon, 30 Mar 2026 07:06:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774809853; cv=none; b=P5CzrQ4DzHIicP9Uqy9YjVm1PwDRhLdPc33YevMuy/X/1ghtDSth1XQhoUx2DiTHASWRckRicfXSO20AEDRO87pSkbS3A7Ggk8kdEVKBNlO+ZFNB2Tcr/5x7fyMI/D2XaHiUU3uVuPHo9lFS7yaXSxTYn7L/GdbgmScsT9jeVz8=
+	t=1774854417; cv=none; b=Q0Rd4W/f/GaaTa+Wz0sV7EiAzfMaDAuan6Xxze1GltkgO7f8UJsq0QC/b4TxWCtLTg2PNKvJ7jWOJihh1dwDlslpDwOXNF0MjgfIUOxDslRHcYDuiGBukyemOsnT7xBhh5vYUfQS9WUY3Jo2mVSW1XuP9bYT7zPOhPQcVcfgDco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774809853; c=relaxed/simple;
-	bh=A7qxJ2hT4DkPy0kLPUOXaYDP7gwmFTJJDSrdzgfZeyk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XKGuHjcOU+TJVqiCKPOAnBKx4E4qU39OKwn3wKlXuQayqZ+rmaqC8T9sOgEBoj9YJux+HAruHFNyXAwtJ5uSL18vkthL6RRHx8i4DqQSPdDW48rBN70nkO8XZ0PPn5AWDR/ERfVDJuZXHkbgW7HadbTUM/JICnePqr3O00TnLWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=feSHdLXJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774854417; c=relaxed/simple;
+	bh=tbeI2CcasPRtwv8iA2a3z67oAioDgSrzrqJj0Lvy6dU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eHxbL+deL3N2kg53L39jOM8fHMwNhsLU6xft2AdAc0n0PlvlKZDJsMGP7pddUi0uMQl5opT2sEcPq3iymoDDeHnmFo7kDhk6z9AvAxmmhuiH0w54fBjwOCE0itUmko6gSXNisCButeIfimG9c1Ga+gR2tm5lwxUxm84JRaIYJA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R7Lzvw0/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="feSHdLXJ"
-Received: by smtp.kernel.org (Postfix)
-	id 47E42C2BCB3; Sun, 29 Mar 2026 18:44:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC58C116C6;
-	Sun, 29 Mar 2026 18:44:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R7Lzvw0/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7970C4CEF7;
+	Mon, 30 Mar 2026 07:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774809853;
-	bh=A7qxJ2hT4DkPy0kLPUOXaYDP7gwmFTJJDSrdzgfZeyk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=feSHdLXJmSuhFm+2gPkUoqmuFqZtEtZ1cNs7DGLRhBd1YyVq4T0cNPgxLbAxAq42m
-	 0fVU1pV9Ulm0vScwTDZkBaqBeaEi3MRKkSCTOKJaS4vPw/3aO8czPOl7gcYH6dN1VL
-	 rwRlAThjWqOR55xMvbriGpRB5gZnxT6M5apDM37QnhSS8rJh1v17D51CKBvvUsYF6H
-	 S7kNrxThZD5gmUvGskhqHPk1t85eXZKajNDxdvb57OMn1QfC1FtfxiuvErYj0Y/J+T
-	 D6ahhsTSAA0VDVUNfLycUzT3Jp+bUFPBU3SzeM7LbJDfi99qsgCDQCqoJjAwv4I0qN
-	 RpjZIQXv799lw==
-Date: Sun, 29 Mar 2026 11:44:11 -0700
-From: Drew Fustini <fustini@kernel.org>
-To: soc@kernel.org
-Cc: devicetree@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>,
-	Han Gao <rabenda.cn@gmail.com>, Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org,
-	Icenowy Zheng <zhengxingda@iscas.ac.cn>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Michal Wilczynski <m.wilczynski@samsung.com>,
-	Yao Zi <ziyao@disroot.org>, Guo Ren <guoren@kernel.org>,
-	linux-riscv@lists.infradead.org,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Fu Wei <wefu@redhat.com>,
-	Robert Mazur <robert.mazur@imgtec.com>
-Subject: [GIT PULL] RISC-V T-HEAD Devicetrees for v7.1, part 2
-Message-ID: <acly+68IaK1lWE2p@x1>
+	s=k20201202; t=1774854416;
+	bh=tbeI2CcasPRtwv8iA2a3z67oAioDgSrzrqJj0Lvy6dU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R7Lzvw0/CvCt6nx9RIVeH6gsDAymRXP2mPNrKQmC4XaEMZHKS1CxqQ1aY6C+GaPwt
+	 x6TVDmN7iNo9NNcbkbxd1PZ3/OXJ+HFadScvbHKcFgymzgjwJYBIEPFCzFqTmJOvMj
+	 V7Y2KTPqgX0lZ5lySPwHD8lxME2XTjRVUnxDcVLMjvPRFPuXUqhC1DFQiqN7h76o66
+	 G7N3Okh7e8JXp0sRLGzJQWbvpZ9V7fb7mQUHTIr74c2wnEZV/M0TEfvqA5Ahv6IlMW
+	 VA6pNV+DVFIz6REDPZ3AATIDn6Q574jKRLhVouSkbU7/HeR/mHqKMT7EdGnkErO9pY
+	 mnOaCEAwpUDoA==
+Date: Mon, 30 Mar 2026 09:06:53 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Gopi Krishna Menon <krishnagopi487@gmail.com>
+Cc: rafael@kernel.org, daniel.lezcano@kernel.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, vireshk@kernel.org, 
+	conor+dt@kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+	daniel.baluta@nxp.com, simona.toaca@nxp.com, d-gole@ti.com, m-chawdhry@ti.com
+Subject: Re: [PATCH v3 2/2] ARM: dts: st: spear: remove undocumented
+ thermal_flags property
+Message-ID: <20260330-furry-apricot-toucan-bb8d8d@quoll>
+References: <20260329123449.309814-1-krishnagopi487@gmail.com>
+ <20260329123449.309814-3-krishnagopi487@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20260329123449.309814-3-krishnagopi487@gmail.com>
 
-Two minor improvements that weren't ready when I sent the originall pull
-request. They have now been tested in next. No problem if it is too late
-for this cycle.
+On Sun, Mar 29, 2026 at 06:04:44PM +0530, Gopi Krishna Menon wrote:
+> spear13xx.dtsi defines a thermal_flags property in spear thermal sensor
+> node which is both unused in kernel and undocumented in spear thermal
+> sensor's binding.
+> 
+> There were no dtbs_check warnings associated with this property as the
+> underlying spear thermal binding was not converted to DTSchema.
+> 
+> Most likely st,thermal-flags is a misspelling of thermal_flags in
+> spear13xx.dtsi. Since both st/spear1310.dtsi and st/spear1340.dtsi
+> define st,thermal-flags property in spear thermal sensor node, we can
+> safely remove this property from spear13xx.dtsi.
+> 
+> Signed-off-by: Gopi Krishna Menon <krishnagopi487@gmail.com>
 
-Thanks,
-Drew
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-The following changes since commit 9c99a784d9117a192ebf779d4f72ebec435ada97:
+Best regards,
+Krzysztof
 
-  riscv: dts: thead: lichee-pi-4a: enable HDMI (2026-03-14 09:19:26 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/thead-dt-for-v7.1-p2
-
-for you to fetch changes up to 74ec3d52c0035b662ec295bef2bbffad68446391:
-
-  riscv: dts: thead: beaglev-ahead: enable HDMI output (2026-03-25 09:20:38 -0700)
-
-----------------------------------------------------------------
-T-HEAD Devicetrees for 7.1, part 2
-
-Additional updates to T-Head device trees for v7.1:
-
- - Enable the display pipeline for the TH1520-based BeagleV Ahead board
-   by adding the HDMI connector node, connecting it to the HDMI
-   controller, and activating the DPU and HDMI nodes.
-
- - Add coefficients to the TH1520 PVT node as the values in the TH1520
-   manual differ from the defaults in the driver.
-
-----------------------------------------------------------------
-Icenowy Zheng (1):
-      riscv: dts: thead: th1520: add coefficients to the PVT node
-
-Robert Mazur (1):
-      riscv: dts: thead: beaglev-ahead: enable HDMI output
-
- arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 25 ++++++++++++++++++++++
- arch/riscv/boot/dts/thead/th1520.dtsi              |  4 ++++
- 2 files changed, 29 insertions(+)
