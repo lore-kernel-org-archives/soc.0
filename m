@@ -1,238 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CAF3D5669
-	for <soc@lists.linux.dev>; Tue, 31 Mar 2026 11:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7D93D566D
+	for <soc@lists.linux.dev>; Tue, 31 Mar 2026 20:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774956513; cv=none; b=nudVj0EmasPQ8uYVviBoYrJ4p7ek/MPXBQDUDL11Lc6+hNsv/BOpXExSGl/xbZq1DZSW2jLv7yvOhhQ2Hsa066gR0/wN60slUlnra6/Cw5E9uwaIF62G+hxjDp2YR2WzztiuT8yRoddOlHVn/OkrCF7/eS0IL5Cc8ZgTer9rLyw=
+	t=1774990402; cv=none; b=oBMhJRDq9MDsNADQqrj7eR9ouVswS2pjw44jmv1Qa7DN4yNyK5o8YEQOTd2ZRZLk9Xgg7BrpwgoduUnCFPPFXDzqqp+t5KqAyyq05kcfvmefWp4qa+bcG+Jp4H/zaVKwCcE00u7bUOnD45o5Mkjo0BAzchryjcN/NE6Y5+yxo9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774956513; c=relaxed/simple;
-	bh=B/99n7I6JcxZI/gQvjlJDqR1aT5LKFUV5LHb8PaWsK0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=dfPZ1AMGX7CrCbKfV1RDEHvoMH1ZUiODlWauLr+SE8ox9/tzBy81hfPQHw7wlQVx6krO6f5yQqYDLqHmdhKOzmmZKV9SToeGhfKCvgEbUxkLrVjHBwcwKpYouax2agdZHAEyedwhj+D8ecPj/XMy5BDwvv3evRC7N8Og5cxtZfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZk0BQ2r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774990402; c=relaxed/simple;
+	bh=x9UvOv0YJRzcsdGEQnhZlvNVNt/6OghCH7bhRc/MRdo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kPhUZJO4F1V6TPp0Sci6MbhrRzlwNEBa65BMosjWtVmTuhhbV7t/T07Gf1eHzkkSvw4ID3rPxQB29vfa/tlTL7k/uXqVG90TBAh7ChBN9t+qeCRUA9KH4AQmwUyWVKPgWVpqaOp/RBYvo9tSE8L5sEKuBym3T+k5BuMj7JOrhKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=umpA/U03; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZk0BQ2r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="umpA/U03"
 Received: by smtp.kernel.org (Postfix)
-	id 9FF1BC4AF09; Tue, 31 Mar 2026 11:28:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4F4C2BC9E;
-	Tue, 31 Mar 2026 11:28:31 +0000 (UTC)
+	id DA8C5C2BCB2; Tue, 31 Mar 2026 20:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2832DC19423;
+	Tue, 31 Mar 2026 20:53:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774956513;
-	bh=B/99n7I6JcxZI/gQvjlJDqR1aT5LKFUV5LHb8PaWsK0=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=dZk0BQ2rZijhuzGkQ9dOuzDrBoCW41HkNblHO96PO6y7g2Lx/okooZmL4dsEjZj+e
-	 n4OwxacGqGo0+7uzFGBVvdHtYKkEGKCaiFnComMqopER/HwO5h3mWrqBx+JqzLrHgp
-	 vbg4i8lH6Qc9xfxuNWNstNYI4ojBtvnDQHOCUQOK6PgP+l5jeh9QUfr5NKobOWOvVW
-	 VIaoLGIZgew7eU/wbUUlbDbsU+EYuGIbA/FqsPMh7G70kXpdFvybJrJzHz6zlPf4+H
-	 pPFzaJlynp7CklBfy4PO4QEFGp1S/lqEdmms8ugPP80fFfkdfSuwimNSBPFzaFGyyl
-	 Sq+P2v09P72Fw==
-Message-ID: <6810060f-5073-4de7-9cd2-3909119e446e@kernel.org>
-Date: Tue, 31 Mar 2026 13:28:30 +0200
+	s=k20201202; t=1774990401;
+	bh=x9UvOv0YJRzcsdGEQnhZlvNVNt/6OghCH7bhRc/MRdo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=umpA/U03EBFsKfKcuLIJWoFPDip/PxEOF+yeMwP8RFFCIcBqOS0ulC7ih/hkK5iT6
+	 FA4crWMc8ea/hg6ScRj9jVTrIHrSgj82axc7ykYDx2yBT9vjaJOevt67aUa/MCsIHL
+	 CEi8mq3i3mjRJ9fbwnqJek9y5sGCngH9d42CYPYvCvkoMXbSW+96tXk3SvFm+kDRov
+	 mDtu1O+ICQCgUeSrYYSV2v/73Ic7L10m2Rr04tEWkn62zhD0bi0gxPQ3HKfHKDYNil
+	 98ysIUydh5CrOyUILlnElQQ+LHO22tTqr2r6CADqT1wcGW2Dh0qW1o40GigBV/O/kW
+	 kunHuTx8BZijw==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+	Ziyue Zhang <ziyue.zhang@oss.qualcomm.com>
+Subject: [GIT PULL] More Qualcomm Arm64 DeviceTree fixes for v7.0
+Date: Tue, 31 Mar 2026 15:53:18 -0500
+Message-ID: <20260331205318.952913-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [GIT PULL 1/7] dt-bindings: Changes for v7.1-rc1
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: Thierry Reding <thierry.reding@kernel.org>, arm@kernel.org,
- soc@kernel.org, Jon Hunter <jonathanh@nvidia.com>,
- linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20260329151045.1443133-1-thierry.reding@kernel.org>
- <406ca5ed-4a3e-48ba-94ad-d88c53b09299@kernel.org> <act9hqxjL6wZ25dP@orome>
- <1bdf911d-383a-4ea3-9a33-f8ee6e8f26e4@kernel.org> <acumPszu9kvDsebG@orome>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <acumPszu9kvDsebG@orome>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 31/03/2026 13:09, Thierry Reding wrote:
-> On Tue, Mar 31, 2026 at 11:50:18AM +0200, Krzysztof Kozlowski wrote:
->> On 31/03/2026 10:25, Thierry Reding wrote:
->>>
->>>>>       dt-bindings: phy: tegra-xusb: Document Type C support
->>>>
->>>> No acks, but that is waiting for one month so it is fine.
->>>
->>> It's got a Reviewed-by from Rob and there were no corresponding driver
->>> changes associated with it. There's literally no reason for this to go
->>> in through a subsystem tree.
->>
->> There are reasons - process and technical:
->> 1. It's a subsystem maintainer's patch, not yours. You rather should
->> have reason to take someone else's patches.
->>
->> 2. Conflict in that file.
->>
->>
->>>
->>>>>       dt-bindings: clock: tegra124-dfll: Convert to json-schema
->>>>>       dt-bindings: interrupt-controller: tegra: Fix reg entries
->>>>>       dt-bindings: arm: tegra: Add missing compatible strings
->>>>>       dt-bindings: phy: tegra: Document Tegra210 USB PHY
->>>>>       dt-bindings: memory: Add Tegra210 memory controller bindings
->>>>>       dt-bindings: memory: tegra210: Mark EMC as cooling device
->>>>
->>>> That's even my subsystem and I did not ack it. You did not even sent it
->>>> to me as requested by MAINTAINERS file (+dt is ignore alias), so
->>>> obviously I did not even had a chance to ack it.
->>>
->>> Ugh... really? I was Cc'ed to you as a DT maintainer as well as the
->>> devicetree mailing list, so I'm sure you've seen it. This had also been
->>
->> Really, you are supposed to use get_maintainers.pl. Not invent the CC
->> list, not come with own filtered list.
->>
->> I understand that my non dt address disappears when running
->> get_maintainers.pl on entire set.
->>
->> But if you sent that patch targetting subsystem instead of combining 6
->> or 7 subsystems at once, it would pop up.
->>
->> And yes, you are not supposed to mix 7 different subsystems in single
->> patchset. That's basic!
-> 
-> Pft... you're being unreasonable. These are all relatively trivial
-> changes that have at one point or another been already reviewed. Do you
-> seriously expect me to turn these into 7 different patch series so that
-> everyone gets to spend even more time dealing with these?
-
-That's what everyone else is doing, including Qualcomm which is
-upstreaming multiple new SoCs per year, multiple patchsets, multiple
-patches.
-
-But no, I do not expect you to split it but I expect to use
-get_maintainers.pl, unless that would cause a patchbomb cc-ing 50
-addresses (I don't suggest that you created such patchbomb -
-hypothetical). Removing maintainers from Cc list is not the way to solve
-patchbomb problem, if such arises. Splitting a hypothetical patchbomb
-would be the solution.
-
-> 
->> But sure, let's skip memory controllers patch cc list and:
->>
->>> reviewed by Rob a long time ago, and honestly, it's also quite trivial.
->>> It's been on the list for a month and there were no objections, so it
->>> does pass all of the criteria you mentioned before.
->>
->> No objections because you did not cc people. How can you claim "no
->> objections from person foo" if you do not cc person "foo", because you
->> do not use get_maintainers.pl?
->>
->> Look, find me here phy mantainers:
->>
->> https://lore.kernel.org/all/20260223143305.3771383-7-thierry.reding@kernel.org/
-> 
-> It's an extremely trivial, one-line change to an existing binding. There
-> is no interaction with the driver whatsoever, why would anyone outside
-> of the DT and Tegra maintainers even want to look at this?
-
-I explained in the beginning why someone could want to look:
-
-1. It's a subsystem maintainer's patch, not yours.
-
-2. Conflict in that file.
-
-But regardless why someone would or would not want, get_maintainers.pl
-asked you to Cc them.
-
-> 
->>>> And we even had few days ago talk were I explained you how these
->>>> bindings must go. Seeing pull request completely ignoring that
->>>> discussion is just huge surprise.
->>>>
->>>> No, it cannot go in. Send patches to proper maintainers first.
->>>
->>> Stop making these baseless accusations, Krzysztof. You were on Cc and
->>
->> Not using get_maintainers.pl so not ccing right address is not baseless.
->> This is the fact.
-> 
-> I use get_maintainers.pl but filter down based on common sense.
-
-Filtering means you don't use. Following this logic (although not
-exactly "common sense" but writing bindings point you that common sense
-for driver bindings is driver subsystem):
-1. I use get_maintainers.pl on my patch.
-2. Then I remove all addresses except linux-kernel@vger.kernel.org.
-3. All good and I claim I am using get_maintainers.pl.
+Content-Transfer-Encoding: 8bit
 
 
-> 
->> Neither phy, nor interrupts, nor clocks were sent to right people.
-> 
-> Again, these are patches that were all on the list previously, sent to
-> the right people at the time. They hadn't been picked up by now, so I
+The following changes since commit 2c409e03fc04b5cded81b7add9ce509706c922e3:
 
-No, they were not sent to the right people at the time. The right people
-at the time are pointed by get_maintainers.pl which you filtered out.
+  arm64: dts: qcom: agatti: Fix IOMMU DT properties (2026-03-23 22:31:40 -0500)
 
-Look again, this is the v1:
-https://lore.kernel.org/all/20260223143305.3771383-7-thierry.reding@kernel.org/
+are available in the Git repository at:
 
-Where is any phy maintainer or the phy mailing list Cc-ed?
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-7.0-2
 
-Instead of again using "baseless" arguments, please provide the actual
-fact for that claim that you cc-ed right list and right people on that
-patch.
+for you to fetch changes up to 11b72b1ca9891c77bc876ef9fc39d6825847ffee:
 
-> resent them, to the DT maintainers only, to give you guys a chance to
+  arm64: dts: qcom: hamoa: Fix incomplete Root Port property migration (2026-03-30 08:08:48 -0500)
 
-This is not a resent, this is the v1. Do you see "RESEND" in the
-subject? I don't.
+----------------------------------------------------------------
+More Qualcomm Arm64 DeviceTree fixes for v7.0
 
-I am pointing out the facts now. If you disagree, please point me to the
-original posting of phy patch with the 'right' people in CC list, as
-requested by get_maintainers.pl.
+The shuffling of reset and wake GPIO properties across various Hamoa
+devices left things in an incomplete state, fix this.
 
+Add the missing "ranges" property to the QCM2290 MDSS DeviceTree binding
+example, to fix the validation warning that was introduced by the
+previous fix.
 
-Best regards,
-Krzysztof
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      dt-bindings: display/msm: qcm2290-mdss: Fix missing ranges in example
+
+Ziyue Zhang (1):
+      arm64: dts: qcom: hamoa: Fix incomplete Root Port property migration
+
+ .../bindings/display/msm/qcom,qcm2290-mdss.yaml    |  1 +
+ arch/arm64/boot/dts/qcom/x1-asus-zenbook-a14.dtsi  | 16 +++++++++------
+ arch/arm64/boot/dts/qcom/x1-crd.dtsi               | 24 ++++++++++++++--------
+ arch/arm64/boot/dts/qcom/x1-dell-thena.dtsi        | 14 +++++++------
+ arch/arm64/boot/dts/qcom/x1-hp-omnibook-x14.dtsi   | 14 +++++++------
+ arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi  |  8 +++++---
+ .../boot/dts/qcom/x1e80100-lenovo-yoga-slim7x.dts  |  6 +++---
+ .../dts/qcom/x1e80100-medion-sprchrgd-14-s1.dts    | 15 +++++++-------
+ .../boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dts | 14 +++++++------
+ 9 files changed, 66 insertions(+), 46 deletions(-)
