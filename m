@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7D93D566D
-	for <soc@lists.linux.dev>; Tue, 31 Mar 2026 20:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AA44508F4
+	for <soc@lists.linux.dev>; Tue, 31 Mar 2026 21:16:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774990402; cv=none; b=oBMhJRDq9MDsNADQqrj7eR9ouVswS2pjw44jmv1Qa7DN4yNyK5o8YEQOTd2ZRZLk9Xgg7BrpwgoduUnCFPPFXDzqqp+t5KqAyyq05kcfvmefWp4qa+bcG+Jp4H/zaVKwCcE00u7bUOnD45o5Mkjo0BAzchryjcN/NE6Y5+yxo9A=
+	t=1774991765; cv=none; b=GteUGni0BIVwYuOgfA66YBgLJ51VFkNES1ZuieP7T9gN4QhgapLc4xp59yCcyI25KJs9rwvYf9sFreov3qZW/x4M6uZgLvSy5clCyq92pRVssgBFnD3+ffR2ddS5UqG50vf1J4twNWEHFt49pJXv1+YPNPjKz2ZPG5WSGAqkAMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774990402; c=relaxed/simple;
-	bh=x9UvOv0YJRzcsdGEQnhZlvNVNt/6OghCH7bhRc/MRdo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kPhUZJO4F1V6TPp0Sci6MbhrRzlwNEBa65BMosjWtVmTuhhbV7t/T07Gf1eHzkkSvw4ID3rPxQB29vfa/tlTL7k/uXqVG90TBAh7ChBN9t+qeCRUA9KH4AQmwUyWVKPgWVpqaOp/RBYvo9tSE8L5sEKuBym3T+k5BuMj7JOrhKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=umpA/U03; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774991765; c=relaxed/simple;
+	bh=/Zuj465z+SJXeuy8BFVva/2T89KUCArNO4FegDfx9oE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TTmnMxSF01PW6W5t0bEcu6KpRDzyXAbq9nQToATM27ZkC5GtlSqAdqW0tkQFUWhcvJ08KeDTR1cZCAtMWwCYEH46Mt/tOms3fNQIXgQAQWx5xNKX9NsKlCPRifWeX4haM567w2N2Wd0tyoHpVpS3D/L3MFcAQ4w7xVgIGPzWyPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o3gTmA2S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="umpA/U03"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o3gTmA2S"
 Received: by smtp.kernel.org (Postfix)
-	id DA8C5C2BCB2; Tue, 31 Mar 2026 20:53:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2832DC19423;
-	Tue, 31 Mar 2026 20:53:21 +0000 (UTC)
+	id A8760C2BCB2; Tue, 31 Mar 2026 21:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA640C19423;
+	Tue, 31 Mar 2026 21:16:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774990401;
-	bh=x9UvOv0YJRzcsdGEQnhZlvNVNt/6OghCH7bhRc/MRdo=;
+	s=k20201202; t=1774991765;
+	bh=/Zuj465z+SJXeuy8BFVva/2T89KUCArNO4FegDfx9oE=;
 	h=From:To:Cc:Subject:Date:From;
-	b=umpA/U03EBFsKfKcuLIJWoFPDip/PxEOF+yeMwP8RFFCIcBqOS0ulC7ih/hkK5iT6
-	 FA4crWMc8ea/hg6ScRj9jVTrIHrSgj82axc7ykYDx2yBT9vjaJOevt67aUa/MCsIHL
-	 CEi8mq3i3mjRJ9fbwnqJek9y5sGCngH9d42CYPYvCvkoMXbSW+96tXk3SvFm+kDRov
-	 mDtu1O+ICQCgUeSrYYSV2v/73Ic7L10m2Rr04tEWkn62zhD0bi0gxPQ3HKfHKDYNil
-	 98ysIUydh5CrOyUILlnElQQ+LHO22tTqr2r6CADqT1wcGW2Dh0qW1o40GigBV/O/kW
-	 kunHuTx8BZijw==
+	b=o3gTmA2S/CH8s2brCacnXtwcIc8+v4oRzecEPqcJ874UO+DZ+POF0HD8aLSYjkAr+
+	 9rTKEPtsuxZNGQlLxfeqaDwJFHxcaiqwJjE4/M6EPDgeAOsoixISqzgNaDAe7rGmdr
+	 KWXpo7IWoN8CFpQJmNnXR0fcrdDbCdUX0pwfenarZ2z5NkZC2sPVriHVQjXEIPuuZ0
+	 V84O2UD1pGTuWB3nek/enBCN613qa4csw1lkt7n/D51nIATeFh3tZmGldpNxJ5quXo
+	 +agOcmOyrLfMB/pS8hE9l11Fdc0XI363OY8VCR5WCYNdvUhK5MwdFpDRj67GyEbUaX
+	 0yl6OnKwtWdDA==
 From: Bjorn Andersson <andersson@kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: linux-arm-msm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	Ziyue Zhang <ziyue.zhang@oss.qualcomm.com>
-Subject: [GIT PULL] More Qualcomm Arm64 DeviceTree fixes for v7.0
-Date: Tue, 31 Mar 2026 15:53:18 -0500
-Message-ID: <20260331205318.952913-1-andersson@kernel.org>
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Rob Herring <robh@kernel.org>
+Subject: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v7.1
+Date: Tue, 31 Mar 2026 16:16:02 -0500
+Message-ID: <20260331211602.959960-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -48,42 +48,53 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 
-The following changes since commit 2c409e03fc04b5cded81b7add9ce509706c922e3:
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
-  arm64: dts: qcom: agatti: Fix IOMMU DT properties (2026-03-23 22:31:40 -0500)
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-7.0-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-7.1
 
-for you to fetch changes up to 11b72b1ca9891c77bc876ef9fc39d6825847ffee:
+for you to fetch changes up to 6453ad0865b68ab0de5873c1a8bb4addbbde5c19:
 
-  arm64: dts: qcom: hamoa: Fix incomplete Root Port property migration (2026-03-30 08:08:48 -0500)
-
-----------------------------------------------------------------
-More Qualcomm Arm64 DeviceTree fixes for v7.0
-
-The shuffling of reset and wake GPIO properties across various Hamoa
-devices left things in an incomplete state, fix this.
-
-Add the missing "ranges" property to the QCM2290 MDSS DeviceTree binding
-example, to fix the validation warning that was introduced by the
-previous fix.
+  ARM: dts: qcom: msm8974: Drop RPM bus clocks (2026-03-31 15:59:12 -0500)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      dt-bindings: display/msm: qcm2290-mdss: Fix missing ranges in example
+Qualcomm Arm32 DeviceTree updates for v7.1
 
-Ziyue Zhang (1):
-      arm64: dts: qcom: hamoa: Fix incomplete Root Port property migration
+Qualcomm APQ8084 is incomplete and hasn't seen functional contributions
+since 2016, so drop the platform (for now?). Also drop a number of
+unused IPQ-related dtsi files.
 
- .../bindings/display/msm/qcom,qcm2290-mdss.yaml    |  1 +
- arch/arm64/boot/dts/qcom/x1-asus-zenbook-a14.dtsi  | 16 +++++++++------
- arch/arm64/boot/dts/qcom/x1-crd.dtsi               | 24 ++++++++++++++--------
- arch/arm64/boot/dts/qcom/x1-dell-thena.dtsi        | 14 +++++++------
- arch/arm64/boot/dts/qcom/x1-hp-omnibook-x14.dtsi   | 14 +++++++------
- arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi  |  8 +++++---
- .../boot/dts/qcom/x1e80100-lenovo-yoga-slim7x.dts  |  6 +++---
- .../dts/qcom/x1e80100-medion-sprchrgd-14-s1.dts    | 15 +++++++-------
- .../boot/dts/qcom/x1p42100-lenovo-thinkbook-16.dts | 14 +++++++------
- 9 files changed, 66 insertions(+), 46 deletions(-)
+Lastly clean up the RPM bus clocks in MSM8974 interconnect nodes.
+
+----------------------------------------------------------------
+Dmitry Baryshkov (2):
+      ARM: dts: qcom: drop apq8084 support
+      ARM: dts: qcom: msm8974: Drop RPM bus clocks
+
+Rob Herring (Arm) (1):
+      ARM: dts: qcom: Drop unused .dtsi
+
+ arch/arm/boot/dts/qcom/Makefile                    |   2 -
+ arch/arm/boot/dts/qcom/qcom-apq8084-ifc6540.dts    |  34 -
+ arch/arm/boot/dts/qcom/qcom-apq8084-mtp.dts        |  23 -
+ arch/arm/boot/dts/qcom/qcom-apq8084.dtsi           | 852 ---------------------
+ arch/arm/boot/dts/qcom/qcom-ipq8062-smb208.dtsi    |  37 -
+ arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi           |   8 -
+ arch/arm/boot/dts/qcom/qcom-ipq8064-smb208.dtsi    |  37 -
+ .../boot/dts/qcom/qcom-ipq8064-v2.0-smb208.dtsi    |  37 -
+ arch/arm/boot/dts/qcom/qcom-ipq8065-smb208.dtsi    |  37 -
+ arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi           |   8 -
+ arch/arm/boot/dts/qcom/qcom-msm8974.dtsi           |  21 +-
+ 11 files changed, 3 insertions(+), 1093 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-apq8084-ifc6540.dts
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-apq8084-mtp.dts
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-apq8084.dtsi
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-ipq8062-smb208.dtsi
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-ipq8064-smb208.dtsi
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-ipq8064-v2.0-smb208.dtsi
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-ipq8065-smb208.dtsi
+ delete mode 100644 arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi
