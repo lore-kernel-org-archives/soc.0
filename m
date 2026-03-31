@@ -1,92 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADCF30CDAB
-	for <soc@lists.linux.dev>; Tue, 31 Mar 2026 02:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726FD3C9ED7
+	for <soc@lists.linux.dev>; Tue, 31 Mar 2026 07:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774924581; cv=none; b=Vd6g5e0/Sikx3Wk9rDf6UaMgXx4uy4QzSys0RNG+WdSW9XAVbEvGwMCES7uJ6yTD7+Ybill1Iu1nyG5Xp83QqVJ6Wm92s8bpaXhIRjFCWv3OiVbfo3sTWWk6jtsjB/vD5YsfqGAkOpQww/PEWQC/P41HRUaCr4cc1GzITaAR3Bk=
+	t=1774942706; cv=none; b=IwSC+2jSpncH3cuPsbPT/DM7HqJOoeQWtkzU/bchQa2RD51lgHl6+wtt8n70COyJq3Q8pPxHKkXDRI1gNK9YGY8JO0JCSjDJb0/XHN95wsIITiPUxOEx6HdtF9zw/oKsd59Gp1sRYWe9FMB7aKeaG5wwMPDf1AdlDHRY37ZC8H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774924581; c=relaxed/simple;
-	bh=ay7yo9lrEKKlSLW7472SnaQqrDPRw0aD215tIRQQEF4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NAZt1GA1AkmQdP2FkoopJRIp2c1ROwT6/94fLP/9XOoZ0N+OYFZsA2KiOEW1XRdC4bQUBvPuonnWcPHGtS9jB1R6GqNrPtY9rVWmrmfVg0iOCLxiD9pImLR/NVDejERwQotaqupT3umi4hd69/SXYHPHF/UZ5g5ho4/R5sD4V+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cki6ikCC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774942706; c=relaxed/simple;
+	bh=G9HJmQU8SgdtwfrY1W2nRepzj5FuKeUXX3qsWHsDCvk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pipAVnyd95bzOn+jx8SoUKuEM8DNdJMvjdsQvOk2Cp2Lg4tXM5cYvbyF1doonmFp9SSmiYaldOqznqYssC6F0oJpvvyGNzTOWgWM2mWqZafz3pMQNJsb8TH4dAMOqIiGtshbYMpo1oQkJ4rMu1svOP1kOhHAXwHyDeuUxu1P/OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=esOVEi9Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cki6ikCC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3677CC4CEF7;
-	Tue, 31 Mar 2026 02:36:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esOVEi9Q"
+Received: by smtp.kernel.org (Postfix)
+	id 2709DC2BCB2; Tue, 31 Mar 2026 07:38:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF8DDC19423;
+	Tue, 31 Mar 2026 07:38:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774924581;
-	bh=ay7yo9lrEKKlSLW7472SnaQqrDPRw0aD215tIRQQEF4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Cki6ikCC42aDEsIaizE+ooo0bU8J568itU2yT+vWvJZUDd1/D8rxJqWpYR59WbxH8
-	 YPrH1m1DaNsVRyM6C+oUSrCleg+0ZSXvjWRYyTF9o8b5Bp6CG8E+LJk9RoaJPctl9V
-	 +FYbmZIM4JlDvT5r2TbTQFm5CQ24978myxHuvHEeRSdUia00saI1EOt+VixS11dvT8
-	 V75l67M2LnThSeAiMRCQdvFzf2EwcRKA7sApzgW3NF7kEu+neBxNKeplaMhna0n60R
-	 QvobH15rnFn3q16nLrjjVNOoJLkqpicldHzwa2+2Qispd1CGZZENKZfnGTSSTEH6fG
-	 XgfjW9Swkga9w==
-From: Dinh Nguyen <dinguyen@kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm64: dts: socfpga: updates for v7.1, version 2
-Date: Mon, 30 Mar 2026 21:36:18 -0500
-Message-ID: <20260331023618.258887-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.42.0.411.g813d9a9188
+	s=k20201202; t=1774942706;
+	bh=G9HJmQU8SgdtwfrY1W2nRepzj5FuKeUXX3qsWHsDCvk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=esOVEi9Q1nK07gXwMY08B8PsSZHCRWRw0S/fnTeEowEFPwThZBIAtm4W7K1RZuaC1
+	 wiPgTml9x+uIEgGEc3TQAKkIVjNjSpHoelM1q5bETCLZLEo9wsQJlU4A/+R8EmTqRd
+	 8K0LnIJASz+rYrIqLI/BZUyPxJwFVWkTeNCqFC8zv5/S6Q6a7Oui+xlRIeyrLujemw
+	 jj3gzElrEHw0R7D1HH1HdDzD72sVl3sunK5JvzXMMWwaXoPjVAVrmkfAthyojba9bb
+	 zDrKhwRlSwz/i2vGBO08JIcSv+ysQ2yi1RC68j0Sn09o9aEL12f9s26upHDQbhLwMs
+	 cxSQiQXn0HAcQ==
+Date: Tue, 31 Mar 2026 09:38:23 +0200
+From: Thierry Reding <thierry.reding@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: arm@kernel.org, soc@kernel.org, 
+	Thierry Reding <thierry.reding@gmail.com>, Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL 4/7] ARM: tegra: Device tree changes for v7.1-rc1
+Message-ID: <act5kGG-4mZl0j3p@orome>
+References: <20260329151045.1443133-1-thierry.reding@kernel.org>
+ <20260329151045.1443133-4-thierry.reding@kernel.org>
+ <058d79b7-3d4c-4f0a-a95f-b2e3582a4fa7@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="u64yt5slajlaoiug"
+Content-Disposition: inline
+In-Reply-To: <058d79b7-3d4c-4f0a-a95f-b2e3582a4fa7@kernel.org>
 
-Change from v1:
-- Correct the commit message in commit "dt-bindings: intel: Add Agilex5
-SoCFPGA modular board"
-- Used b4 to apply patch
 
-Thanks,
-Dinh
+--u64yt5slajlaoiug
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [GIT PULL 4/7] ARM: tegra: Device tree changes for v7.1-rc1
+MIME-Version: 1.0
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+On Mon, Mar 30, 2026 at 01:46:32PM +0200, Krzysztof Kozlowski wrote:
+> On 29/03/2026 17:10, Thierry Reding wrote:
+> > ----------------------------------------------------------------
+> > ARM: tegra: Device tree changes for v7.1-rc1
+> >=20
+> > Various improvements for Tegra114 boards, as well as some legacy cleanup
+> > for PAZ00 and Transformers devices.
+> >=20
+> > ----------------------------------------------------------------
+> > Dmitry Torokhov (1):
+> >       ARM: tegra: paz00: Configure WiFi rfkill switch through device tr=
+ee
+> >=20
+> > Svyatoslav Ryhel (8):
+> >       ARM: tegra: Add SOCTHERM support on Tegra114
+> >       ARM: tn7: Adjust panel node
+> >       ARM: tegra: lg-x3: Add panel and bridge nodes
+> >       ARM: tegra: lg-x3: Add USB and power related nodes
+> >       ARM: tegra: lg-x3: Add node for capacitive buttons
+> >       ARM: tegra: Add ACTMON node to Tegra114 device tree
+> >       ARM: tegra: Add External Memory Controller node on Tegra114
+> >       ARM: tegra: transformers: Add connector node
+> >=20
+> >  arch/arm/boot/dts/nvidia/tegra114-tn7.dts        |  13 +-
+> >  arch/arm/boot/dts/nvidia/tegra114.dtsi           | 221 +++++++++++++++=
+++++++++
+> >  arch/arm/boot/dts/nvidia/tegra20-paz00.dts       |   8 +
+> >  arch/arm/boot/dts/nvidia/tegra30-asus-tf600t.dts |  21 ++-
+> >  arch/arm/boot/dts/nvidia/tegra30-lg-p880.dts     |  23 +++
+> >  arch/arm/boot/dts/nvidia/tegra30-lg-p895.dts     |  33 ++++
+> >  arch/arm/boot/dts/nvidia/tegra30-lg-x3.dtsi      | 174 +++++++++++++++=
+++-
+> >  arch/arm/mach-tegra/Makefile                     |   2 -
+> >  arch/arm/mach-tegra/board-paz00.c                |  56 ------
+> >  arch/arm/mach-tegra/board.h                      |   2 -
+> >  arch/arm/mach-tegra/tegra.c                      |   4 -
+>=20
+> Why does the DTS branch has mach code? Tag message mentions legacy
+> cleanup only and such cleanup should not cause mixing independent
+> hardware description (DTS) with drivers.
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+The DT additions for PAZ00 replace the legacy code, so it makes sense to
+replace it in one patch, otherwise we'd be introducing a bisectability
+problem.
 
-are available in the Git repository at:
+Thierry
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_updates_for_v7.1_v2
+--u64yt5slajlaoiug
+Content-Type: application/pgp-signature; name="signature.asc"
 
-for you to fetch changes up to 625af11fb9885f202e028ea5afa0037f3014e376:
+-----BEGIN PGP SIGNATURE-----
 
-  arm64: dts: intel: agilex5: Drop CPU masks from GICv3 PPI interrupts (2026-03-30 21:27:28 -0500)
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmnLee8ACgkQ3SOs138+
+s6GasBAAqfoYj2h+7y52qfWeJW22QsUTtH9yfVzleXtd59ZqOEw2GR4p6LrZ6Uy+
+n4zg/h9yxRstb3K323jMfBhTDYLtotMPPnoeLzy5nb46PubAJD8AOTeN/aWoJWwx
+39E7lrbXEdlwJPC857AHAbVtoPTKIh46PoCO7vCQcDqBHemo7umd1CNnJ+0GfY04
+4YgCZRkGI9AMdPWzGJbzodfBd+TZvw9SfD4hl2Ey8QmAmp0E2Axs13p/4uqVIbFE
+p3HdMVyhXecVuSWGozVeViahyqZPnWNarQHBcC+xiku6QWeZF7UfjFWi2E2XiWFc
+STOrIZ7hB2Hy7BpzbVygvTVoSWD2/Rt9Duelp8glKmt+Q9t1Vn8e+dL0yLdeZPzh
+QRK8rbE9RPQfKuPYeeS8OFtsOiZPaw7+So4DxkZmauhd3VzAwoBxkrXs7WKqFkdW
+Y5m+xpsr9MFvkTlbnTPnZU0AOjFqkC1jlynKmjkbND+jzTvOnMWFdR+W4Yv2zmTV
+QMcczdXYG1CyTXkII9Rz/ZCM5TsQ5twa5Kdemk4jf+TMgS9oepr4Xr2yjfvKwoXE
+SnrnmTlTqjz10fsVsIWzC0005eG1cCKqHAX9fFByMVyYdpsMbLWydEoKvZ2Raadw
+NUP2OtA124XEqquTBxxXYrpDfyekys7qEg0ZG9DBCJWhQGZ3k0o=
+=ZBTf
+-----END PGP SIGNATURE-----
 
-----------------------------------------------------------------
-SoCFPGA DTS updates for v7.1
-- dt-bindings updates:
-	- Document fallback compatible for Stratix10 SoCDK eMMC board
-	- Document compatible for the Agilex5 SoCFPGA modular board
-
-- Add emmc support for the Stratix10
-- Drop CPU masks from the GICv3 PPI interrupts for Agilex5
-
-----------------------------------------------------------------
-Dinh Nguyen (1):
-      dt-bindings: intel: Add Agilex5 SoCFPGA modular board
-
-Geert Uytterhoeven (1):
-      arm64: dts: intel: agilex5: Drop CPU masks from GICv3 PPI interrupts
-
-Ng Tze Yee (2):
-      dt-bindings: altera: Add fallback compatible for Stratix 10 SoCDK eMMC variant
-      arm64: dts: socfpga: stratix10: Add emmc support
-
- Documentation/devicetree/bindings/arm/altera.yaml  |  7 ++
- arch/arm64/boot/dts/altera/Makefile                |  1 +
- .../boot/dts/altera/socfpga_stratix10_socdk.dts    | 67 +-----------------
- .../boot/dts/altera/socfpga_stratix10_socdk.dtsi   | 71 +++++++++++++++++++
- .../dts/altera/socfpga_stratix10_socdk_emmc.dts    | 81 ++++++++++++++++++++++
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     |  8 +--
- 6 files changed, 166 insertions(+), 69 deletions(-)
- create mode 100755 arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dtsi
- create mode 100755 arch/arm64/boot/dts/altera/socfpga_stratix10_socdk_emmc.dts
+--u64yt5slajlaoiug--
