@@ -1,41 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1828539BFFC
-	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 11:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDCC1C68F;
+	Wed,  1 Apr 2026 11:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775042811; cv=none; b=jzbZ6SSw+I+L1lh2oKRTyA3n9VKNf0zuYBcdSKMQd/3urQvXRj6PUHIdY8QINWi4vRhdm9OOwQfPok9iKOA3rXBAH3/q23vZjkz9WpfHA7TvR58PRbTxtpQ08dC+UoYn8HBDk93hbfqt1Yn8V0cHwMsetewW6noUvmNKl6rdcKU=
+	t=1775043221; cv=none; b=OhCvIS/SqYqx49Qfs0VmFK8qnfGG0tbaQbEDyhFQipGx6sscVhwwIPUb6fZMLmK2jdeYtpJititL+n8T7AoUbRza9s5ONjdfPptccphZ20MNQGHEHVARzmnBPuv3I2AaP8A0TD0kGlGz9UggSkc5+4b35PsPKTBmZFyWEgsriyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775042811; c=relaxed/simple;
-	bh=m8yKhzC3LaxWjfpfpdy07UdKE1XsSYKtP6Sim+B+8Rg=;
+	s=arc-20240116; t=1775043221; c=relaxed/simple;
+	bh=WP7aMfbv/ILGmqyI+0/9zkY2yavAid0gw/ITIKmxPF4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b6MUtfM88hk6/ayZcgjkfrabMMpKWPTTfU81g7R9bKZ44wW30XSv2cn+6n+ngHjMqC7u55l1B1cZejqzMYi2iK7TtN5ifcv2IBUtpsyn/L/DgcsJcIwgIjHUy9bC+WLE8Nlj0t8rTVecsLeB9+xcKwecxppTd4+67WuWg0UydL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KwaJapGr; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=eQVxmkEpe5pyM/gV9F2QuQ3R0oTWLhRBGvsAZyfjoQF4SYFxMi0y/R3tOwUuay2dad4KdklsGqaR9p0AGOp5gQoSJUzCJu21RpD1zMM4/I3Vhy9SmXQ657lln29nBlJx3dy408AoV1/FZDEMI4jjkOp4GHYerSnSftXxhCqmDQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tylho3wr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwaJapGr"
-Received: by smtp.kernel.org (Postfix)
-	id CB4BAC2BCB0; Wed,  1 Apr 2026 11:26:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4BEC4CEF7;
-	Wed,  1 Apr 2026 11:26:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tylho3wr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3249DC116C6;
+	Wed,  1 Apr 2026 11:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775042810;
-	bh=m8yKhzC3LaxWjfpfpdy07UdKE1XsSYKtP6Sim+B+8Rg=;
+	s=k20201202; t=1775043220;
+	bh=WP7aMfbv/ILGmqyI+0/9zkY2yavAid0gw/ITIKmxPF4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KwaJapGr4tnl7p14mIb0FOFPVc6cJdGfKQU7XuiYmejgQcBwRMLwJNzfCTxrDlk8w
-	 +ZJMiYl4CPbLG7+igfwiVF8dAU6V9VvH4lbBl6p5zMCM7kb+NXoPN0oUOqBF3/lL3q
-	 Env03O7LT5/2jZg+8q3J1HdUqaTugS6ZSZ+Y/ddNteJ4/Rr3hZgPePzhgPZSnYoojS
-	 EwDlnEvT3KbVDNt3S0nD+nutI/qcL5pSEzS+ja8UdyokLmHI49A4KYVYTk1qDKhBMs
-	 ++699uVrcLPcOA/r7lCWCsXU1pBGtuFQ3znOiT2YmhISYxaxmCGYCvPiCqhYl64J/K
-	 NDRvRy7C+Ab/A==
-Date: Wed, 1 Apr 2026 13:26:48 +0200
+	b=tylho3wrCv6pG2LF2mwddsKlQBptnSsWn2JnykRidEfsQ8hwWvZ4SstQWLUXEPCqI
+	 x17KikpghkeS34k9BGsUVSITbJ+BzO5VWcgHZ00Mijk5r1kdwgUoSkhUNjQYwvLrHI
+	 9Wo23/uO/q12YyuEtlWoHXohdxeW+28Pzv6DggstihDf1s/lcqVTX02Ixtha6jdCJc
+	 IxIv4Iq+QhYfIVHroiqz23yu0BJYZ/bqIbS7HNgVqZFgPqLdcPYUr0Tb4cE8Hgo3UW
+	 l2pJFpI1Ex5m6oMm5ZfFPuy7au3mpfiYWwX9D9tNXFuG/IPwOcsPDvPr7dVLUSffjp
+	 N85af9OpqAq8g==
+Date: Wed, 1 Apr 2026 13:33:38 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kernel@pengutronix.de
-Subject: Re: [GIT PULL] Reset controller fixes for v7.0, part 2
-Message-ID: <20260401-ubiquitous-brawny-camel-bfb1e4@quoll>
-References: <20260324094255.3538772-1-p.zabel@pengutronix.de>
+To: Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: soc <soc@lists.linux.dev>, linux-arm-kernel@lists.infradead.org, 
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
+Subject: Re: [GIT PULL] aspeed: first batch of fixes for v7.0
+Message-ID: <20260401-fanatic-benevolent-squid-8118bf@quoll>
+References: <4afeb8eaa663835725cebaeb8c1b6f50dce184dd.camel@codeconstruct.com.au>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -44,32 +42,31 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260324094255.3538772-1-p.zabel@pengutronix.de>
+In-Reply-To: <4afeb8eaa663835725cebaeb8c1b6f50dce184dd.camel@codeconstruct.com.au>
 
-On Tue, Mar 24, 2026 at 10:42:55AM +0100, Philipp Zabel wrote:
-> Dear arm-soc maintainers,
+On Thu, Mar 26, 2026 at 01:25:03PM +1030, Andrew Jeffery wrote:
+> Hello SoC maintainers,
 > 
-> The following changes since commit e0cf84109bc6c6768337123f1de24ff56b41c91b:
+> I've been intending to send out this fix PR for a while now, but time
+> has escaped me recently.
 > 
->   reset: rzg2l-usbphy-ctrl: Check pwrrdy is valid before using it (2026-02-23 17:03:28 +0100)
+> Andrew
+> 
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> 
+>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://git.pengutronix.de/git/pza/linux.git tags/reset-fixes-for-v7.0-2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed-7.0-fixes-0
 > 
-> for you to fetch changes up to a0e0c2f8c5f32b675f58e25a9338283cedb5ad2b:
+> for you to fetch changes up to 7ec1bd3d9be671d04325b9e06149b8813f6a4836:
 > 
->   reset: spacemit: k3: Decouple composite reset lines (2026-03-23 12:25:47 +0100)
+>   soc: aspeed: socinfo: Mask table entries for accurate SoC ID matching (2026-02-23 09:43:21 +1030)
 > 
 > ----------------------------------------------------------------
-> Reset controller fixes for v7.0, part 2
+> aspeed: first batch of fixes for v7.0
 > 
-> * Decouple spacemit K3 reset lines that were incorrectly coupled
->   together as one, but are in fact separate resets in hardware.
-> * Fix a double free in the reset_add_gpio_aux_device() error path.
->   This has already been fixed on reset/next by commit a9b95ce36de4
->   ("reset: gpio: add a devlink between reset-gpio and its consumer").
-> * Fix the MODULE_AUTHOR string in the rzg2l-usbphy-ctrl driver.
 
 Thanks, applied
 
