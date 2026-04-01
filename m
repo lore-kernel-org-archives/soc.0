@@ -1,44 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDE63C342A
-	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 11:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30C03F7E8D
+	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 11:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775042337; cv=none; b=D03MTsBWSZ/r6+6DhxM9wM742GFUaNCNwCbMW72V1I7SIdMGpX22wd/KPjMd1RRvCbpuEmorwotLgNx+pwk0HZaMh5eQTLehatRBHRGho1QDACF86xuw+hMVxpuPpAKg00GZWdRhnFIZSIbdmNiDQ9IfazGexGDWpAac+c3S7BQ=
+	t=1775042667; cv=none; b=dBQITJtjeiueDvds1Y6vwuPJXQQMhdu7HPkA9D4a6jVeINYELphKecpoVyERWTz9TCeut5Zd68R6+oCN911KX0q8pdfMSD1Fb9fPZbwbSt09YZ0H0AGF255K3QPOn4xuuXeWeoj/MKUzzrEaJGecRkRr0mZeYMkfJ8H0lVEJjzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775042337; c=relaxed/simple;
-	bh=pqNx+XdtPue5P43Is5uBQ98Y3Hnw2hNKyF4NnEidEuE=;
+	s=arc-20240116; t=1775042667; c=relaxed/simple;
+	bh=y/ngwuhS2Jpyc7YPVHpxC4rTjEHqs+MNlAUE9lvy6ms=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=apk1wIXF7uxQ+ZzFfCdTaYLh7pw8SrWLDzwgR0MGr3NpRNMUiFY128KbiD7TmkHmKVZ57bwM8bX2kyN1IF9UqylFm6AFi+bLsAVu7yMZ4V47sYZ3JkHFw/+zlfz+3nEVRdCq7Pb/isDoemtQP598ITkAZ3OUGS7SsghBItExq2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6oS+Nyd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=eABbewm0gtrY2fpw8scWpOoOZAJjrXMcyuhmLW13oWtPsS0DXjDyGWHhF3mI7/VdI5dOCPelB1keOJtosGB4GhQZnGH2eyEyObw4NWVPK8lMbqdJQ09+yPY09QUZsnZrMxcxXk1avbMgsYzCztS0/AeFPt+nP/DxB69xVtZXFfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uFKQByon; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6oS+Nyd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uFKQByon"
 Received: by smtp.kernel.org (Postfix)
-	id 11FD1C4CEF7; Wed,  1 Apr 2026 11:18:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FBEC2BC9E;
-	Wed,  1 Apr 2026 11:18:56 +0000 (UTC)
+	id 7AD94C2BCB3; Wed,  1 Apr 2026 11:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4B2C2BC9E;
+	Wed,  1 Apr 2026 11:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775042337;
-	bh=pqNx+XdtPue5P43Is5uBQ98Y3Hnw2hNKyF4NnEidEuE=;
+	s=k20201202; t=1775042667;
+	bh=y/ngwuhS2Jpyc7YPVHpxC4rTjEHqs+MNlAUE9lvy6ms=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y6oS+NydJKP4lXpWPkASVFtY5WXa0O/JO/D/heCZxpU+PkyKjeKDmEQLCroEgRlMv
-	 HJBEFEom5beps9aXJNLv1+B+olD1ahAaW/7+ztVrWTb4LT5swNtakIfoZP/FkaIATL
-	 7TKyFL3a/yiGhHBOu30hu57nD55Nn/LWpJVTaD6bkr7/GwvcINdILaERDKKszoss7W
-	 W2jKFzvmcKvea97oBFB/xFSmDUraaTVYmilXAtQvPqGgBaKREh/aK0u8WWTpYM/DwB
-	 dP864TdNZ5Uash80Rrw6l6vwmNql6I8rZWmYGoYc9aHkFeQ8+mQP+lqkMvDD+sSROh
-	 8IeaADUWM9plA==
-Date: Wed, 1 Apr 2026 13:18:54 +0200
+	b=uFKQByonYUSgTjPkV2Aykn9g5VCvZzzHo/SC8SWELW+CT47wk5/9yIzsD9e5tgW0q
+	 ikjhfUMqzGaiDJ3xfyewqYzurXovNyxW8PMZoWcae1t1qHdnBOkTsvGqXps7P0TEdX
+	 q4mu4LTbUE1qxawxTqo52soq7OtLm/uC97bOmJu/ZHPyMFi/Y8uSXI9VSyu6cWsoN0
+	 U021ThzgmwK4I3X76ee4qRsUs4KBXbFSomPFTTvGXSGoncqOIjfCilOgb3hScksV2A
+	 vfZ9gB4d2csuedAb/TTiBnHD4vqKlEqeMXKD40bUBIDfHA+Z8CxC/M8BE7Vr4eQIMr
+	 Lct2gHc9KEyoA==
+Date: Wed, 1 Apr 2026 13:24:25 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: soc@kernel.org, Rob Herring <robh@kernel.org>, 
-	Gregor Herburger <gregor.herburger@linutronix.de>, =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>, 
-	Stefan Wahren <wahrenst@gmx.net>, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, 
-	khilman@kernel.org, bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [GIT PULL 2/2] Broadcom devicetree-arm64 changes for 7.1
-Message-ID: <20260401-rapid-lyrebird-of-emphasis-da7b13@quoll>
-References: <20260323190239.1890505-1-florian.fainelli@broadcom.com>
- <20260323190239.1890505-2-florian.fainelli@broadcom.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kernel@pengutronix.de
+Subject: Re: [GIT PULL] Reset controller fixes for v7.0, part 2
+Message-ID: <20260401-imperial-hare-of-defense-8cfc87@quoll>
+References: <20260324094255.3538772-1-p.zabel@pengutronix.de>
+ <39b18202a275168eb4344a2515f7c18723eaf8b0.camel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -47,31 +45,50 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260323190239.1890505-2-florian.fainelli@broadcom.com>
+In-Reply-To: <39b18202a275168eb4344a2515f7c18723eaf8b0.camel@pengutronix.de>
 
-On Mon, Mar 23, 2026 at 12:02:39PM -0700, Florian Fainelli wrote:
-> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+On Tue, Mar 24, 2026 at 10:55:47AM +0100, Philipp Zabel wrote:
+> On Di, 2026-03-24 at 10:42 +0100, Philipp Zabel wrote:
+> > Dear arm-soc maintainers,
+> > 
+> > The following changes since commit e0cf84109bc6c6768337123f1de24ff56b41c91b:
+> > 
+> >   reset: rzg2l-usbphy-ctrl: Check pwrrdy is valid before using it (2026-02-23 17:03:28 +0100)
+> > 
+> > are available in the Git repository at:
+> > 
+> >   https://git.pengutronix.de/git/pza/linux.git tags/reset-fixes-for-v7.0-2
+> > 
+> > for you to fetch changes up to a0e0c2f8c5f32b675f58e25a9338283cedb5ad2b:
+> > 
+> >   reset: spacemit: k3: Decouple composite reset lines (2026-03-23 12:25:47 +0100)
+> > 
+> > ----------------------------------------------------------------
+> > Reset controller fixes for v7.0, part 2
+> > 
+> > * Decouple spacemit K3 reset lines that were incorrectly coupled
+> >   together as one, but are in fact separate resets in hardware.
 > 
->   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> It is important that this makes v7.0, as it fixes an incorrect binding
+> that has not been part of a release and which has no users yet.
 > 
-> are available in the Git repository at:
+> > * Fix a double free in the reset_add_gpio_aux_device() error path.
+> >   This has already been fixed on reset/next by commit a9b95ce36de4
+> >   ("reset: gpio: add a devlink between reset-gpio and its consumer").
 > 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-7.1/devicetree-arm64
+> Because of this, commit fbffb8c7c7bb ("reset: gpio: fix double free in
+> reset_add_gpio_aux_device() error path") introduces a merge conflict
+> with reset/next:
 > 
-> for you to fetch changes up to 0acb1de2b4df426a62dba33bcd80f3939636f97b:
+>   https://lore.kernel.org/all/acFRVzvV9Dww47v_@sirena.org.uk/
 > 
->   arm64: dts: broadcom: bcm2712: Move non simple-bus nodes to root level (2026-03-20 10:17:30 -0700)
+> Should I resolve this myself by merging this tag in to reset/next as
+> well, before submitting reset updates for v7.1?
 
-Patches were good, I wanted to merge them, but then merge complained:
+Yes, please merge the fixes to your next branch. Or base next branch on
+top of fixes commit, when starting next as new branch.
 
-	Can't check signature: No public key
-
-I refreshed now my keyring with kernel.org and the same.
-
-I think the same issue was last time and repo is non korg, so nothing
-seems to improve.
-
-I am moving on.
+This merge conflict looks quite significant.
 
 Best regards,
 Krzysztof
