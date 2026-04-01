@@ -1,97 +1,151 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C8E46AEDF
-	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 17:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14ED378D7F
+	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 21:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775064813; cv=none; b=OIiq5uCmX5UzyTzu5FhXOSw+oiicF7V43BPQQmTfSAuEAibYNiL4+zv/Q2aNr5nG5LM2veNq/SinYCgArW/tCnJHUG6XskAadV79pr4r4gslW1b5GEd+ajW91Pu5Wu7j5ygnlkmAoI515DFVUM3alqGygbqFzX4/j78pvFllIdQ=
+	t=1775078878; cv=none; b=Em3GjViG4K/EvdjWkpMouMqxfHYJ5dJU28K0isOj1xqcTAMffIFcyziYEOuDA1GeHcb7eOVvn/jeP32vQedyZOlx94Y4I15AJODre5m6MkN5lwO0KSfNpc7yzojwP7FEPv6J3spPPHZjypixuElAw9VQ6bU9gJ7rjbR4xPKqdkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775064813; c=relaxed/simple;
-	bh=9h3k+SWXPgCXh3URQw2m2EnXgwEp8fqiTGDr5MkY+Cs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=GKLpaqjp037L7fWKnQQmMLQ4ZKVdlkX4eJPgqLIkrOKb9Jbjw6eavlI8baegsKf0LzchHQoBmIg2GAryycrzcD+HcqMU9QjzSEHfM2YPVM3v98AE+VkamSrjYz2ZNblP0KMmkYOV+9OA0MJI0GIWgWE1ro07YFIz8c4GU2egjBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=KuHX7Ltf; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1775078878; c=relaxed/simple;
+	bh=5cRLt2ejY/q4381xho7ZTnEIV1SDSwjdAkxgGGfrjzM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gw5PDONpwWl9Y33dUseYxbi3WDoK0to9mgeztF1yJ7jXGdVN/VIv6UX26SkSeQLMXO7bnn8xBDv/xpSyXbKPZ261LjdREPgOntBsAeqovZkhZa3haYZRMcm7ir/Uowl8YAiYAwleEJ1EMslKKU7PAFo+b84xNt0ftvZzCtan2Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=1ZSAu4a8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="KuHX7Ltf"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2b24fdac394so38879285ad.3
-        for <soc@lists.linux.dev>; Wed, 01 Apr 2026 10:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1775064811; x=1775669611; darn=lists.linux.dev;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wUGrmWIs1eqe1Uc4sRH3g6ZJwCj+Y/CkFLvTuPn+h5I=;
-        b=KuHX7LtfoF9rY2pzdceABIcIKQ7v0tLpnIN4O5ExUzJtLBOk5HbhPZlYACxBNCz9BF
-         N0rVpGge2tsmKS6OECJiPf7PzARAMFQ+cOmJ/eccwZxOePzqaefGILn1I0Dxbq9hM2l8
-         X7oHu+wADF8YalBDbd4c1UF+8rcSGB+drvNbnAAbUZo2ghha6j6hzwgguFyqdypGxPDN
-         oc7R8RmO2li1GzGphWRjywRyTyF+t6Ep6cCeG0Pcb+LuB19SVuAljqScVDXN+d4a11ND
-         iYuyMuMS4pwFNjouMEab8kHDPVN3FYvA3MsyT+r28gplbJj1zIqmmBHspvqPFNjK06Yi
-         uldg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775064811; x=1775669611;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wUGrmWIs1eqe1Uc4sRH3g6ZJwCj+Y/CkFLvTuPn+h5I=;
-        b=PSHxTR9Y0V6N1s+GIqUrxQ+h+6JRv2M2V6yjt5J9bz/dncSWoVEUDPvmcvTc2SRBU3
-         lpYDkYBYvu5dcAqOTY3EZquUnndPuwk76rj4X0HP5rYM3A+uThZN6zUYTk0zygvVA166
-         QhS2kIQi8q1AmRqNwFUn78wWTWQh+yg4RVA6IPRG3Tu5Qjgd6SWugRdArmCwC8pce8np
-         zif40TjhTzkVjiLL5/IZ5WbYOeWOAz97cJyUeJYh5uIqR4kYnGcTwTITEBOKgUfEOEGe
-         aI956zqDBhzuXu0QKng7/Rz6ObS9e3SK/1pYQwvpXwAphYuxzSDE7m/osa4BpHb1oOvD
-         UGkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMkR7BxgohmPwgT9tF8KJvH3NTh1ma8VRLkIge/z91XhgLxyrPwHREzK2AcuPUhtL5/8M=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxOWz5hDzo4sF+EvYFaEPzDC+X/XVYOFid6pVwys6vX+rG7dC3y
-	hg70Zm7stizvaKof/DMK4W4V+FEy9HgN/9gCU1Yd6+zonsZtA/78vxt9h1DbbOJ1sus=
-X-Gm-Gg: ATEYQzyTAjcjwIVrIW13yeG2cezZbYqJuvtKG52tMRserOW3t2o5ThDZc868G4YnP07
-	JlX637894aE6rqjWA9MqBVRuQqyz7cM0PYWHT3UqFcoyMFfsE6WSHsv3fH0B9UhLBFjbiht9kpa
-	RXHueRjBBY4tavtZpIsswae6wT1n+1EuqtldMLv51e3siSt25sUYtU8i+Gy/3bCOY3EtLTi8L/E
-	jLk8b+WgFiQPhFxbI6Qnz3+XwsHMz7jfZfIdZ0REiu+o9gLhsTVaM7JypjvU1zewmpwDwmQb5GS
-	zIrevfl388kJB067AvQAPA8vPQZCOoDrVvpffDJplczMVVmZx86JNJh7KP2uZ8yA0nvrzpqWBuC
-	mq7ZY5A2zLadqkLCfm62f+u+Zc5uoMxgXRrQ+IdI5Sn/Ey8/RZRIhxZ0Lnu+cS6TiidC2nK74a9
-	uCLCOf7Ldazt0MC9wY3Y4=
-X-Received: by 2002:a17:902:f54a:b0:2b0:6e12:bb21 with SMTP id d9443c01a7336-2b269d4af02mr44706185ad.41.1775064810785;
-        Wed, 01 Apr 2026 10:33:30 -0700 (PDT)
-Received: from localhost ([97.126.187.42])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749cbca2sm2974705ad.73.2026.04.01.10.33.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 10:33:30 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, linux@armlinux.org.uk,
- aaro.koskinen@iki.fi, jmkrzyszt@gmail.com, tony@atomide.com,
- andreas@kemnade.info, rogerq@kernel.org, arnd@arndb.de
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-omap@vger.kernel.org, soc@lists.linux.dev,
- linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org, Thomas
- Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH] arch/arm: Drop CONFIG_FIRMWARE_EDID from defconfig files
-In-Reply-To: <20260401082533.214103-1-tzimmermann@suse.de>
-References: <20260401082533.214103-1-tzimmermann@suse.de>
-Date: Wed, 01 Apr 2026 10:33:29 -0700
-Message-ID: <7hcy0ivb4m.fsf@baylibre.com>
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="1ZSAu4a8"
+Received: by smtp.kernel.org (Postfix)
+	id 77628C116C6; Wed,  1 Apr 2026 21:27:57 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0F8F5C4CEF7;
+	Wed,  1 Apr 2026 21:27:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F8F5C4CEF7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=CgQ0riG099Ng810rA77pJLFLouGFW6v9pWnuuSLHYA8=; b=1ZSAu4a8MGgxzMttGWd2CqVwMd
+	8VwEeDUgh9p9DdHxy4k9NgO2VAXOB0faNqM8TSPtxZkEZMXSxOTnRxONOHygabn7Cr/EZN0W4+DhY
+	H/HPaLy78lVS3F9bWYMjg7IW5QD9uFHMXoKU+knwpch+orC7Jn14rhhmW5ff8cGM12aqUqaqzgHja
+	xG6oBLxjZlMbT/O+YqTTd9JvKo0i0Ar2XnAtvtttXlw22HS2u6g39ZMpfZZYtFdhwzTK2h4uuT08C
+	dDnuxnc2ACyI2wa6Naoa9Xf06cuKQQeGDw7moWvdRV0Wlk62sWdZaf4tNenfrcHhx+3mT5ErN7U02
+	MFT9KzwQ==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 7.1 #2
+Date: Wed, 01 Apr 2026 23:27:47 +0200
+Message-ID: <2902697.BEx9A2HvPv@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-Thomas Zimmermann <tzimmermann@suse.de> writes:
+Hi soc maintainers,
 
-> CONFIG_FIRMWARE_EDID=y depends on X86 or EFI_GENERIC_STUB. Neither is
-> true here, so drop the lines from the defconfig files.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/configs/davinci_all_defconfig | 1 -
->  arch/arm/configs/omap1_defconfig       | 1 -
->  arch/arm/configs/omap2plus_defconfig   | 1 -
+please find below some more Rockchip DT changes for the merge-window
+for 7.1 .
 
-For omap*_defconfig:
+This time they have also marinated longer in next without complaints.
 
-Acked-by: Kevin Hilman (TI) <khilman@baylibre.com>
 
-Kevin
+Please pull.
+Thanks
+Heiko
+
+
+The following changes since commit d7787a77cf8b129304f590233032556dec10dfc6:
+
+  arm64: dts: rockchip: enable vicap dvp on wolfvision pf5 io expander (202=
+6-03-13 21:39:34 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git =
+tags/v7.1-rockchip-dts64-2
+
+for you to fetch changes up to 6cb4ec63ba9a5831621cf951b7af55c67beeb97b:
+
+  arm64: dts: rockchip: configure hdmirx in Rock 5 ITX (2026-03-26 00:34:54=
+ +0100)
+
+=2D---------------------------------------------------------------
+New board, the Khadas Edge 2L. Newly added peripherals are the
+OTP nvmem controllers for RK3528, RK3562 and RK3566/8, SPDIF on RK3576.
+The RK3566/8 SoCs now also control the Pipe-clocks on their PCIe
+controllers and UFSHC controller on RK3576 got an additional reset line.
+
+Apart from that are of course individual board changes and fixes for
+older issues that are not specific to the current development cycle.
+
+=2D---------------------------------------------------------------
+Anand Moon (1):
+      arm64: dts: rockchip: Enable PCIe CLKREQ# for RK3588 on Rock 5b-5bp-5=
+t series
+
+Chris Morgan (2):
+      arm64: dts: rockchip: Correct Fan Supply for Gameforce Ace
+      arm64: dts: rockchip: Correct Joystick Axes on Gameforce Ace
+
+David Heidelberg (1):
+      arm64: dts: rockchip: assign pipe clock to rk356x PCIe lanes
+
+Gray Huang (2):
+      dt-bindings: arm: rockchip: Add Khadas Edge 2L board
+      arm64: dts: rockchip: Add Khadas Edge 2L board
+
+Heiko Stuebner (2):
+      arm64: dts: rockchip: Enable OTP controller for RK3562
+      arm64: dts: rockchip: Enable OTP controller for RK356x
+
+Jonas Karlman (1):
+      arm64: dts: rockchip: Enable OTP controller for RK3528
+
+Ming Wang (1):
+      arm64: dts: rockchip: Fix Bluetooth stability on LCKFB TaiShan Pi
+
+Pedro Alves (1):
+      arm64: dts: rockchip: configure hdmirx in Rock 5 ITX
+
+Robin Murphy (1):
+      Revert "arm64: dts: rockchip: add SPDIF audio to Beelink A1"
+
+Sebastian Reichel (2):
+      arm64: dts: rockchip: Add SPDIF nodes to RK3576 device tree
+      arm64: dts: rockchip: add SD/eMMC aliases for ArmSom Sige5
+
+Shawn Lin (1):
+      arm64: dts: rockchip: Add mphy reset to ufshc node
+
+=E8=B0=A2=E8=87=B4=E9=82=A6 (XIE Zhibang) (1):
+      arm64: dts: rockchip: Fix RK3562 EVB2 model name
+
+ .../devicetree/bindings/arm/rockchip.yaml          |  5 ++
+ arch/arm64/boot/dts/rockchip/Makefile              |  1 +
+ arch/arm64/boot/dts/rockchip/rk3328-a1.dts         | 23 ------
+ arch/arm64/boot/dts/rockchip/rk3528.dtsi           | 47 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts   |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3562.dtsi           | 46 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3566-lckfb-tspi.dts |  4 +-
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi           | 12 ++-
+ arch/arm64/boot/dts/rockchip/rk356x-base.dtsi      | 52 ++++++++++++-
+ .../boot/dts/rockchip/rk3576-armsom-sige5.dts      |  2 +
+ .../boot/dts/rockchip/rk3576-khadas-edge-2l.dts    | 34 +++++++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi           | 87 ++++++++++++++++++=
++++-
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts | 12 +++
+ .../boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi   |  6 +-
+ .../boot/dts/rockchip/rk3588s-gameforce-ace.dts    | 12 +--
+ 15 files changed, 303 insertions(+), 42 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-khadas-edge-2l.dts
+
+
+
