@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD66315D53
-	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 22:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B83230BDB
+	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 22:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775081429; cv=none; b=KWaVWgAtsVhhfBgKK6Pm/SQ0rErxC9igswPNzBLLqrEYgdDtr67wCwvufZUYKXxRs77Ehejq3R512kHHt2WuVjo7hUsbDruxspZWxjRkz8EE2PSkMvwvTOWZyXwv/mOq7GGbQAJSOexSKqjUH8d45r8VbBBWc6k3sWJOb2n72Ys=
+	t=1775081430; cv=none; b=TTLVp0w9ZdN4o0yi/om5urwmR2fK34XFdXPpq9LK/jmpNgZeOoycUhwidTCKGvX1rDcJwKWt4diBqba0XEivxsLGNUsDK2peomK9EdkN1h8dM3HDCBSG3n5i89Ns3VmzZubwQqQonRQv1NlFwhWgagcvQ8MXANI06xD9BeWNOJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775081429; c=relaxed/simple;
-	bh=FJ41BD9up95J+dfp2+Dam8PMIi1KbMUL/B8jSSC9X24=;
+	s=arc-20240116; t=1775081430; c=relaxed/simple;
+	bh=wQVBNYBd4DIoc1L036+EYXXQ4PMCCFWPuZs1jR/cWkQ=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GTpV/90boSU53dxJWsEzPLr5WPP9yjmBOYAGQiNRExwJ4mJJDbXgv8oYs+NZKjQ2OwIjPuaHCNWUD33S6mdamI1GoaKmutO1+LREKHFEY/TStZSonYVJYrWno28KIib0MaGq/GuKSKkT3Oo1LgG9K0dHznQSh/oqV/cpqkjrwKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f3rFhcmk; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=oLu8Oi+x4C2bpaH2s7sMzRHP7JD2SXr15IKyxvKlLcBQC24UzOgzQG/pQdslPRfqemUGLaQfYDYhdYE/dLVSVdGlaVajvQx6kEm3vfzAlBlYzbELK1HnxtBHdkU1uz9SJED/dOEbeLKGgPZ/itoTDOsQnTpADgvqL2hsiEAs/PE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NlfYnPK8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f3rFhcmk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NlfYnPK8"
 Received: by smtp.kernel.org (Postfix)
-	id 13735C2BCAF; Wed,  1 Apr 2026 22:10:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9ACC116C6;
-	Wed,  1 Apr 2026 22:10:28 +0000 (UTC)
+	id 521C1C2BC9E; Wed,  1 Apr 2026 22:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388FCC4CEF7;
+	Wed,  1 Apr 2026 22:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775081429;
-	bh=FJ41BD9up95J+dfp2+Dam8PMIi1KbMUL/B8jSSC9X24=;
+	s=k20201202; t=1775081430;
+	bh=wQVBNYBd4DIoc1L036+EYXXQ4PMCCFWPuZs1jR/cWkQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=f3rFhcmk9ZymJGGxMCrIIBGLXx3qFmMv/F09peGgzkkcHrKp/fRKer1HtoNXZoGbR
-	 66RdnF9B7a7QzlJ7F4JO/Yaht/u6+ny4TjC+PrfkSYzlVI9YN82gzNTDdi72+ZjcHE
-	 1mqbhazmagM/GaPRnGaRAFbW5d/LGi0OAD5gQlljgW74yKDLsvtgrSkzzYYPJPi76k
-	 LuS2v+UAC12ExY4zfA3UTT/Zj9p8tg9Ij/k+c1AkJdjrLgi6ZgHMzFppMChMWc1zRF
-	 4cJVzAFDgcqb7I/QqHAdYI27bX01ta9BeQK02PmdwuG8D0StsMhmpwzGel5MiiJBSR
-	 b2OVYeS+5uu5g==
+	b=NlfYnPK84Mtl0t5jJznmkn8oGc5eU3UEq0HkWAmjiYZIbxO2tc4/MqZPo1Io9Z0j8
+	 KT4Iqmk82h+G8rmXfbBefX5ONJr1fI3DXzHZoYJ0MyrXVhOozov9MqXLAnp5p5AYtK
+	 wtW65X2WF/9mF4J2ddHXQReJKiHYKB8LMeVqJdAVTLdU3khK5QzuJpKpkwLGd/f2ug
+	 Qo6dqIzNX9LKAnk11DaMx974P0tC6KelPNiC3zMhoO08MpbgWFY+R8fTP2WRx0KgV6
+	 HtYfGCPV9y8mKI1Pq5LEgWFcgi3SHQGgBjTNXxR5ii5v2Xnz3QNd6KMkbYn+UZbXI3
+	 QhhlxvVkLdJpA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02CC43808203;
-	Wed,  1 Apr 2026 22:10:13 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FE983808203;
+	Wed,  1 Apr 2026 22:10:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,35 +39,38 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] STM32 Bus firewall for v7.1
+Subject: Re: [GIT PULL 0/3] Renesas SoC updates for v7.1 (take two)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <177508141153.3882930.1370195348075994079.git-patchwork-notify@kernel.org>
-Date: Wed, 01 Apr 2026 22:10:11 +0000
-References: <c1de351b-6272-4903-8231-d92e5190a60c@foss.st.com>
-In-Reply-To: <c1de351b-6272-4903-8231-d92e5190a60c@foss.st.com>
-To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+ <177508141303.3882930.11510337401901282096.git-patchwork-notify@kernel.org>
+Date: Wed, 01 Apr 2026 22:10:13 +0000
+References: <cover.1774606536.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1774606536.git.geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 26 Mar 2026 10:04:08 +0100 you wrote:
-> Hi Arnd,
+On Sat, 28 Mar 2026 13:11:03 +0100 you wrote:
+> Hi SoC folks,
 > 
-> Please consider the first round of STM32 firewall bus patch-set. DT part
-> for STM32 MPU SoC will come with the STM32 DT pull request.
+> This is my second pull request for the inclusion of Renesas SoC updates
+> for v7.1.
 > 
-> Regards
-> Alex
+> It consists of 3 parts:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] STM32 Bus firewall for v7.1
-    https://git.kernel.org/soc/soc/c/dc26ea325f9c
+  - [GIT,PULL,1/3] Renesas ARM SoC updates for v7.1
+    https://git.kernel.org/soc/soc/c/9ac420358dd8
+  - [GIT,PULL,2/3] Renesas driver updates for v7.1 (take two)
+    https://git.kernel.org/soc/soc/c/78b06e0a76cb
+  - [GIT,PULL,3/3] Renesas DTS updates for v7.1 (take two)
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
