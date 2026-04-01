@@ -1,39 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454943AA4F6;
-	Wed,  1 Apr 2026 11:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FFA3F8814;
+	Wed,  1 Apr 2026 11:38:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775043358; cv=none; b=Hme9Qs3fXSUe/HphUM5bgWv1hFTghCw4bI6M3n2L3A0C63vrl1Nvw2IFGV3t9V0fr4zAB8gv4qBA8FlO2/fvHTzKrMV1GlWmA6Uv9eNiMWQ8pL5ZxgcI2kOlZI0UOwu28G7k85zP8IymDJ+vLzfazZQUfdcoKNkDu4pbWx9GNrU=
+	t=1775043531; cv=none; b=lfFpwDKMb4RZMCvyoUWgkmR/oeVVbChkKTJolYXZivcrM17ZbYZW90Ef+g3ZbZsj1/NOiGZDFyEZqZz/0hikFj7zwkOUmKcE+QYrMoLok3ng94MpTqidS12n0ZXY0CXTWFIFkJanl3643pSDmPjs2mvJo80dGqCz8Vf0UiAk34I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775043358; c=relaxed/simple;
-	bh=sff6V0+SikbFfnnkuOiFBlCiqZ50wVPswHcHFFLJGmk=;
+	s=arc-20240116; t=1775043531; c=relaxed/simple;
+	bh=vwnSiQZ99mUCmzzXqPBktCwlYG0prAlCiZI4JiplVNU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aDDbbrcsM7y01ztaUfLQ2Flanz1NfmS/UJoLWgBN9y4NTxatnApGPy99BMZ/16tsrumhSkv6djnyLQa38mZA7bEstBFzoAYekgwp6U7INCay0FB4ZsISGaHAf9PV+c9XDARuWBoxcpZC5gmpAwshhiiTlTarodyCJPrk9izAbRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iBoUc3LC; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=f6nAbFv70Mk4u7vCaqFjTp+9ssFAkKCpGmCumIx+dSfS76CZa0FMoWPn0neojB+WJflEX+7e8jtcTyM2QWZCeSi2dP+L/1DJJPSl/sGOBEfWli8M3AWUHNFjT+HNy2xl8O3C+rsOJ6E6hpuvzeHH7a5xHHv+Vo/r4tQUIRyDtZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bGi3bXl3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iBoUc3LC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9D8C116C6;
-	Wed,  1 Apr 2026 11:35:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bGi3bXl3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65000C4CEF7;
+	Wed,  1 Apr 2026 11:38:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775043358;
-	bh=sff6V0+SikbFfnnkuOiFBlCiqZ50wVPswHcHFFLJGmk=;
+	s=k20201202; t=1775043530;
+	bh=vwnSiQZ99mUCmzzXqPBktCwlYG0prAlCiZI4JiplVNU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iBoUc3LC2c+qN4fkZK6Cqw0ymOV5YmE554r9dGUUTJ7ePeCc4aTLdJZgHeyuATAod
-	 OW7ZnFmtIf9go8WObN5EjT3d4VNpuWHpc+OoOUneqtbWJ495e1gwd2YwVJkKQH6osk
-	 x0Q+9qVhVpqAAw/qGFTGKViqT9KKUK3AG8GNHtkjFmypfV4+YqaB5pFX724M4qxXBB
-	 Tmbd/qV7OSfvVc2f/Ycm9o3HEdVCCR2nfka8SxXKibb+81Fxt4aQTBWqt1moenQ7Xp
-	 e2ZDPR1I1gzD4nBNXkUd6NBG40yYSCwS1w60HKBZI1QsFyHoLCqdbSvMh4a5dQWF7I
-	 B3N/vFNsrmt6w==
-Date: Wed, 1 Apr 2026 13:35:55 +0200
+	b=bGi3bXl32jS6aAj8wQqLELCva0RyJe3oApGysu2vvy4MKOmnhuzOReKgG2geCtADl
+	 sSSu8CFoh3SJEMn5flLhlSoJlngkewar/8WjmgrNbf6UOsDJrgE3MNsvy2D2YtGbb5
+	 e8xe6hOfsyhZze60TlyAFpyvzFEAqZrs7j3EH5vf+RHiL8AIjuteCtzhA1hQAs62ix
+	 S0iTLks/UZRSg9im5ctkGUeW7mB469OR6X9BWgSFNiLQw69QOGsNFaa8bm0eIQSHGl
+	 geFaPwwd+rQQasVz7H+Mj5pk9/GnJMOGxRUDrjCTqwHcyDocvilnEJ2U/UoRZ+536i
+	 YiolfgPQ+DDxA==
+Date: Wed, 1 Apr 2026 13:38:48 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Andrew Jeffery <andrew@codeconstruct.com.au>
 Cc: soc <soc@lists.linux.dev>, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
-Subject: Re: [GIT PULL] aspeed: first batch of devicetree changes for v7.1
-Message-ID: <20260401-duck-of-striking-engineering-3bcfab@quoll>
-References: <df8ef5ea7b9e254658934c18de20fd9805a82d74.camel@codeconstruct.com.au>
+	openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
+Subject: Re: [GIT PULL] nuvoton: first batch of arm64 devicetree changes for
+ v7.1
+Message-ID: <20260401-resourceful-fabulous-marmot-e26db2@quoll>
+References: <8d8d5f9f7f8ee803ab14c4b3405d74b305a2ab81.camel@codeconstruct.com.au>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -42,16 +43,14 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <df8ef5ea7b9e254658934c18de20fd9805a82d74.camel@codeconstruct.com.au>
+In-Reply-To: <8d8d5f9f7f8ee803ab14c4b3405d74b305a2ab81.camel@codeconstruct.com.au>
 
-On Thu, Mar 26, 2026 at 01:39:52PM +1030, Andrew Jeffery wrote:
+On Thu, Mar 26, 2026 at 01:56:03PM +1030, Andrew Jeffery wrote:
 > Hello SoC maintainers,
 > 
-> Here's the first batch of ASPEED devicetree changes for v7.1.
+> Just the one Nuvoton devicetree change for v7.1
 > 
 > Please pull.
-> 
-> Cheers,
 > 
 > Andrew
 > 
@@ -61,11 +60,13 @@ On Thu, Mar 26, 2026 at 01:39:52PM +1030, Andrew Jeffery wrote:
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed-7.1-devicetree-0
+>   https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/nuvoton-arm64-7.1-devicetree-0
 > 
-> for you to fetch changes up to 76b4ec8efdc3887cdbf730da2e55881fc1a18770:
+> for you to fetch changes up to 6ee3f20368a4a6198988a54c1a744cbae1354359:
 > 
->   ARM: dts: aspeed: anacapa: Add retimer EEPROMs (2026-02-23 12:02:22 +1030)
+>   arm64: dts: nuvoton: drop unused syscon property from watchdog node (2026-02-23 09:43:36 +1030)
+> 
+> ----------------------------------------------------------------
 
 Thanks, applied
 
