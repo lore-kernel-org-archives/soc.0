@@ -1,151 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14ED378D7F
-	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 21:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06035378D7F
+	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 21:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775078878; cv=none; b=Em3GjViG4K/EvdjWkpMouMqxfHYJ5dJU28K0isOj1xqcTAMffIFcyziYEOuDA1GeHcb7eOVvn/jeP32vQedyZOlx94Y4I15AJODre5m6MkN5lwO0KSfNpc7yzojwP7FEPv6J3spPPHZjypixuElAw9VQ6bU9gJ7rjbR4xPKqdkM=
+	t=1775078913; cv=none; b=Epo73kgfejKDprrWTkxLOMCkAF/vMSsygmLih/bixCQaxpODi8kyIvsPJD5flOMSOPayUVH6/o8t19lHcs6pfLItyC2jYZyKqvlbJZ7HjeY6RkLVMGHRybyMl/Gwn8MJmXeOr+kaXpbFfo2zynFOFjHtSwVZDQFIKt2O1uXYc0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775078878; c=relaxed/simple;
-	bh=5cRLt2ejY/q4381xho7ZTnEIV1SDSwjdAkxgGGfrjzM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gw5PDONpwWl9Y33dUseYxbi3WDoK0to9mgeztF1yJ7jXGdVN/VIv6UX26SkSeQLMXO7bnn8xBDv/xpSyXbKPZ261LjdREPgOntBsAeqovZkhZa3haYZRMcm7ir/Uowl8YAiYAwleEJ1EMslKKU7PAFo+b84xNt0ftvZzCtan2Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=1ZSAu4a8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775078913; c=relaxed/simple;
+	bh=WEsLWV4qR6UWZvDqunL5H7vXZXLI1MjhtyEZ4X3JaQQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mATD12Z8xYs1wdtQgYid/HRDoTpMwwVSWYEKZ+pHr/Lh8N2zb7zMyXVxv1lPq03O2rauugEHTaK4FGkRtD7DNL3YAvR39eKo3jx3wwt64J1Ii20x1RSUp4vAF77AJDuYgMqO/e1sQXRhnmO5ZEC4vveOtxdwvcShYo5glW+7OJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=M39Vtg+K; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="1ZSAu4a8"
-Received: by smtp.kernel.org (Postfix)
-	id 77628C116C6; Wed,  1 Apr 2026 21:27:57 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0F8F5C4CEF7;
-	Wed,  1 Apr 2026 21:27:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F8F5C4CEF7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=CgQ0riG099Ng810rA77pJLFLouGFW6v9pWnuuSLHYA8=; b=1ZSAu4a8MGgxzMttGWd2CqVwMd
-	8VwEeDUgh9p9DdHxy4k9NgO2VAXOB0faNqM8TSPtxZkEZMXSxOTnRxONOHygabn7Cr/EZN0W4+DhY
-	H/HPaLy78lVS3F9bWYMjg7IW5QD9uFHMXoKU+knwpch+orC7Jn14rhhmW5ff8cGM12aqUqaqzgHja
-	xG6oBLxjZlMbT/O+YqTTd9JvKo0i0Ar2XnAtvtttXlw22HS2u6g39ZMpfZZYtFdhwzTK2h4uuT08C
-	dDnuxnc2ACyI2wa6Naoa9Xf06cuKQQeGDw7moWvdRV0Wlk62sWdZaf4tNenfrcHhx+3mT5ErN7U02
-	MFT9KzwQ==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 7.1 #2
-Date: Wed, 01 Apr 2026 23:27:47 +0200
-Message-ID: <2902697.BEx9A2HvPv@phil>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="M39Vtg+K"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-35d99031e4eso87420a91.1
+        for <soc@lists.linux.dev>; Wed, 01 Apr 2026 14:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1775078910; x=1775683710; darn=lists.linux.dev;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AYPEpP1b00lX0zsw7xL3leAQo4zY3t6/Feqga7nFICY=;
+        b=M39Vtg+KzYbynBe/Wu60kmz7hpm1BtL5U+djqrh47U3YKoh69uj2ct4T2gNCQBokYW
+         7Xf/3ExzlLn0dxqDFGTGoVu83pI92lnV/EcXUQ21VQOOYFEGyXv1OAHnjVNLsVAVyRjU
+         zojLXYVyi44cgXnugQVCvulldl7imTratRSuaSAHQu7v7FjtQrlhI9s/yAyFNToqoeyX
+         IJ6Vt+Jx3R9BLC73nIhplFsyt3O5SFvQnJpLniTRFYTWMfYwMxCKioOYyNTlijVFtqK6
+         crmP+2DJtiPMrW9WfNJcMaz0ckWpXfXi6LjSz6hPYiSFTcumvXzx8asq1t6Qe3B2Ab4N
+         kWVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775078910; x=1775683710;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AYPEpP1b00lX0zsw7xL3leAQo4zY3t6/Feqga7nFICY=;
+        b=qVe81V00aMc5dYDpb0zacGnf0NXdvthwzivuHR5Z/YAEa0sMfDlYVn+cHV3p0KTpcL
+         jcIE9To/U1QV0sExhyw8vRZqhWX58qM2W7vb6fRGHUAjP87Rys6qp8qjcJMaYIfLxweu
+         nOqfEEAbguxmO/JHLxWUbmQhBFQ4qQeutiWx3a9vR1tENcy1KBafvdS20wWyJkaaZTvH
+         vwIv43gV9PAMQlAh1JxQBcGWjeU22EEmoNOsuF99Y1PANIHlWL9swO6a2yPXqkGpU+ID
+         os7eR4wQ4R6iraXQa5j6N7lLa/cJ0UnBbGGV3NYacQ97GThTW248xhG5q0qO28EMQ1tw
+         uDtA==
+X-Gm-Message-State: AOJu0YzujbqpmIZOFJJVfC9HsEB93ggLubGPEM06mxTkjiYnOwSWN0Oz
+	M5k0yfk6vJODwpdMnGUFUkv6KrPwj1WjGPMo/vDsqwdhkcM7zOShfNJBBnDVkG0D0OYBA88wDQq
+	ZCe+RTlU=
+X-Gm-Gg: ATEYQzzX/5hMXSObn2acNpmRb4aC7+dxUN0jgUJs/DPP3agVD6jhIQ97+TzNKmyZ48D
+	y37486YIuwBbhtHNt211uDn1j8ZFc0nIh+emlNXHNwdH0jBFpXQlfrMM1v84LjqNokJFBp0bdF8
+	F+EGPo9xoE43hZb34HAP1iJSMatMlRtKLs2C0qy+aVRVuUjIq7mDyhmMg4hI/StDvxLb8G9KZQL
+	85z1M2gUz3fZzdZolEMUj6k9It+7bRlUAUZwNOolwQ7LHwrSx14iP4oIHB/bIC0ID/lhCvSPvdM
+	JpPcgiEGlhhV0KS2Bp5tUKL+9guQA2+0DhPuGDr2cL56+CNLackwBC+7BJI5AXDC62gbg3iuUx8
+	rhoUHYB0DbUGdvH4n/7AD/RK0U7RSJKwRbbMX43p31CKPLgPLoskwuBdIDMd1kGQuLL5BM3/CzF
+	gfjTrFTDPvHSKi2L4OwD0Kejxfc/nUAw==
+X-Received: by 2002:a17:90b:3f0b:b0:35d:9f7c:142c with SMTP id 98e67ed59e1d1-35dc7052e98mr4367414a91.26.1775078910328;
+        Wed, 01 Apr 2026 14:28:30 -0700 (PDT)
+Received: from localhost ([97.126.187.42])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe5e519dsm5918706a91.2.2026.04.01.14.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 14:28:29 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: soc@lists.linux.dev
+Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: soc/omap updates for v7.1
+Date: Wed, 01 Apr 2026 14:28:29 -0700
+Message-ID: <7hzf3mtloi.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain
 
-Hi soc maintainers,
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
-please find below some more Rockchip DT changes for the merge-window
-for 7.1 .
-
-This time they have also marinated longer in next without complaints.
-
-
-Please pull.
-Thanks
-Heiko
-
-
-The following changes since commit d7787a77cf8b129304f590233032556dec10dfc6:
-
-  arm64: dts: rockchip: enable vicap dvp on wolfvision pf5 io expander (202=
-6-03-13 21:39:34 +0100)
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git =
-tags/v7.1-rockchip-dts64-2
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.1/soc-signed
 
-for you to fetch changes up to 6cb4ec63ba9a5831621cf951b7af55c67beeb97b:
+for you to fetch changes up to 9ceb17ccd15ea32f19c9066f5f1b340d8340bd0b:
 
-  arm64: dts: rockchip: configure hdmirx in Rock 5 ITX (2026-03-26 00:34:54=
- +0100)
+  ARM: omap2: dead code cleanup in kconfig for ARCH_OMAP4 (2026-03-30 14:21:20 -0700)
 
-=2D---------------------------------------------------------------
-New board, the Khadas Edge 2L. Newly added peripherals are the
-OTP nvmem controllers for RK3528, RK3562 and RK3566/8, SPDIF on RK3576.
-The RK3566/8 SoCs now also control the Pipe-clocks on their PCIe
-controllers and UFSHC controller on RK3576 got an additional reset line.
+----------------------------------------------------------------
+ARM: soc/omap updates for v7.1
 
-Apart from that are of course individual board changes and fixes for
-older issues that are not specific to the current development cycle.
+----------------------------------------------------------------
+Aaro Koskinen (1):
+      ARM: OMAP1: Fix DEBUG_LL and earlyprintk on OMAP16XX
 
-=2D---------------------------------------------------------------
-Anand Moon (1):
-      arm64: dts: rockchip: Enable PCIe CLKREQ# for RK3588 on Rock 5b-5bp-5=
-t series
+Julian Braha (1):
+      ARM: omap2: dead code cleanup in kconfig for ARCH_OMAP4
 
-Chris Morgan (2):
-      arm64: dts: rockchip: Correct Fan Supply for Gameforce Ace
-      arm64: dts: rockchip: Correct Joystick Axes on Gameforce Ace
+Randy Dunlap (1):
+      ARM: omap: fix all kernel-doc warnings
 
-David Heidelberg (1):
-      arm64: dts: rockchip: assign pipe clock to rk356x PCIe lanes
+Thorsten Blum (1):
+      ARM: omap2: Replace scnprintf with strscpy in omap3_cpuinfo
 
-Gray Huang (2):
-      dt-bindings: arm: rockchip: Add Khadas Edge 2L board
-      arm64: dts: rockchip: Add Khadas Edge 2L board
-
-Heiko Stuebner (2):
-      arm64: dts: rockchip: Enable OTP controller for RK3562
-      arm64: dts: rockchip: Enable OTP controller for RK356x
-
-Jonas Karlman (1):
-      arm64: dts: rockchip: Enable OTP controller for RK3528
-
-Ming Wang (1):
-      arm64: dts: rockchip: Fix Bluetooth stability on LCKFB TaiShan Pi
-
-Pedro Alves (1):
-      arm64: dts: rockchip: configure hdmirx in Rock 5 ITX
-
-Robin Murphy (1):
-      Revert "arm64: dts: rockchip: add SPDIF audio to Beelink A1"
-
-Sebastian Reichel (2):
-      arm64: dts: rockchip: Add SPDIF nodes to RK3576 device tree
-      arm64: dts: rockchip: add SD/eMMC aliases for ArmSom Sige5
-
-Shawn Lin (1):
-      arm64: dts: rockchip: Add mphy reset to ufshc node
-
-=E8=B0=A2=E8=87=B4=E9=82=A6 (XIE Zhibang) (1):
-      arm64: dts: rockchip: Fix RK3562 EVB2 model name
-
- .../devicetree/bindings/arm/rockchip.yaml          |  5 ++
- arch/arm64/boot/dts/rockchip/Makefile              |  1 +
- arch/arm64/boot/dts/rockchip/rk3328-a1.dts         | 23 ------
- arch/arm64/boot/dts/rockchip/rk3528.dtsi           | 47 ++++++++++++
- arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts   |  2 +-
- arch/arm64/boot/dts/rockchip/rk3562.dtsi           | 46 ++++++++++++
- arch/arm64/boot/dts/rockchip/rk3566-lckfb-tspi.dts |  4 +-
- arch/arm64/boot/dts/rockchip/rk3568.dtsi           | 12 ++-
- arch/arm64/boot/dts/rockchip/rk356x-base.dtsi      | 52 ++++++++++++-
- .../boot/dts/rockchip/rk3576-armsom-sige5.dts      |  2 +
- .../boot/dts/rockchip/rk3576-khadas-edge-2l.dts    | 34 +++++++++
- arch/arm64/boot/dts/rockchip/rk3576.dtsi           | 87 ++++++++++++++++++=
-+++-
- arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts | 12 +++
- .../boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi   |  6 +-
- .../boot/dts/rockchip/rk3588s-gameforce-ace.dts    | 12 +--
- 15 files changed, 303 insertions(+), 42 deletions(-)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-khadas-edge-2l.dts
-
-
-
+ arch/arm/mach-omap1/clock_data.c           | 4 ++--
+ arch/arm/mach-omap2/Kconfig                | 1 -
+ arch/arm/mach-omap2/id.c                   | 3 ++-
+ include/linux/platform_data/voltage-omap.h | 4 ++--
+ 4 files changed, 6 insertions(+), 6 deletions(-)
