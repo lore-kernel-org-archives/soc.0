@@ -1,40 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FFA3F8814;
-	Wed,  1 Apr 2026 11:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9F5375ADE
+	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 11:44:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775043531; cv=none; b=lfFpwDKMb4RZMCvyoUWgkmR/oeVVbChkKTJolYXZivcrM17ZbYZW90Ef+g3ZbZsj1/NOiGZDFyEZqZz/0hikFj7zwkOUmKcE+QYrMoLok3ng94MpTqidS12n0ZXY0CXTWFIFkJanl3643pSDmPjs2mvJo80dGqCz8Vf0UiAk34I=
+	t=1775043847; cv=none; b=CwEQmG1Yjv7gy+TGV2A6y5ZWg7l4aEzmbqqioiQFChhSHbT2NIOTlx36n0bUo6jcBiTofNcXvWbp1lFiIPhuXBJB6c3IYmNczOtkbntA/XoRpQPuAYuehBFS0Cps9V/9S8Ig2r+U21dvYt6858PfSWFL0di36+yvPDJ3pixw4Oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775043531; c=relaxed/simple;
-	bh=vwnSiQZ99mUCmzzXqPBktCwlYG0prAlCiZI4JiplVNU=;
+	s=arc-20240116; t=1775043847; c=relaxed/simple;
+	bh=msYVK4Utdiqx9U2vKN4AsAcQwo+MGyKaSM3z3gcoNPw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f6nAbFv70Mk4u7vCaqFjTp+9ssFAkKCpGmCumIx+dSfS76CZa0FMoWPn0neojB+WJflEX+7e8jtcTyM2QWZCeSi2dP+L/1DJJPSl/sGOBEfWli8M3AWUHNFjT+HNy2xl8O3C+rsOJ6E6hpuvzeHH7a5xHHv+Vo/r4tQUIRyDtZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bGi3bXl3; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=AECmBWQxRgC6RdIZdXGa44ombOsI+xU8bNzPcRZJ0E8fmQnl3hhsiIiH6lCSfHERrD6b11STgQULkYUbhAQ35hWtLzBCVYeWma+2nq/UY3Dy3NKUqkLeg8ZyO20UPk3cMuetCg9rY1wX8o5AWIEEpPqEP2nbok8KaWqH0BsyYO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qSF3OmF9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bGi3bXl3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65000C4CEF7;
-	Wed,  1 Apr 2026 11:38:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qSF3OmF9"
+Received: by smtp.kernel.org (Postfix)
+	id 42521C2BCB2; Wed,  1 Apr 2026 11:44:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2FB0C116C6;
+	Wed,  1 Apr 2026 11:44:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775043530;
-	bh=vwnSiQZ99mUCmzzXqPBktCwlYG0prAlCiZI4JiplVNU=;
+	s=k20201202; t=1775043847;
+	bh=msYVK4Utdiqx9U2vKN4AsAcQwo+MGyKaSM3z3gcoNPw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bGi3bXl32jS6aAj8wQqLELCva0RyJe3oApGysu2vvy4MKOmnhuzOReKgG2geCtADl
-	 sSSu8CFoh3SJEMn5flLhlSoJlngkewar/8WjmgrNbf6UOsDJrgE3MNsvy2D2YtGbb5
-	 e8xe6hOfsyhZze60TlyAFpyvzFEAqZrs7j3EH5vf+RHiL8AIjuteCtzhA1hQAs62ix
-	 S0iTLks/UZRSg9im5ctkGUeW7mB469OR6X9BWgSFNiLQw69QOGsNFaa8bm0eIQSHGl
-	 geFaPwwd+rQQasVz7H+Mj5pk9/GnJMOGxRUDrjCTqwHcyDocvilnEJ2U/UoRZ+536i
-	 YiolfgPQ+DDxA==
-Date: Wed, 1 Apr 2026 13:38:48 +0200
+	b=qSF3OmF9Gh5QP08gC3sEz7Qg7lNGlacb1ZwnTpz4+WXuiZ0eiUIe1iNsBuFdlwufb
+	 hfygd6sG1d5RDZ5RtYlaJZSmsvWpf46u+xbQa9+kJPFPIsf+0opQAnNAaTbdoaf90e
+	 k8OmvpcTJsfT9ff0R2uNyS1nX1h5m7d5XvWVYgcvpWIb6OS5gRNl6otlmEOSnCFdky
+	 J87pk73eLGbdkWtaAnJYwN67g1gLzMGt+3ftaD6WPMBsbfSZjzCyfpQS+UYLr6C2Lk
+	 ryRbKfgKX7gcNVIIMmJPlrWYkEB8FYtL1i0Eo/Rce7d/AcxMVYsYGhVsyJ5yllo1NC
+	 /1qrzOq2EpqYQ==
+Date: Wed, 1 Apr 2026 13:44:04 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>
-Cc: soc <soc@lists.linux.dev>, linux-arm-kernel@lists.infradead.org, 
-	openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
-Subject: Re: [GIT PULL] nuvoton: first batch of arm64 devicetree changes for
- v7.1
-Message-ID: <20260401-resourceful-fabulous-marmot-e26db2@quoll>
-References: <8d8d5f9f7f8ee803ab14c4b3405d74b305a2ab81.camel@codeconstruct.com.au>
+To: Conor Dooley <conor@kernel.org>
+Cc: soc@kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] ~RISC-V~Microchip soc fixes for v7.0-rc6
+Message-ID: <20260401-bold-positive-flounder-6e7b0d@quoll>
+References: <20260326-vertebrae-relatable-adfa3baabfd6@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -43,32 +44,36 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8d8d5f9f7f8ee803ab14c4b3405d74b305a2ab81.camel@codeconstruct.com.au>
+In-Reply-To: <20260326-vertebrae-relatable-adfa3baabfd6@spud>
 
-On Thu, Mar 26, 2026 at 01:56:03PM +1030, Andrew Jeffery wrote:
-> Hello SoC maintainers,
+On Thu, Mar 26, 2026 at 11:21:39AM +0000, Conor Dooley wrote:
+> Hey folks,
 > 
-> Just the one Nuvoton devicetree change for v7.1
+> Another small PR here, worth pointing out that the exact contents has
+> been in linux-next but not as these commit hashes yet, I squashed a
+> fixup patch just now that I hadn't realised got pushed without being
+> squashed. Might be worth letting it marinate for a few days if that's
+> a concern.
 > 
-> Please pull.
+> Cheers,
+> Conor.
 > 
-> Andrew
+> The following changes since commit 0528a348b04b327a4611e29589beb4c9ae81304a:
 > 
-> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
-> 
->   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+>   cache: ax45mp: Fix device node reference leak in ax45mp_cache_init() (2026-02-06 19:54:40 +0000)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/nuvoton-arm64-7.1-devicetree-0
+>   https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-soc-fixes-for-v7.0-rc6
 > 
-> for you to fetch changes up to 6ee3f20368a4a6198988a54c1a744cbae1354359:
+> for you to fetch changes up to c7596f9001e2b83293e3658e4e1addde69bb335d:
 > 
->   arm64: dts: nuvoton: drop unused syscon property from watchdog node (2026-02-23 09:43:36 +1030)
-> 
-> ----------------------------------------------------------------
+>   firmware: microchip: fail auto-update probe if no flash found (2026-03-26 11:14:11 +0000)
 
 Thanks, applied
+
+Probably better if the fixes branch would move to v7.0-rc1, not
+continuing the v6.19.
 
 Best regards,
 Krzysztof
