@@ -1,66 +1,66 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49483806A9
-	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 21:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C169D378D7F
+	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 21:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775078946; cv=none; b=L1ezW2s0dTdRC7ARjAbE2mh5GzdoZwL+8OufyMlBed+ejBqdwHgHhcTOLY+iv36BHX7Ctm+WQZ06MJ8urwlK719kJWiEG5iPijkOfiQczqScaPK3pvE5wf85AFdQShqirq811DxlTKKAmvyR7MPgzCaqiszfgh7id8PzOefnR+g=
+	t=1775078973; cv=none; b=e4L2fV7cTfoTThGV7Kf8lkrJ/fCSrJMTkXa54l1VJ9Ean1fYCRN9LZTUMPl8WjOs8IkPsoMGv6vF/hcygorCjMasDVo/spqPodstKjcSK7cYteEte7EMTm0jYxpfqlAo73s/2O3eQ2a30P6enS6kZO8caZtdBF4ZsIsqYXhw5kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775078946; c=relaxed/simple;
-	bh=U/fUOSJSk4+rbP24lUBM6nBwRMa4PD4EWPaEofbYms0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hx8ErzNGIduOvVak4k4kxBbqTNhztBdqwYtqb94w1VlxOQ92ahN75NSP4rSI+nCgpDsxql9QJA3utdxxmIoqomBix5IiJHf7TJ6reXzNWyHRAIRJPvIaw4lJNDfkNg6rgJbGBES707cJBdrt+plhhPzOZpHxO95ZQtyBoiQ3Ba8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=mRLsn9+x; arc=none smtp.client-ip=209.85.215.174
+	s=arc-20240116; t=1775078973; c=relaxed/simple;
+	bh=K8KsRVv9ierCoDyKNMfqXhMspOs4K7/4jBXcjnpXjbM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WczW/epkT5/mUc5JswYLSC4nn5r+GmAm8bwL15PWwnVdz6pySkHuo2qoZq2pSTupUpb1zdVcMBERB1+9Pnw1J4Leju+HY+BXtP3C1MvYOBT+tJTEJf9DIUp4z6kmzTYzkwJ8hvj8FUo9eucnaPxaZzGea04uyp1zpfEn3hk4+cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=pilzYyB6; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="mRLsn9+x"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c70fb6aa323so45122a12.3
-        for <soc@lists.linux.dev>; Wed, 01 Apr 2026 14:29:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="pilzYyB6"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2b2503753efso1384085ad.0
+        for <soc@lists.linux.dev>; Wed, 01 Apr 2026 14:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1775078944; x=1775683744; darn=lists.linux.dev;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1775078972; x=1775683772; darn=lists.linux.dev;
         h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=tA3CYuQv2XiQfD/33D614etMn9c8OW1fecXvIS0+Tb0=;
-        b=mRLsn9+xvT3QC5JHYUzecBVtV6/nCTOPf4sH4+Rjc4NuXRtf3RqT/4NYPwVZSsT9PO
-         rWvAhpXXlPChcFuxS07002KD2da2CzY7El88Vn+shznDJH1qrTP5/2N2yKDT8O5sUm0k
-         IuNcK9db5HOM5uhsqG4dzy+4nCo3JILnSpLwak/S1XpIV1Y6qZjJMs9Qj6onMScCWdjz
-         R3DaG58Azh/jnHrFacQzkqijfKPWGWVCEDaKWZ4cDCCh7/TxltQlXYJHKzhatNDg8m0R
-         ZqhSb7ibw/R4xLgPTTaKgRSOAPcsPXPjmr0tVyOsWJFC+Ygs6ZQRPK1T99FSgXtthxqY
-         D6TQ==
+        bh=7GOwLlN10Ns683PDS/KNdu0fTgjCNY8NkrJ0V0K9rlc=;
+        b=pilzYyB6ONu6k6zqOQAxEIaZ2uNnjjU415VXZIRwBtlnQedZmjNAZb2VpuTHv+z7Jl
+         r+Pn/3sQVc/T4DJtaZy8q+gLWc5OzlSbcDS6mqlElREGG97a5SZEeUDitp+VgPs0QXOd
+         7btTKuXsBOiDP0WBYydZzHYIhUfY5qsSFVtYkUWtS4NFeXJ0hXCDRYCUvUljyqJNmeXU
+         SDvE76dcQBDQZeBo9xbyGG042m0Ws3vAkw/dW/dvGDaypPONB3Kjk3ztXtY4AyV9a66g
+         amMFHDVLo5Ylp0qNwgopcgRFn6AUg6ON78y4QjWDFYl3jTokAif7dWkULxETwTWfQV8i
+         05tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775078944; x=1775683744;
+        d=1e100.net; s=20251104; t=1775078972; x=1775683772;
         h=mime-version:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tA3CYuQv2XiQfD/33D614etMn9c8OW1fecXvIS0+Tb0=;
-        b=Va3W7/wxkhP2bdNRNFkFiUFmjaQovfwT2cgS1x6fG5We7rx5L0K52PTgTarXL6KzxB
-         rbyIInzriu/DK1WUV1YifM4l8eYwhNJ333rH7wjfzTT+5H0OnRVzNf4m2Uv8t+azLgT1
-         iMHAKkyi30snhtT07UsfeyXoc2LPUUduMjJz+VfePFtaNQYask0hPupsWk4T3H1gycg/
-         cIyoFmhxJTYsrbRA35McCqT5L+Z1eu9mQ254Pb2OcoCcQHgPB3GsoUqzCShclo2EeegP
-         4VTjevRqy+d9WQLp4gUTD063afUtT4Eb52cQH/zCxKmGSn3o4QPLcBf/mT19EnJymJ1L
-         oeig==
-X-Gm-Message-State: AOJu0YwO8N35dKnIlmBLgAHfnXxbi2Llr8mhk8D40spnTqEgYt4ItRC1
-	XjO6M3hFhx+j83e6qR76RiZVN8xRc1yB59N0gc6PxsED9oNRP4wbxiF2Vj5QELT6b2AmEcu8DKJ
-	uerHvYLM=
-X-Gm-Gg: ATEYQzzjAIng1v20bU+87DwLM4i7soIDbUQZLVLIzxLaH/wTBAdYSGvK5zpkBHRg7Zt
-	6Q/wX/BL5IF/SKRRb1J45WbxWFOgX+viXsmwJhQMc/XUM46T8e5YlToDyW1Y1FB5eO38lrdeL8E
-	NSZSBxzWdB6xkG4PrDbtBu28Ep7q5h//ak0djev7MWIrSQOGeuq30S4WfcgS+h7e2nOSMjoJrEr
-	Q6P4hUWt26bDDw8+I7H4XX92Y8xn4kclTyLaQ19aJUvmyS+ZNMzf0MwK+f6G6aB9rSc8HqACQs5
-	CckN9xtAA8gEAvjDqcp9IFkpIusikrsTwZbDNbRwP925KXLYxbBV7/T8YWUf+cYVUvbFedH+Wya
-	wqWiIp5zG1zOxgrcAACa41T0PX0mlodg3+bSK97pKokzjzwcO+3ofSzZ/z4TeGK464FKaMzJLeO
-	eWzAAC2x9E0A6vyeoci3M=
-X-Received: by 2002:a05:6a20:734d:b0:39b:b35f:2eb5 with SMTP id adf61e73a8af0-39ef76c1b2emr5611986637.41.1775078943866;
-        Wed, 01 Apr 2026 14:29:03 -0700 (PDT)
+        bh=7GOwLlN10Ns683PDS/KNdu0fTgjCNY8NkrJ0V0K9rlc=;
+        b=Jh/3Kr4MKqOZOV16lAmrn0JucVHe3Wq+CH3Vu/Pbg1zNwzOFFBXrMx0DnMN5I1W61y
+         sc5EdyMN9Ztwfe6fZv7ra/VnzJMVb8lRRimpSlI+BQV3PZOh6c7PshJp3ZzJXJeOuinQ
+         WWuFWqEPCc5SvFUiV/2eRrNKWaV4X6AM0IuFxAHyR7zkksz2DbLg2tYPWTbZAJ8HgVWA
+         p0att1KbCqAs6oZCn7YsztJKa/O4EB0uYlXtoxpbh8hBslRYk9Pbxx3t2DSGMJHfF4Gc
+         29mXtvSv9Lkr4AwCDEPYiE2Z507fxWerL/EQK2HJSwXBJBdz9ydKLXdTizrSuVL+3d95
+         DGNA==
+X-Gm-Message-State: AOJu0Yx/m7MGOTL5spi3D3UqmJj6tla6zzG1vTKo33tmvRgVBCC81LjO
+	sVwop50OBGfjSB5FC2dBQoWB8PczHI5w2Fv6nXXcYyHRBsF6FBgNH5g0xKw6sHaSmZFiJMkkk5x
+	hNuxeC3U=
+X-Gm-Gg: ATEYQzzcyVQL8pWCxTCtHY+7fnMociHqQ3jQpuYt5Vik789GABCirsuvc/gAYe60JaO
+	RE8y5Pg6no6soURSChfGtNBNGcUh10CpCSVQ+GQ0tZisn6N9Q5eVRcLp8JWS8t191J0EecPh6kA
+	6k/x43ts6iom+VwTy20nEWQMwn4oqy0PQdMwko+1A8+SdCAcx6IJoyDmgdNJMblc9NmhiuiZRs5
+	Rr30P99Om57/YMXuuKgYYNQ4BWtytwmQs2JnnnK2TuMFi7Odut30qlZn78mDWIHHXZe0rUaFjdF
+	+3guAbtaQ8US+ZPZeJGRlmCP212bpR7psgpuU8XI7HXZzK3uky0xrflp2vP4htNzhxgodDJa4dv
+	P4Sb5Bc/nMhYktzck7fZLzq4+HXd0ni/wZI+v2yfMM5BYe/KeTV4Ejag/2tOEA+355oKWZTo3fU
+	AcM5x/IIQ8lGWembdttto=
+X-Received: by 2002:a17:903:37c3:b0:2b2:52af:52b8 with SMTP id d9443c01a7336-2b275891e28mr6903115ad.11.1775078972028;
+        Wed, 01 Apr 2026 14:29:32 -0700 (PDT)
 Received: from localhost ([97.126.187.42])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76c647792bsm822742a12.6.2026.04.01.14.29.03
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749cbd85sm6419405ad.74.2026.04.01.14.29.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 14:29:03 -0700 (PDT)
+        Wed, 01 Apr 2026 14:29:31 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 To: soc@lists.linux.dev
 Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] arm: OMAP defconfig updates for v7.1
-Date: Wed, 01 Apr 2026 14:29:03 -0700
-Message-ID: <7hv7eatlnk.fsf@baylibre.com>
+Subject: [GIT PULL] ARM: dts: updates for ti/omap for v7.1
+Date: Wed, 01 Apr 2026 14:29:31 -0700
+Message-ID: <7hqzoytlms.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -75,22 +75,53 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.1/defconfig-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.1/dt-signed
 
-for you to fetch changes up to adcf290f9de2fc4768e5ba07c700e91faf9c86bf:
+for you to fetch changes up to 2c4059f54f65ff1ee2d430fa023d25487cfb5b99:
 
-  arm: multi_v7_defconfig: Enable more OMAP 3/4 related configs (2026-03-05 16:45:57 -0800)
-
-----------------------------------------------------------------
-arm: OMAP defconfig updates for v7.1
+  ARM: dts: am335x: Add Seeed Studio BeagleBone HDMI cape overlay (2026-03-31 17:15:17 -0700)
 
 ----------------------------------------------------------------
-Andreas Kemnade (1):
-      arm: multi_v7_defconfig: Enable more OMAP 3/4 related configs
+ARM: dts: updates for ti/omap for v7.1
 
-Kory Maincent (TI) (1):
-      ARM: multi_v7_defconfig: omap2plus_defconfig: Enable ITE IT66121 driver
+----------------------------------------------------------------
+Andrew Goodbody (1):
+      ARM: dts: omap: dm816x: Correct pinctrl register
 
- arch/arm/configs/multi_v7_defconfig  | 28 ++++++++++++++++++++++++++++
- arch/arm/configs/omap2plus_defconfig |  1 +
- 2 files changed, 29 insertions(+)
+Charan Pedumuru (1):
+      arm: dts: ti: omap: align node patterns with established convention
+
+Kory Maincent (TI) (2):
+      ARM: dts: ti: Enable overlays for am335x BeagleBoard devicetrees
+      ARM: dts: am335x: Add Seeed Studio BeagleBone HDMI cape overlay
+
+Mithil Bavishi (8):
+      ARM: dts: twl6032: Add DTS file for TWL6032 PMIC
+      dt-bindings: vendor-prefixes: Add Doestek
+      dt-bindings: display: bridge: lvds-codec: add doestek,dtc34lm85am
+      dt-bindings: display: panel-lvds: Add compatibles for Samsung LTN070NL01 and LTN101AL03 panels
+      ARM: dts: ti: omap: espresso-common: Add common device tree for Samsung Galaxy Tab 2 series
+      dt-bindings: omap: Add Samsung Galaxy Tab 2 7.0 and 10.1
+      ARM: dts: ti: omap: samsung-espresso7: Add initial support for Galaxy Tab 2 7.0
+      ARM: dts: ti: omap: samsung-espresso10: Add initial support for Galaxy Tab 2 10.1
+
+ Documentation/devicetree/bindings/arm/ti/omap.yaml               |   2 +
+ Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml |   1 +
+ Documentation/devicetree/bindings/display/panel/panel-lvds.yaml  |   4 +
+ Documentation/devicetree/bindings/vendor-prefixes.yaml           |   2 +
+ arch/arm/boot/dts/ti/omap/Makefile                               |  15 ++++
+ arch/arm/boot/dts/ti/omap/am335x-bone-hdmi-00a0.dtso             | 157 ++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/ti/omap/dm816x.dtsi                            |   4 +-
+ arch/arm/boot/dts/ti/omap/dra7-l4.dtsi                           |   4 +-
+ arch/arm/boot/dts/ti/omap/omap4-l4.dtsi                          |   4 +-
+ arch/arm/boot/dts/ti/omap/omap4-samsung-espresso-common.dtsi     | 744 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/ti/omap/omap4-samsung-espresso10.dts           | 101 +++++++++++++++++++++
+ arch/arm/boot/dts/ti/omap/omap4-samsung-espresso7.dts            |  70 +++++++++++++++
+ arch/arm/boot/dts/ti/omap/omap5-l4.dtsi                          |   2 +-
+ arch/arm/boot/dts/ti/omap/twl6032.dtsi                           |  77 ++++++++++++++++
+ 14 files changed, 1180 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm/boot/dts/ti/omap/am335x-bone-hdmi-00a0.dtso
+ create mode 100644 arch/arm/boot/dts/ti/omap/omap4-samsung-espresso-common.dtsi
+ create mode 100644 arch/arm/boot/dts/ti/omap/omap4-samsung-espresso10.dts
+ create mode 100644 arch/arm/boot/dts/ti/omap/omap4-samsung-espresso7.dts
+ create mode 100644 arch/arm/boot/dts/ti/omap/twl6032.dtsi
