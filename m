@@ -1,133 +1,398 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011064.outbound.protection.outlook.com [52.101.57.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C333477988
-	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 16:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775062272; cv=none; b=nF672vVGNzjf2Jt4eC2yXwNgHbVVjehOEhaTGR7KXTTTbQIOXSWlA2Bc9aUTQIYgNkC2kN2fmb1/DtT2JUQWyC9qJ21eJDpBxxuE6zq0MfhS/iMyF1tlrd+V4qf1sgQlOX7wez0QE5VYs/bGM3oZclOQTFnJIJwCq9bsvTlPMRA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775062272; c=relaxed/simple;
-	bh=rWLr1RgFkWa6CwhZc97BfgtBCBdonmaFuRmweCGQGb8=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=c+80v+NtrK1NCD7gqmvagEp+7UkGMyQbPZ7mi8LZxM0JvNGr4LxTJtXjkR5EvdbQtsI8IyHJjoiCPv4L6zqewW25qOn3oDwte6qnYXyW39N74oohdoNxP4yA6bMIAj0Bja6EGbOs68ULG5bmeVMqO2e1xMXT/A0i/dVXeoFefdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=MOwKB051; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y8l4CbSL; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B453033A9CF
+	for <soc@lists.linux.dev>; Wed,  1 Apr 2026 17:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.64
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775063653; cv=fail; b=R9vQkGEUaEUyrv7pF6YxZA9IWJYr6+V9hyY8NbJN373vMHU7Cvp72syyFoGAHy+EuyO3C+gNnmciDbGjI9MB1An/29UY7bNtbhe6ZHdJ7OhSo8cDzjWLF2y+B0c+HJbI89SV45t2eY3gOsAIaVIVNEDIwM0ETSqzfWM0WgSpmwo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775063653; c=relaxed/simple;
+	bh=N3RCroHGmkf8SVjGZkGi8vibkmJ+qVW7zAozZc9b4Qg=;
+	h=Message-ID:Date:MIME-Version:From:To:CC:Subject:Content-Type; b=GN07YbWSK88Bn5Py7w+z/aTmWr91X4kuMl3D7Q8PH4zkzs7FbzduDdYgdDe3H0bKSeR5NSAcQd0TdChieuStWJREl+EyMadA94+mcCTnWyxzNoAVAG6aYcWNnzgaTF8Dj+SCGD/J/AmQUsLPmB35UHaDQFX0szqHMr2XtX9JXCk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=d0CU/3YX; arc=fail smtp.client-ip=52.101.57.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="MOwKB051";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y8l4CbSL"
-Received: by smtp.kernel.org (Postfix)
-	id 19F49C19421; Wed,  1 Apr 2026 16:51:12 +0000 (UTC)
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9694DC4CEF7;
-	Wed,  1 Apr 2026 16:51:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9694DC4CEF7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id B102B140025B;
-	Wed,  1 Apr 2026 12:51:09 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Wed, 01 Apr 2026 12:51:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1775062269;
-	 x=1775148669; bh=ntHteolZmRp8mw0hqZwOpCeITtp0TjCPhGc0JrTRIqQ=; b=
-	MOwKB051dhkWhoz3SiwZCCUL7ySvUmMUNq/WdsHwkMk5O27t0IP++AHtn3vOGcqC
-	K22Y9HB0rL3TMRbuJGWtLZSCFhDbvS+CKys0JEgdC3B8Ju2mxYyHqer9fqF0VjF4
-	XWPHqgojjYhtyxqB/LyhmGdmreL3Jvw7CXkVbr6eqO7VteYdgB0bF9ohjA0Xl4zT
-	/+AT1scIPsft0KVEcyMTAhqGSnyUjXzBpirPIskfax8Fw4jIjqrls9kI/UH2Lowi
-	1gtZ4H/9dEY4Cs76l4MjUFQFo+iJ0Pz1EoxQFr+GKB4nmXX2LLmeodNp7d5UnHPb
-	wMo6HdoDjA5Yx+5e40oF5w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1775062269; x=
-	1775148669; bh=ntHteolZmRp8mw0hqZwOpCeITtp0TjCPhGc0JrTRIqQ=; b=Y
-	8l4CbSLJUKneC6DqhBhOcfX9uEedQ1wN0qeKOxjQf/c+42iGhpPWUkVgPtARkDnt
-	fyBQwZ4fnUAficd2PvVg1svI+6hRhLwaqsNkTzZfN0yIeIF8ZisPp9y5Fbk6k6LZ
-	0PuSTg9XvM50CjhWahlsfzgOd6HbTDv1+7qrvPx9w0JTXrr/3om+MInaHobJjQy5
-	cpwy4HZj9pJJeTY6/IYd+1RMVJkvgnaINRzf4AVWfPkBko2VW7mLoN+RQVl2rGZy
-	3GgFK4I593ACzt0nbXQtD0EkW8ug86+4H/+FwH6l9X8jfuA4SFqcZI52Eybpn0RW
-	4sIR4j39qxne4DE8yWVSw==
-X-ME-Sender: <xms:_UzNabCYPDObcakokSLBKEF3s5woe-yVFMRPU0XUuZxFi-3FBt0-vg>
-    <xme:_UzNacX2yX-GNPSo0JNTpag78cRtK2yZ-gYQXk38RBOMhDqPpGf_oDoZzhhYYvK4i
-    CH7Mmzm3PBdSKqgoSsGnMcbc6Z_bQuBea27j1XOKffZjmWdSzHgnRa4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdefieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
-    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
-    ephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdeinecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguse
-    grrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopegstghmqdhkvghrnhgvlhdqfhgvvggusggrtghkqdhlihhsthessghroh
-    gruggtohhmrdgtohhmpdhrtghpthhtohepfhhlohhrihgrnhdrfhgrihhnvghllhhisegs
-    rhhorggutghomhdrtghomhdprhgtphhtthhopeifrghhrhgvnhhsthesghhmgidrnhgvth
-    dprhgtphhtthhopehmtggrnhgrlhesihhgrghlihgrrdgtohhmpdhrtghpthhtohepkhhh
-    ihhlmhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihksehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    shhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgohhrrdhhvghrsghurh
-    hgvghrsehlihhnuhhtrhhonhhigidruggv
-X-ME-Proxy: <xmx:_UzNaWjs4pmWuFxhaFdP6_ExLaBt_p3B4B1DJRGVpTQ-IR2ToP9x1Q>
-    <xmx:_UzNaaEZWbYwsUf6J36o70YrsVtShKsNIUtvsAEaw50XavCKkO6OfA>
-    <xmx:_UzNaYtngEtOCOP3W6yIuy_i9mbmJ3wBPj3x7wsrgAC59m4UkP-Aug>
-    <xmx:_UzNabdv2VnS8BQL4f-p9sXjF7ZFRRdXH2FtllOE3qBtXMXTjx9cWw>
-    <xmx:_UzNaWRDpY7sCoU28BmkMiB3Zz1ILQJ7Era7q6vJsadVc3GKwWKd8a-9>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 330CD700065; Wed,  1 Apr 2026 12:51:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="d0CU/3YX"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=utiNJ8IxCIZD3h3Z39kGcF6pOkMRts3+uQ/JwWuy/s0bKrJP5eo40sQB7TT3EY3YVbSxbxqsXWrB5wqYxZYBMutl2ZmRlSQmP0VqN3F5UeVqKIUoORnV5LIk4olOa5nnxg65P16U9HTM1m2KT1bHrBFXZcTbmp/l+jdIMn2Mr+IE2ixHqOVOQcFFFL3lRY/WfujQQWLw4VIV3MUnd1Lct1y5ArsveLes1gQeMeZBcF4FnE4ZfCUp2DEob8T3FgpMzsUwMCkDEA11N/v/6LuaETxu8vkV0e/iphkWMCqdeUT8bt2MngYW1HgNMhGs5YaoNgYQzYQpuz2xhoGB/Osdlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ke0Czr+9JwECKr26r+t4hBxTTGmkR++JdoyMiqb6rNk=;
+ b=JdLow0LdCE5FxCn00kJ0Q5QRsAE4hWdGh1fL/uBxaxARTzbzMcMayPO5rJssTPGOHRu69OzShjuz8HkXw55yx2SPfpYzTnjKKOrXlAtG9FbQ1biE/giHmHVZ5qEBAAzRW1WaOmersapnlTSx/yxiKi1LEgpMLmz6KBlWI6w8/koBYiD1t4PHPLFt6MiUaly3Zv9bI5eYaPnk5OYQe+2R5nyYgjh0hwDS9fMJM2qWiWtZpmACsV2j3b25BvkiYZWaBYLonRDt+pKGnIWJiRDmbzaQ79GsM8qUEIC2UkB5bGiLNTDCvHuiTIIU/Rx1chwUCQngx3k0mhcnYp2UVjAb0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.194) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
+ (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ke0Czr+9JwECKr26r+t4hBxTTGmkR++JdoyMiqb6rNk=;
+ b=d0CU/3YXH7Km5y+ByPlipwZ4exnD/6mLXI3NjUwdPoCp5Bfzh4lRnA550ETn/F/4R+CyQKLkMDrJfNPsxFVN0romZtvufU/qF1R4yQ1oZpbanU0AW4+SOUJN+t4kvTNT4v8PjrixLwtq7MmMyE8Xc1Jt2Cm3ZakR747FjR1F4aI=
+Received: from MN2PR01CA0025.prod.exchangelabs.com (2603:10b6:208:10c::38) by
+ MN0PR10MB5912.namprd10.prod.outlook.com (2603:10b6:208:3cc::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.18; Wed, 1 Apr 2026 17:14:07 +0000
+Received: from BL6PEPF0001AB59.namprd02.prod.outlook.com
+ (2603:10b6:208:10c:cafe::28) by MN2PR01CA0025.outlook.office365.com
+ (2603:10b6:208:10c::38) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.30 via Frontend Transport; Wed,
+ 1 Apr 2026 17:14:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
+Received: from lewvzet200.ext.ti.com (198.47.23.194) by
+ BL6PEPF0001AB59.mail.protection.outlook.com (10.167.241.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.17 via Frontend Transport; Wed, 1 Apr 2026 17:14:07 +0000
+Received: from DLEE204.ent.ti.com (157.170.170.84) by lewvzet200.ext.ti.com
+ (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Apr
+ 2026 12:14:06 -0500
+Received: from DLEE212.ent.ti.com (157.170.170.114) by DLEE204.ent.ti.com
+ (157.170.170.84) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Apr
+ 2026 12:14:06 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE212.ent.ti.com
+ (157.170.170.114) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Wed, 1 Apr 2026 12:14:06 -0500
+Received: from [172.24.233.103] (uda0132425.dhcp.ti.com [172.24.233.103])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 631HE3b5475624;
+	Wed, 1 Apr 2026 12:14:04 -0500
+Message-ID: <e724f95d-09d0-4ede-9ed4-0ce782d81058@ti.com>
+Date: Wed, 1 Apr 2026 22:44:03 +0530
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: Au-GG9YHiX1s
-Date: Wed, 01 Apr 2026 18:50:47 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Florian Fainelli" <florian.fainelli@broadcom.com>,
- "Krzysztof Kozlowski" <krzk@kernel.org>
-Cc: soc@kernel.org, "Rob Herring" <robh@kernel.org>,
- "Gregor Herburger" <gregor.herburger@linutronix.de>,
- =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
- "Stefan Wahren" <wahrenst@gmx.net>, linux-arm-kernel@lists.infradead.org,
- "Kevin Hilman" <khilman@kernel.org>, bcm-kernel-feedback-list@broadcom.com
-Message-Id: <9b120c3b-637e-47d3-aed8-62b344337344@app.fastmail.com>
-In-Reply-To: <e060307f-5c85-468f-8f5d-6101dc0a2015@broadcom.com>
-References: <20260323190239.1890505-1-florian.fainelli@broadcom.com>
- <20260323190239.1890505-2-florian.fainelli@broadcom.com>
- <20260401-rapid-lyrebird-of-emphasis-da7b13@quoll>
- <2e47f487-da04-411d-bf78-4c76ac793a91@kernel.org>
- <df52b2ae-4b8b-487a-bb6b-07bf021500b5@app.fastmail.com>
- <3f7879d0-9e5d-4c00-a5dc-4871a049afd0@kernel.org>
- <83a52edc-1d46-4eaf-996e-924ed3a00c83@app.fastmail.com>
- <8d8925ad-22eb-4b9b-b6eb-6ae7dc3b2073@kernel.org>
- <e060307f-5c85-468f-8f5d-6101dc0a2015@broadcom.com>
-Subject: Re: [GIT PULL 2/2] Broadcom devicetree-arm64 changes for 7.1
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+From: Vignesh Raghavendra <vigneshr@ti.com>
+Content-Language: en-US
+To: SoC <soc@kernel.org>, <arm@kernel.org>
+CC: SoC list <soc@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Tero Kristo <kristo@kernel.org>, "Nishanth
+ Menon" <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
+Subject: [GIT PULL 1/2] arm64: dts: ti: K3 updates for v7.1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature";
+	boundary="------------T8uAc3ICRv90EsD0lIaStzoB"
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB59:EE_|MN0PR10MB5912:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8498dd94-3a5e-4d96-5eb7-08de9012155a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700016|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	+Z1f0RLBZJFD6vai1FHLGQ1fDRomO0kOPzzvkhrrRtmSo+NCfmnc3I3Specj9sZ8wzUs4twIV7oOdfTO50GStczMhI9VSkmlU2qZGZIHWkgLZrbaBtH6iUf8viECZiYrUx5vsajhxiD4twoJjR22rnqBHey/90SKVykdGWWxhleAOHV+RRrAlz3cAMp1dfwn7qy0VRh8FIXB7ASi28Hk5o3KqJyscnkEaqLQtdeJrWExjKO7VXOusKDL7SpkYqd9Cq5/G4CfNz1UC/vBDm/GxjpAbWyh1FlKr8pQOu3XzFTVm7Sf/HNPG1xxeA8L9UdpfF8K8mz+XMUqkl/6PjJEHiLOvcktmFwt87LtiVPAArbCQRpYasJ3RrCuSQjrbAyoB4MFWeaILEwCfAGaZ+4VaBMR4qvt+OuYeSkbk+Ii8KsXcoRNGuL/H7ShtA9djWVhQu0AUQivqi5rN+yaxrme8ejh5+9rt+u2ens7TmEafCcqv7EAqF0F/ldosBLfVzJ/I8NrcNC/PgijOc/AsRwrLpk1Yi9OPJCtaR+u+Fx1v9E2GTXuRcqGcRUK49MIq3uB5xVr8xnIjSoK9jmRzeWQb3SFuwRcn/L6W+j/9lIvPp97dADNvt0BmVnihwAUWokDZ1K7ZbVSYO40SwjTY4jOfA8OUtArc3FDRy9NFjroAY2Ml3XK8r5caZyGlS9EfTA++8YspsA6B49Gs6McRodRCtRgbHcGdQCYjFbWnz7Hk0BeEbDQqq1F3PQt8rdrxfAENxUQl/wYh3kJHXmYTbpVJg==
+X-Forefront-Antispam-Report:
+	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700016)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	DznccOXUVfxFxc+F6OE4r96tz5FMb2Dl4DMl37KAPOuSgoT4g3Ii/+diuENOjxLe5sQXlKOrWrK7+6+YP9gRgiz91tNw1y1YphVIbQw9uJsQbOuKgLVhZTEmjAeMHZcJl9HKhUJQJsFvZyAWqfqjyAb00QtJx//a9njj2RTwAyYw1rTpMw7l1tXHloGfKqAh7x1xdungdONEpF78RmNd5a5/3sfJXfloBloAlioIZtE5dCr1HTQyRXdOB6TVIitM3w+V/ajEL5SBOPajXCQcS45RtkImCP0le7Z5MZzCgk1GX3wKOFcfRG/wai6d+cX17vE4NJJGCJc5M/1gtKU2KenicI26HFUpg1rqxsJkdOehuM3atQacq3Mw/0ViBLrNAZvL/iTJ0lBoItZC+tZxIrKaBF8ST793f/lCQCPdbDQvd5pBxTXAM9dBbtUyIca4
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 17:14:07.3971
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8498dd94-3a5e-4d96-5eb7-08de9012155a
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB59.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5912
 
-On Wed, Apr 1, 2026, at 18:41, Florian Fainelli wrote:
-> On 4/1/26 09:38, Krzysztof Kozlowski wrote:
->> On 01/04/2026 18:33, Arnd Bergmann wrote:
->>> On Wed, Apr 1, 2026, at 16:47, Krzysztof Kozlowski wrote:
->>>
->>> Florian, I don't know if there is a Broadcom specific policy that
->>> requires you to use the corporate github account, but if you
->>> are setting up a new key already, it may be a good time to
->>> also move the hosting.
->
-> OK, I will get going with moving the hosting to kernel.org. What about 
-> this specific pull request, will it go through or is relocating the 
-> hosting mandatory for it to be accepted?
+--------------T8uAc3ICRv90EsD0lIaStzoB
+Content-Type: multipart/mixed; boundary="------------oAW5J7hdI1PCiXsPU00w0Ax0";
+ protected-headers="v1"
+From: Vignesh Raghavendra <vigneshr@ti.com>
+To: SoC <soc@kernel.org>, arm@kernel.org
+Cc: SoC list <soc@lists.linux.dev>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
+ Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <e724f95d-09d0-4ede-9ed4-0ce782d81058@ti.com>
+Subject: [GIT PULL 1/2] arm64: dts: ti: K3 updates for v7.1
 
-I've merged both now, should push them out later tonight.
+--------------oAW5J7hdI1PCiXsPU00w0Ax0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-     Arnd
+Hi ARM SoC maintainers
+
+Please pull DT updates for K3 Platforms for v7.1.
+Note there is a patch touching embedded-controller/kontron,sl28cpld.yaml =
+as it is part of=20
+series that removes of Kontron SMARC-sAM67 board support.
+
+
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f2=
+7f:
+
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
+-dt-for-v7.1
+
+for you to fetch changes up to 47c806de9e9cf171d197f2f0df86df7f2bd1aa56:
+
+  arm64: dts: ti: k3-pinctrl: sort shift values numerically (2026-03-27 1=
+9:55:06 +0530)
+
+----------------------------------------------------------------
+TI K3 device tree updates for v7.1
+
+Generic Fixes/Cleanups:
+- k3-pinctrl: Cleanup alignment and reorder macros
+- ti,min-output-impedance addition to all K3 board DT files
+
+SoC Specific Features and Fixes:
+AM62L:
+- Add RNG node
+- Support cpufreq scaling
+
+J721S2:
+- Make MAIN domain system control bus a simple-bus
+- Add second DSI node
+
+J722S:
+- Add main_i2c4 device node
+
+J7200:
+- Make MAIN domain system control bus a simple-bus
+
+Board Specific Features and Fixes:
+AM642 EVM:
+- Add ICSSG0 overlay for dual EMAC support
+
+AM62:
+- LP-SK: Enable internal pulls for MMC0 data pins
+- SK: Enable Main UART wakeup
+- phycore-som: Add 128MiB of global CMA
+- Verdin: Add Zinnia board support and misc cleanup
+
+AM62A7-SK:
+- Enable Main UART wakeup
+- Fix pin name in comment from M19 to N22
+
+AM62D2 EVM:
+- Enable Main UART wakeup and set wakeup-source system-states
+
+AM62L3 EVM:
+- Disable MMC1 internal pulls on data pins
+- Enable Main UART wakeup and enable wkup_uart0 pins/target node
+
+AM62P:
+- SK: Disable MMC1 internal pulls on data pins and enable Main UART
+  wakeup
+- Verdin: Add Zinnia support and misc cleanup
+
+AM68 PHYBoard:
+- Add DSI->LVDS bridge, LVDS-Display overlay and PEB-AV-15 overlay
+
+AM69 Aquila:
+- Fix DP regulator enable GPIO
+
+J721S2 CPB:
+- Add QSPI flash partition details
+
+Removal of SMARC-sAM67 board:
+- Kontron SMARC-sAM67 board support along with all bindings
+  are dropped as board is no longer planned for production
+
+----------------------------------------------------------------
+Andrew Davis (2):
+      arm64: dts: ti: k3-j7200: Make MAIN domain system control bus a sim=
+ple-bus
+      arm64: dts: ti: k3-j721s2: Make MAIN domain system control bus a si=
+mple-bus
+
+Aniket Limaye (1):
+      arm64: dts: ti: k3-j722s: Add main_i2c4 device node
+
+Anurag Dutta (1):
+      arm64: dts: ti: k3-j721s2-common-proc-board: Add QSPI flash partiti=
+on details
+
+Dhruva Gole (1):
+      arm64: dts: ti: k3-am62l: support cpufreq scaling
+
+Dominik Haller (5):
+      arm64: dts: ti: k3-am68-phyboard-izar: Assign dss clocks
+      arm64: dts: ti: k3-am68-phycore-som: Add DSI->LVDS bridge
+      arm64: dts: ti: k3-am68-phyboard-izar: Add LVDS-Display
+      arm64: dts: ti: k3-j721s2-main: Add DSI1
+      arm64: dts: ti: k3-am68-phyboard-izar: Add PEB-AV-15 overlay
+
+Francesco Dolcini (8):
+      arm64: dts: ti: am62-verdin: Enable pullup for eMMC data pins
+      dt-bindings: arm: ti: Add verdin am62/am62p zinnia board
+      arm64: dts: ti: k3-am62-verdin: Fix SPI_1 GPIO CS pinctrl label
+      arm64: dts: ti: k3-am62-verdin: Split UART_2 pinctrl group
+      arm64: dts: ti: k3-am62-verdin: Add Zinnia
+      arm64: dts: ti: k3-am62p-verdin: Split UART_2 pinctrl group
+      arm64: dts: ti: k3-am62p-verdin: Add SPI_1_CS as GPIO
+      arm64: dts: ti: k3-am62p-verdin: Add Zinnia
+
+Franz Schnyder (2):
+      arm64: dts: ti: k3-am69-aquila-dev: Fix DP regulator enable GPIO
+      arm64: dts: ti: k3-am69-aquila-clover: Fix DP regulator enable GPIO=
+
+
+Judith Mendez (3):
+      arm64: dts: ti: k3-am62p5-sk: Disable MMC1 internal pulls on data p=
+ins
+      arm64: dts: ti: k3-am62l3-evm: Disable MMC1 internal pulls on data =
+pins
+      arm64: dts: ti: k3-am62-lp-sk: Enable internal pulls for MMC0 data =
+pins
+
+Kendall Willis (10):
+      arm64: dts: ti: k3-am62d2-evm: Set wakeup-source system-states
+      arm64: dts: ti: k3-am62l: include WKUP_UART0 in wakeup peripheral w=
+indow
+      arm64: boot: dts: ti: k3-am62l-wakeup: create label for wkup_uart0 =
+target-module
+      arm64: boot: dts: ti: k3-am62l3-evm: define wkup_uart0 pins
+      arm64: boot: dts: ti: k3-am62l3-evm: enable wkup_uart0_target node
+      arm64: dts: ti: k3-am62x-sk-common: Enable Main UART wakeup
+      arm64: dts: ti: k3-am62a7-sk: Enable Main UART wakeup
+      arm64: dts: ti: k3-am62p5-sk: Enable Main UART wakeup
+      arm64: dts: ti: k3-am62l3-evm: Enable Main UART wakeup
+      arm64: dts: ti: k3-am62d2-evm: Enable Main UART wakeup
+
+Meghana Malladi (1):
+      arm64: dts: ti: k3-am642-evm: Add ICSSG0 overlay for dual EMAC supp=
+ort
+
+Michael Walle (3):
+      arm64: dts: ti: remove the Kontron SMARC-sAM67
+      dt-bindings: mfd: sl28cpld: Drop sa67mcu compatible
+      dt-bindings: arm: ti: Drop Kontron SMARC-sAM67 module
+
+Rasmus Villemoes (2):
+      arm64: dts: ti: k3-pinctrl: consistently use tabs for alignment
+      arm64: dts: ti: k3-pinctrl: sort shift values numerically
+
+Shiva Tripathi (1):
+      arm64: dts: ti: k3-am62l-main: Add RNG node
+
+Siddharth Vadapalli (5):
+      arm64: dts: ti: k3-am642-{evm,sk}: add ti,min-output-impedance
+      arm64: dts: ti: k3-am654-base-board: add ti,min-output-impedance
+      arm64: dts: ti: k3-j7200-common-proc-board: add ti,min-output-imped=
+ance
+      arm64: dts: ti: k3-j721e-common-proc-board: add ti,min-output-imped=
+ance
+      arm64: dts: ti: k3-am62a7-sk: Fix pin name in comment from M19 to N=
+22
+
+Thomas Richard (TI) (1):
+      arm64: dts: ti: k3-j721s2: Use ti,j7200-padconf compatible
+
+Wadim Egorov (1):
+      arm64: dts: ti: k3-am62-phycore-som: Add 128MiB of global CMA
+
+ Documentation/devicetree/bindings/arm/ti/k3.yaml             |    5 +-
+ .../bindings/embedded-controller/kontron,sl28cpld.yaml       |    7 +-
+ arch/arm64/boot/dts/ti/Makefile                              |   27 +-
+ arch/arm64/boot/dts/ti/k3-am62-lp-sk.dts                     |   14 +-
+ arch/arm64/boot/dts/ti/k3-am62-phycore-som.dtsi              |    7 +
+ arch/arm64/boot/dts/ti/k3-am62-verdin-zinnia.dtsi            |  493 ++++=
++
+ arch/arm64/boot/dts/ti/k3-am62-verdin.dtsi                   |   42 +-
+ arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-zinnia.dts    |   22 +
+ arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-zinnia.dts       |   22 +
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts                      |   15 +-
+ arch/arm64/boot/dts/ti/k3-am62d2-evm.dts                     |   82 +-
+ arch/arm64/boot/dts/ti/k3-am62l-main.dtsi                    |    7 +
+ arch/arm64/boot/dts/ti/k3-am62l-wakeup.dtsi                  |    7 +-
+ arch/arm64/boot/dts/ti/k3-am62l.dtsi                         |    5 +-
+ arch/arm64/boot/dts/ti/k3-am62l3-evm.dts                     |   32 +-
+ arch/arm64/boot/dts/ti/k3-am62l3.dtsi                        |   47 +
+ arch/arm64/boot/dts/ti/k3-am62p-j722s-common-main.dtsi       |   13 +-
+ arch/arm64/boot/dts/ti/k3-am62p-verdin-zinnia.dtsi           |  469 ++++=
+
+ arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi                  |   29 +-
+ arch/arm64/boot/dts/ti/k3-am62p5-sk.dts                      |   19 +-
+ arch/arm64/boot/dts/ti/k3-am62p5-verdin-nonwifi-zinnia.dts   |   22 +
+ arch/arm64/boot/dts/ti/k3-am62p5-verdin-wifi-zinnia.dts      |   22 +
+ arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi               |   13 +-
+ arch/arm64/boot/dts/ti/k3-am642-evm-icssg0.dtso              |  168 ++
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts                      |    1 +
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts                       |    2 +
+ arch/arm64/boot/dts/ti/k3-am654-base-board.dts               |    1 +
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-ads2.dtso       |  146 --
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts        | 1091 ----=
+------
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso       |   26 -
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gpios.dtso      |   61 -
+ arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso |   31 -
+ .../boot/dts/ti/k3-am68-phyboard-izar-lvds-ph128800t006.dtso |  125 ++
+ arch/arm64/boot/dts/ti/k3-am68-phyboard-izar-peb-av-15.dtso  |  191 ++
+ arch/arm64/boot/dts/ti/k3-am68-phyboard-izar.dts             |   17 +
+ arch/arm64/boot/dts/ti/k3-am68-phycore-som.dtsi              |   17 +
+ arch/arm64/boot/dts/ti/k3-am69-aquila-clover.dts             |    2 +-
+ arch/arm64/boot/dts/ti/k3-am69-aquila-dev.dts                |    2 +-
+ arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts        |    1 +
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi                    |    5 +-
+ arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts        |    1 +
+ arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts       |   42 +
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi                   |   50 +-
+ arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi             |   12 +-
+ arch/arm64/boot/dts/ti/k3-j722s-main.dtsi                    |   13 +
+ arch/arm64/boot/dts/ti/k3-j722s.dtsi                         |    3 +-
+ arch/arm64/boot/dts/ti/k3-pinctrl.h                          |   82 +-
+ 47 files changed, 2030 insertions(+), 1481 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62-verdin-zinnia.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-zinnia=
+=2Edts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-verdin-wifi-zinnia.dt=
+s
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62p-verdin-zinnia.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62p5-verdin-nonwifi-zinni=
+a.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62p5-verdin-wifi-zinnia.d=
+ts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am642-evm-icssg0.dtso
+ delete mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-ads2.dts=
+o
+ delete mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts=
+
+ delete mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dts=
+o
+ delete mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gpios.dt=
+so
+ delete mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv82=
+63.dtso
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am68-phyboard-izar-lvds-ph1=
+28800t006.dtso
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am68-phyboard-izar-peb-av-1=
+5.dtso
+
+--------------oAW5J7hdI1PCiXsPU00w0Ax0--
+
+--------------T8uAc3ICRv90EsD0lIaStzoB
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wnsEABYIACMWIQRQBrqaOmQ441h4YbUDQj8NV+8d1wUCac1SWwUDAAAAAAAKCRADQj8NV+8d15Az
+AP9/E7nWmBzLcgEvzyFtprNTh2HJDtB5xe34vIA7o0DKLwEA0S/GKbQ2fVCqw7MwGw66YiWmBI4Q
+x9cV1/BYoVxw5AQ=
+=F0Sy
+-----END PGP SIGNATURE-----
+
+--------------T8uAc3ICRv90EsD0lIaStzoB--
