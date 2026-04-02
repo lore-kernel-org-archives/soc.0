@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECCBA3612F8
-	for <soc@lists.linux.dev>; Thu,  2 Apr 2026 21:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F240360722
+	for <soc@lists.linux.dev>; Thu,  2 Apr 2026 21:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775165438; cv=none; b=Ggqzp0TMCUXeTdA8dMi0PixHdcC4XwEUiWteuVhHr6Q7Np8MIimty6hwA4Mcmq0dFEcpb2AfjnZNgpL7zzdAJkPtBkwXy9fAPQ6rEpGuy91i0f3Xr/Zo4Pu+908C3gQKx79hl081kM+kvILbXAFW4+cV9xcnZkoN+bL3x9bERdo=
+	t=1775165439; cv=none; b=c8rXZFblRhHQ4M7Ng/9ufyzy90TVEnM4EPO19ub8dBD4pYEsq3N6YB2kxnHe5DJKHrAhkWtUVM6noh7l8VrYb3jj2WLbyBRt/l/CeYCfkjv52FuEHhlD0gunDXjw4/p9OMsPZOTj82xU7QE6k0zDn82u/dVge+xupBZbXv2WSM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775165438; c=relaxed/simple;
-	bh=GtQj0gY0gjdzJhZWTkVs44WonFagPprDwzUVKhD6s78=;
+	s=arc-20240116; t=1775165439; c=relaxed/simple;
+	bh=4zRinVX8eY6w0r1uPKhFV1ReddXd5Z6FG0WAOVNCbGY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=peKCR9YdU2OUI/bqK+Bq4J5+Y5upjb/aek2C0wTM4wF73Ke88euoJiBrV5DUa3llKBY1EoJ5mvsnd4vEqnj12UeozdR5hmsFyEf2tKeky6POUnAe21eD3NVb25pw8u4Y+n2HeYLlo3SdO4zLpvfDO+WbcawZX3zBCQPzY8pOu/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTVNHBJZ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=AB70ZFxF7MuSez37NWn5c8NwecO3PoP0nju8tXzqCLhdl06uFeZDAdsOB3WyRnDFhzSnBaXlOjs9jyyd2MclV1pMwubZR17RxZC/J7od9l2m4g/EaxXUEuOmkz0I7W8MgarYrV0J6P3fwts1PnSD9MX+OcTmbka+DZUYep+dERk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=airF3YJW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTVNHBJZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="airF3YJW"
 Received: by smtp.kernel.org (Postfix)
-	id E3182C2BCAF; Thu,  2 Apr 2026 21:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD6DDC116C6;
-	Thu,  2 Apr 2026 21:30:37 +0000 (UTC)
+	id 272B0C2BCAF; Thu,  2 Apr 2026 21:30:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 119E4C116C6;
+	Thu,  2 Apr 2026 21:30:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775165437;
-	bh=GtQj0gY0gjdzJhZWTkVs44WonFagPprDwzUVKhD6s78=;
+	s=k20201202; t=1775165439;
+	bh=4zRinVX8eY6w0r1uPKhFV1ReddXd5Z6FG0WAOVNCbGY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=BTVNHBJZtbH0JS6CbkHVLocQH29aeGUEUhddW0woeRWH809MX5gC1kc5obtZ1Rg0U
-	 quOp3GXLAw0u+i2pWFn5vxnfSdoe35NRGdQFgYsCpD6lKJa0CNfITv8PDrt1mY6X7D
-	 1Y/Gt6j6ciRwdtUTu3oMG0Tr+Qw9aD0rLEjdUXCGzDfoLKW+WCLyR4h17cObop2Mij
-	 /KFNxmyGo+kZmz3keqNu+MbZzPVkYnEVm+SE5btvV32eifoWNPvX7A7RDlLZis5qZm
-	 00xhgArM16KcBxLyBsfnondloRN5rqB5NMU5BmnKDw2pTCitdk9lCyt9MHZq9PvPlA
-	 X+oIqvFxRidQg==
+	b=airF3YJWHBNRQM9qnD00+2GBR+hWeEMtmGMKYtsn+PxId7zGG/gV7Noo5B+KxTyL2
+	 wHzRlPre9XoZhoQ3n/E3hMketAP66/YQG+UB9kA6nRO7SZY09OfFcgf1G/Jvem9Zfw
+	 3cMfQJH1tutEgsWnHBX3iKb3ZmVJCSxhdu6McsmlZ/e0qG2SVTFqh/a6AMH45Qosj0
+	 XIzmhV8+TMVU9HAimaqciDheOy/+6VvsUSfJTo4qW5B/fnBeDyrqGGniKQa+cCQZJb
+	 Kpuchck82XK56EL8T4s2XuWr0nWF0cUCx7ipewN3yykQp5392d7D+QWq//SBIFpy0e
+	 8t7zWnGJVjmyg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FE013809A09;
-	Thu,  2 Apr 2026 21:30:21 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CD0E3809A09;
+	Thu,  2 Apr 2026 21:30:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] arm64: dts: ti: K3 updates for v7.1
+Subject: Re: [GIT PULL] Qualcomm Arm64 defconfig updates for v7.1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <177516541978.623252.15846803399656430611.git-patchwork-notify@kernel.org>
-Date: Thu, 02 Apr 2026 21:30:19 +0000
-References: <e724f95d-09d0-4ede-9ed4-0ce782d81058@ti.com>
-In-Reply-To: <e724f95d-09d0-4ede-9ed4-0ce782d81058@ti.com>
-To: Vignesh Raghavendra <vigneshr@ti.com>
+ <177516542128.623252.14913787701785078962.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Apr 2026 21:30:21 +0000
+References: <20260331215521.968341-1-andersson@kernel.org>
+In-Reply-To: <20260331215521.968341-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,21 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 1 Apr 2026 22:44:03 +0530 you wrote:
-> Hi ARM SoC maintainers
+On Tue, 31 Mar 2026 16:55:21 -0500 you wrote:
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 > 
-> Please pull DT updates for K3 Platforms for v7.1.
-> Note there is a patch touching embedded-controller/kontron,sl28cpld.yaml as it is part of
-> series that removes of Kontron SMARC-sAM67 board support.
+>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 > 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-7.1
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] arm64: dts: ti: K3 updates for v7.1
-    (no matching commit)
-  - [GIT,PULL,2/2] arm64: defconfig: TI K3 updates for v7.1
-    https://git.kernel.org/soc/soc/c/1c4c5c50ec58
+  - [GIT,PULL] Qualcomm Arm64 defconfig updates for v7.1
+    https://git.kernel.org/soc/soc/c/ba5d247871d2
 
 You are awesome, thank you!
 -- 
