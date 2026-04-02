@@ -1,83 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AC63612F8
-	for <soc@lists.linux.dev>; Thu,  2 Apr 2026 21:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60883B47DE
+	for <soc@lists.linux.dev>; Thu,  2 Apr 2026 21:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775165445; cv=none; b=jjsd4Gm7Ir4Bof+ZlknJ7oY5Q0jxBBVG0JHOoiX329qcte4loonZPBtVEHonePakdcU4T60kci+9TiDyQLgdrgHnZvR9aVzIXlMjoq2Rn5n0yGe/v43tVIkoPqcFFlWIBciceJ+2miwEh5FECLS37rHykcLtsk2XZSDx9Y+lF1o=
+	t=1775166250; cv=none; b=pOAT4+Hn/vVxq8adoanHNDT88BdBgmMj+orAG5JCUIMFXMFJk26GCR7T7/M+S5HLAEyVjuTsBrjGXzC2BDde/FJPma4l2faUBXixsnRWRfmAynK9M0UN0pmP94bvvc+rB6B3nCv29kqvGz3tbI8Pyu1uFiuDAjo68ce7v30E/9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775165445; c=relaxed/simple;
-	bh=eFyGLqu4P+jCcInr1l3BzbQeUB3q4eZz+EITBRCk7Ts=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=dIWRZIDC1D0BRwXzNZWmHj7b9UBQmPx1nS5ZCxN61PwSVyNGEq2YBFPCfvc4soNB1bi67Bhm9PkOLRnzSIretgGzhBF5y5dCK075Ay9V8oEEU+RJV3IZauxlsj1IRY+w0sC2vQCpsPyDOyz76RRo27bdFhbMOPnOY3qUISO8m+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fxbn/PcT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775166250; c=relaxed/simple;
+	bh=c2REoGnOpaEdqvIeKx5TQKxbNjOmJJih8Ma0AIt4Vrc=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=OArPaE0G/QNGvOPZese6UvhGLCn3X4ZoAKPBxrWUGs//hd5HMZ42w9Gqn1LnmX+1x9L8mOnB1bfGzcamG3lsoiRYF0iBxcd3G68cGZ3mOBspBg9NFh9wgR0dTnCPHog1Hn7MfDpcSUVrJ9FIh3caFCeyu2GXRdIgVNinI8D7G+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=DMmqEN9L; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FrOjsqKr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fxbn/PcT"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="DMmqEN9L";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FrOjsqKr"
 Received: by smtp.kernel.org (Postfix)
-	id DD0E1C2BCAF; Thu,  2 Apr 2026 21:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C789BC116C6;
-	Thu,  2 Apr 2026 21:30:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775165444;
-	bh=eFyGLqu4P+jCcInr1l3BzbQeUB3q4eZz+EITBRCk7Ts=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Fxbn/PcTnZvNl0gnvxevdlUPbnW0ugHnoMrRAGiFXs0JSjspxbshHRdcen29GGSJ7
-	 O+4zQZ3wr5GUFZspvus6zsb9UYmzKlZzBVrg8RjAsA9Rkmhc+MfQzonDf/R6iHKPsl
-	 mzoNbyvh7DIkBYcTmMzHHFuEFSaHhDASnI7ZJoglK0HYfR3dyOUtN9m0eodWLQysl2
-	 /vGox3XlBzalFBifO97d/8mEpdZic2TwYqPnAb9gAIlIYwTr5dEDEOEaqU0zJb1INS
-	 0sdfqHmc4F3XItvMY7yv9Mulw2rDP8SOTsTa6wjBbsHGU/YpxCk9Azo6jCWuAZMjI2
-	 2Zc2gGiEEemCA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 400283809A09;
-	Thu,  2 Apr 2026 21:30:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 52A35C19424; Thu,  2 Apr 2026 21:44:10 +0000 (UTC)
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5609EC116C6;
+	Thu,  2 Apr 2026 21:44:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5609EC116C6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 420E77A017D;
+	Thu,  2 Apr 2026 17:44:04 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Thu, 02 Apr 2026 17:44:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1775166244;
+	 x=1775252644; bh=OYQnpeSzoHqE/ynjfzXJ1D5WN7qoO0KuXUY/6t2eV9s=; b=
+	DMmqEN9LJwU6m6OMVajvyXqoA3+xsORQyUIMf1jEF/XgxjoQr7xmV6LsP55wzMKg
+	yiqXSJ7yC/jbS0IHzxcCr5fJbaJZcam0P7E5sdGhwDwAoRlN8BLIBTzYX0XgX18P
+	8Z7bYLwV0pPOSuCy9z+IeNGMbrNvHXNsMEtDw09lI7m0bwCCZQeNcSTQjCBVKK2g
+	i3QOW9ic1D7DzWIpTQ0L1mV/AabBdnm3+QCv13iIjie04U1NaCNZvQGhRlzL8Jhk
+	0Nrt86Q/eE5Q5B8ypHpPVpoOxqShkupPqWv2k9vAsElj2JViUCuaylDjaSZS8ywz
+	CKkzM9hqu43O2rji/P2Bgw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1775166244; x=
+	1775252644; bh=OYQnpeSzoHqE/ynjfzXJ1D5WN7qoO0KuXUY/6t2eV9s=; b=F
+	rOjsqKrBxfhkRT7+s77dBlRZ16gLlgO5KU83UuqcB14SPqMewIhADV5z13LAQT+e
+	olwj9uiLpJW8Txll/Mx3j2zHOWhMWegsM2tly2syVOJtC4t3K0DvvLQkxlyK0J4B
+	STu1xvsq7Ya+pMrAJhQFmWSr3dufd3kOUPVXNKYQFpPJyRTiWPdqLxBCAxcjmGHI
+	Ou6iu/cuNhRA5hrz7acIwZtPxTbaOb8aNSdtA8aLiNuPN0OxKnMoTNNJCtyeGlfj
+	JeOo2Qkb0oFj/flIuOO4tBwQyiLk3tphh+xmOPxna/79bPi1GOKM3L98/7jR5X91
+	7UHLXXVKIVFiCxiob0dlg==
+X-ME-Sender: <xms:I-POabSNu7d0vgRDjY5BYmF2CVb2Jwy5PaBcpLObJ8Z2j7fU_MZVkQ>
+    <xme:I-POaXnhqVHgwuD_8hQdcLueuP99dG_5gVy9rufuttHh4jWn4RE4KdkoUysEJBphK
+    Db8aYsmI3Lg0rHWXu1G51wz-mtmUS28w4MWjHDdSF6EnXO4uY0v4lB6>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdejudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
+    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
+    ephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdeinecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguse
+    grrhhnuggsrdguvgdpnhgspghrtghpthhtohepiedpmhhouggvpehsmhhtphhouhhtpdhr
+    tghpthhtohepihhnohgthhhirghmrgesghhmrghilhdrtghomhdprhgtphhtthhopegtoh
+    hnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrg
+    guvggrugdrohhrghdprhgtphhtthhopehsohhphhhgoheslhhishhtshdrlhhinhhugidr
+    uggvvhdprhgtphhtthhopehunhhitghorhhnpgifrghnghesohhuthhlohhokhdrtghomh
+X-ME-Proxy: <xmx:I-POabT2NWajPAxYA0xneUgLH1zNW2z1dwNxUIAwfxHpIRoRGz5xTw>
+    <xmx:I-POaXvhvxUoERQJMG5qRDvr_UnpPaxPORkuhtxeCFYNtzGuRRmuaQ>
+    <xmx:I-POaf35szzbGLpLGzavim2sRFYZwO1afPzc-_FjJuK_IjtJLtOgXg>
+    <xmx:I-POaQXDRGXbjEGsqk-uJkQDraDsX7vu68GkcbZx5FF4Sn6TNfId2Q>
+    <xmx:JOPOaS0CBzvUmAUN_voBkRA9zXVJ9Amt5SNQH-kmmbvCAXokWzD_Wxo1>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B3EE7700065; Thu,  2 Apr 2026 17:44:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 3/4] i.MX dt binding changes for v7.1
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <177516542678.623252.16814265080122687219.git-patchwork-notify@kernel.org>
-Date: Thu, 02 Apr 2026 21:30:26 +0000
-References: <20260330141444.3789193-1-Frank.Li@nxp.com>
-In-Reply-To: <20260330141444.3789193-1-Frank.Li@nxp.com>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: soc@kernel.org
+X-ThreadId: AaZlO9rjbYwJ
+Date: Thu, 02 Apr 2026 23:43:43 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Chen Wang" <unicorn_wang@outlook.com>, soc@kernel.org
+Cc: "Conor Dooley" <conor+dt@kernel.org>,
+ "Inochi Amaoto" <inochiama@gmail.com>,
+ "sophgo@lists.linux.dev" <sophgo@lists.linux.dev>,
+ linux-riscv <linux-riscv@lists.infradead.org>
+Message-Id: <f99471c2-4b7e-4475-af71-5c0ac4c92809@app.fastmail.com>
+In-Reply-To: 
+ <MA5PR01MB1250079A8884D4F6245B955B9FE51A@MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM>
+References: 
+ <MA5PR01MB1250079A8884D4F6245B955B9FE51A@MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM>
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v7.1
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Thu, Apr 2, 2026, at 04:39, Chen Wang wrote:
+> For CV18xx serials:
+> Just a minor patch to replace the compatible for
+> dma-controller to allow setting DMA channel number.
+> New bindings and driver part change are picked by
+> DMA subsytem and this patch handles the left dts
+> part change.
+>
+> Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
+>
+> ----------------------------------------------------------------
+> Inochi Amaoto (1):
+>        riscv: dts: sophgo: cv180x: Allow the DMA multiplexer to set 
+> channel number for DMA controller
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Doesn't this change break backwards compatibility with
+all existing kernels?
 
-On Mon, 30 Mar 2026 10:14:36 -0400 you wrote:
-> From: Frank.Li@nxp.com
-> 
-> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
-> 
->   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
-> 
-> are available in the Git repository at:
-> 
-> [...]
+I did not take this one for now, need clarification, or
+a new patch that keeps the old compatible string along
+with the new one, if that is possible.
 
-Here is the summary with links:
-  - [GIT,PULL,3/4] i.MX dt binding changes for v7.1
-    https://git.kernel.org/soc/soc/c/62513d2213a6
-  - [GIT,PULL,1/4] i.MX arm64 dts changes for v7.1
-    (no matching commit)
-  - [GIT,PULL,2/4] i.MX arm dts changes for v7.1
-    (no matching commit)
-  - [GIT,PULL,4/4] i.MX drivers/soc changes for v7.1
-    (no matching commit)
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+       Arnd
