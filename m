@@ -1,154 +1,168 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600F53D6CA4
-	for <soc@lists.linux.dev>; Thu,  2 Apr 2026 12:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC8F33F8D9
+	for <soc@lists.linux.dev>; Thu,  2 Apr 2026 17:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775131363; cv=none; b=OcfdnXJX8cndvQO8Ab9n/36jUQ8qY+fl8Mpn+XjzKW39S0F7hE0fpgVtozQhIYbouqUsXf2qKxmoHS/ata/dYaosJgvld/cqb1AmvWxWxMFYBZEJ9/hL30kGzRWXUc30LQwUS33o/A1QQMwrS00gajI467R4BY8VtVUwN4UwCac=
+	t=1775149533; cv=none; b=W8aBlJIb6XSdXxmg2cJMOs9lqCQR6Xlvl8ghu7Jc02495QBRCJ82fZpgD2s6JtZR+ilra19E0HBOzg7AnPov5Xw/tgOo83wWHYXyzQ2+5tzcvYTa5EbDZlewJqRhQGLKOzM2xK2v9OsgWW8TyZrOZcz+C9ifGtLmt61TWDzL7XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775131363; c=relaxed/simple;
-	bh=VtSexpkAeTcEr816mi3bsaOoish9Xihb19NxtfkqEIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LG42Ci08CQxPNCiJn0/IKpeE6DRcyfpzxsc7Jci8mLEVXtTwQDquMf9OVfcEqMZzC8GyBVF4+fhzxo+pzdNNAtxY1kXPo/ALYblXtQO2fUXlhLkcSbgHoKLcqltG0XpwPxRo2uWBccmcH0cPItWhWg94Wh/7rVliajM23+jg2Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gXFVmZN9; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gXFVmZN9"
+	s=arc-20240116; t=1775149533; c=relaxed/simple;
+	bh=iH6S2Us2UIvQ7FUMCTROkLaI+67ZYnyc0CQPUuNssDo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jwU+/ZNgJpXl4A7XN7oMlaLfuyVmI1A5RH3vUvkOr4oK8uQFIzvvh7htNmpm3s4rq+NI0zipeDad5DrBuv6iTrAHuICPTytfJ1uTbhhnuLayfRTKKG8T/D8uoGenAYVfLYF6XVkJ5369ALUiCFganaMBbmmRi7ULi1s739fCVGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id C0E32C19424; Thu,  2 Apr 2026 12:02:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F056C19423;
-	Thu,  2 Apr 2026 12:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775131362;
-	bh=VtSexpkAeTcEr816mi3bsaOoish9Xihb19NxtfkqEIo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gXFVmZN9njolG5Q04B9Dt3MGpPNu0B2m9h+frpYlQok9ue0qz5Q4DqpOwK7tETDKA
-	 K39eq56Zs9O28oZCoQ+G6aWNaD7B63a3/iHNWkD56riFQD2A+1tavWOsWSyH3dhL0Z
-	 kAucddrfTLhGxPRsAe8PGDgpnGafBib81DFL2sxGc1F+qf3UsDWt7MfSdzw0kgxJDy
-	 VipNSzmt4IrGkY7Z/Dk6dXlt4yLxDG5XWW8MoA4jcC1WXwZaw98ZRp+IYIJ+kGhgJQ
-	 KQnO6r3mZF88sAdJG/bjekFu9DDUNpAynZ50qoicexzwcjvnLm3SILCdSeKZP0dmQ8
-	 xrFmLHW7usyuA==
-Date: Thu, 2 Apr 2026 14:02:40 +0200
-From: Thierry Reding <thierry.reding@kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>, 
-	Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 6/7] arm64: tegra: Device tree changes for v7.1-rc1
-Message-ID: <ac5ahWb1I-qnaK_Y@orome>
-References: <20260329151045.1443133-1-thierry.reding@kernel.org>
- <20260329151045.1443133-6-thierry.reding@kernel.org>
+	id C81D8C116C6; Thu,  2 Apr 2026 17:05:32 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A009AC19423
+	for <soc@kernel.org>; Thu,  2 Apr 2026 17:05:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A009AC19423
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1w8LTy-00078F-3k; Thu, 02 Apr 2026 19:05:26 +0200
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller updates for v7.1
+Date: Thu,  2 Apr 2026 19:05:25 +0200
+Message-ID: <20260402170525.2452299-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kvqhrzlj2b7g3m5j"
-Content-Disposition: inline
-In-Reply-To: <20260329151045.1443133-6-thierry.reding@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
+Dear arm-soc maintainers,
 
---kvqhrzlj2b7g3m5j
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [GIT PULL 6/7] arm64: tegra: Device tree changes for v7.1-rc1
-MIME-Version: 1.0
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
-On Sun, Mar 29, 2026 at 05:10:43PM +0200, Thierry Reding wrote:
-> From: Thierry Reding <thierry.reding@gmail.com>
->=20
-> Hi ARM SoC maintainers,
->=20
-> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f2=
-7f:
->=20
->   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegr=
-a-for-7.1-arm64-dt
->=20
-> for you to fetch changes up to c70e6bc11d2008fbb19695394b69fd941ab39030:
->=20
->   arm64: tegra: Add Tegra264 GPIO controllers (2026-03-28 01:36:46 +0100)
->=20
-> Thanks,
-> Thierry
->=20
-> ----------------------------------------------------------------
-> arm64: tegra: Device tree changes for v7.1-rc1
->=20
-> Various fixes and new additions across a number of devices. GPIO and PCI
-> are enabled on Tegra264 and the Jetson AGX Thor Developer Kit, allowing
-> it to boot via network and mass storage.
->=20
-> ----------------------------------------------------------------
-> Diogo Ivo (1):
->       arm64: tegra: smaug: Enable SPI-NOR flash
->=20
-> Jon Hunter (1):
->       arm64: tegra: Fix RTC aliases
->=20
-> Prathamesh Shete (1):
->       arm64: tegra: Add Tegra264 GPIO controllers
->=20
-> Thierry Reding (6):
->       dt-bindings: pci: Document the NVIDIA Tegra264 PCIe controller
->       Merge branch for-7.1/dt-bindings into for-7.1/pci
->       arm64: tegra: Fix snps,blen properties
->       arm64: tegra: Drop redundant clock and reset names for TSEC
->       arm64: tegra: Add PCI controllers on Tegra264
->       arm64: tegra: Add Jetson AGX Thor Developer Kit support
->=20
->  .../bindings/pci/nvidia,tegra264-pcie.yaml         | 149 +++++++++
->  arch/arm64/boot/dts/nvidia/Makefile                |   2 +
->  arch/arm64/boot/dts/nvidia/tegra210-smaug.dts      |  12 +
->  arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   2 -
->  arch/arm64/boot/dts/nvidia/tegra234-p3701.dtsi     |   1 +
->  arch/arm64/boot/dts/nvidia/tegra234-p3767.dtsi     |   1 +
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi           |   6 +-
->  .../dts/nvidia/tegra264-p4071-0000+p3834-0008.dts  |  11 +
->  .../boot/dts/nvidia/tegra264-p4071-0000+p3834.dtsi |  12 +
->  arch/arm64/boot/dts/nvidia/tegra264.dtsi           | 336 +++++++++++++++=
-++++--
->  10 files changed, 500 insertions(+), 32 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pci/nvidia,tegra264=
--pcie.yaml
->  create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p4071-0000+p3834-=
-0008.dts
->  create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p4071-0000+p3834.=
-dtsi
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 
-Hi ARM SoC maintainers,
+are available in the Git repository at:
 
-DT maintainers objected to the way I wanted to handle the DT bindings
-dependency here, so I'll drop the whole PCI stuff from this and redo the
-PR.
+  https://git.pengutronix.de/git/pza/linux.git tags/reset-for-v7.1
 
-Thierry
+for you to fetch changes up to d373605cd514837d8a6de3d00c786d4bae6dbaf8:
 
---kvqhrzlj2b7g3m5j
-Content-Type: application/pgp-signature; name="signature.asc"
+  Merge tag 'reset-fixes-for-v7.0-2' into reset/next (2026-04-02 18:32:53 +0200)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+Reset controller updates for v7.1
 
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmnOWuAACgkQ3SOs138+
-s6EWdBAAu9sQun8NBxkNHrqi1zIzoZakofv0v3tzIIayEiLRmYnGFuf5ycVobK0T
-X/jraQ0uvtVcUQkbMNOrth/PeZS+8//deSJJUQBAH8+x+fNWm/JH3/si+dQRREaL
-btyUJhLsdFn4WoimJa05q/lvl0lbnFWcYkiuGSHt14l3GW3huxrcqguqbkfMXP1D
-/RTOWdJViVMpBonIBkQllaoiSqACVsGVoip/enn4lquI6z0nFDemBT7DPd3J//CV
-T+ftdUQKZ7EKA+w3HOeWCgzYMGidzV/+EZY7LrpjiUmZNT6ffM9Ycws0l4u0Lyds
-K+UUV3hxqD7F8IONqdByjwN5+vSVVD24LiiT78P9MXUvAcM3zAEqKMnkCL8Nu05V
-0bZ6mteFNxe4WedQ8pyfNYihwhFmTSqR76g4Mv70DH4/5voAW0o0IPxp8MCbvges
-6ccM8lz7jsGNY2K0YqjJt9M3aeg7KMycKvo4W6GQLzIcb/UmMxncleXWoR6NHT9s
-/+YQMZEekNguCmEKx/RpBtOgpshfp56t6ecAALRXSn9fyoP8ffpYeuQ429/0rnWM
-kfGrwRzgS3UaXSSRgb6kI2a9vkxiXEwcy94KDBFUhLsWQoY3uYlTyl8HwcEQJ8lX
-V5ulj4q13qnBBBtd2CHrC/FR9mSJ/4bYOUfi5sLqPNQR3/9E9kw=
-=qAuN
------END PGP SIGNATURE-----
+* Rework the reset core to support firmware nodes, add more fine
+  grained locking, and use guard() helpers.
+* Change the reset-gpio driver to use firmware nodes.
+* Add support for the Cix Sky1 SoC reset controller.
+* Add support for the RZ/G3E SoC to the reset-rzv2h-usb2phy driver and
+  convert it to regmap. Prepare registering a VBUS mux controller.
+* Replace use of the deprecated register_restart_handler() function in
+  the ath79, intel-gw, lpc18xx, ma35d1, npcm, and sunplus reset drivers.
+* Combine two allocations into one in the sti/reset-syscfg driver.
+* Fix the reset-rzg2l-usbphy-ctrl MODULE_AUTHOR email.
+* Fix the reset_control_rearm() kerneldoc comment.
 
---kvqhrzlj2b7g3m5j--
+The last commit is a merge of reset-fixes-for-v7.0-2 into reset/next,
+to solve a merge conflict between commits a9b95ce36de4 ("reset: gpio: add a
+devlink between reset-gpio and its consumer") and fbffb8c7c7bb ("reset: gpio:
+fix double free in reset_add_gpio_aux_device() error path").
+
+----------------------------------------------------------------
+Andrew Davis (6):
+      reset: ath79: Use devm_register_restart_handler()
+      reset: intel: Use devm_register_restart_handler()
+      reset: lpc18xx: Use devm_register_sys_off_handler()
+      reset: ma35d1: Use devm_register_sys_off_handler()
+      reset: npcm: Use devm_register_sys_off_handler()
+      reset: sunplus: Use devm_register_sys_off_handler()
+
+Bartosz Golaszewski (15):
+      reset: gpio: remove unneeded OF-node put
+      reset: gpio: add a devlink between reset-gpio and its consumer
+      reset: gpio: simplify fallback device matching
+      reset: gpio: remove unneeded auxiliary_set_drvdata()
+      reset: warn on reset-gpio release
+      reset: fold ida_alloc() into reset_create_gpio_aux_device()
+      reset: use lock guards in reset core
+      reset: handle removing supplier before consumers
+      reset: protect struct reset_controller_dev with its own mutex
+      reset: protect struct reset_control with its own mutex
+      reset: convert of_reset_control_get_count() to using firmware nodes
+      reset: convert the core API to using firmware nodes
+      reset: convert reset core to using firmware nodes
+      reset: gpio: make the driver fwnode-agnostic
+      reset: don't overwrite fwnode_reset_n_cells
+
+Biju Das (1):
+      reset: rzg2l-usbphy-ctrl: Fix malformed MODULE_AUTHOR string
+
+Claudiu Beznea (2):
+      reset: rzg2l-usbphy-ctrl: Check pwrrdy is valid before using it
+      reset: core: Drop unnecessary double quote
+
+Gary Yang (2):
+      dt-bindings: soc: cix: document the syscon on Sky1 SoC
+      reset: add Sky1 soc reset support
+
+Guangshuo Li (1):
+      reset: gpio: fix double free in reset_add_gpio_aux_device() error path
+
+Philipp Zabel (2):
+      reset: core: Fix indentation
+      Merge tag 'reset-fixes-for-v7.0-2' into reset/next
+
+Rosen Penev (1):
+      reset: sti: kzalloc + kcalloc to kzalloc
+
+Tommaso Merciai (5):
+      reset: rzv2h-usb2phy: Keep PHY clock enabled for entire device lifetime
+      dt-bindings: reset: renesas,rzv2h-usb2phy: Add '#mux-state-cells' property
+      dt-bindings: reset: renesas,rzv2h-usb2phy: Document RZ/G3E USB2PHY reset
+      reset: rzv2h-usb2phy: Convert to regmap API
+      reset: rzv2h-usb2phy: Add support for VBUS mux controller registration
+
+Yixun Lan (1):
+      reset: spacemit: k3: Decouple composite reset lines
+
+ .../reset/renesas,rzv2h-usb2phy-reset.yaml         |   9 +-
+ .../bindings/soc/cix/cix,sky1-system-control.yaml  |  42 ++
+ Documentation/driver-api/reset.rst                 |   1 -
+ drivers/reset/Kconfig                              |   9 +
+ drivers/reset/Makefile                             |   1 +
+ drivers/reset/core.c                               | 518 ++++++++++++++-------
+ drivers/reset/reset-ath79.c                        |  12 +-
+ drivers/reset/reset-gpio.c                         |  27 +-
+ drivers/reset/reset-intel-gw.c                     |  11 +-
+ drivers/reset/reset-lpc18xx.c                      |  12 +-
+ drivers/reset/reset-ma35d1.c                       |  11 +-
+ drivers/reset/reset-npcm.c                         |  12 +-
+ drivers/reset/reset-rzg2l-usbphy-ctrl.c            |   5 +-
+ drivers/reset/reset-rzv2h-usb2phy.c                | 197 ++++----
+ drivers/reset/reset-sky1.c                         | 367 +++++++++++++++
+ drivers/reset/reset-sunplus.c                      |  12 +-
+ drivers/reset/spacemit/reset-spacemit-k3.c         |  60 ++-
+ drivers/reset/sti/reset-syscfg.c                   |   9 +-
+ .../dt-bindings/reset/cix,sky1-s5-system-control.h | 163 +++++++
+ .../dt-bindings/reset/cix,sky1-system-control.h    |  41 ++
+ include/dt-bindings/reset/spacemit,k3-resets.h     |  48 +-
+ include/linux/reset-controller.h                   |  21 +-
+ include/linux/reset.h                              |  43 +-
+ 23 files changed, 1223 insertions(+), 408 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/cix/cix,sky1-system-control.yaml
+ create mode 100644 drivers/reset/reset-sky1.c
+ create mode 100644 include/dt-bindings/reset/cix,sky1-s5-system-control.h
+ create mode 100644 include/dt-bindings/reset/cix,sky1-system-control.h
