@@ -1,80 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9D333E345
-	for <soc@lists.linux.dev>; Fri,  3 Apr 2026 07:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAD518DB01
+	for <soc@lists.linux.dev>; Fri,  3 Apr 2026 07:06:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775199830; cv=none; b=H5kHs0Qv655MPO/fF27z3CXOqGC9dZ79ym5qRkj7VV/25cmn2oi3puZrVuk+Rph7uHyJBzXCepWyVfCfjaAWNVSNbrXVJg8IZ0dpydY6asZ2NeQiQ5Sh2csBigutab+wkXZXuJPPWuv8HzzMNcEeOusHgzbnTmQZAiEihCuC5SE=
+	t=1775200002; cv=none; b=EkZA6TlR6XN7TnvBXH7MfE31sVtf4rg3omPSLBtdFN4UD13HJ5cbnIJyHEMcdK0qdUmByD5c2sUcywXDBS9wrtK/shF8b3n8GNNy1pf9RWBtaX8l1d0+iKoQ7MVZUuOxmlToHzWiKgiz6a+7+TfGjpM6m9f64rSz4q5TXU2Keu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775199830; c=relaxed/simple;
-	bh=Dut6otDgCg5ddGzL/iIfdoRncFvnU1VegwfxdTGwpyc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JkGTMtxA+gU2xhArGV4Yxpl1HOowdbEDqSgfuM4PbTXEgTwQA0ZmlxWz/kLS2UHvYQvX0d1zmkNF2MlCFz/40H5w0+TW4hdn7hHx7stdUU6FrXXfoqjUKdDgitW1lcvOFwu9kyATtMKCkG5yrAyxTy7Sb+XGNhVCbQYXGVGefjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=LA8EcST1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775200002; c=relaxed/simple;
+	bh=gLiR40ICk/DqpjJXUtAkYxOHXtP5jGNCmAylQ6h2EN8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mzmue6Z+170wzfYwy337JiZFcfKGlW8KfKRho4awErfAaMaCn7Youx9daqIc9RkwABbHmwnru3W40nk47sfz10MNXjV5GcM4zbcLliJF1ai0F2YZn7TzxdYsya0kq3YASOhcFrE3FWVKFbFM3cucSewbX8c4TiR7ohJB2ko/AUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=HDc9qdSA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="LA8EcST1"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="HDc9qdSA"
 Received: by smtp.kernel.org (Postfix)
-	id 3338FC19424; Fri,  3 Apr 2026 07:03:50 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	id 88AECC4CEF7; Fri,  3 Apr 2026 07:06:42 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6F796C4CEF7
-	for <soc@kernel.org>; Fri,  3 Apr 2026 07:03:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6F796C4CEF7
+	by smtp.kernel.org (Postfix) with ESMTPS id 825FCC2BCB0
+	for <soc@kernel.org>; Fri,  3 Apr 2026 07:06:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 825FCC2BCB0
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4888244e9f9so14282015e9.0
-        for <soc@kernel.org>; Fri, 03 Apr 2026 00:03:49 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-486b96760easo18567795e9.2
+        for <soc@kernel.org>; Fri, 03 Apr 2026 00:06:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1775199827; x=1775804627; darn=kernel.org;
+        d=tuxon.dev; s=google; t=1775200000; x=1775804800; darn=kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vqnTFhR30A/TR4noz6Hyn5T24eQZrxW2/g5X6NMsOb0=;
-        b=LA8EcST14550dKx1RHJBeoDjC2PE356ixm6Df8uM0Nu8qW0ih9PFH+5hpls9bvmLJy
-         EScra16SWn/sjvchfDrwZjksCgdJFmD/Vfkqa6EgW25/aCHQcF9evIz9dQM6fkLoqBek
-         sPLxx1/p3nj4wdDmF4keoq10wXOOfo3lxaCEZoxzq/wvOUwZEzv7Gs+glX1FR7LnAZEM
-         kG9RYMba6ZG4s7Gv3cTtTktZGwDLqjCvtECEIzD8cg1w3WbGd63ttuBYW8y37c2T6zvm
-         3nobeoyKW0qn/ix5whawQAY26v2iFmAt/JhSNCixtaOvWe7HTb2tkrMU9h5fI1nB5Cq8
-         lbxw==
+        bh=7OXn+fDhlDjBfFUiybD6ea00XK+mf3TYPg3/vc00MCU=;
+        b=HDc9qdSAe4fZOSbwltay0CMhhbzpRWQ87WfLdyDHD8lhx0D+BDJ9ZiY3zSUjuA9HCT
+         QRpFs7RWpLdzxzmCdTm+NxLGJzScNgVL2h7vbXuelefjnN836cSEKZDK12pPg1ILDQJ7
+         mrqecP6rwHOZy/9POQJ0BOtoGGIHbXGXggbzVEB1YG3phZwCDK8tb6DPTLh80gKGiWlH
+         7m0mNE1QJ04zjqsngCU4ZK2nIocGzOObOsIPo76Tf7b1oERfe5LMyXyvNwLdCpLv165h
+         YPb2DwvzOAvVp95rCytOuqAoi5TreWAn2lcht9aOjTJAs1JWkEdgybqI93jEpNZ/Sjze
+         FW6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775199827; x=1775804627;
+        d=1e100.net; s=20251104; t=1775200000; x=1775804800;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vqnTFhR30A/TR4noz6Hyn5T24eQZrxW2/g5X6NMsOb0=;
-        b=ZpNSedeFua7N07WEXYchG7mVz9NZj2a/iH3Sfv1Og9Id+hqMJju+pV4trl8IHxvggs
-         +ww2sMoQCnfC9RBAXUEIClCh3Xn+cN0v8G8V1FhCcJ/L5caJ7PAHs7vSlS+a8vSRGPoK
-         aR4EVSV9rHODjr8NrBA0mJLogHvoduvwvVY62Lg1dNr+I78M5pVgkeZvtPbxlTX001s1
-         4MdPGRRe2i+3tLecZGyTRaMX2+pFEa83WNf+XvOOoxnQCWFvbRUdUgX6z3SGoibMtGa5
-         DKCJtkUwx5SerSZldD972ezw3sE26sgoBqbJN30B9jvx5DZoZtoHhYQ+Mwe5fBQUOUtI
-         TKIw==
-X-Gm-Message-State: AOJu0YzM2jUlu9W3CqjRZR15yIlUB9u4xfUlm71dIDGsYB1kxTLM4i7d
-	XEJwAYTxe6lGE9Q4xnulkXKy+oLMFLy8DKNPKXr1mILub7CsXiwNpJoqIPsoSfqB41XpQQofqTM
-	H/Hg0
-X-Gm-Gg: ATEYQzwCaWSG2/noDqKNNnZwiCdhiCy568zkjBmEkdNG8QqmNYSwHnaEhsO31W9/0hH
-	C4L3dI2jEkqHhAPOGNEFAxc6mpF5wXGvVP1PFZcCzw9e6Ew0kH1iDF7KNkqePVZz+BDoqzcY+rA
-	bWHOHcyrV2xrSKFcca5Rg8OzPv7HtSWXp3+Y7W5IKoCSw7/w7GHANXUKI637gK1P0OZPBhMLiSp
-	XayeQ3qyoI6lgDT1wB1+weSXfBHWdd51RB08pGAgF4A3OLqYPKlvMWqSmbB8lYrVnfJoSDLEl2/
-	oHaAAIiaiTYbGrzG3cgN0DIWGeNDt0eXMzq/qjP+NaR2QLUbbhr/cZdLKFPi3FC4DtHszZ9tLSq
-	/q8HLe61s74VJNHBMjWdn0X1+HU/lKpml5AZxYDoUpoXYQ1mjW6kcnNfW3MD2ujam+dt/dqcAVU
-	77LlUXFDtXfN6MXkBe0UeIUQK4fd3z6rC+dOxVV/qanbxNibkLR5W5
-X-Received: by 2002:a05:600c:3544:b0:486:fd5c:2b35 with SMTP id 5b1f17b1804b1-48899735bb2mr25152895e9.13.1775199825786;
-        Fri, 03 Apr 2026 00:03:45 -0700 (PDT)
+        bh=7OXn+fDhlDjBfFUiybD6ea00XK+mf3TYPg3/vc00MCU=;
+        b=YLdLuCgvZpY3kX0SjRtneffYBDyIBMtsCPGqAl+2ENEk8NdPwjgw92pJ5rPLO4gMwA
+         0hM99Kn3lH/17lgD6TL5KZ9qAwWfEpoL0wOcxsfjm+2fAqfeWtG2dzCNzMwTju5a37vA
+         yIZNxCO9r0BrSsOBHrIr93LIJQUU6YAz5oe+I8/QIlX0yHtqC70PNl8rgxjL8ZJ0CW2x
+         pXIhOyTmhtwqpSIVEcqJISd8uiEeumx+IpGfqoiTJEmJt5+/XuXDCesHl54qcokVaXU8
+         FeE9CuOZYKIUNOdNRnjymAIbnoYkBD7PwybhQHZ21mkeg5UiINc+1YXpRPTKCm62KWD0
+         tW2A==
+X-Gm-Message-State: AOJu0YyYUGu1GZHF1lKqid8Md6DFbHlzFxOm1Lv1JoUiIwSFTVnSP5Gm
+	o857MWZQ9l7ecGhm5ADVnXpaG1JiCEorI2BfPB9BX/Mf1JvRH5JVrHX6nnipqpVenknzRlNEyAM
+	hDqkG
+X-Gm-Gg: ATEYQzyXJHdtFpKKFDa8QASR9IQJUiuemhEQ/sc7Pmktu/n/RCMWBSavy0mVJ1561lR
+	TPPrjnvwkiIdsB0GNNmP6EDV0mWv1xzTLcQjYANSfs1F31Ox5z0CbjaAlIhJ/aUINt+LMlSdHfT
+	SqtdA2XHstnLU2gqbc3CdvW1rz9QSMMb62bIJlhytqK7OUGn9PW0sIUYaxzSAQFi0FBf6k0cUrj
+	ih2zhdro2Bxow8o95D6OA+2ujX2timK3SCs4HW7Mv0Tn6FpGxpLaothOyMWVgJzmKpstlPXd/56
+	qvASgLWaPPgL3sAmNvkGirOckyASoZzfrRaeYEHDXUS0/Cc9i1C1Z/RMi0v0m2FNliNz4QRJpxL
+	ffI+Jw6ZzDt9kPeBVeO2ln8flwAR1UDVZInReSXD7x8v9puTa9qblzkVuoUTpgRc2QrGFn3V7I9
+	i46tYFc+opB5x4H/Ty0eAITP7/9osMRCBZ8TevcZX0RQ==
+X-Received: by 2002:a05:600c:818d:b0:485:9a50:3369 with SMTP id 5b1f17b1804b1-488997e74fbmr27479815e9.29.1775199999487;
+        Fri, 03 Apr 2026 00:06:39 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.248])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e967badsm323261125e9.14.2026.04.03.00.03.44
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4889b559a15sm16310975e9.2.2026.04.03.00.06.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 00:03:45 -0700 (PDT)
+        Fri, 03 Apr 2026 00:06:39 -0700 (PDT)
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 To: soc@kernel.org,
 	arm@kernel.org
-Cc: nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com,
+Cc: conor@kernel.org,
+	nicolas.ferre@microchip.com,
 	claudiu.beznea@tuxon.dev,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Microchip AT91 SoC updates for v7.1
-Date: Fri,  3 Apr 2026 10:03:44 +0300
-Message-ID: <20260403070344.2553018-1-claudiu.beznea@tuxon.dev>
+Subject: [GIT PULL] Microchip ARM64 device tree updates for v7.1
+Date: Fri,  3 Apr 2026 10:06:37 +0300
+Message-ID: <20260403070637.2554408-1-claudiu.beznea@tuxon.dev>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -90,37 +90,32 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-7.1
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/microchip-dt64-7.1
 
-for you to fetch changes up to f3ae0049ff8a3d2cbd8c05857705744435629d0c:
+for you to fetch changes up to 711cca0f1cfef57018654b969da4041c2bab68d3:
 
-  dt-bindings: arm: atmel,at91rm9200-sdramc: convert to DT schema (2026-03-07 16:41:03 +0200)
+  arm64: dts: microchip: add EV23X71A board (2026-03-20 10:56:22 +0200)
 
 ----------------------------------------------------------------
-Microchip AT91 SoC updates for v7.1
+Microchip ARM64 device tree updates for v7.1
 
 This update includes:
-- device tree bindings conversion to DT schema for CHIPID, RAM
-  controller and PIT, PIT64b, ST timers
+- device tree files for the Microchip LAN9691 SoC and its evaluation
+  board (Microchip EV23X71A)
 
 ----------------------------------------------------------------
-Akhila YS (5):
-      dt-bindings: arm: microchip,sama7g5-chipid : convert to DT schema
-      dt-bindings: arm: atmel,at91sam9260-pit: convert to DT schema
-      dt-bindings: arm: microchip,sam9x60-pit64b : convert to DT schema
-      dt-bindings: arm: atmel,at91rm9200-st: convert to DT schema
-      dt-bindings: arm: atmel,at91rm9200-sdramc: convert to DT schema
+Robert Marko (4):
+      arm64: dts: microchip: add LAN969x clock header file
+      arm64: dts: microchip: add LAN969x support
+      dt-bindings: arm: AT91: document EV23X71A board
+      arm64: dts: microchip: add EV23X71A board
 
- .../bindings/arm/atmel,at91rm9200-sdramc.yaml      | 66 +++++++++++++++++++++
- .../bindings/arm/atmel,at91rm9200-st.yaml          | 69 ++++++++++++++++++++++
- .../bindings/arm/atmel,at91sam9260-pit.yaml        | 49 +++++++++++++++
- .../devicetree/bindings/arm/atmel-sysregs.txt      | 48 ---------------
- .../bindings/arm/microchip,sam9x60-pit64b.yaml     | 68 +++++++++++++++++++++
- .../bindings/arm/microchip,sama7g5-chipid.yaml     | 41 +++++++++++++
- 6 files changed, 293 insertions(+), 48 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/arm/atmel,at91rm9200-sdramc.yaml
- create mode 100644 Documentation/devicetree/bindings/arm/atmel,at91rm9200-st.yaml
- create mode 100644 Documentation/devicetree/bindings/arm/atmel,at91sam9260-pit.yaml
- delete mode 100644 Documentation/devicetree/bindings/arm/atmel-sysregs.txt
- create mode 100644 Documentation/devicetree/bindings/arm/microchip,sam9x60-pit64b.yaml
- create mode 100644 Documentation/devicetree/bindings/arm/microchip,sama7g5-chipid.yaml
+ .../devicetree/bindings/arm/atmel-at91.yaml        |   6 +
+ arch/arm64/boot/dts/microchip/Makefile             |   1 +
+ arch/arm64/boot/dts/microchip/clk-lan9691.h        |  24 +
+ arch/arm64/boot/dts/microchip/lan9691.dtsi         | 488 +++++++++++++
+ arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts | 756 +++++++++++++++++++++
+ 5 files changed, 1275 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/microchip/clk-lan9691.h
+ create mode 100644 arch/arm64/boot/dts/microchip/lan9691.dtsi
+ create mode 100644 arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
