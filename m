@@ -1,60 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469B61EE7B7
-	for <soc@lists.linux.dev>; Fri,  3 Apr 2026 12:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2542F379ED8
+	for <soc@lists.linux.dev>; Fri,  3 Apr 2026 13:25:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775219540; cv=none; b=VxLb4lCk4QUph8npb+PjOMBNXQnegLPjAH46Bjsx9njGtmXXucdeoS/l+Jv6uEKPeyyIFP0BhzNfDMlKhOD1WEZEoslUzNfzMCHT9p4sCwuGGw7oSYQdQozt8s6G2CIpo8D/AA+pTXEPLlE38WgTwnX7rCR/CANxkLhf8h7Sacc=
+	t=1775222748; cv=none; b=S1XFIjdZ89t0LLRufXezTsVNjdtDl/djHQRBRb1MQGUzCLb9q6CC1u6ttwBEsngHDcMEq1LJaRPhIRR59lDoEvBX2HWvYHS/W3diUmUtfUt+rAxTVezUO3TKXbgYEt8JXs/2zRr4XSKu1lgPSH70XTIB4B5nUBNRdMYr7aJrHTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775219540; c=relaxed/simple;
-	bh=KBUjyrpPe2k4XhKFx345kREYiQ7Vjgg1jBFk6gpSAns=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AfKl8RD+hx3P0R2RiV1aZPrQ1s+kI7F37ZmVRbMPvz9Mczm9oEY3OtTXAXJ8Pi6oYY9gmlzGICcRUUPKmIIMXVmgWH1INXL9i3G++7nY6uiya38iZh9KGQPYvE4AMjbw4pyxdRifMa7rnZoAzcFpjdWBiQ5iaX79uBmFVyj0Ke0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPIUyh5M; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775222748; c=relaxed/simple;
+	bh=CvudSdpQESAVqTPWzzFPC6z7ueI6hlQs7MwLrB6XP5w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qZUL7vMv13XZ4ILekufZ79Q5Dpt5W3dtU5WlX5oSw92H3RtEefuzlfrOxPFWyccUxAIHmR9rFDy3Lm78HMKf2e3pVVx+bQ0gUL6rR7Wao8WC6QWrDv4OLNaWpiwy0rsCruJs4KFxrqgLeoMX/RZDYLhQAl9yvHOmaGIm2A3DE1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=plb+/0EY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPIUyh5M"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="plb+/0EY"
 Received: by smtp.kernel.org (Postfix)
-	id EFF4BC19423; Fri,  3 Apr 2026 12:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5498DC4CEF7;
-	Fri,  3 Apr 2026 12:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775219539;
-	bh=KBUjyrpPe2k4XhKFx345kREYiQ7Vjgg1jBFk6gpSAns=;
-	h=From:To:Cc:Subject:Date:From;
-	b=hPIUyh5MLKJzCMUWJkZ1EW0Uo8J1VVlOIxSZpxB3jrEPp8Eo7JYo0WRfg4Uh2VaZB
-	 oMZxBGwOE2dyRnlhW8I3rRnc93/TWbs7Qcg3A1igt7gshVsKd3WkSuKvC2MIqnvyEY
-	 zAhlQP7Jd4aLyCDwTAigM5M9PlnyJT5tRMko5YRaburX6yg8QF4tuxTGD/1mFwvAAK
-	 8uyWGBegVIt6kuG9Peo2J5f4CqkO44utmxlyGukSbKk6n3pyXq+XMi0S5zhYRGkRQj
-	 cwewXHoyz36eRdQL4iTKYkZraTftrnCe5A4crCoEdK87FMV9lnl5jgrbfRNwYW3eZ4
-	 NHWtWszItvOGw==
-From: Yixun Lan <dlan@kernel.org>
-To: soc@kernel.org
-Cc: Yixun Lan <dlan@gentoo.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.1
-Date: Fri,  3 Apr 2026 12:32:06 +0000
-Message-ID: <20260403123040-KYC0145825@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	id D59D0C2BCB1; Fri,  3 Apr 2026 13:25:47 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CF107C4CEF7;
+	Fri,  3 Apr 2026 13:25:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CF107C4CEF7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=NF4JDG9gLpkgwa9sSYPibHIAixK9qPvEipevanGie4c=; b=plb+/0EYqxQ+ZWruLdGpjcZs63
+	F/Qry1QoQpyR2ruHVovbtvdcU0KkG7PjDd/AdhiuSurFwmcmKezUo8sRh/uMKNXxeqL1j+XzZ6GjV
+	S5E3o7hAVIAwE2/zXy6Zol1t7fc2wZXXzpO+aLdQvwNdfcmddasc5Mkb+V71J+8o9vXpgqw6lqjDn
+	q20BV2VqWAiFOoUcV8KXcdCzbJyrAzBPzT9RSO8hmoLOOUgTfrI6WpbmM1vxebQpNKg7y/NEQlH94
+	p8RETiUXkyFULd3OZvFF3Gg8ILGyXlE4D/3xVMQpNdHIozItXmfJUj77IFL+PsKUWj+aR+QeHwwwP
+	W51lbgHw==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts32 changes for 7.1 #1
+Date: Fri, 03 Apr 2026 15:25:36 +0200
+Message-ID: <2771700.BddDVKsqQX@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
-From: Yixun Lan <dlan@gentoo.org>
+Hi soc maintainers,
 
-Hi Arnd,
+please find below Rockchip ARM32 DT changes for the merge-window for 7.1 .
 
-   Please pull SpacemiT's DeviceTree changes for v7.1
 
-Yixun Lan
+Please pull.
+Thanks
+Heiko
+
 
 The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
@@ -62,68 +65,45 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
 are available in the Git repository at:
 
-  https://github.com/spacemit-com/linux tags/spacemit-dt-for-7.1-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.1-rockchip-dts32-1
 
-for you to fetch changes up to af62a095eb0c3359d477b55ef72d2afd94c83c8f:
+for you to fetch changes up to 94c8dc1fa8e1ad4037084204152bca1e799d7d1c:
 
-  dts: riscv: spacemit: k3: add P1 PMIC regulator tree (2026-03-30 04:42:10 +0000)
-
-----------------------------------------------------------------
-RISC-V SpacemiT DT changes for 7.1
-
-For K3 SoC
-- Add I2C support
-- Add PMIC regulator tree
-- Add ethernet support
-- Add pinctrl/GPIO/Clock
-- Enable full UART support
-
-For K1 SoC
- On Milk-V Jupiter
-- Enable PCIe/USB on
-- Enable QSPI/SPI NOR
-- Enable EEPROM, LEDs
- Others
-- Fix PMIC supply properties
-- Fix PCIe missing power regulator
+  ARM: dts: rockchip: Pass linux,code to the power key on rk3288-veyron-pinky (2026-03-24 17:06:35 +0100)
 
 ----------------------------------------------------------------
-Aurelien Jarno (7):
-      riscv: dts: spacemit: drop incorrect pinctrl for combo PHY
-      riscv: dts: spacemit: add LEDs for Milk-V Jupiter board
-      riscv: dts: spacemit: add 24c04 eeprom on Milk-V Jupiter
-      riscv: dts: spacemit: add i2c aliases on Milk-V Jupiter
-      riscv: dts: spacemit: enable QSPI and add SPI NOR on Milk-V Jupiter
-      riscv: dts: spacemit: enable USB 3 ports on Milk-V Jupiter
-      riscv: dts: spacemit: enable PCIe ports on Milk-V Jupiter
+A number of dt-schema cleanups that are log standing, so not suitable
+as fix for the current release.
 
-Chukun Pan (2):
-      riscv: dts: spacemit: Add 'linux,pci-domain' to PCIe nodes for K1
-      riscv: dts: spacemit: reorder phy nodes for K1
+----------------------------------------------------------------
+Fabio Estevam (12):
+      ARM: dts: rockchip: Remove rockchip,grf from rk3288 tsadc
+      ARM: dts: rockchip: Move PHY reset to ethernet-phy node on rk3036 boards
+      ARM: dts: rockchip: Fix RTC compatible on rk3288-phycore-rdk
+      ARM: dts: rockchip: Use mount-matrix on rk3188-bqedison2qc
+      ARM: dts: rockchip: Remove invalid regulator-property from rk3288-veyron
+      ARM: dts: rockchip: Fix the Bluetooth node name on rk3288-veyron
+      ARM: dts: rockchip: Fix the trackpad supply on rk3288-veyron-jerry
+      ARM: dts: rockchip: Add missing the touchscreen interrupt on rk3288-phycore-rdk
+      ARM: dts: rockchip: Fix RTC description on rk3288-firefly-reload
+      ARM: dts: rockchip: Fix GMAC description n RK3288 boards
+      ARM: dts: rockchip: Fix LED node names on rk3288-phycore-rdk
+      ARM: dts: rockchip: Pass linux,code to the power key on rk3288-veyron-pinky
 
-Guodong Xu (1):
-      riscv: dts: spacemit: Update PMIC supply properties for BPI-F3 and Jupiter
+ arch/arm/boot/dts/rockchip/rk3036-evb.dts            |  4 ++--
+ arch/arm/boot/dts/rockchip/rk3036-kylin.dts          |  4 ++--
+ arch/arm/boot/dts/rockchip/rk3188-bqedison2qc.dts    |  2 +-
+ arch/arm/boot/dts/rockchip/rk3288-firefly-reload.dts |  3 +--
+ arch/arm/boot/dts/rockchip/rk3288-phycore-rdk.dts    | 16 ++++++++++------
+ arch/arm/boot/dts/rockchip/rk3288-phycore-som.dtsi   |  2 +-
+ arch/arm/boot/dts/rockchip/rk3288-veyron-brain.dts   |  2 --
+ arch/arm/boot/dts/rockchip/rk3288-veyron-fievel.dts  |  5 ++---
+ arch/arm/boot/dts/rockchip/rk3288-veyron-jaq.dts     |  2 +-
+ arch/arm/boot/dts/rockchip/rk3288-veyron-jerry.dts   |  2 +-
+ arch/arm/boot/dts/rockchip/rk3288-veyron-mickey.dts  |  2 --
+ arch/arm/boot/dts/rockchip/rk3288-veyron-pinky.dts   |  1 +
+ arch/arm/boot/dts/rockchip/rk3288.dtsi               |  1 -
+ 13 files changed, 22 insertions(+), 24 deletions(-)
 
-Inochi Amaoto (1):
-      riscv: dts: spacemit: Add ethernet device for K3
 
-Yixun Lan (9):
-      riscv: dts: spacemit: pcie: fix missing power regulator
-      riscv: dts: spacemit: adapt regulator node name to preferred form
-      dt-bindings: serial: 8250: spacemit: fix clock property for K3 SoC
-      riscv: dts: spacemit: k3: add clock tree
-      riscv: dts: spacemit: k3: add pinctrl support
-      riscv: dts: spacemit: k3: add GPIO support
-      riscv: dts: spacemit: k3: add full resource to UART
-      dts: riscv: spacemit: k3: Add i2c nodes
-      dts: riscv: spacemit: k3: add P1 PMIC regulator tree
 
- Documentation/devicetree/bindings/serial/8250.yaml |   5 +-
- arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts    |  26 +-
- arch/riscv/boot/dts/spacemit/k1-milkv-jupiter.dts  | 204 +++++++++++-
- arch/riscv/boot/dts/spacemit/k1.dtsi               | 112 ++++---
- arch/riscv/boot/dts/spacemit/k3-pico-itx.dts       | 170 ++++++++++
- arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi       |  69 ++++
- arch/riscv/boot/dts/spacemit/k3.dtsi               | 369 ++++++++++++++++++++-
- 7 files changed, 876 insertions(+), 79 deletions(-)
- create mode 100644 arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi
