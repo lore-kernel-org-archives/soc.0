@@ -1,70 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6487276025
-	for <soc@lists.linux.dev>; Fri,  3 Apr 2026 07:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D88F23D7FB
+	for <soc@lists.linux.dev>; Fri,  3 Apr 2026 07:03:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775199764; cv=none; b=TVY8JIm8FyGEiKVVwkxPlhu9hKfRYMMgCwjVfdcpiqkB9Qmcndkt4+2R/2AvuTSAterC7//MUmbudJzcCk5n2H2/11je1qK1m6d0lTDI7+mWSvOWZa2Y5G64fGQf4vFdZ9I0idSaCHsqvauLKuitqQxN14f+Ss1ZbetwOR575DA=
+	t=1775199787; cv=none; b=d6NOWTIYcSO8xVjxoH5SfNM+WV55vv9EgqdgtEZ+RjLJTepS0yrJQwSM3WiPyeEQWHsduUVyGBqRMadCemBNsetEngOQNey8spo3gcUgamlQiQeOg6kmyc0ZbwmI8HZofCQAEU1lJ30FkhD4R2rUKdPrfoIGzGxo8tG6Wa8szvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775199764; c=relaxed/simple;
-	bh=vhiz2UwcoRpe0MlvqtbQK8MaLvf6KaR4aN6FcfrD7GI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=si2cQUN0PPjToC+Jq+sc80w1Y/3CYceoxa5vPVAUDUfzsY8RxhbYY9yohsl9AtNFTTNN1cp8peCtmoTtNEzEBVDgqXPtz82z64kL6oSpCwD4niTAG8LcPCEjy3fD4rOErD5pTWumMPUQNVg3EHxcEm4p2StSnlxl8JI+jlSLhHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=g1nEfsJ9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775199787; c=relaxed/simple;
+	bh=sDjp8oGfWzm4BKI6BBosvQw91OtlMIXdGLQGjvW3bH4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M+lFJtKdIwDDAT2NxNz6mAU4UI9tVuLIH1UZdc7ZKq6mKGnVlw9hY7YBzXhmtD0leLX3dv2gPlxOFZBEnQjch3+rKELlzvY/ryZup6RBtaOR8iJryGA7qcdJ2cUlV7jDCuu2SCxekpWpyy2Lj2ynINJXT1ns2/Qc3AepiMnwwK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=HOK1qrbS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="g1nEfsJ9"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="HOK1qrbS"
 Received: by smtp.kernel.org (Postfix)
-	id 1F7FBC2BCAF; Fri,  3 Apr 2026 07:02:44 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	id EC242C4CEF7; Fri,  3 Apr 2026 07:03:06 +0000 (UTC)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E210BC4CEF7
-	for <soc@kernel.org>; Fri,  3 Apr 2026 07:02:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E210BC4CEF7
+	by smtp.kernel.org (Postfix) with ESMTPS id 111A3C19424
+	for <soc@kernel.org>; Fri,  3 Apr 2026 07:03:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 111A3C19424
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43d03db7f87so882237f8f.3
-        for <soc@kernel.org>; Fri, 03 Apr 2026 00:02:42 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43d23305225so1099992f8f.2
+        for <soc@kernel.org>; Fri, 03 Apr 2026 00:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1775199761; x=1775804561; darn=kernel.org;
+        d=tuxon.dev; s=google; t=1775199783; x=1775804583; darn=kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IQTw2Hn7kVK5lRmBqgqs/8lbK71TYOhM3LaYF1mMaUk=;
-        b=g1nEfsJ9mcfFX6iflpmSkOpiXQxjX/k8KHTrQG6NzqLsEYMgq4reh4lGc9fhUx7uR6
-         pciUfDNYiJO3tlyi4sSlM6IzcEDthgmIexEb8GZdYfSCTj0qcCKgRJX4X4WhG5Kh5CNf
-         CHL/7t/QbPcDQpRjHuGtf5mB8ay27Jn0ZyJQ9sKqo1tsygpvijgZebbqRbngt1EJSASX
-         H7VmN0uGuODLStO/7WeDFtM+qSn7q5wk5R6IcJFRGc8eqel7Jd6Xmdj15aEiB4pLerUu
-         uujgstZ7EYSEdlswOw3S9kZrxUZ6KHSecuQZCZwIeK1CZr4EInFAcHYSWuJYAQUT3740
-         haTg==
+        bh=0Ro+gdRSxkKZsqBhuMAX/TnwJiyqZFyTBN8tQDODJGE=;
+        b=HOK1qrbSi9/pcHtEoE9obEPpuU/sN2HgmT6jUqQ7GLrrcea+DsAL2wtVy2/8cjJVma
+         9Dvjrjug1NRkw2xQ6HB9fWNO5hUoZ6NIPbbbj+nti70/cko+fFBaxgPbWWFxAIDbd5/Y
+         JbfoS7hPtule1M3nFL1OociRN/S/k2YyaBMIlOEq3uvliRnfEEub+9E84C7Ussr8unDO
+         eoY3FRi8zcYeg6Gz3mg8RhXA1xgQ+6h3JgQ8mShNa3TGPGZZUtBUi61gSmK70H4g6UMM
+         rLgjHvf1+l/RJwCxS+Yew13O+eaeuSbrl6Dix4gTp4KpRzuseJka7RGRysTEuM6g3uiT
+         Dm5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775199761; x=1775804561;
+        d=1e100.net; s=20251104; t=1775199783; x=1775804583;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IQTw2Hn7kVK5lRmBqgqs/8lbK71TYOhM3LaYF1mMaUk=;
-        b=DomCEyW/D5A6Nyg3C5Mm5sL0SEgnufT7rfg3dg+RpxwX+5ZzwOJn9Tp6cKq1gssj4O
-         653owL1+hXAp6Zc0OOmtD0FsFLiNS1w56ZE3/VS93nmRtUouC5M0l1CrbLm0tr+qXR1h
-         2yM8FeRvqq0MaD0xlYXspMhDwsvQANeNlm8bJkyEvvBnVjEUbyGMsCgbyvGYstkKFe6w
-         QFQtzyhlHNHzOQy1z14yvm0v7gACLaQJDiU9rQGI/xfs3zsMMD49M87qeAm0Vyg0VAdy
-         Fc3zGVuyuT19XwKLAaZpTPvfoRomWqA9CbcOL94J7Or9LPLbfflzoxy5X+Y2sB2XmBlt
-         stjA==
-X-Gm-Message-State: AOJu0Yw2KFb1CHU1rZKJ8uwtkHe3nyt9j7Y4/6cJ1i46uc5SMtjIcEmj
-	yli+144pNSaTAqsNFoVj33UbwnnQCy2XuXEzZMebwZ3tJFEKEVvGxy388LM0oRyMNHLuJeWlHK5
-	kNh4a
-X-Gm-Gg: ATEYQzxnRbkjesXJX/6rqy7aC/BReRxODePjdB1NGzdR8zISY6mVLuqrg2Z74Kz8fns
-	A+t8Elp1CmKJrEQlrDJPqYiRFG2pB1v4QQcctxRxDOHvLmFRTunYYwLPlfOZtMzUA0VgYloBB5n
-	J4RTSk6fXeGW8MpIyBcL3ILdwLAflZGYBjv0YwAUCUMfddfzvSiqC3ZdJUgTMLDrY94swyKjm26
-	Iz87OXKULSM/GZhgE0/UrAfyKPvrWWNLBL+I0p9JZAnytSfp7ZEi0t3/adkf8/iTuqr6u1/uPxq
-	zynO8SHE+35hZ9q6qGq1gleTBmVZlDCXogM8Pm/64/xh/0EslXPTcPdnEf3RS3+gCip5zYpQSIt
-	5w+u1K2n0r6poqkXNYti/PmdHeIuk98VCdDZsDYN/6uEqbEwtguLbvLJqnWzfwSTvBJbzS3ozdA
-	djBRdwbXOvsD+4sZoxed4Mzhb+Wuibzq+KzHyMBlrENA==
-X-Received: by 2002:a05:600c:5292:b0:47e:e2eb:bc22 with SMTP id 5b1f17b1804b1-488996e0891mr29430855e9.5.1775199760936;
-        Fri, 03 Apr 2026 00:02:40 -0700 (PDT)
+        bh=0Ro+gdRSxkKZsqBhuMAX/TnwJiyqZFyTBN8tQDODJGE=;
+        b=B3EWFLkQ15/meHbFZ7swbrFIJpLeMGQnFkphYVsR1aewBctsVqN3mHe+HeWOLXP2uj
+         fwA9RAHvaMoXZIINpq3R5e12+yefvp49PvdO6OfGKzvojVjRI1fJyHEko7APtzn0Y3Tx
+         J8igB+n0aovNWmhaCboMEg9QBglOGxpHdn/2ag+kdWAqMMlXfdmTokeifJN8dryqBoTo
+         upBz/+73whkwkQpDyFq59VEDWhyOTGSHOgUpfpHvAJgIsKLR2JJqpbAK2YyuJ5KPokRA
+         HjfZY8cOdV6wId+sWnZdZgD9dr5rCR3YnzagcfPPmRtS9TDFwKiMYd7JIbM+4hOfITOZ
+         4Y1w==
+X-Gm-Message-State: AOJu0YxHXfs+JqmjWlyFEddAgtkvnfXZv8DVejF0GsRLIdMv+BXg932w
+	bvVuIMGjCD2y0STuich667R2uZr0GbrdwRMh+C/22GrAOsQFTR2P3lu8biyoySMIAAQbTEZh67c
+	0YEzH
+X-Gm-Gg: AeBDievKtnWZTEoYyvfajk7K1Qc4jna9vmcX/iSdMhDA58VyKRcvL5/adCnYGIhBcuT
+	15s6XQBK6MvO6GSq+jB0S+5Hn8tO5OIwhRf0WF5KbW1PYZVvNX5BS5RNQrC9cnPn/8JmwBVubQ/
+	FbeYVl1W7/R77ife9QanAVWgjpj+j69G3jgbMEFLrT6pe5/Q2nXuLCxAwBbmGyz8CpYiMHT6lTm
+	qzGyZGFlL383DKhlrlLwa5kuFJF5BqDVAS+abiBQsQtlo+lOI4ghkyy7Ub5vw6U3HLixY85B0na
+	EUCvIbS1BT1nqBeVKS4LfHLIZKjcpJCULsxmSGDxdELaj+QgYq5VCF5UG65z9t4nNtSLwMZsbLe
+	tYED8WfYxVM/qAkAOUnBVmKDDVFeHOEM8yONt2mP2vDgVYQeVpMP8DYkZlGITe7IpB6YWaEcWzj
+	F/LStm7UPx8R/AUQt1XpW211BNYYVoY4c9S6Ai/3JW53fl5/rVgJ0z
+X-Received: by 2002:a05:6000:611:b0:43c:f8a7:3b09 with SMTP id ffacd0b85a97d-43d292c7739mr3320959f8f.23.1775199783531;
+        Fri, 03 Apr 2026 00:03:03 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.248])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e80a616sm409275845e9.2.2026.04.03.00.02.40
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4d29bbsm14118803f8f.21.2026.04.03.00.03.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 00:02:40 -0700 (PDT)
+        Fri, 03 Apr 2026 00:03:00 -0700 (PDT)
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 To: soc@kernel.org,
 	arm@kernel.org
@@ -72,9 +72,9 @@ Cc: nicolas.ferre@microchip.com,
 	alexandre.belloni@bootlin.com,
 	claudiu.beznea@tuxon.dev,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Microchip AT91 fixes for v7.0
-Date: Fri,  3 Apr 2026 10:02:39 +0300
-Message-ID: <20260403070239.2552455-1-claudiu.beznea@tuxon.dev>
+Subject: [GIT PULL] Microchip AT91 defconfig updates for v7.1
+Date: Fri,  3 Apr 2026 10:02:59 +0300
+Message-ID: <20260403070259.2552626-1-claudiu.beznea@tuxon.dev>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -90,21 +90,28 @@ The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-7.0
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-7.1
 
-for you to fetch changes up to 907150bbe566e23714a25d7bcb910f236c3c44c0:
+for you to fetch changes up to 1f17fce8bf19a48e5e5610c6da8f806eab81878a:
 
-  ARM: dts: microchip: sam9x7: fix gpio-lines count for pioB (2026-03-23 12:54:24 +0200)
+  ARM: configs: at91: sama7: enable LVDS serializer support (2026-02-28 16:04:03 +0200)
 
 ----------------------------------------------------------------
-Microchip AT91 fixes for v7.0
+Microchip AT91 defconfig updates for v7.1
 
 This update includes:
-- fix gpio-lines for SAM9X7 PIOB GPIO controller
+- LCD controller, LVDS controller, backlight, simple pannel, touchscreen
+  configuration flags required by SAMA7D65 SoC
 
 ----------------------------------------------------------------
-Mihai Sain (1):
-      ARM: dts: microchip: sam9x7: fix gpio-lines count for pioB
+Aubin Constans (1):
+      ARM: configs: at91: sama7: enable LVDS serializer support
 
- arch/arm/boot/dts/microchip/sam9x7.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Romain Sioen (1):
+      ARM: configs: at91: sama7: enable config for atmel maxtouch
+
+Ryan Wanner (1):
+      ARM: configs: at91: sama7: enable DRM hlcdc support
+
+ arch/arm/configs/sama7_defconfig | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
