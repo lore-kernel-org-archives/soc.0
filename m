@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DF3145355
-	for <soc@lists.linux.dev>; Sat,  4 Apr 2026 14:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBA9264619
+	for <soc@lists.linux.dev>; Sat,  4 Apr 2026 15:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775314039; cv=none; b=DvQNliEZDvpnUlqh1o7kEhf51xapQIgi8CkPySsgmfIBmx+7TnSH6xPxnw4oDRCaL9e8KEgXRWycW+009OmWXIyI4GdXal++tIH/s3fjPpcH4lnqe2NVztCxeh0hpopelKgpn+sl5lRkKvmRnh2tJEkt0fIvYDshUvolG1kSSkI=
+	t=1775315914; cv=none; b=LhpRYbLMT1vkDiQ9qYofd6AauO9FA7IahwVm/xzJgr630ZklsxhQgRAU+fbG0bbO/QRMj0Hh3AbZ7RKlOeVFC6NNjujRpq/y+VLomNL6+xRlFGQwNOHP0t+SCeSM+1w7Icz40vr/bvwy9OPazPaqoVJOw/5Hbarzd6Lo6NvSjzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775314039; c=relaxed/simple;
-	bh=wkWsq3wOxvvGHQk5g9AdcPeG8Kmz14QfgWPiPSY/fAw=;
+	s=arc-20240116; t=1775315914; c=relaxed/simple;
+	bh=sfics3gcx6ewjjKwTOJ2rCkuCBEKr9GefJzlW0cJEQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kMROk/chHs3E1RzMkt6faLSKFN+I8dIqXnz8CdH9PRSIGts2609NYc425K5sRAjEoMofgYsx5fQ0ivR18AXUOmuY6TtBqBl07WfeOO0CZWUjxEcUhlDrv7drs8jFmTycLyKhc6XiKElusb9sPb8u9X+hDTz7V6idCOEobcQQnPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mgWB8Cvr; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=I0hRNWZe9Mh6/7loao36NNAl7i3zOvDHKJaVLux2/95CiJ6oUo88R+cW3Sn5Oo4TG9IszkhMM1hsJ0xrkzGDJc14ZmGnUT99+g7pshuQf+QlqDrDIs10OEv8DjXMJZhAc5lVB4HhGtxCRGKzkHgfN39dexv1D3GblqXQLvoGPUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m34AcMyJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mgWB8Cvr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m34AcMyJ"
 Received: by smtp.kernel.org (Postfix)
-	id EE843C19425; Sat,  4 Apr 2026 14:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F677C19421;
-	Sat,  4 Apr 2026 14:47:18 +0000 (UTC)
+	id 4CBACC2BCAF; Sat,  4 Apr 2026 15:18:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3592C19421;
+	Sat,  4 Apr 2026 15:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775314038;
-	bh=wkWsq3wOxvvGHQk5g9AdcPeG8Kmz14QfgWPiPSY/fAw=;
+	s=k20201202; t=1775315914;
+	bh=sfics3gcx6ewjjKwTOJ2rCkuCBEKr9GefJzlW0cJEQE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mgWB8CvrnBabd/PPFTftEM8Yg4ce7Bnp5i35nCClv52Fol4A5/jbB0PR04WD4D5nx
-	 OZ2mTONoFKKP91Q5Bb3d0CUgEm553zGSmU5/qFMxjD6MKaD1df3y+AmdN5rTgL1kjZ
-	 x2F/zt4suiuQB1Fq+NvvHpgMld8/IVU7q85yds8LTwwKOQdzf+WpJOgzYjuEXHSBOz
-	 m3masDW9xk0r2292SJ79A4GOBHboGlVxErafkxqh/biq5bsP9qsGLouFD2m/avjxjY
-	 LMe2uTJmkZdCNUaF/FBkCCdrKxOAx+lGKBCZMVpLbt6atGPBpLVZrqKfV45a3+fJem
-	 wCqBTw0AfzJqQ==
-Date: Sat, 4 Apr 2026 16:47:16 +0200
+	b=m34AcMyJ0jEtOTzP9OesH/iBIpXGqfXSA/nU28tl7SZvejC4IJTQxodPPy85sJM2K
+	 5mkufD9/tjy81w+oPkSd19B+bTst5z/HuMblhTpsU3HNe5O2ri3d2o835npA7iv56V
+	 LlRqy4KUcuxhunxaV2kB1FHvfKPiV1BX2NM4Rtf1BHCT3rnjASMxIzEr6fP8ZdDblS
+	 XQC0XA8lgBY3QpLBZFRYox5yW4xbf54uaK80waqlB3gSRw40junHAm3YaYqMaP2NIF
+	 OqF1ULpuGhSgV/zZZZYLwcDk8I02zgVjvqMZbit3kwoD6ixOx+Kby/t/G66xN5Yxo1
+	 YNZ7GdOdttt+Q==
+Date: Sat, 4 Apr 2026 17:18:31 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: soc@kernel.org, arm@kernel.org, Shawn Guo <shawnguo@kernel.org>, 
-	Fabio Estevam <festevam@gmail.com>, kernel@pengutronix.de, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 2/4] i.MX arm dts changes for v7.1
-Message-ID: <20260404-thoughtful-placid-boobook-da26da@quoll>
-References: <20260330141444.3789193-1-Frank.Li@nxp.com>
- <20260330141444.3789193-3-Frank.Li@nxp.com>
+To: Chen Wang <unicorn_wang@outlook.com>
+Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@gmail.com>, 
+	"sophgo@lists.linux.dev" <sophgo@lists.linux.dev>, linux-riscv <linux-riscv@lists.infradead.org>
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v7.1
+Message-ID: <20260404-humongous-mayfly-of-fortitude-5f087f@quoll>
+References: <MA5PR01MB1250079A8884D4F6245B955B9FE51A@MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -46,29 +45,53 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260330141444.3789193-3-Frank.Li@nxp.com>
+In-Reply-To: <MA5PR01MB1250079A8884D4F6245B955B9FE51A@MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM>
 
-On Mon, Mar 30, 2026 at 10:14:38AM -0400, Frank Li wrote:
-> Frank Li (24):
->       ARM: dts: imx35: rename emi to emi-bus to fix CHECK_DTBS warning
->       ARM: dts: imx35: rename i2c clock-names to ipg
->       ARM: dts: imx35: remove simple-bus 'usbphy'
->       ARM: dts: imx51-ts4800: rename fpga@0 to fpga@0,0
->       ARM: dts: imx51-babbage: rename at45db321d@1 to flash@1
->       ARM: dts: imx53: drop fallback compatible "dlg,da9052"
+On Thu, Apr 02, 2026 at 10:39:51AM +0800, Chen Wang wrote:
+> Hey Arnd,
+> 
+> Please pull this dt changes for RISC-V/Sophgo.
+> 
+> BTW: I'm still waiting for my key to be added into the pgpkeys.git and
+> hoping this will not block my PR.
+> 
+> Thanks,
+> 
+> Chen
+> 
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> 
+>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://github.com/sophgo/linux.git tags/riscv-sophgo-dt-for-v7.1
+> 
+> for you to fetch changes up to 7b159ed9c81cf7e0d0b75666e6548ceface2e1b5:
+> 
+>   riscv: dts: sophgo: cv180x: Allow the DMA multiplexer to set channel
+> number for DMA controller (2026-02-26 06:12:22 +0800)
+> 
+> ----------------------------------------------------------------
+> RISC-V Devicetrees for v7.1
+> 
+> Sophgo:
+> 
+> For CV18xx serials:
+> Just a minor patch to replace the compatible for
+> dma-controller to allow setting DMA channel number.
+> New bindings and driver part change are picked by
+> DMA subsytem and this patch handles the left dts
+> part change.
+> 
+> Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
+> 
+> ----------------------------------------------------------------
+> Inochi Amaoto (1):
+>       riscv: dts: sophgo: cv180x: Allow the DMA multiplexer to set channel
+> number for DMA controller
 
-This, just like arm64 pull, breaks users without explanation. You use
-incorrect terms in that commit msg which might mean you did not perform
-proper analysis of compatibility. Commit claims compatibility string is
-not comaptible and as proof brings dtbs_check warning. So the sole
-reason is the binding. What if binding is wrong?
-
-Commit msg must explain that.
-
-I looked at the drivers and it looks 100% compatible, so commit msg is
-clearly wrong and this might affect users of DTS.
-
-Please resend pull without this commit.
+Commit has messed DCO chain. I suggest using b4 to handle patches.
 
 Best regards,
 Krzysztof
