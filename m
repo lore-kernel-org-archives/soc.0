@@ -1,145 +1,175 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A432DB789
-	for <soc@lists.linux.dev>; Mon,  6 Apr 2026 12:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE0B2F5A12
+	for <soc@lists.linux.dev>; Mon,  6 Apr 2026 13:20:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775477873; cv=none; b=XU7T07Jh0/qvfetdzYvUQDWpRXn22FQEg+YYtfX9mDbQhL12oqYz3PAA96reu5sxpQHnu+zjdEkbEeysp4AcwSb1AJjFF0x3YT02+K8uDy4b4mIoKB8D/NoSZltslstd722pJSoZ50MNG27SpLXZI4u8VM49peceWe2OdtuxAbY=
+	t=1775481612; cv=none; b=kWpbusKGvuB0wqwD/qOfGksGpr1L8WqU1PiS8tWx7q0PhbmijuhF4Q8/uclrm2yN1fIKC2z6v8ovYaMYu4n18sw5AK+wUoSkDHKYPOU6usR/Gi6N/TWlCO017VPbFT4VnhUI058VAXTs6i7y8Eg3aVLhBhQVosDY1qEsGwNwDOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775477873; c=relaxed/simple;
-	bh=yFdJwiEVINgONrJy1w1Fju+r6dDcyJdI5aC2Lb90A3I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DR6TC82BaHQtEZzyXdzfN72Z3K32l6iF2l4Fx/1sevlD195zsFRUmLhkhSRXXqKGFYrHwHIKlEVqtF76gVXl5cu4r7YdkiSxunimS5AzJm39G0udMK5RlvP0pNzWtxKaQKk41itl4qZASieL0dE4KGK0zV528n1LGFacadv7uGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kno0LClW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775481612; c=relaxed/simple;
+	bh=StZoYZSX3E03qoBHUpVi4AQ8Vdh7LtYLTjwMGiHSG10=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=maXInv49VEyEIYMGAPXWf3UcIxCYHz1JrOKFej00RubrgirqSd8gIB9UosJs+oGeNCdYzA3SN7m3Vw+jWL7f3v0l39JtgcE21FqGuNQv/GODzBC9A+A9M44nZek2qE9b2KQniLVmt7SUnqWwwyrkKUFnQpIJIp2vCxryEuZ2jyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lx/63tbT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kno0LClW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lx/63tbT"
 Received: by smtp.kernel.org (Postfix)
-	id F1BFEC4AF09; Mon,  6 Apr 2026 12:17:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38CDC4CEF7;
-	Mon,  6 Apr 2026 12:17:45 +0000 (UTC)
+	id D9EF0C2BCAF; Mon,  6 Apr 2026 13:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268CDC4CEF7;
+	Mon,  6 Apr 2026 13:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775477872;
-	bh=yFdJwiEVINgONrJy1w1Fju+r6dDcyJdI5aC2Lb90A3I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kno0LClWBQSLnEk5FONJtokVkIhIfQRu5IpLb+xTlZZnMcmNr0f8aGieqAcXB5WyW
-	 k7wRBHV+QTicmmy4Gxd3Kjp3KMsb8+7jVWBF74iKcLp9ibzei62TOoRs6Io4VDuogX
-	 30C3FFB/lyHrF8CTfFa6YUMuMy1Gkt46ACixi1bO89gbCdBBzlXYPStWUYcarcrKEv
-	 Gwz7er9+8VWfxWe3w+vyrXRGzjJ3Nf3nqNp/Y+55RM+zE/waLjSc0wrGrN+5+a6WRg
-	 DLPGvuQTEbbmuhqKvKjFhf62+p/r8yQZ4YIWLAF70uYn6GGTYTIGmDDt/3rywLGDnG
-	 ufcS2fBJrchdA==
-Date: Mon, 6 Apr 2026 07:17:42 -0500
+	s=k20201202; t=1775481611;
+	bh=StZoYZSX3E03qoBHUpVi4AQ8Vdh7LtYLTjwMGiHSG10=;
+	h=From:To:Cc:Subject:Date:From;
+	b=lx/63tbTBTxuSxb+GUC1vG9fWJr7naq+7Hx8amitFSBw96HDow9a5P9EtlPvI2qBE
+	 /tQsB6uTEvRlVSskV95YURmF2UxXB62MB9O3LTlMbn5eUGi4BKsMA7Sh65TEH/aW1i
+	 A4V56wXyAjG1kTwcA+SkK/J1iwWLUNVArP6ScKF/RYBwlsanWOrhgBnqCLGnD+sfBd
+	 uzhZSOaipmHa0lB0WPgz51msd/JBnyiiKyMCIR506FY6pEVxjVVbSz6ltbe/V1XRAe
+	 zwo5wY7CqWbM9RvbhU1h7w/SoytBZgfFuhg/9dv2Af8/6Di/UzPhttTcquAV0ce4d2
+	 LjNN/RWcxbPtg==
 From: Bjorn Andersson <andersson@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: arm <arm@kernel.org>, soc@kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	=?utf-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>, Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Luca Weiss <luca.weiss@fairphone.com>, 
-	Abel Vesa <abel.vesa@oss.qualcomm.com>, Swati Agarwal <swati.agarwal@oss.qualcomm.com>, 
-	Val Packett <val@packett.cool>, Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
-	Loic Poulain <loic.poulain@oss.qualcomm.com>, Biswapriyo Nath <nathbappai@gmail.com>, 
-	David Heidelberg <david@ixit.cz>, Jingyi Wang <jingyi.wang@oss.qualcomm.com>, 
-	Md Sadre Alam <quic_mdalam@quicinc.com>, Nihal Kumar Gupta <quic_nihalkum@quicinc.com>, 
-	Taniya Das <taniya.das@oss.qualcomm.com>, Varadarajan Narayanan <varadarajan.narayanan@oss.qualcomm.com>, 
-	Yijie Yang <yijie.yang@oss.qualcomm.com>, Gopikrishna Garmidi <gopikrishna.garmidi@oss.qualcomm.com>, 
-	Jens Glathe <jens.glathe@oldschoolsolutions.biz>, Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, 
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Pankaj Patil <pankaj.patil@oss.qualcomm.com>, 
-	Paul Adam <adamp@posteo.de>, Pradeep P V K <pradeep.pragallapati@oss.qualcomm.com>, 
-	Pragnesh Papaniya <pragnesh.papaniya@oss.qualcomm.com>, Roger Shimizu <rosh@debian.org>, 
-	Srinivas Kandagatla <srinivas.kandagatla@oss.qualcomm.com>, Tobias Heider <tobias.heider@canonical.com>, 
-	Xilin Wu <wuxilin123@gmail.com>, Abel Vesa <abelvesa@kernel.org>, 
-	Ayushi Makhija <quic_amakhija@quicinc.com>, Canfeng Zhuang <canfeng.zhuang@oss.qualcomm.com>, 
-	Erikas Bitovtas <xerikasxx@gmail.com>, Jie Gan <jie.gan@oss.qualcomm.com>, 
-	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>, 
-	Petr Hodina <petr.hodina@protonmail.com>, Prasad Kumpatla <prasad.kumpatla@oss.qualcomm.com>, 
-	Raymond Hackley <raymondhackley@protonmail.com>, Sarthak Garg <sarthak.garg@oss.qualcomm.com>, 
-	Sibi Sankar <sibi.sankar@oss.qualcomm.com>, Sushrut Shree Trivedi <sushrut.trivedi@oss.qualcomm.com>, 
-	Umang Chheda <umang.chheda@oss.qualcomm.com>, Wesley Cheng <wesley.cheng@oss.qualcomm.com>, 
-	Xin Liu <xin.liu@oss.qualcomm.com>, Yuanjie Yang <yuanjie.yang@oss.qualcomm.com>, 
-	Aaron Kling <webgeek1234@gmail.com>, Aleksandrs Vinarskis <alex@vinarskis.com>, 
-	Alexander Koskovich <AKoskovich@pm.me>, Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, Christopher Obbard <christopher.obbard@linaro.org>, 
-	Gabor Juhos <j4g8y7@gmail.com>, Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Gergo Koteles <soyer@irl.hu>, 
-	Gianluca Boiano <morf3089@gmail.com>, Hongyang Zhao <hongyang.zhao@thundersoft.com>, 
-	Janaki Ramaiah Thota <janaki.thota@oss.qualcomm.com>, Jyothi Kumar Seerapu <jyothi.seerapu@oss.qualcomm.com>, 
-	KancyJoe <kancy2333@outlook.com>, Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>, 
-	Le Qi <le.qi@oss.qualcomm.com>, 
-	Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>, Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, Max McNamee <maxmcnamee@proton.me>, 
-	Pengyu Luo <mitltlatltl@gmail.com>, Riccardo Mereu <r.mereu@arduino.cc>, 
-	Richard Acayan <mailingradian@gmail.com>, Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, 
-	Vishnu Saini <vishnu.saini@oss.qualcomm.com>, Wei Deng <wei.deng@oss.qualcomm.com>, 
-	Wei Zhang <wei.zhang@oss.qualcomm.com>, Xueyao An <xueyao.an@oss.qualcomm.com>, 
-	Yedaya Katsman <yedaya.ka@gmail.com>, Zijun Hu <zijun.hu@oss.qualcomm.com>
-Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree updates for v7.1
-Message-ID: <adOh0D8wQW4yT3WO@baldur>
-References: <20260401142242.1068620-1-andersson@kernel.org>
- <2c5402a1-9724-4fb1-bd31-6e8d133f3b88@app.fastmail.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Paul Sajna <sajattack@postmarketos.org>,
+	Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>,
+	Sudarshan Shetty <tessolveupstream@gmail.com>,
+	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+	Casey Connolly <casey.connolly@linaro.org>,
+	Jie Zhang <quic_jiezh@quicinc.com>,
+	Abel Vesa <abel.vesa@oss.qualcomm.com>,
+	Alexander Martinz <amartinz@shiftphones.com>,
+	Amir Dahan <system64fumo@tuta.io>,
+	Christopher Brown <crispybrown@gmail.com>,
+	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>,
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+	Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
+	Qingqing Zhou <quic_qqzhou@quicinc.com>
+Subject: [GIT PULL] A few more Arm64 DeviceTree updates for v7.1
+Date: Mon,  6 Apr 2026 08:20:07 -0500
+Message-ID: <20260406132007.2264408-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2c5402a1-9724-4fb1-bd31-6e8d133f3b88@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 03, 2026 at 12:26:17AM +0200, Arnd Bergmann wrote:
-> On Wed, Apr 1, 2026, at 16:22, Bjorn Andersson wrote:
-> > The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
-> >
-> >   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
-> >
-> > are available in the Git repository at:
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git 
-> > tags/qcom-arm64-for-7.1
-> >
-> > for you to fetch changes up to b683730e27ba4f91986c4c92f5cb7297f1e01a6d:
-> >
-> >   arm64: dts: qcom: sm8250: Add missing CPU7 3.09GHz OPP (2026-03-30 
-> > 09:35:01 -0500)
-> >
-> > ----------------------------------------------------------------
-> > Qualcomm Arm64 DeviceTree updates for v7.1
-> >
-> > Introduce the Eliza, Glymur, Mahua, and IPQ5210 Qualcomm SoCs.
-> 
-> I pulled this one as well now.
 
-Thank you, Arnd.
+The following changes since commit b683730e27ba4f91986c4c92f5cb7297f1e01a6d:
 
-> The contents all seem fine to me,
-> but please try to group the dts changes into smaller branches
-> so you can send some of it earlier when you know that you
-> have a large amount of content queued up.
-> 
+  arm64: dts: qcom: sm8250: Add missing CPU7 3.09GHz OPP (2026-03-30 09:35:01 -0500)
 
-I've considered splitting the branch up like so, but have not found
-a model that seems feasible. New platforms are intermingled and there
-are often cleanups etc that crosses multiple targets. Forcing a cleaner
-split of such work would seem to result in more work for everyone
-involved.
+are available in the Git repository at:
 
-I will invest some time to think about this.
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-7.1-2
 
-> I know this is hard, and I also tend to do things in the
-> last minute, but it would really help to have e.g. the
-> newly added SoCs in a separate branch, or even just
-> the stuff that you know is ready by -rc3.
-> 
+for you to fetch changes up to af241225893ac4933bb8f0615f2dfda8ea2326ce:
 
-I generally don't rebase these branches, so starting earlier and then
-following up with incremental PRs should be straightforward to implement.
+  arm64: dts: qcom: Add the Lenovo IdeaCentre Mini X (2026-04-02 16:08:54 -0500)
 
-Regards,
-Bjorn
+----------------------------------------------------------------
+A few more Arm64 DeviceTree updates for v7.1
 
-> This pull request alone has 178 files / 258 patches / 38000 lines,
-> among 686 files / 913 patches / 68376 lines that are queued
-> up in total across 63 branches we have merged so far for 7.1.
-> 
->        Arnd
+Introduce the Hamoa-based Lenovo IdeaCentre Mini X, the Dragonwing
+IQ-615 (Talos) EVK, and a Talos EVK camera overlay.
+
+Enable DisplayPort support on the Glymur CRD.
+
+Add WiFi, Bluetooh, LEDs, and venus on LG-based SDM845 devices. Add
+battery, charger, and display on the LG G7 ThinQ.
+
+Enable SD-card, describe the audio amplifier, and increase the speed of
+the i2c clock for touchscreen on the SHIFT SHIFT6mq.
+
+Add camera subsystem, camera control interface, GPU, GMU, and GPU
+cooling on the Talos platform. Enable the GPU on the Ride board.
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      arm64: dts: qcom: glymur-crd: Enable DisplayPort support
+
+Alexander Martinz (1):
+      arm64: dts: qcom: sdm845-shift-axolotl: Enable TFA9890 codec
+
+Amir Dahan (1):
+      arm64: dts: qcom: sdm845-lg-common: Add LEDs
+
+Bjorn Andersson (2):
+      dt-bindings: arm: qcom: Document the Lenovo IdeaCentre Mini X
+      arm64: dts: qcom: Add the Lenovo IdeaCentre Mini X
+
+Casey Connolly (2):
+      arm64: dts: qcom: sdm845-shift-axolotl: Enable sdcard
+      arm64: dts: qcom: sdm845-shift-axolotl: Set higher touchscreen i2c clock
+
+Christopher Brown (1):
+      arm64: dts: qcom: sdm845-lg-judyln: Add battery and charger
+
+Gaurav Kohli (1):
+      arm64: dts: qcom: talos: Add GPU cooling
+
+Jie Zhang (2):
+      arm64: dts: qcom: talos: Add gpu and rgmu nodes
+      arm64: dts: qcom: qcs615-ride: Enable Adreno 612 GPU
+
+Mukesh Ojha (1):
+      arm64: dts: qcom: talos: Add EL2 overlay
+
+Odelu Kukatla (1):
+      arm64: dts: qcom: talos: Add clocks for QoS configuration
+
+Paul Sajna (10):
+      arm64: dts: qcom: sdm845-lg-common: Sort nodes and properties
+      arm64: dts: qcom: sdm845-lg-judyln: Add firmware nodes, change path
+      arm64: dts: qcom: sdm845-lg-judyp: Define firmware paths for judyp
+      arm64: dts: qcom: sdm845-lg-common: Enable venus
+      arm64: dts: qcom: sdm845-lg-common: Enable qups and their dma controllers
+      arm64: dts: qcom: sdm845-lg: Add uarts and Bluetooth
+      arm64: dts: qcom: sdm845-lg-judyln: Add lab/ibb
+      arm64: dts: qcom: sdm845-lg-judyln: Add display panel
+      arm64: dts: qcom: sdm845-lg: Add wifi nodes
+      arm64: dts: qcom: sdm845-lg-common: Add chassis-type
+
+Qingqing Zhou (1):
+      arm64: dts: qcom: talos: add the GPU SMMU node
+
+Sudarshan Shetty (3):
+      dt-bindings: arm: qcom: talos-evk: Add QCS615 Talos EVK SMARC platform
+      arm64: dts: qcom: talos/qcs615-ride: Fix inconsistent USB PHY node naming
+      arm64: dts: qcom: talos-evk: Add support for QCS615 talos evk board
+
+Wenmeng Liu (4):
+      arm64: dts: qcom: talos: Add camss node
+      arm64: dts: qcom: talos: Add CCI definitions
+      arm64: dts: qcom: talos: Add camera MCLK pinctrl
+      arm64: dts: qcom: talos-evk-camera: Add DT overlay
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    2 +
+ arch/arm64/boot/dts/qcom/Makefile                  |   14 +
+ arch/arm64/boot/dts/qcom/glymur-crd.dts            |   16 +
+ .../qcom/hamoa-lenovo-ideacentre-mini-01q8x10.dts  | 1200 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qcs615-ride.dts           |   10 +-
+ arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi     |  210 +++-
+ arch/arm64/boot/dts/qcom/sdm845-lg-judyln.dts      |  127 ++-
+ arch/arm64/boot/dts/qcom/sdm845-lg-judyp.dts       |   28 +-
+ arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts  |   59 +
+ arch/arm64/boot/dts/qcom/talos-el2.dtso            |   25 +
+ .../boot/dts/qcom/talos-evk-camera-imx577.dtso     |   63 +
+ .../dts/qcom/talos-evk-lvds-auo,g133han01.dtso     |  127 +++
+ arch/arm64/boot/dts/qcom/talos-evk-som.dtsi        |  617 ++++++++++
+ .../boot/dts/qcom/talos-evk-usb1-peripheral.dtso   |   27 +
+ arch/arm64/boot/dts/qcom/talos-evk.dts             |  139 +++
+ arch/arm64/boot/dts/qcom/talos.dtsi                |  436 ++++++-
+ 16 files changed, 3033 insertions(+), 67 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/hamoa-lenovo-ideacentre-mini-01q8x10.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/talos-el2.dtso
+ create mode 100644 arch/arm64/boot/dts/qcom/talos-evk-camera-imx577.dtso
+ create mode 100644 arch/arm64/boot/dts/qcom/talos-evk-lvds-auo,g133han01.dtso
+ create mode 100644 arch/arm64/boot/dts/qcom/talos-evk-som.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/talos-evk-usb1-peripheral.dtso
+ create mode 100644 arch/arm64/boot/dts/qcom/talos-evk.dts
