@@ -1,72 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4C73290C3
-	for <soc@lists.linux.dev>; Mon,  6 Apr 2026 13:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC1E30E0ED
+	for <soc@lists.linux.dev>; Mon,  6 Apr 2026 14:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775481701; cv=none; b=sg7hj09A2pvfD+4IBirw44GoZPBv1vQmrJEi2AqSkYLKGTQPYebjnYIsK40QoxXAmJBvwQvKHbM0gUTAwU7qfNr2TC6QXsvqV2kO5B6Dri0v339DTBreIEYKTD3vAPFArx9ZqHyq/6OGLgsy8rgDgQBMox/i8Zg73f1cvdd0ahI=
+	t=1775487110; cv=none; b=StG9EtXCvcGljT33Bt0cFbz5okpIsNmnJJuhSUaYBT0oHmlZyMcN47cPC2c8HCJCofjZ0plbqTFXxCWfX9emencT7KIhxrJsF5k9IwShtilehNSYPvRFzKgtqCrSAmySVvnFqRd6ETQiCvadlEWvxz2ZobyUqoKGG3l0EwgHzww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775481701; c=relaxed/simple;
-	bh=gMzvZgJhPQDGhuIKuU+VTQeMpr2RvuGJOM4ZILaIqFM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qkj3/ckFHlJMB9JQZgDF7KxEKWaTGbQfxorfKnbiksmXZ+vEk02+sss7Fe3ooEGwbcBDku8IipByxzyyfzd75vnp3Pl37yibAFahyy4FJHkcPYBwgGnVLpX8msZRXPhdPZnCrGxEDBJWSVEnrphDqKjOKy7zJsqyt6KhzEM5Nw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fsgW6wgG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775487110; c=relaxed/simple;
+	bh=rwPbP1+bFk4jFXuGeRlNdKBo7Zv7Zhhj2QVlBA9xpOU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WVnEQoq356HK1Jod8IJXM0DQzTE43Wz5Pizc++waWAEaHHIuNKFUAAKpJ6RSGCnN4ecNGumobd6z60+ShW4SDfdKoO3xcjKSiqjALYCVwwjsBEEYizO5CPBeDF9NINGydSMGcfS9cI0I4CZIhba9p2S5bvmOq7uhxs9tUg54fE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hcX0ZLjo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fsgW6wgG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hcX0ZLjo"
 Received: by smtp.kernel.org (Postfix)
-	id 892ADC2BCB1; Mon,  6 Apr 2026 13:21:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CB9C4CEF7;
-	Mon,  6 Apr 2026 13:21:40 +0000 (UTC)
+	id 1ABCEC2BCB0; Mon,  6 Apr 2026 14:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE317C4CEF7;
+	Mon,  6 Apr 2026 14:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775481701;
-	bh=gMzvZgJhPQDGhuIKuU+VTQeMpr2RvuGJOM4ZILaIqFM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=fsgW6wgGxQgAydwtbIDhTk+P+JSilrn1Tax8ZmMrcV+Lk2Pca7Vwn6KzcjoppNSBo
-	 +z15AhJqxG4SvBN8legbu7ORAtxK+8tvlPnTKzS77w9pNmMsosqr2TkxXKQdSN5seZ
-	 BHn3SYsmIKXRrUJ+GBSlqB1dDjSJqUs29KHvbJOvbEmNzlHofD5zukbFBz80Tqj7Xu
-	 cyUwAM+nFcSIcj63J8NRUy9ifU8PUfwHpbH+SOQXuJ0n5NFcvH0bKzoqgIV1WeUaGP
-	 APnZ56ai67I5jUlkIAY54LXp5kfIZK3KX+0CUR1BBFtfOJf3Fm5UV2YIBoxnW10H+H
-	 bDmrBaJslID/Q==
-From: Bjorn Andersson <andersson@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-Subject: [GIT PULL] One more Qualcomm driver update for v7.1
-Date: Mon,  6 Apr 2026 08:21:38 -0500
-Message-ID: <20260406132138.2265013-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20201202; t=1775487110;
+	bh=rwPbP1+bFk4jFXuGeRlNdKBo7Zv7Zhhj2QVlBA9xpOU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=hcX0ZLjoUqvZGX4zWItRYNaHBJw/PC9a750oubI6W/pSAJJ3JEUIyATkSMF6YXcSE
+	 nIejwAm38lKqcHUJqrznQIrvIIbINNVkXm4s1l6FugwYqku/Pqg0NMoPTu1u3GVbWN
+	 mxnIQxv6qhTiG3gNr67oEx/j1yeI8Wv9kZ61KS+kWu68h8EdrKGvIaIPeaCLHl4SMC
+	 94crm/1rhu3TxOmLfd/OVsZ08Bx5JWH/dQoyzVT579H4/irJA0tWb8tQ7ozFigmClh
+	 iXyxv7LhaU7/YRg1Rp2KSS/8Db4VCs9WdTZ8twQgBuwU4yC/YlJOPr756ZJhPxRZtN
+	 aVnM9wK76qv5g==
+Date: Mon, 6 Apr 2026 22:51:45 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner Device Tree Changes for 7.1 - Part 2
+Message-ID: <adPIgTlQxnVpYgH4@home.wens.tw>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+The following changes since commit b912e48bee355b6b1faf86efc4a23191324ffecb:
 
-The following changes since commit d6e766e391ef0b2be62682e007223fc72ba7764f:
-
-  Merge branch '20260125-iris-ubwc-v4-1-1ff30644ac81@oss.qualcomm.com' into drivers-for-7.1 (2026-03-30 12:46:14 -0500)
+  arm64: dts: allwinner: h6: Add TaiqiCat (TQC) A01 support (2026-03-14 15:27:04 +0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-7.1-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-7.1-2
 
-for you to fetch changes up to a31ad9339eff4ce401dec816b01a94b4e3c47898:
+for you to fetch changes up to c755e39836ec492b0bc210fd96c2b720b5b4a690:
 
-  firmware: qcom: scm: Allow QSEECOM on Lenovo IdeaCentre Mini X (2026-04-02 16:09:01 -0500)
-
-----------------------------------------------------------------
-One more Qualcomm driver update for v7.1
-
-Flag Lenovo IdeaCentre Mini X to have functional QSEECOM/uefisecapp.
+  arm64: dts: allwinner: enable h616 timer support (2026-03-29 21:20:49 +0800)
 
 ----------------------------------------------------------------
-Bjorn Andersson (1):
-      firmware: qcom: scm: Allow QSEECOM on Lenovo IdeaCentre Mini X
+Allwinner Device Tree Changes for 7.1 - Part 2
 
- drivers/firmware/qcom/qcom_scm.c | 1 +
- 1 file changed, 1 insertion(+)
+UART DMA channels added for A64 and H6. Standard resolution MMIO timer added
+for H616. This timer can be used as a broadcast timer for wakeup from idle
+states.
+
+----------------------------------------------------------------
+Chen-Yu Tsai (2):
+      arm64: dts: allwinner: sun50i-a64: add UART DMA channels
+      arm64: dts: allwinner: sun50i-h6: add UART DMA channels
+
+Michal Piekos (1):
+      arm64: dts: allwinner: enable h616 timer support
+
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi  | 10 ++++++++++
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi   |  8 ++++++++
+ arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi |  9 +++++++++
+ 3 files changed, 27 insertions(+)
