@@ -1,120 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE4C32D0D8
-	for <soc@lists.linux.dev>; Mon,  6 Apr 2026 10:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A432DB789
+	for <soc@lists.linux.dev>; Mon,  6 Apr 2026 12:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775471718; cv=none; b=n0tU/jw1fA257FJCU+mnLs9DOM/1IbcEad+yuqbSpHjtECmbuZcz8iIuHESoPKGIyVpcm3uKaVFBs6YT8cvpY4r0/GLkHg5lqcLbF0+0tO7ERqWTqRpHHZ97e26PMGZHeub8TWJX7uc386I/qTcOlKKPrGqtvecF1DC31f7LdwY=
+	t=1775477873; cv=none; b=XU7T07Jh0/qvfetdzYvUQDWpRXn22FQEg+YYtfX9mDbQhL12oqYz3PAA96reu5sxpQHnu+zjdEkbEeysp4AcwSb1AJjFF0x3YT02+K8uDy4b4mIoKB8D/NoSZltslstd722pJSoZ50MNG27SpLXZI4u8VM49peceWe2OdtuxAbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775471718; c=relaxed/simple;
-	bh=fZJwWZGCMsWt5WVh+Ig6SZBzzZylN81uk6bAMko3zvE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MAAqle8tn8oeFbTnH/wwP2j6tJfWTqf/xvKgCMkRF53Ix6+1yizkkCDm8CRzCbD4a8SaJcqTliIM9rpZqwiWaGJYOXw/jiorhSoE7/RIwLgvZBESza3lO/YmBRBLt+YCG1V/qX8XQNT054LuTg899nVbI+PGHypJipvKM2AYw50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ne1gPalm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775477873; c=relaxed/simple;
+	bh=yFdJwiEVINgONrJy1w1Fju+r6dDcyJdI5aC2Lb90A3I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DR6TC82BaHQtEZzyXdzfN72Z3K32l6iF2l4Fx/1sevlD195zsFRUmLhkhSRXXqKGFYrHwHIKlEVqtF76gVXl5cu4r7YdkiSxunimS5AzJm39G0udMK5RlvP0pNzWtxKaQKk41itl4qZASieL0dE4KGK0zV528n1LGFacadv7uGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kno0LClW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ne1gPalm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kno0LClW"
 Received: by smtp.kernel.org (Postfix)
-	id 41CC4C2BCB6; Mon,  6 Apr 2026 10:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36965C2BCB2;
-	Mon,  6 Apr 2026 10:35:17 +0000 (UTC)
+	id F1BFEC4AF09; Mon,  6 Apr 2026 12:17:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38CDC4CEF7;
+	Mon,  6 Apr 2026 12:17:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775471718;
-	bh=fZJwWZGCMsWt5WVh+Ig6SZBzzZylN81uk6bAMko3zvE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ne1gPalmg5ep1RlzXvnJU5QbXLiTd7272J88QFdPbSk6Ir2nQHzPy4QdbQpc1lSWY
-	 q0f0OGDKdlJ2htuIecFGzPybRmxWa2HsOWJcoQT7QXLSsiglwT3Hf/cEvD4QWcXB6i
-	 p/YJdUTgdj12SU2+qP/Odd46+TOTdP6Niv+W4VWT3kGeZKRP9Hbc2uSC2YBlGd0jpL
-	 0QazIW8I2TJaXoMw24V+OteFQQLQDXyM0h82KCPn3HwAR5ZeBVOsk9F0u8DCcHu004
-	 /eudnDi06XKzXtJs6nsd1I25mA1iqiCrFBU/ihU0jWMO+mF+E4+IyH/ARU3FYtd/Mj
-	 qL1PM08H26Y1Q==
-Date: Mon, 6 Apr 2026 11:35:15 +0100
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RISC-V soc drivers for v7.1
-Message-ID: <20260406-spearmint-request-b71f627dc08c@spud>
+	s=k20201202; t=1775477872;
+	bh=yFdJwiEVINgONrJy1w1Fju+r6dDcyJdI5aC2Lb90A3I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kno0LClWBQSLnEk5FONJtokVkIhIfQRu5IpLb+xTlZZnMcmNr0f8aGieqAcXB5WyW
+	 k7wRBHV+QTicmmy4Gxd3Kjp3KMsb8+7jVWBF74iKcLp9ibzei62TOoRs6Io4VDuogX
+	 30C3FFB/lyHrF8CTfFa6YUMuMy1Gkt46ACixi1bO89gbCdBBzlXYPStWUYcarcrKEv
+	 Gwz7er9+8VWfxWe3w+vyrXRGzjJ3Nf3nqNp/Y+55RM+zE/waLjSc0wrGrN+5+a6WRg
+	 DLPGvuQTEbbmuhqKvKjFhf62+p/r8yQZ4YIWLAF70uYn6GGTYTIGmDDt/3rywLGDnG
+	 ufcS2fBJrchdA==
+Date: Mon, 6 Apr 2026 07:17:42 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: arm <arm@kernel.org>, soc@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	=?utf-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>, Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Luca Weiss <luca.weiss@fairphone.com>, 
+	Abel Vesa <abel.vesa@oss.qualcomm.com>, Swati Agarwal <swati.agarwal@oss.qualcomm.com>, 
+	Val Packett <val@packett.cool>, Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+	Loic Poulain <loic.poulain@oss.qualcomm.com>, Biswapriyo Nath <nathbappai@gmail.com>, 
+	David Heidelberg <david@ixit.cz>, Jingyi Wang <jingyi.wang@oss.qualcomm.com>, 
+	Md Sadre Alam <quic_mdalam@quicinc.com>, Nihal Kumar Gupta <quic_nihalkum@quicinc.com>, 
+	Taniya Das <taniya.das@oss.qualcomm.com>, Varadarajan Narayanan <varadarajan.narayanan@oss.qualcomm.com>, 
+	Yijie Yang <yijie.yang@oss.qualcomm.com>, Gopikrishna Garmidi <gopikrishna.garmidi@oss.qualcomm.com>, 
+	Jens Glathe <jens.glathe@oldschoolsolutions.biz>, Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, 
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Pankaj Patil <pankaj.patil@oss.qualcomm.com>, 
+	Paul Adam <adamp@posteo.de>, Pradeep P V K <pradeep.pragallapati@oss.qualcomm.com>, 
+	Pragnesh Papaniya <pragnesh.papaniya@oss.qualcomm.com>, Roger Shimizu <rosh@debian.org>, 
+	Srinivas Kandagatla <srinivas.kandagatla@oss.qualcomm.com>, Tobias Heider <tobias.heider@canonical.com>, 
+	Xilin Wu <wuxilin123@gmail.com>, Abel Vesa <abelvesa@kernel.org>, 
+	Ayushi Makhija <quic_amakhija@quicinc.com>, Canfeng Zhuang <canfeng.zhuang@oss.qualcomm.com>, 
+	Erikas Bitovtas <xerikasxx@gmail.com>, Jie Gan <jie.gan@oss.qualcomm.com>, 
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>, 
+	Petr Hodina <petr.hodina@protonmail.com>, Prasad Kumpatla <prasad.kumpatla@oss.qualcomm.com>, 
+	Raymond Hackley <raymondhackley@protonmail.com>, Sarthak Garg <sarthak.garg@oss.qualcomm.com>, 
+	Sibi Sankar <sibi.sankar@oss.qualcomm.com>, Sushrut Shree Trivedi <sushrut.trivedi@oss.qualcomm.com>, 
+	Umang Chheda <umang.chheda@oss.qualcomm.com>, Wesley Cheng <wesley.cheng@oss.qualcomm.com>, 
+	Xin Liu <xin.liu@oss.qualcomm.com>, Yuanjie Yang <yuanjie.yang@oss.qualcomm.com>, 
+	Aaron Kling <webgeek1234@gmail.com>, Aleksandrs Vinarskis <alex@vinarskis.com>, 
+	Alexander Koskovich <AKoskovich@pm.me>, Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, Christopher Obbard <christopher.obbard@linaro.org>, 
+	Gabor Juhos <j4g8y7@gmail.com>, Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Gergo Koteles <soyer@irl.hu>, 
+	Gianluca Boiano <morf3089@gmail.com>, Hongyang Zhao <hongyang.zhao@thundersoft.com>, 
+	Janaki Ramaiah Thota <janaki.thota@oss.qualcomm.com>, Jyothi Kumar Seerapu <jyothi.seerapu@oss.qualcomm.com>, 
+	KancyJoe <kancy2333@outlook.com>, Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>, 
+	Le Qi <le.qi@oss.qualcomm.com>, 
+	Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>, Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, Max McNamee <maxmcnamee@proton.me>, 
+	Pengyu Luo <mitltlatltl@gmail.com>, Riccardo Mereu <r.mereu@arduino.cc>, 
+	Richard Acayan <mailingradian@gmail.com>, Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, 
+	Vishnu Saini <vishnu.saini@oss.qualcomm.com>, Wei Deng <wei.deng@oss.qualcomm.com>, 
+	Wei Zhang <wei.zhang@oss.qualcomm.com>, Xueyao An <xueyao.an@oss.qualcomm.com>, 
+	Yedaya Katsman <yedaya.ka@gmail.com>, Zijun Hu <zijun.hu@oss.qualcomm.com>
+Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree updates for v7.1
+Message-ID: <adOh0D8wQW4yT3WO@baldur>
+References: <20260401142242.1068620-1-andersson@kernel.org>
+ <2c5402a1-9724-4fb1-bd31-6e8d133f3b88@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="n3WH9EHYOiLI3q76"
-Content-Disposition: inline
-
-
---n3WH9EHYOiLI3q76
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2c5402a1-9724-4fb1-bd31-6e8d133f3b88@app.fastmail.com>
 
-Hey folks,
+On Fri, Apr 03, 2026 at 12:26:17AM +0200, Arnd Bergmann wrote:
+> On Wed, Apr 1, 2026, at 16:22, Bjorn Andersson wrote:
+> > The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> >
+> >   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> >
+> > are available in the Git repository at:
+> >
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git 
+> > tags/qcom-arm64-for-7.1
+> >
+> > for you to fetch changes up to b683730e27ba4f91986c4c92f5cb7297f1e01a6d:
+> >
+> >   arm64: dts: qcom: sm8250: Add missing CPU7 3.09GHz OPP (2026-03-30 
+> > 09:35:01 -0500)
+> >
+> > ----------------------------------------------------------------
+> > Qualcomm Arm64 DeviceTree updates for v7.1
+> >
+> > Introduce the Eliza, Glymur, Mahua, and IPQ5210 Qualcomm SoCs.
+> 
+> I pulled this one as well now.
 
-Please pull my driver updates for 7.1.
+Thank you, Arnd.
 
-Thanks,
-Conor.
+> The contents all seem fine to me,
+> but please try to group the dts changes into smaller branches
+> so you can send some of it earlier when you know that you
+> have a large amount of content queued up.
+> 
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+I've considered splitting the branch up like so, but have not found
+a model that seems feasible. New platforms are intermingled and there
+are often cleanups etc that crosses multiple targets. Forcing a cleaner
+split of such work would seem to result in more work for everyone
+involved.
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+I will invest some time to think about this.
 
-are available in the Git repository at:
+> I know this is hard, and I also tend to do things in the
+> last minute, but it would really help to have e.g. the
+> newly added SoCs in a separate branch, or even just
+> the stuff that you know is ready by -rc3.
+> 
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-soc-drivers-for-v7.1
+I generally don't rebase these branches, so starting earlier and then
+following up with incremental PRs should be straightforward to implement.
 
-for you to fetch changes up to bd34cdd6d214f815570986ce55978fd7ddd8d8ac:
+Regards,
+Bjorn
 
-  soc: microchip: add mpfs gpio interrupt mux driver (2026-03-31 14:13:14 +0100)
-
-----------------------------------------------------------------
-RISC-V soc drivers for v7.1
-
-Microchip:
-Add coverage for the pic64gx in the system controller and syscons.
-Add a interrupt mux driver (akin to the one that Renesas recently added)
-that fixes a problem where the platform never properly modelled gpio
-interrupts. There's a gpio driver change here that Bartosz has acked
-that adds the interrupt support to the GPIO driver itself.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-----------------------------------------------------------------
-Conor Dooley (4):
-      dt-bindings: soc: microchip: add compatible for the mss-top-sysreg on pic64gx
-      gpio: mpfs: Add interrupt support
-      dt-bindings: soc: microchip: document PolarFire SoC's gpio interrupt mux
-      soc: microchip: add mpfs gpio interrupt mux driver
-
-Pierre-Henry Moussay (2):
-      dt-bindings: soc: microchip: mpfs-sys-controller: Add pic64gx compatibility
-      soc: microchip: mpfs-sys-controller: add support for pic64gx
-
- .../soc/microchip/microchip,mpfs-irqmux.yaml       | 103 ++++++++++++
- .../microchip/microchip,mpfs-mss-top-sysreg.yaml   |  18 +-
- .../microchip/microchip,mpfs-sys-controller.yaml   |   4 +-
- MAINTAINERS                                        |   2 +-
- drivers/gpio/Kconfig                               |   1 +
- drivers/gpio/gpio-mpfs.c                           | 122 +++++++++++++-
- drivers/soc/microchip/Kconfig                      |  11 ++
- drivers/soc/microchip/Makefile                     |   1 +
- drivers/soc/microchip/mpfs-irqmux.c                | 181 +++++++++++++++++++++
- drivers/soc/microchip/mpfs-sys-controller.c        |  74 ++++++---
- 10 files changed, 488 insertions(+), 29 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-irqmux.yaml
- create mode 100644 drivers/soc/microchip/mpfs-irqmux.c
-
---n3WH9EHYOiLI3q76
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCadOMYgAKCRB4tDGHoIJi
-0uo8AP9PYB0GQdK6WV4VT+Dr77MlLx2xoCT0XkgFWDkruO82/QEAza6Y9CnWvi31
-8654TI2+1w19rW+/0CQi3oU1qB/ajgo=
-=esMu
------END PGP SIGNATURE-----
-
---n3WH9EHYOiLI3q76--
+> This pull request alone has 178 files / 258 patches / 38000 lines,
+> among 686 files / 913 patches / 68376 lines that are queued
+> up in total across 63 branches we have merged so far for 7.1.
+> 
+>        Arnd
