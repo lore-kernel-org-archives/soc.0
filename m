@@ -1,76 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEC83939D7
-	for <soc@lists.linux.dev>; Wed,  8 Apr 2026 09:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6501438F24D
+	for <soc@lists.linux.dev>; Thu,  9 Apr 2026 08:28:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775641323; cv=none; b=E6c2ex0OIjLOHw4ITQSLZPoJUCu3XB1DAwT3lwHM4mGLNOAX7eZmYPcECIYDtK7IvWW97fBGqo+T8WaUEfyPocGZyXyxRhLKFsllHnztGX52KXYN/1q+FmV/+QtTP8rTUNYbMPx8YcNaOFTBDJ7csdA1emIhg1GWK+cws6Adu70=
+	t=1775723297; cv=none; b=A6qLWjNsTJGbPfaL5Ocp8i2LC2lwe/28rGJG/xTrcY4xFP+pg6SQ2KOqx+HWSgCycS0h50hyz0xJlCs3T2GP/zpBYau5CDnarJ7067ojWKfYuuhe93UzZeiuRjM7JSD6WHM/TlYgR8b842/YX1oWGF8nd2v7jif0hl3XKQY2KXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775641323; c=relaxed/simple;
-	bh=rQG4TqA9wEWVFqpW55Yqq/GOk/HkENJAQiF4iLl/WA0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SXbK1DdoXGL6NEYAXeWh31YLRR1LwN35dpktIPUXz7X1zh47ndOxusX1cNvyPKrVFZbA0sPXSw/AYzOLF4DLPmMrybdf5a6/jD+D9Xd034BSuP8QiChoK0v3eetUTHl8GXU3m6hEelWO0N5uGnIJr+qJee9NOTNynBeTSchplHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775723297; c=relaxed/simple;
+	bh=RlZ5km5xMJgq+tEMQrGqYFysGgwjA0BQnwiz3SWtV9c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CUKqxzYakEn0LdM/4MlJZoTowcC2iXPg6CZBA3mvASGZxsQ7NYu5yKQDOwe4I0nqcvMvhkQyrN3Z9vgo9j6zP6liycF1d1TrRaBQRmylHn8ZSfqrq5Zw7CCmdC4mbOz5ey0/EkrHc9zIIoRRLC4uINBzwUvGN7Qnmx8IhZu77yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L6SlGv4q; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L6SlGv4q"
 Received: by smtp.kernel.org (Postfix)
-	id 2B929C2BCAF; Wed,  8 Apr 2026 09:42:03 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	id 2FC91C4CEF7; Thu,  9 Apr 2026 08:28:17 +0000 (UTC)
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 839CCC2BCB1
-	for <soc@kernel.org>; Wed,  8 Apr 2026 09:42:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 839CCC2BCB1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1wAPQ1-0006Ee-CC; Wed, 08 Apr 2026 11:41:53 +0200
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	kernel@pengutronix.de,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [GIT PULL] Reset controller fixes for v7.0, part 3
-Date: Wed,  8 Apr 2026 11:41:52 +0200
-Message-ID: <20260408094152.1698594-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.47.3
+	by smtp.kernel.org (Postfix) with ESMTPS id 27F7FC19424
+	for <soc@kernel.org>; Thu,  9 Apr 2026 08:28:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 27F7FC19424
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id C0E91C5AABA
+	for <soc@kernel.org>; Thu,  9 Apr 2026 08:28:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 22A8B5FDEB;
+	Thu,  9 Apr 2026 08:28:13 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B27BE1045024F;
+	Thu,  9 Apr 2026 10:28:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1775723292; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=0gNMksGCJbd7EqixIA8vvHKcH+FZvBP9KXWFhtHZFsg=;
+	b=L6SlGv4qS1oSXd1UYVpGCwW6362M2yLv5Tvzpe5++GDQpXy5wMRRE0pHQGs0yC7LzYrPNK
+	K1Bwpvx/Lorz3V/omsyVnNcnq/nVm7b6pFZ3od3JIIWaWM6acZFmXE6wh9OJfqNGcec2ND
+	0zk3vWhk1i/JHCRgQ//1dMZoB71YJSXkvYOVyZYpDH25G2saznlfApYuHbvT6Dzrc+2mbg
+	aJmJ2ww2GEHVQVetnLqQzGNGky4Gto2y7mKrwEzVotMjYlq34Ux/nm7sbVHS+3NfxXywNt
+	GGZaRVf4NDPkunlQy9KU59Vp6x/lEQVZ20+l8PVh38aKR+1PQJDIWbQL7HfGWQ==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Arnd Bergmann <arnd@arndb.de>,  <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: fixes for v7.0 (#1)
+Date: Thu, 09 Apr 2026 10:28:09 +0200
+Message-ID: <87tstk35d2.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
-Dear arm-soc maintainers,
+Hi,
 
-The following changes since commit a0e0c2f8c5f32b675f58e25a9338283cedb5ad2b:
+Here is the first pull request for fixes for mvebu for v7.0.
 
-  reset: spacemit: k3: Decouple composite reset lines (2026-03-23 12:25:47 +0100)
+Gregory
+
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 
 are available in the Git repository at:
 
-  https://git.pengutronix.de/git/pza/linux.git tags/reset-fixes-for-v7.0-3
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-fixes-7.0-1
 
-for you to fetch changes up to 9797524ef2b69c6b187b55bd844eb72a8c1cbd99:
+for you to fetch changes up to edb7efa767da8bb82d724b85178be251ec4e060e:
 
-  reset: amlogic: t7: Fix null reset ops (2026-03-31 17:19:18 +0200)
-
-----------------------------------------------------------------
-Reset controller fixes for v7.0, part 3
-
-* Add missing reset ops for amlogic,t7-reset to the reset-meson driver.
-  The resets are unused as of now, but as soon as they are, the driver
-  would otherwise run into a NULL pointer dereference.
+  dt-bindings: arm64: add Marvell 7k COMe boards (2026-03-13 16:41:11 +0100)
 
 ----------------------------------------------------------------
-Ronald Claveau (1):
-      reset: amlogic: t7: Fix null reset ops
+mvebu fixes for 7.0 (part 1)
 
- drivers/reset/amlogic/reset-meson.c | 1 +
- 1 file changed, 1 insertion(+)
+A new device tree has been merged without a binding, which triggered
+warnings during dtb_checks. The commit in this pull request fixes this
+issue, enabling easier detection of new problems in device trees by
+reducing the number of false warnings.
+
+----------------------------------------------------------------
+Elad Nachman (1):
+      dt-bindings: arm64: add Marvell 7k COMe boards
+
+ .../devicetree/bindings/arm/marvell/armada-7k-8k.yaml         | 11 +++++++=
+++++
+ 1 file changed, 11 insertions(+)
+
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
