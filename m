@@ -1,107 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BD2346769
-	for <soc@lists.linux.dev>; Fri, 10 Apr 2026 22:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9A1346769
+	for <soc@lists.linux.dev>; Fri, 10 Apr 2026 22:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775859605; cv=none; b=mYUsUBhy6RWSbUu4Ja07+F6VvRFTKEwbRLi0UY05KomHEJCjsOhIwjWlwpWCvpWt1cC5rRAnn0EL26JAqMeOFQUuOcKwwsRaYE7AN00eSjuTrARxbo5HdH4VfhzEg108DJr1UQYRJMZYsaNPckfsk+XmB/aZNtCtH0rUXtdXmBM=
+	t=1775859630; cv=none; b=UQUp33NTuJy8Sd7S1GOIjmOgOLsjZEuMNWsUUY+cko4ReOEkRTNwekeBJlUO85lQqRrlGBB9M7reqsMCtsvFf0JjkD8lw/DTxz/JhI/5uM36OMr1xs5WaKNjTfpSnhW5fg0HgqxcPcSYMnRpHLMykPm5+MjNiLQ6pZ4ElbTYF1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775859605; c=relaxed/simple;
-	bh=CfBrxZMHYu+JoYASsbBXZuZ5K6ehZtv5W3IhWdspxyw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N/8spB3J078lGT+cKuic8gFw8V3HDBdCJOPCzvyGXyfBTUEs8t6feQ8XA8g9pgI8/U7R03ukelRAChivt9q7M5h0uO6j+l1tl+u+Hqj2ZV2A4XtjsT5k8ANu3XPMSufeVb02sX0cFe6Jn9Qnj2xmsPplIzDYun1skXUl3IU5UUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g06rx4q5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775859630; c=relaxed/simple;
+	bh=y1qMrzD5iJnwVU/+Ilt3GL17kHaVVf6x4/eJaMHjwfA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=BymuRTuej4AUHWX6QukqsOvNmacx5vfDIO2EatKSum+7FFEcbv+EX4AiQHqD7lfhD1Z/aoIplearpHLuH8yA1HOyDkNHGACIKROB4IyRb7m6w1DXak5LcIONhrBf0AE1SEZFxiND8woANDJg5Wdsalqz4lo3aiu5Ums/tPQcUiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kc3bQF9V; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g06rx4q5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kc3bQF9V"
 Received: by smtp.kernel.org (Postfix)
-	id 60DA2C2BCB2; Fri, 10 Apr 2026 22:20:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 497A0C19424
-	for <soc@kernel.org>; Fri, 10 Apr 2026 22:20:05 +0000 (UTC)
+	id 5C3B9C2BC87; Fri, 10 Apr 2026 22:20:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D8CC19421
+	for <soc@kernel.org>; Fri, 10 Apr 2026 22:20:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775859605;
-	bh=CfBrxZMHYu+JoYASsbBXZuZ5K6ehZtv5W3IhWdspxyw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=g06rx4q589ILyCvwnQmkQeiuRueotxmE6556VBmrLHVTnDJtrsBGu1hbmJ0Ia9u5j
-	 7sjWRgo/SlWng+ljVRrgxYjnqtwH3n8p1AKapCASkQQ9M+c9O7lbptbY1bn5fn0osJ
-	 qKGmWulAfW/hq2gnnx3W5ph0W8NBpH65Ff8vyhfkaq4gflKZ5/VmaH6OlMG4EcfknU
-	 MyFJaOurXtMlKR6ChVuh3kl8spxU61HZEDHNnoWkZR0HEs2zLfgxkPYjaX+QgcS2Lt
-	 c9cn2MwB4wQiXu9yOCPkW8J2gev5Xqwsi+z8x7w4YOPoMvxpu+BxSPLHtks4qMc3nB
-	 4tMwm2zQPfkow==
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7a299d84b7dso19232087b3.0
-        for <soc@kernel.org>; Fri, 10 Apr 2026 15:20:05 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzXptWDl09eJnWDvx8+xxXzmHytCfTRjulowkhsdogeg+gZqzot
-	YBhFvA5Oauss4A4xZ99FLNLkvvKrZZZGIugbRENsSZqd3z7pkOQ+LfiFu4TKSjLWot/ZzT0PLMj
-	MEQnrhF5HpAPEAv2zgfl1ALwh/PGYvCo=
-X-Received: by 2002:a05:690c:e653:b0:79a:5508:5831 with SMTP id
- 00721157ae682-7af6f909682mr40933627b3.20.1775859604680; Fri, 10 Apr 2026
- 15:20:04 -0700 (PDT)
+	s=k20201202; t=1775859630;
+	bh=y1qMrzD5iJnwVU/+Ilt3GL17kHaVVf6x4/eJaMHjwfA=;
+	h=Subject:From:Date:To:Cc:From;
+	b=kc3bQF9ViXL9hsCw1qRkl9c35LRz7QFr9rxfR1VziAQfx99UYIFuN42cF8czd34kT
+	 fKmqP5b/rFaSIA6Rd37czuLIEAQZm/3DZKr4Thwt4JCVr0x3wlLwE1c3AaRl3uNy6y
+	 KNt3na3HEQ8mMgY4cZ5TFvyLzvVSha498bUUg33nb8w1Y7PsQlGg85zelQjA7d4TXI
+	 ku/IMfhaMqua47Q4Lc7TCJCusUDSelUWgJKxjWg7GrUM6l2BAzte0FfdzEej0YLri7
+	 6d/W64l7CiFtFpV2hW0ApF+E9aHhpdc36a4kqf0IN5AQ2t9M/ENhl5LrK09QI+e9vs
+	 2NbtSIKyffn+Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BC72F3809A88;
+	Fri, 10 Apr 2026 22:20:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260403123040-KYC0145825@kernel.org>
-In-Reply-To: <20260403123040-KYC0145825@kernel.org>
-From: Linus Walleij <linusw@kernel.org>
-Date: Sat, 11 Apr 2026 00:19:53 +0200
-X-Gmail-Original-Message-ID: <CAD++jLkQfUwhvDOCkhK2NtRyXrb6y9rwpDckR6h0G3+dzYwW3A@mail.gmail.com>
-X-Gm-Features: AQROBzCuH10sUCp1pWYa5W_5SjPJMPxeW_gppQj455tR-xLUJ3z2UWA4xLhfFaI
-Message-ID: <CAD++jLkQfUwhvDOCkhK2NtRyXrb6y9rwpDckR6h0G3+dzYwW3A@mail.gmail.com>
-Subject: Re: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.1
-To: Yixun Lan <dlan@kernel.org>
-Cc: soc@kernel.org, Yixun Lan <dlan@gentoo.org>, Arnd Bergmann <arnd@arndb.de>, 
-	spacemit@lists.linux.dev, linux-riscv@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <177585960435.2663266.1657766507518920160.git-patchwork-summary@kernel.org>
+Date: Fri, 10 Apr 2026 22:20:04 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-Hi Yixun,
+Hello:
 
-I looked into this pull request.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-I'm sorry if I do stupid mistakes in handling it, I'm new to maintaining
-the SoC tree. Bear with me.
+Patch: [GIT,PULL] RISC-V SpacemiT Devicetrees for v7.1
+  Submitter: Yixun Lan <dlan@kernel.org>
+  Committer: Linus Walleij <linusw@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1076981
+  Lore link: https://lore.kernel.org/r/20260403123040-KYC0145825@kernel.org
 
-On Fri, Apr 3, 2026 at 2:32=E2=80=AFPM Yixun Lan <dlan@kernel.org> wrote:
 
-> Aurelien Jarno (7):
->       riscv: dts: spacemit: drop incorrect pinctrl for combo PHY
-(...)
-> Yixun Lan (9):
->       riscv: dts: spacemit: pcie: fix missing power regulator
+Total patches: 1
 
-[Fixes]
-fatal: Not a valid object name linus/master
-Commit: c68360c0d636 ("riscv: dts: spacemit: drop incorrect pinctrl
-for combo PHY")
-    Fixes tag: Fixes: 0be016a4b5d1b9 ("riscv: dts: spacemit: PCIe and
-PHY-related updates")
-    Has these problem(s):
-        - Inspect: Target SHA is not ancestor of Linus' master branch,
-which means it is fixing commit in your branch
-fatal: Not a valid object name linus/master
-Commit: 8a9071299dec ("riscv: dts: spacemit: pcie: fix missing power regula=
-tor")
-    Fixes tag: Fixes: 0be016a4b5d1 ("riscv: dts: spacemit: PCIe and
-PHY-related updates")
-    Has these problem(s):
-        - Inspect: Target SHA is not ancestor of Linus' master branch,
-which means it is fixing commit in your branch
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-So this means you introduced bugs and fix them in the same pull request?
 
-Why?
-
-The practice is to squash such fixes into the offending patches when
-presenting pull requests. But I went ahead anyway, trying to not be so
-picky. (The commits are there, in your branch indeed.)
-
-- Checked that it was in linux-next OK
-- built DTBS OK
-
-Pulled in, thanks.
-
-Yours,
-Linus Walleij
