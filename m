@@ -1,132 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26BE326930
-	for <soc@lists.linux.dev>; Fri, 10 Apr 2026 13:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BD2346769
+	for <soc@lists.linux.dev>; Fri, 10 Apr 2026 22:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775827553; cv=none; b=V0zzzIIIDQgB68Y6xcEpVGVhVY8md6OlInGjI3CjsBTArMy585xnwjGNcHZ0tTj93PX++8T+b2PVxgp3DUI1PZrgply55Knb2X4A7duIA4QFGH4YFmoy8Z3ZUoll3GhSl6UWbtaTdXkuNBW+HrmiwGB+upYPE4vjXHAWg6d5Xy0=
+	t=1775859605; cv=none; b=mYUsUBhy6RWSbUu4Ja07+F6VvRFTKEwbRLi0UY05KomHEJCjsOhIwjWlwpWCvpWt1cC5rRAnn0EL26JAqMeOFQUuOcKwwsRaYE7AN00eSjuTrARxbo5HdH4VfhzEg108DJr1UQYRJMZYsaNPckfsk+XmB/aZNtCtH0rUXtdXmBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775827553; c=relaxed/simple;
-	bh=GT7Aahlv/8aqacB7dT46QOr57cpeajJOdahsedL+19Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=J5sFZEkM45YEJwP2S/ls1Wc9W/sqOFj5z1iFd1bIKZgekMf07Ct5vfRt8m/LMTBFuelLK71927Twyv2B1+vX7s+HsjS6CnWqkPZufhjZsVT/GMWbGwrAB8iFlqX3JEg/uJ7eQyL6jvFa1jME0AGGWtJcwnNPJgB5YEFsOPnDxsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cChgOkzE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775859605; c=relaxed/simple;
+	bh=CfBrxZMHYu+JoYASsbBXZuZ5K6ehZtv5W3IhWdspxyw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N/8spB3J078lGT+cKuic8gFw8V3HDBdCJOPCzvyGXyfBTUEs8t6feQ8XA8g9pgI8/U7R03ukelRAChivt9q7M5h0uO6j+l1tl+u+Hqj2ZV2A4XtjsT5k8ANu3XPMSufeVb02sX0cFe6Jn9Qnj2xmsPplIzDYun1skXUl3IU5UUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g06rx4q5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cChgOkzE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g06rx4q5"
 Received: by smtp.kernel.org (Postfix)
-	id 6A40CC19425; Fri, 10 Apr 2026 13:25:53 +0000 (UTC)
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 23E9AC19421
-	for <soc@kernel.org>; Fri, 10 Apr 2026 13:25:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 23E9AC19421
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 5D1751A325A
-	for <soc@kernel.org>; Fri, 10 Apr 2026 13:25:42 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 2A675603F0;
-	Fri, 10 Apr 2026 13:25:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 163A91045001A;
-	Fri, 10 Apr 2026 15:25:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1775827541; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=ANiLXy2khpgRJ4NUYD3KloSLAU+fqIeMO0q9LkbLPm4=;
-	b=cChgOkzENzUd4hXa/ttfMXyZ0RDfND2LkMVRzbdjblDPHSJc/Ngf2fCJu5n2R/sFyZJKRz
-	KEuV56FWmssZhlk0CmVElB56ny+lg/JfOgnIpDlkNvAM7yHm2BGXtUR3VLdx0KWonKsDSU
-	7tyf6NHe2AgUU2J1I70ERoP4IrSZTkH9HV+5ozPDUyE6NvYDBosShh1WN613k2OfC8x+X7
-	/cg/OYZRN+6tJXePzv8I5eOChkJyBnRboBs1x3maxI+Bi46hVFvRcvy4aM9axrFwO1G/5r
-	aqBN1yCuGy6kY9Bo4ce7ozcEsGTAooQs67FI0Azh0RzERrAAn7skZYCPNOcYFg==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Arnd Bergmann <arnd@arndb.de>,  <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt64 for v7.1 (#1)
-Date: Fri, 10 Apr 2026 15:25:39 +0200
-Message-ID: <87cy072bho.fsf@BLaptop.bootlin.com>
+	id 60DA2C2BCB2; Fri, 10 Apr 2026 22:20:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 497A0C19424
+	for <soc@kernel.org>; Fri, 10 Apr 2026 22:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775859605;
+	bh=CfBrxZMHYu+JoYASsbBXZuZ5K6ehZtv5W3IhWdspxyw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=g06rx4q589ILyCvwnQmkQeiuRueotxmE6556VBmrLHVTnDJtrsBGu1hbmJ0Ia9u5j
+	 7sjWRgo/SlWng+ljVRrgxYjnqtwH3n8p1AKapCASkQQ9M+c9O7lbptbY1bn5fn0osJ
+	 qKGmWulAfW/hq2gnnx3W5ph0W8NBpH65Ff8vyhfkaq4gflKZ5/VmaH6OlMG4EcfknU
+	 MyFJaOurXtMlKR6ChVuh3kl8spxU61HZEDHNnoWkZR0HEs2zLfgxkPYjaX+QgcS2Lt
+	 c9cn2MwB4wQiXu9yOCPkW8J2gev5Xqwsi+z8x7w4YOPoMvxpu+BxSPLHtks4qMc3nB
+	 4tMwm2zQPfkow==
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7a299d84b7dso19232087b3.0
+        for <soc@kernel.org>; Fri, 10 Apr 2026 15:20:05 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzXptWDl09eJnWDvx8+xxXzmHytCfTRjulowkhsdogeg+gZqzot
+	YBhFvA5Oauss4A4xZ99FLNLkvvKrZZZGIugbRENsSZqd3z7pkOQ+LfiFu4TKSjLWot/ZzT0PLMj
+	MEQnrhF5HpAPEAv2zgfl1ALwh/PGYvCo=
+X-Received: by 2002:a05:690c:e653:b0:79a:5508:5831 with SMTP id
+ 00721157ae682-7af6f909682mr40933627b3.20.1775859604680; Fri, 10 Apr 2026
+ 15:20:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20260403123040-KYC0145825@kernel.org>
+In-Reply-To: <20260403123040-KYC0145825@kernel.org>
+From: Linus Walleij <linusw@kernel.org>
+Date: Sat, 11 Apr 2026 00:19:53 +0200
+X-Gmail-Original-Message-ID: <CAD++jLkQfUwhvDOCkhK2NtRyXrb6y9rwpDckR6h0G3+dzYwW3A@mail.gmail.com>
+X-Gm-Features: AQROBzCuH10sUCp1pWYa5W_5SjPJMPxeW_gppQj455tR-xLUJ3z2UWA4xLhfFaI
+Message-ID: <CAD++jLkQfUwhvDOCkhK2NtRyXrb6y9rwpDckR6h0G3+dzYwW3A@mail.gmail.com>
+Subject: Re: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.1
+To: Yixun Lan <dlan@kernel.org>
+Cc: soc@kernel.org, Yixun Lan <dlan@gentoo.org>, Arnd Bergmann <arnd@arndb.de>, 
+	spacemit@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi,
+Hi Yixun,
 
-Here is the first pull request for dt64 for mvebu for v7.1.
+I looked into this pull request.
 
-Gregory
+I'm sorry if I do stupid mistakes in handling it, I'm new to maintaining
+the SoC tree. Bear with me.
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+On Fri, Apr 3, 2026 at 2:32=E2=80=AFPM Yixun Lan <dlan@kernel.org> wrote:
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> Aurelien Jarno (7):
+>       riscv: dts: spacemit: drop incorrect pinctrl for combo PHY
+(...)
+> Yixun Lan (9):
+>       riscv: dts: spacemit: pcie: fix missing power regulator
 
-are available in the Git repository at:
+[Fixes]
+fatal: Not a valid object name linus/master
+Commit: c68360c0d636 ("riscv: dts: spacemit: drop incorrect pinctrl
+for combo PHY")
+    Fixes tag: Fixes: 0be016a4b5d1b9 ("riscv: dts: spacemit: PCIe and
+PHY-related updates")
+    Has these problem(s):
+        - Inspect: Target SHA is not ancestor of Linus' master branch,
+which means it is fixing commit in your branch
+fatal: Not a valid object name linus/master
+Commit: 8a9071299dec ("riscv: dts: spacemit: pcie: fix missing power regula=
+tor")
+    Fixes tag: Fixes: 0be016a4b5d1 ("riscv: dts: spacemit: PCIe and
+PHY-related updates")
+    Has these problem(s):
+        - Inspect: Target SHA is not ancestor of Linus' master branch,
+which means it is fixing commit in your branch
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt64-7.1-1
+So this means you introduced bugs and fix them in the same pull request?
 
-for you to fetch changes up to 00e6d608fe80b0f68c325cb46862f78e9a8ec768:
+Why?
 
-  arm64: dts: marvell: armada-37xx: swap PHYs' order in USB3 controller nod=
-e (2026-04-09 10:14:40 +0200)
+The practice is to squash such fixes into the offending patches when
+presenting pull requests. But I went ahead anyway, trying to not be so
+picky. (The commits are there, in your branch indeed.)
 
-----------------------------------------------------------------
-mvebu dt64 for 7.1 (part 1)
+- Checked that it was in linux-next OK
+- built DTBS OK
 
-- Armada 37xx/3720 device tree fixes:
-   - Reorder USB PHYs, standardize names, drop undocumented
-     properties, fix schema alignment
+Pulled in, thanks.
 
-- Add Marvell 7k COMe board bindings and uDPU ethernet aliases
-
-- Cleanup: drop unused .dtsi files
-
-----------------------------------------------------------------
-Elad Nachman (2):
-      arm64: dts: a7k: use phy handle
-      dt-bindings: arm64: add Marvell 7k COMe boards
-
-Gabor Juhos (6):
-      arm64: dts: marvell: armada-3720: drop 'marvell,xenon-emmc' properties
-      arm64: dts: marvell: armada-37xx: align 'phy-names' of EHCI node with=
- DT schema
-      arm64: dts: marvell: armada-37xx: drop redundant status property
-      arm64: dts: marvell: armada-37xx: drop 'marvell,usb-misc-reg' from US=
-B host nodes
-      arm64: dts: marvell: armada-37xx: use 'usb2-phy' in USB3 controller's=
- phy-names
-      arm64: dts: marvell: armada-37xx: swap PHYs' order in USB3 controller=
- node
-
-Rob Herring (Arm) (1):
-      arm/arm64: dts: marvell: Drop unused .dtsi
-
-Robert Marko (1):
-      arm64: dts: marvell: uDPU: add ethernet aliases
-
- .../bindings/arm/marvell/armada-7k-8k.yaml         |  11 ++
- arch/arm/boot/dts/marvell/armada-380.dtsi          | 148 -----------------=
-----
- .../boot/dts/marvell/armada-3720-atlas-v5.dts      |   1 -
- .../boot/dts/marvell/armada-3720-espressobin.dtsi  |   1 -
- arch/arm64/boot/dts/marvell/armada-3720-uDPU.dtsi  |   7 +-
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi       |   9 +-
- .../boot/dts/marvell/armada-7020-comexpress.dtsi   |   2 +-
- arch/arm64/boot/dts/marvell/armada-8020.dtsi       |  20 ---
- .../boot/dts/marvell/cn9130-db-comexpress.dtsi     |  96 -------------
- 9 files changed, 21 insertions(+), 274 deletions(-)
- delete mode 100644 arch/arm/boot/dts/marvell/armada-380.dtsi
- delete mode 100644 arch/arm64/boot/dts/marvell/armada-8020.dtsi
- delete mode 100644 arch/arm64/boot/dts/marvell/cn9130-db-comexpress.dtsi
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yours,
+Linus Walleij
