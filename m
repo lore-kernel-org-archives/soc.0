@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D6E23BD1B
-	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EA6334C1F
+	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 09:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775897692; cv=none; b=uIM6IpjCmxb7Acxt7N8RXngHNS9d+9uvuKXRCWcaVSeHE2GPmAKLw6z5Pz/SUcD4s5YjiMfW2mEgsLXx1MFW3+2Jksp+oZRv1u/kCt6Yn2ThZk2ZtoegKI3cikvvqIEsY3yMzLJieoNq1GyrggAcVhDI27n/abejAckRK2f/ec0=
+	t=1775899779; cv=none; b=Wb7IJjOr8hwh94gcfbIgvO8W9srZuZLnViOn4//5hGkskZXcQ/rzj22m/oWHAWeD8lm4Nmoch54SXVBArSIvVYxpVJAwzSjVo081Cr20DHH1+8Es0ZwqGndVN6VtBAU1j0vk24kO4j9mQhJr8nl3OCNlJPk3/UJ/3SyAvNQlPAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775897692; c=relaxed/simple;
-	bh=IO2YPV6AEKfJ4Hz9ub8GiQZXFSmfuRwPQfE4POfgvJk=;
+	s=arc-20240116; t=1775899779; c=relaxed/simple;
+	bh=waa66iiXwVjYMPwroTuW2sKA1unznzskqc+15JbWTVQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HyHNtuoM7sktr+szon39kI12RCjqVCNA+Y2AqiPiA+u5tWmFrD8/vlOfzpHxb1N0iS3MUicqZxXi0fAudKSH/yyXbbA50Xr/en02oAlIJm1aVjZ0ZigTtngZhpQhkYZY3Saxf22q49x3ZeTQsWXxWIQnIxSnwf3i1DW7IUl2kF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LaKrykhF; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=BLtngVryQg3U0tAvkBDi24IWHFVXwvkcie6lBH8zOt4SFNdruVRFSQt6LBUIuB0CChSlyj8EmO6+vc0rLHY1KZHYO9RQtkpCfVP67ChOL3vlXFVMv6hh2rK34OvMCeDqVgkBw5yMazGc2Hbguss2w+26deyjijWfP4NdKD49P/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSKMF89b; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LaKrykhF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSKMF89b"
 Received: by smtp.kernel.org (Postfix)
-	id 53D5DC4AF09; Sat, 11 Apr 2026 08:54:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5231C4CEF7;
-	Sat, 11 Apr 2026 08:54:51 +0000 (UTC)
+	id E0E1FC2BC87; Sat, 11 Apr 2026 09:29:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4808CC4CEF7;
+	Sat, 11 Apr 2026 09:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775897692;
-	bh=IO2YPV6AEKfJ4Hz9ub8GiQZXFSmfuRwPQfE4POfgvJk=;
+	s=k20201202; t=1775899778;
+	bh=waa66iiXwVjYMPwroTuW2sKA1unznzskqc+15JbWTVQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LaKrykhFSF4ef54dIyhFrWVCBtT0ow/mmsohmXHRlf6bskYDFbpWDJQkglZulXJa7
-	 PHpLn6tEBmYNTJztBLrshOkofYiGF01M9MtZylmqZi/7G+kkmGWTC3jWT9VLCG8LcO
-	 pljHF4O7vblfysd+LJvABVBjJTPvWZQFER3MgodrWPISmvnhp63+Heh56ZC9/Hg777
-	 tY1mwHWvbpevo8wQGy1etQGrETUPmx1xZlawIv59dflU6F5/NgSqPJkPkptFDm3zIp
-	 d0VM7vnmes3BphrQQAyRzeeXwVa9lQb/bG4WVCj1ht9cX5T4yFi/kc0Wk7bM5+Y/By
-	 I+7Pay5TllChg==
-Date: Sat, 11 Apr 2026 10:54:49 +0200
+	b=OSKMF89bhbsJ/Sv4SzKBFapQ/3P5mpm7jjE6WXT4uuYXjX67uFLWQ6ZX2rUsWSh4G
+	 9vk3RNql4bBrTeEuX/iLHMWrT8V1um7/4DSuMBJ/6IcrzRytGxEzKX/KkpI/PjhnHg
+	 +OCvY3BWJy/c/MG83ad2LK/a+Y4yDOHhSwJ82FaaBUuyA2cyB+4B3h2dQeTAkqI5Ts
+	 KE6Dt0s+i/cBJlBS9Ob7fo/2jsstYjMCz4NGB6gTQLp/UzeiIbkrNrf9TnqcucZHQj
+	 cMaYifbLJ+BXRyY0+MNzC8PwR7UCxkPmjOFgvUOPMfBpRdxdI/i+Z+HMS5G5FcNRID
+	 ruL6/hESiJNIw==
+Date: Sat, 11 Apr 2026 11:29:36 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>
 Cc: Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org, 
 	Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] ARM: mvebu: fixes for v7.0 (#1)
-Message-ID: <20260411-inescapable-overjoyed-dinosaur-14130d@quoll>
-References: <87tstk35d2.fsf@BLaptop.bootlin.com>
+Subject: Re: [GIT PULL] ARM: mvebu: dt for v7.1 (#1)
+Message-ID: <20260411-icy-inescapable-cougar-ece4c5@quoll>
+References: <87qzoo3412.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -45,12 +45,12 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87tstk35d2.fsf@BLaptop.bootlin.com>
+In-Reply-To: <87qzoo3412.fsf@BLaptop.bootlin.com>
 
-On Thu, Apr 09, 2026 at 10:28:09AM +0200, Gregory CLEMENT wrote:
+On Thu, Apr 09, 2026 at 10:56:57AM +0200, Gregory CLEMENT wrote:
 > Hi,
 > 
-> Here is the first pull request for fixes for mvebu for v7.0.
+> Here is the first pull request for dt for mvebu for v7.1.
 > 
 > Gregory
 > 
@@ -60,20 +60,13 @@ On Thu, Apr 09, 2026 at 10:28:09AM +0200, Gregory CLEMENT wrote:
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-fixes-7.0-1
+>   git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt-7.1-1
 > 
-> for you to fetch changes up to edb7efa767da8bb82d724b85178be251ec4e060e:
+> for you to fetch changes up to 29d8a380643521422a9907f3e982e142fe22d19e:
 > 
->   dt-bindings: arm64: add Marvell 7k COMe boards (2026-03-13 16:41:11 +0100)
+>   MAINTAINERS: drop file entry in Marvell Kirkwood and Armada SOC support (2026-03-02 16:24:43 +0100)
 > 
 > ----------------------------------------------------------------
-> mvebu fixes for 7.0 (part 1)
-> 
-> A new device tree has been merged without a binding, which triggered
-> warnings during dtb_checks. The commit in this pull request fixes this
-> issue, enabling easier detection of new problems in device trees by
-> reducing the number of false warnings.
-> 
 
 Thanks, applied
 
