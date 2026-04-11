@@ -1,42 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0681D432D
-	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:44:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECEC230264
+	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775897070; cv=none; b=IICeoJCIAt7fII1lcKtVxH5tWjkL1hpS+u+YKvN6kSH9+8EfOBr/qLEVxWE+OgD+8L5RH82Ylmbkc51hmQE7Rph+XgErpuTW24Ts2aj9+TKTgU4nVsyofqlOWA8Jrex525mjFM42sCwQ9f+9bq47/ou3ABrkuL3sOIXPdcegK3k=
+	t=1775897393; cv=none; b=I9L/Wzt/5X+kuQdTMUShv/mg+8PQ/iBw3eE9+/5qI79UQ+jgJeFP9jPD5PtB78+2KBUu6u2dTsQHdXOLyeHAeJoULX+Gl2NY3bkRBLMv+yCGvid/YcDGJ8SoZZVhlHeY40dT3CU2iie/OhvRKXkAg7Inj6oqbTGexPy1/iT9Ai0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775897070; c=relaxed/simple;
-	bh=RntnNLUVeODVikBI+yOez3GfbM1NukCg0uXVTU/wpAw=;
+	s=arc-20240116; t=1775897393; c=relaxed/simple;
+	bh=KVDPs0/AR7SfA/haz9MFeLHwZP/iNdbl1ulmOeYe3F8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DL0cQnB7QAYJNg4hTD3xh8e79WDBuKiGRHop4V80DYt1d18GUuGsYXHqwd5hZ7AhzlEnAxuMIhbUq/MCd9OW7bIyum3Uq1k1WDO40/D/y9NTUYjBA9Etgx12eGBJvHOAITWTCvGqkXiILCBGT+V9TSI9sqiPM6vH6/6FOaQ7CxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ev5bn4GR; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nf/+tXm3XK/wMK8D3BPmsImlmOUAVGSvCBKl8grVtiVYTUmbKjJ0JnNk/1Bvas10D3YWil48ayFPfxZi0xOvdrrFchMPu1fKYI6m+bXbxZbcyof3wio7mQloaZ7pwC7XhTet+SKZPP7PeRU/AoCYaUOx0gjnnrdJY0LFM88M9XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gtRXhwTP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ev5bn4GR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtRXhwTP"
 Received: by smtp.kernel.org (Postfix)
-	id EB61DC2BCB0; Sat, 11 Apr 2026 08:44:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55440C4CEF7;
-	Sat, 11 Apr 2026 08:44:29 +0000 (UTC)
+	id D147EC4AF0B; Sat, 11 Apr 2026 08:49:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6430DC4CEF7;
+	Sat, 11 Apr 2026 08:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775897069;
-	bh=RntnNLUVeODVikBI+yOez3GfbM1NukCg0uXVTU/wpAw=;
+	s=k20201202; t=1775897392;
+	bh=KVDPs0/AR7SfA/haz9MFeLHwZP/iNdbl1ulmOeYe3F8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ev5bn4GRcJhvmrmPqreMk3g82DW5zQky9oGjim7Qz+7WNffQQSC/cxc3/qsYWE2gK
-	 nX3dPkPLySBY13x0hJdFq9Jmf0gbRSnUW80kXyGlV1XtFBhWeVKvznQnH2nyuX55Zh
-	 A221pmjk40FrnzL27EKvqBffsgK74qfUwGY/1OLOaI8PNEaUKP19ZMUtW7KeBuXsJa
-	 CKjoWGYv2lTalIeKMYxK2BhllF++PLw7T/hCbA4iWtDyocUTRxpkjgU22jAW7rpnwG
-	 f6OG7ii/CRIDHy1GqM5TnBKbh2HfQRK2GbmI7QbO4oXZswDXlqW6P/IY+QbwbbzBm0
-	 u1Nx09cpUEq9g==
-Date: Sat, 11 Apr 2026 10:44:27 +0200
+	b=gtRXhwTPBNQjpr9wuxzV0WvknJFHtD1f6ORK9Vo7ALKRuBiJwFfpTiaGn+DG1jkdh
+	 z5t1zFhjNKyjBMhAnhA61RdsQGuvPjUheh+IpZ/TjcBNu5207odJzYENGIzoUrcPSJ
+	 3ORsIWYygOJOYl95O3onNNHY0Nq1fDPylnEJzAO8yMQ6IsmuAmVbprvI0QG1YBYWjp
+	 jBohcpBJpBQj7nG30LvZwlCAcbn79NZ5V50w3ZqNruKSxa5YS9unT2Ag445QmdCgIJ
+	 9OaZf7K+n3PcDAg+gVnfYBBEwrIyE+FVacJNaWrOwluMTlWZWpxX69+azreFV72tOL
+	 0q/zWw36hpQiw==
+Date: Sat, 11 Apr 2026 10:49:50 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chen-Yu Tsai <wens@kernel.org>
-Cc: soc@kernel.org, Jernej Skrabec <jernej@kernel.org>, 
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Allwinner Device Tree Changes for 7.1 - Part 2
-Message-ID: <20260411-abiding-porcupine-of-feminism-d0c5c2@quoll>
-References: <adPIgTlQxnVpYgH4@home.wens.tw>
+To: Sudeep Holla <sudeep.holla@kernel.org>
+Cc: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>, 
+	ALKML <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [GIT PULL] firmware: arm_ffa: Fix for v7.1
+Message-ID: <20260411-tireless-agama-of-advance-5bdabf@quoll>
+References: <20260407100841.3150090-1-sudeep.holla@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -45,28 +44,43 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <adPIgTlQxnVpYgH4@home.wens.tw>
+In-Reply-To: <20260407100841.3150090-1-sudeep.holla@kernel.org>
 
-On Mon, Apr 06, 2026 at 10:51:45PM +0800, Chen-Yu Tsai wrote:
-> The following changes since commit b912e48bee355b6b1faf86efc4a23191324ffecb:
+On Tue, Apr 07, 2026 at 11:08:39AM +0100, Sudeep Holla wrote:
+> Hi ARM SoC Team,
 > 
->   arm64: dts: allwinner: h6: Add TaiqiCat (TQC) A01 support (2026-03-14 15:27:04 +0800)
+> Please pull ! This is the only fix/update I have at the moment for v7.1
+> So, I am sending it early as fix but late as an update for v7.1.
+> 
+> Regards,
+> Sudeep
+> 
+> -->8
+> 
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> 
+>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-7.1-2
+>   git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-fix-7.1
 > 
-> for you to fetch changes up to c755e39836ec492b0bc210fd96c2b720b5b4a690:
+> for you to fetch changes up to 83210251fd70d5f96bcdc8911e15f7411a6b2463:
 > 
->   arm64: dts: allwinner: enable h616 timer support (2026-03-29 21:20:49 +0800)
+>   firmware: arm_ffa: Use the correct buffer size during RXTX_MAP (2026-04-07 10:47:42 +0100)
 > 
 > ----------------------------------------------------------------
-> Allwinner Device Tree Changes for 7.1 - Part 2
+> Arm FF-A fix for v7.1
 > 
-> UART DMA channels added for A64 and H6. Standard resolution MMIO timer added
-> for H616. This timer can be used as a broadcast timer for wakeup from idle
-> states.
-> 
+> Use the page aligned backing allocation size when computing the RXTX_MAP
+> page count. This fixes FF-A RX/TX buffer registration on kernels built
+> with 16K/64K PAGE_SIZE, where alloc_pages_exact() backs the buffer with a
+> larger aligned span than the discovered minimum buffer size.
+
+Can we avoid per-driver trees or pulls? You do maintain also ARM SCMI
+firmware driver, so this could be sent together? I think you also use
+the same Git tree, right?
+
 
 Thanks, applied
 
