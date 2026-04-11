@@ -1,44 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCEA1346A0D
-	for <soc@lists.linux.dev>; Fri, 10 Apr 2026 23:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD761E1E04
+	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:06:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775864268; cv=none; b=YA552OI4UAngcNT7OSU9skDYW0+oJ3Y1ot4JtfBWbJGnxyy1ghDdQVUsQ1VxfFXLuQsAJPazdWEV1+1Lkc7L6CFrtjDtxyatL3Pj3BXpi+bEsJXc+8XwUy8+orSLa3QKhoEq7u1MEY5UN4/kdftC403LfOoeXtxFb011AF7xKU8=
+	t=1775894779; cv=none; b=b5d4F/nIzcOUwy0khzYmyvmJ7QekDqmu0SUs3FftyORnNG0FlkasKG1MR2E4NIzhNVa3vYVAhi9A6YDY9gAI52DjfbhM3OWrlnAnnXoh1DvEI/UBX8oidtzapqbU61t/7fHmpSAFHj0ER5VB8a+5oOvT5FRMxqD6vCvwz5zURLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775864268; c=relaxed/simple;
-	bh=9nyWpvl587TXnw2WHO5q+qP+iVSustuNqLD/U3XMv24=;
+	s=arc-20240116; t=1775894779; c=relaxed/simple;
+	bh=BFlObOZeCKW1kez1s3sdnqR/uS9yq9vy54bq71cFFL8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f7vo8Tn4BBA/BRNC+NcMml+VdptUPLjSpG0rFsS+EqbwP7CYgor+2nTHTDy1z4Bzs67Jz4CbqATVzpO2+o+jUi1LpMYkAhZ6KPazyS27j/y9B21Am1i6eiUPjtr24fdwkrE9zDu8w9r3S1dwrJY6dbPF46eoC8Y32azFmzmE5zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNTF2OFV; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=N/LemT+JNb1Uw8JsachFvKuFYnehUgDCt1s9PCFOIGwliNimXwfJ5ItGW/nmCqkAHZExfl5hbxkpmm2j4Cn42mT56OfHD5tPSEXNwHLNsRrI80qqKvb6jdZpTQX8P8L+vAaKt68S3eYBItpQXarpib2Bvc8HI4mgtr/9ADVie7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DEaEHBwJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNTF2OFV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DEaEHBwJ"
 Received: by smtp.kernel.org (Postfix)
-	id AD887C2BC87; Fri, 10 Apr 2026 23:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4360EC19421;
-	Fri, 10 Apr 2026 23:37:48 +0000 (UTC)
+	id 71097C19425; Sat, 11 Apr 2026 08:06:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC498C4CEF7;
+	Sat, 11 Apr 2026 08:06:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775864268;
-	bh=9nyWpvl587TXnw2WHO5q+qP+iVSustuNqLD/U3XMv24=;
+	s=k20201202; t=1775894779;
+	bh=BFlObOZeCKW1kez1s3sdnqR/uS9yq9vy54bq71cFFL8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iNTF2OFVv6rlhpMPVLGC+iL5F/WSz2Ou9zFlHB24lyGAb8rY2iRQ01M9hYtEXtKbg
-	 9lzVb4h1hhLNMNbaeq8zIFpV8w+34Je76IAJbFh+U2DBC6HuGiDzwU5yVm1zabkvVw
-	 ZIIC7RQqZul1N8xHXtf1+VwqxZD9FGCtcKmEGTbmHqnr9VWm7wJC0oMsboonlD1U2q
-	 eA8yiYXsE/4fqTO+0H0UsOLxbm46bfgyqVWLEGuiOn5HgDapTGZjzY9AN3CcAZijjY
-	 QCIAgPpBv7QFFIDxu0ibTSk20g2kr2aXQ3YrO5FxdA9heCdDTuo8xQqALxJlLIj5VW
-	 6GmJvWyuUcOkQ==
-Date: Sat, 11 Apr 2026 07:37:46 +0800
-From: Yixun Lan <dlan@kernel.org>
-To: Linus Walleij <linusw@kernel.org>
-Cc: soc@kernel.org, Yixun Lan <dlan@gentoo.org>,
-	Arnd Bergmann <arnd@arndb.de>, spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.1
-Message-ID: <20260410233746-GKA1167630@kernel.org>
-References: <20260403123040-KYC0145825@kernel.org>
- <CAD++jLkQfUwhvDOCkhK2NtRyXrb6y9rwpDckR6h0G3+dzYwW3A@mail.gmail.com>
+	b=DEaEHBwJZOMvMvl5ETbmP1KK61OErN6X47FyIIrizbUxVqR2tAMMHbCZwOimoxd/0
+	 3Utqa/dh2iqYRmmqyUih/a4ut4J6MGVbRvJICxSAr2rAz1T5ZLXFuux4FEX+uTdX57
+	 By4sMD286ARaIKJkep9e687jtGfTmpBEXZLeWVJZNQVesrkGsUn2/o8Kfh/kSb0N9x
+	 7yoiUGSy4geQHchyTqW3NLLQERJ0HX5HcBCWJlGMFB9iG/gRJgPEDc96bd9JEyAdGq
+	 2TZ/Stuk3H56Ofi/Kz74wAh0pqDZOG9ESsjijlwmdYmyNlZonZFZ7GlFT8gQmJN+2n
+	 vFuLEV/Alvzjg==
+Date: Sat, 11 Apr 2026 10:06:16 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Rockchip dts32 changes for 7.1 #1
+Message-ID: <20260411-voracious-innocent-stoat-74a79a@quoll>
+References: <2771700.BddDVKsqQX@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -47,72 +44,38 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD++jLkQfUwhvDOCkhK2NtRyXrb6y9rwpDckR6h0G3+dzYwW3A@mail.gmail.com>
+In-Reply-To: <2771700.BddDVKsqQX@phil>
 
-Hi Linus,
+On Fri, Apr 03, 2026 at 03:25:36PM +0200, Heiko Stuebner wrote:
+> Hi soc maintainers,
+> 
+> please find below Rockchip ARM32 DT changes for the merge-window for 7.1 .
+> 
+> 
+> Please pull.
+> Thanks
+> Heiko
+> 
+> 
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> 
+>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.1-rockchip-dts32-1
+> 
+> for you to fetch changes up to 94c8dc1fa8e1ad4037084204152bca1e799d7d1c:
+> 
+>   ARM: dts: rockchip: Pass linux,code to the power key on rk3288-veyron-pinky (2026-03-24 17:06:35 +0100)
+> 
+> ----------------------------------------------------------------
+> A number of dt-schema cleanups that are log standing, so not suitable
+> as fix for the current release.
+> 
 
-On 00:19 Sat 11 Apr     , Linus Walleij wrote:
-> Hi Yixun,
-> 
-> I looked into this pull request.
-> 
-> I'm sorry if I do stupid mistakes in handling it, I'm new to maintaining
-> the SoC tree. Bear with me.
-> 
-> On Fri, Apr 3, 2026 at 2:32 PM Yixun Lan <dlan@kernel.org> wrote:
-> 
-> > Aurelien Jarno (7):
-> >       riscv: dts: spacemit: drop incorrect pinctrl for combo PHY
-> (...)
-> > Yixun Lan (9):
-> >       riscv: dts: spacemit: pcie: fix missing power regulator
-> 
-> [Fixes]
-> fatal: Not a valid object name linus/master
-Could be the problem that your master branch isn't up-to-date?
+Thanks, applied
 
-> Commit: c68360c0d636 ("riscv: dts: spacemit: drop incorrect pinctrl
-> for combo PHY")
-..
->     Fixes tag: Fixes: 0be016a4b5d1b9 ("riscv: dts: spacemit: PCIe and
-> PHY-related updates")
-Above commit was merged for v7.0 cycle, while this PR is for v7.1
-The fix isn't that critical and didn't cause any run-time issue, so
-I do the fix in this v7.1 cycle..
+Best regards,
+Krzysztof
 
->     Has these problem(s):
->         - Inspect: Target SHA is not ancestor of Linus' master branch,
-> which means it is fixing commit in your branch
-> fatal: Not a valid object name linus/master
-> Commit: 8a9071299dec ("riscv: dts: spacemit: pcie: fix missing power regulator")
->     Fixes tag: Fixes: 0be016a4b5d1 ("riscv: dts: spacemit: PCIe and
-> PHY-related updates")
->     Has these problem(s):
->         - Inspect: Target SHA is not ancestor of Linus' master branch,
-> which means it is fixing commit in your branch
-> 
-> So this means you introduced bugs and fix them in the same pull request?
-> 
-> Why?
-> 
-> The practice is to squash such fixes into the offending patches when
-> presenting pull requests. But I went ahead anyway, trying to not be so
-> picky. (The commits are there, in your branch indeed.)
-> 
-Glad to learn this, I will keep it in mind..
-
-> - Checked that it was in linux-next OK
-Right, I think the commit is actually in v7.0-rc1
-
-> - built DTBS OK
-> 
-> Pulled in, thanks.
-Thank you
-
-> 
-> Yours,
-> Linus Walleij
-
--- 
-Yixun Lan (dlan)
