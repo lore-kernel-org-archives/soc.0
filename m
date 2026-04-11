@@ -1,48 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C612EBBB7
-	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BA632F740
+	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775896719; cv=none; b=Su8fhT8WggOV+j5Trqa1xlAtRCx0hTNaqojY0FjtBOvCR8F8K1/peJSYgVsZh6pZI/HnHKMW95xyJ+/DtfcjHVol7DFDM5/GKKx7KVf4GmIKX+IT+6iuQb+w+v7nzuG4yt1Ea+lCnOrHJfc0ex90o+dQtMaEd2jgP7wJKhd69Gc=
+	t=1775896876; cv=none; b=rjMUtUB+qtQdmZcuOW4gbZTXgd9y/RdMeBO5gHXYkNM5girOt1qF2xear9PThHgzDEqY5fJ3V9H/ZjyYgANaOqb484zEY9EHa9PbOLqpiUd6Pk1WsEtrNjx4GOMEEMrVcKaRf8pCAN36XMqXsVvlxOI234Wb/Bv14IWVeQLqPx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775896719; c=relaxed/simple;
-	bh=WJwPAsSYyhBmXwIaIw1VAto7NG+MlEuN2t6R5r+/qJw=;
+	s=arc-20240116; t=1775896876; c=relaxed/simple;
+	bh=kBsOxr3eKZCvLYnbyeQwhEckrwKolmqWuaSMv3r69rE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eVlYVhvJKt4rQiMXBvgkasrlluOhw+ZYbAQLyyQA9ymjGAWrjU6QSO/4JY7p17t5KXzRKSHCKpv25NEt0lpHRNUgpDUlBk87k6ANQjw/oDHqFDUHmnTo+Fp4E82XZJ6xEN3Bp+X4VHi4mggmaGzttCihV6OBWKFKRblPc0qiy8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KojuZtuX; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=P6psJiqEiL95TngbxFI7NQvS/cW8FPtVt1gdBYbOmPtf3FPdZdtWlHDzQi02YqQ+D1OZ0i4UYErzd7X7PAiEyiZg1qKsv9mMStZkimvgw+Pr8KzQ4Oc7bXnCY5xyb1vGRdns+RsjTKOh+ae3Mc8Tnts8SNaWbHv84gcB9FdwqzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q5+eQ3sS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KojuZtuX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q5+eQ3sS"
 Received: by smtp.kernel.org (Postfix)
-	id CD5ACC2BCAF; Sat, 11 Apr 2026 08:38:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631EAC4CEF7;
-	Sat, 11 Apr 2026 08:38:38 +0000 (UTC)
+	id D4CD9C4AF0B; Sat, 11 Apr 2026 08:41:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B876C4CEF7;
+	Sat, 11 Apr 2026 08:41:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775896718;
-	bh=WJwPAsSYyhBmXwIaIw1VAto7NG+MlEuN2t6R5r+/qJw=;
+	s=k20201202; t=1775896875;
+	bh=kBsOxr3eKZCvLYnbyeQwhEckrwKolmqWuaSMv3r69rE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KojuZtuXa+vfA+4gyCMqMFo1YA6loJ6n8pXUWBGJKSsrjBq6nD9XMBtxdy95aFDZG
-	 upszcPCrjivP+hrJcwlzW4LAnH4rY6Un69RhXgwhOKRxnC5MjZgulSlOOb8M8vhNDE
-	 VOJosRb7JzeG130LU17K7XZq9xAzym9kEUWxtqhNmEVgF7T0OdNeia0hvlUg2Cyicn
-	 ZkAe80SSGgXH/Zik5Ol0Bm4rsW1Tmcg26AMnCmZjpgwlgybjGKv40sk+gj/YnGh4Wu
-	 WvORo8CJdOUvDpC8VaQ1fup7Z+7V7/ZxHVnGRjQdzeCnDD9D5yI5OSRUT8VLwCpTM3
-	 VBdHT3LBvtkoQ==
-Date: Sat, 11 Apr 2026 10:38:36 +0200
+	b=q5+eQ3sSpSYIFT37nLZmc0PwcBopPnwQTeTsz+FPR+P+hqhE5l3QX6t5WsGoPu6I9
+	 m1Ndn18E9QbRV3Af4FeI/uvAL6O/poM0gBgpOqEnLCmZp3KkP/Uq1+WmB41hhYR16e
+	 ic3Vav9zLb01BUObPsASr5ECqnJ6w8Hl+qxilrqls/eFd6kvW6opTq1qS75W1bKeNO
+	 OHLHY4K9PQcvCY1rn0URjWc8ZlJ98Ju/HfNtwIPL0PW5R75634hQ0Wr5VpqEFc31B8
+	 JxsZyKM/A3/HZYcjF9Z4l0VguPGIJU29iKdV7SQisN9Qc1roV/ywymJrv8cQT3vpLF
+	 gh/4IfTZOHC5A==
+Date: Sat, 11 Apr 2026 10:41:13 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Bjorn Andersson <andersson@kernel.org>
 Cc: arm@kernel.org, soc@kernel.org, linux-arm-msm@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>, 
-	Paul Sajna <sajattack@postmarketos.org>, Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>, 
-	Sudarshan Shetty <tessolveupstream@gmail.com>, Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
-	Casey Connolly <casey.connolly@linaro.org>, Jie Zhang <quic_jiezh@quicinc.com>, 
-	Abel Vesa <abel.vesa@oss.qualcomm.com>, Alexander Martinz <amartinz@shiftphones.com>, 
-	Amir Dahan <system64fumo@tuta.io>, Christopher Brown <crispybrown@gmail.com>, 
-	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, 
-	Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>, Qingqing Zhou <quic_qqzhou@quicinc.com>
-Subject: Re: [GIT PULL] A few more Arm64 DeviceTree updates for v7.1
-Message-ID: <20260411-amusing-hot-koala-cfcdaf@quoll>
-References: <20260406132007.2264408-1-andersson@kernel.org>
+	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+Subject: Re: [GIT PULL] One more Qualcomm driver update for v7.1
+Message-ID: <20260411-adventurous-celadon-flamingo-10b27b@quoll>
+References: <20260406132138.2265013-1-andersson@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -51,26 +45,29 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260406132007.2264408-1-andersson@kernel.org>
+In-Reply-To: <20260406132138.2265013-1-andersson@kernel.org>
 
-On Mon, Apr 06, 2026 at 08:20:07AM -0500, Bjorn Andersson wrote:
+On Mon, Apr 06, 2026 at 08:21:38AM -0500, Bjorn Andersson wrote:
 > 
-> The following changes since commit b683730e27ba4f91986c4c92f5cb7297f1e01a6d:
+> The following changes since commit d6e766e391ef0b2be62682e007223fc72ba7764f:
 > 
->   arm64: dts: qcom: sm8250: Add missing CPU7 3.09GHz OPP (2026-03-30 09:35:01 -0500)
+>   Merge branch '20260125-iris-ubwc-v4-1-1ff30644ac81@oss.qualcomm.com' into drivers-for-7.1 (2026-03-30 12:46:14 -0500)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-7.1-2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-7.1-2
 > 
-> for you to fetch changes up to af241225893ac4933bb8f0615f2dfda8ea2326ce:
+> for you to fetch changes up to a31ad9339eff4ce401dec816b01a94b4e3c47898:
 > 
->   arm64: dts: qcom: Add the Lenovo IdeaCentre Mini X (2026-04-02 16:08:54 -0500)
+>   firmware: qcom: scm: Allow QSEECOM on Lenovo IdeaCentre Mini X (2026-04-02 16:09:01 -0500)
 > 
 > ----------------------------------------------------------------
+> One more Qualcomm driver update for v7.1
+> 
+> Flag Lenovo IdeaCentre Mini X to have functional QSEECOM/uefisecapp.
+> 
 
-A note: your GPG key has expired. Consider dropping expiration time. At
-least I am planning to drop it in my next keys update.
+Thanks, applied
 
 Best regards,
 Krzysztof
