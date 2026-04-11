@@ -1,41 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF129186284
-	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40546286417
+	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775896331; cv=none; b=Iy64NvmXqwxGakC4WYhUtz+iL1EUHqldryzDqEA9bRxxCIQBRqjKwuG/QpCTW2NmexgGMaGw0ZbnvgOrxO6sL5meUw2iyI4NAwNjmh+levuhYg1xBssJxMF5MAB7+KKgxjtBCxri4sqchpMgRmt5nfKLsFI7fmyvIz7NC/Qs/8g=
+	t=1775896590; cv=none; b=a9xt4svO/92r4x7Iqd6E7QFepR+fNxMdh2G5FPS/fV61poEfnJhpqR1QEfmUSYo7WCQj5iLCe/mALBEt62gyXOeOqnAF8Q9cAtVsp9sn4itLuL2J46px0NuEE5y021DV5gOvtBAXhbZfdddO3Iz8TTq7TZwc9z9H4ooW+CAy2Y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775896331; c=relaxed/simple;
-	bh=HmgsdVZSABtANDAREGCwmrAh8TC6aMqoBTlAENcPbuQ=;
+	s=arc-20240116; t=1775896590; c=relaxed/simple;
+	bh=wprADVJKu9wHnF7hgXcFtU3lqaLTiDIRd/Vv8wZiTZc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pu72Dw2WOqb2rn0uGcxWgjdGGtOcQCKDwMkQZg6vYzqIWiJ19wi5KTuHZz58V5NhHCCYVUM4ec83NJKZmc4T7KJJZQAynPiZBRo+ewIfcWfrcTBB3Odpg6SSxYzN+J30mahADiwVQA+Cpz/VP/NFDrXsYVNPcuFqe7xR+KSKGG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m1dSmwFQ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=GQje7XYBG/c5GGpnyIDF0JAJXKyqXH5vbNaqedffZDBQa8Aufu6RwCrkinrABbdA8d6vVhXs4gNaTXwwY4xAzlhaFXayVsHk2y0S5+CVTzgRFB7k6SvBJybMWOiwm94rDB/guLb28D7KkHN8zJTc5Zi71/FVtVr6vmN9M1Ph8OM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OEq+8xdW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m1dSmwFQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OEq+8xdW"
 Received: by smtp.kernel.org (Postfix)
-	id 862A3C2BC87; Sat, 11 Apr 2026 08:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF560C4CEF7;
-	Sat, 11 Apr 2026 08:32:10 +0000 (UTC)
+	id 07260C2BCAF; Sat, 11 Apr 2026 08:36:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60921C4CEF7;
+	Sat, 11 Apr 2026 08:36:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775896331;
-	bh=HmgsdVZSABtANDAREGCwmrAh8TC6aMqoBTlAENcPbuQ=;
+	s=k20201202; t=1775896589;
+	bh=wprADVJKu9wHnF7hgXcFtU3lqaLTiDIRd/Vv8wZiTZc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m1dSmwFQ/FnspaYaXCoh4AMby4Bl96nEoP//0DL836WeRau6zooB5SxS0GMiJ49Pc
-	 Z6UCTzWxoENdEsqt/9xL2wM7kkiNU+jOE36HAppSsrv3XMwCceavXbEPEalkX4RJPd
-	 9gnwtFLXN7fcG2FNIyhdHqSrIX/1QBfY90IlHkwnT5oqKrybPXpaB1NRbwxcFJ5Djz
-	 IhmWdMerMIhIwe4bEBpdGrR4b6yKLyHTRb0/c12DyPqIKjue2PePeMcRQwoupe3sKU
-	 tc5/NsROtgRghzmL5l+5gwQll+n09JtRGCrB5/y1uTgkyUzb6qFebbG2mgdriqK+CS
-	 /wIs8GwmcI1MA==
-Date: Sat, 11 Apr 2026 10:32:08 +0200
+	b=OEq+8xdWHBmKWDgsA2JDojibVUDQ9tmJo4A3w1aQXafDDRStzOQqLETOsS6bezolZ
+	 UKhyks9z07BeunXBMPTFcVyXwkKc0zQmsEAw0lrzUp2Crii6pe5I8k39RO0E9l5UtF
+	 k2Cvmuvh7v1MW7uxqVyRwtlzFW3Hw/RGw1QBtpNQLqPv7QRY1lc8/9HBs7vOTVwpzD
+	 0r72IMin8TyOAnSaiiiWsVM0mMCMv2nig7HJ/pklvK0UAmv35RXys9qVuScr518QBz
+	 Vz4nqNB73JpzeVIrrTtCBQHEZGJ17N/QqSq0gqcbw+LIs7vMlRyX5dt9+dmoGAm43+
+	 qyUPV2pSRQN7w==
+Date: Sat, 11 Apr 2026 10:36:27 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: soc@kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] RISC-V soc drivers for v7.1
-Message-ID: <20260411-meaty-wolf-of-glee-eb7f5d@quoll>
-References: <20260406-spearmint-request-b71f627dc08c@spud>
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: arm@kernel.org, soc@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>, 
+	Paul Sajna <sajattack@postmarketos.org>, Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>, 
+	Sudarshan Shetty <tessolveupstream@gmail.com>, Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+	Casey Connolly <casey.connolly@linaro.org>, Jie Zhang <quic_jiezh@quicinc.com>, 
+	Abel Vesa <abel.vesa@oss.qualcomm.com>, Alexander Martinz <amartinz@shiftphones.com>, 
+	Amir Dahan <system64fumo@tuta.io>, Christopher Brown <crispybrown@gmail.com>, 
+	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, 
+	Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>, Qingqing Zhou <quic_qqzhou@quicinc.com>
+Subject: Re: [GIT PULL] A few more Arm64 DeviceTree updates for v7.1
+Message-ID: <20260411-strict-nifty-otter-fcd6dd@quoll>
+References: <20260406132007.2264408-1-andersson@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -44,39 +51,38 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260406-spearmint-request-b71f627dc08c@spud>
+In-Reply-To: <20260406132007.2264408-1-andersson@kernel.org>
 
-On Mon, Apr 06, 2026 at 11:35:15AM +0100, Conor Dooley wrote:
-> Hey folks,
+On Mon, Apr 06, 2026 at 08:20:07AM -0500, Bjorn Andersson wrote:
 > 
-> Please pull my driver updates for 7.1.
+> The following changes since commit b683730e27ba4f91986c4c92f5cb7297f1e01a6d:
 > 
-> Thanks,
-> Conor.
-> 
-> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
-> 
->   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+>   arm64: dts: qcom: sm8250: Add missing CPU7 3.09GHz OPP (2026-03-30 09:35:01 -0500)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-soc-drivers-for-v7.1
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-7.1-2
 > 
-> for you to fetch changes up to bd34cdd6d214f815570986ce55978fd7ddd8d8ac:
+> for you to fetch changes up to af241225893ac4933bb8f0615f2dfda8ea2326ce:
 > 
->   soc: microchip: add mpfs gpio interrupt mux driver (2026-03-31 14:13:14 +0100)
+>   arm64: dts: qcom: Add the Lenovo IdeaCentre Mini X (2026-04-02 16:08:54 -0500)
 > 
 > ----------------------------------------------------------------
-> RISC-V soc drivers for v7.1
+> A few more Arm64 DeviceTree updates for v7.1
 > 
-> Microchip:
-> Add coverage for the pic64gx in the system controller and syscons.
-> Add a interrupt mux driver (akin to the one that Renesas recently added)
-> that fixes a problem where the platform never properly modelled gpio
-> interrupts. There's a gpio driver change here that Bartosz has acked
-> that adds the interrupt support to the GPIO driver itself.
+> Introduce the Hamoa-based Lenovo IdeaCentre Mini X, the Dragonwing
+> IQ-615 (Talos) EVK, and a Talos EVK camera overlay.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Enable DisplayPort support on the Glymur CRD.
+> 
+> Add WiFi, Bluetooh, LEDs, and venus on LG-based SDM845 devices. Add
+> battery, charger, and display on the LG G7 ThinQ.
+> 
+> Enable SD-card, describe the audio amplifier, and increase the speed of
+> the i2c clock for touchscreen on the SHIFT SHIFT6mq.
+> 
+> Add camera subsystem, camera control interface, GPU, GMU, and GPU
+> cooling on the Talos platform. Enable the GPU on the Ride board.
 > 
 
 Thanks, applied
