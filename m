@@ -1,42 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7941DFDA1
-	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815171F91D6
+	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 08:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775895918; cv=none; b=QJ7NuMtzSg9oyf7tq3IDPUZY76bY3tHa6wZlCQ3pTW3rbHmEqepEZxu4BofCY8eVuCDcr5WTdh/bzWYEQcwPduMDG+WBWxafL5TDVxisS2IB/nxswmMkJIm0XZKESECHG359XuWtxzbjBhWPTjnVHx0MjDwusLWPJQpdyDLdLUw=
+	t=1775896205; cv=none; b=QHK5T1pXxIYxVfKbL4527lz75u69JQOEJzEhpLJ5sQiRs0CojMuiQ/RegJoASt2ycBmz23iNZzXVLtdjfKrsuVQwjcecrSdTiVvLcAn7QA1ZvLOT9hFLhSySiHdmf7+sjlEfJchjXkbwpjCfQOdD8lKAlbgtImrLtFy+i9FdztI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775895918; c=relaxed/simple;
-	bh=UNE/FDKJlKGVYWqaC8jppJoejgnR0BL7bQaOen40Y7E=;
+	s=arc-20240116; t=1775896205; c=relaxed/simple;
+	bh=sNa47R7FO11+M8osg2I4wKoZye42hyF1yBwYH7np4TM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zspv210+HzVDoFVASSd7/1VuPbNVek+O9KCsBpGltf0mneyaEecXeznYBEl2X9xDQMWcoJHLheG36b+ePWzbtwWXe6cR/J7aajn2eJMNdgvcE+Z9gM6MdcosSkfdlN6+sv/2QU/vqIaFxNFu8tQYkCydZjLLCB+SyWQg36ZJJGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZ0gnSW0; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nOL3CZ46vKdrcBrj7lFeK138Or5m40GrPRCSCJs+PlzKmxn42Af7pyw1PjFXscTqNc6HfaR5+apxM70QXgwZuaTmAdo1ClThhN5vglu+kLxnd9efPqUv2DVhsgJva2c+MeYMolmUjLpawUvqA+hoALwBuMBE3Ti3VDkcUBCFWTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KBApDLJn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZ0gnSW0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KBApDLJn"
 Received: by smtp.kernel.org (Postfix)
-	id DF8E5C2BCB1; Sat, 11 Apr 2026 08:25:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B1E6C4CEF7;
-	Sat, 11 Apr 2026 08:25:17 +0000 (UTC)
+	id 3B81DC2BCAF; Sat, 11 Apr 2026 08:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98834C4CEF7;
+	Sat, 11 Apr 2026 08:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775895917;
-	bh=UNE/FDKJlKGVYWqaC8jppJoejgnR0BL7bQaOen40Y7E=;
+	s=k20201202; t=1775896205;
+	bh=sNa47R7FO11+M8osg2I4wKoZye42hyF1yBwYH7np4TM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kZ0gnSW0NU0/XQ3BE9PFVmO1hpWpS0Wc7CQ1q9zLKt0griIZ3iS912V5O5S2YKLBl
-	 2ZvC7QwupywZ1zEBYd/j800dp1o/VYOrBCsBevZuRbf/tExm/xMJRnpELdmPDlQK4x
-	 Lt1pB5INeGUqXmYNEiLUvKSZNB5QSc3MCwWvpOqy3mfjkim6BTbWZ7GvZ+IfmOlgbG
-	 Tc7Db5p7nGCde9yz6wSJZIlwtDSv5+tlMWL8DDFbj7CXg+06d6wdGI2HyJa5ukDFKi
-	 bmNExfAR0ywMKN6gXgE6+7Ka2XyPvLZOaotskH0VoPmEgmucVCdanJB9ZlbRhegmFE
-	 b9m1etNmJj+Ow==
-Date: Sat, 11 Apr 2026 10:25:15 +0200
+	b=KBApDLJnqSTwpOUQA1e+zJVoyHFke2u+qArjGacFUiTnrO8eHobq/HuqA5CpEUU+z
+	 RJSq01NLOwIm52QKdZV79xpMMtdFrjaZrL8ybYxotbZREu0ph8YgJWmJAtcN3PGRbn
+	 DJVEc/8XW0fJ1M1Wvu3o0ZNmoreowkuXTTMGYVSAvSh5FEJB1w7F45VIWd4rMPhWRv
+	 UAxHDi4QHwN9CPLqxYkl0RI5fyWfvrrQnEtlL2Wip0El2GP5Ce9l1HKL8MiyO5r3BY
+	 AG/3f1pds8sX4oG49eTA18DoAV3uY2cXU8IXSZGxSPBVHR4WHkKCr3/4lyaqnySTUa
+	 Gg/BfW7ZvMoYQ==
+Date: Sat, 11 Apr 2026 10:30:02 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: soc@kernel.org, arm@kernel.org, Shawn Guo <shawnguo@kernel.org>, 
-	Fabio Estevam <festevam@gmail.com>, kernel@pengutronix.de, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] i.MX arm dts changes for v7.1 (V2)
-Message-ID: <20260411-honored-cockatoo-of-inquire-2d5c26@quoll>
-References: <20260406020819.2812877-1-Frank.Li@nxp.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: soc@kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] RISC-V devicetrees for v7.1
+Message-ID: <20260411-loutish-hound-of-attack-8e2576@quoll>
+References: <20260406-bronze-anemia-a5b3a254f46b@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -45,68 +44,48 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260406020819.2812877-1-Frank.Li@nxp.com>
+In-Reply-To: <20260406-bronze-anemia-a5b3a254f46b@spud>
 
-On Sun, Apr 05, 2026 at 10:08:08PM -0400, Frank Li wrote:
-> From: Frank.Li@nxp.com
->=20
-> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f2=
-7f:
->=20
+On Mon, Apr 06, 2026 at 11:26:24AM +0100, Conor Dooley wrote:
+> Hey folks,
+> 
+> Realised as I was tagging this that the tsu clock and gpio interrupts
+> changes miss the pic64gx and should have been rebased. I'll send another
+> PR later this week I think, with those two fixes. Nothing is broken by
+> the two fixes, they just didn't fix the newly added dts, which is why I
+> still feel comfortable sending this, particularly given I am pretty late
+> already. My excuse is that I was sick all last week...
+> 
+> Cheers,
+> Conor.
+> 
+> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+> 
 >   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
->=20
+> 
 > are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux.git tags/i=
-mx-dt-7.1
->=20
-> for you to fetch changes up to 0037d16644b15686eec420a90f05bcd2804edf6d:
->=20
->   ARM: dts: imx: Add DT overlays for DH i.MX6 DHCOM SoM and boards (2026-=
-04-05 21:35:41 -0400)
->=20
-> Changes in v2:
->   drop patch: ARM: dts: imx53: drop fallback compatible "dlg,da9052"
->=20
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-dt-for-v7.1
+> 
+> for you to fetch changes up to b0258f69f1e0ed98e8506706da9ef538389b27ea:
+> 
+>   riscv: dts: microchip: update mpfs gpio interrupts to better match the SoC (2026-03-31 15:51:52 +0100)
+> 
 > ----------------------------------------------------------------
-> i.MX ARM device tree changes for 7.1:
->=20
-> - Device Tree Schema Compliance Fixes
->=20
->   Fixed numerous CHECK_DTBS warnings across multiple i.MX SoC families
->   Renamed nodes to match schema requirements (tcq=E2=86=92touchscreen,
->   uart8250=E2=86=92serial, iomuxc=E2=86=92pinmux, etc.). Fixed node namin=
-g conventions
->   (added "led-" prefix, proper addressing formats).
->=20
->   Corrected compatible strings and removed undocumented fallbacks. Added
->   required properties (clocks, clock-names, power supplies,
->   #sound-dai-cells).
->=20
-> - New Hardware Support
->=20
->   Added DT overlays for various expansion modules (i.MX6 DHCOM PDK2,
->   PicoITX display boards). Added support for muRata 1YN WiFi chip
->   (replacement for 1DX) on i.MX6ULL DHCOR board.
->=20
->   i.MX7ULP: Added CPU clock and OPP table support for frequency scaling.
->=20
-> - Boot Phase Properties
->   Added bootph.yaml properties to multiple TQ-Systems boards and SoCs:
->   imx7s, tqma7, mba7 imx6ul/ull, tqma6ul/ull, mba6ulx imx6qdl, tqma6, mba=
-6.
->=20
-> - Bug Fixes & Corrections
->=20
->   Fixed interrupt property usage (interrupts=E2=86=92interrupts-extended =
-where
->   needed). Corrected spelling ("TQ-Systems" with hyphen). Removed redunda=
-nt
->   intermediate nodes in pinmux hierarchy. Fixed clock references and
->   naming.
->=20
-> ----------------------------------------------------------------
+> RISC-V devicetrees for v7.1
+> 
+> Generic:
+> Add binding coverage for Supm.
+> 
+> Microchip:
+> Add support for the picgx64 and its curiosity board. This is a PolarFire
+> SoC without the FPGA.
+> Add the missing tsu_clk for ptp on the macb on PolarFire SoC and resolve
+> a long-running problem with gpio interrupts being incorrectly described
+> on the platform.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> 
 
 Thanks, applied
 
