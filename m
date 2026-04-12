@@ -1,94 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010010.outbound.protection.outlook.com [52.101.201.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69FA3B774F
-	for <soc@lists.linux.dev>; Sat, 11 Apr 2026 17:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775928912; cv=none; b=tLwfHkW0Yw/Y8rAoMXiNDrJm4OSR+FEvG4USnQ3J/d9tUv81nF8/ArrnSjjeGxBFKqeaUBOpExtSRyFJZ8yw5ZBv5PGuWTfmECKad4S5Cf8UL7+sfDNoPVOFxo2YsKGfb3GvLS+uaCCv6RHlN5U4c7IUNPmbd+MFTXPD+TlkL3U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775928912; c=relaxed/simple;
-	bh=6EsoCMNC5sXMkFgYBufNFBA0ceJXkOiSoYKRAmHD49I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OE9w4J/Le/1Zh9IlKLeSpTEmLRKA3G9I33mfXe4A+onpjGI8JfuzwLXe3NuzqnCs5piDV+c6ul3aRohQDWXJQf14GfblGT/TFsJbLRdbKLWiar531Am3uApWBjOPiBln0aHgpXDL8oJmT6kTlsXDgBWxFkaumeLFy6r7Ty3WFdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CufYP9+5; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE17D285041
+	for <soc@lists.linux.dev>; Sun, 12 Apr 2026 07:23:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775978585; cv=fail; b=oYAmwZFsgi3ZE1fmPn1PO54+0BvhQ4WzE1FYqSXhg7Jyh6vDCdJDx+2UyDRhLw+p+wAqJc5FQVPg/bLymowYJ5No3jK0B/CttQ8rrGl7T4iSjxde8ohOec2xpMjY+7XHIZNEu4IxaEzGeUY3giPKfoCwcWLgHWSuOkOUuAdAM+Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775978585; c=relaxed/simple;
+	bh=9m07vUe/EtNY9iVurNhAJAHYuveXgZX2cBjk5wVdrvs=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:Content-Type; b=krhZL2phEiOwnykRRPzPe32C98IcBCgwe8X+vIWqyBZdxJBJIVSTBS2QCaQhauvg6U1GhcyJyuVArfBtoWR/++dwJzJiEVMaTIO+XorjAIJ9aooHyNaLFXSV7havsVcWxVUs4RNh7ZtqbnEkIvV2u/JibDJy2kV6TpI+qn8ULf4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=ZnvOJFme; arc=fail smtp.client-ip=52.101.201.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CufYP9+5"
-Received: by smtp.kernel.org (Postfix)
-	id 812D4C2BC9E; Sat, 11 Apr 2026 17:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31245C4CEF7;
-	Sat, 11 Apr 2026 17:35:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775928912;
-	bh=6EsoCMNC5sXMkFgYBufNFBA0ceJXkOiSoYKRAmHD49I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CufYP9+5KHkN6t9LkVn72Q2qRM5DtFdhnLAB1QY6xa0ir4DuS/s61+dSTDD8syKyK
-	 M6GhpH2tAAkZPyTOUk2WFyyQjkLpD1/6RygNBO77WhTLdlw4fxGhM702pSOq+ga3n6
-	 mryn43CI5TK98uc8kIVSu+D9a+4c2vIzDa0TqO4UOjTmrEAqSXZSWK2PFHCQN89CBQ
-	 sotOtflZUGTW7fsvHy/GUNgqDvOOG9gkhErGWOZuOdGQ8WNxPA70CQTiJAqdCSNijg
-	 s1ABHbNaqldR0+WYoEqss0+LW7VC+VhF1Dl5AF74UlJDflYNVqstPzb1poSrN/Rb3U
-	 DoUwuF8uhSz3g==
-Date: Sat, 11 Apr 2026 18:35:08 +0100
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
-	Sudeep Holla <sudeep.holla@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>,
-	Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [GIT PULL] firmware: arm_ffa: Fix for v7.1
-Message-ID: <20260411-exotic-astonishing-piculet-0cd25e@sudeepholla>
-References: <20260407100841.3150090-1-sudeep.holla@kernel.org>
- <20260411-tireless-agama-of-advance-5bdabf@quoll>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ZnvOJFme"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=y0cNg2N/sw+ITGy5Gyjyif/G0a99F+yCLuh0A4ub0ARGMKSwXhgI2htHMFBfnnyBZ+MplnZ1AHFnJdxaW06Nn3Y8ZjgBnMZNHlvvrEl7j9KGdfBm9fHynk8X6nq/wljVhclW6UxDcyKkChtHGhHJMfCdUiq+koa6kSuQuNqybkMi+YppOXEG0al4k6cCpXwkq24mT6JLDAUVbLVvUv/EnBzqBsqBWgQEm6ibKTtKA0DD2AWvPKqrr0Xi67BI5Bn8E62n9PrmdmoNl7cy8PCrGmOUFSEcicZcncHveIks4vo3ZVZEvql6hGSGplvysQMSyFvbxcG1mLbIyhusrdSniQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=izr7pIP1CN1uJgsUEqIJjhrv44uoCs6GlT47A4URMFk=;
+ b=ZNoL6HnotftNFtfQgbNhPoC2iQ+StTqaEr8xgnwkbDfteytfuF5FS8qeYPizgWBCgHVWtnMHYATer+5Sx3Lrl6+qYa8CuJTC0SMtqGSbEcg/VjLq+GXfitlwn3UWk8QmXjrfTPVyQN0PghAoBWpwyVYlOvx4tgpvnFCzn5gVL/z5AUk/43NN3BRK5pM4t1hPdnYM8emn603QSZ6qj79C7mHvreyDO+DwTvQYFmPrJ26DVwjyf4hMMkd+Y9i2qAe+yhdrEg5O+CLTyRawIBqEcERx0JFc90ZQNT7h9aASHkM7O7Z/qPB8Xf5Y6lePg/nA7ue7OpbxgMb/ZyjXkajOWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.195) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
+ (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=izr7pIP1CN1uJgsUEqIJjhrv44uoCs6GlT47A4URMFk=;
+ b=ZnvOJFmebvCEONi+cyhaK5zjQyONpdO7pefeBDFDwO9srCrrZ9aFxMR2m0dHAEEQpHK+LQrNIH8yfRb3WGO8Tc+kSv/WK8JxbryXQ3XRFrqNEObO1/xr/x1y5+ru02QCbaG6x0KooZNup+9AqdnOO3c4nney23E1Ly5uWabwsrQ=
+Received: from SA9P221CA0015.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:25::20)
+ by SA1PR10MB6470.namprd10.prod.outlook.com (2603:10b6:806:29f::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.46; Sun, 12 Apr
+ 2026 07:22:59 +0000
+Received: from SN1PEPF00036F3F.namprd05.prod.outlook.com
+ (2603:10b6:806:25:cafe::9e) by SA9P221CA0015.outlook.office365.com
+ (2603:10b6:806:25::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.46 via Frontend Transport; Sun,
+ 12 Apr 2026 07:22:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ SN1PEPF00036F3F.mail.protection.outlook.com (10.167.248.23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.17 via Frontend Transport; Sun, 12 Apr 2026 07:22:57 +0000
+Received: from DFLE203.ent.ti.com (10.64.6.61) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 12 Apr
+ 2026 02:22:55 -0500
+Received: from DFLE202.ent.ti.com (10.64.6.60) by DFLE203.ent.ti.com
+ (10.64.6.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 12 Apr
+ 2026 02:22:55 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE202.ent.ti.com
+ (10.64.6.60) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Sun, 12 Apr 2026 02:22:55 -0500
+Received: from [172.24.233.103] (uda0132425.dhcp.ti.com [172.24.233.103])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 63C7MqEi017453;
+	Sun, 12 Apr 2026 02:22:53 -0500
+Message-ID: <6e294d61-9779-41ef-83f8-29f46fd98700@ti.com>
+Date: Sun, 12 Apr 2026 12:52:51 +0530
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260411-tireless-agama-of-advance-5bdabf@quoll>
+User-Agent: Mozilla Thunderbird
+From: Vignesh Raghavendra <vigneshr@ti.com>
+Subject: [GIT PULL] arm64: dts: ti: k3: Late DT update for v7.1
+Content-Language: en-US
+To: SoC <soc@kernel.org>, <arm@kernel.org>
+CC: SoC list <soc@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Tero Kristo <kristo@kernel.org>, "Nishanth,
+ Menon" <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature";
+	boundary="------------wne23iCyT1RjOkaQBVNncqjt"
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3F:EE_|SA1PR10MB6470:EE_
+X-MS-Office365-Filtering-Correlation-Id: 10bc0135-2508-44c7-ec17-08de9864525f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|376014|82310400026|1800799024|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	cbSuQ/d66yFfvI5SuvBDgxDY2umJdKwu7QlwRdo+Goy2YkTDs+3J3SNwpXgK2uexgNa8TLAHccNrG5yxdPQ9/g7/Y2HUiHvcFSaBobnH+RJh/1fnK/jmhohNlQkBxzgltus+zT7xNjckLQvGKVy5DMt7w5jLi/VFnJDWvy8doCzSdaoZR1PaCRwKw9yHRayrM89njWRCssO00nAWR2SfYFix0Y+nZwYDVPNQnvl2upZsafuzgiEKnT2lbSeQgwjGLy/lTABOEccuhlqBL0oeaaQoq0E6fkOQkXfTi5VlwWSktDi8VuPjb/6cZTF5SzpJ679DHf9FnpLmALy00W4AKLIKg4ZVVUVjaW7hdIIEXY+sW0s+Je8dxAgIaPGQknJOkYqZxEssz2ANognRI8OgP3E0JOcMDimAAaO5i0l7Uxs/mXP0P0Ygm4BhomRgRyyFS/DyYcqAKDnPfWhj/q31/UYUpXwiknaP4bkXHnZlAJHZ4P9DeO8qzwpRbE6xjgZw5SFDeCqLNyTyTw3iSB9po5eq43mMRCAhwcbGrpgLpa60RVlcoV66eGFTlslYwyA/PMOekZDwb9UkP/PBEAG9c72pDODtNjM6QtjhwSLtQ9z/KI8Xtzb6VAgpAWuZT75zTNU7wn7L8VNmA2L+lloIrYluCt0BjpB96vKrxzBi7olCo+99GfQOIGU1PvvG2sf9/v66gqn8uDhLhQf6N3bHa51AQTDLReQb0BXJ3rghttu+yAZBewsNqyg6ShDPQWDAH29C764xLthi7GHBrnkZFZvn9iBM29AQrkAokl24AU8=
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(36860700016)(376014)(82310400026)(1800799024)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	NR2IGS3mfcz0tgDExFsBX530vO1Gv2HCOcKsxnXCtlAdsmZ7vEuwHN69HP7hMh8kwvaHH3jawhFJ5rXrnchgaKeF4Boctcuic0B47QMkX5QqlA3TCq2Orrw7xUz2iOAAsx05SDH+PMxsTY8NXgJpNHuyd103evqXW2MtRPHpzPQrwkqiQRCR+CAnAiKUqS5FWre7UzX/q+GW/pcQfh/uWzkYcL/gg49AwcYSotodi0GIYC3XbPPkGip/nhQPtX7VUhCS9Px+Kn/EcHIdIUGFxHAXqsbPVzaahTxn1Sy6AEvMax59DNTRlQW6H9jJA10BFG78X2HB90+Vs/lWtmt08f7dTAEAtVDDpuFI/s4pfn19O024uZ/6B+iXn5h2YmBsY27oc8PNiKZo9FAy7ZhcCfhLuj6uk1NT1Ik6qvlcbTdRn8fZwoyJBpynQ63AJTWB
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2026 07:22:57.8674
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10bc0135-2508-44c7-ec17-08de9864525f
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF00036F3F.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6470
 
-On Sat, Apr 11, 2026 at 10:49:50AM +0200, Krzysztof Kozlowski wrote:
-> On Tue, Apr 07, 2026 at 11:08:39AM +0100, Sudeep Holla wrote:
-> > Hi ARM SoC Team,
-> > 
-> > Please pull ! This is the only fix/update I have at the moment for v7.1
-> > So, I am sending it early as fix but late as an update for v7.1.
-> > 
-> > Regards,
-> > Sudeep
-> > 
-> > -->8
-> > 
-> > The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
-> > 
-> >   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-fix-7.1
-> > 
-> > for you to fetch changes up to 83210251fd70d5f96bcdc8911e15f7411a6b2463:
-> > 
-> >   firmware: arm_ffa: Use the correct buffer size during RXTX_MAP (2026-04-07 10:47:42 +0100)
-> > 
-> > ----------------------------------------------------------------
-> > Arm FF-A fix for v7.1
-> > 
-> > Use the page aligned backing allocation size when computing the RXTX_MAP
-> > page count. This fixes FF-A RX/TX buffer registration on kernels built
-> > with 16K/64K PAGE_SIZE, where alloc_pages_exact() backs the buffer with a
-> > larger aligned span than the discovered minimum buffer size.
-> 
-> Can we avoid per-driver trees or pulls? You do maintain also ARM SCMI
-> firmware driver, so this could be sent together? I think you also use
-> the same Git tree, right?
-> 
+--------------wne23iCyT1RjOkaQBVNncqjt
+Content-Type: multipart/mixed; boundary="------------Ajo5ceQ3I866hKcfjqMcw114";
+ protected-headers="v1"
+From: Vignesh Raghavendra <vigneshr@ti.com>
+To: SoC <soc@kernel.org>, arm@kernel.org
+Cc: SoC list <soc@lists.linux.dev>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
+ "Nishanth, Menon" <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <6e294d61-9779-41ef-83f8-29f46fd98700@ti.com>
+Subject: [GIT PULL] arm64: dts: ti: k3: Late DT update for v7.1
 
-Sure, I can put all of the firmware drivers I maintain together. I had
-for some reason assumed individual PR is preferred.
+--------------Ajo5ceQ3I866hKcfjqMcw114
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Regards,
-Sudeep
+Hi ARM SoC Maintainers,
+
+This contains a single patch that updates r5f remoteproc DT nodes, warran=
+ted by recent=20
+binding update merged via remoteproc tree.
+
+The following changes since commit 47c806de9e9cf171d197f2f0df86df7f2bd1aa=
+56:
+
+  arm64: dts: ti: k3-pinctrl: sort shift values numerically (2026-03-27 1=
+9:55:06 +0530)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
+-dt-for-v7.1-part2
+
+for you to fetch changes up to abe76f9f47d59ff80eb2fc59482aa76bbf6fd13a:
+
+  arm64: dts: ti: k3: Use memory-region-names for r5f (2026-04-09 17:05:2=
+8 +0530)
+
+----------------------------------------------------------------
+TI K3 device tree updates for v7.1 part2
+
+Late addition:
+- Use memory-region-names for r5f across K3 SoCs
+
+----------------------------------------------------------------
+Markus Schneider-Pargmann (TI) (1):
+      arm64: dts: ti: k3: Use memory-region-names for r5f
+
+ arch/arm64/boot/dts/ti/k3-am62-ti-ipc-firmware.dtsi               | 1 +
+ arch/arm64/boot/dts/ti/k3-am62a-ti-ipc-firmware.dtsi              | 2 ++=
+
+ arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi              | 2 ++=
+
+ arch/arm64/boot/dts/ti/k3-am64-ti-ipc-firmware.dtsi               | 4 ++=
+++
+ arch/arm64/boot/dts/ti/k3-am65-ti-ipc-firmware.dtsi               | 2 ++=
+
+ arch/arm64/boot/dts/ti/k3-j7200-ti-ipc-firmware.dtsi              | 4 ++=
+++
+ arch/arm64/boot/dts/ti/k3-j721e-ti-ipc-firmware.dtsi              | 6 ++=
+++++
+ arch/arm64/boot/dts/ti/k3-j721s2-ti-ipc-firmware.dtsi             | 6 ++=
+++++
+ arch/arm64/boot/dts/ti/k3-j722s-ti-ipc-firmware.dtsi              | 3 ++=
++
+ .../boot/dts/ti/k3-j784s4-j742s2-ti-ipc-firmware-common.dtsi      | 8 ++=
+++++++
+ 10 files changed, 38 insertions(+)
+
+
+--=20
+Regards
+Vignesh
+https://ti.com/opensource
+
+
+--------------Ajo5ceQ3I866hKcfjqMcw114--
+
+--------------wne23iCyT1RjOkaQBVNncqjt
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wnsEABYIACMWIQRQBrqaOmQ441h4YbUDQj8NV+8d1wUCadtITAUDAAAAAAAKCRADQj8NV+8d13cK
+AP0ej3EtlNm4E0DX/S4vshnlWkn6VUcy8FOZYPHhJt5A/gD/YF8Hfrjr/SJlTghSybtuOCTOjIVF
+L0HHL9STNERlWgE=
+=JZPa
+-----END PGP SIGNATURE-----
+
+--------------wne23iCyT1RjOkaQBVNncqjt--
