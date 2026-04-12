@@ -1,87 +1,86 @@
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFC8306B1B
-	for <soc@lists.linux.dev>; Sun, 12 Apr 2026 17:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B197308F3E
+	for <soc@lists.linux.dev>; Sun, 12 Apr 2026 17:12:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776013977; cv=none; b=AcZDUhjd2V8qkjIcxhfC4AhDXijHVgM+8ku3+P82WFEyNjO4aZk1UmB+wNXMUGjjmckiQ53vnCUCMHkAWk2YgAcQebMkM2RZjDblQjwR4g7g3lcH5M/KKJUkV9LoKx76c2Kc7/JE+N2gwkOgMW/hUk99J25p3j3Szadswd6Hqqs=
+	t=1776013979; cv=none; b=AEVtLaMXCgiGE5PgDUKJ2qYJY8dW2J3A4WecCBpN6VJS8mMC+d8DQQ6V98HffYW29xu8dsYHCZRui4K11FvpbYTTyh2+2JEL2S6OP4uQlVLMEhd1CYDb+RbXZQYKWw4IobRZZ2FG5i6Fv440fDYH4iqqqJLyo6PRwfQaC/e7ZGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776013977; c=relaxed/simple;
-	bh=YV3YfCEMXg/5PND6vVExXVVeEAoJHpkm1JRVpD4pXyk=;
+	s=arc-20240116; t=1776013979; c=relaxed/simple;
+	bh=jjIEBMQ8waMqMWAZa0PumarSPjZYZOqQbKDr0oElp8s=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bbBc5F49N/H3/yF6iHHwC4KKWDvOI41f9CN4P53VDpag6nx3NymZvPIJ6Vy2ikF+dBWtU9NQfnKymvreGrZvBndf6gSedSydylHO9RjNuBkfRJ7EopMm3489AKNPox/RYtysa3YFX2OP9SUP+K5q01rTMixz689q4JMXJu2sdfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=CaX2YV+A; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=DklxHXx0; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:To:Cc; b=s9drX8EZXo+PbDUZK3TdQeKpHNS9D4TtHRgx+aqVpzYdA6Dx2jGzG/LYEiQQKZcwNGod2mVE1WnTbmocnc1WmIFlXBWlS8cwdM6ICypLVjmtcRzRH8gRDWPb+sgwpjvY3rjn/t0AtkJTMBdGjwnSbQTPZFNkoc7hmwteQC/mh64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=H5WGEaYl; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=M7J5tlBG; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="CaX2YV+A";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="DklxHXx0"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="H5WGEaYl";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="M7J5tlBG"
 Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63CE5swV533583
-	for <soc@lists.linux.dev>; Sun, 12 Apr 2026 17:12:55 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63CE4gM1531170
+	for <soc@lists.linux.dev>; Sun, 12 Apr 2026 17:12:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	pmWYTgynkvgBD+uM77KEXQPDTogdgg03IqQ5cV8AE9w=; b=CaX2YV+AWf7cr90j
-	n4IjQpL7i0qqwrwGGBIVM7OZ3hdSocvRmXicGajkRqv/VtKDexIv03dqY8yHeZLe
-	zYmncyV0kLQ04NCACfhaRzaHSxv57Zq/9lPMcsL1fr4zHPK1e9z9Z4o1k1uw2cu/
-	oy2Tybq7RgYOeUHop3rDyrVZl4DdWOe6c56788C8ZDrBzKSIdbQ7tQu4wAsO+vQI
-	FxIgSoLa1uTkvO165Anq83W+k3ON+GC8H/fctWFmtUqGJJgJSnYdJCXJAKn1whn9
-	+13HVGPlLodS1pyn6/79/bf1pBQxvwJJFi9bx0J0Rl957EArM6nsW9hhArqyFi7L
-	maYzFA==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dff2baq8g-1
+	3T4p9Po57gL8RRR8ofgCbqP4BdGLIjWvMreG0U33+sc=; b=H5WGEaYlfX6UnXnq
+	D9VoEbtRUHEvk+51jV3qYC7Sum8xgffF56MwUNq0J/pbXNfQ/0t5J0eHcqWurUXB
+	Q7JwSuWjDFuVJd76+uL6a40cykuLDSdyPXQyoTAoNyLrne4OdnRzjcn9gzRJJNdx
+	rPDQBEC/2KyBuda89CUFloqU4f2FUX4C+N0VcsUYvsDesZL1/CrWe57IudQfRw5l
+	1ZuDDE5PcmZcvWahvpLvNA1ob+j0DdkeKrbaJ67y1NeRMfItVl/3UzvYV5zgF/Xa
+	ZSDXDbZlcym1wEGFfByWlkvyvgtgnayCJaOmzArGvfR8NVIfDS+uIJi+HgB5oaAn
+	+pw+dQ==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dff2baq8k-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <soc@lists.linux.dev>; Sun, 12 Apr 2026 17:12:55 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-50b34223670so141886961cf.0
-        for <soc@lists.linux.dev>; Sun, 12 Apr 2026 10:12:55 -0700 (PDT)
+	for <soc@lists.linux.dev>; Sun, 12 Apr 2026 17:12:57 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-50d6bf346adso71933531cf.1
+        for <soc@lists.linux.dev>; Sun, 12 Apr 2026 10:12:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1776013974; x=1776618774; darn=lists.linux.dev;
+        d=oss.qualcomm.com; s=google; t=1776013976; x=1776618776; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pmWYTgynkvgBD+uM77KEXQPDTogdgg03IqQ5cV8AE9w=;
-        b=DklxHXx0irQpTczh8itDBIOILvKTMnoU0G5JHdEZbzdd+4+x3Wo1zQgVxkCxNWM8yP
-         TKFlpzoYREo3HwfosqeLjYoPFIDoWN0Xb5oDulAce6eJIohmuOArJXvlHbAWKF+K7L7H
-         +hdPylWRP7EioJMARbIGITFNSQnngQ90McZ5xwpkilfqM6lYEoKinb9co1dv7OTT6z5V
-         0Lu4SBKUdu2GWl0qEas6dpu88Lja9NSLcx86hq9Ilru3K7RT2bGsZDoxzHKJrynYslDf
-         hPt1vpv3KR/RBHAV9qPvs0Hzf7/rIWBIBcARNFWmV1sbqBuvIUUtpk4X074umtrqwPDe
-         r8nQ==
+        bh=3T4p9Po57gL8RRR8ofgCbqP4BdGLIjWvMreG0U33+sc=;
+        b=M7J5tlBG5jeA5IpCXlDiqL5mMbJ0oyTyHX2P/AnvywbKOOtzsB1re3Ian2h4VPEg3A
+         KE+nrhYaVbQcIJ8SzzwBKftJOp5hf+yTR53Il9igOb+bl4QTGtxeRlhqL3ty4vOuYCRc
+         Cdi1gU8cEF82qQ7/jsiOxGydkN31EIif+mXZPcrx9FHM80MGP6SaZLm2JdQ18rsg22t4
+         DlSffuoQR0Vhys+KaxLgR1y6IB+q74Za6YWwLVUNjCJNJlP2HsvdHrNte86A8iFZ3kIy
+         HbP4DzqxwZGXx6jrcf98cTG3at+v3URl8/qcEgFyUu90ENLrWrbXYbMaiPeSRYmO4QTW
+         YUbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776013974; x=1776618774;
+        d=1e100.net; s=20251104; t=1776013976; x=1776618776;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=pmWYTgynkvgBD+uM77KEXQPDTogdgg03IqQ5cV8AE9w=;
-        b=d0gc0iLswcMKtIjaeEZRIECeGDbQcT4u5hg6rLwivTdrH+qJUwsP97zv47ZCMQ+H41
-         5TdWg42IfkOcpe2SbrzW/wOzFtndhrF9ysIIq9hkBsqjaqS6Yt/ZJpJH34F12pbyD656
-         ETXzGJBbyhi1lsEmy5donAK2ZV0jUCSjnwp+E9m788YZff9EOD/Ea1yY0kDjTBZdqExf
-         SPlTz+hdxNrXm1R1w8LLDkDULXswWiEmeN/dZQZnpyUBdoa5te0vsuxUoPrFJOKGkgIb
-         nkCCbI2DObxOgiZAwvtZuaMJF4C2xQen5bvvINak1X6R4QJTpsyLggSkz4/eYxNcDJ8S
-         p0ag==
-X-Forwarded-Encrypted: i=1; AJvYcCVH/903FiPD/22wR5rKBFoEXHXNnsHX9ATZhpu/Bnw8WHV5qWopoUjzudN+Z52mqtyKJSA=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz4Qid8HgDRS+wmGHaVzgQNVBJnV2iz7daqOKZ9fsm8apn4BQSq
-	XXsB6FBZm5FRBvAmyDVLfSgfmMj3VK2W0PBbkbv8dlUbgfT/N3Xum8QHHgWSDaY5d3aCe4WJEpT
-	SJagWNyQFw7jrjO0V2WrcCUxSebDIsStz955q+jOARiM73cpcAIZSeLk=
-X-Gm-Gg: AeBDiesQmeG6qWDo+gN/piYcA1MM6WSiyMYry+WoGRiJMLr76WMxYUzC0WksOcAt79u
-	9rIRvay6wZSzcsV+PUhrQlAqDy/YKB9wjnvr/wLYFywAgrgDoy/D7MmPUoFekWe4GRCWBHgwAZh
-	vtcUZWnSD6gvAPda6NqmWm0W5KNROwXqRQkVcldN/V51xrsfgWyQ4HWq7sV+XKN+65n7G5SIyJC
-	WtZjyTQBCoYyWAghk2wesvW6tfUM79EXHBH6t3dS6dOSN5MYrJwneNd5blZR+0DPH8KbZgw0Edi
-	Hq5xznkUQFAicDEp3QWaz5nWUYVbPBXAQEi8/NHeYdQXFnWXixC6QiF/9+dtE8t4sekLCKVqFw5
-	iCJF9ll/gg1WGeekYSZZn4aC8prQtaOo+CxuhipWpBBsF
-X-Received: by 2002:a05:622a:250a:b0:50b:6b21:2bf7 with SMTP id d75a77b69052e-50dd5a44875mr159814041cf.0.1776013974392;
-        Sun, 12 Apr 2026 10:12:54 -0700 (PDT)
-X-Received: by 2002:a05:622a:250a:b0:50b:6b21:2bf7 with SMTP id d75a77b69052e-50dd5a44875mr159813671cf.0.1776013973997;
-        Sun, 12 Apr 2026 10:12:53 -0700 (PDT)
+        bh=3T4p9Po57gL8RRR8ofgCbqP4BdGLIjWvMreG0U33+sc=;
+        b=RBW+65EVy9CM+XAKwJZX3hrg4ikfhExEHG3UJmHlHKxyJ0v4Ff7jUwG4oK+M6HTUiS
+         J70SN2rmQwHqPoBaY6VCzlVLm1Mw7EyaPWfLw2fuPHRyVwcinne/nyWpzpl+ebQ2Q98h
+         8Bsc9iwO3rNkjqTcP5G7XqkrHrB7w6odHyI1mae3De0UcRoFBiDRJHxOi6THQFp4Cn7+
+         QTUzjzNf+C6owXyjFOxyHxisNSBBYkwp48HQWk7fl+VoLbcxM/f1XXNMyzYeXl2VUypv
+         0OFBojr7tdRCkTswLIF0qW9cPAVVWm+db0mqzNRaKzA9pVaHuHIHlRRwgqrEHG6uLj50
+         6yNg==
+X-Forwarded-Encrypted: i=1; AJvYcCWE5dbgbWnClMz4/YkJ6jzDSUqA8L5dA2w5jFvsyxm5vVmUb2vL4t66YpmsIPMMK684jmg=@lists.linux.dev
+X-Gm-Message-State: AOJu0YycLUnLSkOC15Aauc8Ph8W6DAaAnDayNBsihd9kRghZ/U4r+cBx
+	eu7AzJ8MCRUIiG38wAxNQw3SOPjWeYDp5gutXTaQCWvCX1QfT4dA/CCwS8jNK2K/zwpIK63142E
+	Y8T9rJLDZB42oHQqZdlmxm4BkPwaH97DI/qgq1EnCJ12+7fMeUPfBMns=
+X-Gm-Gg: AeBDiet+FnoYnNpdZ2FT4Gx5L+IPsAXhwKNmwe6eWTBcrgIJibYLOjBETDpZaX/F6Uo
+	j+sztxv/itjBxFEA4KA+TpFmSTqQQZkoNfKyZAA4Re0hUDN/8pOlquVvX9c9FVU8wsZ34o7cl2G
+	sdzo8KeGiAu4pPYRa1+c7uY6vWODItr8x4Vb3X/KJQargoS4X0kpkadv2fI/AL8vY3ZkVG6/KqX
+	84ovHRrSiEVG+52ECH9lVNDH6uiEfk3QoSVvzs7yfq5QKQxTN8Tf5+3TQDJXWzfOPK8FcptOSmK
+	060a/jhv+T2UM93N5B+Slx3XNATRzFP7jNxJr6c/iyLIWvvRvx49GY99/rKFyfsv0BzLsQSpThu
+	LE/yrSALdig1x3i+lwFQRrG8TrjJmCKP4MVMJUPpxaMUH
+X-Received: by 2002:ac8:5843:0:b0:50d:8d0f:a507 with SMTP id d75a77b69052e-50dd5baecb2mr162145971cf.45.1776013976542;
+        Sun, 12 Apr 2026 10:12:56 -0700 (PDT)
+X-Received: by 2002:ac8:5843:0:b0:50d:8d0f:a507 with SMTP id d75a77b69052e-50dd5baecb2mr162145581cf.45.1776013976079;
+        Sun, 12 Apr 2026 10:12:56 -0700 (PDT)
 Received: from [127.0.1.1] ([178.197.219.94])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d63de3499sm23715547f8f.1.2026.04.12.10.12.52
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d63de3499sm23715547f8f.1.2026.04.12.10.12.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Apr 2026 10:12:53 -0700 (PDT)
+        Sun, 12 Apr 2026 10:12:54 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Date: Sun, 12 Apr 2026 19:12:44 +0200
-Subject: [PATCH 1/5] ARM: multi_v7_defconfig: Move entries to match
- savedefconfig
+Date: Sun, 12 Apr 2026 19:12:45 +0200
+Subject: [PATCH 2/5] ARM: configs: Drop redundant I2C_DESIGNWARE_PLATFORM
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -90,7 +89,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260412-b4-defconfig-multi-v7-v1-1-e76de035c2df@oss.qualcomm.com>
+Message-Id: <20260412-b4-defconfig-multi-v7-v1-2-e76de035c2df@oss.qualcomm.com>
 References: <20260412-b4-defconfig-multi-v7-v1-0-e76de035c2df@oss.qualcomm.com>
 In-Reply-To: <20260412-b4-defconfig-multi-v7-v1-0-e76de035c2df@oss.qualcomm.com>
 To: Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -106,39 +105,39 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
         linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3806;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3603;
  i=krzysztof.kozlowski@oss.qualcomm.com; h=from:subject:message-id;
- bh=YV3YfCEMXg/5PND6vVExXVVeEAoJHpkm1JRVpD4pXyk=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBp29KOqLrYx0npCq6gwpwF2lTOgGsbgP/31ghaw
- E6eVAzbGdiJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCadvSjgAKCRDBN2bmhouD
- 11DyEACUql4jcZA1f03hJCGBKd2/QaO8Lsp3pfN0Y9n4Fa4+YOlrZQPo/ocbQgIyeAskROqqwDT
- kN9NftU8St6U7BjNmdI9inAGSj1tFf2bbExZFmgjFK87XqLMN/RpQb7NELew0dbjBpjGSVP82Ja
- uzdH6vgMSzStwHQUEa3tN48ZFZHEIufBHxe556qFjKOwKtlXvdnJTMxcrX+rir2XPGbT1dVKxEa
- bHzwd37EiT7VymCR99Fj83EMYwnXZei3pRe0DRr4Kr+rRRBSqNXcc+7aBIxlOIr2CuI4zXxraYp
- Gca+OD8qRWwX4Qd+5i2JW88q+URmLaCh8ragxeu9puMztl7+XTeD5hNGLczpANRDdmpPgl7qnN9
- buv3j1Y0TJaaSD6nn82Ep7AN3okLHFZYz53uUK9QL20PyARVSJWSCCSW4TlW+DSDgrglcm7G7hv
- BtP9z17m67fZxL6SnFfyn2prLOfwWvsCHaVzJQlk2q73yvVBOPVY7YZCcSUKY7LcjRqx4192RfN
- JIhIxCx8T77oZI7naeoZXYIa8OxuLWTuJ/pK17DpEx0Kh5+Nfp1fEBlCqQl/emVXQHYjVah/jlj
- NXzSZCSyzxaWM8VPE1KWbM5DT2LvkDk4gVzORl/U1ZhKoHMT6f8ceqGm06/FOVqoOCkack+2yOD
- guMcBteMNhFCTVg==
+ bh=jjIEBMQ8waMqMWAZa0PumarSPjZYZOqQbKDr0oElp8s=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBp29KO10ougV1FJoMvqmzP/pO7HYyUIFjsgXMan
+ 6UvpE4W4sCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCadvSjgAKCRDBN2bmhouD
+ 1ziiD/43A+Y5ILBAY43ub/OOhpW6/2Am4oy2oBK3PZe/MvPqpJ5+Tc6dtSpa45S6r/favOs5ijq
+ ompsMapLtmQaCt1EIhOvjCEAmtPYvmSbBHcTW0egVOQ1awGTNyne0zEjlvdYxc1JWe4N7+6blIx
+ 7L8OPjtZKG0H5LIFvGgQGF8CokLW7M8ELuD6HvrjF6Vz+On8JW/YY4Qm+6ZObuA+Vp6J8EawHSU
+ vcskD2KKh/jdfyau9mNWjdUl78fdPBZMYUJGliJ6YLZNmwbCq2TkNB87ErvtlY7s8oAH8sLhvN3
+ mOv46TwLROZezfr5rlwvxOjUtrmanBcpVaaYJ6QOCFDhbig49Uq+hBvVehT/l6Ffs5KOdtfIlm3
+ ej5Fqkp58OZ0YsOzlbq9zwzeyz+wCpB2xti16vwRtfU43dFdyyfFjC/honmDKa5nAVOCpcVbKd5
+ m9ARPDN2/mnmoxziB1E6T684bG0Ggs6mxhkD+mqgndcHw1nCv9w7gk6SUFWE1B+hU3PGvWExBYW
+ JAKwWDh2PSNeHqxx0MPjGyXUNCTmbz8js8HvPQ1CnyBupNBTngyvodDT06gFRV9MkkhRU1xkcHS
+ FA+4JVouCgi5GL/ElG7gDapuH6vScUzAe/77ZrhuTowIkh7WuNAVWMGNESOaj+haHzYKnUEWox0
+ 3h6KVvevLESNrhg==
 X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp;
  fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEyMDE2NyBTYWx0ZWRfX0O4VOva2boh4
- KoDQR/QqEDTk8Gq6Yu9t7SbxOqCAk3VVpdP13Qmt3ENlm6L1akBwVx0bcdK8/W1d6dKlQArwPNm
- idQpZoQXwtyyVenOWISn0V1sYwQeef61kT9C1kMPGAjLSw+iKLRJaThT1zl1O5vX6ebb0u+1QI+
- VJinMiY4YdTXbSAhW+gBfMCisgA1TAztZ4XE/IPKcgDfThKLxCMExgevY3QBWdLoYVh8U/Guhs8
- 0ILvzV8kmPfVhvyAuv5XgdUQF/XnxYdo3gL4geHMo5k/RIqhylRtlayvmtIqGlAthEB4tXxtUy0
- TYfkXuvg/Ia2pQX7s29xGS3fobu16noh6K2AiDrDyI2YOiLLAGOXHjBSbLGQ0RLaUBwWqUEgOTQ
- /DnbswevxNlcWlAh5nOLfao03qqcD7mNgbvg7e70tw7T6gFZ5I9OE5sircl5i2OFVvIoA64STfM
- uHAUWy/jC/YuKTUiCXA==
-X-Proofpoint-GUID: jPpqakNj0CGsL6HlraxCwy80JHszkTi-
-X-Proofpoint-ORIG-GUID: jPpqakNj0CGsL6HlraxCwy80JHszkTi-
-X-Authority-Analysis: v=2.4 cv=W4gIkxWk c=1 sm=1 tr=0 ts=69dbd297 cx=c_pps
- a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=gOEeR9iKwsj33Yj5oN/cWg==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEyMDE2NyBTYWx0ZWRfX72BPcgI/C1iI
+ FDErI9b40J2shkVRWEvjajc2ZySsIBUbCMQ+WW0gzQ+MOiQyErbts0KUNzJSCikvnrD8ex+hbmt
+ m83sGZqdOD9QXb5qkzAbZbAnaq4nIBr13G98FuFRp4JsGkI8zp8VmMt/zi/xKDxSJsZnkp7xruE
+ yoBXBr+3NPRJ+uYlpTYy8jSoKr8Lm/of+k4FK6PQx+F/U6dT5o93y8IxLgGP3Y+1wK1jWlrpRe7
+ TnzQBftZNgpJVuFGWZXzkRImTrjCTwJDZxC7DP8t+2FVmpNRoiyA9p+gFXPNwd59vIDuYA1/8SN
+ +J4FTP5K4UfKxBA7u47VSBxkQ2tkvYBWGNWSNtCdysfoVPfrJT4px3pVTLDrhlkvqYDGgYX1F2u
+ TGcRVpxx5yPnEyJDW2Zr6ItwKW/XfyBDh/RNSr+WLst4eackhNlq/gwFghRwUFDFalwF8W/xr29
+ q7H80YQeaDoUqSokwpA==
+X-Proofpoint-GUID: fvgX9nlyJjtEPcAfJWJtRH2_JV4LtGkx
+X-Proofpoint-ORIG-GUID: fvgX9nlyJjtEPcAfJWJtRH2_JV4LtGkx
+X-Authority-Analysis: v=2.4 cv=W4gIkxWk c=1 sm=1 tr=0 ts=69dbd299 cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=gOEeR9iKwsj33Yj5oN/cWg==:17
  a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10
  a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22
- a=EUspDBNiAAAA:8 a=2ShsH9uPjTmnt004chwA:9 a=QEXdDO2ut3YA:10
- a=dawVfQjAaf238kedN5IG:22
+ a=EUspDBNiAAAA:8 a=knklNFjf03hsu1HMgqoA:9 a=QEXdDO2ut3YA:10
+ a=kacYvNCVWA4VmyqE58fU:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-12_04,2026-04-09_02,2025-10-01_01
@@ -149,133 +148,104 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604010000
  definitions=main-2604120167
 
-Only re-shuffle entries to match savedefconfig, without removing any
-symbols.  This helps in reviewing defconfig when comparing with
-savedefconfig and looking for obsolete symbols.  No impact on
-include/generated/autoconf.h.
+I2C_DESIGNWARE_PLATFORM is default=y via I2C_DESIGNWARE_CORE, which is
+enabled.  No impact on include/generated/autoconf.h.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 ---
- arch/arm/configs/multi_v7_defconfig | 82 ++++++++++++++++++-------------------
- 1 file changed, 41 insertions(+), 41 deletions(-)
+ arch/arm/configs/hisi_defconfig      | 1 -
+ arch/arm/configs/multi_v7_defconfig  | 1 -
+ arch/arm/configs/pxa_defconfig       | 1 -
+ arch/arm/configs/socfpga_defconfig   | 1 -
+ arch/arm/configs/spear13xx_defconfig | 1 -
+ arch/arm/configs/spear3xx_defconfig  | 1 -
+ arch/arm/configs/spear6xx_defconfig  | 1 -
+ 7 files changed, 7 deletions(-)
 
+diff --git a/arch/arm/configs/hisi_defconfig b/arch/arm/configs/hisi_defconfig
+index 384aade1a48b..dde9cff951d4 100644
+--- a/arch/arm/configs/hisi_defconfig
++++ b/arch/arm/configs/hisi_defconfig
+@@ -43,7 +43,6 @@ CONFIG_SERIAL_OF_PLATFORM=y
+ CONFIG_SERIAL_AMBA_PL011=y
+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_I2C_DESIGNWARE_CORE=y
+-CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_SPI=y
+ CONFIG_SPI_PL022=y
+ CONFIG_PINCTRL_SINGLE=y
 diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index bcc9aabc1202..c477454a4694 100644
+index c477454a4694..4f3d1fa99887 100644
 --- a/arch/arm/configs/multi_v7_defconfig
 +++ b/arch/arm/configs/multi_v7_defconfig
-@@ -360,9 +360,9 @@ CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_8250_NR_UARTS=5
- CONFIG_SERIAL_8250_RUNTIME_UARTS=5
- CONFIG_SERIAL_8250_EXTENDED=y
-+CONFIG_SERIAL_8250_SHARE_IRQ=y
- CONFIG_SERIAL_8250_MANY_PORTS=y
- CONFIG_SERIAL_8250_ASPEED_VUART=m
--CONFIG_SERIAL_8250_SHARE_IRQ=y
- CONFIG_SERIAL_8250_BCM2835AUX=y
- CONFIG_SERIAL_8250_DW=y
- CONFIG_SERIAL_8250_EM=y
-@@ -731,40 +731,8 @@ CONFIG_VIDEO_ADV7604_CEC=y
- CONFIG_VIDEO_ML86V7667=m
- CONFIG_IMX_IPUV3_CORE=m
- CONFIG_DRM=y
--CONFIG_DRM_NOUVEAU=m
--# CONFIG_DRM_NOUVEAU_CH7006 is not set
--# CONFIG_DRM_NOUVEAU_SIL164 is not set
--CONFIG_DRM_EXYNOS=m
--CONFIG_DRM_EXYNOS_FIMD=y
--CONFIG_DRM_EXYNOS_MIXER=y
--CONFIG_DRM_EXYNOS_DPI=y
--CONFIG_DRM_EXYNOS_DSI=y
--CONFIG_DRM_EXYNOS_HDMI=y
--CONFIG_DRM_ROCKCHIP=m
--CONFIG_ROCKCHIP_ANALOGIX_DP=y
--CONFIG_ROCKCHIP_DW_HDMI=y
--CONFIG_ROCKCHIP_DW_MIPI_DSI=y
--CONFIG_ROCKCHIP_INNO_HDMI=y
-+CONFIG_DRM_ASPEED_GFX=m
- CONFIG_DRM_ATMEL_HLCDC=m
--CONFIG_DRM_RCAR_DU=m
--CONFIG_DRM_SUN4I=m
--CONFIG_DRM_OMAP=m
--CONFIG_OMAP5_DSS_HDMI=y
--CONFIG_DRM_TILCDC=m
--CONFIG_DRM_MSM=m
--CONFIG_DRM_FSL_DCU=m
--CONFIG_DRM_TEGRA=y
--CONFIG_DRM_STM=m
--CONFIG_DRM_STM_DSI=m
--CONFIG_DRM_PANEL_LVDS=m
--CONFIG_DRM_PANEL_ORISETECH_OTM8009A=m
--CONFIG_DRM_PANEL_RAYDIUM_RM68200=m
--CONFIG_DRM_PANEL_SAMSUNG_LD9040=m
--CONFIG_DRM_PANEL_SAMSUNG_S6E63J0X03=m
--CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0=m
--CONFIG_DRM_PANEL_SHARP_LQ101R1SX01=m
--CONFIG_DRM_PANEL_EDP=y
--CONFIG_DRM_PANEL_SIMPLE=y
- CONFIG_DRM_DISPLAY_CONNECTOR=m
- CONFIG_DRM_I2C_NXP_TDA998X=m
- CONFIG_DRM_ITE_IT66121=m
-@@ -780,20 +748,52 @@ CONFIG_DRM_TI_TFP410=m
- CONFIG_DRM_TI_TPD12S015=m
- CONFIG_DRM_I2C_ADV7511=m
- CONFIG_DRM_I2C_ADV7511_AUDIO=y
--CONFIG_DRM_STI=m
-+CONFIG_DRM_ETNAVIV=m
-+CONFIG_DRM_EXYNOS=m
-+CONFIG_DRM_EXYNOS_FIMD=y
-+CONFIG_DRM_EXYNOS_MIXER=y
-+CONFIG_DRM_EXYNOS_DPI=y
-+CONFIG_DRM_EXYNOS_DSI=y
-+CONFIG_DRM_EXYNOS_HDMI=y
-+CONFIG_DRM_FSL_DCU=m
- CONFIG_DRM_IMX=m
- CONFIG_DRM_IMX_PARALLEL_DISPLAY=m
- CONFIG_DRM_IMX_TVE=m
- CONFIG_DRM_IMX_LDB=m
- CONFIG_DRM_IMX_HDMI=m
-+CONFIG_DRM_LIMA=m
-+CONFIG_DRM_MSM=m
-+CONFIG_DRM_MXSFB=m
-+CONFIG_DRM_NOUVEAU=m
-+# CONFIG_DRM_NOUVEAU_CH7006 is not set
-+# CONFIG_DRM_NOUVEAU_SIL164 is not set
-+CONFIG_DRM_OMAP=m
-+CONFIG_OMAP5_DSS_HDMI=y
-+CONFIG_DRM_PANEL_LVDS=m
-+CONFIG_DRM_PANEL_ORISETECH_OTM8009A=m
-+CONFIG_DRM_PANEL_RAYDIUM_RM68200=m
-+CONFIG_DRM_PANEL_SAMSUNG_LD9040=m
-+CONFIG_DRM_PANEL_SAMSUNG_S6E63J0X03=m
-+CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0=m
-+CONFIG_DRM_PANEL_SHARP_LQ101R1SX01=m
-+CONFIG_DRM_PANEL_EDP=y
-+CONFIG_DRM_PANEL_SIMPLE=y
-+CONFIG_DRM_PANFROST=m
-+CONFIG_DRM_PL111=m
-+CONFIG_DRM_RCAR_DU=m
-+CONFIG_DRM_ROCKCHIP=m
-+CONFIG_ROCKCHIP_ANALOGIX_DP=y
-+CONFIG_ROCKCHIP_DW_HDMI=y
-+CONFIG_ROCKCHIP_DW_MIPI_DSI=y
-+CONFIG_ROCKCHIP_INNO_HDMI=y
-+CONFIG_DRM_STI=m
-+CONFIG_DRM_STM=m
-+CONFIG_DRM_STM_DSI=m
-+CONFIG_DRM_SUN4I=m
-+CONFIG_DRM_TEGRA=y
-+CONFIG_DRM_TILCDC=m
- CONFIG_DRM_V3D=m
- CONFIG_DRM_VC4=m
--CONFIG_DRM_ETNAVIV=m
--CONFIG_DRM_MXSFB=m
--CONFIG_DRM_PL111=m
--CONFIG_DRM_LIMA=m
--CONFIG_DRM_PANFROST=m
--CONFIG_DRM_ASPEED_GFX=m
- CONFIG_FB=y
- CONFIG_FB_EFI=y
- CONFIG_FB_WM8505=y
+@@ -420,7 +420,6 @@ CONFIG_I2C_BCM2835=y
+ CONFIG_I2C_CADENCE=y
+ CONFIG_I2C_DAVINCI=y
+ CONFIG_I2C_DESIGNWARE_CORE=y
+-CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_I2C_DIGICOLOR=m
+ CONFIG_I2C_EMEV2=m
+ CONFIG_I2C_IMX=y
+diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+index c51ae373ca88..2d5f5dfe5af6 100644
+--- a/arch/arm/configs/pxa_defconfig
++++ b/arch/arm/configs/pxa_defconfig
+@@ -278,7 +278,6 @@ CONFIG_I2C_CHARDEV=m
+ CONFIG_I2C_MUX_PCA954x=m
+ CONFIG_I2C_MUX_PINCTRL=m
+ CONFIG_I2C_DESIGNWARE_CORE=m
+-CONFIG_I2C_DESIGNWARE_PLATFORM=m
+ CONFIG_I2C_GPIO=y
+ CONFIG_I2C_PXA_SLAVE=y
+ CONFIG_I2C_XILINX=m
+diff --git a/arch/arm/configs/socfpga_defconfig b/arch/arm/configs/socfpga_defconfig
+index f2e42846b116..19a8e30a7b22 100644
+--- a/arch/arm/configs/socfpga_defconfig
++++ b/arch/arm/configs/socfpga_defconfig
+@@ -84,7 +84,6 @@ CONFIG_SERIAL_8250_DW=y
+ CONFIG_I2C=y
+ CONFIG_I2C_CHARDEV=y
+ CONFIG_I2C_DESIGNWARE_CORE=y
+-CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_SPI=y
+ CONFIG_SPI_CADENCE_QUADSPI=y
+ CONFIG_SPI_DESIGNWARE=y
+diff --git a/arch/arm/configs/spear13xx_defconfig b/arch/arm/configs/spear13xx_defconfig
+index 8b19af1ea67c..6712ae741c19 100644
+--- a/arch/arm/configs/spear13xx_defconfig
++++ b/arch/arm/configs/spear13xx_defconfig
+@@ -63,7 +63,6 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_RAW_DRIVER=y
+ CONFIG_I2C=y
+ CONFIG_I2C_DESIGNWARE_CORE=y
+-CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_SPI=y
+ CONFIG_SPI_PL022=y
+ CONFIG_GPIO_SYSFS=y
+diff --git a/arch/arm/configs/spear3xx_defconfig b/arch/arm/configs/spear3xx_defconfig
+index b4e4b96a98af..b96baa63fd58 100644
+--- a/arch/arm/configs/spear3xx_defconfig
++++ b/arch/arm/configs/spear3xx_defconfig
+@@ -43,7 +43,6 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_RAW_DRIVER=y
+ CONFIG_I2C=y
+ CONFIG_I2C_DESIGNWARE_CORE=y
+-CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_SPI=y
+ CONFIG_SPI_PL022=y
+ CONFIG_GPIO_SYSFS=y
+diff --git a/arch/arm/configs/spear6xx_defconfig b/arch/arm/configs/spear6xx_defconfig
+index 7083b1bd8573..dba3bf3fa19a 100644
+--- a/arch/arm/configs/spear6xx_defconfig
++++ b/arch/arm/configs/spear6xx_defconfig
+@@ -34,7 +34,6 @@ CONFIG_SERIAL_AMBA_PL011=y
+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_I2C=y
+ CONFIG_I2C_DESIGNWARE_CORE=y
+-CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_SPI=y
+ CONFIG_SPI_PL022=y
+ CONFIG_GPIO_PL061=y
 
 -- 
 2.51.0
