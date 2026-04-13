@@ -1,175 +1,219 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DE3397E88
-	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 07:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07AE39F17C
+	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 07:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776066260; cv=none; b=tKdwTfJJ0697P+fUpF/2zyhb6ArJhBQEUhYXH0qFSE7wn/QcMPM1C5eU5gQ+eqo3Mco0c5OfRUo6oxNkBwYdhjZLk5XMo4QmQKRht26vAp75JoG1X/wD/orxAuK9QJtut9P+33czz42qbhkmB7s7PGaOZSnvuhzV3PHKTj9rVlo=
+	t=1776066326; cv=none; b=lav85Y9Q49YYBqha9v60AHfwly8Ggkd3kxCz/VZov8dvhNOs2h+2MV2sWvAET2mu9j5eQy+XJ7HcumaknsFbsMzBDbLb8JGFB7pRRvTzrL2d8dFg+UU4lVjj09yklSWA356zVETiuw88JkXkDs8+uoChQEzUonkJ4BCFdAi5HwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776066260; c=relaxed/simple;
-	bh=9+/eeTgyYS/yzTO3pnqexv4gWy07zOtf8v7RwgZqnq0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N0y+kdl4XNoT6jxeYf1VYZ1BXKtm9eXMnO996FCfmP+x2/etQQXZ2Ely84ca1M7YO086z4KGDlXQw7yXyBZf9GIJKtlrQlSpfrx9T436qP36jHNvPSXe6aEVjsy+QDSRs06599+VVBPtbEIQhRVOFe/SrsMRyIXZWvCYT3B2qu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jc2xfMLX; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=V+rA4Yma; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1776066326; c=relaxed/simple;
+	bh=bVQQkllE9FsB3FoMq2iX1KHXSbDPIIeoKVxWTvJnWY8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=D3i+JeZwgGn58js7KmrzUHDDaD7P1UMcHl4D1eIBsp9SDsqF05JWEyJvqwl/gLv7zHGlj82SS4Yir2E6wJRIfnVBIC4i3BXOpDAvBtnDHLQ/aOdiIho2GsGApzFSUmdBnzFcf0JcZp8e4CcvxhHzwHilR4hG5o+DhiNENS1K8FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uZKDopoE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jc2xfMLX";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="V+rA4Yma"
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63CMWTxN142037
-	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 07:44:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=jMDYT8BNhIA
-	8WXSavqLXGIyacO4Fz0LIBJB58ZxpfaY=; b=jc2xfMLXQoJy0Jjx6xJ7MvmVwKY
-	RseI8gde1K1ROLTbSHC3ZLQhfw76IQEiHlNh2OnDxNXMzXGtKeXLW18mFxu5OYf7
-	85BqqrM+nnNole7Pjxq/TlVwmdbjqd3kNlbJBRyXQtDJPYfZomS6jbh5Aoy3Atwh
-	r9h64UgCW+NTXXviuNfzosa9YisKNHedMaKnC1tuh1b4tPlWkQqs0tAIUuIawwgB
-	MsQwjcK9HAID8y5Sc+zx864WYAsnC/ll7KmTWPlkRiaQxuZUGJJgYWbnF01aZgQ1
-	zfG3iyWmDlY0lWN8FU+MAVcZJ9qpPS7YsPnBTo0/0Y5rD5FEAvUaJhrToMA==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dfewkvayx-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 07:44:18 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-50b323c43fdso70675031cf.2
-        for <soc@lists.linux.dev>; Mon, 13 Apr 2026 00:44:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uZKDopoE"
+Received: by smtp.kernel.org (Postfix)
+	id 2FBEBC2BCB4; Mon, 13 Apr 2026 07:45:26 +0000 (UTC)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 625F5C2BCB7
+	for <soc@kernel.org>; Mon, 13 Apr 2026 07:45:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 625F5C2BCB7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488ba6366a7so51435705e9.0
+        for <soc@kernel.org>; Mon, 13 Apr 2026 00:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1776066258; x=1776671058; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jMDYT8BNhIA8WXSavqLXGIyacO4Fz0LIBJB58ZxpfaY=;
-        b=V+rA4Yma/AEJ9DOs6i6RFgNQ7RcXmv7aVoOe4bLADAjH5oPgZk0W2YHyRsy3Gf/oE0
-         Koc+bVtPWCLa3xb7//fMa+11NaOFFr1gWztwAJXxQaWnAqc7+EkKfoGfUSySGikzYeli
-         P1FLc4VtolaF63lmyltTbfvR9y3ukYluYw3Lkm/Ed+KHeojIK0jPQFIm4Fg8ACbp7o9M
-         2ujyaWlKqWVSLDfvYlyae0ZuG7H6+BsgzeNeJ7j0csx6/+6NlMX9fqwasumYpIlEElQy
-         dvsPybw9lNSWFCiidSgVZ6hMegTMftntrCpL8KY7KH1TJRgZzKMpLMTTCwIXFahf9IKk
-         UZHA==
+        d=linaro.org; s=google; t=1776066321; x=1776671121; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uXpz2O0o7IAOiW0wpCsudNdz58SNhf9Y+6JQ1Zpf05w=;
+        b=uZKDopoEAORTcp4EQy5YktBOrNJr1xUgeZzAC3oUxYKtDcIgc11n3d5/7YlGbz9aut
+         MGr4AV5V0ZYT5QaV421N6TsyDw/pZN0+4oNSIotdFOAKxYt5R9pj7XqfBXvzlnWLjnOp
+         FeGdnZCJ/+/GGyC2Ix0ayYMh3eR65Vp5aMwURSkNljnyQ4o5TV8oK/A7Jvz++n2H0J8K
+         Ry+m0shxjjO4kX3Mtq8VS280LkyDSnsuf0jB6In6mvmUiMsJghWaRVHezxOXvHcswtb6
+         XeuJpv7nDRRBMBQ8QwreH0RI6vRIx6o+ju3PkbcprFy3EGJivI3NrWn+xWYwtwxAnWt/
+         0JOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776066258; x=1776671058;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jMDYT8BNhIA8WXSavqLXGIyacO4Fz0LIBJB58ZxpfaY=;
-        b=dybjyzGpIHW8b6vZCbzJ4/NBR4NNNuyWiFIKZ1ITq9t8rdRLtIfluuGztROkd6zeZ+
-         dadJxGabALMBCvjqLLvDTRBdUJuBY3HHpZyolpHKGseVQlTVNspkByneGkeP9eqRN2Hh
-         hA5TUAy3+W4C4syQv568cq1iebBcyTvDgaUUGV8rvimMt9uKwDNP/cWqnfg2mTasVJEz
-         MPpcwW4fEuezP96JF5FqBMRmaWydcz3TfMmWE/DtF4CA+7TdARmPCUtJ3zzhbh95ja24
-         plklcUyma5SozQdhupIPCXj5WjGz5z4Nifj5NlGOiYbjLWW+RkFXN31mFE3durpDk4/h
-         vP1A==
-X-Forwarded-Encrypted: i=1; AFNElJ9f6VzdOSCNMgWE8fBLR8NOlQbW1YBTs+h2kcdowwghgGpNBoyU9x+8i0PP6L2fvOnH+ns=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzRx7OEPzKkskHU4JXez+ZPBEZRpoWpR+liWzvSvLQ72fmwp17D
-	uBo/oVmOzx7bCuwc8SKSyuzwQz2iVrB/sIM+RFCQDBK8JwnE4Cx19opS2843c633Jxnyk+YpTqj
-	VE8b1I+e3DwLPIlVCwQlCibCp0P1yyc33JA/McC8XmM479SznhUv36v8=
-X-Gm-Gg: AeBDieuvOLzSCl3zGig/vzcrQ4iB0ptmb60icwvsrlWoSKkAFPsKM7zXLkWJdj7miK5
-	4e44HjImIwkf2RSgSg/vkrFSvT+tTCfMx0iBa+vBnJwcbFA6/8fgBf32VFiNV1I/uNdi6/wRQAu
-	6pZDB2rgH/ALNXuhNjErn3CBAeXX0u6ge629zePbSnjmkK1oQWMGMm9VRuHQPxssS8F9Q1S/sdP
-	rMTcZaylw6pP7jvvLj+mD/GQ0OoVYD7nC3ayXOl4LmxTkdbNWFLAtZ/vMizM6RH/Kb5FRY2HhnL
-	s/XhyPeezU1NVn/Di8YSvBsEsPNb13eX3xcFXzR2fcA5+t52/AuPmiKuq4SPdqnALSgOqaTBCTV
-	rpqspfSSU+B5r3DFM2VHYSaBILUqfyBlx+mmR
-X-Received: by 2002:a05:622a:11c5:b0:50d:882e:c5ae with SMTP id d75a77b69052e-50dd5bab443mr185499571cf.44.1776066257569;
-        Mon, 13 Apr 2026 00:44:17 -0700 (PDT)
-X-Received: by 2002:a05:622a:11c5:b0:50d:882e:c5ae with SMTP id d75a77b69052e-50dd5bab443mr185499291cf.44.1776066257139;
-        Mon, 13 Apr 2026 00:44:17 -0700 (PDT)
-Received: from quoll ([178.197.219.94])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d67a46bdsm137465635e9.3.2026.04.13.00.44.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 00:44:16 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
-        workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH 2/2] Documentation/process: maintainer-soc: Document purpose of defconfigs
-Date: Mon, 13 Apr 2026 09:44:03 +0200
-Message-ID: <20260413074401.27282-4-krzysztof.kozlowski@oss.qualcomm.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260413074401.27282-3-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260413074401.27282-3-krzysztof.kozlowski@oss.qualcomm.com>
+        d=1e100.net; s=20251104; t=1776066321; x=1776671121;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uXpz2O0o7IAOiW0wpCsudNdz58SNhf9Y+6JQ1Zpf05w=;
+        b=beJGuhRJOiYZevfGKjTPq32m+gLR+sWyk0W4JcsrE/Zl89baTSD0ztvYedfY7yhvOG
+         hC/ZzkiIXdC0rUJzHDHnDtPA6hsvVNNnNLC9UIIPsyj/cYpKNa2WPFwJkIWFQHedHWBg
+         N3klnhEXGZTZgcPD2Z6f07DJX19qVDdc39r95T/IdPliN/DKcM6pNb3JR0XzBOPqEg9u
+         QYoNxUkiuIzL+ilVjFPgSLM3ORvScH3J1vB4v4MSUHf4ND7Wy9fBKrlqrB3K6pT1wV5U
+         X3q+tYnXQLVlu8mpQQ/znGQZ6bxqLczOhRePuHIzU/E6+PAjHPEFBBFVFrYQnZAnk4fP
+         +2GQ==
+X-Gm-Message-State: AOJu0YxuOEjqlBX5w8OjU23jyScIlLd1FBO7UqLhJ3+AaMCn4K66j8JR
+	aCEMA6Y2gD0e3gpCMdHQw45viGGRjjm3Pzw/ptT4lCq4rfbSt3DXli0ZZxdGodA5SbE=
+X-Gm-Gg: AeBDiet2zAmDumX8tCskJJZ6yIjyKIdktQgUVjJujJ0yVF3BUUHw6Q8DPEg6bUKcvH/
+	3H7bEbl7MQZGJShavIWLdH1cNtQboYKioDcYhO+y/dU+YXL7dTlv/GKcxzdzwU2jgqggHhYXy9r
+	U/FmRBO//pgGUIXpHkycK5JEUoTmob0aAYjCB3EEm9ilQSnsdcUexrS1APeOQv06XzxWnoxogJm
+	Xhi1vmM7nfxyLClwE5o5MKUehPibhXFuHP9HvBkChDLJ0+8YY7NtzS18gvN0wmcFmTMnUjJ1PYB
+	9HkP8LkiTX4hC7sehFnKeaqBwFtsgxNJvl7ssvOKA/ovTZa28FmZC5QgdDl/mudZV+Tn2gXoR8V
+	b7lCjTPMCDJkp90v97Pk3MOuEmc9b1od1FY3+n8Pg+IZb7G7ALazV3BQy1jh1Q3fbkUANHAhkEK
+	m+A0VEVY3d6jqipAV5IDOHDHp/bcE8lirUmzXn+aR/Kz+9CjC0UrSMWs+DTicZSyC4qeBJ52s0i
+	YkLsS7o
+X-Received: by 2002:a05:600c:4215:b0:488:d9ea:3da7 with SMTP id 5b1f17b1804b1-488d9ea3e0cmr86555425e9.10.1776066321406;
+        Mon, 13 Apr 2026 00:45:21 -0700 (PDT)
+Received: from ?IPV6:2a01:cb1c:fcf:4600:4cfb:7427:8a08:9d25? ([2a01:cb1c:fcf:4600:4cfb:7427:8a08:9d25])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d684b55fsm92669805e9.26.2026.04.13.00.45.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Apr 2026 00:45:20 -0700 (PDT)
+Message-ID: <6adde3fe-7eea-46e7-a6f7-de536f054c06@linaro.org>
+Date: Mon, 13 Apr 2026 09:45:18 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1698; i=krzysztof.kozlowski@oss.qualcomm.com;
- h=from:subject; bh=9+/eeTgyYS/yzTO3pnqexv4gWy07zOtf8v7RwgZqnq0=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBp3J7EJHjlEZXYb+iPxBermj9EsVFEZq7Qk22P8
- OiDqazIySKJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCadyexAAKCRDBN2bmhouD
- 1y6hD/47MsD0PcTGJM8sGmIHobgom/PdUcdZlLirII1VDDJpyXDTs3PHiezEKdoCNSyztcrMsXT
- 4oHcTnD/X77Yp3yiQkK5xSwHdQoR0qGwgi8Hg4xHeWmwAoUeaE6rAt/Uet24wdZpfzfcZCduoc5
- Ys3VpGnXHsY+yUt868aAFzOWdqfuH+LC4JOqNvx4KgBINBjwi0QXoHwYey9MJ/97ayMEcbC38Mq
- f377+k1H/ndRbs9bRJoRFhb3vdG5rPwiUBAYWYmoENwxqLmVjrSqkf0sFnRhoG0SwrGslud0ShE
- t+4E1HkALxOeqLE/obi3Z6TRKz+z0dh3Nv6QWLJnoH3h3h2jraDW+VGHDyL27zWjwPqbgwhjIb8
- zJJj9piSymp8nMPSPUIKt6bMV/g3/NfGVUqnOLBsK0XbJQP2cZKQ7eBVRX1w80uckOcJOle5jop
- BVzvei+HZMU96eld6NiEIlqUUTHwLMh5jszBBNgFakOTnBMJ4qnIsPQluJnbZUenmmbe3/PoAqc
- 8O/QpKxKBPAFvPRlPXmh95SlRUPhYrB3nZXhirvnwP6Fbv4juHtZDBNJ2yfuskRA6ed7M5P8SOc
- DvkKDfxfifMUfHlL7Cb2WZJaSzSb8o3mqB4vDn0fC4rW2gHkgLqwkU8kP0xIxapmNKNdTZHQaWt 9QhzkBoVibNtu6A==
-X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v7.1
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: soc@kernel.org, arm@kernel.org, linux-amlogic@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+References: <2fde1b11-d2a4-4aa2-8c28-d20fbbb54f7f@linaro.org>
+ <20260411-spicy-apricot-newt-afa8a7@quoll>
+ <5af5dfdb-001a-4b63-8a43-5cfcf28d821c@linaro.org>
+ <fe782180-99ec-404f-96c5-8949a8732186@kernel.org>
+ <4b2a319e-3292-4576-b5b9-4e7db8aebe87@kernel.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <4b2a319e-3292-4576-b5b9-4e7db8aebe87@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=bcFbluPB c=1 sm=1 tr=0 ts=69dc9ed2 cx=c_pps
- a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=gOEeR9iKwsj33Yj5oN/cWg==:17
- a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22 a=EUspDBNiAAAA:8
- a=Tz5aH96nyyF_Xlqy0V8A:9 a=dawVfQjAaf238kedN5IG:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEzMDA3MyBTYWx0ZWRfXyojItYxZ5lIq
- Qo9fzsL23RVWU7yKd+vEaMxDryPhKH+G3vXTP/HOH5Qv484nXxudfgkD4H6/5QgMUYovAJXn/QM
- sois0/Jx3k7z3seUH/b3tno/qYEkLJFgZRkqLKmIM82w4Wz9/N4Vf5YtJpyPYHqmEZLfY2oDt1x
- ivcxFYs7bzMNNtiBZZo1Ieb2nd4hYn6yCeZfahVBnjFijP+NdWBgFpSRh35vWZGzbI/pp8ac4Eh
- PUHKRDmEmJ3pXWdqxQ9IVoFWIg2Ipcw4PWXqHKoAAKbWI4lRlnSIJYciPjjx5VV9xcWPzFRe0OV
- mfKwUXUlYCuGPGXWcFq4lbOfVwoaLpwmZxmrsvu1lxT5qhr+eVs8XYDW/Ur24hDFACivSjF7j42
- +P06Vd+zS1B4d6SuopEyIdynIEraiuSVNS7cMlPNsVie629qAnrviMqipKC3iT6aAMB++6NEP5m
- +J/77wzxj0Jfy2SHU/w==
-X-Proofpoint-ORIG-GUID: bOZw4SHTZOImd4Zc2LMuRio-9eQx_3fJ
-X-Proofpoint-GUID: bOZw4SHTZOImd4Zc2LMuRio-9eQx_3fJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-13_02,2026-04-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 clxscore=1015 impostorscore=0 malwarescore=0
- suspectscore=0 adultscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2604010000
- definitions=main-2604130073
 
-Common mistake in commit messages of patches on mailing list adding
-CONFIG options to arm/multi_v7 or arm64/defconfig is saying what that
-patch is doing, e.g. "Enable driver foo".  That is obvious from the diff
-part, thus explaining it does not bring any value.  What brings value is
-to understand why "driver foo" should be in a shared, upstream
-defconfig, especially considering that distros have their own defconfigs
-and we do not care about non-upstream trees.
+On 4/13/26 09:30, Krzysztof Kozlowski wrote:
+> On 13/04/2026 09:17, Krzysztof Kozlowski wrote:
+>> On 13/04/2026 09:10, Neil Armstrong wrote:
+>>> On 4/11/26 11:32, Krzysztof Kozlowski wrote:
+>>>> On Fri, Apr 10, 2026 at 10:50:58AM +0200, Neil Armstrong wrote:
+>>>>> Hi,
+>>>>>
+>>>>> Here's the Amlogic ARM64 DT changes for v7.1, including a bunch of fixes
+>>>>> and improvements for the Khadas VIM4 and VIM1s SBCs, plus some additions
+>>>>> for the Phicomm N1 and a couple of low priority fixes.
+>>>>>
+>>>>> Thanks,
+>>>>> Neil
+>>>>>
+>>>>> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+>>>>>
+>>>>>     Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+>>>>>
+>>>>> are available in the Git repository at:
+>>>>>
+>>>>>     https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v7.1
+>>>>>
+>>>>> for you to fetch changes up to 401e5c73eedde8225e87bd11c794b8409248ff41:
+>>>>>
+>>>>>     arm64: dts: meson-gxl-p230: fix ethernet PHY interrupt number (2026-04-08 14:27:20 +0200)
+>>>>
+>>>> Days in linux-next:
+>>>> ----------------------------------------
+>>>>    1 | ++++++++ (8)
+>>>>    ...
+>>>>
+>>>> So a few things were just applied, unless this was rebased?
+>>>
+>>> This one has been applied lately, but this is news for me, I always took
+>>> in account the time spent in the lists, not in linux-next.
+>>> I made sure this one landed at least once in -next to trigger CIs.
+>>>
+>>> So if there’s new rules, we should be made aware of those.
+>>
+>> How is it a new rule? Linus posting from 2023:
+>>
+>> https://lore.kernel.org/all/CAHk-=wgXDTfWFbn-481=it6W_B0KTQsOhdgXL6mweVm6ewtSvA@mail.gmail.com/
+>>
+>> Plus this is simply logic - why soc tree should be the first tree
+>> exposed to integration issues and robot reports? If soc tree merges
+>> stuff which was not on next, all such reports will be applicable to soc
+>> tree as well. That's nothing new about this.
+>>
+>>>
+>>>>
+>>>> I will wait with this. It might miss the merge window if v7.0 is
+>>>> released this weekend.
+>>>
+>>> Ok wow, just like that... I mean the amlogic DT is stable, all patches
+>>> patches bindings checks and none is critical since it mainly touches
+>>
+>> You sent your pull very late, just before v7.1, and skipping late
+>> posting is not a new rule. It was always going late pulls, which might
+>> make it or might not make it.
+>>
+>>> new platforms and the incriminated commit is a low priority fix for
+>>> 10y old development boards...
+>>
+>> I did not check which commit was not in next. You can provide feedback
+>> to my reply with actual argument, because such explanation was missing
+>> in tag. Instead you decided to be surprised that patches needs to be in
+>> next...
+>>
+> 
+> And to clarify, I did not say that pull will not make it. Considering
+> the timeline:
+> 1. You sent the pull on 10th April, Friday
+> 2. v7.1 is released on 13th April, Sunday
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
----
- Documentation/process/maintainer-soc.rst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Stop this nonsense, there's a very high probability release are done after rc7,
+but it's not a strict rule at all.
 
-diff --git a/Documentation/process/maintainer-soc.rst b/Documentation/process/maintainer-soc.rst
-index 4029dc6938d8..a3a90a7d4c68 100644
---- a/Documentation/process/maintainer-soc.rst
-+++ b/Documentation/process/maintainer-soc.rst
-@@ -207,3 +207,13 @@ The subject line of a pull request should begin with "[GIT PULL]" and made using
- a signed tag, rather than a branch.  This tag should contain a short description
- summarising the changes in the pull request.  For more detail on sending pull
- requests, please see Documentation/maintainer/pull-requests.rst.
-+
-+Defconfigs purpose
-+~~~~~~~~~~~~~~~~~~
-+
-+Defconfigs are primarily used by the kernel developers, because distros have
-+their own configs.  A change adding new CONFIG options to a defconfig should
-+explain why the kernel developers in general would want such option, e.g. by
-+providing a name of an upstream-supported machine/board using that new option.
-+This implies that enabling options in defconfig for non-upstream machines shall
-+not be accepted.
--- 
-2.51.0
+> 
+> and that people are allowed to take weekends off, then there is simply
+> almost no way that pull can be merged before v7.1 is released, so by
+> definition it is a *late pull*. The policy for late pulls, like that,
+> did not change.
+> 
+> Lack of exposure of a few commits to linux-next is only the explanation
+> why I did not pull it while doing last round of pulls.
+> 
+> Feel free to ignore that explanation and take other one: avoid sending
+> pulls a one working day before new release, because it is considered a
+> late pull.
+
+I understood your explanation, crystal clear.
+
+Neil
+
+> 
+> Best regards,
+> Krzysztof
 
