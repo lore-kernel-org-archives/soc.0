@@ -1,183 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D73737C107
-	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 07:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94124397686
+	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 07:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776065457; cv=none; b=lF1Rasvo9u3F5Z/CWfUBSfOhauU8vZskr414sS9KUuyW1Ds7ltHlN8h2VLk52fPijIhQKRSYjrx8D24+r8oS3TJQcP/hshfCfi1COvNGS2/MsAQ9x2b0sdkcwZnYioAjSi/Tsny1pBokKvoQabjiiacg7U/He0GGq8QJiaLCqk0=
+	t=1776066259; cv=none; b=CuoE7hBTezG+DZhkS9l11chaAnUO0bpfBvVKLvMDu0eGhRTU/hYXuwBB5ln886fWOcz5iYW1nU+lZR6gZaAR6Vy5RuOQ1suYIt8Jd4uDByWsg6huVn+pFJxhJV6sTSM5DRxEkOHXwomyt81VNq/8URi+6mBrbYXVZ3okCUsuQqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776065457; c=relaxed/simple;
-	bh=4tA/3yFAncGwgo+gz90dhh8OW9VW1X2Fj42sJaXzeN0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=gTsetkTtbL4Wa5iL4gs7d48Aw+aj2G00/8sg02N/095+O3fBoC7CpnJEvOwxlKUPsH+xAl0aTFhglx4VhVbsMjx3caqRm3xbBe9aHpJcZJEOjc9XMpV7O73Ib/dTRGSMR1qpn03PA//2s4gL9gLf3p5H0O5Hr6cCQe2AjDkqBDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LeykPCN1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776066259; c=relaxed/simple;
+	bh=emAvh6toXGOd5B6fz9M/oSRBGye5L4QrB2xQSA35mQk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iCGiXGEYqrwyfhsUZgI8Aaqglcr8OifYKRGj2a4CQx0sX1GgS5+XqedSdMiJa11WYj1ZCSc097zQu0rJFGYtL11MtNbYwvLUmaK0ZtWXmm8X3xTRx0wbxKKV0DomCrzoDplXZHdkhN1855acBZplhxpjbqqm45VVRBav1xd4OEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=AyBXHeun; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=fFtQqDGk; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LeykPCN1"
-Received: by smtp.kernel.org (Postfix)
-	id 5F7E7C2BCB1; Mon, 13 Apr 2026 07:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03AC8C2BCB0;
-	Mon, 13 Apr 2026 07:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776065457;
-	bh=4tA/3yFAncGwgo+gz90dhh8OW9VW1X2Fj42sJaXzeN0=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=LeykPCN1VMyKIEj2FbfiVwUYwFQa8qmK5IcTU0paBifp/WcA0mZeFvcV+cUROwB00
-	 J7M2SvvoGfRUN7UO9zI481sk4L7fbuDYInaI+o3LfQFJ5Ej0aKFHrzEKhsQY68/7k+
-	 VH2zt0lWZySWdgKGc3nQKVeBAaoqRXeNLwLLsSl+PNTDRIOiYmwysMfqP+w8PawPtW
-	 kSk3P3kGtRWJpgYZqriljOJxszSqsryq09fJsgO0C4rJRD/whZhc55zUxUKAk+LwBC
-	 1amkunSTdfn0Y9X+SNgVSgkEbclCLqJZXhHI9leq6HowzFnaWqXHOqxEj+ymrVZl71
-	 //8YJgM4FzFwQ==
-Message-ID: <4b2a319e-3292-4576-b5b9-4e7db8aebe87@kernel.org>
-Date: Mon, 13 Apr 2026 09:30:54 +0200
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="AyBXHeun";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="fFtQqDGk"
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63D5tADX3315177
+	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 07:44:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=Y3r+aQYgMBEMT6ku800XCoTGo0hyxDK8cY2
+	8YsHhpYU=; b=AyBXHeuncUj2SlqQHimyEvSr0VpXT1UnTu9I57tHajzg+BhsxqB
+	VT+gFyGFZ6IAVYuM2rASS0xVuwiB1TwPF6ezaIq083U1qmx3AY6hMxfDD0DNbvuI
+	JYF7icxAQ379i5wVBy2uxql/gKmxvbnWroewB6HKTJn1AO4VSc/yaSUm4PIVmloP
+	Ly4sGB+gbbmGSRXEu+feMu7hnVOJJ8H/tINfcfzEZcelsmKko831AjK1h/i9Bqi9
+	hWSKVAGapE8mDpzb/pv9Ql5UOZprHaHSYbNLFWayjLRn56ZkexKZr+eOwUB8JESZ
+	/r9DrowfD9yUIteloRcd7K/mTSNSDzQlZRA==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dfewkvayq-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 07:44:16 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-50b781542c1so78810741cf.1
+        for <soc@lists.linux.dev>; Mon, 13 Apr 2026 00:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1776066256; x=1776671056; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y3r+aQYgMBEMT6ku800XCoTGo0hyxDK8cY28YsHhpYU=;
+        b=fFtQqDGk78Mp/mvPXsIT/M9lidRzRihRXaPjYuGCmyjuhA1++qX/2MPEq8AZSm2J74
+         J4F0M1rO9F8f2dzr0ZK6lQvujnm67uLC766eVdY1Xo25+31ozhN6DzefCRCh3WJem1Y3
+         ks1/OZQwrk0BJoasquDdXmW2dklZtwS0HgBtvmNc403uDLakgTs/JZDJuXKwKvRy9eey
+         S193RfygulWEHouxDhEJjLPo/BuT7q5cOddxLh7TOBbjWWCeOYYTzclDARaoYgl1tgH/
+         xgCzWHbL1DIKofCHWJ7/IUiS8ivwjohEy+psPTKs5fxGknhJRuVZxDkUbZCLRC6jp80L
+         bx7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776066256; x=1776671056;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y3r+aQYgMBEMT6ku800XCoTGo0hyxDK8cY28YsHhpYU=;
+        b=BEL1lF9PyGOiLmlF/X36M2sSAXPurw47pyXj8o6Fh3Qw2UUKDqc2tm8CKTIny2ztCv
+         nlOIb9sfyrdjS13XRT1YUhVzheJaK7KCSEuYm2HLk23F50SMmU4+K1+rDxUS3TFv5vjD
+         psCXmlap7TIOHtD7OQxjAYfVIC81W84TaBiwYtp3TY5vTXzRIgbDvPK3BNrcFooPE/UQ
+         7Cv22MpA0hclexFkZd62qeg4dSkahWNosqp8Q73nDIYcEtYA6LdT/CImdtrfzZ8ZtcaF
+         8RHsLhGwa227/p83pUWkrTQHrA2suosHjGtKB/S2cTePw0FEeZ5O8EhlCIxHiMGV4NEC
+         vzhA==
+X-Forwarded-Encrypted: i=1; AFNElJ9nL+L1jlfBepxzWUGP89i8SHH7m9DgOUtVkgUMCj+czf5WgtfnIOsvgL51ZcJ9mrSmaJQ=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx+zK8eyyC4SAP8f6aT39PfWcV2ryQwvY6gsNkavBRQeMxt2cwn
+	Ucd1da21y/vKVeiLalLb/sadIGHngdMqLYK/1/iUXOOajjQs5y7f0zro6VjdM4cLxQZ1Bvs9VqW
+	1K5bNeb5ssuYXO3D6T6B7arFelkdxBFr2MoCuvfsMvnR5HzakAcv1nbQ=
+X-Gm-Gg: AeBDiev/IxMNjGfEIv2eMzXXROj/oiwSHTvVd6OeW7ShtsQanN5g/GrU6S0IZBxX65u
+	VD472wwbOH/5fD2DijLUwIc2XobuvVNzT0X69Xo3Z8+07jsdjt38J2gqH4M/fIkGvxuaZ15ENmX
+	nmxfkpFiDlSXt9AGOMvet+l4OTWOrUiZTdM8XAJ36t6G7wufSEtPyv+9CYhO+wpNvnAZQt319a3
+	puU7RWk15HnZJh/xAm41ibzDI3obNpa9Wx7rtpZa43t0JZNmw4h/9Mtp6o8aGFBoZDlzKjWmsr6
+	C8msZtB2hwjzPIcF2h0NoNAuoPUx/5nzLuZW9VLs0kgNBXpezYiovSz6mCxai3C3P0JWumpQxjK
+	9wDcRoJwDU8ZbaxpaKow/incVmxgOP/yL6KkT
+X-Received: by 2002:a05:622a:2485:b0:50b:50bf:5bbe with SMTP id d75a77b69052e-50dd5adbf6fmr172964141cf.22.1776066255692;
+        Mon, 13 Apr 2026 00:44:15 -0700 (PDT)
+X-Received: by 2002:a05:622a:2485:b0:50b:50bf:5bbe with SMTP id d75a77b69052e-50dd5adbf6fmr172963821cf.22.1776066255250;
+        Mon, 13 Apr 2026 00:44:15 -0700 (PDT)
+Received: from quoll ([178.197.219.94])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d67a46bdsm137465635e9.3.2026.04.13.00.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 00:44:13 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
+        workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Subject: [PATCH 1/2] Documentation/process: maintainer-soc: Trim from trivial ask-DT
+Date: Mon, 13 Apr 2026 09:44:02 +0200
+Message-ID: <20260413074401.27282-3-krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v7.1
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: soc@kernel.org, arm@kernel.org, linux-amlogic@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-References: <2fde1b11-d2a4-4aa2-8c28-d20fbbb54f7f@linaro.org>
- <20260411-spicy-apricot-newt-afa8a7@quoll>
- <5af5dfdb-001a-4b63-8a43-5cfcf28d821c@linaro.org>
- <fe782180-99ec-404f-96c5-8949a8732186@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <fe782180-99ec-404f-96c5-8949a8732186@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1043; i=krzysztof.kozlowski@oss.qualcomm.com;
+ h=from:subject; bh=emAvh6toXGOd5B6fz9M/oSRBGye5L4QrB2xQSA35mQk=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBp3J7B9CNNwKiSkBiaBvTBEt7nJ0+9KfR4CI6jJ
+ ReGlcqSceeJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCadyewQAKCRDBN2bmhouD
+ 1/2wD/9L24BCH+anyswyq/Pmf9FjSqqRahmQhA3Etm/mZhIjFMkR7SmeIS94BhUgJ1CTNj5Nzrz
+ GulTVM6c0ublpzeEtJJJvQ0IOxUWo1d7U1yaSxWdplLOdXNMTkJNso4LcT7ImlPimc9wIzbJbAz
+ QgFHg/4XqpKgRqY2MfWixigQ6K3Qr5VtakXiJ8FX9QN0TnTCWhDtadNIEHwtdgVpDd3cL86VDXO
+ 5VXHTfuGiY6WhqwU1cDx2apqEciWxE+8EnQ2alx/ndl5+sXsGmnNSG1usVNKAN3kaSxsGdQPUI3
+ 0yEgACJPWScLQoecEZ+F9E0VQezmfyDO8eGY4Q4wMDWigvvXK4c1a1J/Mrhgt6K2QcNMi4roudX
+ E6eLr+JJtZ68hmfkXyFcrjzmYNloQ0Wnh1Z92i6KSxCzRZJLMvCwC/pvdBgpvD/iNDBEk8l/E9J
+ IptP1feZNdAcY1jJ7JyoxxTNrKP9qewZYrUvs8DcyGCoyOJ6a3JwQT8EdPcw4cN0UvgIfdNxAQv
+ KOclVDo+A7WIc8z3kA+dW8AZzEDyn7kg3lHooWQO1D04bnlqlK+YfrplJJJN2t9ZLBC9BicXvBD
+ DCClGh127H4DYZsDyTAgqzbkiwTy7UGVsr08momrz7NrSfZIXKNS5hjgqcd/yjCnUZ71MQaWS4d q6mSGtE0n8TVtrA==
+X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=bcFbluPB c=1 sm=1 tr=0 ts=69dc9ed0 cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=gOEeR9iKwsj33Yj5oN/cWg==:17
+ a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22 a=EUspDBNiAAAA:8
+ a=gmrGOGr7E6VI24hohNgA:9 a=a_PwQJl-kcHnX1M80qC6:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEzMDA3MyBTYWx0ZWRfX98RNVUZdldeO
+ avpqamucWJdR+inmASKguCIMTZHWPDyC0zSKe6q+dWuWICywIVYr3NOwsGJqhm+DFWRthg7hBdG
+ 8CpvfCiXZyIMJBvuB8pm4FzR8oTRX4lQYqbDbiYlrbcCxwIUiOXzSyj1YQLAFSRB3UxoMcBCqF+
+ m0Xpgv/S4BTVnqHfJkc7R7lndvyudXFo1OZ6lYUvrmWiZTmx0SBL9EbukUw3+OlaUlXy2LGRi9S
+ CfIuHDtf3NYFsUr3zKSuflk9NGhhqiAE5daqSvxB57h3X5lgxgaHdIQsuyL2uPK0AIzOypgEkbY
+ 7sAmxoA8/AzHbzK7GYYjihnBydpGF5y92/1u+eSc2clOt3WrCfaFpnyAOXv73TlI9Jy4YXlmBCk
+ fdlelh126hRMz+O1Sbwe74ITAxrHcOKELugA7pvSiIMOJWFgupgrOzoU3Q8NYguaK9Zzwj93DUZ
+ ip3V5I9TV9pZif/7FSg==
+X-Proofpoint-ORIG-GUID: cf0zNZLtz_-dSWJsXcJl9jT899USGYKJ
+X-Proofpoint-GUID: cf0zNZLtz_-dSWJsXcJl9jT899USGYKJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-13_02,2026-04-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 bulkscore=0 phishscore=0 priorityscore=1501
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2604010000
+ definitions=main-2604130073
 
-On 13/04/2026 09:17, Krzysztof Kozlowski wrote:
-> On 13/04/2026 09:10, Neil Armstrong wrote:
->> On 4/11/26 11:32, Krzysztof Kozlowski wrote:
->>> On Fri, Apr 10, 2026 at 10:50:58AM +0200, Neil Armstrong wrote:
->>>> Hi,
->>>>
->>>> Here's the Amlogic ARM64 DT changes for v7.1, including a bunch of fixes
->>>> and improvements for the Khadas VIM4 and VIM1s SBCs, plus some additions
->>>> for the Phicomm N1 and a couple of low priority fixes.
->>>>
->>>> Thanks,
->>>> Neil
->>>>
->>>> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
->>>>
->>>>    Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
->>>>
->>>> are available in the Git repository at:
->>>>
->>>>    https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v7.1
->>>>
->>>> for you to fetch changes up to 401e5c73eedde8225e87bd11c794b8409248ff41:
->>>>
->>>>    arm64: dts: meson-gxl-p230: fix ethernet PHY interrupt number (2026-04-08 14:27:20 +0200)
->>>
->>> Days in linux-next:
->>> ----------------------------------------
->>>   1 | ++++++++ (8)
->>>   ...
->>>
->>> So a few things were just applied, unless this was rebased?
->>
->> This one has been applied lately, but this is news for me, I always took
->> in account the time spent in the lists, not in linux-next.
->> I made sure this one landed at least once in -next to trigger CIs.
->>
->> So if there’s new rules, we should be made aware of those.
-> 
-> How is it a new rule? Linus posting from 2023:
-> 
-> https://lore.kernel.org/all/CAHk-=wgXDTfWFbn-481=it6W_B0KTQsOhdgXL6mweVm6ewtSvA@mail.gmail.com/
-> 
-> Plus this is simply logic - why soc tree should be the first tree
-> exposed to integration issues and robot reports? If soc tree merges
-> stuff which was not on next, all such reports will be applicable to soc
-> tree as well. That's nothing new about this.
-> 
->>
->>>
->>> I will wait with this. It might miss the merge window if v7.0 is
->>> released this weekend.
->>
->> Ok wow, just like that... I mean the amlogic DT is stable, all patches
->> patches bindings checks and none is critical since it mainly touches
-> 
-> You sent your pull very late, just before v7.1, and skipping late
-> posting is not a new rule. It was always going late pulls, which might
-> make it or might not make it.
-> 
->> new platforms and the incriminated commit is a low priority fix for
->> 10y old development boards...
-> 
-> I did not check which commit was not in next. You can provide feedback
-> to my reply with actual argument, because such explanation was missing
-> in tag. Instead you decided to be surprised that patches needs to be in
-> next...
->
+It is obvious that one can ask DT maintainers of something, just like
+one can ask anyone, so just drop the sentence.  Concise documents with
+rules have bigger chances of actually being read by people.
 
-And to clarify, I did not say that pull will not make it. Considering
-the timeline:
-1. You sent the pull on 10th April, Friday
-2. v7.1 is released on 13th April, Sunday
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+---
+ Documentation/process/maintainer-soc.rst | 2 --
+ 1 file changed, 2 deletions(-)
 
-and that people are allowed to take weekends off, then there is simply
-almost no way that pull can be merged before v7.1 is released, so by
-definition it is a *late pull*. The policy for late pulls, like that,
-did not change.
+diff --git a/Documentation/process/maintainer-soc.rst b/Documentation/process/maintainer-soc.rst
+index 7d6bad989ad8..4029dc6938d8 100644
+--- a/Documentation/process/maintainer-soc.rst
++++ b/Documentation/process/maintainer-soc.rst
+@@ -169,8 +169,6 @@ more information on the validation of devicetrees.
+ For new platforms, or additions to existing ones, ``make dtbs_check`` should not
+ add any new warnings.  For RISC-V and Samsung SoC, ``make dtbs_check W=1`` is
+ required to not add any new warnings.
+-If in any doubt about a devicetree change, reach out to the devicetree
+-maintainers.
+ 
+ Branches and Pull Requests
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- 
+2.51.0
 
-Lack of exposure of a few commits to linux-next is only the explanation
-why I did not pull it while doing last round of pulls.
-
-Feel free to ignore that explanation and take other one: avoid sending
-pulls a one working day before new release, because it is considered a
-late pull.
-
-Best regards,
-Krzysztof
