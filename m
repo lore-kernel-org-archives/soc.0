@@ -1,76 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48DA83BB9EB;
-	Mon, 13 Apr 2026 14:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776092288; cv=none; b=vBo9EAz7oTHYAKDasXb3sA5pvzfUwQiuNPZwhGwgc9KkH86fJdS0bNzMt7KYVJn0f9123/PHWP1PRpjLP5h3S5/unqH5p4jExKZm1BSZzDWrvmXY+3XqV0YJELlJT93bKBUCs9+PqOtxFIUx0ZiDZnLlA2a302sTP/2vL9IaBxE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776092288; c=relaxed/simple;
-	bh=c/crgD2cydhjzHPYC0Jib4vZAZ370Vr36kI0vZgqROU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bw7vUmaseNtOCTZsTjaP9EtsFi0gl09o3E3n0uFFBDFAAwKlPIH2XMeO5IW2rA/KCgVPMrZVQy75+es3lISUPAbFxl7JsXSf28yyhtj0cbAnL4JiYCQpNLg2TzxnFTNBhGWbET8zglqz+WjD+r0VMxYNa3zDZDTdu+JwgByiqoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cEnAxJqY; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51BF344D8B
+	for <soc@lists.linux.dev>; Mon, 13 Apr 2026 19:28:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776108516; cv=pass; b=CTomBH/sXWkpUrpxPCnsvBDdeGP1HKmL5Xxw6UNfKVusqzJMJs7OMCEs3jOxtwe4CYHs9ot5Jb/WmNpUArHxZkueA+mXGqFRtNp9MEBC7+KB8/j2DcWwtEh0/gYTz7twl8dT/zMnTVwNTy5ImbjRxQtHvT3/gq9GnHtvQHPc8ik=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776108516; c=relaxed/simple;
+	bh=at1sLsxz7zG/NI4eVz+XUTJj1sDPXHu9VBu5AMReNzA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g/Bs2Vizu9ugMVRkemqun+RMWZwUQ4lSkdoPGBZFAdOoloD8F/uuwhAx7r3tGcZ4sdbRy0hxsA3JDNfNRNNd+DNVdqmjs5CLcPHsimWznuNwWTqWH7yYnaeOy5prlHIqz4eB9EDUmDXG+Va3iL7biUsqwULZWz5RHfLJkvrYoic=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EmfIvu85; arc=pass smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cEnAxJqY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00411C2BCAF;
-	Mon, 13 Apr 2026 14:58:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776092288;
-	bh=c/crgD2cydhjzHPYC0Jib4vZAZ370Vr36kI0vZgqROU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cEnAxJqYidHsfLI5Q5LLp7L+MALVzEAcMA3d9iuNv5vgTUM7vvFiF7GVUN5rZvpgT
-	 7WbICuo5qKFrJoeHZZTcxuoXfEoAmkrNk9Jx5vKuvhQj79sgU8D2tHJGQKevyT+f9d
-	 wu8bUn2qa60JSctaHquVCUHi16ZVyni0ikezYzS7Cd+MFS4xdCTdAXteNmzhI+mTLX
-	 FRgjmc8L/oj86kjGoYd99IzV2K0e2YO9FCJ+cfiLD5YyXIYhX7L3+WsWnOKLz2Tvon
-	 2HjJO6uTXNhqDbXnINlxDA8swy3c1D68c1wtAZT5ZzIMkTJja3MeXKlqZ2rBua+7Rm
-	 CbjCmLtIiy2Wg==
-Message-ID: <c74c0245-7651-4cc8-8550-4b25f662a03e@kernel.org>
-Date: Mon, 13 Apr 2026 09:58:00 -0500
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EmfIvu85"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b9b1df1a6b3so556914366b.0
+        for <soc@lists.linux.dev>; Mon, 13 Apr 2026 12:28:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776108512; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RZ8ZAYaErzQ2IoH0Bo89YMDJx/yN0zIKHYPBIqr9NXq88gAp7S6hQ/7VUcCxRQ6Tle
+         Wv2Oeh4GfJwuTql1SBdh8rEKMnlr2IjK8Kl/PSwhiZkNG7W0QsMwmtA33fFA4HCQM8jn
+         FmIgHEpwQWQbUbnE3Dh5Wtr8uIxtA2dfon6zAqU2LkB3+ssBUMBBdQuDxylnoEASJeqT
+         Sanj1zTEfbED+WwuLwvYwIHeZdP6OHP7B1g+BawGRbtkiHb2sb13rTcUeLVXgT6KHO6l
+         gcpkr4O28BFPKBWBtSa5fd2QT0ZQ2MmfGVR9crPMaGXCwR9VVIaO+J0hw6K302vD/J/4
+         Jklg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9bF/zvI2KpjlnALCVbm2BiZRYcKLJLbXhP543C6RUbg=;
+        fh=fl66IpQ8jOo7hvqnDdfnx4R0WmMfuaOWt3ZHbdv1UC4=;
+        b=WLf2tLMXt1PdGYQekeENbgfwy4sSEIW2+4BUguw/iQl+mvl6/uoV83h6iNt32lq3cD
+         2PpsM3Bz/2vDUyHz6jYMfjtvmJmcntySPrrIuis+1doBmh3OhwvHrtAuDV7Q57ejLJdF
+         h0TvZJclZYBlJzT2HmkroSSmLozqYhprJhqeNFK7Sl5vh3oeRGjrhjvVSUxeElIEo145
+         DtUoWliKLGOZCi2o0mYZsyXy8A6vq3RzytJtimVdschfFzy+OXfmgbynsdkjQwoYUSa5
+         67ohAPkMVdxJp4GdOEGdH6hNJRVvWHxJroh5Fx8ql2+mIQCkCmzaTb25tpvzWSA0Kcwu
+         GK1w==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776108512; x=1776713312; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9bF/zvI2KpjlnALCVbm2BiZRYcKLJLbXhP543C6RUbg=;
+        b=EmfIvu85YuQOTDxMdR49MBXm9To7HSvYJ5kD6vz70j+T4vPkJSh6ewKIf2+kjX55vW
+         meMpxsIvFc3KvUEKSj5rcAeJ3MBTMBEhtqKlihzmlK84gMT+nZ0jMsFucaOuBTigLqYg
+         DHhrzHjx6fsBXkqy/xWSJKRUC7su0C/yU2HUxxIEUiloyAxHkWBKvdWbVlbAX0aegKCD
+         OTQbiUnq3YrTPkGzCxs1yeN/clPf37lY4FS/9icIGaRCKJRAwjCLfKyXCfU0Qz0qOng+
+         6ZNzlCnefzl2heJZis75XK8z0Q9FPtbC05LtKVBPE4KpRpzIlCt85G+NxCdnKwXaXGKK
+         x8zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776108512; x=1776713312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9bF/zvI2KpjlnALCVbm2BiZRYcKLJLbXhP543C6RUbg=;
+        b=UatzsufcJ85LYYZwCnA4WjYVHd/B58hPUHARIHv1FHd7n/oJm4dORXwZ2nVewWL/RF
+         n5k1MBNczWzOuEjNofmXTNO+dTIzlyIl+iAk3MuhUA1uUVPfxD0FAWxbPx4sfztZGXy7
+         +t4JjYcltxaqKidAkHLGbQbYeBAmHxluW497oz484rdenxmisbi3T5dW3qCtg1WWmS1L
+         vpF8loXJ1jWrIBv7oNYOmtkdIbCnW5ggV/F010WkEDJO0V/ZQHu+/4WoyHv3eZrKZCTu
+         866MhdvnfYA3pIDQaQitLXSSprzeuOxTPqCXPRAAqlE1SEfcHjIMlHCfe3HqeojbrdhN
+         WSpA==
+X-Forwarded-Encrypted: i=1; AFNElJ9RAEySSrUL1x2O4+3oVYKvtKdJvHwwgbHSZFkHCkCtLaL6Qy3ZlsvXU7I2KuCEKXqZy5M=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwQ/zAlPwWDSRy7iEt+HXXS+wwwXo23xbeLx6teYLsjwLlpESV4
+	g/Et1auXgZy7PCi1BVLjpbsySA2iMRbHcYcqMYJpeHXhTwUZxroPiWEv9uexrMCgpZFcB4BJqct
+	n0JvAs5uUCDzTC+NxGhA/Fq54CortT9U=
+X-Gm-Gg: AeBDieumK8QADWqYLR0u73wbLsgj+CXay+txL0NZJ1EGS0AN/gQkTOn9fMP1U3661vp
+	WHXJKqjWjbWy2muFo+iyQTYvIB+qVZQ0ItTbZveInbm01+1p13DJCf3FMi/uMG1pR2q+zkU5J/D
+	/Pv7G1aOoqbJVmPOWOShVYDftV61u7S5Xr8XAwnDxxkVGJyJmLBwFSGsbsr7rb7avoOkkgSn2zu
+	BgnqGBZqdq0ZuKRGJdvDr80yYH2s6Ub0q/mY5jjo4qlnuIPoOS8htQIMRJUYnoT9sHrXQS+fp6Z
+	nhDAcCJiwX2dnTurUde2aCGTSa1tUDiZEIUwa+6ZJ2dcnSfnCxg2+CM6oLUFs2GOvJ1s+APXMD8
+	CYvz0PA==
+X-Received: by 2002:a17:907:6c0f:b0:b97:e32f:7ee8 with SMTP id
+ a640c23a62f3a-b9d7298ffe1mr758494466b.37.1776108511829; Mon, 13 Apr 2026
+ 12:28:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] ARM: configs: Drop redundant I2C_DESIGNWARE_PLATFORM
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>,
- Drew Fustini <fustini@kernel.org>, soc@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260412-b4-defconfig-multi-v7-v1-0-e76de035c2df@oss.qualcomm.com>
- <20260412-b4-defconfig-multi-v7-v1-2-e76de035c2df@oss.qualcomm.com>
-Content-Language: en-US
-From: Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20260412-b4-defconfig-multi-v7-v1-2-e76de035c2df@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260413092148.3870746-1-arnd@kernel.org>
+In-Reply-To: <20260413092148.3870746-1-arnd@kernel.org>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Mon, 13 Apr 2026 12:28:19 -0700
+X-Gm-Features: AQROBzDRhEA53Q6D19izUguGZUF4CJzwH_A7MqptLtlQ6pim0lENIBLGjdUpTss
+Message-ID: <CAKxU2N9iBwbt2frA5v3=BgAdUgQm6zSdVU01ZVV2AqOJb-ntRw@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: bcm4709: fix bus range assignment
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>, Hauke Mehrtens <hauke@hauke-m.de>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	soc@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 4/12/26 12:12, Krzysztof Kozlowski wrote:
-> I2C_DESIGNWARE_PLATFORM is default=y via I2C_DESIGNWARE_CORE, which is
-> enabled.  No impact on include/generated/autoconf.h.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+On Mon, Apr 13, 2026 at 2:21=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The netgear r8000 dts file limits the bus range for the first host
+> bridge to exclude bus 0, but the two devices on the first bus are
+> explicitly assigned to bus 0, causing a build time warning:
+>
+> /home/arnd/arm-soc/arch/arm/boot/dts/broadcom/bcm4709-netgear-r8000.dts:1=
+42.3-27: Warning (pci_device_bus_num): /axi@18000000/pcie@13000/pcie@0/pcie=
+@0,0/pcie@1,0:bus-range: PCI bus number 0 out of range, expected (1 - 255)
+> /home/arnd/arm-soc/arch/arm/boot/dts/broadcom/bcm4709-netgear-r8000.dts:1=
+42.3-27: Warning (pci_device_bus_num): /axi@18000000/pcie@13000/pcie@0/pcie=
+@0,0/pcie@2,0:bus-range: PCI bus number 0 out of range, expected (1 - 255)
+>
+> I could not find any reason why this is done in the first place, but
+> this can be easily addressed by reassigning the two devices to
+> bus 1, or by dropping the bus-range property in order to allow
+> secondary bus 0 to be assigned.
+>
+> Assuming the bus-range is intentional, fix this by moving the
+> devices to the first valid secondary bus number.
+No, bus-range is not intentional. It should be removed instead.
+>
+> Fixes: 893faf67438c ("ARM: dts: BCM5301X: add root pcie bridges")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   arch/arm/configs/hisi_defconfig      | 1 -
->   arch/arm/configs/multi_v7_defconfig  | 1 -
->   arch/arm/configs/pxa_defconfig       | 1 -
->   arch/arm/configs/socfpga_defconfig   | 1 -
-
-...
-
-> diff --git a/arch/arm/configs/socfpga_defconfig b/arch/arm/configs/socfpga_defconfig
-> index f2e42846b116..19a8e30a7b22 100644
-> --- a/arch/arm/configs/socfpga_defconfig
-> +++ b/arch/arm/configs/socfpga_defconfig
-
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+>  arch/arm/boot/dts/broadcom/bcm4709-netgear-r8000.dts | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/broadcom/bcm4709-netgear-r8000.dts b/arch/=
+arm/boot/dts/broadcom/bcm4709-netgear-r8000.dts
+> index d170c71cbd76..355be5014943 100644
+> --- a/arch/arm/boot/dts/broadcom/bcm4709-netgear-r8000.dts
+> +++ b/arch/arm/boot/dts/broadcom/bcm4709-netgear-r8000.dts
+> @@ -147,7 +147,7 @@ pcie@0,0 {
+>
+>                 pcie@1,0 {
+>                         device_type =3D "pci";
+> -                       reg =3D <0x800 0 0 0 0>;
+> +                       reg =3D <0x10800 0 0 0 0>;
+>
+>                         #address-cells =3D <3>;
+>                         #size-cells =3D <2>;
+> @@ -162,7 +162,7 @@ wifi@0,0 {
+>
+>                 pcie@2,0 {
+>                         device_type =3D "pci";
+> -                       reg =3D <0x1000 0 0 0 0>;
+> +                       reg =3D <0x11000 0 0 0 0>;
+>
+>                         #address-cells =3D <3>;
+>                         #size-cells =3D <2>;
+> --
+> 2.39.5
+>
