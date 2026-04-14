@@ -1,77 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A0C3E6DF3;
-	Tue, 14 Apr 2026 16:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F13C31E826;
+	Tue, 14 Apr 2026 20:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776185102; cv=none; b=hhZUtDi5H4/wa0BUI8/YOp3eg5XE0p4CxjR5aiEWOhLsCpNHpyaKrkG632r3250W9Cto9azUgPtckKDLn6ru3JNGi7z5+dMTNZRgVYXJp1H0Wfbjk79wIk4DZbomJ+y2D4VnWi25KdZPWai5KMPR3qa9S9O+MLBz1fN44VQOgvk=
+	t=1776198285; cv=none; b=pxOnUtcOzW7WEghscKR9b55fZtlOkBhwd3RqAZJCzgVXB0WtkCWpIa7RRFy1myOYNuqIiE5/2Rsbbb7yjGivI+yGbaJDVhmshXVx4QZY9EgXEik2by7J1BT14XHbMYrzmETBi7Lptxgc16nLREKHNEOO9FqkQbgzkc047yD1cJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776185102; c=relaxed/simple;
-	bh=DtB5DYTaR28SLpzvv7nCbQkO6KtAJJ1wWIiVmOdIfaI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B4sJGI9a1yVJeI2egXHAKLNQHEgA00vJ7rMEGj8XAo6LMRjzeo3m4ZwSOqYneL/F3Tu3G4CyHIognTqA7Sb7Vxmi1KW2MN/ToN06W1etH/nS3oZj7FBQAQOVK+01LndBtqazd7jn5CHHTw+UMMQ8Jrf+dYLsRItG3/jMmWMWjKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUZZ36WQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776198285; c=relaxed/simple;
+	bh=9gzrxKbw2rxLwue2MsvZ/QpDvJM6VvmWIy9J5cPJO0s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dg9/wGAfxhngQZJ4LzEs+NObgl4JVjEMzuhTCnDyk59PT/sriISaWPPk+8o2eSApJdq6H3LQQ/vnW6AEGLhMQBsThOz8wH0NDsVxTGcBazdghp052rfPyN7SU9l7Bx0utwichxfuCXsITr5uK47YSqHzEYN7LssEtN1Ee6+2aTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iB9npNQd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUZZ36WQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D77C19425;
-	Tue, 14 Apr 2026 16:45:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iB9npNQd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C97C19425;
+	Tue, 14 Apr 2026 20:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776185102;
-	bh=DtB5DYTaR28SLpzvv7nCbQkO6KtAJJ1wWIiVmOdIfaI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aUZZ36WQPvD5VXDAhUN8kn9hDHX8y/rFXzBwFBHj8Z/+AyewTEJe57G7U3P/2J+mu
-	 f6iAJLIsEya1kwM0/GoCX6gceG6DI/KPLczf/692L6srICIXA+qj8Kw/R1F+bkR7bM
-	 +28Ehl7h3iSR5NXvaESJe6BKTpIL5N1oRiVRPzes1NGmtzsFBTZb5IkuYRbUF9mCNI
-	 W7wjsWrC7H9Bwdsce/2oru/2B9h2Yi7Wk7vieP51xR27ok38kd93a2k6vnXrqCo9fH
-	 D5MZC7mVd8jZmFuAXSBqYzdyi0ZrRwIP0qtUpvKu4tqJGz6422NTule5W7Fwk+xtAq
-	 viq72a875qHGA==
-Date: Tue, 14 Apr 2026 18:44:59 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: SoC <soc@kernel.org>, arm@kernel.org, SoC list <soc@lists.linux.dev>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Tero Kristo <kristo@kernel.org>, 
-	"Nishanth, Menon" <nm@ti.com>
-Subject: Re: [GIT PULL] arm64: dts: ti: k3: Late DT update for v7.1
-Message-ID: <20260414-viridian-turkey-of-progress-dd5094@quoll>
-References: <6e294d61-9779-41ef-83f8-29f46fd98700@ti.com>
+	s=k20201202; t=1776198284;
+	bh=9gzrxKbw2rxLwue2MsvZ/QpDvJM6VvmWIy9J5cPJO0s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iB9npNQd4Uq8GqWbc6nfDQCUGz/NKMH077as1pAwywYc5wRCRfAktsxJjnD7VG4Fm
+	 YiCfAoH9UJSR3T0Fey7YxZS2PeoRdN8bLXMetpjdu1gbDVEPCX3ikAEv8wJEosCETX
+	 6kFn24oRkmPRTttdSqHgk9PraPWwhf0lTY4dyPgTbCXCOI3UGZ2AdUvIzporkOEERm
+	 Q2czFlISg7eqB6/oWEKoHVxHDj6lri+116jn/Ve/7jhlRhXTx3Kjtqjt6iJ0d1WeC8
+	 zaduqioMFVbova++50cAcnZ05BNrs/puRC81gQuFmglTBud0VMLHmPFqEHlIXMMfvH
+	 xPzXaQrY2loEA==
+From: Sven Peter <sven@kernel.org>
+To: soc@lists.linux.dev
+Cc: asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Apple SoC fixes for v7.0
+Date: Tue, 14 Apr 2026 22:24:25 +0200
+Message-ID: <20260414202428.5278-1-sven@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6e294d61-9779-41ef-83f8-29f46fd98700@ti.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Apr 12, 2026 at 12:52:51PM +0530, Vignesh Raghavendra wrote:
-> Hi ARM SoC Maintainers,
-> 
-> This contains a single patch that updates r5f remoteproc DT nodes, warranted by recent 
-> binding update merged via remoteproc tree.
-> 
-> The following changes since commit 47c806de9e9cf171d197f2f0df86df7f2bd1aa56:
-> 
->   arm64: dts: ti: k3-pinctrl: sort shift values numerically (2026-03-27 19:55:06 +0530)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-for-v7.1-part2
-> 
-> for you to fetch changes up to abe76f9f47d59ff80eb2fc59482aa76bbf6fd13a:
-> 
->   arm64: dts: ti: k3: Use memory-region-names for r5f (2026-04-09 17:05:28 +0530)
-> 
-> ----------------------------------------------------------------
-> TI K3 device tree updates for v7.1 part2
-> 
-> Late addition:
-> - Use memory-region-names for r5f across K3 SoCs
-> 
+Hi,
 
-Thanks, applied
+Two fixes without any functional changes, they just update Sasha's email
+everywhere and fix a typo in a dtsi file comment.
+As discussed with Arnd I'm already sending out the PR now so that you guys can
+decide when to merge this.
 
-Best regards,
-Krzysztof
 
+Thanks,
+
+
+Sven
+
+
+The following changes since commit 028ef9c96e96197026887c0f092424679298aae8:
+
+  Linux 7.0 (2026-04-12 13:48:06 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git tags/apple-soc-fixes-7.0
+
+for you to fetch changes up to c7ff53ef45b2f879576f7bbeb163828d04f5f491:
+
+  arm64: dts: apple: Fix spelling error (2026-04-14 22:13:19 +0200)
+
+----------------------------------------------------------------
+Apple SoC fixes for 7.0
+
+Two commits without any functional changes that arrived just before the
+merge window opened:
+- Update Sasha's email address in all dt-bindings, MAINTAINERS and add
+  him to mailmap
+- Fix a typo in spi1-nvram.dtsi
+
+----------------------------------------------------------------
+Axel Flordal (1):
+      arm64: dts: apple: Fix spelling error
+
+Sasha Finkelstein (2):
+      mailmap: Update Sasha Finkelstein's email address
+      dt-bindings: Update Sasha Finkelstein's email address
+
+ .mailmap                                                                | 1 +
+ .../devicetree/bindings/display/apple,h7-display-pipe-mipi.yaml         | 2 +-
+ Documentation/devicetree/bindings/display/apple,h7-display-pipe.yaml    | 2 +-
+ Documentation/devicetree/bindings/display/panel/apple,summit.yaml       | 2 +-
+ Documentation/devicetree/bindings/gpu/apple,agx.yaml                    | 2 +-
+ .../devicetree/bindings/input/touchscreen/apple,z2-multitouch.yaml      | 2 +-
+ Documentation/devicetree/bindings/nvmem/apple,spmi-nvmem.yaml           | 2 +-
+ Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml               | 2 +-
+ Documentation/devicetree/bindings/spmi/apple,spmi.yaml                  | 2 +-
+ MAINTAINERS                                                             | 2 +-
+ arch/arm64/boot/dts/apple/spi1-nvram.dtsi                               | 2 +-
+ 11 files changed, 11 insertions(+), 10 deletions(-)
