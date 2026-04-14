@@ -1,129 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA473E7179
-	for <soc@lists.linux.dev>; Tue, 14 Apr 2026 14:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7EA91339A4
+	for <soc@lists.linux.dev>; Tue, 14 Apr 2026 14:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776175738; cv=none; b=Ey61TOV6Pw1APANoyfVwd/5YxplVxQ0b2dts098WZsBDiZnM08j33HqxUSRWKw8uySe9FKp7YD1Q7va4mcPPg/nTMWPzGv35rghTqVrNrfZJ3faQmeGNoqtZuSRPs86ZnCgMcloIrMxykk30DTBkLvBZZIGW09UpC4gM9PdESf8=
+	t=1776178583; cv=none; b=B+/Ts3PRPs5+NJnXbrmUCluG0JrKcs5xzf2t7UWIpOUw4mHCC9d25qqNKvJf+HAI8tAYUCIf9j6ZlwbNIFwN4susK3jxu8HQRaPozIonQ2etPKk5qE1RikFG+OzkphxVKhs5jcThVLLuBH/PshPSVEPoPqe0jG6uYx9yZuPOKqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776175738; c=relaxed/simple;
-	bh=/Mr/wlWVzKqN06fIqsjXgeaRfYAFw5fIknUNgHNbLRs=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=nYLjBsBEaePsuIGOIwMxd966FyNKzlAbKpIEeu8gS+3OOcJh+JYeP9y9W2KBWRnhl+QzU3Gb0fDQKwoB5fCV7AX+udtD3HOEfLqcmoLgRfmetDWyX4x/U9AIzES7fzxHgPfjNlar2ViXvwx0MKAHpK8wk3S5mJiI2yeCeu35XxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=re6Onb2O; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776178583; c=relaxed/simple;
+	bh=mxJm4JFoTJ2KITJlOr2eq2X4iWII1Zaic+bktd7DxlY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=GjVyFfY/idZe4zYcGaYJTKMvpXHLej2Us/pQ5JSe9YO+daxu7KzGlPco/jPyLvyUbJza++i5lGTifi9v9DHjCuU4/CBWqQd30nBkSYlW/SL7wDVipfIRqtOsUW0LWqbMH7lOUswaHXQhengIGjEJyy6qavniKgNUApWi20yqUX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bGKxjEUQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RDOYXbWy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="re6Onb2O"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bGKxjEUQ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RDOYXbWy"
 Received: by smtp.kernel.org (Postfix)
-	id 2C667C2BCB5; Tue, 14 Apr 2026 14:08:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5A9C19425;
-	Tue, 14 Apr 2026 14:08:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776175738;
-	bh=/Mr/wlWVzKqN06fIqsjXgeaRfYAFw5fIknUNgHNbLRs=;
-	h=Date:From:Subject:To:Cc:From;
-	b=re6Onb2Oixbima3J0ouaE0vDkjYODpBBdsAsSsiMfOlbZox46nOI7bTdfiBorSqln
-	 J+3i0W2Ue7NQLgO5tcTsWRmFSuAidU5HJNfBL/83JmkqTLHxPTP8lAwV4hycndrbxg
-	 KWE3OaBkUlFUlLY1s+h/oSrxjZogOCsJA/0c6DM5OcQR+fAXCoGRvIuShkW3xzG3hl
-	 rjS+ciPXBMUysWkjsA3rpCqC1xduCJAJJcP6WI3KXKdJtu/d7J6wtYwDbSnA6REKC3
-	 Rt2XqOt6LcxzROWYiLtfl7BlxZX5CgenKuwpmnYQq9GBhqVitpa4KZ2G6u1oPM33oz
-	 yQC7zJvW1UqVA==
-Message-ID: <69cdadd6-523c-4a79-8cb3-1deff5910699@kernel.org>
-Date: Tue, 14 Apr 2026 16:08:54 +0200
+	id 4A3DCC2BCB5; Tue, 14 Apr 2026 14:56:23 +0000 (UTC)
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 4F145C19425;
+	Tue, 14 Apr 2026 14:56:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4F145C19425
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 6FE6D1400088;
+	Tue, 14 Apr 2026 10:56:20 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 14 Apr 2026 10:56:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1776178580;
+	 x=1776264980; bh=A2BcP/gRSwUwHAq9cjvJKcwNFmkhB9XyYu8CxcvkNgs=; b=
+	bGKxjEUQXyEGU3cJ51AyPY6ACkU0nv4W6uoChwPrhUWO2kSG4kZrjk1tsZujbk62
+	JggpHIlz5oFGFrFOMZjvhTF+trgjhp2F0TS+U0Yq3Eh0zWrCaKhzZ9M07+7JBO9g
+	tOlzK571yzB0H1Vk+B2gjG1DLtsNJLcDsMgJ9ItzM75XFUzSVr8Mjy5DVY6ysaxZ
+	slHETdqHmeCTm5FP3w8K4oBRAXbOCpeA6eZlTWsXpR15rORtMReQICU97jR/jcCi
+	10gvnH+RUPnVKyZeUMfx4A9Jj7q7ZjJnThsXutlk857F+MudBuT6vZyV95yRVczq
+	RT35aOWMrnw6x9ZXHMEdpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1776178580; x=
+	1776264980; bh=A2BcP/gRSwUwHAq9cjvJKcwNFmkhB9XyYu8CxcvkNgs=; b=R
+	DOYXbWyQc61tccpAILj1Hm5iWSeXQo7YtYYQjylLI+yp+ZcOdpeVzcs6dCDIBrdu
+	iLOd+G3s2YgEyaltDkmKzJVGz2B7NNY2+3Qvpudfw36b5+nzA5mxtBLenLpHpPIt
+	htJgeGuuAxoKllqY4o96WdJlVVh0ReFuplhlhFHfjcFoTLpKZlL7PcsZi7p4/6+N
+	e0/nBOJrVxpLt1sbXqlU4Z9lc8Fkzl6GLMzZKZ4YMg2s7oxLQWtDXofVvVUiRaSL
+	IR+y7Q19WzgIgAkm3XD3hoB5SDNX02CvCBQ8W9XU1SB8NsQsN1ngTBFH3gWDY+pq
+	WQjgeM6Dpq2K5HPncCi1w==
+X-ME-Sender: <xms:lFXeaaTpaqZAyVkCFr8qIhL6JVV9EklS003QLJ7fhAcwyiw3Ji9YyQ>
+    <xme:lFXeaammLWDUEcu1m54r5fYMjW_tPqCnCuPLylDriteOLBEERX_Ju_WD8Fyn2e8OI
+    0RB7DtZtAYEMFjkmQy_4QMCBWLl-K5eFc4FSTLu2I3U6HWpVZ-s9M8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdegudeghecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdp
+    rhgtphhtthhopegthhhlvghrohihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsoh
+    gtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehiohgrnhgrrdgtihhorhhnvghisehn
+    gihprdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrh
+    hnvghlrdhorhhg
+X-ME-Proxy: <xmx:lFXeaQ6vbhlCqM7PydlqlgOlF7_Zcxud3ExaLZAPwFDPqF-q_03VBA>
+    <xmx:lFXeafsqb6M6uapLWpbyCRIoxtU5wbljhy8-MK7rk7wG51Zsys2LVw>
+    <xmx:lFXeaZ4EmG3ZrURDYNZAzUdqAZxyTOCnbCFYo7ryhH7rKMgkyyPnHQ>
+    <xmx:lFXeaSU5HtIv6PwUaYtZPsONncsPT7EhWxilJTeWVxM_MiwChgfk5w>
+    <xmx:lFXeaZtc7xOI25MqbiwhNJrtudWDiBvTzRJqOWoeHtA2WNHw2R_C3eCz>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2104B700065; Tue, 14 Apr 2026 10:56:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Subject: [GIT PULL] SOC FSL for 6.20
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+X-ThreadId: ArHybFH20ckc
+Date: Tue, 14 Apr 2026 16:55:59 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Christophe Leroy" <chleroy@kernel.org>, soc@kernel.org
 Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Ioana Ciornei <ioana.ciornei@nxp.com>
-Content-Language: fr-FR
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ "Ioana Ciornei" <ioana.ciornei@nxp.com>
+Message-Id: <f48af0d1-0980-46dd-b2e9-081b019381e2@app.fastmail.com>
+In-Reply-To: <69cdadd6-523c-4a79-8cb3-1deff5910699@kernel.org>
+References: <69cdadd6-523c-4a79-8cb3-1deff5910699@kernel.org>
+Subject: Re: [GIT PULL] SOC FSL for 6.20
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
+On Tue, Apr 14, 2026, at 16:08, Christophe Leroy (CS GROUP) wrote:
+> Hi Arnd,
+>
+> Please pull the following Freescale Soc Drivers changes for 7.1
+>
+> Changes to fsl-mc bus are reviewed or acked by Ioana Ciornei.
 
-Please pull the following Freescale Soc Drivers changes for 7.1
+Hi Christophe,
 
-Changes to fsl-mc bus are reviewed or acked by Ioana Ciornei.
+This is really too late for 7.1: the merge window is
+already open, and I see that all the commits have a committer
+date of today, though some appear to be freshly rebased
+and had an earlier version in linux-next.
 
-Thanks
-Christophe
+I don't think any of these are urgent bugfixes, so I'd
+suggest you rebase onto 7.1-rc1 and send these again for
+7.2.
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
-
-   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
-
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/chleroy/linux 
-tags/soc_fsl-7.1-1
-
-for you to fetch changes up to 1bc2b368e0338bf1a977502d6c4716c888d1fbdb:
-
-   bus: fsl-mc: wait for the MC firmware to complete its boot 
-(2026-04-14 08:01:09 +0200)
-
-----------------------------------------------------------------
-FSL SOC Changes for 7.1
-
-Freescale QUICC Engine:
-- Add missing cleanup on device removal and switch to 
-irq_domain_create_linear()
-in interrupt controller for IO Ports
-- Panic on ioremap() failure in qe_reset()
-
-Freescale Management Complex:
-- Move fsl-mc over to device MSI infrastructure
-- Wait for the MC firmware to complete its boot
-
-Freescale Hypervisor:
-- Fix header kernel-doc warnings
-
-----------------------------------------------------------------
-Christophe Leroy (CS GROUP) (1):
-       soc: fsl: qe_ports_ic: switch to irq_domain_create_linear()
-
-Felix Gu (1):
-       soc: fsl: qe_ports_ic: Add missing cleanup on device removal
-
-Ioana Ciornei (1):
-       bus: fsl-mc: wait for the MC firmware to complete its boot
-
-Marc Zyngier (6):
-       fsl-mc: Remove MSI domain propagation to sub-devices
-       fsl-mc: Add minimal infrastructure to use platform MSI
-       irqchip/gic-v3-its: Add fsl_mc device plumbing to the msi-parent 
-handling
-       fsl-mc: Switch over to per-device platform MSI
-       fsl-mc: Remove legacy MSI implementation
-       platform-msi: Remove stale comment
-
-Randy Dunlap (1):
-       virt: fsl_hypervisor: fix header kernel-doc warnings
-
-Wang Jun (1):
-       soc: fsl: qe: panic on ioremap() failure in qe_reset()
-
-  drivers/base/platform-msi.c                 |   4 -
-  drivers/bus/fsl-mc/dprc-driver.c            |  14 +--
-  drivers/bus/fsl-mc/fsl-mc-bus.c             |  50 ++++++++-
-  drivers/bus/fsl-mc/fsl-mc-msi.c             | 166 
-+++++----------------------
-  drivers/bus/fsl-mc/fsl-mc-private.h         |   2 +-
-  drivers/irqchip/Kconfig                     |   6 -
-  drivers/irqchip/Makefile                    |   1 -
-  drivers/irqchip/irq-gic-its-msi-parent.c    |   7 +-
-  drivers/irqchip/irq-gic-v3-its-fsl-mc-msi.c | 168 
-----------------------------
-  drivers/soc/fsl/qe/qe.c                     |   3 +
-  drivers/soc/fsl/qe/qe_ports_ic.c            |  23 ++--
-  include/linux/fsl/mc.h                      |   6 +-
-  include/linux/irqdomain_defs.h              |   1 -
-  include/uapi/linux/fsl_hypervisor.h         |   4 +-
-  14 files changed, 106 insertions(+), 349 deletions(-)
-  delete mode 100644 drivers/irqchip/irq-gic-v3-its-fsl-mc-msi.c
+       Arnd
