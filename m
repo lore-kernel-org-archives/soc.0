@@ -1,99 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F13C31E826;
-	Tue, 14 Apr 2026 20:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CED30F94D
+	for <soc@lists.linux.dev>; Wed, 15 Apr 2026 05:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776198285; cv=none; b=pxOnUtcOzW7WEghscKR9b55fZtlOkBhwd3RqAZJCzgVXB0WtkCWpIa7RRFy1myOYNuqIiE5/2Rsbbb7yjGivI+yGbaJDVhmshXVx4QZY9EgXEik2by7J1BT14XHbMYrzmETBi7Lptxgc16nLREKHNEOO9FqkQbgzkc047yD1cJs=
+	t=1776232665; cv=none; b=NF69eAuW707jxyk9meYzTTQs/exarg7cisON2zjOXkQIk/0vdzuUZlWPCwE7EoN67Yeo/Wx8LWXXvBIuZhtR2Wjasjh5qRXl9XYIRw67JfrZGXiluOYZqRHqa3tAAub3zWtXzFD5PU4x5O3yHsi3sWeeEr83yaab1bJP9wPnr0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776198285; c=relaxed/simple;
-	bh=9gzrxKbw2rxLwue2MsvZ/QpDvJM6VvmWIy9J5cPJO0s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dg9/wGAfxhngQZJ4LzEs+NObgl4JVjEMzuhTCnDyk59PT/sriISaWPPk+8o2eSApJdq6H3LQQ/vnW6AEGLhMQBsThOz8wH0NDsVxTGcBazdghp052rfPyN7SU9l7Bx0utwichxfuCXsITr5uK47YSqHzEYN7LssEtN1Ee6+2aTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iB9npNQd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776232665; c=relaxed/simple;
+	bh=PjSnTV4MTkCnNE445WevLA/WZXxDGKFWb/5i7Xs5Aig=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=l1OIHnPMUEm1KcpSi5rTDe7XL/aKn0vBD5Yibbkji3xUpKuxWfBPX0OQsHXgjgVy1EclZESYmg6y4K2L2QkZLTObzWcFR2YymzV/tysRq5ZrjIR6FV5FTwDBEITjbeax1YYWNXqX0gTYFLGHyGY9xP5WMjbPtguPq995OJeUIss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=No6f1Qrd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iB9npNQd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C97C19425;
-	Tue, 14 Apr 2026 20:24:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="No6f1Qrd"
+Received: by smtp.kernel.org (Postfix)
+	id 49E61C2BCB0; Wed, 15 Apr 2026 05:57:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 512FFC19424;
+	Wed, 15 Apr 2026 05:57:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776198284;
-	bh=9gzrxKbw2rxLwue2MsvZ/QpDvJM6VvmWIy9J5cPJO0s=;
-	h=From:To:Cc:Subject:Date:From;
-	b=iB9npNQd4Uq8GqWbc6nfDQCUGz/NKMH077as1pAwywYc5wRCRfAktsxJjnD7VG4Fm
-	 YiCfAoH9UJSR3T0Fey7YxZS2PeoRdN8bLXMetpjdu1gbDVEPCX3ikAEv8wJEosCETX
-	 6kFn24oRkmPRTttdSqHgk9PraPWwhf0lTY4dyPgTbCXCOI3UGZ2AdUvIzporkOEERm
-	 Q2czFlISg7eqB6/oWEKoHVxHDj6lri+116jn/Ve/7jhlRhXTx3Kjtqjt6iJ0d1WeC8
-	 zaduqioMFVbova++50cAcnZ05BNrs/puRC81gQuFmglTBud0VMLHmPFqEHlIXMMfvH
-	 xPzXaQrY2loEA==
-From: Sven Peter <sven@kernel.org>
-To: soc@lists.linux.dev
-Cc: asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Apple SoC fixes for v7.0
-Date: Tue, 14 Apr 2026 22:24:25 +0200
-Message-ID: <20260414202428.5278-1-sven@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20201202; t=1776232665;
+	bh=PjSnTV4MTkCnNE445WevLA/WZXxDGKFWb/5i7Xs5Aig=;
+	h=Date:From:Subject:To:Cc:From;
+	b=No6f1QrdH9TxdOZk6CiVMAxWbhl/QhQsrodwnXN9uP9ms5rGGLOE8/+A3RCjbkk86
+	 h1ranMgn7F+h+sS33A1oaIxC4Vsd9GepUB0n8VLWgacX0OGpxnhbPAJM0sfYXKCKF8
+	 XUmtrY7GCtOaG6Xw9HJGe19JBaA1n5OeovIK5aw7/ORMzEbS2Ks8nxsTBMvY9R0gYV
+	 HPwF3HIbG4QznGiSRtz5DZVdcjaTU00Bcj55e1o2Emhl51vn7zyzVvkZ+Urt6v8Vtk
+	 RPwYK265nF81zu4S96ZPaLi+q46Il7gWGhskdmtNqmwsmiaUConk3+f2v1pQ0PfIgr
+	 gO1/BFG7nGuIw==
+Message-ID: <310b65ba-1d73-4ce0-b332-00cde70acc69@kernel.org>
+Date: Wed, 15 Apr 2026 07:57:41 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Subject: [GIT PULL] SOC FSL for 7.1 (retry)
+To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Ioana Ciornei <ioana.ciornei@nxp.com>
+Content-Language: fr-FR
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi Arnd,
 
-Two fixes without any functional changes, they just update Sasha's email
-everywhere and fix a typo in a dtsi file comment.
-As discussed with Arnd I'm already sending out the PR now so that you guys can
-decide when to merge this.
+As you are worried about the last minute rebase done yesterday, here is 
+a new pull request without the rebase. It means it is based on tag 
+soc_fsl-7.0-2 that you merged into 7.0-rc5 some weeks ago.
 
+Most commits have spent several weeks in linux-next, only the last one 
+spent only 10 days there, but it is not a major change and it is 
+originating from the maintainer of fsl-mc bus directly.
+Commit a0fe29d20e78 ("soc: fsl: qe: panic on ioremap() failure in 
+qe_reset()") is also flagged as being commited 10 days ago, but this is 
+just because I droped the preceding commit.
 
-Thanks,
+Please pull the following Freescale Soc Drivers changes for 7.1
 
+Changes to fsl-mc bus are reviewed or acked by Ioana Ciornei.
 
-Sven
+Thanks
+Christophe
 
+The following changes since commit 3f4e403304186d79fddace860360540fc3af97f9:
 
-The following changes since commit 028ef9c96e96197026887c0f092424679298aae8:
-
-  Linux 7.0 (2026-04-12 13:48:06 -0700)
+   soc: fsl: cpm1: qmc: Fix error check for devm_ioremap_resource() in 
+qmc_qe_init_resources() (2026-02-23 14:49:27 +0100)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git tags/apple-soc-fixes-7.0
+   https://git.kernel.org/pub/scm/linux/kernel/git/chleroy/linux 
+tags/soc_fsl-7.1-2
 
-for you to fetch changes up to c7ff53ef45b2f879576f7bbeb163828d04f5f491:
+for you to fetch changes up to 208858b1b48eba83d073542372329cf8ed606526:
 
-  arm64: dts: apple: Fix spelling error (2026-04-14 22:13:19 +0200)
-
-----------------------------------------------------------------
-Apple SoC fixes for 7.0
-
-Two commits without any functional changes that arrived just before the
-merge window opened:
-- Update Sasha's email address in all dt-bindings, MAINTAINERS and add
-  him to mailmap
-- Fix a typo in spi1-nvram.dtsi
+   bus: fsl-mc: wait for the MC firmware to complete its boot 
+(2026-04-04 18:54:05 +0200)
 
 ----------------------------------------------------------------
-Axel Flordal (1):
-      arm64: dts: apple: Fix spelling error
+FSL SOC Changes for 7.1
 
-Sasha Finkelstein (2):
-      mailmap: Update Sasha Finkelstein's email address
-      dt-bindings: Update Sasha Finkelstein's email address
+Freescale QUICC Engine:
+- Add missing cleanup on device removal and switch to 
+irq_domain_create_linear()
+in interrupt controller for IO Ports
+- Panic on ioremap() failure in qe_reset()
 
- .mailmap                                                                | 1 +
- .../devicetree/bindings/display/apple,h7-display-pipe-mipi.yaml         | 2 +-
- Documentation/devicetree/bindings/display/apple,h7-display-pipe.yaml    | 2 +-
- Documentation/devicetree/bindings/display/panel/apple,summit.yaml       | 2 +-
- Documentation/devicetree/bindings/gpu/apple,agx.yaml                    | 2 +-
- .../devicetree/bindings/input/touchscreen/apple,z2-multitouch.yaml      | 2 +-
- Documentation/devicetree/bindings/nvmem/apple,spmi-nvmem.yaml           | 2 +-
- Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml               | 2 +-
- Documentation/devicetree/bindings/spmi/apple,spmi.yaml                  | 2 +-
- MAINTAINERS                                                             | 2 +-
- arch/arm64/boot/dts/apple/spi1-nvram.dtsi                               | 2 +-
- 11 files changed, 11 insertions(+), 10 deletions(-)
+Freescale Management Complex:
+- Move fsl-mc over to device MSI infrastructure
+- Wait for the MC firmware to complete its boot
+
+Freescale Hypervisor:
+- Fix header kernel-doc warnings
+
+----------------------------------------------------------------
+Christophe Leroy (CS GROUP) (1):
+       soc: fsl: qe_ports_ic: switch to irq_domain_create_linear()
+
+Felix Gu (1):
+       soc: fsl: qe_ports_ic: Add missing cleanup on device removal
+
+Ioana Ciornei (1):
+       bus: fsl-mc: wait for the MC firmware to complete its boot
+
+Marc Zyngier (6):
+       fsl-mc: Remove MSI domain propagation to sub-devices
+       fsl-mc: Add minimal infrastructure to use platform MSI
+       irqchip/gic-v3-its: Add fsl_mc device plumbing to the msi-parent 
+handling
+       fsl-mc: Switch over to per-device platform MSI
+       fsl-mc: Remove legacy MSI implementation
+       platform-msi: Remove stale comment
+
+Randy Dunlap (1):
+       virt: fsl_hypervisor: fix header kernel-doc warnings
+
+Wang Jun (1):
+       soc: fsl: qe: panic on ioremap() failure in qe_reset()
+
+  drivers/base/platform-msi.c                 |   4 -
+  drivers/bus/fsl-mc/dprc-driver.c            |  14 +--
+  drivers/bus/fsl-mc/fsl-mc-bus.c             |  50 ++++++++-
+  drivers/bus/fsl-mc/fsl-mc-msi.c             | 166 
++++++----------------------
+  drivers/bus/fsl-mc/fsl-mc-private.h         |   2 +-
+  drivers/irqchip/Kconfig                     |   6 -
+  drivers/irqchip/Makefile                    |   1 -
+  drivers/irqchip/irq-gic-its-msi-parent.c    |   7 +-
+  drivers/irqchip/irq-gic-v3-its-fsl-mc-msi.c | 168 
+----------------------------
+  drivers/soc/fsl/qe/qe.c                     |   3 +
+  drivers/soc/fsl/qe/qe_ports_ic.c            |  23 ++--
+  include/linux/fsl/mc.h                      |   6 +-
+  include/linux/irqdomain_defs.h              |   1 -
+  include/uapi/linux/fsl_hypervisor.h         |   4 +-
+  14 files changed, 106 insertions(+), 349 deletions(-)
+  delete mode 100644 drivers/irqchip/irq-gic-v3-its-fsl-mc-msi.c
