@@ -1,63 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F78363C7F;
-	Fri, 17 Apr 2026 04:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D10139F19A
+	for <soc@lists.linux.dev>; Fri, 17 Apr 2026 08:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776399075; cv=none; b=dBLetFx6dO22ny2OkV2qHAwAd3LK0Fa7/YnbQH4OPagrU6ae3kENgd35vidsL1nMNVQ1XEoO6nx8qZ+tRtx+04N87LicGJXC/P6Myx+OfFjhd0gngQYsYtiNAdeND7Hy5w4q3eosli1CSeyD+md1cgtbMt3KB0yEVds6N3jpLXs=
+	t=1776416402; cv=none; b=opugV/lpwcVGU1i7e4ud1Kp1a6iYQqSRCVQKSVRmQp0kimA7P+dyUnfXpCjzp8vUVEi8GwFtqLSk0Kh8nYOvX1EaE/Jhqfj8/g0YO/PcXwZWLW0xBczcv+cdqnQMmRcsOlEU31SktbZPd+c1xuK5l6OML8M6QPW0NpmKvzu141Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776399075; c=relaxed/simple;
-	bh=E10JRXjAArC+gw4mkvjfjJvB3Q5k9wQg/kwMVF+t7Bc=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=X/GisHunt6CpGEJx/1mKkqg7DsXfvOa/x3+KkhdTMy7k+3ryX1vUQVnxZQEhr6PLU+gEnQ9ct/B9vn209Myno+EIoCU9vypuecgCBYAMtQfuP7D3q9vqE7DHTjn4pTucaW9U9ZxVhB2WTTRvynDIl3E+YDV345pH0CCsZa31azI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fQoU9OjH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776416402; c=relaxed/simple;
+	bh=hshxd87I7o4SSyjp/EHX3u4T0PWayKVK/jIU2zs7yxM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=g3cD2cmEuq+3GGj0Qb406NXkZT1C7Sr54T+HDCVd5pzGinT5CFHTpjolIFFJuLI04FBHGUbNbBvHtGHMblxAiCqmE75Hs3zcMz1vUveccpV0hU3VuQspRtEgp4e/kyEb1YVXocP9wVujvrlBqGC92EI0ukTTpbqM5KPmQYJWs+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JS/UeliM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WaSxT0Xq; arc=none smtp.client-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fQoU9OjH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCBFC2BCB5;
-	Fri, 17 Apr 2026 04:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776399075;
-	bh=E10JRXjAArC+gw4mkvjfjJvB3Q5k9wQg/kwMVF+t7Bc=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=fQoU9OjHAvYMDxJlSua611Tvx7NPUOmZld4QCaCJ8+ihiura18U65m/5uHmhctiIq
-	 m9A501lQObfmXmX29pG6HnMib1HGHgk5VAvnQYGfPeFvmO3tGgzIsqfNaM/8legy/l
-	 e6GlTD2A3Ptc6I7/9SqqhVS2CY7kakedhKsltxCsJhuCv3zuJK3xExMer7vuXhHOWo
-	 QvNIzJh/i7CZP0FG+1FziYpiqiMLQ53expQ7ayC3hO5GkBIlt2WKKWYpZCjAyb8aeC
-	 1pTmNBAvG32FtESh8l6gA1D9MEOI1CrElAmxB9ypxbL1smyRtDp1QjCM7OYWEEaQVC
-	 r/WLV5OielAdA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 413FF380AA7D;
-	Fri, 17 Apr 2026 04:10:44 +0000 (UTC)
-Subject: Re: [GIT PULL 4/4] soc: ARM code changes for 7.1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <2af6e914-7d5f-4976-8b18-0a98ad3a427c@app.fastmail.com>
-References: <c595dc8e-6367-4922-98ed-90bdd4c3c24f@app.fastmail.com> <2af6e914-7d5f-4976-8b18-0a98ad3a427c@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lists.linux.dev>
-X-PR-Tracked-Message-Id: <2af6e914-7d5f-4976-8b18-0a98ad3a427c@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-7.1
-X-PR-Tracked-Commit-Id: 3ef628c3f37f1dcef0da51e73ad6e458ec74bddb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8242c709d4ba858c483ef7ef3cc2dc1280f5383c
-Message-Id: <177639904300.3519243.17509720046680609301.pr-tracker-bot@kernel.org>
-Date: Fri, 17 Apr 2026 04:10:43 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JS/UeliM";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WaSxT0Xq"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 9D3DE1D001E3;
+	Fri, 17 Apr 2026 04:59:58 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Fri, 17 Apr 2026 04:59:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1776416398;
+	 x=1776502798; bh=UUvDMgT2JDILnPFp/rQMG5xa0/FbaPkssLGIWBPbYgo=; b=
+	JS/UeliMctoAoIjBE3RhNUS3edBlWLZsyGRgrONFKmz/CiVVFMhHNtetfjM6JtYQ
+	vhFE5tdjK6uy+zuwU2ldiI2TlC18ZZ2YZLLNoJXI6zYYalxRAVDM6HW395y87Q/7
+	Z1+QaKK3TyTsy7wq1vzXIGQBct7+ddSpDmH7EY5xfyxY/EM+MlqAcwaDNnnK104I
+	H8e5gK1lbaSN9/AtAogtApuHRZsCPUEbWWOn5L3j3UBP1BwK4nc8OK43a1iDW8xE
+	5wZNs8Ayo/84JGwpCUxJjcTOg7lYQOoXiQbSg6ZVNSDQ76sMI/UXv4v+tSmuMpIZ
+	uOBsqxQ3NsYY+gSbaH79cA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1776416398; x=
+	1776502798; bh=UUvDMgT2JDILnPFp/rQMG5xa0/FbaPkssLGIWBPbYgo=; b=W
+	aSxT0XqmNdL6YS4/HeSJP2lsDApkXf0O9c9SWzPy8SFX8ZhYhTmisvLzDa0MuAJ2
+	7BrehUxkn7QsZTwGuhl/upRnMcM1UAWrVkvI7LYFJS7ImyG9wHlXkET/m53wU0D3
+	w03IvFqGs6GlgwRv9/BqT453wti6jJIcNrtCysHJmiIYr/0vmFOyEquKD1a62oSc
+	tGhyIZd49KLpeSTvYuk8YQp737LnM6FujUyMG5UVPvuZEqiVugDCDnzfRfz14HiS
+	11DN5i/IoZTW9PHHqOcmJ8yb+3W/ZFP5HBRKl4DiWsYaNIeqGr9jWybv6aNzRUek
+	EU0bgjIorrZ1l0HPF/Hfg==
+X-ME-Sender: <xms:jfbhaVCKzv6Y5_tboWvdprRfSdNQOWe4XLA7ZKJagNGj88goJ1BCPQ>
+    <xme:jfbhaeWXg8sJufOIzqIVXDXeu0gK5r2qqDylP8NBILdyki6WdieNCo7Zvi9XKJnla
+    C5hyto0XjpqfpjHIR9It9u_IpqRGicpVy0ZzLliu9Vi79O125Tk4DI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdegleegiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeduledpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtoheplhhinhhugiesrghrmhhlihhnuhigrdhorhhgrdhukhdprhgtphhtth
+    hopegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghp
+    thhtohepshhtvghfrghnughovghsihhnghgvrhesghhmrghilhdrtghomhdprhgtphhtth
+    hopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfhhushhtihhn
+    iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhirhhishhlrggshieskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtohepkhhriihksehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhhsfieskh
+    gvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:jfbhaZkiRndjPCwU6sql-kOX10LyujavQxQBoN4M6zLknn8cqvafOA>
+    <xmx:jfbhaTMbcbJ58fLah-LqrDOHtB4mfjWZqP9VFCwxbPoEjLUNh71LCg>
+    <xmx:jfbhabofCGG5zweFeXghmctJU7-N5LHnIIR6i8bI2NG8mg3lhLoa1Q>
+    <xmx:jfbhacs0yuhPrjhyheW8S6qyVgAWvGv4Ym_2dYXv7pkkkmN5CH0_zg>
+    <xmx:jvbhaTPSJ6wafZHNswkUf5Vf0rZBdqmkwoEVH7znV98AIPrNVgrTg05d>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id C1056700065; Fri, 17 Apr 2026 04:59:57 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-ThreadId: AkOrUqlAGQ43
+Date: Fri, 17 Apr 2026 10:59:17 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>,
+ "Russell King" <linux@armlinux.org.uk>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Linus Walleij" <linusw@kernel.org>, "Drew Fustini" <fustini@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Jiri Slaby" <jirislaby@kernel.org>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ soc@lists.linux.dev, linux-serial@vger.kernel.org
+Message-Id: <0d80dcbe-cb46-45e5-821a-de5299d6a663@app.fastmail.com>
+In-Reply-To: <20260416-send-v4-7-e19d02b944ec@gmail.com>
+References: <20260416-send-v4-0-e19d02b944ec@gmail.com>
+ <20260416-send-v4-7-e19d02b944ec@gmail.com>
+Subject: Re: [PATCH v4 7/8] ARM: dts: Declare UART1 on zx297520v3 boards
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The pull request you sent on Fri, 17 Apr 2026 00:31:18 +0200:
+On Thu, Apr 16, 2026, at 22:19, Stefan D=C3=B6singer wrote:
+>
+> The reason why I add the serial1=3Duart1 alias is to keep console=3Dtt=
+yAMA1
+> stable regardless of the other enabled UARTs. UART0, as the name
+> implies, has a lower MMIO address, but uart1 is the one that usually h=
+as
+> the boot output and console.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-7.1
+I'm not sure I'm following here. You generally want to either make
+sure the alias matches whatever number is printed on the product
+if there are multiple numbered ports, or you just use 'serial0'
+as the only alias if there is only one port.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8242c709d4ba858c483ef7ef3cc2dc1280f5383c
+> +	aliases {
+> +		serial1 =3D &uart1;
+> +	};
 
-Thank you!
+Either way, the alias should go into the board specific file, not
+the general SoC file, as a board might be using a different
+set of UARTs.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> +
+> +		/* The UART clock defaults to 26 mhz. It will be replaced when the =
+zx29 clock
+> +		 * framework is added.
+> +		 */
+> +		uartclk: uartclk: clock-26000000 {
+> +			#clock-cells =3D <0>;
+> +			compatible =3D "fixed-clock";
+> +			clock-frequency =3D <26000000>;
+> +		};
+> +
+> +		uart1: serial@1408000 {
+> +			compatible =3D "arm,pl011", "arm,primecell";
+> +			arm,primecell-periphid =3D <0x001feffe>;
+> +			reg =3D <0x01408000 0x1000>;
+> +			interrupts =3D <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks =3D <&uartclk>;
+> +			clock-names =3D "apb_pclk";
+> +		};
+
+Since you know the addresses of the other uart instances, I would
+suggest you add all of them at the same time.
+
+       Arnd
