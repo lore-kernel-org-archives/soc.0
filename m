@@ -1,310 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDB63DB63E;
-	Mon, 20 Apr 2026 13:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0092835F5F2
+	for <soc@lists.linux.dev>; Mon, 20 Apr 2026 14:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776691445; cv=none; b=TvKRdIiWmydoDGXWv5jsrBzRFFyADWo8zBCXJg10fJHT3B42vGtzb51rGMF1Jo22o0TKhgoLfSZQewvmCzBZ/7ZPGj2Sjix2ZmliPw+5+9TU+9t34WOebVZlR0GCWNFE//+1R6vR4gELE04ZAhfmST3Yp5u9kByS74A6LvCbHck=
+	t=1776693958; cv=none; b=NW9N5PSbbVCHQXAAOPlNGXBkTQ0dzJFd9zVEDT0dS3oAVv+eQ4SNKWMR1yf57Zz/XMIZEfjbM5waMENhnquht7u1BRCPWxUD4Z8xL1afxK+Z3br72BwAN3lyxw7kQ0evXrCEOQ+HXigARnPIQOHDGKoQrrfLJP6pz4nIZn3rmQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776691445; c=relaxed/simple;
-	bh=IBuL87kg7wpsT412K8NRk4YOtFTrf5NwlI/iUmu+Et8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GMhf04qJ4m1K8XdWdL+3tbfzpyyNJhG7LJ3RSvAq2wGoWr4+6pxGodOL9JwD52QtvciPMDVJ0gg8eV8WLf/CeVFVMkjjQxnp1HaiDqlz95ZVqIEW4yqwpoMehr0nHVmM7mryHXSXPnzVC8E8338YkrylDo7rN8TENxpov9pjvpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKw2ubrL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776693958; c=relaxed/simple;
+	bh=QAwupXvswKi0i6idD00xekBtVM14c9yZdmAI9K+opHw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=T8UYSwcFYsxe66meQB4DuBgeGGjbXtNX9/i0GkGMo9LwCoMFNBZbOH/1eGJWNtLKDoew4BLoQtFytW4RH+6Vh9GNju4Th0PHz/1qe7s+hISOWGp/tdsJvmRy+HgEPkWTTDIfi1DO5dw8JUuiuIdVy5WxVmtLqpGmYYGwNJg3MCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pQiPoimt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKw2ubrL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570CAC2BCB8;
-	Mon, 20 Apr 2026 13:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776691445;
-	bh=IBuL87kg7wpsT412K8NRk4YOtFTrf5NwlI/iUmu+Et8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mKw2ubrLr5QqdOp6FOQL+oZJE0zvdTlfQuYvQgDMbSfJ39PHj2UucaUAunYPYYom0
-	 WFKsJkeRpPXUQNf856Swl8E6/r+dRUKeFbLhOCgsZppPgu7+krv5Uo/DTp/7dpXECK
-	 raM/qHWLKvNYyyKZAZtTr5Ll5TtyZ/K4Qw3VOZCP5ExR2X34aMdV2jsf4rbHso2cmh
-	 ccU/rUocMUKJI3oPz65J8hQM0Ti7wGVKDAikKapG/ec1SrhZAfsMsXkjYsLsYjHgi1
-	 6vZ0rOPJkyVwbxLujfzkhIvjEkOj2p4rMjErofmxQXNGujq0D/w3FPWH2Ig5Xsyi44
-	 xy31pEgH9uCKw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Sasha Levin <sashal@kernel.org>,
-	vireshk@kernel.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-5.10] clk: spear: fix resource leak in clk_register_vco_pll()
-Date: Mon, 20 Apr 2026 09:17:06 -0400
-Message-ID: <20260420132314.1023554-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260420132314.1023554-1-sashal@kernel.org>
-References: <20260420132314.1023554-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pQiPoimt"
+Received: by smtp.kernel.org (Postfix)
+	id A3192C2BCB6; Mon, 20 Apr 2026 14:05:57 +0000 (UTC)
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3E72FC19425;
+	Mon, 20 Apr 2026 14:05:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E72FC19425
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 508CFC5C997;
+	Mon, 20 Apr 2026 14:06:33 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6EAD05FFA5;
+	Mon, 20 Apr 2026 14:05:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D831D104609B0;
+	Mon, 20 Apr 2026 16:05:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776693952; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=/mj8RAP9/uofykJIdVLa13LaWWUYKPuyG+u16lfjWh4=;
+	b=pQiPoimtg6qTaag9BcjlaMczteF6DEA8IoDnUWB7NIclufHoCNSD0R4oQG0Zh5NL+WuZEA
+	iajliuAqic0sAA1X8q/g4FEFzdJjskYVDeyH60UWuuFw1rnndOU7AAUCsKK7V8+HErGW7t
+	aQv9FlgwYpJtba4/s2MF0F+SwP6WfiaPuCI9uiz3skDP190p2QPAr0lMhykXaaD1/oPIhq
+	I/9e2yA/IxnsTwrNbZae5EwaIsd/JJq9O9Q1hAy+qoNnXZrfuqc5679z1HWayG4N6rhZtW
+	mDMCMzWP9l9nW8XfwX8JDe+WSVELP6VS7thbv400ohavmqdYWNGj1C6Gs/rujg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org, Andrew
+ Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v7.1 (#1)
+In-Reply-To: <20260414-nifty-conscious-fox-973b65@quoll>
+References: <87cy072bho.fsf@BLaptop.bootlin.com>
+ <20260414-nifty-conscious-fox-973b65@quoll>
+Date: Mon, 20 Apr 2026 16:05:50 +0200
+Message-ID: <87mryxrakh.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 7.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
-From: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+Hello Krzysztof,
 
-[ Upstream commit a0ac82cbed1007afd89e30940fe2335b61666783 ]
+> On Fri, Apr 10, 2026 at 03:25:39PM +0200, Gregory CLEMENT wrote:
+>> Hi,
+>>=20
+>> Here is the first pull request for dt64 for mvebu for v7.1.
+>>=20
+>> Gregory
+>>=20
+>> The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f=
+27f:
+>>=20
+>>   Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+>>=20
+>> are available in the Git repository at:
+>>=20
+>>   git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/=
+mvebu-dt64-7.1-1
+>>=20
+>> for you to fetch changes up to 00e6d608fe80b0f68c325cb46862f78e9a8ec768:
+>>=20
+>>   arm64: dts: marvell: armada-37xx: swap PHYs' order in USB3 controller =
+node (2026-04-09 10:14:40 +0200)
+>>=20
+>> ----------------------------------------------------------------
+>> mvebu dt64 for 7.1 (part 1)
+>
+> This was sent just 2 days before merge window open, thus I applied it as
+> late branch.
 
-Add a goto label in clk_register_vco_pll(), unregister vco_clk
-if tpll_clk is failed to be registered.
 
-Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://lore.kernel.org/r/20260325062204.169648-1-lihaoxiang@isrc.iscas.ac.cn
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+Thanks for finally merging it.
 
-LLM Generated explanations, may be completely bogus:
+Gregory
 
-Now I have enough information to complete the analysis. Let me
-synthesize my findings.
+>
+> Best regards,
+> Krzysztof
+>
 
----
-
-## PHASE 1: COMMIT MESSAGE FORENSICS
-
-**Step 1.1: Subject Line**
-- Subsystem: `clk: spear` (SPEAr SoC clock driver)
-- Action verb: "fix" (explicitly a bug fix)
-- Summary: Fixes a resource leak where `vco_clk` is not unregistered on
-  error path
-
-**Step 1.2: Tags**
-- Signed-off-by: Haoxiang Li (author)
-- Acked-by: Viresh Kumar (original author of the file and subsystem
-  maintainer)
-- Link: to lore submission
-- Signed-off-by: Arnd Bergmann (ARM SoC maintainer who merged it)
-- No Fixes: tag, no Reported-by:, no Cc: stable (expected for review
-  candidates)
-
-**Step 1.3: Commit Body**
-The body explains: when `tpll_clk` (PLL clock) registration fails, the
-already-registered `vco_clk` is leaked because the error path goes to
-`free_pll` which only frees the structs but doesn't unregister the
-clock.
-
-**Step 1.4: Hidden Bug Fix?**
-No, this is explicitly labeled as a "fix resource leak" — not hidden.
-
-## PHASE 2: DIFF ANALYSIS
-
-**Step 2.1: Inventory**
-- Single file: `drivers/clk/spear/clk-vco-pll.c`
-- +3 lines (new label + `clk_unregister` + blank line), 1 line changed
-  (`goto free_pll` -> `goto unregister_clk`)
-- Function modified: `clk_register_vco_pll()`
-- Scope: Single-file surgical fix, error path only
-
-**Step 2.2: Code Flow Change**
-- BEFORE: When `tpll_clk = clk_register(NULL, &pll->hw)` fails, code
-  jumps to `free_pll`, which only does `kfree(pll)` + `kfree(vco)`. The
-  already-registered `vco_clk` is leaked.
-- AFTER: Code jumps to new label `unregister_clk`, which calls
-  `clk_unregister(vco_clk)` before falling through to `free_pll`.
-
-**Step 2.3: Bug Mechanism**
-Resource leak in error path — specifically, a registered clock object
-(`vco_clk`) that is never unregistered when the subsequent PLL clock
-registration fails.
-
-**Step 2.4: Fix Quality**
-- Obviously correct: Yes. The ordering is correct (`clk_unregister`
-  before `kfree`), and it only applies when `vco_clk` was successfully
-  registered.
-- Minimal/surgical: Yes, 4 lines total.
-- Regression risk: Essentially zero — only affects an error path that
-  was previously buggy.
-
-## PHASE 3: GIT HISTORY INVESTIGATION
-
-**Step 3.1: Blame**
-From `git blame`, the buggy code (line 346: `goto free_pll;`) was
-introduced in commit `55b8fd4f42850` by Viresh Kumar on 2012-04-10,
-which is the original "SPEAr: clk: Add VCO-PLL Synthesizer clock"
-commit. This bug has been present since v3.5 (2012).
-
-**Step 3.2: Fixes: tag**
-No explicit Fixes: tag. Implicitly the fix is for `55b8fd4f428501`
-("SPEAr: clk: Add VCO-PLL Synthesizer clock").
-
-**Step 3.3: File History**
-The file has had very few changes: mostly treewide cleanups (SPDX,
-kzalloc_obj, determine_rate API conversion). No recent bug fixes or
-active development.
-
-**Step 3.4: Author**
-Haoxiang Li is a prolific contributor of resource-leak fixes across the
-kernel (10+ similar commits found). Their related clk tegra fix
-explicitly CC'd stable.
-
-**Step 3.5: Dependencies**
-None. The fix is self-contained. `clk_unregister()` has been available
-since the clk framework was introduced.
-
-## PHASE 4: MAILING LIST
-
-Lore is behind anti-bot protection. However, the commit has Acked-by
-from Viresh Kumar (the original author and subsystem co-maintainer) and
-was merged by Arnd Bergmann (ARM SoC maintainer), indicating proper
-review.
-
-## PHASE 5: CODE SEMANTIC ANALYSIS
-
-**Step 5.1-5.4: Callers**
-`clk_register_vco_pll()` is called from:
-- `spear3xx_clock.c` (2 calls: vco1, vco2)
-- `spear6xx_clock.c` (2 calls: vco1, vco2)
-- `spear1310_clock.c` (4 calls: vco1-vco4)
-- `spear1340_clock.c` (4 calls: vco1-vco4)
-
-These are all boot-time clock initialization paths. The error path would
-only trigger if `clk_register()` fails during boot.
-
-## PHASE 6: STABLE TREE ANALYSIS
-
-**Step 6.1: Buggy code in stable**
-The file was introduced in v3.5 (2012). It exists in ALL stable trees.
-The buggy code has not changed since the original commit.
-
-**Step 6.2: Backport Complications**
-The only potential issue: `kzalloc_obj` (from commit `bf4afc53b77ae`,
-v7.0 era) replaced `kzalloc`. But the fix only touches error handling
-labels, not the allocation code. The fix should apply cleanly with
-minimal or no conflict to all stable trees.
-
-**Step 6.3: Related fixes**
-No other fix for this issue exists in stable.
-
-## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
-
-- Subsystem: `drivers/clk/spear` — clock driver for SPEAr SoC (ARM, ST
-  Microelectronics)
-- Criticality: PERIPHERAL — niche ARM embedded platform
-- Activity: Very low (mostly treewide cleanups)
-
-## PHASE 8: IMPACT AND RISK ASSESSMENT
-
-**Step 8.1: Who is affected**
-Users of SPEAr SoC platforms (SPEAr3xx, SPEAr6xx, SPEAr13xx).
-
-**Step 8.2: Trigger conditions**
-Only triggered if `clk_register()` fails for the PLL clock after VCO
-clock was successfully registered. This is an error-path-only scenario
-during boot.
-
-**Step 8.3: Failure mode severity**
-Resource leak (registered clock not freed) — LOW severity. The clock
-remains registered but orphaned. Not a crash, not corruption, not
-security-relevant.
-
-**Step 8.4: Risk-Benefit**
-- Benefit: LOW — fixes a leak in a rarely-hit error path on a niche
-  platform
-- Risk: VERY LOW — 4 lines, obviously correct, error path only
-- Ratio: Acceptable but marginal
-
-## PHASE 9: FINAL SYNTHESIS
-
-**Evidence FOR backporting:**
-- Fixes a real resource leak bug (missing `clk_unregister`)
-- Extremely small and obviously correct (4 lines)
-- Acked by the subsystem maintainer (Viresh Kumar)
-- Zero regression risk (error path only)
-- Bug present since v3.5 (exists in all stable trees)
-- Applies cleanly
-
-**Evidence AGAINST backporting:**
-- Very low real-world impact: only triggered on error path during boot-
-  time clock init
-- SPEAr is a niche, largely unmaintained ARM platform
-- The error condition (second `clk_register()` failing) is extremely
-  unlikely in practice
-- No Reported-by: tag — nobody actually hit this bug
-- Not a crash, corruption, or security issue — just a resource leak on
-  error path
-- Does not meet the "important issue" criterion of stable rules (not a
-  crash, security bug, data corruption, deadlock, etc.)
-
-**Stable Rules Checklist:**
-1. Obviously correct and tested? YES
-2. Fixes a real bug? YES (resource leak)
-3. Important issue? NO — minor error-path leak on niche platform
-4. Small and contained? YES
-5. No new features? YES
-6. Can apply to stable? YES (likely clean apply or trivial conflict)
-
-## Verification
-
-- [Phase 1] Parsed tags: Acked-by Viresh Kumar, SOB Arnd Bergmann, Link
-  to lore
-- [Phase 2] Diff analysis: 4 lines changed in error path of
-  `clk_register_vco_pll()`, adds `clk_unregister(vco_clk)` before kfree
-- [Phase 3] git blame: buggy code introduced in 55b8fd4f42850 (v3.5,
-  2012), present in all stable trees
-- [Phase 3] File history: 13 changes total since introduction, none fix
-  this bug
-- [Phase 3] Author history: Haoxiang Li submits many resource-leak
-  fixes, similar tegra fix CC'd stable
-- [Phase 4] Lore blocked by anti-bot; confirmed Acked-by from subsystem
-  maintainer from commit tags
-- [Phase 5] Callers: 12 call sites across 4 SPEAr clock init files, all
-  boot-time init
-- [Phase 6] Code exists in all active stable trees
-- [Phase 8] Failure mode: resource leak on error path, severity LOW
-
-While this is a legitimate bug fix that is small and obviously correct,
-it fixes a resource leak that only occurs in an extremely unlikely error
-path during boot on a niche embedded platform. Nobody has reported
-hitting this bug. The stable kernel rules require that a fix addresses
-an "important" issue — this is a minor error-path cleanup, not a crash,
-security issue, data corruption, or deadlock. The risk is very low but
-so is the benefit.
-
-**YES**
-
- drivers/clk/spear/clk-vco-pll.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/spear/clk-vco-pll.c b/drivers/clk/spear/clk-vco-pll.c
-index 601e123f5c4b5..faba727e2f843 100644
---- a/drivers/clk/spear/clk-vco-pll.c
-+++ b/drivers/clk/spear/clk-vco-pll.c
-@@ -343,13 +343,15 @@ struct clk *clk_register_vco_pll(const char *vco_name, const char *pll_name,
- 
- 	tpll_clk = clk_register(NULL, &pll->hw);
- 	if (IS_ERR_OR_NULL(tpll_clk))
--		goto free_pll;
-+		goto unregister_clk;
- 
- 	if (pll_clk)
- 		*pll_clk = tpll_clk;
- 
- 	return vco_clk;
- 
-+unregister_clk:
-+	clk_unregister(vco_clk);
- free_pll:
- 	kfree(pll);
- free_vco:
--- 
-2.53.0
-
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
