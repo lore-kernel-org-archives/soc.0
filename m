@@ -1,131 +1,165 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94758279798
-	for <soc@lists.linux.dev>; Mon, 20 Apr 2026 19:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEE03115A2
+	for <soc@lists.linux.dev>; Tue, 21 Apr 2026 13:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776714088; cv=none; b=WXiuYIA/MGrbxk1hAUE/qnLl/Kw8UyyTc+ZH/ueUMMNW+Mquwyhw0EIAwHq7PSREEz0BdPK7o1MZ8/FKfz58dgk2vvp18xfyV3JYVjxD2CJD5mBQ3myucXpdDV1f/0LAbwKfKcO7kAzJceJIfCsjdAOPxvTY2f2KVzUN69HNht8=
+	t=1776779530; cv=none; b=q5KlP0pDmFgBcgJBj0bsnppTrQ8X+70Qb0Cf85jJr8w1GWCamvAtKX5v8XUzZgdCznU4amppgsWLWk9+XJpA4z0iU4jST55DY3esPc9VZpi0DTDpdii6IyiVmSL3dnAAqhZTMIUs/iw59GnRS6c/KvJMSii+FkyLvzDu448SBYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776714088; c=relaxed/simple;
-	bh=vb0/sUvLs4L8ywV5aPu7Pf/bm2oGUfVm3CTrMEICeS4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=iDpnQ+O3O8g+4sYzSEFjf93WpkmnAPd99/360ptWnYWCqRs03cz9G2rTcESlCXxRU60Tu+fqPfjL6vSFjlZRVlB1DJuuTfTwh33kMoUTQkFoTAM9m5ouxYgm90NtRmustBJ6gnHyUiFY4n/MbgEsnjWzUCqAiiTqeHX+SlqRonw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Q8Qg0Es4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hADYUc2r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776779530; c=relaxed/simple;
+	bh=bxTlfEqNKlfD/1zhWj2LkTSIBDsbTE5V59FoNHHBTkI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=XIxRfVNfnOlzX9g+LZmeE0WeALQVCOgW1t08fHtrtyXbPLn8zP4pxueV8RuqzKRCbLcYbpp8cMW1qdjR3hwSOvCBHOFzIm+L0F5lSX8PhyWhWTFyZvKUPARY/JbONwJsTmPYVsgI8eopAj6aE73VniI8V4taH9/6OnKhAnEsTOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D+cn4Kwn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Q8Qg0Es4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hADYUc2r"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D+cn4Kwn"
 Received: by smtp.kernel.org (Postfix)
-	id 3FD9CC2BCB8; Mon, 20 Apr 2026 19:41:28 +0000 (UTC)
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 2264DC2BCB7; Tue, 21 Apr 2026 13:52:10 +0000 (UTC)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 60CD8C19425;
-	Mon, 20 Apr 2026 19:41:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60CD8C19425
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 5E529EC05D4;
-	Mon, 20 Apr 2026 15:41:25 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 20 Apr 2026 15:41:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1776714085;
-	 x=1776800485; bh=t5ZkqNq7ovZw3BANwX3fqguzu/wgJwpDrIbtpHMi9K8=; b=
-	Q8Qg0Es4eFu1W7kGkTGr4448Z7L6zw0x4i+6eqe5oJTTKPH73z3TISv64ePeEOc8
-	u+8u5LM+6rPqrJ0fjLXDeDcXDQJ/WfXC9G81xuKOclTUsFKOWZapvxRlisrAMMxQ
-	4f0n/rHuIxkdNWzk3XNeGlcYJE8hp2PJSQk04yHou5ez8HZPVRAzPSG2VPjAhvo+
-	m0aBjJf/we0grbHRzS04UwVoj9IojVm4+qW/DfTDMJy7DFf3Xbiuj1bau1i3q/r8
-	LFAWfS5gW20HIxIBBV9Ia/pfvKR6DVVKU/r43CU+P2ruE8Kn0lSiZQYW+i0aFzip
-	fpCKY7p+YOJWHYNwF9TeDQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1776714085; x=
-	1776800485; bh=t5ZkqNq7ovZw3BANwX3fqguzu/wgJwpDrIbtpHMi9K8=; b=h
-	ADYUc2rFRBuVTDhjm9LtBnmDBi689S6FdmKcTrochD1YxNSyoPaeF8IQqxe3qUhe
-	EpC/JElRAe2Zc4F+eOZfE4rka4RRsYVMTEFE3lujoYDh2dTdIqdqbNaluPXHI8Tu
-	AaBdybApTpRPcjqMTBqA4zeI8cz4I7JnR+vlUPK7B6qhxmUvERmFJznLyNIQ734f
-	JGyVPregl01NZhyg6Q07GsP13hYRbbVSJR71lRrhixF3jgr/GGKrlmXd/8p0Cx0v
-	n79IBctkA+Vq7r7bZLE6QEptGjkBNPFuaFZQzWb0KJSkcP4lWy1NA2Sb2Wb9AYxo
-	RyRJKGd0d7zvAV/amCuaA==
-X-ME-Sender: <xms:ZIHmaQZn0PGvHyIGRdqk2YHLY4TcloHgre9BGRWLPaCfGayaIZZNYA>
-    <xme:ZIHmaWMVYjvOY6az6FsmxoiIGpFb3v4j_-7xK05Kz1CgthZO2JDNfB48YVZkf3kSo
-    Ij1d6CitrVp-lW_TFwBlPdIourOjEN8cY20-74ry7tzViWrP-ONTHA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdehleeflecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeipdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikheskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohepnhgvihhlrdgrrhhmshhtrhhonhhgsehlihhnrghrohdrohhrghdprhgtphhtth
-    hopehlihhnuhigqdgrmhhlohhgihgtsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhg
-    pdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrh
-    gruggvrggurdhorhhg
-X-ME-Proxy: <xmx:ZIHmaZbYU8ATmh10MsIQ7alxZepKEwOn98BH8N_PvoJG5i8MGPvRBg>
-    <xmx:ZIHmabUawoVFFrlAZyW70Uq0iZQ-vCj_n616kkTPGH1r-cxRM0xBrg>
-    <xmx:ZIHmaa9ziPrkvHlgNjeXm-JPCVkNCHqD6xkUTIqEEnhxwPLfG8PG0w>
-    <xmx:ZIHmac9_Kqo2BZ37-SoEfGy1B37Ix9tBej3ojToifDU_KKl0xl5pwg>
-    <xmx:ZYHmadUfhFYXBSvYR2NVAo2Ul3b1UcqOGCIpJN4SFnQx3J7qHfVrq0M0>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D828D700065; Mon, 20 Apr 2026 15:41:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.kernel.org (Postfix) with ESMTPS id 1E2E5C2BCB0
+	for <soc@kernel.org>; Tue, 21 Apr 2026 13:52:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E2E5C2BCB0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488b0046078so39482375e9.1
+        for <soc@kernel.org>; Tue, 21 Apr 2026 06:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1776779527; x=1777384327; darn=kernel.org;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jZ1Sn0x9mZvYh8gn/3N1aTOHuBkEI82dIz+RlHb/0fE=;
+        b=D+cn4Kwn6/HoM0kCp7R9CbDkivb7XxBybgvZRJtqOhvz+MtABPt2WYbbh/E58qs2rQ
+         n3/3czzUz0BKuEvm6EkInWC+Yq8cQyaT/FUphAccynoZqAXeJv9gkmfSY+qriliBLGmZ
+         DjWvL0+xDPU2UzmkSfm2WlS3U90G/ey6pzC0EJHxUInUq22cGf+aBhpYNLHyXzfIn3HK
+         2LgYj8V/PmBvf9u9xaaxV7sQJ4tJdVApC611fOmfmhFQzvc4sRrjdQlBWEvC1389c49T
+         ls3yKYrg0iJbH6BpgNpFXPMYWHx7A6BUAQdGW3XOE0RDGWlEcHCTbgQpd9o7lY6D5wqe
+         OE3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776779527; x=1777384327;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jZ1Sn0x9mZvYh8gn/3N1aTOHuBkEI82dIz+RlHb/0fE=;
+        b=eZG/x024Q2TJPQTsGWggIY4aTtEXAaIgDXpuGBRbUhVnAO70BN7c/BzYM0k+Lhw72e
+         9gYZrKYSFt1NPgK4flhlfHCASANYA0US+ksTfXFpKj2SJuFSXq5kaWbDPVXgH7ZJ/eKu
+         i4L3rT+uDibzdSGGKdTDE6AXVjo3KNFESFUFH/RwA5oRQfrn1uRrYRcYXJn4Mvfwyrri
+         UBCOzQUS5+D5kX75EHtejN4oeOWmEtvWWHkw/d70VIt/jBVpneDv6pq4FYbNOsZbBu8z
+         2zTz81InL0l3B3JJBNRsYH3aM4rtmIuJdBQrkM8sqUmxD4yR5b7Cc6tuAG909mydg2Zn
+         Dd7w==
+X-Gm-Message-State: AOJu0Yw1xRQ11LPc+Qnu/7AUqyG14tQBsIHxzRxyqx+VChvPKsuZNw1/
+	qFN2oURNyWeiAnwYB/IWvnwrY5lG15AybUQcMPkprtTveNVAyG61umVC8FS/AOaOvZZVk5SvfRz
+	7WBcc41o=
+X-Gm-Gg: AeBDiesEukApEXJoAYZ9GNCFLKkDQOhitz3oFX/RpH31hWloBvfRZc/S256vDU2DC09
+	ZS9gPEK1RFV1IPEjf7iI/KQeIA2cIepNU27iHqcCXEa1qfL6y0N+oRwtiQVUkRf5OA2SnILs0S2
+	/bNFn7ueqwkODUT74IU95n1EU0/+F/LH5oue/Lj5K2ynBxpJ3LVts8r5UnToXcFKKGqHTPFwRx0
+	PK4XuD2k71ZmJMT8NNQTogEcVWxwCgO40uJbOAvTIyWiCXa5cruHI+fexrOOGmPwRdcPXB04pLJ
+	5cK+O42Xm/BXBpTBwLw6CKFRMKv2tZYLr8oLuGuoRECcJzqDXvjuzu3HV46chDUHpNLznRy/RKg
+	GF38CDjw8FRo3D54/0VPKyFx4fBfe662l4z7UJhAHmPlkikqeS0DiP+PWNBNXARiL+0ALgcpjUX
+	a9wN0gNKaw5Zv0tAtDLvfx1KOYTs4wJtjAgH7d1Sqt4BbrT6RKXLFhyL9LZDkY7nyGQs+Hc6hdR
+	lqCND7swMGW48VT+w==
+X-Received: by 2002:a05:600c:b90:b0:488:b99b:4177 with SMTP id 5b1f17b1804b1-488fb78ee4emr249304235e9.25.1776779527194;
+        Tue, 21 Apr 2026 06:52:07 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:106d:1080:4d7c:c818:d959:1c48? ([2a01:e0a:106d:1080:4d7c:c818:d959:1c48])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488ffc558f2sm235882855e9.1.2026.04.21.06.52.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Apr 2026 06:52:06 -0700 (PDT)
+Message-ID: <536207a3-64bd-488f-a8cc-d61560b82ad6@linaro.org>
+Date: Tue, 21 Apr 2026 15:52:06 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AvG_jmLX_3YV
-Date: Mon, 20 Apr 2026 21:41:04 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Neil Armstrong" <neil.armstrong@linaro.org>,
- "Krzysztof Kozlowski" <krzk@kernel.org>
-Cc: soc@kernel.org, arm <arm@kernel.org>, linux-amlogic@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Message-Id: <d95cfc82-327f-4bed-95ae-88a9182eedba@app.fastmail.com>
-In-Reply-To: <5d9c1c31-5e89-4699-b910-f5ca2c36260f@linaro.org>
-References: <2fde1b11-d2a4-4aa2-8c28-d20fbbb54f7f@linaro.org>
- <20260411-spicy-apricot-newt-afa8a7@quoll>
- <5af5dfdb-001a-4b63-8a43-5cfcf28d821c@linaro.org>
- <fe782180-99ec-404f-96c5-8949a8732186@kernel.org>
- <4b2a319e-3292-4576-b5b9-4e7db8aebe87@kernel.org>
- <43ae9d05-5cc9-4f68-933a-99eb744756b7@app.fastmail.com>
- <5d9c1c31-5e89-4699-b910-f5ca2c36260f@linaro.org>
-Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v7.1
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic ARM64 DT fixes for v7.1-rc
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Mon, Apr 20, 2026, at 19:31, Neil Armstrong wrote:
-> On 4/20/26 17:25, Arnd Bergmann wrote:
->> On Mon, Apr 13, 2026, at 09:30, Krzysztof Kozlowski wrote:
->> - I see that only a few of the patches in the branch got applied
->>    during the fineal days before the merge window, while the rest
->>    had been part of next-20260330 or earlier. Aside from just
->>    sending the bulk of the contents earlier, I think the best
->>    solution on Neil's side would have been to send two separate
->>    pull requests, for the earlier and the later contents
->>    respectively, even if sending them on the same day
->
-> I never did a split because I don't have enought changes to justify
-> 2 PRs and I had some contributors & other maintainers activity late
-> in the cycle.
-> Anyway I'll make sure to send the PRs earlier.
+Hi,
 
-Ok, thanks! Note that I rarely complain about a follow-up PR
-being late. If you have the majority of the content queued up
-early enough and have a few more things or even just a single
-fix later, that's not an issue at all.
+Here's the Amlogic ARM64 DT fixes for v7.1-rc, including a bunch of fixes
+for the Khadas VIM4 and a couple of low priority fixes.
 
-     Arnd
+Thanks,
+Neil
+
+The following changes since commit 028ef9c96e96197026887c0f092424679298aae8:
+
+   Linux 7.0 (2026-04-12 13:48:06 -0700)
+
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-fixes-v7.1-rc
+
+for you to fetch changes up to 174a0ef3b33434f475c87e66f37980e39b73805a:
+
+   arm64: dts: meson-gxl-p230: fix ethernet PHY interrupt number (2026-04-21 15:46:29 +0200)
+
+----------------------------------------------------------------
+Amlogic DT Fixes for v7.1:
+- Fix ethernet PHY interrupt number for P230 reference board
+- Add missing cache information to cpu0 for Amlogic AXG
+- Fix Khadas VIM4 board model name
+- Fix GIC register ranges for Amlogic T7
+- Fix Khadas VIM4 memory layout for 8GB RAM
+- Drop CPU masks from GICv3 PPI interrupts for Amlogic S6
+
+----------------------------------------------------------------
+Anand Moon (1):
+       arm64: dts: amlogic: meson-axg: Add missing cache information to cpu0
+
+Geert Uytterhoeven (1):
+       arm64: dts: amlogic: s6: Drop CPU masks from GICv3 PPI interrupts
+
+Jun Yan (1):
+       arm64: dts: meson-gxl-p230: fix ethernet PHY interrupt number
+
+Nick Xie (2):
+       arm64: dts: amlogic: t7: khadas-vim4: fix memory layout for 8GB RAM
+       arm64: dts: amlogic: t7: khadas-vim4: fix board model name
+
+Ronald Claveau (1):
+       arm64: dts: amlogic: Fix GIC register ranges for Amlogic T7
+
+  arch/arm64/boot/dts/amlogic/amlogic-s6.dtsi                   | 10 +++++-----
+  arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts |  6 ++++--
+  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi                   |  4 +++-
+  arch/arm64/boot/dts/amlogic/meson-axg.dtsi                    |  6 ++++++
+  arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dts          |  3 ++-
+  5 files changed, 20 insertions(+), 9 deletions(-)
