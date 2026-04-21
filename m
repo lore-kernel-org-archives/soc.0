@@ -1,165 +1,215 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEE03115A2
-	for <soc@lists.linux.dev>; Tue, 21 Apr 2026 13:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFF534DCFF
+	for <soc@lists.linux.dev>; Tue, 21 Apr 2026 20:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776779530; cv=none; b=q5KlP0pDmFgBcgJBj0bsnppTrQ8X+70Qb0Cf85jJr8w1GWCamvAtKX5v8XUzZgdCznU4amppgsWLWk9+XJpA4z0iU4jST55DY3esPc9VZpi0DTDpdii6IyiVmSL3dnAAqhZTMIUs/iw59GnRS6c/KvJMSii+FkyLvzDu448SBYY=
+	t=1776803040; cv=none; b=cfSrBFyzap6KiXAX4uz+5CqwWYcPENB+yPzj7NfA526Oh5gAw/EJtW4d0UO0euJKy8Ih+O6XSef4YseZTQAhPrrPY/JVXZQu5goyXvFgF02HdxV1Dfp/il39bVzNb2sGkVvW9hynGP40yvg2da0wItiHggTa2ztZOLnSa10Fc7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776779530; c=relaxed/simple;
-	bh=bxTlfEqNKlfD/1zhWj2LkTSIBDsbTE5V59FoNHHBTkI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=XIxRfVNfnOlzX9g+LZmeE0WeALQVCOgW1t08fHtrtyXbPLn8zP4pxueV8RuqzKRCbLcYbpp8cMW1qdjR3hwSOvCBHOFzIm+L0F5lSX8PhyWhWTFyZvKUPARY/JbONwJsTmPYVsgI8eopAj6aE73VniI8V4taH9/6OnKhAnEsTOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D+cn4Kwn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776803040; c=relaxed/simple;
+	bh=o9gYTJKBqIyVOmX80U3TwTTah7IWirGi76Bxb25Nizs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZcWb7J+W4nd+/q64ENyau35kTcI6haB5NQtH9FNvf5RF2oQkjLY/92pvIaCqAdu4uHKSQQRRedzerjqFZKfUSr/5FaCCsGFhBlqf6op2C5QrC+ptOlghIABncg/5PFBtqfi/YHwfmcDwJlv3nSPfIpd4lscOKnocRZB0m+W1x0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HR+OKzLJ; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D+cn4Kwn"
-Received: by smtp.kernel.org (Postfix)
-	id 2264DC2BCB7; Tue, 21 Apr 2026 13:52:10 +0000 (UTC)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1E2E5C2BCB0
-	for <soc@kernel.org>; Tue, 21 Apr 2026 13:52:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E2E5C2BCB0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488b0046078so39482375e9.1
-        for <soc@kernel.org>; Tue, 21 Apr 2026 06:52:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HR+OKzLJ"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488af9fdaa7so29677925e9.1
+        for <soc@lists.linux.dev>; Tue, 21 Apr 2026 13:23:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1776779527; x=1777384327; darn=kernel.org;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jZ1Sn0x9mZvYh8gn/3N1aTOHuBkEI82dIz+RlHb/0fE=;
-        b=D+cn4Kwn6/HoM0kCp7R9CbDkivb7XxBybgvZRJtqOhvz+MtABPt2WYbbh/E58qs2rQ
-         n3/3czzUz0BKuEvm6EkInWC+Yq8cQyaT/FUphAccynoZqAXeJv9gkmfSY+qriliBLGmZ
-         DjWvL0+xDPU2UzmkSfm2WlS3U90G/ey6pzC0EJHxUInUq22cGf+aBhpYNLHyXzfIn3HK
-         2LgYj8V/PmBvf9u9xaaxV7sQJ4tJdVApC611fOmfmhFQzvc4sRrjdQlBWEvC1389c49T
-         ls3yKYrg0iJbH6BpgNpFXPMYWHx7A6BUAQdGW3XOE0RDGWlEcHCTbgQpd9o7lY6D5wqe
-         OE3w==
+        d=gmail.com; s=20251104; t=1776803038; x=1777407838; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nVlIjHK8beTpkqGMwU9MBSNVUOjmph10Qmo15WK1r6o=;
+        b=HR+OKzLJHDz++5g1o3FpSxvZNLl9QzNpdaunBC2YvI+Ax85MnMBOY3fsvV1kjo4Iow
+         HBH28WL+FOSAB88E3EvlNBorxez+CB+ZGGcW/EGWLIeAVFdD+eu7m6tVxtZFmMiAj49x
+         lJTNJOCC687lV3z/y0Yc++p90q6GbPq+mahWbNt4xC+8K5UfHMPkTxK91PVQZNfXTDz+
+         mRp05n19sAXfmTDSK7YfrJUYYFQ8oFHsDquqvcoNv0m+VkR0if5rVaQa2NVpj0nUTPOB
+         mRgX7j/3vka0q0E5HuXu7YiMGAwbj6weODCwkND4Ipa0iTwaAraLrhbC1HYfTOx9lgYr
+         BRnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776779527; x=1777384327;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jZ1Sn0x9mZvYh8gn/3N1aTOHuBkEI82dIz+RlHb/0fE=;
-        b=eZG/x024Q2TJPQTsGWggIY4aTtEXAaIgDXpuGBRbUhVnAO70BN7c/BzYM0k+Lhw72e
-         9gYZrKYSFt1NPgK4flhlfHCASANYA0US+ksTfXFpKj2SJuFSXq5kaWbDPVXgH7ZJ/eKu
-         i4L3rT+uDibzdSGGKdTDE6AXVjo3KNFESFUFH/RwA5oRQfrn1uRrYRcYXJn4Mvfwyrri
-         UBCOzQUS5+D5kX75EHtejN4oeOWmEtvWWHkw/d70VIt/jBVpneDv6pq4FYbNOsZbBu8z
-         2zTz81InL0l3B3JJBNRsYH3aM4rtmIuJdBQrkM8sqUmxD4yR5b7Cc6tuAG909mydg2Zn
-         Dd7w==
-X-Gm-Message-State: AOJu0Yw1xRQ11LPc+Qnu/7AUqyG14tQBsIHxzRxyqx+VChvPKsuZNw1/
-	qFN2oURNyWeiAnwYB/IWvnwrY5lG15AybUQcMPkprtTveNVAyG61umVC8FS/AOaOvZZVk5SvfRz
-	7WBcc41o=
-X-Gm-Gg: AeBDiesEukApEXJoAYZ9GNCFLKkDQOhitz3oFX/RpH31hWloBvfRZc/S256vDU2DC09
-	ZS9gPEK1RFV1IPEjf7iI/KQeIA2cIepNU27iHqcCXEa1qfL6y0N+oRwtiQVUkRf5OA2SnILs0S2
-	/bNFn7ueqwkODUT74IU95n1EU0/+F/LH5oue/Lj5K2ynBxpJ3LVts8r5UnToXcFKKGqHTPFwRx0
-	PK4XuD2k71ZmJMT8NNQTogEcVWxwCgO40uJbOAvTIyWiCXa5cruHI+fexrOOGmPwRdcPXB04pLJ
-	5cK+O42Xm/BXBpTBwLw6CKFRMKv2tZYLr8oLuGuoRECcJzqDXvjuzu3HV46chDUHpNLznRy/RKg
-	GF38CDjw8FRo3D54/0VPKyFx4fBfe662l4z7UJhAHmPlkikqeS0DiP+PWNBNXARiL+0ALgcpjUX
-	a9wN0gNKaw5Zv0tAtDLvfx1KOYTs4wJtjAgH7d1Sqt4BbrT6RKXLFhyL9LZDkY7nyGQs+Hc6hdR
-	lqCND7swMGW48VT+w==
-X-Received: by 2002:a05:600c:b90:b0:488:b99b:4177 with SMTP id 5b1f17b1804b1-488fb78ee4emr249304235e9.25.1776779527194;
-        Tue, 21 Apr 2026 06:52:07 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:4d7c:c818:d959:1c48? ([2a01:e0a:106d:1080:4d7c:c818:d959:1c48])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488ffc558f2sm235882855e9.1.2026.04.21.06.52.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2026 06:52:06 -0700 (PDT)
-Message-ID: <536207a3-64bd-488f-a8cc-d61560b82ad6@linaro.org>
-Date: Tue, 21 Apr 2026 15:52:06 +0200
+        d=1e100.net; s=20251104; t=1776803038; x=1777407838;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nVlIjHK8beTpkqGMwU9MBSNVUOjmph10Qmo15WK1r6o=;
+        b=d0oP5JGMaAgr3LyUUhJmzVndrPILGMRX6UwyHBfksGDl/6NSE8VHyxmrPLyUwOjjkm
+         /okg6nLR7P/XlzgemWQSTUCqjrNApu3bmNTA+XCgFQ70FeiP02W2UEvGtDmtODGI4k6A
+         U9Uc0FRK1BUdomxw45DwRnvhcyQr4PEaCp7Lnf7Nn6hEGf1fKGuDFz1GhHYUsYfYemFE
+         4IxQU7PU3J3mB5z0e/jc+UtPqAvQyzQcW8n+uFYaEZImjsELnzCvmbXZbH7eKbge1sri
+         0kK6eoRB9mYZphIQWBNoDyv4H8rviqkJSS8LGy3EEzrswMCg2o4R22w8lQGm1jJLTdDL
+         mt8A==
+X-Forwarded-Encrypted: i=1; AFNElJ/MZb9g7LBuQNa0oKTXZMVdFj+gFAFuWujYl46Smg3BqN4cqDcxtUiSyN8Vv42aKUvV9f8=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzGcL1MuLNHEWZWne4PWgVNZT/JJeQTJxwxwWH3b5RmxG70jva+
+	8t0K48cU0VKNyPl/ZWtAvREYbt/QH4wd9zkDQsNpSqpvQgOc6SN+K20w
+X-Gm-Gg: AeBDiev4IVG10ZMebOrbQg2kUJ1wPP+oBTPJwrzqnH169qOSAW6KfuOxzPQB9sr6KLV
+	HQuO8ijdKNKPotYY4dIIxcmT+cLWIa2vgn7/gLCzBOp1zwbq/31rT+vR9zf2dv1Ok1Vaa4KS98Z
+	1YtgAAHWlYh2IoBeXMOLRr+I55LR1UBy3C0C1lc/MK9hARG/EtnVYhkoj/8EP6Ysr6gUglabG3N
+	7cQzy/6QBOPcxg/YL1YDGqqM0+an8BuAblDXXa8HhzKiCdXzusMOrngBjfl2rjdLGq9z+PXi7hM
+	CK1OjXsZzof7WM2eoOfNlJLI69Y7nR8X88rbjzkT0TwfkjVnU9McEznJ8itiPt3Anjpj3NGVvQa
+	/L3MR4KHULspWSULYV8VVBiyvRZA6iLSuTQkNMwWRZus7UxYobo4XgK6s13GkHeUdE4Rbx0YZho
+	bAKTLYekTCX+A2RmN5t7DF9VlnNjY1TNW/4HSuKeaxB5U+0tizdEd4YnU=
+X-Received: by 2002:a05:600c:8587:b0:488:a797:f0ac with SMTP id 5b1f17b1804b1-488fb7880bdmr194237985e9.28.1776803037405;
+        Tue, 21 Apr 2026 13:23:57 -0700 (PDT)
+Received: from [192.168.0.2] ([197.250.227.85])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc0f82bbsm655989805e9.3.2026.04.21.13.23.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 13:23:55 -0700 (PDT)
+From: =?utf-8?q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
+Subject: [PATCH v5 0/8] Add support for ZTE zx297520v3
+Date: Tue, 21 Apr 2026 23:23:08 +0300
+Message-Id: <20260421-send-v5-0-ace038e63515@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT fixes for v7.1-rc
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKzc52kC/13MQQrCMBCF4auUWRuZhqQYV95DuqjJ2A7YRDISl
+ JK7G7t0+T8e3wZCmUng3G2QqbBwii3soQO/THEmxaE1aNQDmn5QQjEo6/FE6CxZ76Bdn5nu/N6
+ Z69h6YXml/NnVYn7rH1CMQkW9C6hvzhjyl3md+HH0aYWx1voF2KRO85gAAAA=
+X-Change-ID: 20260416-send-5c08e095e5c9
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Russell King <linux@armlinux.org.uk>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ soc@lists.linux.dev, linux-serial@vger.kernel.org, 
+ =?utf-8?q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4666;
+ i=stefandoesinger@gmail.com; h=from:subject:message-id;
+ bh=o9gYTJKBqIyVOmX80U3TwTTah7IWirGi76Bxb25Nizs=;
+ b=owEBiQJ2/ZANAwAIAT0TvMhUTxoiAcsmYgBp59zX/bLsmFSSyvgUtedC0P3fDHA0k5szw2Ags
+ j+PbWDI3vSJAk8EAAEIADkWIQRDFvS2qgVbJ5UyXWw9E7zIVE8aIgUCaefc1xsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQPRO8yFRPGiKs0w/+JNWC7OaWAdBhMhILzJxa5nrCYgMP1K1
+ snJ5xSPPon5do+hhsRwQAXhiKQ201BcXztab9EPAdr3nhzlpIHgQkxljqXZ4sCMgq9rrrVm9G5b
+ rgg+hfMV+8UMm0WvqAzWhj0028YC1Ir/Z+tc+l7vpzh3vDpfHPtMuCxxxsElifzwtV4qKLM/xmQ
+ eJ8oOUvqwZvFUWPfwS/cCHxhHVISfToavxDtOeCUbyfUhgZALm7Wz+Y4HUFFOCzmiJVJP+StYLl
+ ls/ujX2/jR719obDgBqIZ96APs0lA4sGYNcP26AL+YdfmAzfu53ihoBYIRWU1Do8n1CZCpqSefa
+ mtWpLDOb4PA6lKSvBOmpySDmFflc1FN2qbNfCXJy/9k01EgFlCDTHyNfyg5FFJIiD18m5gWrkwb
+ CFS3ro3m1C4bguclOqsghxLyJcNytfo6FYVtsQ0Bl4EaRwaSI19fgdvlYwqQB23tKrC7gaZLaEV
+ msHoNP0miqQr+++XoKSg/v1/12Ul71kmjxTcIRoLmh3BePq6WJve/9LoKidWTj9JPPBtHYy6E13
+ cwLv+D7pDEQEDFDQiI3aI/bEuhGKv8rZJXnewg+bW/aZ4BzVmFbkPYtX6ZiocsdzUHwiK8+zz95
+ dn3D88vZU+j0Jld4xpGQ+fpXNjv/0DdsmodvoziwUgQ7zdl0v61I=
+X-Developer-Key: i=stefandoesinger@gmail.com; a=openpgp;
+ fpr=4F9C2C8728019633893EBBB98CB81F9A72BBA155
 
 Hi,
 
-Here's the Amlogic ARM64 DT fixes for v7.1-rc, including a bunch of fixes
-for the Khadas VIM4 and a couple of low priority fixes.
+This is a follow-up on my RFC patches from January [0] for ZTE's 
+zx297520v3 chipset. This chipset is popular in cheap LTE-to-wifi routers 
+sold in developing countries. My goal is to run OpenWRT on them. I made 
+more progress in more work on this SoC and it is time to get serious 
+about code review and upstreaming.
 
-Thanks,
-Neil
+Since my version in January I managed to get more hardware running: SPI, 
+I2C, PMIC with real time clock and voltage regulators, Watchdog. LTE is 
+not working yet, but I am able to start the coprocessor that handles it 
+and talk to it via mailbox + shared memory. Wifi is working on a few 
+more devices. Since WiFi, USB and Ethernet are working, the devices can 
+have actual use with OpenWRT even without LTE.
 
-The following changes since commit 028ef9c96e96197026887c0f092424679298aae8:
+Another hacker created a free software program to talk to the USB loader 
+[1] and boot U-Boot and Linux without modifying the on disk files. At 
+the moment it needs a proprietary blob, so my documentation is 
+emphasising booting with the on-device U-Boot.
 
-   Linux 7.0 (2026-04-12 13:48:06 -0700)
+This patchset here is mostly unmodified from the version I sent in 
+January. It is the bare minimum to get an interactive shell working on 
+the UART. Future patches can be found on my git repository [2] for those 
+curious to peek ahead. The first 30 patches are in reasonable shape, but 
+the further you go the more cleanup is necessary. I expect all of the 
+patches go require a few rounds of feedback though.
 
-are available in the Git repository at:
+My plan for upstreaming is largly this:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-fixes-v7.1-rc
+1) This bare minimum boot patchset
+2) Add clock and pinctrl drivers
+3) Add standard hardware to the device tree
+4) Add zx29 specific drivers one by one: Watchdog, spi, i2c, DMA, PMIC, 
+battery
+5) SDIO backend for rtl8xxxu
+6) rproc, mailbox and rpmsg
 
-for you to fetch changes up to 174a0ef3b33434f475c87e66f37980e39b73805a:
+I am willing to maintain support for the SoC within reason. My patches 
+add myself as maintainer. This is a hobby project for me though, keep 
+that in mind if you want to ship a commercial product with these SoCs 
+and upstreaming Linux.
 
-   arm64: dts: meson-gxl-p230: fix ethernet PHY interrupt number (2026-04-21 15:46:29 +0200)
+Cheers,
+Stefan
 
-----------------------------------------------------------------
-Amlogic DT Fixes for v7.1:
-- Fix ethernet PHY interrupt number for P230 reference board
-- Add missing cache information to cpu0 for Amlogic AXG
-- Fix Khadas VIM4 board model name
-- Fix GIC register ranges for Amlogic T7
-- Fix Khadas VIM4 memory layout for 8GB RAM
-- Drop CPU masks from GICv3 PPI interrupts for Amlogic S6
+0: https://lists.infradead.org/pipermail/linux-arm-kernel/2026-January/1099306.html
+1: https://github.com/zx297520v3-mainline/zx297520v3-loader
+2: https://gitlab.com/stefandoesinger/zx297520-kernel/
 
-----------------------------------------------------------------
-Anand Moon (1):
-       arm64: dts: amlogic: meson-axg: Add missing cache information to cpu0
+Patch changelog:
 
-Geert Uytterhoeven (1):
-       arm64: dts: amlogic: s6: Drop CPU masks from GICv3 PPI interrupts
+v5:
+Spelling fixes
+Renamed dlink-dwr-932m.dts to zx297520v3-dlink-dwr932m.dts
+DT binding indentation fixes
+Use a manufacturer 0x8b for the UART, fix patch prefix
+Declare all UARTs, remove uart aliases for now
+Consistent license declarations. I made every new file except the DT 
+binding GPL-2.0-only but I don't particularly mind GPL-2.0-or-later 
+either.
 
-Jun Yan (1):
-       arm64: dts: meson-gxl-p230: fix ethernet PHY interrupt number
+v4: rename zx29.yaml to zte.yaml and add board enums
+v3: Remove [RFC] tag, add defconfig
+v2: checkpatch.pl fixes
 
-Nick Xie (2):
-       arm64: dts: amlogic: t7: khadas-vim4: fix memory layout for 8GB RAM
-       arm64: dts: amlogic: t7: khadas-vim4: fix board model name
+Signed-off-by: Stefan Dösinger <stefandoesinger@gmail.com>
+---
+Changes in v5:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v4: https://lore.kernel.org/r/20260416-send-v4-0-e19d02b944ec@gmail.com
 
-Ronald Claveau (1):
-       arm64: dts: amlogic: Fix GIC register ranges for Amlogic T7
+---
+Stefan Dösinger (8):
+      ARM: zte: Add zx297520v3 platform support
+      dt-bindings: arm: Add zx297520v3 board binding
+      ARM: dts: Add D-Link DWR-932M support
+      ARM: zte: Add support for zx29 low level debug
+      ARM: dts: Add an armv7 timer for zx297520v3
+      amba/serial: amba-pl011: Bring back zx29 UART support
+      ARM: dts: Declare UARTs on zx297520v3 boards
+      ARM: defconfig: Add a zx29 defconfig file
 
-  arch/arm64/boot/dts/amlogic/amlogic-s6.dtsi                   | 10 +++++-----
-  arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts |  6 ++++--
-  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi                   |  4 +++-
-  arch/arm64/boot/dts/amlogic/meson-axg.dtsi                    |  6 ++++++
-  arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dts          |  3 ++-
-  5 files changed, 20 insertions(+), 9 deletions(-)
+ Documentation/arch/arm/zte/zx297520v3.rst          | 158 +++++++++++++++++++++
+ Documentation/devicetree/bindings/arm/zte.yaml     |  25 ++++
+ MAINTAINERS                                        |   6 +
+ arch/arm/Kconfig                                   |   2 +
+ arch/arm/Kconfig.debug                             |  12 ++
+ arch/arm/Makefile                                  |   1 +
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/zte/Makefile                     |   3 +
+ arch/arm/boot/dts/zte/zx297520v3-dlink-dwr932m.dts |  22 +++
+ arch/arm/boot/dts/zte/zx297520v3.dtsi              | 103 ++++++++++++++
+ arch/arm/configs/zx29_defconfig                    |  89 ++++++++++++
+ arch/arm/include/debug/pl01x.S                     |   7 +
+ arch/arm/mach-zte/Kconfig                          |  26 ++++
+ arch/arm/mach-zte/Makefile                         |   2 +
+ arch/arm/mach-zte/zx297520v3.c                     |  19 +++
+ drivers/tty/serial/amba-pl011.c                    |  42 ++++++
+ 16 files changed, 518 insertions(+)
+---
+base-commit: 028ef9c96e96197026887c0f092424679298aae8
+change-id: 20260416-send-5c08e095e5c9
+
+Best regards,
+-- 
+Stefan Dösinger <stefandoesinger@gmail.com>
+
