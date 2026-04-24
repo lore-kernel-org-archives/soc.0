@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1993644DA
-	for <soc@lists.linux.dev>; Fri, 24 Apr 2026 06:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA61361DD2
+	for <soc@lists.linux.dev>; Fri, 24 Apr 2026 06:58:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777013919; cv=none; b=BCbO8BIeo0olZUFAWAZRMZLrPaKD46Nho/DJ+X+G85zYUIj9jrecL8C5gM2rHlvDl4qLbNylI5oz9LHRsgwlA72wiAg5MjQTDRx9ewZN9Xe91xdASY8L31MSVJrubryvFJymNP6xCOGgJtCk+ONaQiRIrkFJBarP1gQhXK6uZ/c=
+	t=1777013936; cv=none; b=OUc2lKWSq2ty7lktgb1zC6tJuO+9LYbcxpKsPcQPuEpQThWHSk6oR0k+autFdfmIR9bVH95GMbxXS1Ie7LJEBwdNA8dZJYUMB65oi3LTco2xkq9fs+6oQFCXZHwxsoPx83NSIa50BE3M8W+tSCnd37QmB16Ba0B4Yrg/yVdCbaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777013919; c=relaxed/simple;
-	bh=IPi/+Vyv6aQFQSyZXeZ0oxHNzEPss0vbDNKeN9Kde6g=;
+	s=arc-20240116; t=1777013936; c=relaxed/simple;
+	bh=iaYxt9AMLkeN9IM6ftUBSYmqelQZmEG9oCJlezeiK0w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mI24gfTpjKSfk5kyQ0/XntTADdCDsdiMJrURa9eNA/fRzNnovALY/br4Yp2UUprG7J963GBVf1FNmBe3YUpswM6Hz7q9LB7NH+gYdVlzyfn8DfIeIMgdJ/FuVbfcauHn6WOmJNwD3zuRyRwc3kxCOQf/se+LWHwPMp6OvPOkPBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kku4l+U0; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=oNpWB/otOKy+WTldej4iPEASsdyLKLYsZSMisUd0Cv7tkQlGYDi6a8g3Zqel15nJo/0Nccv8phEEuAv4QTXzEaFAUw/JiaN/CHWBDEEY/sDtO7PSPnOJnN4LpQ+5rxYzFJ0xS3otMtmzbuciLRs/HdUNKO1AYOvng45RLJtbkkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KD1cH/wV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kku4l+U0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0041EC2BCB5
-	for <soc@lists.linux.dev>; Fri, 24 Apr 2026 06:58:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KD1cH/wV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 328A1C2BCB8
+	for <soc@lists.linux.dev>; Fri, 24 Apr 2026 06:58:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777013919;
-	bh=IPi/+Vyv6aQFQSyZXeZ0oxHNzEPss0vbDNKeN9Kde6g=;
+	s=k20201202; t=1777013936;
+	bh=iaYxt9AMLkeN9IM6ftUBSYmqelQZmEG9oCJlezeiK0w=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kku4l+U0ckoHtw89UyGWrNG9Tiq0DZBFD4DvNrjad0ByFYPh+LKqfkDEa9U9kMnUr
-	 vq0p3R/4Lb3v5DPa5rmI9mbwoxss9YIHkWFr4lmE90eLwrPqVV65giT9hRpffQzraQ
-	 allEsthfMW+RtefuYCK6sOV/BB4WxN9oBZVshceIPuLoh0nJdE5VYVCWeyD17JdPD/
-	 QLA4y10kWgh3HRPwXtX+NYgx0z1ESnmR7sUI59VeurnBt2r0lXIO47rTt5V7N47lPM
-	 yNvk/CsDkbXkmsgEHD9kN2g9ph/c4SB4sh8VphZ3l3+dKwzbILn5Ywovt/LvQ90Q92
-	 oJIJd+F1qur8Q==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5a10d130b37so7470321e87.0
-        for <soc@lists.linux.dev>; Thu, 23 Apr 2026 23:58:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ9UPvRlxmNTMXCpwV8CN+jPeJ2u0aTLlhyVJZKwYXI9z4UDRrQHHWVsImZJ0B2mEWzoEvk=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxOdGxGIJ2fW2J0N/Apot83Wew3y76EmdJseQkSRgBajr5QuxIg
-	oirp5nPqsvEeof998DlgNIQeWF3Q+Kr2YZ0vYCQnfcBwT7LQZfOCRmbB4pIVr+O0p++Tn/z6ZFm
-	MSgniV+7pTPsiNWmSbbttZqvnKXDeDQs=
-X-Received: by 2002:a05:6512:398a:b0:5a1:42ae:88b6 with SMTP id
- 2adb3069b0e04-5a4172a2f31mr8641497e87.18.1777013917744; Thu, 23 Apr 2026
- 23:58:37 -0700 (PDT)
+	b=KD1cH/wVRAkhxpKyIgGwnVwNKO9vS8algf9lCpvMZ3LD/7nBABa++dWRLhEjBBgek
+	 fLzD4JgFrJadUBppjNykTLoHN35FXEaH6n4NXnYMv3ZndzGR1axbdsR+hnorJ3Oc/V
+	 Tc4Q9iocyGxz3PM3yYtcRGmlrm1oaJ46wycrmIES0GbSBHGIWGXokhrfc65IRlEgrI
+	 7Ble80djXX8hX7YVoNsbk/Tn5uN+M656P8PgHvGMyumKh+o/25Rgon+yv/0C8BhKZu
+	 WZcjTp4QqNrIS33YAt6yKdLX3cc4r4NVrpjnx+vUOP5/ldUIGFnqdsLzwOGiyO5Hs+
+	 UUwvvec2eST/Q==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5a4113ab355so7905120e87.1
+        for <soc@lists.linux.dev>; Thu, 23 Apr 2026 23:58:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8+v8xIBsS6cemnKJuWWkXQ99H/bvEmjHCWSNLlMhkBXI6vXRohC8bL5MsbRetzc2PwVys=@lists.linux.dev
+X-Gm-Message-State: AOJu0YynF0p+7tWLbJYdXyfIrpDkQK2dcdDiItQxM3iNg6YdKk/AvK8h
+	PRbLkipBVWvynUbaNYIGXlNVd7EUPoH3SFjs3WdebrgdYilv3fNjN8n7sHEPlsUF0ILP0TBvCdd
+	oUyN5iFdSK/MAxFXLX9nI2UOI2oDrcpA=
+X-Received: by 2002:a05:6512:138c:b0:5a4:6a5:9910 with SMTP id
+ 2adb3069b0e04-5a4172dc698mr11347475e87.23.1777013934905; Thu, 23 Apr 2026
+ 23:58:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -42,14 +42,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260412-b4-defconfig-multi-v7-v1-0-e76de035c2df@oss.qualcomm.com>
- <20260412-b4-defconfig-multi-v7-v1-2-e76de035c2df@oss.qualcomm.com>
-In-Reply-To: <20260412-b4-defconfig-multi-v7-v1-2-e76de035c2df@oss.qualcomm.com>
+ <20260412-b4-defconfig-multi-v7-v1-3-e76de035c2df@oss.qualcomm.com>
+In-Reply-To: <20260412-b4-defconfig-multi-v7-v1-3-e76de035c2df@oss.qualcomm.com>
 From: Linus Walleij <linusw@kernel.org>
-Date: Fri, 24 Apr 2026 08:58:25 +0200
-X-Gmail-Original-Message-ID: <CAD++jLnU6qf5QoW7xH+=0e4UiHWqUGQS5cX78EtEONhvxmLLwg@mail.gmail.com>
-X-Gm-Features: AQROBzB-942dPXAfTM04NoAlrIm_VT2pS3PYsMqrPQZ0Mrmk0TIpj2V5E1vE8sQ
-Message-ID: <CAD++jLnU6qf5QoW7xH+=0e4UiHWqUGQS5cX78EtEONhvxmLLwg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] ARM: configs: Drop redundant I2C_DESIGNWARE_PLATFORM
+Date: Fri, 24 Apr 2026 08:58:43 +0200
+X-Gmail-Original-Message-ID: <CAD++jLm1s4FWZ+zoKs-UkEhKgMEFVOTgAJrrbhjuTTZkPBUsVw@mail.gmail.com>
+X-Gm-Features: AQROBzBE7No9DY5SvJhFb2KBRmdi1-NdT3J1fO5lkzFDj3-nX3LtfUFmilbfCTY
+Message-ID: <CAD++jLm1s4FWZ+zoKs-UkEhKgMEFVOTgAJrrbhjuTTZkPBUsVw@mail.gmail.com>
+Subject: Re: [PATCH 3/5] ARM: configs: Drop redundant SND_ATMEL_SOC
 To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 Cc: Nicolas Ferre <nicolas.ferre@microchip.com>, 
 	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
@@ -63,12 +63,9 @@ Content-Transfer-Encoding: quoted-printable
 On Sun, Apr 12, 2026 at 7:13=E2=80=AFPM Krzysztof Kozlowski
 <krzysztof.kozlowski@oss.qualcomm.com> wrote:
 
-> I2C_DESIGNWARE_PLATFORM is default=3Dy via I2C_DESIGNWARE_CORE, which is
-> enabled.  No impact on include/generated/autoconf.h.
+> CONFIG_SND_ATMEL_SOC is gone since commit 4f30f84feb77 ("ASoC: atmel:
+> Standardize ASoC menu") and can be simply dropped without effect.
+>
+> No impact on include/generated/autoconf.h.
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-
-Reviewed-by: Linus Walleij <linusw@kernel.org>
-
-Yours,
-Linus Walleij
