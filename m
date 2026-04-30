@@ -1,200 +1,182 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51EC3FE358
-	for <soc@lists.linux.dev>; Wed, 29 Apr 2026 19:14:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777490080; cv=none; b=Vf5XmWCE8sWhngR330YACwnzVfiLI6pDNJOE3OTubHpXMuMtRxtOppqV6FnMp25dK2CT+mVPBgj+71P0azJk7qiBz1HWJBI4OL/B4HGI2GKh32X1rqjzMNNysFQlCG0Ip/Uz88mjSL+YncH7c6b3ZsDV6Wizkii/9RiBBUT9eyg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777490080; c=relaxed/simple;
-	bh=Raw3nnG6txGxRT2tuucK4Vyk8RJ3aJNJodqKknAtnWs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=etaShJtKCfwL1mYSLDxrrnCuhmBx44GDxPPZEw1u2Sdr9AmGHVeIWj05oAnC6TaFSHWj2F04Q8JPsjpOyYb7W3j40crK+uaPNGGv3zLpvpUaazTwze0c9Xq1s5q6J/+zkdfKwZ1Bygm1fq14Om9y8RyL5lmKxWQq+Y79W/BGp7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CN2cr33P; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919F047D928
+	for <soc@lists.linux.dev>; Thu, 30 Apr 2026 18:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777574875; cv=fail; b=I1+It+sNWI00QU7rs6KhfUPvbZF+rbeEJTbkp67MVsR2QYaIhR2XI4UGf1exEIjX8qffGLdZ2RncIvZPw0BG4AchtJ1LgzdC5HpCxZEKIzHL2lPUP1w2YtkCwBukHKtk7HMgp9vyu/RJ3R1XYxVVoh9d8yf3pGlkypJlbbHkXxg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777574875; c=relaxed/simple;
+	bh=xloobRUm6TFgfz1u2AMzIWtf1nVLzbMEW91tyXn93KM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Z/J7PHrHfhWV/Yg230+xpPzm+AQKvrzDiRf4b2WuFszRXguCNz7SvAqWdvvaZxhQx47lL5yhvDc3TDCd2zX8paQyTSGF1UzuxuMkpKdMuc1KBFWkSpX5sgXlwFmLn20oRQPzrleIRTYi0+Yx8Lg6bXGHVAa/Y+CRtDGPnP6svAg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=kCRYz3z9 reason="signature verification failed"; arc=fail smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CN2cr33P"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so1168165e9.0
-        for <soc@lists.linux.dev>; Wed, 29 Apr 2026 12:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777490077; x=1778094877; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6fKUgxBCx0mNxBEJyRtsEMEQ1iRhj1qvL3+7BPzmL+U=;
-        b=CN2cr33PTa6bpcsi8NVOV8SLK9wKkez+HdKI282uAkd4HZfRvZ3upRFxDPsWUvlOm9
-         ZdVLYGSUOtSqI73oDmXyyWW1bVwA6pNhGQdFhY8mCcnTEc52lLnnxEs6wDrohtcbYoPo
-         Pfw+iHwA4rOg27aR9MnovJ+7LWNV9exd5FBKHsqEgtB1xKqAIG1B1D2J125iavweVwG8
-         /KEnA3WbWQeQKd8xfiX4ltk3+jDtJdg0Q2R0qiQWW2Q8fZMsgBUccSuSuMl6AhQge3WZ
-         Evtu3gIeKD9VKBjKxInh7G20781djnvn9JJvO62l8d42LlISYTlUgXqCa8N83BbqHu0/
-         2f0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777490077; x=1778094877;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6fKUgxBCx0mNxBEJyRtsEMEQ1iRhj1qvL3+7BPzmL+U=;
-        b=QULBxl3nfBu9020p54PF3hqzXZY/hM4RLB+QtklZ5BK4r3h1BDE8usYLNQxWiBzOcw
-         3OVEjiSj9tUUeXxpJKFsowQeeGrd0BhayIoEoORH8tksTb34BgXgaaEY3KyEcgBXYn5m
-         IUd8Q1PyDyDWx1LxCZftGGBF1rWDMnOdJ9FbbIpvU3y90EEO+JxlO++WKQpuUviw/lWx
-         J4MfYsEgMfsnHrleGCvCl4Zw3M6mblxUzMdOAW4VEq/tswYDQNw+KBzbAkcA9NDmKIAG
-         gsVCpYxRj+/BhM4JNCfZZ+4NpxzmaYv2c9uMY9AJQ/greVnIDXAhPBZ7xpzZfh0Potjv
-         a05g==
-X-Forwarded-Encrypted: i=1; AFNElJ8uYTD0CE4JWFJRr7qvk/RaAQlZrC03ShVEByjgvTTZBHfhQiRjmBERBp1iw+CDftrvxxc=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz3g2qnr5pgx2ZY0ZPNbHDC4MWFxo9Vl8xMeUbH/mMTD0bnY18F
-	38Hin5bYtS1JeKjDCxWj4KI1bq89UnmEEGty/dRLsuWGjavbfexMiN2F
-X-Gm-Gg: AeBDiet/rTYGhVB27Rvx1shqdXNv0P18KpcnNA9ZIUCbjOy2kMQURZ7y0X4PwDDGj+U
-	jSCG4TcI0UwA7kvkse71zZlnlfSlWS6rcZ16JA3hmLwjqxjVVaj54CXY6d7L8D9P2ZBcu0JZXFp
-	ZL5re7rUij2wCIcwZDItAEJMeolfwMb3Ad6ZihanOB5PlvENFCLm8Rs1KEYGc75sZZ6PG3kcnUu
-	WM0TJ8ZZwg76hZLQ4XMqTVhEeVnHVEmpA2Z5bLLEnsNb2WnPXUkjSYN4C5SQbcKzgZ+UrgbxIjJ
-	Rk6x2WZ4lgx6RLjZA68kuAK456/6qDL3nufKnDUk+8spduJNJ+TGzALjgw07kT0WSKm78Vs3gtm
-	JiV5yxCJkgP5enCQ0GadrHjAogVgagaO5ATbuv5h6a1vM6SucNdH0c2ERHP4isTQYsrvbp1LN3e
-	ahhvfJ6RJw4PBcIGT88NdhOzGFtcvE3y4znTeLtGFc3kA=
-X-Received: by 2002:a05:600c:630a:b0:487:1fb4:7e1 with SMTP id 5b1f17b1804b1-48a77b0ee3emr168084865e9.22.1777490077103;
-        Wed, 29 Apr 2026 12:14:37 -0700 (PDT)
-Received: from [192.168.0.2] ([197.250.51.50])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a7c316d7esm23315005e9.24.2026.04.29.12.14.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2026 12:14:36 -0700 (PDT)
-From: =?utf-8?q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
-Date: Wed, 29 Apr 2026 22:13:17 +0300
-Subject: [PATCH v7 6/6] ARM: zte: defconfig: Add a zx29 defconfig file
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="kCRYz3z9"
+Received: by smtp.kernel.org (Postfix)
+	id 15B03C2BCB9; Thu, 30 Apr 2026 18:47:55 +0000 (UTC)
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012059.outbound.protection.outlook.com [52.101.66.59])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 727D1C2BCB3;
+	Thu, 30 Apr 2026 18:47:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 727D1C2BCB3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BYgml5FzPgCc1ZOiAaiwRIkItkDwZ6iFHF+7UT72k0deo+qHDMq2AgOJ3YTZwsAR2H74z+JGAhqqFkRBhMb2104kktd03SyPEqE18pSPIPSD+Solzy/JgLtit+4itH2I1E4d3C+Uoi6pNODr8DjfwkS8Q6anE8Y8Kx1veRWg05E9tKloYzfcNKJGRxs4lBW7gvDXaV57M7lTaOAz++f0ec2SJed4/1Vnyg6mowTIyZ6p3qBOPDPAFQZcsc7e82AviwWT+TzrAswI9EbKCyUXQoxp1p3cgLpOFRkRFnRPEgGqrl9i/mjnywHHHLov7jlkP0ctdTDYCQHljQe13Xs40A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1qGSCEi2wZ0er+ZZWsKvF+CAxJaEwBLZyb9HcsbyQwo=;
+ b=YyaCzOm0p1CTAIFQmiHv4x/8z0vz6hCSHufKYlOTDOI6ecg683f8dl89QQeoXnMt8ClmBKo7FBKh2NDdGUt1C+Xyc/yf5PDW+Hi2vNo25BWD27/il+jjGlI6hq1CMOLvvx7ZZ6nJEmy4h50EKVATc9GguoV+bjweb0uwYCJft9L45JrkZkbf63p3K4dvJ3AKOPswPXVpwyOtWz59KAxagVFQa3bcqVwbfYJNA4U4THDhiLt+VXf4WYf/QyKJCxqqFOtx7zOZFrPR2lg2skBX5xdw12PMo4eySDhlozjsUJtmF4q1A8i+cLi8JFGKWTvpE7pQulOOBy9N2uI77/aYVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1qGSCEi2wZ0er+ZZWsKvF+CAxJaEwBLZyb9HcsbyQwo=;
+ b=kCRYz3z9QTJDQsAlEz5wXrFLIJk6Hubhz0LfI0xCYArGErPWCMYtbZnLGnohdHuoLpUuAM8sQVhyeJqRUpeA0mqz+n0Stfr2aL41YXmfyIAzBxaltafebtXQ9sv/qbYI9ffuBUwToBrPdeRcXFaEmyD8Yc+bxoX+7ixZNmvN+tyV4kyEtFNl2VzvKSeN6jAMiKIwb1177iFuXMXWh+AiP+LskAOMG8j4FJBO12bKUTsZdMGjsM3dTvbzSWdi3mZzV6t4EOSUp+1qS2nB2pfgvGhtCKshUDVTdkXIo3m/XJgxXi0j0o2Evwb1CURHjH1FizTIakDrdrQCEHVGVz9muw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
+ by DU2PR04MB8712.eurprd04.prod.outlook.com (2603:10a6:10:2df::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.20; Thu, 30 Apr
+ 2026 18:47:50 +0000
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9870.020; Thu, 30 Apr 2026
+ 18:47:50 +0000
+Date: Thu, 30 Apr 2026 14:47:43 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: =?iso-8859-1?Q?S=E9bastien?= Szymanski <sebastien.szymanski@armadeus.com>,
+	soc@kernel.org, arm@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>, kernel@pengutronix.de,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL 2/4] i.MX arm dts changes for v7.1
+Message-ID: <afOjz03KQGa8sHRY@lizhi-Precision-Tower-5810>
+References: <20260330141444.3789193-1-Frank.Li@nxp.com>
+ <20260330141444.3789193-3-Frank.Li@nxp.com>
+ <ab6b9b36-f08d-451a-9c2d-ef27b813d744@armadeus.com>
+ <0c5a5204-331e-473b-9969-ff96bf711ce5@kernel.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0c5a5204-331e-473b-9969-ff96bf711ce5@kernel.org>
+X-ClientProxiedBy: SA0PR11CA0192.namprd11.prod.outlook.com
+ (2603:10b6:806:1bc::17) To PA4PR04MB9366.eurprd04.prod.outlook.com
+ (2603:10a6:102:2a9::8)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260429-send-v7-6-b432e00d2db8@gmail.com>
-References: <20260429-send-v7-0-b432e00d2db8@gmail.com>
-In-Reply-To: <20260429-send-v7-0-b432e00d2db8@gmail.com>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Russell King <linux@armlinux.org.uk>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- soc@lists.linux.dev, linux-serial@vger.kernel.org, 
- =?utf-8?q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2584;
- i=stefandoesinger@gmail.com; h=from:subject:message-id;
- bh=Raw3nnG6txGxRT2tuucK4Vyk8RJ3aJNJodqKknAtnWs=;
- b=owEBiQJ2/ZANAwAIAT0TvMhUTxoiAcsmYgBp8lh1EhYS/FI32IlxLUBQvJ1l9b49Dbf2N5b5b
- 0+0yQRveI2JAk8EAAEIADkWIQRDFvS2qgVbJ5UyXWw9E7zIVE8aIgUCafJYdRsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQPRO8yFRPGiLTUQ/9H4sDaDcI8rzJTKhDFNRttj29vxe6POt
- eevQdOL+WQaWNV5Iq+5n/XsbP0bp2cuqUwCUbr8sRr+s1kFz2TB0YjWQCjT3eLTpU5F5xZ32V0n
- LM2hx7oOK5tvlCn8EScXp2v/0t3G+WwS+PJT5JkKKJj670Z+5PbBWmdkRRqR3eCZ8LkVWsJAO3y
- T6ya+d2yGv+jVfZmp6Cm7nsdVINKlFQ9bKmBEqOHwXwpNK35xPEsHUqYselJ7Y6ijIHTAQWSPSs
- m3HtYNJPJcw2how9p084rusWqFS6qVPgWGEBCEZ1+5Y2FdKepgvjuVRUqAOUxU6EOBIVKYz+Zup
- ksAoJGRzMC/o2/w4J7l9+9Eyqv6UdS3yu3HgiBloNGM8fiQDDFDkI9tdLK/sn5YjiIaSs96IY3H
- MrPisngXDE6JCyVlGzNlHzB1PZZXYm3TiGr8Lw04HhyawjbA8bad7k+IpOJmFlGULDQ4ais+Tkx
- 4ByKHcTaCM9V7eUzaK2vsVsDGstcn8lKV26t78yeQ5Szmy8+uZJEUhVdjd5ue6j2JYuiG4EeOjq
- Tieiv8xSuv6EmymMgSguk0s87VQE1xZ01bcYbN84JI/M4Snh3oh9SBKL2PESxrMa0NIfilYH5Vk
- VQ6/qQIFKNYuUoKSGqwlOh9qd8IC9QthvqlEMv8q/soMTaUMkvFE=
-X-Developer-Key: i=stefandoesinger@gmail.com; a=openpgp;
- fpr=4F9C2C8728019633893EBBB98CB81F9A72BBA155
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|DU2PR04MB8712:EE_
+X-MS-Office365-Filtering-Correlation-Id: f362fe2b-e4c5-4804-c2ed-08dea6e8fa7d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|366016|376014|52116014|1800799024|22082099003|18002099003|56012099003|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	xa7qpps9YLC7ei0Zp1JsMYxFK0D3HV0tka9nz/Yc8ZlvShprCzG8iWoLweXX0k8u49+4GySBR/5lQDTVHKCm7OYWlxpvraq3l1r47qpizr7Y0rjUKGba3ohPrdM4rqcGFTVeduZml1wiGW9Zckjm+n6ZY/1V2GCfayPHw/6oGFXkW9wmpqc5uJ+ekMPNAd9VDiNJnPPhu40i0wZ13OQZpl/BG3ZXb0j6wPQkNwUFTijbiDi8g/JacdNPNOjG0rwgKFtBRAJ+wt1M0Tr9L1r8AsuR9JrVVD4knstXb5DcU3ymrNOKkoHYhKIV5phdwwUZRbcqhEuWJ1544TpT/msNkucltlIqWt/ym+3h0v4dIvi7uvScPHn+5Tt0Eefou0Ecm4OSYJKzFlljZ40WabiWIAuIEWkV98thjdUrb2KMTlWphvxC8+HHzYZ45EYIee3lpysHN283pBcg5ScrDRMjP0wYI5jOfvNwILnm+94KGQ1Jb/B8lUZNdt/ZTZ78I0hA7zNo5z27jwxDzNgQ0g35JXP/F4bwgYvQupNOR8CMaITIkz2p87FEg7N3UIYCdvWNBb+Zixf4AG6owMUcIWN+ZWMMleEiIVuGSlH8LEdJeFipUeFNpF2TX43OklfMUn8Kmdl0kMAk5pZ88l0prvEA0bBIAgaG553gNUPZniTEoLpoCSe8S2Zrn8CAZ3my9Axg4/ilKYYp9UBcaPI4nwtLInaFkejll47R51u9iwq/1ztREEutGuEPggK1w5X1KaaD
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(366016)(376014)(52116014)(1800799024)(22082099003)(18002099003)(56012099003)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?2gQI7Uusz/idJro/L/JThBdT7WXmHaKEvar7xnthzlwEJknXJmfhLEvXLQ?=
+ =?iso-8859-1?Q?7q/ymIV888wl94i3JB3qm+wWoUR2hRUu+AA1bIF496pOt7odvm7S2oMGIM?=
+ =?iso-8859-1?Q?Bt/NPkBWpL0DJIc/Q4CatKSO8TVjOHVEr7/V8i45Jage5ypzt/fTtKrP/W?=
+ =?iso-8859-1?Q?j38vHp8QzzAeyx6ZPpTj2ABV6pLytD/FNw593ALJ5VQWw8zfu4eTSPtkPn?=
+ =?iso-8859-1?Q?AbGOWMgFCbo8TkXdaI4MitThyGC1YaKwHL0nWh1i7gQTXcr/HL1QaLIUe5?=
+ =?iso-8859-1?Q?9mTLu8whgIU7yvvU2jxrqqMGTLuXVmQnuxgDCAv1efjsyH9lYvzaEQbCnB?=
+ =?iso-8859-1?Q?0NQLE4wIqvYSG3rgqhvI8DecuYCT3gdrQOWyp98C6q5yUxMAgTZAsWGpU4?=
+ =?iso-8859-1?Q?TiZqf7cTpUg83oA6zNprYz8+MSiuO6Rp+MBk19rBXJdWcLOWsgKK4lbgik?=
+ =?iso-8859-1?Q?in8bwgjX4GmkMC9/ERrOduFiM/FNCL+iMNsmxdxnM/97dMl0AE7AyMgmw2?=
+ =?iso-8859-1?Q?8/Q5O73Sq1JJBsg6psEUQUR8mUpGUddunoc84XS1+NbhuRTRipDnZpjpic?=
+ =?iso-8859-1?Q?pWVzFsqiPGqnXKXrfcMEY7JhoG/qQowX45LuKk/SxH0/Xo44xLE0khKPv6?=
+ =?iso-8859-1?Q?g85DeP41deXX5GoG5/5yk+f0db1NAjLROATQBG8XqPRUyTGwINpQ3Vth+H?=
+ =?iso-8859-1?Q?/eiATjCMIPYWOarg1b82Qvrhhu6KST3hPXe8BSq1zvOcHrmCj/Gc9IuwjI?=
+ =?iso-8859-1?Q?zXSk5WtAKsQI8JFnGm72feVftCU83684WafLjf8ujF9CalsYatyaxjvq5m?=
+ =?iso-8859-1?Q?wmregAqGAvb17M0hAqhHvvr3iapjQpIDl1L80kpOqVMynr8sU4uP6c8iYe?=
+ =?iso-8859-1?Q?aG49KQqIRYsfzRnAwWYsgF7tLYomUCU2VNrGnhBUpm+fOnuZ8ndjkLC3kS?=
+ =?iso-8859-1?Q?w0WAlVSNELMJDEeUFj0jRzpfTFebO8GQ3g5DUsX29bm2aH9RqZCJj0/7ms?=
+ =?iso-8859-1?Q?72HkOTpgNbK8b/AKjAPJab1jHy+izJl9bG1vk4n/PRgV4kIlMXhvtgR4ll?=
+ =?iso-8859-1?Q?kg7Z/W5GxF2hg5J1MP+eZxV2shV+hdGR8YE3JY+H1nVudAlIUBINp/jm5Y?=
+ =?iso-8859-1?Q?djS1bdHWSVqpmKvTm6aX95FByc0DpE/DdYOFvDCciFIRlOn3HgoPQSvX94?=
+ =?iso-8859-1?Q?IEEd/D10Njo8CxuheLJjOm1iex9nnw9wRM6HqMUqljUpLCLL+kKVs+TDkK?=
+ =?iso-8859-1?Q?gMrINTH76NI93hWFjIAT9Bpdpfms1Wfh97kLHmABVEV/1mS4x1EG/sSNpu?=
+ =?iso-8859-1?Q?E1OIUqENoSWtEgweZIFBVx48LcozB6T7yiC+Z1gw9t/0TO80yAOqtL2OvI?=
+ =?iso-8859-1?Q?D2k8gJCGOAG1zogZRO02tyNJNAjR14nJlxGsOfhlq/TGrvsOf8mhZ0ewIo?=
+ =?iso-8859-1?Q?uO7W6AB7dDC8ySts1VO347hbTtvE/HEeUBnjWPUo4y7zH3GdA015l313eK?=
+ =?iso-8859-1?Q?LwhXzvDQKnEZopZkuFL2dmxm7SR2rsWG5WakIkHSF6QJUsLMg7BjlxwemA?=
+ =?iso-8859-1?Q?RAbPW+CW2YHLDGhm/at+WiQJIESuwBIVlz0Au/GvqJRbPcGc56FjAFarNX?=
+ =?iso-8859-1?Q?mSktwWUfBiLPDkQWYjGCaSdVyEZi6bvN8cq2XhLOQ8X1e3KiZkjzTyCegj?=
+ =?iso-8859-1?Q?c6r4HvnVfYbgxwwvYqW8yBSQ1rZprmG6wArgkjCpzYKOXU94/u5n9XsGx6?=
+ =?iso-8859-1?Q?TlR3tF5zrG/myWRByotd8fj96N7heLG/zxSBfOCvo7iSZx?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f362fe2b-e4c5-4804-c2ed-08dea6e8fa7d
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2026 18:47:50.0761
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Uf59RnXjFZeT/4BiN/RPfWj/7DgqoMJO5nVdNnvEJSPn9uT2Y6upigNl5QZXpKxH2EsB7UHdHQILPWS5CRgwEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8712
 
-This enables existing drivers for hardware that is present on this board
-even if it is not present in the DT yet.
+On Wed, Apr 29, 2026 at 08:29:49PM +0200, Krzysztof Kozlowski wrote:
+> On 28/04/2026 16:03, S�bastien Szymanski wrote:
+> > Hello,
+> >
+> > On 3/30/26 4:14 PM, Frank Li wrote:
+> >> ARM: dts: imx: remove redundant intermediate node in pinmux hierarchy
+> >
+> > This commit breaks Linux 7.1-rc1 boot on my APF27Dev board. I see the
+> > following errors with earlyprintk enabled:
+> >
+> > [    0.346162] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node i2c1grp
+> > [    0.354438] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node i2c2grp
+> > ...
+> > [    0.636217] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node pwmgrp
+> > [    0.644346] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node gpioledsgrp
+> > [    0.657247] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node uart1grp
+> > ...
+> > [    0.868102] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node cspi1grp
+> > [    0.876513] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node cspi2grp
+> > [    0.888903] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node fec1grp
+> > ...
+> > [    2.413181] imx27-pinctrl 10015000.pinmux: unable to find group for
+> > node gpiokeysgrp
+> >
+> > Reverting the commit makes the errors disappear and the board boot again.
+> >
+> > Should I send a patch reverting this commit ?
+>
+>
+> If you know how to fix it, then better fixing it instead of reverting,
+> but otherwise yes, revert is justified. Just give a few more days for
+> Frank or community to reply, because maybe there is a fix known.
 
-Signed-off-by: Stefan Dösinger <stefandoesinger@gmail.com>
+Thanks for your report this problem, let me check at next monday since I
+am traving.
 
----
+Frank
 
-Changes: v5 to v6: Regenerate the file with make savedefconfig.
-
-An open question: What's the appropriate name? zx29_defconfig?
-zte_defconfig? zte_zx29_defconfig? There's e.g. stm32_defconfig without
-an extra mention of STMicro in the name.
----
- MAINTAINERS                     |  1 +
- arch/arm/configs/zx29_defconfig | 54 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6f51ba1c5ada..5dc52b84cc09 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3776,6 +3776,7 @@ ARM/ZTE ZX29 SOC SUPPORT
- M:	Stefan Dösinger <stefandoesinger@gmail.com>
- F:	Documentation/devicetree/bindings/arm/zte.yaml
- F:	arch/arm/boot/dts/zte/
-+F:	arch/arm/configs/zx29_defconfig
- F:	arch/arm/mach-zte/
- 
- ARM/ZYNQ ARCHITECTURE
-diff --git a/arch/arm/configs/zx29_defconfig b/arch/arm/configs/zx29_defconfig
-new file mode 100644
-index 000000000000..54fa62ed56e7
---- /dev/null
-+++ b/arch/arm/configs/zx29_defconfig
-@@ -0,0 +1,54 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_BLK_DEV_INITRD=y
-+# CONFIG_RD_BZIP2 is not set
-+# CONFIG_RD_LZMA is not set
-+# CONFIG_RD_XZ is not set
-+# CONFIG_RD_LZ4 is not set
-+CONFIG_EXPERT=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_ARCH_ZTE=y
-+CONFIG_ARM_PSCI=y
-+CONFIG_ARM_APPENDED_DTB=y
-+CONFIG_CMDLINE="console=ttyAMA0 earlyprintk root=/dev/ram rw"
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPUFREQ_DT_PLATDEV=y
-+# CONFIG_SUSPEND is not set
-+CONFIG_PM=y
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+# CONFIG_STANDALONE is not set
-+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
-+# CONFIG_ALLOW_DEV_COREDUMP is not set
-+CONFIG_MTD=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_COUNT=4
-+CONFIG_SRAM=y
-+CONFIG_KEYBOARD_GPIO_POLLED=y
-+# CONFIG_INPUT_MOUSE is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_SERIAL_AMBA_PL011=y
-+CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-+CONFIG_SERIAL_DEV_BUS=y
-+# CONFIG_HW_RANDOM is not set
-+CONFIG_PINCTRL=y
-+CONFIG_GPIOLIB=y
-+CONFIG_GPIO_GENERIC_PLATFORM=y
-+CONFIG_POWER_RESET=y
-+CONFIG_MFD_SYSCON=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+# CONFIG_HID is not set
-+CONFIG_USB_DWC2=y
-+CONFIG_USB_GADGET=y
-+CONFIG_MMC=y
-+CONFIG_MMC_DW=y
-+CONFIG_RESET_CONTROLLER=y
-+CONFIG_RESET_SIMPLE=y
-+CONFIG_JFFS2_FS=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DEBUG_LL=y
-+CONFIG_EARLY_PRINTK=y
-
--- 
-2.53.0
-
+>
+> Best regards,
+> Krzysztof
