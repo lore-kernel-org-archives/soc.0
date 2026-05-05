@@ -1,105 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72ABA33507D
-	for <soc@lists.linux.dev>; Tue,  5 May 2026 09:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80E23E1205
+	for <soc@lists.linux.dev>; Tue,  5 May 2026 09:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777974738; cv=none; b=pDgCFjGEukJnX9U7eOCpgJRPKs7firt+/JQIXM28x/dpe7YMG9WuNLU0TtxEPD6xMo+gJuf1fClJsJ2mhC0L9Q0KnVTAsq5Um5/z7OdOx3Memt8TgegM2gE7T0vHDAt3CoJW+qIPt9qBS9VwQBLAzIcb8RRuxBpz+epwEMkUzDI=
+	t=1777974806; cv=none; b=sh52mYXt5YFavitFQdlndDfiVPjM5Bs27kZMLCsYRmE6GOTB7gxfV+QllZZk1Q4rNgtrjCIwDJlJwwItysnXlj5J9DPZgrfaC1JZgjZdKu1aHawszeWY0USZT/FrIJD7899oB/3oKtqZsYdaNg9+wHWqfOKAog/E1bwX2qC16s8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777974738; c=relaxed/simple;
-	bh=cpIFIXhpqMMG5+sMrNERuIyu7U4UcLZK/Q47PKcgdqo=;
+	s=arc-20240116; t=1777974806; c=relaxed/simple;
+	bh=saiAoSq0Gjw4nVSv3lJIbi7mZbCEiUFubkklHZ6p6UU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oBnQ8cx3wPf9OhA+H2+6BCUETSQDo2qHbcVtCwHjRSVdB9iGZ2Rxvo//meCKzcjjuXrTlMPa0o4kayGW0CAQ4eNFMny0YksYDBK8A0ZPkYRthpTZtoyZRV8/gNlMtcYWTILxqMg3m0BfFJBgUpLIeOHP9iGtfp3k6+P9nLm2HF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNRi7nTu; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=TgvyMP5jPfPnAyBaUq+HeFvWQCxLyMCilmAmWNeZZFWrqvv3jI/XPf9BT+BW7Iq7tEJm8KmtVsYrCoO2yRe4JXvqmQpb61t8xUmNM3VLig0mzjJ+jUv+VL4whb9jOapqGqK5sFHkAUxl73oHKjhkbCZtnUQmcbCOlsgbC19Xoz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tFkqNMfK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNRi7nTu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 107F2C2BCFC
-	for <soc@lists.linux.dev>; Tue,  5 May 2026 09:52:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tFkqNMfK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C37C2BCFD
+	for <soc@lists.linux.dev>; Tue,  5 May 2026 09:53:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777974738;
-	bh=cpIFIXhpqMMG5+sMrNERuIyu7U4UcLZK/Q47PKcgdqo=;
+	s=k20201202; t=1777974806;
+	bh=saiAoSq0Gjw4nVSv3lJIbi7mZbCEiUFubkklHZ6p6UU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fNRi7nTupnxh5eSmRIio74kd+u5Vi2OF5cS7v9YWXVI+NRSd+RWC3uNy5BSPWBKv/
-	 105hKSvTQf+T+t6rdNCbl+rFx7Y+wzmdmYyzThe4DjSW12WGRSGCJbWS4L7CXTX14m
-	 IU5WL2Pb8lzVuInCq2azdC77srFCZLlqlDzFQgDUuiV4cs2oGADWARj2V7JQ0b19Ut
-	 Ha3K7JWCbfDa7nYL5hL3tj4VlQ09B+jhQEv8VqbJdQCDxPho8ymzkz5i0dWEgPFvgW
-	 DTl2uHiUMoKq/H31oePPEYOBUnn3pTQbTX1nUfHm2FXUK6hocVlleKmRVRz1bjjKOb
-	 J/cJfwnoc1CxA==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5a525aedb24so5649748e87.2
-        for <soc@lists.linux.dev>; Tue, 05 May 2026 02:52:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+2+p9Y7FvVYMJmWjqw4K5PTrPd6B1hbEK/+12QKf7bCEY8153SjPaRpD/XGRforUEOhDk=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzHrA6T+1b7zD7PHKqkEB7/TrdhEfUzlNRm9YxqVfbHOuYusrbd
-	1G7DwGnpYAW+jneVUDqq39aTQZbsDWnNN6/5vQ1sAwjVtiWlTLbevckKaBqSkbfrdZfNxmMO8MR
-	s7FU5x1fFr0+Af/InoMofNhkIQBTry7U=
-X-Received: by 2002:a05:6512:33c1:b0:5a8:63e1:af06 with SMTP id
- 2adb3069b0e04-5a87f1dae3emr1048945e87.23.1777974736749; Tue, 05 May 2026
- 02:52:16 -0700 (PDT)
+	b=tFkqNMfKJt7Q7XONP/ZHfpv5V9+vnr/gtXNIn3ijNpCHDU1BoQiALetWJSt+PmgoS
+	 BBlwwgPBnV78TtaJ+qqsAWJKwy04QPBJA7QgkL/YCiCCJmhmXsUMSvQROJgCTk9K72
+	 LYLjeDL1f2ZcOtEecI6GzZ8O6zCTjFBwRHGdvn2D9E4/oieDtY8CGp2nuukUFWHL+R
+	 Rjumx4xYqOtsQgaslMgTG4/ycuwRE3YzrV0FqhDjssIDQ72Weuuu02Y+IG7diGD6l4
+	 SlDWqIxoESZZKTuqqpnwzyEzXhczNwyfeuSBgznwvsv2LGbvIddoalPj75rgpWWe2T
+	 0tvUDQj+4WKlw==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-38a01c80c34so50647781fa.0
+        for <soc@lists.linux.dev>; Tue, 05 May 2026 02:53:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8Re/DOPQGt6zFyGVpEvzicbzSnW+e0L6+2dN5dof882fSt2fIOeYs6qeUUcfc/PwhSczw=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzslE/b2A35yZNWC+pxe2fUSP/HMV/Aamo70pOTxWuVJi/1/J+L
+	2SMpw6plHi1Jpgv2Pxw2WS//8dte6X7kwd5n7MY60kuU+BYhneJQJUG0qWiYRf0fLbhv7iBb0oh
+	20Sj73vlLDAszI3LnSMBl7lAc0w7c98Y=
+X-Received: by 2002:a2e:be8e:0:b0:38e:a8ef:b61 with SMTP id
+ 38308e7fff4ca-3937857c3bamr54490251fa.29.1777974805235; Tue, 05 May 2026
+ 02:53:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260429-defconfig-v2-0-e4ed4186028b@oss.qualcomm.com> <20260429-defconfig-v2-5-e4ed4186028b@oss.qualcomm.com>
-In-Reply-To: <20260429-defconfig-v2-5-e4ed4186028b@oss.qualcomm.com>
+References: <20260429-send-v7-0-b432e00d2db8@gmail.com> <20260429-send-v7-5-b432e00d2db8@gmail.com>
+In-Reply-To: <20260429-send-v7-5-b432e00d2db8@gmail.com>
 From: Linus Walleij <linusw@kernel.org>
-Date: Tue, 5 May 2026 11:52:05 +0200
-X-Gmail-Original-Message-ID: <CAD++jLkjOzfP5MLB0wuOUouM3keE1osBEJ+PWC84dwtd6h4SOg@mail.gmail.com>
-X-Gm-Features: AVHnY4IFYFYkhZ8oq3rAOzmlf9lv-MvlXK4ZwfeKAdZXsIKlgyz53yxEXQ0V6No
-Message-ID: <CAD++jLkjOzfP5MLB0wuOUouM3keE1osBEJ+PWC84dwtd6h4SOg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] arm64: defconfig: Switch Ethernet drivers to modules
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Drew Fustini <fustini@kernel.org>, soc@lists.linux.dev
+Date: Tue, 5 May 2026 11:53:12 +0200
+X-Gmail-Original-Message-ID: <CAD++jL=PzwbKFvLDX_b-UvQtd83qfb+Kaeg1Oibo5mzRaFjR3Q@mail.gmail.com>
+X-Gm-Features: AVHnY4KMDuCZ2LITDqNfqa9EPfYGc-qnLM8XOIgJiicE6urZJdWk9Rb4jm-mXt0
+Message-ID: <CAD++jL=PzwbKFvLDX_b-UvQtd83qfb+Kaeg1Oibo5mzRaFjR3Q@mail.gmail.com>
+Subject: Re: [PATCH v7 5/6] ARM: dts: zte: Add D-Link DWR-932M support
+To: =?UTF-8?Q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Russell King <linux@armlinux.org.uk>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Drew Fustini <fustini@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	devicetree@vger.kernel.org, soc@lists.linux.dev, linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 29, 2026 at 8:50=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@oss.qualcomm.com> wrote:
+On Wed, Apr 29, 2026 at 9:14=E2=80=AFPM Stefan D=C3=B6singer
+<stefandoesinger@gmail.com> wrote:
 
-> Development of Linux kernel progressed over last 10 years and it is easy
-> to generate now initramfs for building own kernel, e.g. with Yocto or
-> mkosi.  Therefore for a few years of reviews on mailing lists, all new
-> options enabled in arm64 defconfig were with assumption of having
-> initramfs which can load bare minimum of modules to mount filesystem
-> from network or disk.  Basically network driver as built-in is not
-> anymore essential to boot the system, so switch almost all Ethernet
-> drivers to modules to save on kernel image size.
+> This adds base DT definition for zx297520v3 and one board that consumes i=
+t.
 >
-> Similarly 9P network filesystem for QEMU, especially that testing kernel
-> unuder QEMU does not have any size or build process constraints and can
-> use initramfs with -initrd argument.  Note that having network drivers
-> does not break NFS root, because whatever loading method, e.g. TFTP,
-> which brought the kernel image can bring also the initramfs with network
-> adapters (and I have been using such method for years for my Samsung
-> boards).
+> The stock kernel does not use the armv7 timer, but it seems to work
+> fine. The board has other board-specific timers that would need a driver
+> and I see no reason to bother with them since the arm standard timer
+> works.
 >
-> Notable exceptions / diff explanations:
+> The caveat is the non-standard GIC setup needed to handle the timer's
+> level-low PPI. This is the responsibility of the boot loader and
+> documented in Documentation/arch/arm/zte/zx297520v3.rst.
 >
-> 1. Mark I2C as built-in, used by CONFIG_IGB as a module.
->
-> 2. CONFIG_BCM4908_ENET and CONFIG_BCMASP appear in the diff, because
->    they were default=3Dy (via ARCH_BCMBCA or ARCH_BCM_IPROC).
->
-> 3. CONFIG_HNS3_HCLGE and CONFIG_HNS3_ENET are removed, because they are
->    default=3Dm.
->
-> Moving code to modules has positive impact on kernel image size, thus
-> boot time of all users not using above drivers and ability to flash
-> fixed-size boot partitions.
->
-> Old Image size: 41.2 MiB (Image.gz: 14.8 MiB)
-> New Image size: 39.1 MiB (Image.gz: 13.8 MiB)
->
-> bloat-o-meter of vmlinux:
-> add/remove: 3/6972 grow/shrink: 6/45 up/down: 66659/-2333659 (-2267000)
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> Signed-off-by: Stefan D=C3=B6singer <stefandoesinger@gmail.com>
 
-OK it's probably the right thing to do, no reaction from the netdev
-people so let's go.
 Reviewed-by: Linus Walleij <linusw@kernel.org>
 
 Yours,
