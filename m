@@ -1,103 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACDE3D47B5
-	for <soc@lists.linux.dev>; Mon,  4 May 2026 13:00:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B895940DFA7
+	for <soc@lists.linux.dev>; Tue,  5 May 2026 09:36:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777899613; cv=none; b=qajgp79ciBgYSlAY/nX7jCk6LvVfvgVeGu5L9yGmIZht20+kKoLYYDuLRCgGbRX653C86oH+fGzwO1l/h5cXIFqdJnbBfx4hZMwJWxn1Ff33+VgDox+JUlzqIqkzFC1wN3ut2rg9WsItrRBGlPUUBTsh6yCiQ5d51kBhYnChPXo=
+	t=1777973774; cv=none; b=DQR9Kftv/a2erHI7fARLhMJNnBGbGnDxY7otgPUdB4z3Gk0+ghl7zMCb97/080FGAfyoGocv+5Ku3ULG/q4PGVuMQYgPejn3iSn1vp2GWDy5+Vzj/vKcebeo3qEmr+hONufop9k/A1BYSchLeE+Qay+t3+vC1INPvbTjsiovjX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777899613; c=relaxed/simple;
-	bh=78C0iIpHwaY1z055Q60sRTW3KuphQTn9gwpSmEjxuYw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jFz//GWcdOGWdXnlYia2F8Y+DLj4LE0gXR1uzpigpRBKDZQ0yN5msnXq6WmZOYIjs8vW2yFYN5g4dwpuT2HbNrS/1ZI15ncfuCJjCekPYDCfeBtqiXXeQSOz1hmBnw0QRoAwq1EuK3Hwf66z+WjJ43oWHL1VKwH3j277kzFvXb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777973774; c=relaxed/simple;
+	bh=snZU2O2/tFVxCxfE62Jr46UfgTfqqKdl8nNtcogCPMs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=T19YaypjVqkB955v+ppCOXN/WKvnvaVh77ly908E1ykkhZDuyHuvORm9XZxFDXJnB4sKR0zQwjP34gL8Cj+CnsMG26ucmLYy2KyIyzPrzwjn9kOHSohYCQhvp83lfqtVEgh4tPPNQcblWrWXjyLF+O+RGG8fWuApfmvvI7qZQA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3MNQnbZ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3MNQnbZ"
 Received: by smtp.kernel.org (Postfix)
-	id 7C896C2BCB9; Mon,  4 May 2026 13:00:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18410C2BCB8;
-	Mon,  4 May 2026 13:00:11 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL]  Renesas SoC fixes for v7.1
-Date: Mon,  4 May 2026 15:00:09 +0200
-Message-ID: <cover.1777899408.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
+	id 693BDC2BCC7; Tue,  5 May 2026 09:36:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739F2C2BCB4;
+	Tue,  5 May 2026 09:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777973774;
+	bh=snZU2O2/tFVxCxfE62Jr46UfgTfqqKdl8nNtcogCPMs=;
+	h=From:Date:Subject:To:Cc:From;
+	b=V3MNQnbZ7QMLO61GDboeAEYlPjXoIOj8gbFxVnLLHxQ5z2zGnEzp21oFZfFmK9p7D
+	 aApklVgmg2wIl6jWlM0gI5pK49gIbaHPMYksJKtJyHpY4xlJCDvZAzIl06wTO6Xukt
+	 wZgRgWUzSoMccfM9/kWDZ72rboDx7hQ7GxSzIdt8Ut8E1L9iCw0oeqly2NU7hLBHCU
+	 QYTaI4Yx2S6GS+w5Lyznp2j8xvye2zJrDumkpSJ3xKMsNMzjoxltli/WVmYtyKdfsy
+	 cqwMlxvsjvv9sqiu1dBajWNuOU2C5Hp74Do0UHE88gx38kES0Ng2dASV8zqpk42ZX9
+	 29zh7FHVtns9w==
+From: Linus Walleij <linusw@kernel.org>
+Date: Tue, 05 May 2026 11:36:07 +0200
+Subject: [PATCH] ARM: dts: ixp4xx: use phandle-based GPIOs in mi424wr
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260505-ixp4xx-dts-v1-1-02f4a92a9697@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMSw5AMBRG4a3IHWtSjUfYihgUP64B0os0EXtXD
+ L/BORcJHEOoii5yOFl4XQKSOKJusssIxX0wGW1ynelMsd9S71W/i7KJaaFLWFuAQrA5DOy/Wd3
+ 8lqOd0e3vge77ASqGSd5uAAAA
+X-Change-ID: 20260505-ixp4xx-dts-a12be09eaa7e
+To: soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: Mohamed Ayman <mohamedaymanworkspace@gmail.com>, 
+ Linus Walleij <linusw@kernel.org>
+X-Mailer: b4 0.15.2
 
-	Hi SoC folks,
+From: Mohamed Ayman <mohamedaymanworkspace@gmail.com>
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+Convert remaining legacy integer GPIO specifiers to phandle-based
+descriptors in intel-ixp42x-actiontec-mi424wr.dtsi.
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+All other GPIOs in this file already use &gpio0/&gpio1. These are the
+last remaining legacy users in the IXP4xx DTS files.
 
-are available in the Git repository at:
+Signed-off-by: Mohamed Ayman <mohamedaymanworkspace@gmail.com>
+Link: https://lore.kernel.org/20260428191029.809462-1-mohamedaymanworkspace@gmail.com
+Signed-off-by: Linus Walleij <linusw@kernel.org>
+---
+ arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-fixes-for-v7.1-tag1
+diff --git a/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi b/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi
+index 9b54e3c01a34..3043ae7232dd 100644
+--- a/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi
++++ b/arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi
+@@ -195,19 +195,19 @@ gpio1: gpio@1,0 {
+ 
+ 				pci-reset-hog {
+ 					gpio-hog;
+-					gpios = <7 GPIO_ACTIVE_HIGH>;
++					gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
+ 					output-high;
+ 					line-name = "PCI reset";
+ 				};
+ 				pstn-relay-hog-1 {
+ 					gpio-hog;
+-					gpios = <11 GPIO_ACTIVE_HIGH>;
++					gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
+ 					output-low;
+ 					line-name = "PSTN relay control 1";
+ 				};
+ 				pstn-relay-hog-2 {
+ 					gpio-hog;
+-					gpios = <12 GPIO_ACTIVE_HIGH>;
++					gpios = <&gpio0 12 GPIO_ACTIVE_HIGH>;
+ 					output-low;
+ 					line-name = "PSTN relay control 2";
+ 				};
 
-for you to fetch changes up to 7e070a14beaf036588f164575bbaf7011dd26285:
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260505-ixp4xx-dts-a12be09eaa7e
 
-  arm64: dts: renesas: r9a09g056: Add #mux-state-cells to usb20phyrst (2026-04-27 11:14:31 +0200)
+Best regards,
+--  
+Linus Walleij <linusw@kernel.org>
 
-----------------------------------------------------------------
-Renesas fixes for v7.1
-
-  - Fix SCIF (serial port) clocks on R-Car X5H,
-  - Fix various dtc and dtbs_check warnings.
-
-Thanks for pulling!
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      arm64: dts: renesas: r8a78000: Fix SCIF brg_int clocks
-
-Marek Vasut (10):
-      arm64: dts: renesas: draak/ebisu-panel: Fix missing cells and reg in DTO
-      arm64: dts: renesas: salvator-panel: Fix missing cells and reg in DTO
-      arm64: dts: renesas: rz-smarc-cru-csi-ov5645: Fix missing cells and reg in CSI2 subnode
-      arm64: dts: renesas: rz-smarc-du-adv7513-smarc: Fix missing cells and reg in DU subnode
-      ARM: dts: renesas: r8a7778: Add missing unit address to bus node
-      ARM: dts: renesas: r8a7779: Add missing unit address to bus node
-      ARM: dts: renesas: r8a7792: Add missing unit address to bus node
-      ARM: dts: renesas: r7s72100: Add missing unit address to bus node
-      ARM: dts: renesas: genmai: Drop superfluous cells
-      ARM: dts: renesas: rskrza1: Drop superfluous cells
-
-Tommaso Merciai (2):
-      arm64: dts: renesas: r9a09g057: Add #mux-state-cells to usb2{0,1}phyrst
-      arm64: dts: renesas: r9a09g056: Add #mux-state-cells to usb20phyrst
-
- arch/arm/boot/dts/renesas/r7s72100-genmai.dts                | 3 ---
- arch/arm/boot/dts/renesas/r7s72100-rskrza1.dts               | 2 --
- arch/arm/boot/dts/renesas/r7s72100.dtsi                      | 2 +-
- arch/arm/boot/dts/renesas/r8a7778.dtsi                       | 2 +-
- arch/arm/boot/dts/renesas/r8a7779.dtsi                       | 2 +-
- arch/arm/boot/dts/renesas/r8a7792.dtsi                       | 2 +-
- arch/arm64/boot/dts/renesas/draak-ebisu-panel-aa104xd12.dtso | 5 +++++
- arch/arm64/boot/dts/renesas/r8a78000.dtsi                    | 8 ++++----
- arch/arm64/boot/dts/renesas/r9a09g056.dtsi                   | 1 +
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi                   | 2 ++
- arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi     | 5 +++++
- arch/arm64/boot/dts/renesas/rz-smarc-du-adv7513.dtsi         | 5 +++++
- arch/arm64/boot/dts/renesas/salvator-panel-aa104xd12.dtso    | 5 +++++
- 13 files changed, 31 insertions(+), 13 deletions(-)
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
