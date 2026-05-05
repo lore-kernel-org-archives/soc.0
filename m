@@ -1,78 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F75A3358C2
-	for <soc@lists.linux.dev>; Tue,  5 May 2026 09:54:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738DA40629B
+	for <soc@lists.linux.dev>; Tue,  5 May 2026 10:39:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777974882; cv=none; b=oOZ9aIaI98icmQf8ue/49CKbRqO+okIlHFnfryzdiYsAN4Bf69ys42jBXOEJOw9/tDwLHGqEar/ICvDM4aOC3YAWWiqJ3vKw59GLvyciIke//guM1LT8R9bUkYbVtdjYsuD18I/IEWygeddRYjAdgtfAwLfHfKMW1sRNiymlP+o=
+	t=1777977599; cv=none; b=iknbnMW0hTJUc7Gqd/wWfTM5k7nCx27wbxXH+tSHPme3rkfEto582rPO41lzVJA7eylMpeAiykV9KECu2xvFg5EbGj7/U9ma0Kx1d1fyWBeELoFpRxFikJ22U8hkiCzJeiLBza+Jc90RiKSCCGQQGQZ2Ak97DaDzgWmY9x/5TBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777974882; c=relaxed/simple;
-	bh=PxaH7JEkFGR4j8g8WfN53Ub/nYRVGDBMMmwqa0ku9Ro=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wkoc3vh+SxkL/dIcQUy8dFROim7JkOt0h+++cQKOb2s/rU6b0Q585claxZcBJc4C+iOA8Xtqifhv81BA6mXHJdUbngQEW4AyQh1J97zwJBCbcT8VciLpigXyt18eBmaejsKPi1vHAp02Pvu0+cunHLIOi7JLmV+adx7sbNvvrfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyjhw2Ld; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777977599; c=relaxed/simple;
+	bh=21KkK8fuHwyUMnWeb63n9WmVc90yAKVk7g5A9u1COZg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ncjn9kGnlg5wveF/xPIs+m83R5eCG0ZrtRqFrnQEoj2Ky55/c8E/HTuyVsMfsIuZg+WJmkTAA7itH3/LaNJRzSE5y0jY4epm35k0LgKW2Vl7OcbfMcVmB25FiRKsD3B3eARsPHpD2dvCZfhFSuhWfHtVmFhj2DvccIONvKBNNOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=IhGQGDuq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyjhw2Ld"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68470C2BCF7
-	for <soc@lists.linux.dev>; Tue,  5 May 2026 09:54:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777974882;
-	bh=PxaH7JEkFGR4j8g8WfN53Ub/nYRVGDBMMmwqa0ku9Ro=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iyjhw2LdsncUd1w1Gr8k+i+Ps+3e6h+F5hs6sCYhAgbXsbEr+/plWEpJaqyz/FbBs
-	 1HCmosWthE/mVgageM08fXD2GUvFqOdVDMjvAHAQ2QOhIP9RBHchcXjDrXgj8dy3PH
-	 br2eS8SqFwFJe0hpo+HJ3WTxVxWVCeiEbR0FuLoj0IkwMvKyr2rMo6EDrhN9ZovemP
-	 poWZMvVlY+UFVCx8UzuWQfve7XFMLdU79kAHcZ90xTa970ioeO7GozL0H1W43oNGY1
-	 HtYKuD/hhX5Ka8QA9bnLnAK+zytKsb575CazAjxo6VdrC4HwZLoQnKLoI1S7cV272O
-	 PkH4A1kq5vsVA==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5a40502e63bso5114395e87.0
-        for <soc@lists.linux.dev>; Tue, 05 May 2026 02:54:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ8zoZePkblYwIq2lSZNFPGpaUYbNguLGhz6Y4BYQvSok5QpMKEMDx1zGNaoTtwDsBMbkPM=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxHG9qNF7yTleWsN/cz7pKwtA9qjACSHIVgAnEZaFBtJo+c/rwW
-	8Ha3ezPDZ+wgc8OAjj/zQ2QO3PagvHBBZJl6pEeqsuy1aXE+k+B9ISdZwjBQ+HpSBMDRAtg4oAL
-	rHREXkcl0iLQUPHCAzWA8wmeCjeoFG2U=
-X-Received: by 2002:a05:6512:31cf:b0:5a2:bf50:763d with SMTP id
- 2adb3069b0e04-5a8631c8222mr5342230e87.38.1777974881162; Tue, 05 May 2026
- 02:54:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="IhGQGDuq"
+Received: by smtp.kernel.org (Postfix)
+	id 69A11C2BCFD; Tue,  5 May 2026 10:39:59 +0000 (UTC)
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 323D8C2BCB9;
+	Tue,  5 May 2026 10:39:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 323D8C2BCB9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 645AdtrU71157145, This message is accepted by code: ctloc85258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
+	t=1777977595; bh=7ipe0+lXh5EphXIInZY0Ql0rK52tFhFsSOH18o40fNw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	b=IhGQGDuqEphjZt3v0D0E5oAgug1vhvMAFMR4iE7pR8TvUgmOKBny9B6Ab4MzYJJfG
+	 ZeHqnAiqua8GMVkUVRtV9c53zQ+FK8vQzWZrDohF+6uKGERkrarLhIx/vbLbN87YCP
+	 Pp38KSSKLgaBC4R/8IvIR0jkUgYN2Ca/lUonQ42WlusRn0evkNQCVcoOlBwPdp3qUy
+	 5KOp/zD5eywsEJU8yY+q11FHjDidG9xVugo3hXa9jwBwudPd1QcYpxYt6AS4L3VJ7i
+	 pO5LI6wWd8HYiunQjxLyr71oaGdZnwA5xeh9SseFIWP7ibhcbyW0Dh/O+LsQfTrDZ7
+	 XvMC68mK/eZ5A==
+Received: from mail.realtek.com (rtkexhmbs03.realtek.com.tw[10.21.1.53])
+	by rtits2.realtek.com.tw (8.15.2/3.27/5.94) with ESMTPS id 645AdtrU71157145
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 5 May 2026 18:39:55 +0800
+Received: from RTKEXHMBS04.realtek.com.tw (10.21.1.54) by
+ RTKEXHMBS03.realtek.com.tw (10.21.1.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Tue, 5 May 2026 18:39:55 +0800
+Received: from cn1dhc-k02 (172.21.252.101) by RTKEXHMBS04.realtek.com.tw
+ (10.21.1.54) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Tue, 5 May 2026 18:39:55 +0800
+From: Yu-Chun Lin <eleanor.lin@realtek.com>
+To: <soc@kernel.org>
+CC: <james.tai@realtek.com>, <eleanor.lin@realtek.com>, <afaerber@suse.com>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-realtek-soc@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <cy.huang@realtek.com>, <stanley_chang@realtek.com>
+Subject: [PATCH 0/3] ARM/Realtek: Add maintainers and pinctrl support for RTD1625
+Date: Tue, 5 May 2026 18:39:52 +0800
+Message-ID: <20260505103955.1010130-1-eleanor.lin@realtek.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260429-send-v7-0-b432e00d2db8@gmail.com> <20260429-send-v7-6-b432e00d2db8@gmail.com>
-In-Reply-To: <20260429-send-v7-6-b432e00d2db8@gmail.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Tue, 5 May 2026 11:54:29 +0200
-X-Gmail-Original-Message-ID: <CAD++jL=S6DSOuC-PXFn76SA7e-Lgueu9Z2wuF7icXCVX7MBpJw@mail.gmail.com>
-X-Gm-Features: AVHnY4LKgP4azk8C0fxvoRTN_Zgf5-T84OtwL-usSAdLEb83x0Y0BnN24IkSneU
-Message-ID: <CAD++jL=S6DSOuC-PXFn76SA7e-Lgueu9Z2wuF7icXCVX7MBpJw@mail.gmail.com>
-Subject: Re: [PATCH v7 6/6] ARM: zte: defconfig: Add a zx29 defconfig file
-To: =?UTF-8?Q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Russell King <linux@armlinux.org.uk>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Drew Fustini <fustini@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	devicetree@vger.kernel.org, soc@lists.linux.dev, linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 29, 2026 at 9:14=E2=80=AFPM Stefan D=C3=B6singer
-<stefandoesinger@gmail.com> wrote:
+This series consists of patches that have already been reviewed on LKML.
 
-> This enables existing drivers for hardware that is present on this board
-> even if it is not present in the DT yet.
->
-> Signed-off-by: Stefan D=C3=B6singer <stefandoesinger@gmail.com>
+Add pinctrl support for the RTD1625 SoC and update the ARM/Realtek
+architecture MAINTAINERS file to reflect current maintainers and include
+the pin controller drivers.
 
-I'm in favor of this, mainly because multi_v7 is pretty useless
-for this board, it is absolutely too big to boot on the machine,
-the board is odd and need some ARM64 stuff.
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+Best regards,
+Yu-Chun
 
-Yours,
-Linus Walleij
+Krzysztof Kozlowski (1):
+  ARM: realtek: MAINTAINERS: Include pin controller drivers
+
+Yu-Chun Lin (2):
+  MAINTAINERS: Add maintainers for ARM/REALTEK ARCHITECTURE
+  arm64: dts: realtek: Add pinctrl support for RTD1625
+
+ MAINTAINERS                           |  5 ++++-
+ arch/arm64/boot/dts/realtek/kent.dtsi | 20 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
+
