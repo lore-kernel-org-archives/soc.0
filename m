@@ -1,104 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50982C030E
-	for <soc@lists.linux.dev>; Tue,  5 May 2026 10:58:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779AB3BFE41
+	for <soc@lists.linux.dev>; Tue,  5 May 2026 19:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777978722; cv=none; b=crThKsrbLz2junS1BVjg89vhFlmPFlHZ8bJxqiHktNb9fgcrWoAxBklKCEhzqTmXnKibD48k05OCy65tCn0DDfagxy4D9+OIdLMAZwC8wqniDcrKoMklyb1XBXiB9bwtrfBAPi1vg/7rfyMDICV3pIt5hhw4BWcJyHz120At/K8=
+	t=1778008541; cv=none; b=fJF437aB2DtNyNx72dKg3x9isxLYfObpJqKCllHClycEdRSUd61FL8oR48tdCiXRimU9CfE8aI7alIlbvjlS4jMO2OnVfWK/b1zn9bsgpbA9oWyJK/tu9n+K2J4VoTvooWRU/584Ri+yYVZepN0gX6SxXFFJnAOzr4L33RS2y3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777978722; c=relaxed/simple;
-	bh=s2ZgeklFxlgyOz1Wnu5KDvbApKc575qGLfg7+7E0+K8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MYVmi6548lnp4+Icox5F1i622/vp385u/ZlFyecjtsJJRvvHNnnuXS4YMWSVSx0ur5s2YBU6ONeTFW4cQWkBIH2IauCtgdp6OBAmm6TEInQ6YCkNzV8EZewVGXdOIOSGnzL1w7Ak+KgeX+Z/VcwCOrXbTdhT9B6DOWwh0m4Xhj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=XQ67Wtdx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778008541; c=relaxed/simple;
+	bh=Ai2OUVAeU1hHFyXkQn4BFPhzJ8Wo1VWlb+jckP5ZuGk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=a+QZYD5Nqx3JbLrHeqtqehh2xsemOVZxYMpmxjgEBxn6fFD5tEKKV6Bw8lTI8va6M60eSz3czv1GcQYbpHOzmgfS/bu3k70RD9vwstcbzt7gibaBuLLsb8RDOVc010tGB61UOD+VF2VHwQoHRxcnDwC+JLbh/0dgCFaKnsY6dAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ehPDIhQ0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="XQ67Wtdx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ehPDIhQ0"
 Received: by smtp.kernel.org (Postfix)
-	id 778DCC2BCB9; Tue,  5 May 2026 10:58:42 +0000 (UTC)
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5F741C2BCC7;
-	Tue,  5 May 2026 10:58:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5F741C2BCC7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 645AwcN431171996, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
-	t=1777978718; bh=tAJhk27tpW5Xpntp31c3+nM/LaggP06QbC7a84S+snc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type;
-	b=XQ67WtdxH3ZXsJEykG4/BOM036OW3bkwxxETnEiDCe6u5CUK3LTuzsK9tZwvgk16O
-	 /uQ3w/cieB89hZ8HiKdf02fj0G4j0I6Wr5tledW8f2v8k9DfHXP6Cfp+qP++fEzX16
-	 JY/sWg7jYmrdVdThsOq2BZ9CqF5lQJFjxu3IBlvxsd+bCZZMbYBce0JHj03XOs4mb3
-	 jSY6Y89y0g0Z3gYpCokTQW0075l/mKe3BDmqR4nLITtIMjKzkKNnp27uekZncLPNxh
-	 A0+s7VAXy2fLPDoi3ILhb7FnyUzGfxIYdHhEtWqw4ribyAqjWbMY3f3qDNxUcY+tV4
-	 xxEa/7owRU2sw==
-Received: from mail.realtek.com (rtkexhmbs04.realtek.com.tw[10.21.1.54])
-	by rtits2.realtek.com.tw (8.15.2/3.27/5.94) with ESMTPS id 645AwcN431171996
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 5 May 2026 18:58:38 +0800
-Received: from RTKEXHMBS04.realtek.com.tw (10.21.1.54) by
- RTKEXHMBS04.realtek.com.tw (10.21.1.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Tue, 5 May 2026 18:58:38 +0800
-Received: from cn1dhc-k02 (172.21.252.101) by RTKEXHMBS04.realtek.com.tw
- (10.21.1.54) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Tue, 5 May 2026 18:58:38 +0800
-From: Yu-Chun Lin <eleanor.lin@realtek.com>
-To: <soc@kernel.org>
-CC: <james.tai@realtek.com>, <eleanor.lin@realtek.com>, <afaerber@suse.com>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-realtek-soc@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <cy.huang@realtek.com>, <stanley_chang@realtek.com>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH 3/3] ARM: realtek: MAINTAINERS: Include pin controller drivers
-Date: Tue, 5 May 2026 18:58:37 +0800
-Message-ID: <20260505105838.1014771-2-eleanor.lin@realtek.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260505105838.1014771-1-eleanor.lin@realtek.com>
-References: <20260505103955.1010130-1-eleanor.lin@realtek.com>
- <20260505105838.1014771-1-eleanor.lin@realtek.com>
+	id 150D8C2BCC7; Tue,  5 May 2026 19:15:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57CDC2BCB4;
+	Tue,  5 May 2026 19:15:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778008541;
+	bh=Ai2OUVAeU1hHFyXkQn4BFPhzJ8Wo1VWlb+jckP5ZuGk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ehPDIhQ0fxxCrknzFJcQCy4KB5o367nN82BkcXzxMzhfB1BBlK3oRH+MuM9FR+fFl
+	 FjHiBU5t6mlu4G5/KD5QzgiMivOZN5hpRV+DOLhO0+ZRVbyWuOMDYWFflIubgV4j1d
+	 82sdETUamD2ofZiZ/7hMnOKrsTKrrB0q3RnURLtpMNh57bAg6e3m6cciSg56Ro/cJG
+	 cEako0mCFK0v9kmPzIaLHS/3akgRIIlSRi18Ft6UId+yMgIuM4+8AUx/h/nInvH5nr
+	 ic3f1yfvucJqk2T4YJVtZMmod/mZ25yAR4IRK0/WcV5WsnkrwS3SfE92kLx7E87z14
+	 3xZUA2XAZ1wag==
+From: Linus Walleij <linusw@kernel.org>
+Date: Tue, 05 May 2026 21:15:37 +0200
+Subject: [PATCH] ARM: integrator: Fix early initialization
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260505-integrator-fixes-v1-1-56ab9aac59db@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3LMQqAMAxA0atIZgO1ahGvIg7VxpqlSlpEEO9uc
+ Hx8/gOZhCnDWD0gdHHmIymauoJ19ykSclCDNbY3zrTIqVAUXw7BjW/K6Ie260NYvGsM6HYK/UG
+ vaX7fD3c3butiAAAA
+X-Change-ID: 20250603-integrator-fixes-a8345ddba610
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, 
+ Guenter Roeck <linux@roeck-us.net>, Linus Walleij <linusw@kernel.org>
+X-Mailer: b4 0.15.2
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-No dedicated maintainers are shown for Realtek SoC pin controllers,
-except pinctrl subsystem maintainer, which means reduced review and
-impression of abandoned drivers.  Pin controller drivers are essential
-part of an SoC, so in case of lack of dedicated entry at least cover it
-by the SoC platform maintainers.
+Starting with commit bdb249fce9ad4 ("ARM: integrator: read counter using
+syscon/regmap"), intcp_init_early calls syscon_regmap_lookup_by_compatible
+which in turn calls of_syscon_register. This function allocates memory.
+Since the memory management code has not been initialized at that time,
+the call always fails. It either returns -ENOMEM or crashes as follows.
 
-Acked-by: Yu-Chun Lin <eleanor.lin@realtek.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Signed-off-by: Yu-Chun Lin <eleanor.lin@realtek.com>
+Unable to handle kernel NULL pointer dereference at virtual address 0000000c when read
+[0000000c] *pgd=00000000
+Internal error: Oops: 5 [#1] ARM
+Modules linked in:
+CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.15.0-rc5-00026-g5fcc9bf84ee5 #1 PREEMPT
+Hardware name: ARM Integrator/CP (Device Tree)
+PC is at __kmalloc_cache_noprof+0xec/0x39c
+LR is at __kmalloc_cache_noprof+0x34/0x39c
+...
+Call trace:
+ __kmalloc_cache_noprof from of_syscon_register+0x7c/0x310
+ of_syscon_register from device_node_get_regmap+0xa4/0xb0
+ device_node_get_regmap from intcp_init_early+0xc/0x40
+ intcp_init_early from start_kernel+0x60/0x688
+ start_kernel from 0x0
+
+The crash is seen due to a dereferenced pointer which is not supposed to be
+NULL but is NULL if the memory management subsystem has not been
+initialized. The crash is not seen with all versions of gcc. Some versions
+such as gcc 9.x apparently do not dereference the pointer, presumably if
+tracing is disabled. The problem has been reproduced with gcc 10.x, 11.x,
+and 13.x. Either case, if the crash is not seen, the call to
+syscon_regmap_lookup_by_compatible returns -ENOMEM, and
+sched_clock_register is never called.
+
+Fix the problem by moving the early initialization code into the standard
+machine initialization code.
+
+Fixes: bdb249fce9ad4 ("ARM: integrator: read counter using syscon/regmap")
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/20250518164118.3859567-1-linux@roeck-us.net
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Hi SoC folks, please apply this directly for fixes.
+Got stuck on a sideways branch for way too long.
+---
+ arch/arm/mach-versatile/integrator_cp.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b66b739ae2ca..0f8b8264e6e1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3356,6 +3356,7 @@ F:	Documentation/devicetree/bindings/arm/realtek.yaml
- F:	arch/arm/boot/dts/realtek/
- F:	arch/arm/mach-realtek/
- F:	arch/arm64/boot/dts/realtek/
-+F:	drivers/pinctrl/realtek/
+diff --git a/arch/arm/mach-versatile/integrator_cp.c b/arch/arm/mach-versatile/integrator_cp.c
+index 2ed4ded56b3f..03dfb5f720b7 100644
+--- a/arch/arm/mach-versatile/integrator_cp.c
++++ b/arch/arm/mach-versatile/integrator_cp.c
+@@ -86,14 +86,6 @@ static u64 notrace intcp_read_sched_clock(void)
+ 	return val;
+ }
  
- ARM/RISC-V/RENESAS ARCHITECTURE
- M:	Geert Uytterhoeven <geert+renesas@glider.be>
--- 
-2.34.1
+-static void __init intcp_init_early(void)
+-{
+-	cm_map = syscon_regmap_lookup_by_compatible("arm,core-module-integrator");
+-	if (IS_ERR(cm_map))
+-		return;
+-	sched_clock_register(intcp_read_sched_clock, 32, 24000000);
+-}
+-
+ static void __init intcp_init_irq_of(void)
+ {
+ 	cm_init();
+@@ -119,6 +111,10 @@ static void __init intcp_init_of(void)
+ {
+ 	struct device_node *cpcon;
+ 
++	cm_map = syscon_regmap_lookup_by_compatible("arm,core-module-integrator");
++	if (!IS_ERR(cm_map))
++		sched_clock_register(intcp_read_sched_clock, 32, 24000000);
++
+ 	cpcon = of_find_matching_node(NULL, intcp_syscon_match);
+ 	if (!cpcon)
+ 		return;
+@@ -138,7 +134,6 @@ static const char * intcp_dt_board_compat[] = {
+ DT_MACHINE_START(INTEGRATOR_CP_DT, "ARM Integrator/CP (Device Tree)")
+ 	.reserve	= integrator_reserve,
+ 	.map_io		= intcp_map_io,
+-	.init_early	= intcp_init_early,
+ 	.init_irq	= intcp_init_irq_of,
+ 	.init_machine	= intcp_init_of,
+ 	.dt_compat      = intcp_dt_board_compat,
+
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20250603-integrator-fixes-a8345ddba610
+
+Best regards,
+--  
+Linus Walleij <linusw@kernel.org>
 
