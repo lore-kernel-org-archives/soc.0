@@ -1,147 +1,193 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124EE4A341B
-	for <soc@lists.linux.dev>; Wed,  6 May 2026 17:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15ADE4A3415
+	for <soc@lists.linux.dev>; Wed,  6 May 2026 18:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778089164; cv=none; b=kMnwlTTo5InkonoPyvc1/lPaUakfADiFWbvi8JBVzl1wD+M/RHzlGgrI9X7BTxAzrO6M+Libqe65r63MoyMzmxx47QODRc/RXto643AoQnsQ/i5/8tzLtB8KOBK1NJYT5KmyU+569OK/zo5tn4tUsdekw1hws3Ui+nU2LqsA30c=
+	t=1778090554; cv=none; b=smTVOTWPLWgivR1iPJnhL+DTzdK4Q0UluDoHvtvFE/LqgrOCguom8/Uffvbc8ahHdDz6F0lsFInQaH/uoTDWF66EgjgK/sbPObus72oqwjoXb5edW99EL6K7pstN7yqcXnSOLD3NZPRhhERYiQivvrzI+uq1U0hvkel7E4rjJ8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778089164; c=relaxed/simple;
-	bh=6i1w8FUVeMItLfoBEsQ1m6McI0ZsDh5XdVy3i6eNKsY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=imgRm7oqfwBgAzNJvo0vqgeEhGoPALIPhbBeKcEa2Wi6+ma82QU3NvN9URp6FB7B6jIj4oCcCjs3pYxLpVp4Kh4HudDqFzO+jMPH538ofGbSDxzXdH3K8xTrzXkWVUzTnCcxV5e2UYgLREHeQGklJIFy77UPL8V/SbkYkF24QMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NUzP33To; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778090554; c=relaxed/simple;
+	bh=TZ0W83v9ODktu0VftSlTef0bohZHnEVOrSln+A4fzqs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MnJeES7GD3xM4yqKmLfZakbiB6gOjK0i9RIWDJUj2ymAJeUISepSXwikGYkhxUL/imqDQF+rJ3csrCLrF53vpc9oRKqjpLSJ0u4CvHJRY5WLlCsdY2+Zc3cv56wYarPVWP8xh3rRvgx23YsJYoVpyqkUGvgXbD1wX8i7nAE8Lds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afpOr2W7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NUzP33To"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso51304425e9.3
-        for <soc@lists.linux.dev>; Wed, 06 May 2026 10:39:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afpOr2W7"
+Received: by smtp.kernel.org (Postfix)
+	id BDDA8C2BCC9; Wed,  6 May 2026 18:02:32 +0000 (UTC)
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A1294C2BCB0
+	for <soc@kernel.org>; Wed,  6 May 2026 18:02:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1294C2BCB0
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8353dfdad62so2945471b3a.1
+        for <soc@kernel.org>; Wed, 06 May 2026 11:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778089160; x=1778693960; darn=lists.linux.dev;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6i1w8FUVeMItLfoBEsQ1m6McI0ZsDh5XdVy3i6eNKsY=;
-        b=NUzP33To0AGLfBtrUzahv22HV3BqwcQ5DZpJs1zcpF3PfwHP/pCX42Mwp5yIfyUo5S
-         QFB8YqIYSfDlOfFkeDJaGPffBKcAWeGNR7lQTbnx8Vy48Oxn2eV8rfXD4rkduh8Ig1Kb
-         X8C12RGeApb7YKb66s3QT/HOuELZN3C54uUq86Mnka5pWlLwvUrVwQvAoGveFIHdDY/q
-         8e9CNzyddoObceHjY6WXa2hxtArMATKkQpiYmOhMJt4z9GVKdRRocBeUkQVZkwerhkYT
-         mHomQ/8C2a+533YiO45BwHGkO0fVcb5AzrhAD4l3dZJsAXt6ObjkRxsodnW/XJooe0Wq
-         qugQ==
+        d=gmail.com; s=20251104; t=1778090551; x=1778695351; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=dwcx8kzQtEt+MjGxw4HHHvAXvVOas61hy1Z/q1OQ/Ss=;
+        b=afpOr2W7XwwFcQFsq9BHJpM4e4pZRa/oiyHVvwBLW1ntdVbn+l0iYltTY9JmhuPVwP
+         O7k7De9O1hSUw+JN4nRNyaEEedPgqg4xSVyOhtrb5+BGBCFl97KBoeIoYiwW8pwpf401
+         dOF/XUc7Id+tSldTlOm7ajOpOawTnRm12OaYgm9tyDrd2kBdQfBmi1PvbbQFfc1NoLMo
+         bN/Z4AED5wzLshNzcIc7TOTMuvMa1MVlRDfTuc0FEbDjr2isQPi4lD4SYRFu0IMcOO1F
+         pr/IdZBc/S7aM0/VgKDW4rXGYxdbN3Szi+sY0qTW0CAbgyr3Ys/OdAbJOMr1cD23+vj4
+         WoLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778089160; x=1778693960;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6i1w8FUVeMItLfoBEsQ1m6McI0ZsDh5XdVy3i6eNKsY=;
-        b=lybaboHugWvSEsvT+nmrql68tZAtse5eTpPgO+4d7e5NOLeZ6M1WLVuqZh2ZUlugEn
-         GOI/VqqmQicf2JHFXOgMfYs+vvNSByjnbGIpSLBmhIbazeildhZtzhc5WYLjL8VQOtos
-         pIJt38v57z+eSzbVeBqQaSgY6dCcPMnEcKaVmPa2Q3LiedV0s2VUT0A/U2AW5ahv1T3K
-         geZBeaa90cTyUubTRUixhKuTLk/P+54j7w7VEHvvJXzbsTQidAEcyg9R8Fer/uklZh/k
-         WhNVKkiUi+Tuw0t8I+tk3hT25HmIMQtCpxJm1Xq0FkBOSbVpSpvuGSsGim/VEWgDjn1c
-         W7oA==
-X-Forwarded-Encrypted: i=1; AFNElJ9SvE2b6BFvB6+cC3rLjg8pbhECZpR7sltAiUgeg0NYIyxgh0ZAStumn2d9zZChi2HOE/o=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxMy3jDvEC7sKqCheeGIzYhF3m+mktcwSiRrJCG/0BR0G2D3pgy
-	oY2oCz25lCLZRGC8B6Wn2RKtWNfgcMGIPDR8Fvzw29XB1Kfh3DIdFZRK
-X-Gm-Gg: AeBDievd9rTmdKqI2BW3t54jsnMd6BjTRrCB7KNvJI6ogyQG4pq63P87DH8uz6PY8a4
-	0Untbl4UnsysZcomFp7vDWG99kBs6+HZRgBBMpr4JZoJ8FIUemKxnaurolSp2jzpwcWwQVfvrtR
-	kTaMlpn3e0Jhm0XS3VtMCPzautqUZtuSxMkAGuCGEUxsYhqvi5st4GfyCHTmzMp4rGO1trJudep
-	Rx/lShG9ljEsGUgirjBsNtwD4zJIlnmlVbJrjJAUpab4NAtNSmAh4KzHOfk8y9FzwszaWn3Q0GW
-	wBJvO8TgCHW92B3DdJnfuaO3nTw4LCSj5TOQE4XtTmL764uBEPOj4o6iPP0b+ChdK2+925ct8S+
-	ooO17ELQJc1XC3lDAS2tjPQXQBquQZHMJsxq9cqmowDKNnJ+SgPz4ppHg4LY0kL5MlAuv9ZWo8r
-	6TOYAJ0Ar2cGZBrhC1TypD2Yh7xqhYXJ9W4iHq2HyxPFe63js9NTty
-X-Received: by 2002:a05:600c:2e0c:b0:48e:526e:1011 with SMTP id 5b1f17b1804b1-48e526e106bmr38312325e9.25.1778089160201;
-        Wed, 06 May 2026 10:39:20 -0700 (PDT)
-Received: from strix.localnet ([197.250.51.29])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e53116a9fsm31957135e9.8.2026.05.06.10.39.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 10:39:19 -0700 (PDT)
-From: Stefan =?UTF-8?B?RMO2c2luZ2Vy?= <stefandoesinger@gmail.com>
-To: Linus Walleij <linusw@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Russell King <linux@armlinux.org.uk>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Drew Fustini <fustini@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, soc@lists.linux.dev, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v7 6/6] ARM: zte: defconfig: Add a zx29 defconfig file
-Date: Wed, 06 May 2026 20:39:02 +0300
-Message-ID: <5379905.31r3eYUQgx@strix>
-In-Reply-To:
- <CAD++jL=S6DSOuC-PXFn76SA7e-Lgueu9Z2wuF7icXCVX7MBpJw@mail.gmail.com>
-References:
- <20260429-send-v7-0-b432e00d2db8@gmail.com>
- <20260429-send-v7-6-b432e00d2db8@gmail.com>
- <CAD++jL=S6DSOuC-PXFn76SA7e-Lgueu9Z2wuF7icXCVX7MBpJw@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1778090551; x=1778695351;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dwcx8kzQtEt+MjGxw4HHHvAXvVOas61hy1Z/q1OQ/Ss=;
+        b=H/VzUMjno99gbNNtrTPZ+8IJ1FtpT821EQW+lXM4ihwvd3VvVhxtuub+kF+vEGqBnL
+         ADCS8eEgTEhPB7TEdLsCKsJZFslpybUQ/SS5IdkaDHIo3nADyhjRG6AiIGQwcFeA0gav
+         Ryknx5/OW5jtDlkOeWuVNaPpYaCe8f1nadNcy3C8qKVzm0ZYewiyHVlSQDhZSbLmvy8u
+         Xtq+wwUV+I6QZG9riPf7N8MSHIU0Dfjtgqh8b37APz/Rms7joLiTGsGfMGYFEoXYVL8k
+         E5sevfAcvXewhl/9hchnPXxoJu4Yh4PsZCuXJdYM6aPl6l/ibIc8r2Hvw0uVPCygT/eZ
+         eImA==
+X-Gm-Message-State: AOJu0Yxs1JCvQjo7vkYoDczpj0Ta5u1sHfCsYLQ3uH0Xjns8stfterHS
+	43w/liomb2tNUyy/tZUyodFv0Mf5aR1TsWALU9B7rZ1ewNpC0sK5DMMhpIasBQ==
+X-Gm-Gg: AeBDietCJ65HMDbajEpsjtHIpu47xDJUUJAqsIv8ndd2B769dn278hEg1YSI24LDFvf
+	FpkrqhlmvR0n4o9AD1MuPWD4Iw4Q5N6CLL14x8gcsyS00yy5tdPiHHaEw6LxS7l9V9BzTK+PbjY
+	GWDleQSKzzMTutBmo6pD5cOWVjmiGWHysH57Q5+3Uccfkdntc1+cMjQiKIEAXM1fRDvYULABvW1
+	fonIvXNDrNE3BKDmnqkP7zESqZSivy6uz/FLOpmtr/ZFNdHqpvfzrQcPO3Tc/UNPx5ZEnHyf66l
+	RPjEqVR73RJ0+v0JjrrgtUFXNH3J6jfRD6E1o+Gf7z98ejGLhOF+5dFG/y+xmo+G9A9I3PI6Hui
+	fMMQGwGLjFX7u8xlnZ+mnzIgFRzofjjRsdlemnwiSz0phW5caGD+sO2dvJPoZCmAkWWjjGLp0Gr
+	hPLSu5nC3HU+/ssY28L/dtC7uiUt/1az2nojnMbVz9aDlFxOy4ZfvL/T45qJ2uxnDb9bKj21bIL
+	yaEvnpZl4c=
+X-Received: by 2002:a05:6a00:2d12:b0:835:6d99:3f94 with SMTP id d2e1a72fcca58-83a5d873770mr4297969b3a.25.1778090550462;
+        Wed, 06 May 2026 11:02:30 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8396563f11csm7687050b3a.3.2026.05.06.11.02.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 May 2026 11:02:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <773c47f5-6d88-48d8-a0c5-e18aaec98485@roeck-us.net>
+Date: Wed, 6 May 2026 11:02:28 -0700
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5014054.LvFx2qVVIh";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-
---nextPart5014054.LvFx2qVVIh
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Stefan =?UTF-8?B?RMO2c2luZ2Vy?= <stefandoesinger@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] ARM: integrator: Fix early initialization
 To: Linus Walleij <linusw@kernel.org>
-Date: Wed, 06 May 2026 20:39:02 +0300
-Message-ID: <5379905.31r3eYUQgx@strix>
-MIME-Version: 1.0
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20260505-integrator-fixes-v1-1-56ab9aac59db@kernel.org>
+ <02b810ab-12b8-4d44-91c2-ce6bf8ad894f@roeck-us.net>
+ <CAD++jLmO935+DC+Bjjo1huipkZ5Nu-y8amMLWCSfX+0atdY9xw@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAD++jLmO935+DC+Bjjo1huipkZ5Nu-y8amMLWCSfX+0atdY9xw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
+On 5/5/26 14:25, Linus Walleij wrote:
+> On Tue, May 5, 2026 at 11:14 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> I actually stopped testing the integratorcp qemu emulation
+>> because it no longer works reliably, not even with gcc 9.x,
+>> since the timer-sp804 patches were applied.
+>>
+>> Given that apparently no one but me ever hit that problem,
+>> I wonder if it is time to remove support for that machine entirely.
+> 
+> I actually have the hardware, even several of them, I've been keeping
+> them as a base reference for old 32bit ARM. Ethernet broke on the
+> one I had out so I need to bring a new one (yeah, as in factory-new)
+> from a box.
+> 
 
-Am Dienstag, 5. Mai 2026, 12:54:29 Ostafrikanische Zeit schrieb Linus Walle=
-ij:
-> On Wed, Apr 29, 2026 at 9:14=E2=80=AFPM Stefan D=C3=B6singer
-> I'm in favor of this, mainly because multi_v7 is pretty useless
-> for this board, it is absolutely too big to boot on the machine,
-> the board is odd and need some ARM64 stuff.
+If those still worked with recent kernels, it just kind of confirms
+that trying to run the integratorcp qemu emulation with a recent kernel
+is futile ...
 
-I added it more out of cluenessness, thought that every board should have a=
-=20
-defconfig and Sashiko let me know that multi_v7 is the preferred. But I lik=
-e=20
-your reasoning. I'll send a v8 with some of Sashiko's (very impressive)=20
-findings but keep the defconfig.
+Note: With this patch applied on top of mainline, I get the following
+backtrace when trying to boot from qemu.
 
-> Reviewed-by: Linus Walleij <linusw@kernel.org>
+=============================^M
+[ BUG: Invalid wait context ]^M
+7.1.0-rc1-00002-gdbd65c72b68b #1 Not tainted^M
+-----------------------------^M
+swapper/0/1 is trying to lock:^M
+c1d25410 (syscon:117:(&syscon_config)->lock){....}-{3:3}, at: regmap_lock_spinlock+0xc/0x18^M
+other info that might help us debug this:^M
+context-{2:2}^M
+1 lock held by swapper/0/1:^M
+  #0: c12874b8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x28/0x40^M
+stack backtrace:^M
+CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted 7.1.0-rc1-00002-gdbd65c72b68b #1 PREEMPT ^M
+Hardware name: ARM Integrator/CP (Device Tree)^M
+Call trace: ^M
+  unwind_backtrace from show_stack+0x10/0x18^M
+  show_stack from dump_stack_lvl+0x44/0x6c^M
+  dump_stack_lvl from __lock_acquire+0x11b0/0x2dbc^M
+  __lock_acquire from lock_acquire+0x114/0x3dc^M
+  lock_acquire from _raw_spin_lock_irqsave+0x5c/0x7c^M
+  _raw_spin_lock_irqsave from regmap_lock_spinlock+0xc/0x18^M
+  regmap_lock_spinlock from regmap_read+0x30/0x6c^M
+  regmap_read from intcp_read_sched_clock+0x34/0x6c^M
+  intcp_read_sched_clock from sched_clock+0x48/0x114^M
+  sched_clock from update_rq_clock+0x50/0x2f0^M
+  update_rq_clock from sched_tick+0x64/0x32c^M
+  sched_tick from update_process_times+0x7c/0x1a8^M
+  update_process_times from tick_periodic.constprop.0+0x34/0x134^M
+  tick_periodic.constprop.0 from tick_handle_periodic+0x20/0x8c^M
+  tick_handle_periodic from sp804_timer_interrupt+0x28/0x38^M
+  sp804_timer_interrupt from __handle_irq_event_percpu+0xb8/0x498^M
 
-Thanks for the reviews as always, and thanks to Krzysztof for the yeoman's=
-=20
-work of guiding noobs over and over again!
+... and the image hangs randomly.
 
---nextPart5014054.LvFx2qVVIh
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQJPBAABCAA5FiEEQxb0tqoFWyeVMl1sPRO8yFRPGiIFAmn7fLYbFIAAAAAABAAO
-bWFudTIsMi41KzEuMTIsMiwyAAoJED0TvMhUTxoiGRcP/ihTsoTIIoe31SesPPm7
-q97WA2l0QuRdt6uaaVSwsjuCxhCKwuVvPOYPsy5+/F0BG9UxylI20cKySsfndZyc
-kMG7hIOD2GgP2oFpXvD9Rm6mABU/01SRMgYxJ8BERldruK2XBi/tTl5z9mLCU9Gv
-6hHKRVkiS28GG08oKXywoEXba+Dt5a4HLk6oVy1UgP9OlImj1Bm+KPD3wvWmlRsL
-fYr2suEdrJ76ox0Mx0kHIrwqhGpDEOAwm3g5pjmNOEcXS1eVXW1QLSg83wN2KOty
-3NWXcwr0KxZjxMc6zkq2jqMZmx/4d7Mdijbs/TInuprU1G9mUcyVvi6BHFYS5Hpz
-2ezEEESl6nIbaMpA9zFZWHkhouqr2bOVH12W0Exkml/rhwIQBRv3S53wAeYeR3Mv
-H1LNEaKdJgZWKKL5f9WC9q4QFQ7CKJQZc+jnArsKp9GkdC1uRLWzLP3eriuRsgbf
-zAOrJSziqrze8Dq2VNH9OpqyNk0W92TO4mmUMNrsqpTMh3dDMM8MiM4VJcLIhb/J
-xUUZ4kRf2lHfx/KAJnn9munL1lsJa/k1zBVxarYe1ASh9ivRxqyojTcy0AIPklbQ
-eaQp/Vj1+rGq43J9RuCxFzqT22DpbK9xsmEcxNaCzW+ECpBXRqhclbKHHYESo/aF
-+r9T9FDiyUEQwbmVCzN6OIBc
-=eicH
------END PGP SIGNATURE-----
-
---nextPart5014054.LvFx2qVVIh--
-
-
+Guenter
 
