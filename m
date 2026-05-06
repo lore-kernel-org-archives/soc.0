@@ -1,66 +1,67 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D717B33F582
-	for <soc@lists.linux.dev>; Wed,  6 May 2026 19:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0F1332EC8
+	for <soc@lists.linux.dev>; Wed,  6 May 2026 19:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778096062; cv=none; b=AP58gIPsz93gyBEBtBfgDBAWcFwtPtKJUmM6H8XuXvVHITyhslKwzJjUNLldN/Kou4P2MoQRA2NdFRSSmOnAowuZFTGHisw3hGmXxkyVLKh+9VXyq4/yRrKplLfGvKKtjgvQgRmVd5w+PBdqiJ3KjDY3z0lCHckWXnXj+F9sjNQ=
+	t=1778096062; cv=none; b=fw0QE2x58YIUK7iAJCL3GYP+vBrjp4ZPyvamVgF0UXCk/8CJMyRCqZXGuqePEu9yMkJIbRNc/nt4Oa3In5OEe63/H7n60vsdQALOjwJq01A7MNkknZ5UCDU1oBDc88rnyYh3SqQtxzWGv2iQzY8LDgTEvXD+pxyoLbBEMAR7D+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778096062; c=relaxed/simple;
-	bh=ZEiGjns9U3m5yLy5ZGIrzh9lkgRuFhlASuJcbgwcHG4=;
+	bh=OFELZprfvGMngJiiwTNQcz/opzneDKzuYgSzdRQRbGE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nWz1dGtSuq3uvqeHFgCumda4SBtBfjpbn+SWGEsTh7fZOkdBL4etM9uEBQjgWr+zmTWv5lwYqK6CPKY9lk32ciEAmLYmsngW5LDRzDr90ex4AzJ154UESSE1a6NMPhe/p+5qlF95clACS1QpDzchre8XsTXasBgaMvICacJksKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ov12XYfO; arc=none smtp.client-ip=209.85.221.54
+	 In-Reply-To:To:Cc; b=uJfAsD0kAjuhH+RpERCWVZ+GF7iDKw9rDGDCEP/5nC7OJ2yrb7Vd01JE0+mJujpjWnWGZ/GF6ZwClr2nWxZVHd0HRYqJdbaWBi+DoiwIglGUKXpcwiO3/1mjfEUSIkA83OM2rRIy2UXm8Ygt7WqrsbQ89a7KV/qs2v2bDaM+IJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BBHKU5f7; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ov12XYfO"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-44e1860558fso62040f8f.0
-        for <soc@lists.linux.dev>; Wed, 06 May 2026 12:34:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BBHKU5f7"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-44e1ebb3122so43937f8f.2
+        for <soc@lists.linux.dev>; Wed, 06 May 2026 12:34:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778096056; x=1778700856; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1778096051; x=1778700851; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2TwfVpezC0RgzGnR+5kZnlGfJY7eOd+0GsSEocGvqOw=;
-        b=ov12XYfOsNVPlOS1lbtOXSbO5uHqHqna2ngPGFrPqf8hIqYeYXyq8DOdDZhzSXVR3B
-         2sNH+o7Wk8OnHtFCjnX8QasDsjRb7wIrC7duu7f2pI5Gaeke3ZyaL5P00uuittmHT7A+
-         /1KIUieQNTR5+OVwaBhxbYirjlDeq3UqDzXKKDqFBYFiEw5tL3RZhwSIc29VQKPmx+cL
-         lP5g1NDeWQS4uPA0E4EO5pFJnBVNnYvVKBaWdSvI5pKO+lm0i91b5PGcYinOGK5gJvNi
-         6RPa87LQSXuKfdTZLVPblkTVRMYywdOblh2znhxvKVAZse99v9gKOkOUFQX/JyPQR7sd
-         l4Hw==
+        bh=LkcOvOZZBBJ6rw+XBoAkJNNzNDgTfzBSBc4KLO3hr2I=;
+        b=BBHKU5f7/qLMajLdZO7Ekbgtj1mn0qxR2fCanauo7jSJ4scvIUp2/5OQHc+32eldtR
+         HH9WNKbQ3JL+I/w7vCCZRzzf5KVwzc6S00tL+o1Srbhfd++inzuTmiMLPIJ5GxGljJKY
+         nfGrHbMz64QUPycz8+ijjVizyVvXd0z3euOgjO0SECsNA+5xbEOrvBg0CFwCX59nG4rz
+         otrSKwl4giq0L26bbIZ87ViC01y7MGYFeh6jlM0N7cDXLE9hCY0n5v4/KBMtWL4zlVbc
+         6PlYqVPYhm5Gv61gnPmRQ6PYF4F1a0x4IBHnJz9Y/UFZSJ1Mt/Rd+yUyVvbXTnYtUg3S
+         fN9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778096056; x=1778700856;
+        d=1e100.net; s=20251104; t=1778096051; x=1778700851;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=2TwfVpezC0RgzGnR+5kZnlGfJY7eOd+0GsSEocGvqOw=;
-        b=UJ98oDzyVPgLPr/gXe+jgnaLtE5pNKP0C1x0HMxAW9CCpTUf5klOEKY/u5PnQcq/Th
-         3oAW8TGD0NwrK4tdjD8dVvD0NcqWXcaB5OW+eSs0G3+C5iJqP6eyLQq2nLbhdzzGgN1w
-         TQTql/OJ5E5BRHhnFeGt21d2ZDSgrB1lUtwEbE2QIDCvb8m0FpU+do9wsvaaB3yx2VfT
-         W8X7K3feHg2F2ueb19so4wlV7QcWFiobuKlZdzEy0xLeaGZkyNbnbF4lgv+vP7QiDzGs
-         Stfi/ft7KYOk85KTY2BQw4Ora2WMedW8z63ty2xUIn34tJLBYXDTrjSYzKfdYDgV+hWc
-         o0NQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/XK8Kj9ZozmZnm6MnHSyQ/teZmqbVzpoIFJd+4WQv5KYe/4Uvx1ENMWKDpsvc+TpF1aa0=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzO7TFnJPENc44tfCEFkEhIylnOjs/ZDEMJsh05lqjclw+lC9LR
-	bTsEog08KsgHOqf2moB/70y8Pp3BeLYqfXyK53HvUXn3rvjoyEvK62Wt
-X-Gm-Gg: AeBDievEMag43b7A3Brf7fM7AYor3xHAsmQLX9nSc3g2txphfHnwiP9+JpdemuFfpSV
-	VClOlCeK8KXOH9CZ+hWtW0BjIEbei0mq4Exeg3qFONzRfzJE4y7yWICv2mVDQc5AVVA9JxmfdU3
-	yRfKMZ/1lcSo9whdzGZCGvSLTugiynZhk/U+NSXkCOmTOeEipeD5rkCLMN5Wnk+HARFXU5QOjOZ
-	9YG0nsGeCA/4tXIk1f/ZAjAqouhohCCh2wITLCQxZbmJTvmETqiGiasSLsAvAMJzp+8MBkIOnxw
-	mSn3Y6RgJPKmpkvgnCpb4jD06P8ETjLhwDXhhVi/SBbanbqHeCl3pVXJww7pqm+R9w1eF2sRwfF
-	hUqXpjs43RUmr0kepLDExeVtMjLC8sp7v/w8O+El6ZtyeN2SBagKS1a0VMgOfSd9sR/Nr3BASb4
-	/szGLH2rLx8GQ96pNHCekGykMeuCmDs8gR/rFh0xxdyvNjXZrMSVPhEA==
-X-Received: by 2002:a5d:64c5:0:b0:44f:e969:7c15 with SMTP id ffacd0b85a97d-4515b057230mr7847306f8f.3.1778096055787;
-        Wed, 06 May 2026 12:34:15 -0700 (PDT)
+        bh=LkcOvOZZBBJ6rw+XBoAkJNNzNDgTfzBSBc4KLO3hr2I=;
+        b=DPkUVyUroCHms0S5OASe88vF64F2XHsaULNmWaEkitJ0j/JPaFx4OpSpLqmVQMY7Xs
+         WLiJq1PURf1Dxb2GmWLgIak8CuJxH6Q4fpoe9/SnAsA1hG6eXh0vN+c1+im1ywSnHMQ0
+         oHkKdhFER7EuYQKG+d7Z4Tu1gYDxgnnj6HNviSadufQR5LxV6ib1w2Sm1m09SA+DnPMK
+         Jaoyp2wm2VtFEHVv/forHaM1zyG0M+g3UbQggAfF+2cLjy4dU4DOL2eQEgQ5Giw2mZyu
+         /AceEN3uOx+Nv2M5Mm5bX1BENfT8cuNmdeUHCD23sG6wSdEHMXcr3/l1CUKpLFniyAIc
+         0Zyw==
+X-Forwarded-Encrypted: i=1; AFNElJ/RGsJ4ulkIvEULutQDA0Wb+9qgLCUWTGxjyT6+sqHBZkvXCBwdrO4rX6IiCNDNSjDbGEk=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx4M+rJDLZ9y4tISGmOYN4hBTLt01OHUOnFx6CER9f77Y5Achd3
+	GP0YRrgjh2rh75Heggx0gGfZwmfihnhUuzBKWqNiFVjvy52tj99XbQa2
+X-Gm-Gg: AeBDiesp2PnHPdxwwdIhngHco1loDqAB9HBctoexepXjW9X9tj7LyHPL/ke0FXn5jgD
+	psOB5Yl6y0sC+boniEs7erzw5M8CZy2Ku9X8qA2CokY+DubbflxAp10csw9URVszbZ0hwRCiXH5
+	yDC8f4JErPEzEJwdtvP02iv7dIzHagQ/CCoSqByJi13Z5Ex1TETCI7Nd3lIXkVwhsh+GrnwFf4d
+	4QV3TiMkZ83xnpY/GGdGmFdQsWSQVhEabJLCQuqFTJpbxwGIwC1TiXHjOzVRg8JXxHSc28uDpb2
+	NNFi6pC5kqm1Zr47BezYfM3qZiq99LRu2Z3SydfLEmVTOPO41K9An/DaXbewGSVpAIQH1IYksKG
+	xlUGYuDcb/HZAvi0KAdrw5BYsnjxbLciNVlt2DzBUMLerDgxmcsF6LdrvYPNQ5dAUn9Gp4VNvhB
+	7wtsKjO2Rouvj/brc8QyYVC3rNXU4kgoRHVQ0+WdNtt5I=
+X-Received: by 2002:a5d:670f:0:b0:452:75ca:3fab with SMTP id ffacd0b85a97d-45275ca3fe3mr1840819f8f.38.1778096050623;
+        Wed, 06 May 2026 12:34:10 -0700 (PDT)
 Received: from [192.168.0.2] ([197.250.51.29])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45055960022sm14895673f8f.26.2026.05.06.12.34.10
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45055960022sm14895673f8f.26.2026.05.06.12.34.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 12:34:14 -0700 (PDT)
+        Wed, 06 May 2026 12:34:10 -0700 (PDT)
 From: =?utf-8?q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
-Date: Wed, 06 May 2026 22:33:22 +0300
-Subject: [PATCH v8 5/6] ARM: dts: zte: Add D-Link DWR-932M support
+Date: Wed, 06 May 2026 22:33:21 +0300
+Subject: [PATCH v8 4/6] amba/serial: amba-pl011: Bring back zx29 UART
+ support
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -69,7 +70,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260506-send-v8-5-f1bdf3243b34@gmail.com>
+Message-Id: <20260506-send-v8-4-f1bdf3243b34@gmail.com>
 References: <20260506-send-v8-0-f1bdf3243b34@gmail.com>
 In-Reply-To: <20260506-send-v8-0-f1bdf3243b34@gmail.com>
 To: Jonathan Corbet <corbet@lwn.net>, 
@@ -87,222 +88,98 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  soc@lists.linux.dev, linux-serial@vger.kernel.org, 
  =?utf-8?q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6258;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2247;
  i=stefandoesinger@gmail.com; h=from:subject:message-id;
- bh=ZEiGjns9U3m5yLy5ZGIrzh9lkgRuFhlASuJcbgwcHG4=;
- b=owEBiQJ2/ZANAwAIAT0TvMhUTxoiAcsmYgBp+5eW50hKxRO8dpnpiZhOIbme+bBLcMDB5Z4pD
- 68aGL1N/RKJAk8EAAEIADkWIQRDFvS2qgVbJ5UyXWw9E7zIVE8aIgUCafuXlhsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQPRO8yFRPGiKIRg//QILi13hbd/g+oKBM9CrIz48opa08edK
- eynSCWwkLGmgS0HgG6qHvJHqMAGYp3qgiBrR7Wb1K17qn8I1V7F4e3hl1BzJ7jQtLLa3PRIoTvd
- yWSoRrGB5QX/KQbgXKz3LjRHO30p322S8gcOGHS79wXkyFFBCgd9gr7yq1+gNoYglYFBVKqnTXJ
- XD2yydPl3CISqTCmUyb8Bt/79mnxTfkglyOTspUgtozjhv0x3lS66eWDjaoX9YLvjhfibt8SYi9
- N/fSYr+g5fcDBAxnXF6uBu2vW2UxJmW0QVfqXv3MJ6OBd/hsiNQMtdMioJbqVJbevov0FbAK7HS
- kVrVUhAdP/RPhnvFI55A3JaeB16WwJeEOAWQRouZSH3qJ0vD+g37bSEy1J67COB5Kof74fVlbyW
- ImeSc3RtCP9qoCfM3KAEjtjUoil35Fk0+YZosLVlSewLq8+qnZIcXJPo1JmAFs7AOq4vZbGnGvb
- gqHA2ICt53ecx1Y+5kcj0Ix688OBSKK87ubS/SZhT7ScpMOB6cBJ4Ki8mdS5qqpuC6AAHWdtbP8
- +CX2LqOLBFI9tYUM5/KMto2NldJJyJt3qQlmvbOpKQ6BnOr5uYEtQNP8uuW9cqwKbQ42WYAIrKf
- gjifXCvmPDvLmvGSNKUdoL8evzHo48fiC1xHdyZ9aoHfihznv82o=
+ bh=OFELZprfvGMngJiiwTNQcz/opzneDKzuYgSzdRQRbGE=;
+ b=owEBiQJ2/ZANAwAIAT0TvMhUTxoiAcsmYgBp+5eWEF9Smqy9/+ZqLj+fvYU3rR6MQcKz77DkM
+ QtvC+gIXhWJAk8EAAEIADkWIQRDFvS2qgVbJ5UyXWw9E7zIVE8aIgUCafuXlhsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQPRO8yFRPGiIx/A/+Jj3LBH9tnjU1WCvDlmvuDKP60pwv77H
+ 9cpKC5X8jU9Rk6vURr6BpE8J21cX+UHaMCaKC/Cf+xiQjWpQDugt4fK44PCsOUg6F7a7+jGOWY8
+ LL8LpnoGzjHW1NVmdbkeIqLE5Z7NBnnIsVb/f1Rm+I/Tw0MN30e9KM5Xfdi4iXUdyMh3pLKzLY3
+ +USPgYvQz6P341ijtBwuMeYsMccIDefew83LipWaF+qR59w2l/s5dZcZHpWddYo80R+tS5HSACY
+ MDD5qa//5HcW+9N3ya2Syb+bqG6LBe7ydReM1FxRWUPxBmcSSOQSUaBncNAGvKdQmGqfk9EQCrV
+ sveBZA+Gm42mHgoXEghXSHEtf7qtxmr6rIiim6j/+MvLnoruinWXl1ift6t+tNM+wzcbRVXN9QY
+ xxflUe2qn0gUmUOAYSRP5Dp3hnWvMs1BGlVRZ+rRaqDrxGI3MX2KBKDiIjhZR9Mi+j+IdTXdJYe
+ dWE2CP3QhYQ23VqOhadxflZUQTwJi7pdOndO6VpPcW4uMJ0uxIp8RprT04JnghBw8juuFGjogmf
+ qFdCVa2SkLAjHfVIzqLJwt4vQpVMbX3bKKVTOEv4m+UEZUB105F8UckcQ94A4XmVy4NU42WvjmF
+ cGzwd9WYmlmtk1x1/KjQgxjaMnfuCad5XpV0o/9care4lwus9wwc=
 X-Developer-Key: i=stefandoesinger@gmail.com; a=openpgp;
  fpr=4F9C2C8728019633893EBBB98CB81F9A72BBA155
 
-This adds base DT definition for zx297520v3 and one board that consumes it.
-
-The stock kernel does not use the armv7 timer, but it seems to work
-fine. The board has other board-specific timers that would need a driver
-and I see no reason to bother with them since the arm standard timer
-works.
-
-The caveat is the non-standard GIC setup needed to handle the timer's
-level-low PPI. This is the responsibility of the boot loader and
-documented in Documentation/arch/arm/zte/zx297520v3.rst.
+This is based on code removed in commit 89d4f98ae90d ("ARM: remove zte
+zx platform"). I did not bring back the zx29-uart .compatible as the
+arm,primecell-periphid does the job.
 
 Reviewed-by: Linus Walleij <linusw@kernel.org>
 Signed-off-by: Stefan Dösinger <stefandoesinger@gmail.com>
 ---
 
-Changes in
-v8: Remove redundant label, use "arm,pl011" for uart0 and 2 too.
-v6: Squash board + timer + uart patches into one
-v5: Prepend the SoC name in the device specific DTS filename.
-v4:
-  Declare all uarts
-  Remove the UART aliases for now. I can revisit this when I get my
-  hands on a board that exposes two UARTs.
+Changes since v4:
+Use ZTE's JEDEC ID instead of 0xfe for the DT-Provided AMBA ID.
 ---
- MAINTAINERS                                        |   1 +
- arch/arm/boot/dts/Makefile                         |   1 +
- arch/arm/boot/dts/zte/Makefile                     |   3 +
- arch/arm/boot/dts/zte/zx297520v3-dlink-dwr932m.dts |  22 +++++
- arch/arm/boot/dts/zte/zx297520v3.dtsi              | 103 +++++++++++++++++++++
- 5 files changed, 130 insertions(+)
+ drivers/tty/serial/amba-pl011.c | 42 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 697287d1b372..b0b774aace55 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3776,6 +3776,7 @@ ARM/ZTE ZX29 SOC SUPPORT
- M:	Stefan Dösinger <stefandoesinger@gmail.com>
- F:	Documentation/arch/arm/zte/
- F:	Documentation/devicetree/bindings/arm/zte.yaml
-+F:	arch/arm/boot/dts/zte/
- F:	arch/arm/mach-zte/
+diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+index 7f17d288c807..f24cc403d9e0 100644
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -216,6 +216,38 @@ static struct vendor_data vendor_st = {
+ 	.get_fifosize		= get_fifosize_st,
+ };
  
- ARM/ZYNQ ARCHITECTURE
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index efe38eb25301..28fba538d552 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -39,3 +39,4 @@ subdir-y += unisoc
- subdir-y += vt8500
- subdir-y += xen
- subdir-y += xilinx
-+subdir-y += zte
-diff --git a/arch/arm/boot/dts/zte/Makefile b/arch/arm/boot/dts/zte/Makefile
-new file mode 100644
-index 000000000000..f052cfbd636c
---- /dev/null
-+++ b/arch/arm/boot/dts/zte/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+dtb-$(CONFIG_SOC_ZX297520V3) += \
-+	zx297520v3-dlink-dwr932m.dtb
-diff --git a/arch/arm/boot/dts/zte/zx297520v3-dlink-dwr932m.dts b/arch/arm/boot/dts/zte/zx297520v3-dlink-dwr932m.dts
-new file mode 100644
-index 000000000000..1700f46aba86
---- /dev/null
-+++ b/arch/arm/boot/dts/zte/zx297520v3-dlink-dwr932m.dts
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2026 Stefan Dösinger <stefandoesinger@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "zx297520v3.dtsi"
-+
-+/ {
-+	model = "D-Link DWR-932M";
-+	compatible = "dlink,dwr932m", "zte,zx297520v3";
-+
-+	memory@20000000 {
-+		device_type = "memory";
-+		reg = <0x20000000 0x04000000>;
-+	};
++static const u16 pl011_zte_offsets[REG_ARRAY_SIZE] = {
++	[REG_DR] = ZX_UART011_DR,
++	[REG_FR] = ZX_UART011_FR,
++	[REG_LCRH_RX] = ZX_UART011_LCRH,
++	[REG_LCRH_TX] = ZX_UART011_LCRH,
++	[REG_IBRD] = ZX_UART011_IBRD,
++	[REG_FBRD] = ZX_UART011_FBRD,
++	[REG_CR] = ZX_UART011_CR,
++	[REG_IFLS] = ZX_UART011_IFLS,
++	[REG_IMSC] = ZX_UART011_IMSC,
++	[REG_RIS] = ZX_UART011_RIS,
++	[REG_MIS] = ZX_UART011_MIS,
++	[REG_ICR] = ZX_UART011_ICR,
++	[REG_DMACR] = ZX_UART011_DMACR,
 +};
 +
-+&uart1 {
-+	status = "okay";
++static unsigned int get_fifosize_zte(struct amba_device *dev)
++{
++	return 16;
++}
++
++static struct vendor_data vendor_zte = {
++	.reg_offset		= pl011_zte_offsets,
++	.access_32b		= true,
++	.ifls			= UART011_IFLS_RX4_8 | UART011_IFLS_TX4_8,
++	.fr_busy		= ZX_UART01x_FR_BUSY,
++	.fr_dsr			= ZX_UART01x_FR_DSR,
++	.fr_cts			= ZX_UART01x_FR_CTS,
++	.fr_ri			= ZX_UART011_FR_RI,
++	.get_fifosize		= get_fifosize_zte,
 +};
-diff --git a/arch/arm/boot/dts/zte/zx297520v3.dtsi b/arch/arm/boot/dts/zte/zx297520v3.dtsi
-new file mode 100644
-index 000000000000..a16c30a164bb
---- /dev/null
-+++ b/arch/arm/boot/dts/zte/zx297520v3.dtsi
-@@ -0,0 +1,103 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2026 Stefan Dösinger <stefandoesinger@gmail.com>
-+ */
 +
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0>;
-+		};
-+	};
-+
-+	/* Base bus clock and default for the UART. It will be replaced once a clock driver has
-+	 * been added.
-+	 */
-+	uartclk: uartclk-26000000 {
-+		#clock-cells = <0>;
-+		compatible = "fixed-clock";
-+		clock-frequency = <26000000>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-+		clock-frequency = <26000000>;
-+		interrupt-parent = <&gic>;
-+		/* I don't think uboot sets CNTVOFF and the stock kernel doesn't use the
-+		 * arm timer at all. Since this is a single CPU system I don't think it
-+		 * really matters that the offset is random though.
+ /* Deals with DMA transactions */
+ 
+ struct pl011_dmabuf {
+@@ -3081,6 +3113,16 @@ static const struct amba_id pl011_ids[] = {
+ 		.mask	= 0x00ffffff,
+ 		.data	= &vendor_st,
+ 	},
++	{
++		/* This is an invented ID. The actual hardware that contains
++		 * these ZTE UARTs (zx29 boards) has no AMBA PIDs stored. ZTE
++		 * JEDEC ID (ignoring banks) and the "011" part number as used
++		 * by ARM.
 +		 */
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	soc {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "simple-bus";
-+		interrupt-parent = <&gic>;
-+		ranges;
-+
-+		/* The GIC has a non-standard way of configuring ints between level-low/level
-+		 * high or rising edge/falling edge at 0xf2202070 and onwards. See AP_INT_MODE_BASE
-+		 * and AP_PPI_MODE_REG in the ZTE kernel, although the offsets in the kernel source
-+		 * seem wrong.
-+		 *
-+		 * Everything defaults to active-high/rising edge, but the timer is active-low. We
-+		 * currently rely on the boot loader to change timer IRQs to active-low for us for
-+		 * now.
-+		 */
-+		gic: interrupt-controller@f2000000 {
-+			compatible = "arm,gic-v3";
-+			interrupt-controller;
-+			#interrupt-cells = <3>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			reg = <0xf2000000 0x10000>,
-+			      <0xf2040000 0x20000>;
-+		};
-+
-+		uart0: serial@131000 {
-+			compatible = "arm,pl011", "arm,primecell";
-+			arm,primecell-periphid = <0x0018c011>;
-+			reg = <0x00131000 0x1000>;
-+			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uartclk>, <&uartclk>;
-+			clock-names = "uartclk", "apb_pclk";
-+			status = "disabled";
-+		};
-+
-+		uart1: serial@1408000 {
-+			compatible = "arm,pl011", "arm,primecell";
-+			arm,primecell-periphid = <0x0018c011>;
-+			reg = <0x01408000 0x1000>;
-+			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uartclk>, <&uartclk>;
-+			clock-names = "uartclk", "apb_pclk";
-+			status = "disabled";
-+		};
-+
-+		uart2: serial@140d000 {
-+			compatible = "arm,pl011", "arm,primecell";
-+			arm,primecell-periphid = <0x0018c011>;
-+			reg = <0x0140d000 0x1000>;
-+			interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uartclk>, <&uartclk>;
-+			clock-names = "uartclk", "apb_pclk";
-+			status = "disabled";
-+		};
-+	};
-+};
++		.id	= 0x0008c011,
++		.mask	= 0x000fffff,
++		.data	= &vendor_zte,
++	},
+ 	{ 0, 0 },
+ };
+ 
 
 -- 
 2.53.0
