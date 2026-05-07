@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3150036998F
-	for <soc@lists.linux.dev>; Thu,  7 May 2026 13:13:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4512DF136
+	for <soc@lists.linux.dev>; Thu,  7 May 2026 13:13:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778159587; cv=none; b=Ui/dT5OmhsqfM3F7M2Bpv/R0iqTYeVulIHs6vxb68iR68HxO4MW3wzifwHVqPdImy4XsWuhJ3IMqemC2mPyB9N+owlZOae07e94K+0pyzoR6tg3rCdaFVAcyTQU4U8yyLzgckLk5f7Uk4G4BrMLMNBnOtfIfGPubBFre2ZoZRLc=
+	t=1778159588; cv=none; b=rGzwVAk5f64uBxBjp/bqv8eX6fxit4XNwNPj3X5Lvxs+qR39I+2Qa00mkwNqjc4+ZGUwg68iEPfejA7fmIT3cyJB0M00286BlML3DJqJqzM0nNRuNVoyvqhpN8RHzJgbUOkHx51AvNkXaNot0OhhamqURWt/tY71H4sPkMM1xeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778159587; c=relaxed/simple;
-	bh=TfRDAVZrOWESAfrxX86+yYv9+OgYTDgPmPCw8U27FZQ=;
+	s=arc-20240116; t=1778159588; c=relaxed/simple;
+	bh=ldiEo25RUsJpOyfrTfmhlPXZWY28kmvyIy8mEcTJ9BY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=f7tYVX3HmaKBR09ZeKoXFbRkPPZmiCXSGLPqeqLvJ4/LwBznyYxQy/EXcXe/xFB56lrw91j122Z+DbGHnog1JG8zDiGHTTAAnYSN+ncv5OadZlnY3CAR/VppMopmbnuRPwVLNDsjssqJknGpB/rXt+eWThhkdnKl/hQAwTyvaNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gRIqLWJm; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=kfNhnyupzgUh7DufgwMTxHqQHMlqW+QoKK/Wn90Iv84tWQeqKAO/YBrdeEGA7eGczXnbz9KVHl3RztcbhtDWIobCFYXLlq39mZyRkDtzy3UERTSxKa0M6Xb0hAxqS5wYx+ESoOXG7foVqMJkMg0ZM6fQSjCCwl+Jx99byCuDgXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mxTovssT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gRIqLWJm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mxTovssT"
 Received: by smtp.kernel.org (Postfix)
-	id CA0A8C2BCB8; Thu,  7 May 2026 13:13:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B446EC2BCB2;
-	Thu,  7 May 2026 13:13:06 +0000 (UTC)
+	id 15F6DC2BCC4; Thu,  7 May 2026 13:13:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00475C2BCB2;
+	Thu,  7 May 2026 13:13:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778159586;
-	bh=TfRDAVZrOWESAfrxX86+yYv9+OgYTDgPmPCw8U27FZQ=;
+	s=k20201202; t=1778159588;
+	bh=ldiEo25RUsJpOyfrTfmhlPXZWY28kmvyIy8mEcTJ9BY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gRIqLWJmu7Em4xDwE4S2xq6Bk2Azhh/L4lz3hKRUHDQ3aPhOyMaNVCgCICUeMSgVp
-	 6eTYdeaQJF4wEv1BXQLog4gZRjswjpQL7Y4v3PNRdwVzxTHpc4VIZi/p/9u0bN2PME
-	 0nLr78V1yri/G54RBrqOoStSyku6BZjingMfJnIOWrvud2QxddCEVPsh7E6WQJdhbp
-	 ddmRqJ2c0czPOJGRKCXqczOC4Aq2bED+ioSVKyQ4JntIGHU1vIp/dZ5mC/iXcVCnZD
-	 Lz1nXrlyO05nX1+VrLK/WgIHRBotgxYNTbxyFPPVXCokZnqvZkicov8Ztz5WOJ9O4w
-	 eHIPVAoufLdPQ==
+	b=mxTovssT+RKDF73F505tlCOZwHZfSvoRXp0M+AncW9XvSyQoRd5ZwgjMeXGIHgyZE
+	 LW+x3wDGT9ImEdP01wmEwS22jz8s8isZBkJ1OdTcJkHZL6eCnFSY3c8qZFXMcxdCUS
+	 +N+sCYN762DA9zDhSRfOFzyViAhU/T0JBl+Ro+5BY3B9A1bcwZbpznbdVITwVWIz+1
+	 EdOsOzYzrj8KXAG2UAvYzKBtQc9l8EEyOS2S/VvBRy7L2ZKFosPpOkYHDbXC6OukRL
+	 XkgHkticlDzLmMDIDn/y+BN3awCxFjpK383T9nOKYC2d9zHMCs+QvTP/JVgUwsYMDb
+	 jxplFbP9ZUpGw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FD8339308F7;
-	Thu,  7 May 2026 13:12:17 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CDE039308F7;
+	Thu,  7 May 2026 13:12:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,35 +39,41 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_ffa: Fixes for v7.1-rc1(Round 2)
+Subject: Re: [PATCH 0/3] ARM/Realtek: Add maintainers and pinctrl support for
+ RTD1625
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <177815953579.3933061.4397380315199059098.git-patchwork-notify@kernel.org>
-Date: Thu, 07 May 2026 13:12:15 +0000
-References: <20260506194602.3474096-1-sudeep.holla@kernel.org>
-In-Reply-To: <20260506194602.3474096-1-sudeep.holla@kernel.org>
-To: Sudeep Holla <sudeep.holla@kernel.org>
+ <177815953729.3933061.12408064514135691650.git-patchwork-notify@kernel.org>
+Date: Thu, 07 May 2026 13:12:17 +0000
+References: <20260505103955.1010130-1-eleanor.lin@realtek.com>
+In-Reply-To: <20260505103955.1010130-1-eleanor.lin@realtek.com>
+To: Yu-Chun Lin <eleanor.lin@realtek.com>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed,  6 May 2026 20:46:00 +0100 you wrote:
-> Hi ARM SoC Team,
+On Tue, 5 May 2026 18:39:52 +0800 you wrote:
+> This series consists of patches that have already been reviewed on LKML.
 > 
-> Please pull !
+> Add pinctrl support for the RTD1625 SoC and update the ARM/Realtek
+> architecture MAINTAINERS file to reflect current maintainers and include
+> the pin controller drivers.
 > 
-> Most of the issues addressed are found by sashiko and other AI agents.
-> It all started with me missing the report by Sashiko in [1]. Each round of
-> fix expanded the AI scope of review and unearthed more issues.
+> Best regards,
+> Yu-Chun
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm_ffa: Fixes for v7.1-rc1(Round 2)
-    https://git.kernel.org/soc/soc/c/d1f29ea139b5
+  - [1/3] MAINTAINERS: Add maintainers for ARM/REALTEK ARCHITECTURE
+    (no matching commit)
+  - [2/3] arm64: dts: realtek: Add pinctrl support for RTD1625
+    https://git.kernel.org/soc/soc/c/50d92732d10e
+  - [3/3] ARM: realtek: MAINTAINERS: Include pin controller drivers
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
