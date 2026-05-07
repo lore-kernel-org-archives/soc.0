@@ -1,131 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4E53ECBFD;
-	Thu,  7 May 2026 11:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D74C3F20EF
+	for <soc@lists.linux.dev>; Thu,  7 May 2026 13:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778154528; cv=none; b=Y3O4Tb/wiYtqUvL2tXPuUL+MFurCoYl5+3qD/icnl7SK09O7CyOmzXXhZibmB/ms1cuTGA70dJOd6ocSpzJxaZwUwdvndyDvVuqe9byb3Ozzp2mPYTnaCMfHIAj0dzbPt94Jctp5EvSYjCnccYrh/8gG28sQ39AftfEk8ITS/bc=
+	t=1778159211; cv=none; b=G1/599NqN4FgOVv49E92tziGEXpPv87k+3JUUuXuvwO49N2LpKZ0FCQeEGbrN+pKBepXa8pGCJTm9aMPKNsC2e9uewfOgcZEuEMs+/Q/cADOLwOqoZ2m4zvrDwQxiXoCIKmyt5oUKWI3wLqc9UeMsS+AzGpDdoWgFcHVi9SmDVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778154528; c=relaxed/simple;
-	bh=skOLNCIOu8uLMNUP2/UbRZTYsUmk4aY5Jmdqccs0fUI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ifoZUBX8ySDZFwrr4MP8If51KcrdXv8rAG83drPJglp4/AK/h4vnQ6XR1dfUG+GL+4PpDcJ5hW7P0ezB4ZruvdAGtIHVb7AAM9QwmNEuRcyDqWWgi+0lXrn2bhgSZhblPCJqMdbslHtexYlCcEfHEud1cF2XWCXpCECmfeupa84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AGG5YSDO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778159211; c=relaxed/simple;
+	bh=yCcSo08p6T88kEAtlpc6xe2HZat7sJpZtchN8FUJVfg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=HSlIuKcxadtK0ZO8r/LVFZMEMHhRwvbs6qstAXLryHlpm3ECLOvdcDazq+MUlL/KK2utAqrVeNSE2ILEsbZ+c3lAdyUrI8uMBr3oX1fVkkMlUov3DiWu0kd8QnN2B32nSDONCPfvvksKaKZn/M8UNsnq3nPN+EDuezVHusQlko4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rn2Y95sd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AGG5YSDO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81408C2BCB8;
-	Thu,  7 May 2026 11:48:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rn2Y95sd"
+Received: by smtp.kernel.org (Postfix)
+	id AFD77C2BCC7; Thu,  7 May 2026 13:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F17C2BCB8
+	for <soc@kernel.org>; Thu,  7 May 2026 13:06:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778154527;
-	bh=skOLNCIOu8uLMNUP2/UbRZTYsUmk4aY5Jmdqccs0fUI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AGG5YSDOLsnijaOhfJiAG7RtYI0t+/QnZ1xLmZMAnTj9AqGPHkZNHiYjooSzzui8t
-	 vU/2NjNcuPLsxl1IsS8WNqOWii8Ro19vV06oaH9AZ59+g0uJ0tobOynFLv4tk0IGCt
-	 xn1Vcb68lw/0wfz9AbJVWNigkzY0ecdJ7ep7d9si+LnjiYQhEDARDQXo6ad5OnLmNp
-	 OAVIHKs6JZTGftmMwPJf1CnRXRdXsJPthxN081GmtKaxF9Ko+7YCPDlDNJ3maf4nFg
-	 HpJvWxmRMdU1ZNrXvk84n8DtB7qf+NqkwQ5THhZG88rqM2MWLc7Bp8ZFZrGgVI9ZgQ
-	 EH4XM+iIMbdbQ==
-Date: Thu, 7 May 2026 17:18:34 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: arnd@arndb.de, Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
-	arnd@arndb.de, mark.rutland@arm.com, bjorn.andersson@oss.qualcomm.com, 
-	konrad.dybcio@oss.qualcomm.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Konrad Dybcio <konradybcio@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Sudeep Holla <sudeep.holla@arm.com>, soc@lists.linux.dev
-Subject: Re: [PATCH] firmware: psci: Set pm_set_resume/suspend_via_firmware()
- for SYSTEM_SUSPEND
-Message-ID: <kkrjrwkibs6uthp6dpo2fv4c6rehrc2dkntyp2iafvx53tgub5@eg7hqkgu2ztu>
-References: <20251231162126.7728-1-manivannan.sadhasivam@oss.qualcomm.com>
- <acJO+fhjeguDZaRa@lpieralisi>
+	s=k20201202; t=1778159210;
+	bh=yCcSo08p6T88kEAtlpc6xe2HZat7sJpZtchN8FUJVfg=;
+	h=Subject:From:Date:To:Cc:From;
+	b=Rn2Y95sdHkT1+xprU38T+QSX+bzodyF49ef8HjdmzIP8VbYtd3gHlkq6+9mAuz0yB
+	 RgNPZsGdP2aXhw1q40ORhTrrzYl48nU1jlk+4jB58s7sYp0ltGs3U/wbtieRWQ8p31
+	 ZyF0+XNco2aB2jv4arcbLO1+lCSihVQMp4pooRvCbZofB6+GdFMG0wZySPl1B8DIyL
+	 iNd+/+YGN41bMpcKeIv/UaSEQZFNreZXXaeK1NhX7NE7mTnG2+BoSZvFRa+r0HZUB+
+	 yg3Ts3LMjzfoHGGNW0L0JIiXdNy0Y2E+ROf1Er1J6otCsYEs94orbWlp7yhx1PK5XX
+	 ewjhONoNIz+8Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0589C39308FD;
+	Thu,  7 May 2026 13:06:01 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <acJO+fhjeguDZaRa@lpieralisi>
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <177815915951.3933061.10513930282910385083.git-patchwork-summary@kernel.org>
+Date: Thu, 07 May 2026 13:05:59 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-On Tue, Mar 24, 2026 at 09:44:41AM +0100, Lorenzo Pieralisi wrote:
-> [+Arnd, arm-soc - to pick this up please]
-> 
+Hello:
 
-Arnd, could you please pick this up?
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-- Mani
+Series: ARM/Realtek: Add maintainers and pinctrl support for RTD1625
+  Submitter: Yu-Chun Lin <eleanor.lin@realtek.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1089830
+  Lore link: https://lore.kernel.org/r/20260505103955.1010130-1-eleanor.lin@realtek.com
+    Patches: [1/3] MAINTAINERS: Add maintainers for ARM/REALTEK ARCHITECTURE
+             [3/3] ARM: realtek: MAINTAINERS: Include pin controller drivers
 
-> On Wed, Dec 31, 2025 at 09:51:26PM +0530, Manivannan Sadhasivam wrote:
-> > From: Konrad Dybcio <konradybcio@kernel.org>
-> > 
-> > PSCI specification defines the SYSTEM_SUSPEND feature which enables the
-> > firmware to implement the suspend to RAM (S2RAM) functionality by
-> > transitioning the system to a deeper low power state. When the system
-> > enters such state, the power to the peripheral devices might be removed. So
-> > the respective device drivers must prepare for the possible removal of the
-> > power by performing actions such as shutting down or resetting the device
-> > in their system suspend callbacks.
-> > 
-> > The Linux PM framework allows the platform drivers to convey this info to
-> > device drivers by calling the pm_set_suspend_via_firmware() and
-> > pm_set_resume_via_firmware() APIs.
-> > 
-> > Hence, if the PSCI firmware supports SYSTEM_SUSPEND feature, call the above
-> > mentioned APIs in the psci_system_suspend_begin() and
-> > psci_system_suspend_enter() callbacks.
-> > 
-> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> > [mani: reworded the description to be more elaborative]
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > ---
-> > 
-> > This patch was part of an old series that didn't make it to mainline due to
-> > objections in the binding and exposing CPU_SUSPEND as S2RAM patches:
-> > https://lore.kernel.org/all/20241028-topic-cpu_suspend_s2ram-v1-0-9fdd9a04b75c@oss.qualcomm.com/
-> > 
-> > But this patch on its own is useful for platforms implementing the S2RAM
-> > feature in PSCI firmware. So I picked it up, tested on Qcom X1E T14s and
-> > resending it.
-> > 
-> >  drivers/firmware/psci/psci.c | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> 
-> Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> 
-> > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> > index 38ca190d4a22..e73bae6cb23a 100644
-> > --- a/drivers/firmware/psci/psci.c
-> > +++ b/drivers/firmware/psci/psci.c
-> > @@ -539,12 +539,22 @@ static int psci_system_suspend(unsigned long unused)
-> >  
-> >  static int psci_system_suspend_enter(suspend_state_t state)
-> >  {
-> > +	pm_set_resume_via_firmware();
-> > +
-> >  	return cpu_suspend(0, psci_system_suspend);
-> >  }
-> >  
-> > +static int psci_system_suspend_begin(suspend_state_t state)
-> > +{
-> > +	pm_set_suspend_via_firmware();
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static const struct platform_suspend_ops psci_suspend_ops = {
-> >  	.valid          = suspend_valid_only_mem,
-> >  	.enter          = psci_system_suspend_enter,
-> > +	.begin          = psci_system_suspend_begin,
-> >  };
-> >  
-> >  static void __init psci_init_system_reset2(void)
-> > -- 
-> > 2.48.1
-> > 
+Patch: ARM: integrator: Fix early initialization
+  Submitter: Linus Walleij <linusw@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1090092
+  Lore link: https://lore.kernel.org/r/20260505-integrator-fixes-v1-1-56ab9aac59db@kernel.org
+
+Patch: [GIT,PULL] firmware: arm_ffa: Fixes for v7.1-rc1(Round 2)
+  Submitter: Sudeep Holla <sudeep.holla@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1090667
+  Lore link: https://lore.kernel.org/r/20260506194602.3474096-1-sudeep.holla@kernel.org
+
+Patch: [GIT,PULL] Renesas SoC fixes for v7.1
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1089275
+  Lore link: https://lore.kernel.org/r/cover.1777899408.git.geert+renesas@glider.be
+
+
+Total patches: 5
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
