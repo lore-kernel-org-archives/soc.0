@@ -1,145 +1,158 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468E839DBFA
-	for <soc@lists.linux.dev>; Wed, 13 May 2026 21:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A593ABD8E
+	for <soc@lists.linux.dev>; Thu, 14 May 2026 06:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778707304; cv=none; b=Lj/LbK2Zmg1T/LDBAKwsX6thC+L9tJ6cpjI24GOSVcHX59F3piDa0WyKyqgPSQYjR6YhpoaSBKKnqFygwGi08R0pcfqrl9biSK9KN6CiCxyQA0vg7IlCbXdSwgIHsnIgyi+Wgr8puCJ6xSx4fo/L/I6CIs0SNghH2jQpfsQAewg=
+	t=1778741443; cv=none; b=YdZwdgNnrkNtz+k9XL2o9lC6Afv77j50/QLo1hne8KXHT5JGlUQPyxof8ojZGeQLlS6nGLXOUZ627QA6DxukpuLgrWTitrlU1dFtqa8cI+AUsxxS3pUQU21IkHRm9CWGvTaIe9v++lOYysTSijLKdsIIrBztx806Q4qzeCyfdEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778707304; c=relaxed/simple;
-	bh=stkleaRX0wmq9j/Ur9c9IcpaImjjRCnccmBs5dokhMQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VjSgD9gmb9/7YLOR0rqiizZS1QCtMJ+WnU8TZd0+kA3isnchRejyd9SsQk8rVGDHZvAxr/aneFKNB+aMeZhu4yBsCmoQtzirBU+cMqArWmgJiFs1/u/Jh13VOdcgMjA9hOPzbOk8YprwAGYobaLKXxItTBKbrpN12BHM4TYzHT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y5IjyiMO; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778741443; c=relaxed/simple;
+	bh=3TLOQXX5xKiM2sGIzt1EUEymlZ7tO3evZhBnWPIL1Xk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ulwty1p0Wym3+KxFkeQrNaO9iTPsh8uNFF11OQz4mSOTcenAZP5uyu0VLiYuUOh/cwLSdpu9WucTHEHc27VWek6kkm88qICIycee0vptqG8/a4slo0jbLibxtKF8hZkoqHehtmjqsuSLKLa74E3dO4IkXpz0Kn28HhkPL9YmJhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZHy54+hk; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Ughu3cUL; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y5IjyiMO"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48a3e9862f0so49282245e9.1
-        for <soc@lists.linux.dev>; Wed, 13 May 2026 14:21:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZHy54+hk";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Ughu3cUL"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64E68r3b1965743
+	for <soc@lists.linux.dev>; Thu, 14 May 2026 06:50:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=1Bz191QtM3OT7TlZvkr4oqTeTL59KBQ6RMy
+	9k++fGU4=; b=ZHy54+hkJxbwZo1XUdhhhFjHXSoJJwPjfIo5MEbYrqvBbk6qjL8
+	1iYydyvUnJtPGYzXkVeB/a6BuA1SazqANU+SnAi5sZbXswAqW8/3SWq1Q1wAlnVl
+	sWn+gBfaln4WpT1ItVnekAY6/H/Yg9Z5Sux7Ly7evrMfuP5z0jV9vWbPI/LBrvAR
+	Gm9sa6/KhMm32jAQ5sV23+cRbIphr29rGgSlwAcFox+UanLk8wcZZKp7O7S3noZF
+	VCGXVydV0Hk9A+D6zexF455Ad/WlO35mwZ2BsoQ5PByuAHTpRa2KUeqrs6BGLY98
+	TxSc1CDb/7O4y+z9rT6S6p9FL5cUQWUD61A==
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e58v884cw-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <soc@lists.linux.dev>; Thu, 14 May 2026 06:50:41 +0000 (GMT)
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-367cb6de61aso9604376a91.1
+        for <soc@lists.linux.dev>; Wed, 13 May 2026 23:50:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778707302; x=1779312102; darn=lists.linux.dev;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oY/vS2daxSQ4cPcucEnR8WY5HPYVG/uWJIbqHtbQwE0=;
-        b=Y5IjyiMOOfXX21oa6g38Z5luA3aJ0NIt2djUyVO0WHByZWmDjMAqDjycyh3DGfJn97
-         jprxKq4Vf4fg5ATrKp/JkESk0R4ollcFAzs0wxPbSwnrbtAb1JCoIectDZwVFdRAG94y
-         ByRx+61v2mZJfYQHZOr1UeL03wxP3xLWuZbzZZP1Dptuk8Y9DQvU/hTUq122vhGQZikb
-         qQ9RMA8BO6PwBl4kb8gU3MS4rKToPvegljEkraXbNgi5kWhjWVPEDlpjSAamr48j4kfP
-         kLhGm/UloUbx5RQ4aqBIGJc0dePorxXwfxBL0cHzeNOKvPoo9v3fBgvhfYZ2wdmQgDnB
-         wNlg==
+        d=oss.qualcomm.com; s=google; t=1778741441; x=1779346241; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Bz191QtM3OT7TlZvkr4oqTeTL59KBQ6RMy9k++fGU4=;
+        b=Ughu3cULAQ/nGBt7jR+Trnht79AIOZyEyOmZpWO/mDBT0On+eUzYoDphOktAaIvSkI
+         kKN73tn99jBlq4ScCF6PvZF50mH8zvZDpTsiqSJByOp87nIRg9nu975qU8vE2Jj1Aloz
+         tbIxHrahphHWlUoAJwCWcl0p3alKo+SCWxNmGboYn/V3o8jtrriKnxm7160nc2TcytzO
+         S4TzSGhDmz78pA67khBxh/DPEPESAYUTKnIeUdWn5bWDNlXVvecsISeetyDc13TVZGwq
+         S9O9wnjvBIz7szLkx5x2bDNXBLAfCy+1VZ6Cq4UypsK/ulj0NcopIn4OOxFAegjc0syr
+         azbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778707302; x=1779312102;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oY/vS2daxSQ4cPcucEnR8WY5HPYVG/uWJIbqHtbQwE0=;
-        b=ete8QsKszRs+l7nu9Aeqv0UimeCIWaDhJ3dmUkdpf9t5uu0u8ECnD0qr0aexoFduq8
-         UIylgzKh6iNaFEyG2D7+x13MQLWTP4Qdwzq3+dU2MPLPwA2HsPnVjAeqrAP5qoEajnbU
-         j/MPLNTmtML9fBuECtTjy4QFNaRmOpiddL1gLcr7WnUZAhcx8vXfzjnwvzSO0TDFFTGZ
-         6OHPp0PB9s8StdHjaMaLQS3BaSJNS88F4/Qkc1ha2AwKpHObN+UuX2lGwxa4kc6vrl1H
-         NqdkbP0r8HhzUjT2pF9AMtMC31V9DhIjHP6qNPGRX5d464ivpx+ogMIgn0ye58njWaCu
-         AWcQ==
-X-Gm-Message-State: AOJu0Yxq6D2ObOnYERERegIkHqNCQFICwkm+rBAZNnqNWz1Du6IdY+oS
-	zuztwAJtMBGpfwZcbnCP3Nb8AHRxRI+WGFFtm0BNCpeKwYsfsGOCEXIPYpT6uNY2
-X-Gm-Gg: Acq92OHwrrt7/oN77sJRUiqNytuM9T012FwYtNmtsU8BXD0F2+kDn3Jc3tPQFnB0xVP
-	688s/ksa3aQ7AMzG2Ry5G9j7hUvPn6OX6SdqJzk1UJfPvI4BKBl3qiZlS+jmxNwEqEJj4fjs3sv
-	umRuh/E5Lg5A49FvzxA//aXXTjRE3VXcJAoSamR/ZLykDeQXpRD6jq+/zBDAZT+SgvH+3KvR9dC
-	jAmazdf5+iKm6XCBgRZdVVqEfDOoApbrnSXSZKD0y+5rNWZF6jQBKqzutxsnc0QxnQtppOPwzLv
-	VPYS65q3SrFqkEtbvGN17b7/vYTpDxJtXEKe/sC3ayCOQ0GyZBpW9kGQBGx2ZuU6HmZ30a1g02s
-	JbDxbe4mznlW7zI5eGgEPX/U05p1+6vy0FtJNmrGcShnaAkApA7kxUaoCoLU26yXYSlkI8LFA4R
-	YWog5g7L7TnCBxtbJUyGkUeTMunMvRr+4RLw==
-X-Received: by 2002:a05:600c:674a:b0:48f:d620:c27f with SMTP id 5b1f17b1804b1-48fd63382e6mr14712735e9.4.1778707301674;
-        Wed, 13 May 2026 14:21:41 -0700 (PDT)
-Received: from strix.localnet ([197.250.51.99])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fdb2c7f93sm397205e9.10.2026.05.13.14.21.40
+        d=1e100.net; s=20251104; t=1778741441; x=1779346241;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Bz191QtM3OT7TlZvkr4oqTeTL59KBQ6RMy9k++fGU4=;
+        b=WrzfRRmYr4SOtjAXq/kaZrGhedmESzeoZYU5S3whCl6iEWNflppYPVsqPf9y3t3onv
+         3CgotPGUqa75hCDBPmnqhXK/k/1awls+YIH6UWRDSdK6MPoV6iJoLBsqJrVUDXRM8j/E
+         icfbFRbuWNimXuibx8HrFZTd7DSPK/d9sBKu1BGvZv7z7hoD1VYy9OF0TC+JWE9opgO/
+         ChB7rBqohP32L2ictn1jdGNqPK6Xxei2C7t3uXT5uAUGzvjocQLmrSptHl10px1Oy1dJ
+         O5iDut1v/DYEIfXHbKYgkO5pEZNiOZgqGEWxoVaebZLvYKS4sUULJoUDEzFT35O2i95f
+         J1ZA==
+X-Gm-Message-State: AOJu0YyPR82JXBgOwcUDzsi2/Z2qnA94zVl9y1Jqbc9lLVJbL94vxBtW
+	IMb6DGT2yHcnqIkpLrDx+k7akcV9DusIgBlFkU3vSvKD3gz8qAJ8xtNECRymSxfrqw+5aSqt0CU
+	axLnD7w9OZrEwjRUm+9Hpwmq1BPcpc17rG86kTHD0gmyNxOa8oO0tNpFYctPnJDE=
+X-Gm-Gg: Acq92OH3rh56wwoIdhgLebX9dq5Jfk7/Xh9omJEOrm+YrHt1jDcabFdn8kLSg9kLh+Z
+	FjiB47HRHH7UVgrM88hbUaakRDNAyhni0UtpgOeKnGB7waap5ZLkRPcKPR7r8OK8XRbeT9ycQKh
+	6M25gkRe+g5Ff0IlMjJUFPY10Uyz1T7NmpOf7hxaz1j+gtVtoLJ754/gFD78OLH4ewNJxEmyO4I
+	BEykJ2wjJLxAnDtrxGXCgOLfcpWLKpfVK0HOxDAyYWt2qcr/89eevuniOEI9dj9wd7NwtL9JJhL
+	SN2ClltANgLRqKI/OKtKd4vXNedQ5oZQCOZEwCgEhcGbm2Pb4QjwSmjIKFkrpFOc42yksf2ojzY
+	dOHrqeR3GKAgqx1yUAbl7WsjyDuZhWezWvDQh
+X-Received: by 2002:a17:90b:554d:b0:368:a297:bd3a with SMTP id 98e67ed59e1d1-368f780eb3bmr6656801a91.8.1778741440879;
+        Wed, 13 May 2026 23:50:40 -0700 (PDT)
+X-Received: by 2002:a17:90b:554d:b0:368:a297:bd3a with SMTP id 98e67ed59e1d1-368f780eb3bmr6656732a91.8.1778741439587;
+        Wed, 13 May 2026 23:50:39 -0700 (PDT)
+Received: from work ([120.56.195.42])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-368ede20a50sm5400043a91.3.2026.05.13.23.50.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 14:21:40 -0700 (PDT)
-From: Stefan =?UTF-8?B?RMO2c2luZ2Vy?= <stefandoesinger@gmail.com>
+        Wed, 13 May 2026 23:50:39 -0700 (PDT)
+From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 To: soc@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] arm: zte: defconfig: zx297520v3 defconfig for 7.2
-Date: Thu, 14 May 2026 00:21:38 +0300
-Message-ID: <4560997.ejJDZkT8p0@strix>
+Cc: bjorn.andersson@oss.qualcomm.com, konradybcio@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, wenst@chromium.org, arnd@arndb.de,
+        mani@kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Subject: [PATCH v3] arm64: defconfig: Enable PCI M.2 power sequencing driver
+Date: Thu, 14 May 2026 12:20:17 +0530
+Message-ID: <20260514065017.11305-1-manivannan.sadhasivam@oss.qualcomm.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2326700.Mh6RI2rZIc";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE0MDA2NSBTYWx0ZWRfXw75seq2up6mt
+ Sk5n4npdVzEOmUyoBLDPfJeWCtB5u9tU7Wg010GLC90p6re0/8SWWhyrUZ55p4HtIAbxgfV5wmO
+ 1WZotJPIJBs5/SNvw8swiWm5CBY4OFvjwayEeSmKTJAqu4XqoJ/x4i3ccFrcETHGcTTdy3ZBilf
+ ZDvsjmF4ROzHa2sBCGB6zCCF8Soa4kE804bfTXinj0hlnbP9+wjRcwEV2YA19Pu3tZcKfgYjyru
+ +/Tu3X+UfsRrSO+pJUYfGmvsEDrejG75i5C0oC5kjf9lW9eb9F3/huufF3UQQd3Sqz/B3TM3wUf
+ pQD1aoF47L4gUYn+AZlsFv3NaBXsgEabjtvnwAazN5PoBuYn7GJRyYuWL8BEEk1DKlFrCd+CuPA
+ sLa+Os/obyQRYeoWEaCvPV8iyZAaUJwlGQMIdP2qdKi8iphw7Ku2KVrkNCv7l1IqUmlDOWJOzmo
+ xfEYrDYiwoNmafEjzqA==
+X-Proofpoint-GUID: A4jZLzZlgNCuzVJMj3jk0ORXW_YyhL0z
+X-Authority-Analysis: v=2.4 cv=YZSNIQRf c=1 sm=1 tr=0 ts=6a0570c1 cx=c_pps
+ a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=QkUiPtlOeBxfVnO1KVo74A==:17
+ a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22 a=EUspDBNiAAAA:8
+ a=Mt3aZHS-KmEbwue0ZEsA:9 a=uKXjsCUrEbL0IQVhDsJ9:22
+X-Proofpoint-ORIG-GUID: A4jZLzZlgNCuzVJMj3jk0ORXW_YyhL0z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-14_01,2026-05-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 adultscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ bulkscore=0 clxscore=1011 suspectscore=0 lowpriorityscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605050000 definitions=main-2605140065
 
---nextPart2326700.Mh6RI2rZIc
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Stefan =?UTF-8?B?RMO2c2luZ2Vy?= <stefandoesinger@gmail.com>
-To: soc@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] arm: zte: defconfig: zx297520v3 defconfig for 7.2
-Date: Thu, 14 May 2026 00:21:38 +0300
-Message-ID: <4560997.ejJDZkT8p0@strix>
-MIME-Version: 1.0
+POWER_SEQUENCING_PCIE_M2 driver handles power supply to the PCIe M.2
+connectors and is required on wide variety of ARM64 platforms such as
+Qcom Snapdragon X Elite laptops and Mediatek Dojo Chromebooks.
 
-Hi,
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+---
 
-This final pull request adds a defconfig file for zx297520v3 boards. The ra=
-tionale behind the defconfig is that this board is too underpowered for mul=
-ti_v7_defconfig and quite odd - it is a Cortex A53 without an FPU running i=
-n 32 bit mode.
+Changes in v3:
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+* Picked the reviewed-by tag
+* Sending it to SoC list as Krzysztof suggested
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+Changes in v2:
 
-are available in the Git repository at:
+ * Dropped PCI_PWRCTRL_GENERIC change since it was already applied
+ * Reworded commit message to include ARM64 platforms making use of this driver
+ * Added R-b tag
 
-  https://gitlab.com/stefandoesinger/zx297520-kernel.git tags/zx29-defconfi=
-g-for-7.2
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-for you to fetch changes up to 9afbe04564c59a217c7d1142ce685c4bd951a8d9:
-
-  ARM: zte: defconfig: Add a zx29 defconfig file (2026-05-14 00:04:05 +0300)
-
-=2D---------------------------------------------------------------
-ARM: zte: defconfig: zx29 defconfig file for 7.2
-
-The rationale behind the defconfig is that this board is too
-underpowered for multi_v7_defconfig and quite odd - it is a Cortex A53
-without an FPU running in 32 bit mode.
-
-=2D---------------------------------------------------------------
-Stefan D=C3=B6singer (1):
-      ARM: zte: defconfig: Add a zx29 defconfig file
-
- arch/arm/configs/zx29_defconfig | 53 +++++++++++++++++++++++++++++++++++++=
-++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 arch/arm/configs/zx29_defconfig
-
---nextPart2326700.Mh6RI2rZIc
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQJPBAABCAA5FiEEQxb0tqoFWyeVMl1sPRO8yFRPGiIFAmoE62IbFIAAAAAABAAO
-bWFudTIsMi41KzEuMTIsMiwyAAoJED0TvMhUTxoiUZYP/RKXKXjbgpwOWDArhVWi
-//t4GeM8XeJHbToNdPs0zddnNDKrUc9m6qRUXS9YrfGKjfEg7w+vUDI96b3rTO9J
-T7vCqFgicHppfdwwLZKaL9E8tSh4U0Vna5CJV77+dgo2+Ai2X1+wxuN/TNLvciqQ
-ZCQo839bDPf86DzbwZlHQwZgmjdLHQYr6VgBhX5tDRh2CJcF8Qd8CNKY//bWLwbl
-brw6G5cd+EThYutYI5qhWY+18I8wEjuZ9kASBL4u2BKSGVbws4kHfF742GnVo7q4
-4BM45A3vGKiHXaf8rTjUoOCZkTiHgCdTx6wxBDBjDWPuk08B6E0T0aDIrzxU72JS
-vvgI7lV/Co2tghBDehKTTQh+2zOd2pm//F99FPtr6uLXQUPqncssVXYWeFc6gmiY
-6X8G3RkqIuzKbSTsOaGpQjQ1dvCj83x/OhOdwfv9dKNxqS192PsCNZLw/0XSENMb
-vk0LMmB4g/ZbetafsQi0nOG45snB5OQVhgWlHC7SQACrVT2LsySgKykis2S9o8n2
-SSyjmX+poC6edxjzo1mLQYIlE3nj/5vN+xc4qCaJX0pwkCeOZClaSFUTLdqIzn5e
-g5lb2PXHa1rY5A4NcEeS2JCXQgEdVflMeJunuDZkCiQJUijqzUlZ92PycU/tWgIe
-QQaezFYYHW6sWXf72RUdaXwO
-=l8wl
------END PGP SIGNATURE-----
-
---nextPart2326700.Mh6RI2rZIc--
-
-
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index d905a0777f93..96ce783f24e7 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -260,6 +260,7 @@ CONFIG_PCI_ENDPOINT=y
+ CONFIG_PCI_ENDPOINT_CONFIGFS=y
+ CONFIG_PCI_EPF_TEST=m
+ CONFIG_PCI_PWRCTRL_GENERIC=m
++CONFIG_POWER_SEQUENCING_PCIE_M2=m
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_FW_LOADER_USER_HELPER=y
+-- 
+2.51.0
 
