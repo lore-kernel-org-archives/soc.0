@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B87370AE9
-	for <soc@lists.linux.dev>; Wed, 20 May 2026 10:31:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9060D3D669F
+	for <soc@lists.linux.dev>; Wed, 20 May 2026 10:31:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779273063; cv=none; b=Ajb4vHcHnoF3f7w7DDkxiRwV1ok3gMKU5MnPZX6jp4w12c6C1hd+JTAGTDnfuK8RobfwEGQ6ZBxXWeO0h3ARQ1U0y/PXXLnkMPjkKesMNTOXGHEvP3wTIPgm3dZdc48yoE6xwRxdfXrBuToVueijPDHX5Y/nJgdVKyj91NtQIno=
+	t=1779273065; cv=none; b=uW1caWhtR80mvboZctul2crpuq3zua/mKg15Ef4O3/m/Fpu/bYmWCzI/95Zvrq9iwQthDhRSkNMPlqQvxyOeEL/hloQhGnbzhjMTN5ylsYrCS+hwVChEhY6b3iHTEwBbcmf3eaWti+YJRyuaeS/66yypW4khlLeSweIF7b4go+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779273063; c=relaxed/simple;
-	bh=U6h9gc4YO6a1i9KMV4ld8n945eN62JfQfRwB271LjDE=;
+	s=arc-20240116; t=1779273065; c=relaxed/simple;
+	bh=Prn3JkKc6oPGwx7ZuKTD57FNyiPz6nNFfkAwcMTTcrc=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=n6wZgzya+INDEMrPNfjLvObAmmYWx9egxlczOsO0SmMhSnSHlF3tIy8GREHsIfJ+rkLVUjqQCxGb5+nueDkvKW9Br2uAMLRu/IOM4IL+AlNllMLfz+desDrV3ouG/dKYWGeJ5D+L/bK2DYpgcG2wI0XP2nOwgzfGy/PppoAk2QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8trtwck; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=BebozRgsGyIHVU96fupm4xBot9CGYnP3xitQZKFDXTevGwF1x+0UJrEsHRC+qBalf1CPG0m4nWi4hGiFe3YuwG8emxw4i9FyPjpFGOP22mq80lu81SDXKDdzSxawbaHvY6EZLUR+q4vUb7e7lN1URQ4jZwhcblQtSJRamWY9rQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ufzr7ICK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8trtwck"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ufzr7ICK"
 Received: by smtp.kernel.org (Postfix)
-	id 1BFC91F00896; Wed, 20 May 2026 10:30:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B191F000E9;
-	Wed, 20 May 2026 10:30:59 +0000 (UTC)
+	id 2D5671F00893; Wed, 20 May 2026 10:31:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 173891F000E9;
+	Wed, 20 May 2026 10:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779273059;
-	bh=8YqtAXAzrtRyRyEFIqDzYQ5c3bMjuyvFOXzOmbK/MH8=;
+	s=k20260515; t=1779273062;
+	bh=w1kVNpO8KGfmEExNP8/XgBcGZkh1dPrFQDv5F06j/bg=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Q8trtwckOH+HNIEWcqFCj8Qtlt0/IAn+PAE3QHO9OWoeewCQ31YE6tRmZdDf7wHU9
-	 UlfDQjQW7xXf9ssj/ZgnxQN3SRhxnxx75QRm+Xa1D3OOOV9YSB5Wj8KNNl8V67b7St
-	 8U7cJwNRO9+FTMbXYxjizEH5RyjG5wxKvy+IXZM5bu/4TfKnRfe1QIeTgmCDoikvpX
-	 K4MinN0mq18DQiXWwRlz4NtkkywzL6mA54sr/Mb5BCMLT8y3L02Ys6WTlNTA1TSYGE
-	 YuQOlx+S8JrtX+w1LLPU7SR/q1cBbdchK3btium0v6b3lMsQ/PNgzYYtxQLm8QXgYF
-	 HaJJHmRdeFvhw==
+	b=Ufzr7ICK5MdpquLs48w6Nr1MVl3Wfevof0v/QdEsLDNIYqV/JAkyd0yamlqYpdapz
+	 9zYaqlv5iG03cQInrdUokdeM18e6Ml8ny8WnqoT5yFCVtJAUFOdCngZi+LW9elyiEX
+	 Jdfb5JRI4VNN5/+bvWW0P4h9uHhQH3vsc6y++ncUAHxe8XrK6B8N85CtnfQ0JcZ0yW
+	 8JDaDQPvXT/Uqk/M3pg3QztZrekfeDDbeZLy8R2/GVdqyxIh+n7Q4VcFHUfltTHtJb
+	 /oHukkZrHXRv8E/13m2zzfur4auK1H4FIFC3o6pOCJHOYknkGdj22CNp3pqaPzzdD3
+	 h90Azfrpd57EA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A453930A0E;
-	Wed, 20 May 2026 10:31:10 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D09CB3930A0E;
+	Wed, 20 May 2026 10:31:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,36 +39,40 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] arm64: defconfig: Enable PCI M.2 power sequencing
- driver
+Subject: Re: [GIT PULL] SOC FSL for 7.1 (retry)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <177927306951.3101306.5919071818164776130.git-patchwork-notify@kernel.org>
-Date: Wed, 20 May 2026 10:31:09 +0000
-References: <20260514065017.11305-1-manivannan.sadhasivam@oss.qualcomm.com>
-In-Reply-To: <20260514065017.11305-1-manivannan.sadhasivam@oss.qualcomm.com>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+ <177927307238.3101306.9197537483718779325.git-patchwork-notify@kernel.org>
+Date: Wed, 20 May 2026 10:31:12 +0000
+References: <310b65ba-1d73-4ce0-b332-00cde70acc69@kernel.org>
+In-Reply-To: <310b65ba-1d73-4ce0-b332-00cde70acc69@kernel.org>
+To: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 14 May 2026 12:20:17 +0530 you wrote:
-> POWER_SEQUENCING_PCIE_M2 driver handles power supply to the PCIe M.2
-> connectors and is required on wide variety of ARM64 platforms such as
-> Qcom Snapdragon X Elite laptops and Mediatek Dojo Chromebooks.
+On Wed, 15 Apr 2026 07:57:41 +0200 you wrote:
+> Hi Arnd,
 > 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> As you are worried about the last minute rebase done yesterday, here is
+> a new pull request without the rebase. It means it is based on tag
+> soc_fsl-7.0-2 that you merged into 7.0-rc5 some weeks ago.
+> 
+> Most commits have spent several weeks in linux-next, only the last one
+> spent only 10 days there, but it is not a major change and it is
+> originating from the maintainer of fsl-mc bus directly.
+> Commit a0fe29d20e78 ("soc: fsl: qe: panic on ioremap() failure in
+> qe_reset()") is also flagged as being commited 10 days ago, but this is
+> just because I droped the preceding commit.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3] arm64: defconfig: Enable PCI M.2 power sequencing driver
-    https://git.kernel.org/soc/soc/c/35f2514c8ff3
+  - [GIT,PULL] SOC FSL for 7.1 (retry)
+    https://git.kernel.org/soc/soc/c/49ff66206e5f
 
 You are awesome, thank you!
 -- 
