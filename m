@@ -1,32 +1,37 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675AB23393C;
-	Tue, 19 May 2026 10:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC18239BFE6
+	for <soc@lists.linux.dev>; Wed, 20 May 2026 10:30:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779186973; cv=none; b=FC1lyq1i/Cz9GIuu1eX3Sa7tovTp/Pk+vdos77UMvzsJr1PauSeNcj2yJsPIsB4MU4LlftFijqhk/cCi6rnOANKkFZFizfXbKBAARlmY8/5xQf12mUwGhlV15ElyKROuDFjcykpKRhcAeRLQpYvywOYsMP6iMIQCPeJMi6L1HdM=
+	t=1779273061; cv=none; b=D0Gb4uSdKKYqSzwjIjyyxm4EWy6nRjA6yqFlb3p6ny5mBzBg7QCVR4wKKVIYu7qZorTDp/0tC4hlDkgNwKcPkvAOH8tTrYQFu7qPWQvucPIMZGLxlsCj/X3c+yo3xcmLKeMlC3T7pfECsjvbwgbTI5G37wCmwpJykrmFIyCVBas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779186973; c=relaxed/simple;
-	bh=YYYSibD/M6zecMN7nfYUk7zsiD8vR9cyDlLrgjuO2hI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XyRpydwFRyVqWYcnH0dUEtFLuosGwTrG3eeI0i9vlwuCueIscPCCNpS4HLL9BoBUHpGENeKCJI+e+nBjZx1VCRpd63jO8Tfn7BTt4tMeM1KPDLUfh/VoDwImqg9I/AqI8HSt5dhYkqn9Gzvc2NIak4fIWPl05MUkaaT6okKYJJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82DAC2BCB3;
-	Tue, 19 May 2026 10:36:11 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 2/2] Renesas DTS updates for v7.2
-Date: Tue, 19 May 2026 12:35:59 +0200
-Message-ID: <cover.1779185462.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1779185457.git.geert+renesas@glider.be>
-References: <cover.1779185457.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1779273061; c=relaxed/simple;
+	bh=wUXhbIEdB5/Lep5/0CBvrcRL+kOiaq/TPxQLH6R+46E=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Hc9rpE4m2ElIUrPuQQufjctNg9Ud7IKQCKSQbXqbco4rD1wCnkjrcN6HI4eOynYiwOTl7cn4U4jWlRVPIv7Sm3+iAE8oi1aadzBphrCm+9en5yrIbAPkGMgx+v0Nt7uTC1Oa02wpsYX6tn15A5eDwo7y36S7Qrzzyuc51Cf8Umw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rn7WEjS/; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rn7WEjS/"
+Received: by smtp.kernel.org (Postfix)
+	id 944581F00893; Wed, 20 May 2026 10:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7A01F000E9;
+	Wed, 20 May 2026 10:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779273057;
+	bh=/RvAf9cnohbvbSNGhZJ3GpkNZGM2EZl9CY1UEwB7kk0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Rn7WEjS/PkcS+d5wF91YejAk+nok6wNj79k6lPpdfVil1fR2SIP8GSx+uFVbe1P/+
+	 3oIlUz/R/pUbv+gzamyDIh4YlZ748pBJExth6Km1oqtKsS+LC8Jl4gpSuBSJihhKS4
+	 ZE8/LzO+LW4+B0tbkQRnjJyuP4JRQtd8X/vkqTegWV68iGFdBqeZ2jYNMAZy3nwLIK
+	 7/VVahmzWSaWwp8nXE4O7MX8zhP4BfvuC7k94s1UqfUeLpVJ3hWtpPuwFGpv7LPupu
+	 MIVLcCCf8jfatEuGMBgtY00G2K6jT19zU9BbiC9Vp9RZGyEyntI5h8+ByGqg0TF1il
+	 FgfbLG7IK0h+w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568EB3930A0E;
+	Wed, 20 May 2026 10:31:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -34,130 +39,38 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] PXA1908 DT changes for 7.2
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <177927306789.3101306.5274138490841256314.git-patchwork-notify@kernel.org>
+Date: Wed, 20 May 2026 10:31:07 +0000
+References: <KimLSS9zQ2O_qT5luvFs7Q@gmail.com>
+In-Reply-To: <KimLSS9zQ2O_qT5luvFs7Q@gmail.com>
+To: =?utf-8?q?Duje_Mihanovi=C4=87_=3Cdujemihanovic32=40gmail=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: soc@kernel.org
 
-The following changes since commit 5d6919055dec134de3c40167a490f33c74c12581:
+Hello:
 
-  Linux 7.1-rc3 (2026-05-10 14:08:09 -0700)
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-are available in the Git repository at:
+On Sat, 09 May 2026 13:04:46 +0200 you wrote:
+> Hi SoC maintainers,
+> 
+> Here's a small set of DT changes for PXA1908.
+> 
+> I must note that I've changed the repository and my PGP key since the last
+> pull request.
+> 
+> [...]
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v7.2-tag1
+Here is the summary with links:
+  - [GIT,PULL] PXA1908 DT changes for 7.2
+    https://git.kernel.org/soc/soc/c/6cf3cf025848
 
-for you to fetch changes up to 44f1ef06ceec55b7704c7d773d6136ca8b90f8b7:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  ARM: dts: renesas: r8a73a4: Describe coresight on R-Mobile APE6 (2026-05-15 11:35:25 +0200)
 
-----------------------------------------------------------------
-Renesas DTS updates for v7.2
-
-  - Add GPU support for R-Car M3-W(+)-based ULCB and Salvator-X(S)
-    development boards,
-  - Add Ethernet, OPP table, interrupt, pin control, and watchdog
-    support for the RZ/G3L SoC and the RZ/G3L SMARC SoM board,
-  - Add Coresight support for the R-Mobile A1 and APE6 SoCs, and the
-    Armadillo-800 EVA and APE6EVM development boards,
-  - Miscellaneous fixes and improvements.
-
-Note that this (1) is based on v7.1-rc3, as PowerVR GPU enablement has a
-dependency on commit 26735dfdd8930d9e ("pmdomain: core: Fix detach
-procedure for virtual devices in genpd"), and (2) includes:
-  - Renesas SoC fixes for v7.1, which are already present in
-    soc/for-next, but not yet in v7.1-rc4,
-  - DT binding definition updates for the R-Mobile A1 and APE6 SoCs,
-    which are shared by the clock subsystem and DT source files,
-  - DT binding definitions for the RZ/G3L SoC, which are shared by the
-    pin control subsystem and DT source files.
-
-Thanks for pulling!
-
-----------------------------------------------------------------
-Biju Das (13):
-      dt-bindings: pinctrl: renesas,rzg2l-pinctrl: Document reset-names
-      dt-bindings: pinctrl: renesas: Document RZ/G3L SoC
-      arm64: dts: renesas: r9a08g046: Add GBETH nodes
-      arm64: dts: renesas: rzg3l-smarc-som: Enable eth0 (GBETH0) interface
-      arm64: dts: renesas: Add pinctrl reset-names for RZ/G2L and RZ/V2H family SoCs
-      arm64: dts: renesas: r9a08g046: Add OPP table
-      arm64: dts: renesas: r9a08g046: Add ICU node
-      arm64: dts: renesas: r9a08g046: Add pincontrol node
-      arm64: dts: renesas: r9a08g046l48-smarc: Add SCIF0 pincontrol
-      arm64: dts: renesas: rzg3l-smarc-som: Add pinctrl configuration for ETH0
-      arm64: dts: renesas: rzg3l-smarc-som: Enable eth1 (GBETH1) interface
-      arm64: dts: renesas: r9a08g046: Add wdt device node
-      arm64: dts: renesas: rzg3l-smarc-som: Enable watchdog
-
-Geert Uytterhoeven (5):
-      arm64: dts: renesas: r8a78000: Fix SCIF brg_int clocks
-      Merge tag 'renesas-fixes-for-v7.1-tag1' into renesas-dts-for-v7.2
-      Merge tag 'renesas-r8a7740-dt-binding-defs-tag1' into renesas-dts-for-v7.2
-      Merge tag 'renesas-r9a08g046-dt-binding-defs-tag2' into renesas-dts-for-v7.2
-      Merge tag 'renesas-r8a73a4-dt-binding-defs-tag1' into renesas-dts-for-v7.2
-
-Marek Vasut (24):
-      arm64: dts: renesas: draak/ebisu-panel: Fix missing cells and reg in DTO
-      arm64: dts: renesas: salvator-panel: Fix missing cells and reg in DTO
-      arm64: dts: renesas: rz-smarc-cru-csi-ov5645: Fix missing cells and reg in CSI2 subnode
-      arm64: dts: renesas: rz-smarc-du-adv7513-smarc: Fix missing cells and reg in DU subnode
-      ARM: dts: renesas: r8a7778: Add missing unit address to bus node
-      ARM: dts: renesas: r8a7779: Add missing unit address to bus node
-      ARM: dts: renesas: r8a7792: Add missing unit address to bus node
-      ARM: dts: renesas: r7s72100: Add missing unit address to bus node
-      ARM: dts: renesas: genmai: Drop superfluous cells
-      ARM: dts: renesas: rskrza1: Drop superfluous cells
-      dt-bindings: clock: renesas,cpg-clocks: Document ZT/ZTR trace clock on R-Mobile A1
-      arm64: dts: renesas: r8a77960-ulcb: Enable GPU support
-      arm64: dts: renesas: r8a77960-salvator-x: Enable GPU support
-      arm64: dts: renesas: r8a77960-salvator-xs: Enable GPU support
-      arm64: dts: renesas: r8a77961-ulcb: Enable GPU support
-      arm64: dts: renesas: r8a77961-salvator-xs: Enable GPU support
-      ARM: dts: renesas: r8a7740: Add ZT/ZTR trace clocks
-      ARM: dts: renesas: r8a7740: Describe coresight
-      arm64: dts: renesas: gray-hawk-single: Fix AVB0 PHY node alignment
-      arm64: dts: renesas: ebisu: Sort sound node
-      arm64: dts: renesas: salvator-common: Sort sound node
-      dt-bindings: clock: renesas,cpg-clocks: Document ZT/ZTR trace clock on R-Mobile APE6
-      ARM: dts: renesas: r8a73a4: Add ZT/ZTR trace clock on R-Mobile APE6
-      ARM: dts: renesas: r8a73a4: Describe coresight on R-Mobile APE6
-
-Tommaso Merciai (2):
-      arm64: dts: renesas: r9a09g057: Add #mux-state-cells to usb2{0,1}phyrst
-      arm64: dts: renesas: r9a09g056: Add #mux-state-cells to usb20phyrst
-
- .../bindings/clock/renesas,cpg-clocks.yaml         |   8 +-
- .../bindings/pinctrl/renesas,rzg2l-pinctrl.yaml    |  35 ++
- arch/arm/boot/dts/renesas/r7s72100-genmai.dts      |   3 -
- arch/arm/boot/dts/renesas/r7s72100-rskrza1.dts     |   2 -
- arch/arm/boot/dts/renesas/r7s72100.dtsi            |   2 +-
- arch/arm/boot/dts/renesas/r8a73a4.dtsi             | 114 +++++-
- arch/arm/boot/dts/renesas/r8a7740.dtsi             | 116 +++++-
- arch/arm/boot/dts/renesas/r8a7778.dtsi             |   2 +-
- arch/arm/boot/dts/renesas/r8a7779.dtsi             |   2 +-
- arch/arm/boot/dts/renesas/r8a7792.dtsi             |   2 +-
- .../dts/renesas/draak-ebisu-panel-aa104xd12.dtso   |   5 +
- arch/arm64/boot/dts/renesas/ebisu.dtsi             |  34 +-
- arch/arm64/boot/dts/renesas/gray-hawk-single.dtsi  |  10 +-
- .../arm64/boot/dts/renesas/r8a77960-salvator-x.dts |   4 +
- .../boot/dts/renesas/r8a77960-salvator-xs.dts      |   4 +
- arch/arm64/boot/dts/renesas/r8a77960-ulcb.dts      |   4 +
- .../boot/dts/renesas/r8a77961-salvator-xs.dts      |   4 +
- arch/arm64/boot/dts/renesas/r8a77961-ulcb.dts      |   4 +
- arch/arm64/boot/dts/renesas/r8a78000.dtsi          |   8 +-
- arch/arm64/boot/dts/renesas/r9a07g043.dtsi         |   1 +
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |   1 +
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi         |   1 +
- arch/arm64/boot/dts/renesas/r9a08g045.dtsi         |   1 +
- arch/arm64/boot/dts/renesas/r9a08g046.dtsi         | 402 ++++++++++++++++++++-
- arch/arm64/boot/dts/renesas/r9a08g046l48-smarc.dts |  13 +
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi         |   1 +
- arch/arm64/boot/dts/renesas/r9a09g056.dtsi         |   2 +
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi         |   3 +
- .../boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi  |   5 +
- .../boot/dts/renesas/rz-smarc-du-adv7513.dtsi      |   5 +
- arch/arm64/boot/dts/renesas/rzg3l-smarc-som.dtsi   | 132 +++++++
- arch/arm64/boot/dts/renesas/salvator-common.dtsi   |  26 +-
- .../boot/dts/renesas/salvator-panel-aa104xd12.dtso |   5 +
- include/dt-bindings/clock/r8a73a4-clock.h          |   2 +
- include/dt-bindings/clock/r8a7740-clock.h          |   2 +
- .../pinctrl/renesas,r9a08g046-pinctrl.h            |  38 ++
- 36 files changed, 945 insertions(+), 58 deletions(-)
- create mode 100644 include/dt-bindings/pinctrl/renesas,r9a08g046-pinctrl.h
