@@ -1,117 +1,63 @@
-Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D34130B508
-	for <soc@lists.linux.dev>; Thu, 21 May 2026 15:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC6B28030E;
+	Thu, 21 May 2026 16:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779378411; cv=none; b=oDHCy3pOtK2jXcCBciwzuK/7PK4sSAcwiarFYw3RzhDJcS4vhZfE4JMkhqpP0+QVQmhtkbmN7gw6TdWu2CLw3eRvgVAd96yao073OWW0qEnWHwkpHEdyveYnv9Wjw/wUKxrtFjCMc3cChwF+0kf/tGGd3hDrf1rdMv+aWULuKek=
+	t=1779380614; cv=none; b=BKG63U/oXE4GbN4OFk0sYa01psRPOf0/aNzsMMMd1HGbcmGKq3IlE5Ps8E9TN1HeZFMtcGcKSNimO5d4ArFO9Ge7hY+BUAeA8MBIy4Xe4KalOGT2rhWTSuFXF3YqGDQMqTNbYwJu+qvkXxWtub6fxR92IoPlBXCZ2n789ct8Cog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779378411; c=relaxed/simple;
-	bh=pR2K7zj8HIWwctcIgSjc/S3c+BfkebvsTACDHVxTo88=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=KGHPKxeCgZodR1b7rQwkDfRRMS6+lv6gtKe7aApr7x8DMOV6POAX5I56wLgNS2O8rGlKcf2zepOW/YTjOsPrNBjhxNk4lj9S+Q0aFIw+HW42YrJGKhVPg4KemjIzbSmGIQ2ulQOUT2LMoTIiHiXWmSHI5CWFI6VgPkLHi19K04k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=VvgeX/p6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qz7TaqTT; arc=none smtp.client-ip=202.12.124.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1779380614; c=relaxed/simple;
+	bh=iwnmjT/Wu6mE77eIFcuLsxFTDvPfjbEtMfp5ypXTPIQ=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=BsgB/oGOdAEfk4XFk3OnPqpz+0C+EX9FuXe+bI3Rf4v8X4U2axyn9GRAD1bGgsxFbZpDDDbXeNvN2Y099WyojwqjjucAFw2hf1f9uH8Oeznv+FR9k2W7FYv+hkoNMb6VTr1zpWjBuadMUhbkuRLLAb4K8icTV64aE+o5AwhPVSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJnjRqYg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="VvgeX/p6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qz7TaqTT"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 5D4767A012B;
-	Thu, 21 May 2026 11:46:49 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Thu, 21 May 2026 11:46:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1779378409;
-	 x=1779464809; bh=oM0uYMBqL1kxJwKhFF/O6VzT58qrsZXQs8dD4plhhVo=; b=
-	VvgeX/p6c5bqNIozg2znabdmwjWeWY7DLzR0KOGkVetIPczND8cZJejWoZTXOl6y
-	Kpp0nM7wrx1gWjaTvD2iw1Q2kOLxieBBIJQKzn28fH/Lm2P0r5KnqFplQlyx4uCg
-	ifEwxJjuShqjj7L+TxqXM61qM8XsfSFlksrlrDyKv5KQ7HXtvtfvYHXQI0ZdwvXu
-	iZH1YjYN5UqQCNTyrrGeb2ht4vUQxWWOQaN4Az1NSiBbgHb4WmnpA1qtFYqXkpZ7
-	bDt1/i6rArVJdmVRCPXd7hI0Pr/td3IZ1k84z8wJGOYTn9/2sTYthMa7udN7gqJS
-	TSJPYIU6gI9FQPBUSHwUFQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1779378409; x=
-	1779464809; bh=oM0uYMBqL1kxJwKhFF/O6VzT58qrsZXQs8dD4plhhVo=; b=q
-	z7TaqTTUSZkiat5yWP6wO58i693rqyXDIM7IhjkHWsDyd2OECsnrZeXyk0g2bVf0
-	VC9pdxw29G38HBJYMO3ytJVZNKv/5uTDJA8vsJKplQpd6OFqoOpgFeds5QcGbT6d
-	9DCZMCZ1gCVmTL9/Sdl1KHgI1K7JicBTEw3sQFNeJkDTX3T4ntL+VMlMc0sQ8QUZ
-	DfOm5PvwhzpqXQQPopvRL5dK2W6YRhVsrc+0TPAQuhfVNxFezXuQEIJwbZWbj50b
-	/7jjuYo1zQA9td+U8oSm4MAukQMZwUcI9aoWyEBQ3gHy5kWbNjDpi40ak+EDU2E4
-	XYn0lr9YDwD7nohKsxxDw==
-X-ME-Sender: <xms:6SgParzEIo7F_xfL0SP0Pb6inzV2PKYiQPtY5XjmSTUDAOSEQ2GnDQ>
-    <xme:6SgPauF_bQL6n-9Eeb_DAKxxfGgXuenM8qdCme4qvPC4t6PfH6s-Znjct54iiVuom
-    O1pL3LBuy5RhQ4YFUCQo5iuuQodq1F1WwSPOiHhYd_-FeUFzx_3xQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddugeejleduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeekkeelffejteevvdeghffhiefh
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
-    phhtthhopeelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrlhgvgigrnhgurh
-    gvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepphgvthgvrhdr
-    tghhvghnsegtihigthgvtghhrdgtohhmpdhrtghpthhtohepfhhushhtihhniheskhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtohepkhhriihksehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehlihhnuhhsfieskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrg
-    hrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthht
-    ohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehkrhiihihsii
-    htohhfrdhkohiilhhofihskhhisehoshhsrdhquhgrlhgtohhmmhdrtghomhdprhgtphht
-    thhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:6SgPanQEwpry4SeBa_xwiv8q6FriiQeSV9nZCQE_1QPU4ZHtqBZ8wg>
-    <xmx:6SgPar0eARjFtfSr0d73vTNOsNEEqVWcaZSEU-72HcvCResnguWiLA>
-    <xmx:6SgPane8cdIXxuzfWBu_P7uVEcHchYTSNZ7U9-Wi8V29xNifVX7CPQ>
-    <xmx:6SgPajOgdpKHNizyeqWodYcfBQ1YL2q1QCSBwflV4zqetCf9VQ_1bw>
-    <xmx:6SgPapib3aa6OZ7RJysosAjQjMNG7Gi3-QgTpUKd7Tu2cWXq0wdkRyB5>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id EDA41182007A; Thu, 21 May 2026 11:46:48 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJnjRqYg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855761F00A3B;
+	Thu, 21 May 2026 16:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779380613;
+	bh=f1Dlk7t3CGGAnHWGGA0QsKQQaeWoYRka/VURIXuvDtI=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=BJnjRqYg0vOY2U8MqPwjcGUSUJMke3BWQGRpCJ8Wp04j3Ew7QBSfu23dGm3f98Yd+
+	 KZvxK3FOXhctSlY0KVHO2xQ6EUUiqMmfNF+9T7shzBOZg5CVuxQRz3T51BO6TM+AVE
+	 nd7yFnZ3OnfVF9UkaJq0DOU6TwmNQG0nrWkqxOdJmmFLZti2355tJqXFIf+BbyNWUt
+	 ABe2BqPG1z/EKWzN8TqoFByJO6PcGe6CXDAnMRyovxJSrB8JkByxZ0yjY4WqOPHqsW
+	 QgIzxOtJldY4HOLBLo7bXRMwF65Mu2u7FXR4JDj9C2c051mXMiVRx7cr7GYsBQrRCq
+	 PbbXElSl3eFSw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93B4D3930E0B;
+	Thu, 21 May 2026 16:23:44 +0000 (UTC)
+Subject: Re: [GIT PULL] soc: fixes for 7.1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <fa4afee7-8cb5-4555-b1e0-de376cc901e6@app.fastmail.com>
+References: <fa4afee7-8cb5-4555-b1e0-de376cc901e6@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <fa4afee7-8cb5-4555-b1e0-de376cc901e6@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.1
+X-PR-Tracked-Commit-Id: 1fcf4149418e7a8f8253dd74059d56340795503f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: dd3802fc4f6b52201a93330d44981a66bd6ef883
+Message-Id: <177938062308.406099.7581855805759436158.pr-tracker-bot@kernel.org>
+Date: Thu, 21 May 2026 16:23:43 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-ThreadId: AXrWoYt_z6Rs
-Date: Thu, 21 May 2026 17:46:28 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>,
- "Krzysztof Kozlowski" <krzk@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Linus Walleij" <linusw@kernel.org>, "Drew Fustini" <fustini@kernel.org>,
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Cc: "Peter Chen" <peter.chen@cixtech.com>
-Message-Id: <9db39c38-2c79-4187-a23f-190d72f6545d@app.fastmail.com>
-In-Reply-To: <20260521153003.429610-2-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260521153003.429610-2-krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: [PATCH] arm64: defconfig: Fixup duplicated PCI_SKY1_HOST
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-On Thu, May 21, 2026, at 17:30, Krzysztof Kozlowski wrote:
-> Commit 246e37739f24 ("arm64: defconfig: Enable CIX Sky1 pinctrl, PCIe
-> host, and Cadence GPIO") placed PCI_SKY1_HOST in wrong spot, thus it got
-> duplicated when merging with  commit f54f7979ff88 ("arm64: defconfig:
-> Move entries to match savedefconfig").
->
-> Cc: Peter Chen <peter.chen@cixtech.com>
-> Fixes: 1440d446ad5d ("Merge tag 'cix-defconfig-v7.2-rc1' of 
-> git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/cix into 
-> soc/defconfig")
-> Signed-off-by: Krzysztof Kozlowski 
-> <krzysztof.kozlowski@oss.qualcomm.com>
->
+The pull request you sent on Wed, 20 May 2026 23:13:35 +0200:
 
-I've redone the merge and folded this in.
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.1
 
-      Arnd
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/dd3802fc4f6b52201a93330d44981a66bd6ef883
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
