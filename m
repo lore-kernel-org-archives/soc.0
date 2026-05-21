@@ -1,106 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30769344024
-	for <soc@lists.linux.dev>; Thu, 21 May 2026 14:14:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E549B3093D3
+	for <soc@lists.linux.dev>; Thu, 21 May 2026 14:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779372863; cv=pass; b=Sbb51AYbCk5Fa7Rg4ZhcHWnUUBKYD6FXKsl2S0F0p0q4srnTOtZezMSOKAXZEmBc/gKaqQfovt65uJzIv2ccscGi3QP2s7zjPtxDvuVlA0ZPmEEOqOF8f/9ugaq2a3TA6IO3qjwr7NgaDZMQXUd9ZVcpxBj24pnmZRmrq876BwU=
+	t=1779372931; cv=pass; b=OsL+mE6tD7P1Wps2KPbf8P8F6dy3IoNZ24c+dQQtdK3zPv8vU6DPc99rQO2DsHnjGdLKbr7Jrh7ObBu5l3w2CHgHWaN7gxuiEHnz7h39KoCvdRBFB5XmiNcEy8+zF5YZKkD7FNWj6dPB8u08z3q1HxIdE/7QkDPsHvn0IptwZys=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779372863; c=relaxed/simple;
-	bh=gJrO2A9MJS6/fFlUZ2b09U6a+i/gEU7GOuJO2TOA51M=;
+	s=arc-20240116; t=1779372931; c=relaxed/simple;
+	bh=OcunlAI2okb+Y9rCTNSIcCq8cCWHG+Kg6ltM8bzJghQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=peWeV0c30zpUlUP9OGEVJLDy5LcsXhxx25unbGWFi0r8y4cpUZIISY2ZsilM4Lh8AnqPHcYt6KRdELRCUsxby0b6/l1VgzwCPaJyHptKpUT0prdY7xghcbZ8cPSWFgZ98PBilYW38BSKaL8GOc7Xt0inX/AXke8EW3D6boWlUmo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mLYAAt5t; arc=pass smtp.client-ip=100.103.45.18
+	 Content-Disposition; b=KHGFQ0L4EmRO1rGScrP6zvOxrRTsymzSLCYAOVsOFRt+Tn/YBtTs+HFuI8JMzJxcD+AEBsej/gy5opza68xaxcItNiKj8D3/vVaALnJHwD79cNWME9A3cCSJZZi1bahTGPX7iUD4hGUwKPkhblh5uj5JSf0mPQ9gTwGCaPQllNE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aj4k9/ZV; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mLYAAt5t"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aj4k9/ZV"
 Received: by smtp.kernel.org (Postfix)
-	id D67761F000E9; Thu, 21 May 2026 14:14:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.167.47
+	id A1A721F00A3C; Thu, 21 May 2026 14:15:29 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.208.177
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1779372861;
-	b=Dw87hoGBs8nPw6kZkxstWDNJHjywkxb2x0RZsh/QR+JhZxjpUjon/vZTgukyJMFBb4/+
-	 UAFSLewVMOYaWgm1jVSqXE6ay3Xk3GCqp7qqcJJJXN2Na4alBpTf59TrNVyZncjDsHlAX
-	 Ucef2k4PDagzzxjVsTdoMXhsbEwcF8+JAMmvOxTTq+3jr11QhJZUzdzjgHdwdfeFS69NX
-	 FGUcz1FKDeH4NLrtwqEE2Rs6jAOw+TFV+ebrhtBxSmbw0NrpuzzVHkM6ajiuJAMgtWLCT
-	 W0KP1rJsVjtETi1ekdxDbKqqiCv8VfreBa/LIyyMKvUcqSCx2YJcVXSscbpBY9ImA8w==
+	t=1779372929;
+	b=PDYTS/KcR033J3nPOFFDgDcoV6st/kso9dWXq+s8giml3rNHzUFpgwk/vVWX86R7zHzf
+	 TikBOWhe/7vZ+FdliunSU67Qut1w058vSidAOwvDKvoKchULPkqyxf984PrFIPl5NhLwp
+	 wepgPGZPpbaLcFy59JLSh1n0zLYhj2G4+DhsAiBIpAHuBWzxUDvejJf/c7c8c6JSHCO4X
+	 UFM6pm52QwF4s0n2G+fLccpBwbez9OmloHLTotO4qXtk8+DPacG9yU3SzwyJpKd8OLKc5
+	 rsgEKLWs4za1crPDLtzixevcP8/q0uzkz0h8VRH7i+4XTTw+0UbHe7KfNos9Wo5SHFQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1779372861;
+	c=relaxed/relaxed; t=1779372929;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
 	 Content-Disposition;
-	bh=JA1Rl/V+AEIvj3al/H+ZnQroSiQ2kKKMhl7jwi2o2AA=;
-	b=YL2Yek9YxGWAP2VmVuRJaS3Zmj+57OXR9ugu0WihsHAU8cEkU6lbJZ5RXMAjQUajEbPo
-	 wAOFPGs8pkDhT/Z9TWffe9w/I+LOv7rWCuVnpjCEUhZABp0PyjqSZb8bkVBSoFFXoxHbi
-	 qZdeqlSnuVrwdt+8YDdGUoDubOGRVrSQ6X3OId9PjiuolQU4jQ9dr+qJGuKJn/lhMobGd
-	 4vMHNCmPoD2j77G3ZpH7D8/U7S0AJkG6KmdVwLiKpuEeiuiSxH8ZpjUyz9mWkFw4xYkOD
-	 vR1ryXbmOACDBQbR1qDog7tqBt1el8mBOgs5jq1Vl+rCtKEnaz3HL5WBDSGFi8MrLsg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=mLYAAt5t;
+	bh=NGBH5couJrf2+imLmZb6M8hd7uyW+GPRfAO1ovQLVjs=;
+	b=oIFh75dak4XW7KJu5g5CYWkDXETgRNLW7/RvFgSMGBEkSyB0IHpr7muVdNHp0uFfVvXw
+	 58hCcvR9IJNWz7SWh6twANcuKcEyhwZiLcsdylK7saaOQJSzKWT6WjEaPJwercVtb6SLK
+	 duV5BITZxGz093w/NtA13aaoPiphgBU+06ZpKf+0ji5uAH1FuolA8v0YZWVGEnbZoKiHd
+	 XzSNsIFqSU5vXAcJcU21F98agEtrPyC3RoPMHmXr730f1cO67cet3TYMcYKf337VslNBv
+	 2cy5ADkSE89XWoKoRNTvDB4Fm/glbLxGcfCrV8ss1eayF5f8nADPL/TlDJ/E+OO5LdQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b="aj4k9/ZV";
 	dmarc=pass header.from=linaro.org;
 	spf=pass smtp.mailfrom=linaro.org;
-	arc=none smtp.remote-ip=209.85.167.47
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	arc=none smtp.remote-ip=209.85.208.177
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 561F81F00A3B
-	for <soc@kernel.org>; Thu, 21 May 2026 14:14:21 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0AE8F1F000E9
+	for <soc@kernel.org>; Thu, 21 May 2026 14:15:28 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=mLYAAt5t
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 561F81F00A3B
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=aj4k9/ZV
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 0AE8F1F000E9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5a8ee4b703fso5848174e87.0
-        for <soc@kernel.org>; Thu, 21 May 2026 07:14:21 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-38e8292423fso42579771fa.0
+        for <soc@kernel.org>; Thu, 21 May 2026 07:15:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1779372859; x=1779977659; darn=kernel.org;
+        d=linaro.org; s=google; t=1779372927; x=1779977727; darn=kernel.org;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JA1Rl/V+AEIvj3al/H+ZnQroSiQ2kKKMhl7jwi2o2AA=;
-        b=mLYAAt5tcNf1IEP8UkCX1PHEZPUNVodoHowRglZBb2CbYm0riqTNvRFvIpfFPBnEar
-         jgWyji013ULtaTeZ/a9b9Kz6060JHrBdDHtNXRdNn5Zwl4nB4oPmw5lTPFIpvz8/Jc9O
-         /ZQwDcsIbEpqJ5nCYZiYMmKiqnQHex2/TWUpJW0FLCh0xZq7v2QElYmWi5IAWB/5HWGr
-         rDgtY3zgsoG8N6JBEHO1k4r/AvHzC8aXOM33UIZ+b5CVpE3ELLnxvOjjSRiCKyWG3Jad
-         p5822BMQdyNmcasIZ+5dtSyJ4omQ8DZquT1mL7BYiEA/x5ikBm0fDnGi/U/RTqRTnlMA
-         ftng==
+        bh=NGBH5couJrf2+imLmZb6M8hd7uyW+GPRfAO1ovQLVjs=;
+        b=aj4k9/ZVNG98vEgdAqTXme2nKAyhCfiUZvwR+81Zx1HDEE6o5TZxyWUn3OgpysOew8
+         dJ2xE8HZy6jdeH2BgsFWV/l4u4xRrMIAPWy7Eo2fEJ33M++f6/EDszNS/2yZ7+1BZpKW
+         KLwgsMNUTrUPkrYAEbkzYoeb2yG1gwvJDOjY5EzDb+MqYy8Dy4iahXpAcsMKDs35tBLi
+         tW6g+weWFqWf5j56YrpJ0wBi8Yll5PJWd+qzplIEsf296L59O9+uf6LZZOUZwXQqrQl9
+         zMREdACo7YNyQHplWtXb2JYTaNyNaBVKHRNIU0ndQ76+VrlrhiFh7S/EcY0d0aq6vJXH
+         OTeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779372859; x=1779977659;
+        d=1e100.net; s=20251104; t=1779372927; x=1779977727;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JA1Rl/V+AEIvj3al/H+ZnQroSiQ2kKKMhl7jwi2o2AA=;
-        b=aaX1cCe60ktxZz9bqduA/hzs0E4HV+mYEVIAInWdb0RcG5pcsj4qL1aKZ97UisUnE2
-         WVkpw8c7D3WKmuUN9pfIfQZ4fBmZmg19VsJ8Sy0PyRFOaTuUFKAZzEZxEeonujYEQs30
-         GpOZtTq45WIaLBe7tFXqbjl2Z6fD5Dbo7x7jPbJxVTvjlm2e/Q4ScYGx/yxP30ZKI7aL
-         Q/GFiJoMhJf3M47PjB5RXXDWsjVpiP6PbbD130tWezZEojqzvQzgyZ2zVyJN3RDsd4rB
-         +IkQ9B1KJWPnKr6WU6QDfCP+myJRXLDE9J70Nj/5jhECS1979zwuJuHHUxMVNJ4OnZ9F
-         hixA==
-X-Forwarded-Encrypted: i=1; AFNElJ8NA+nRmEYheAGs0sU+JgnPwow+Xtw4h/H3bi1CcRl0OAut+augwV6KomJCpoGszukstj4=@kernel.org
-X-Gm-Message-State: AOJu0YyEkM4rGnhjyfHuT+Pw38CIGsz6/OxJSLdOSkYeZ7zl6bI4RdFu
-	BwoGd6dzhgOUPGUvD/nGZanf44b/n2vTZ7G/rEkDk2PAOO+a69iuxvyi/P3y2D0fdvNd2hr+8Nk
-	0VjcV
-X-Gm-Gg: Acq92OEcxYLFUdqndnrPhhmpcHoMYLLZPR5ayl5vZwdkl6PAKDZfzQ467XV+p4aR7bT
-	G29zrWBsvzGsom0954hf3diEx2/Ros0BAisI7eJQCnM/7RRG4tWXRQhhk8TfYRW37ikTXKRS59f
-	UgOhbHkz9hVX+RNod+lzI+3GYrq1NI3N5YhK6pqRy85yUPpBSM5hheVR/qduTA/6aR9pFbD6UjJ
-	GAId13fpC4KPz12IVtsvCvopZZZcbojUawGb4LQF3qGYj+Z/LC6XMVMuAUueIvYq6/JjkNs7NDx
-	wLM8171glJSuXktlq4ezKxOpr7VpMNrbzhRK6XD6a82/9TbnvAPoM2LypuyGYTQrPnRvVEewtoC
-	vgUB3ogr078+rFdkzmlNwLV9Kh2FgD9Alnj/S7MEfm7KFOrKfaLSXBE8+hNF9I0yd4JMcx1atqw
-	M+UorXX//gdC4VRcjUp/v9ONo5PvSIGhy35xbtWqjQGLWJkH6kzcnbu8HViOJGBknxW6b43tp9H
-	Dxn2J3rSmgfjfJkEnuw
-X-Received: by 2002:a05:6512:ba9:b0:5a8:f24b:d511 with SMTP id 2adb3069b0e04-5aa2ba8c089mr1395165e87.26.1779372858502;
-        Thu, 21 May 2026 07:14:18 -0700 (PDT)
+        bh=NGBH5couJrf2+imLmZb6M8hd7uyW+GPRfAO1ovQLVjs=;
+        b=fwNUxrvYu2x/vOo/FByDfohZYHVU/Tb7VSfCKLDRU+Y9Ru/3/k/MvFIL1fc8N5rbBg
+         z+NiUto7tBMyyOKvVzlwbz+BjvcH6YU4r7ndAznSaJ5GjHAG10SK2ssbvAd2WBAjVlfr
+         wisNqPAVTSzYy4xIyKlpme1RisdKJEErD96XkvN4g+8Ul3DE/XaUZJaYGPh+5M7+ZQwF
+         tpYEVakB04/imGGdD1KrIKkdTdFRRD86SD3sjPpceYWfDhpx3rI974+YRZB+hYeiNbK0
+         0Q7O0r+DGIG7UdjLIKpxlFbpWDvAmLgc1t5erjVk/PCjohUJA83ZkhQOjOvhabCbX09E
+         tlcQ==
+X-Forwarded-Encrypted: i=1; AFNElJ89q2CA94mcJi5H6Sy1R+Hy2VFF3TTt2NRJMclQq4Qyl+7DI62LbszaWEH7KKnMXzR964g=@kernel.org
+X-Gm-Message-State: AOJu0Yzq6hpRlonIz654+p4JQnH2aAD2f+Gp74r8Hn8KoGQ4F10Q2Hlm
+	DWQTO9y8PmoyteJcfOfnnkt7Rbwsx2MYOj2EBi1CXQW54F1KjnjWU0TVJ5gZBybmPNw=
+X-Gm-Gg: Acq92OGi8KLB4EC26KMnuiG4Il0/cwJpBY1itIf3U+XDfL+Z1TdoNDijX1TNBe6Dbbr
+	E1ZypTsjVMeWxhTOMFstD5+4AMekh3OTJygy5OMi8KKtU0h+IH8Il21gjy9P5FwJtQFbR+S7CaH
+	+U6omAhdRZ8LeQBIEegDCNB4m5nyobaSl/VUiDDiXo/4AVrMTLuyvgaSgikaCWL9uMLlP8HmsOz
+	CNtXtkL4iPEwSO2celhLYV96DDhNndzN6EYBV54AaGa62IpiavFbzOA9b1f4Gi2savsdRC25cHr
+	yhN9NqQygMtuNK6fNorTNCCOJVgp3/ZiuHV7RsCWN1ToEOgiplTWMGvBjW61r1Blja6nYMcbSdL
+	qSFPJ78w3Np0blefsAWgz1i/KBjgItwRlI7yO2BgBHknT3rYnxAYm070ItFPWxbcpi689o5gUSk
+	+Jfjo3kROtYgda136KLzCayY5Wyq1t/r3OaiN3ApH+4HAWSa6EEcYsnr8NWJUJ2IMysEsSSurW6
+	W/gK2RezJ/l1YRI9wmlrC37sWxcFLc=
+X-Received: by 2002:ac2:5312:0:b0:5aa:b6b:f6ef with SMTP id 2adb3069b0e04-5aa2ba9ab5amr902886e87.45.1779372927069;
+        Thu, 21 May 2026 07:15:27 -0700 (PDT)
 Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aa2efb66cbsm306094e87.0.2026.05.21.07.14.16
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aa2f14a417sm294444e87.58.2026.05.21.07.15.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2026 07:14:17 -0700 (PDT)
-Date: Thu, 21 May 2026 16:14:10 +0200
+        Thu, 21 May 2026 07:15:26 -0700 (PDT)
+Date: Thu, 21 May 2026 16:15:22 +0200
 From: Jens Wiklander <jens.wiklander@linaro.org>
 To: arm@kernel.org, soc@kernel.org
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] OP-TEE fix for v7.1
-Message-ID: <20260521141410.GA1708231@rayden>
+Subject: [GIT PULL] QCOMTEE fix for v7.1
+Message-ID: <20260521141522.GB1708231@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -112,37 +111,31 @@ Content-Disposition: inline
 
 Hello soc maintainers,
 
-Please pull this patch fixing a use-after-free race in the OP-TEE driver
-where a client exiting prematurely could free a request still being
-processed by the supplicant.
-
-This is basically a resend of
-https://lore.kernel.org/op-tee/20260316071210.GA2470832@rayden/
+Please pull this small fix for the QCOMTEE driver.
 
 Thanks,
 Jens
 
+The following changes since commit 028ef9c96e96197026887c0f092424679298aae8:
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
-
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+  Linux 7.0 (2026-04-12 13:48:06 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/optee-fix-for-v7.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/qcomtee-fix-for-v7.1
 
-for you to fetch changes up to 387a926ee166814611acecb960207fe2f3c4fd3e:
+for you to fetch changes up to 471c18323dfdfe7844e193b896a9267ae23a1026:
 
-  tee: optee: prevent use-after-free when the client exits before the supplicant (2026-03-02 14:36:50 +0100)
-
-----------------------------------------------------------------
-OP-TEE fix for v7.1
-
-Prevent possible use after free in supplicant communication.
+  tee: qcomtee: add missing va_end in early return qcomtee_object_user_init() (2026-05-20 09:22:52 +0200)
 
 ----------------------------------------------------------------
-Amirreza Zarrabi (1):
-      tee: optee: prevent use-after-free when the client exits before the supplicant
+QCOMTEE fix for v7.1
 
- drivers/tee/optee/supp.c | 107 ++++++++++++++++++++++++++++++++---------------
- 1 file changed, 74 insertions(+), 33 deletions(-)
+Adding a missing va_end in early return qcomtee_object_user_init()
+
+----------------------------------------------------------------
+Robertus Diawan Chris (1):
+      tee: qcomtee: add missing va_end in early return qcomtee_object_user_init()
+
+ drivers/tee/qcomtee/core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
