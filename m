@@ -1,219 +1,152 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A363E1712
-	for <soc@lists.linux.dev>; Thu, 21 May 2026 13:19:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274AC221F0C
+	for <soc@lists.linux.dev>; Thu, 21 May 2026 14:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779369579; cv=pass; b=heLDNLp16/9asDaVp4KI/vZpdm1kF4hYT4rL5JK+grFlqdZl9hg9rWXKfnXuwQKXL4P5dZfEqQlPfXXL/dkCRZ5VZwsYfhiC4KlNKAaXKO0+9mjfd9ErAxruUZV5xAJRjPIsgNAFGb16nzS9O2QGUT4aDaUlvut4GZsq5+NUIDA=
+	t=1779372153; cv=pass; b=P4dGxJYRaOlpw3dtXI9MRsI+q8tCx+76miFito3rGeOUw1djVZeyhE3XSGI/pdFSxvf6CsDbxXlySgwo2hm4Wpqb+teSYpO3cf5a47r+IqM67q6zHgCBtRTwooPMWLOYd88vUCgwYGM0+1Mc95ghWG3BagxDHa1y35BHtWcf15w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779369579; c=relaxed/simple;
-	bh=3Kxc7rrN/OrFFcIiDAHnp1YaVXxQbzCGAXQIyb096Ro=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=T9IU03LqZERZflI3SXeEIgVSxJX0QlkELcSdqFwZ0x/+y7LK0STDvRPxVO4Qls2Tffa+Kau9zXR/Qi49UZ0kLTc6UstgtgcN4vxqalj3O9kvXym0hkMI3sVE6GWmp148h8uJbrZw4Dorxqgj4tY/oR+vAAbCi5pVCDbLHedgdow=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b5pmUTIb; arc=pass smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779372153; c=relaxed/simple;
+	bh=NYUei8B/o0vof4v/I+CljGVxaiChR/G+Jh3Lv+Z+8o4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SD4IiC5Gs7CbBcj01JoSVzqdSTdX0wlQuaoIlxNa2QwE889DtA594BnWYxQsKWe7Xc79haHl0hskKS/3lulGMYW5gm37TN1DkigEDUoNA+PToIQkW6SsbgcSU7f6D3Z29a1zpyRcxE6jXZBD1dBg5wrfgs9gk+TWLLj9VmfPyoI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B1UL6Mp4; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b5pmUTIb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B1UL6Mp4"
 Received: by smtp.kernel.org (Postfix)
-	id 205CC1F00A3C; Thu, 21 May 2026 13:19:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.221.44
+	id D3D041F00A3C; Thu, 21 May 2026 14:02:31 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.208.177
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1779369578;
-	b=x2rexPQYTBBw0L+CbibvlgphugrIe4CU+LYFvjT5Efe0M0crkxu1CSoCDmXiGdTvwDFY
-	 70INV8ac+M7RSRh8VLo8pYvyZv5JIChpUQ+vvVN/xnk2KILYTkU9Q2R22osIrP6iJfKXm
-	 OSNvaTzPvhy7VAnFpYZs5rQb63tinuTlTLQ8r7wqY3sxqBFVWcMutsgS5+SbaUwMNOQEA
-	 pwenPp0W3vCT/9VmaIc31+t1+lv4UdYM4XAqfPiKbCMo8jUlcUek6ojwof9Bi1dpkc4Fj
-	 +xcAURpWjv8cNbxNaVF57Z4lzgcH8KEe2LlrEI2M9vetfDA7+LwEjawdPlDJRU4Ew9A==
+	t=1779372151;
+	b=k9EZgQeOwiix9ZuRrtiLIz2vfARUNyXliwoE7epuB9rCCIZ1IOC9E9L0yD++qfK7EooG
+	 RtaGQRPRKEjCutAmLH6yi0JozzSNVRwto3Ij8FemGJzhE0tbBUn8JLXogMR92UnwtWJOr
+	 C/KMvtzF6sCV7TIVb7kOMv0Y5tZn7k99GwWkDMvrmE/WLd1j6G2QqYflA5YRueGDd03Oe
+	 udkNde4fkDR5Yc5E+wXM4+pLFXwTCLj7rAFEaqgOg3GsEcTXhPqqb/TU7iQ0BzFAXOXOq
+	 s3aPWqntO1B/8u/odTN0XTNDgq6+jmEs6jKgueBvgGzEGWfo9XXY3tdSoOPrEx3PChQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1779369578;
+	c=relaxed/relaxed; t=1779372151;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:From:Subject:Reply-To:To:Cc:Content-Language:
-	 Autocrypt:Organization:Content-Type:Content-Transfer-Encoding;
-	bh=kVStZuaynsxldxI4z6f6e5rL63M/lihgHYjp99abbpQ=;
-	b=LDWMH2shB8RzomCYgZfNc5+iNDaY1ahiACbuCwJQ1BFI+F9lGP6fLD8V1+PioypnpaSr
-	 Ri1lbtPOZWovRf49helz3N1b8HS5eNowVXKeIPoaPZ+a8xTAx9yR6MzaI1NoFCfcER7O7
-	 6b1yl8Pgo0Dc4OkoJ+Ffno9l6kdI9bWQ31kkpBPNAKEwcfFMg9D5bmcow7OikXTi/k99O
-	 f/g8gRrhIz/4p7gu5BSO73DAPsCOmiBcedQ8ZWBN+5PPQWtEQpXaUL+q3n6uQ4mXR5v3j
-	 1Rlpggrbh1V1QJI7Dec8xRnIv4dHblFNMf61OYwxNfeoVYPxckK4TxT+s9tTxBtJ5Sw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=b5pmUTIb;
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition;
+	bh=O4EDYvNhidqTpiXQIIrbD6SRTj3Qr1KMzIp666/F87M=;
+	b=nQ/zgJsmFuyktUyjzaohLHaaq/u9tXRlawZWKIDt2BLTKHYYpzWt4nHDH91HhaDZFQd4
+	 Gnfv4NoknuQxtT271aZsdNT9PiaehZAVoZLO2w0gzzUP1ppxl2O8TaICq1U+xZD0ATdgn
+	 LmPLmt58tGjpg6mSWrckwRLeZ2hMNANWIeZ6lpBxqPM4Sp0CG7YqAKBvyMy4TDArmIfmj
+	 HKXrEiu7yt9isbP/m//VG/ZhmZ49/pbCVpa46FSLs96e2YqutUV4f5aYbTLP7i2bBfFwa
+	 0doh+GZMT57emLQxdf0dFmx/n8QN2hj2aeYZTLcpFR2ZfbWg3GzBUFLc7+PfBIscHiA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=B1UL6Mp4;
 	dmarc=pass header.from=linaro.org;
 	spf=pass smtp.mailfrom=linaro.org;
-	arc=none smtp.remote-ip=209.85.221.44
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	arc=none smtp.remote-ip=209.85.208.177
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7387E1F00A3B
-	for <soc@kernel.org>; Thu, 21 May 2026 13:19:37 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3C1CB1F000E9
+	for <soc@kernel.org>; Thu, 21 May 2026 14:02:31 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=b5pmUTIb
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 7387E1F00A3B
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=B1UL6Mp4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 3C1CB1F000E9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43d75312379so5108069f8f.1
-        for <soc@kernel.org>; Thu, 21 May 2026 06:19:37 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-39389398838so59223781fa.3
+        for <soc@kernel.org>; Thu, 21 May 2026 07:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1779369576; x=1779974376; darn=kernel.org;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1779372149; x=1779976949; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kVStZuaynsxldxI4z6f6e5rL63M/lihgHYjp99abbpQ=;
-        b=b5pmUTIbrP4wQrz7AFtsbZXv5d4hIGqM/43FK/v3O4kNXB/JBnoYqRQbpNnDBYRTmw
-         U2MkF2aJu8Ns3jEF8VCGqoFRQokTDHGRm4TF2Q5WE5hVV/nUv9G6jjaftlY2iDkKBNQn
-         MuI+SjyMSda3BFByS+yvWi6puviuEVq2gUXMj1G+13poeyheMVpZKvWK0LAuunmkt+CF
-         C1KNvqXYOItK/XrUzBzRQ1ypX73ZICvKSjQWCYG31uh2tY5FxRaQ8k49haR2Plrih+Dp
-         qM6OZ7QvoJ3EIM41f7fXVOs55XaOF1aZqnCxsSFdjRmMEBJBEM7dLEsA4ZhPnJZ0UjqH
-         WTcw==
+        bh=O4EDYvNhidqTpiXQIIrbD6SRTj3Qr1KMzIp666/F87M=;
+        b=B1UL6Mp4MPp0zxjEMoRe2J97qwBr3+fjZy6k2evAegR4Taa7W5lP1frAhvD7z+42Yg
+         7LFm0IIRzXwc3+f5EMZxt9M82E7zbnENI1yKRJ5xO4YzSwkxKdMjcwdcIwBLrZQtQJxl
+         Mv+xS7duVcHzi/F0N6vRE1xBTRVpjwrICML7uWAhEAjO8FGnog/C+QIDvJY4GBOCJihC
+         JRBI/+jMNlEEb3V76WYTHM/pcmy0drXUR8kCrlxhwnr/Fzmi8JVCov/D0nyBw+ntCHY/
+         +HqAklLc/yZp0BdiIuxosm98szVmpKvKAEyrYqHGO5GleSsmtu4qJm1DSopzy/7XWyuJ
+         YiPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779369576; x=1779974376;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20251104; t=1779372149; x=1779976949;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kVStZuaynsxldxI4z6f6e5rL63M/lihgHYjp99abbpQ=;
-        b=XDvc2zsZXF4E0b5no7PPvoAMy30vn8D8pDpCjBfJEaUaNYgbF4b26GKTEGstfijIqi
-         D3dLoqsFzZBtNhcW5d+3aI1AKR9AzVRnKUpvdPfmrwWMesEOaZ6GFRF3e+T0wPKwCv2D
-         Ct3s0hjRv9wpkh+CgfNv1/ExggQ4CoNNwcZOXg2xrpSN5ChxiFAP/HBpvbjpyu0iGAjG
-         gyzII4ZZ/pUUt5vYBRK7WrevLMJJ80XfwLbCNzl4Uv+17NVL8W5qabguug81sH8wCAr3
-         6K3ke2Am+Itqrp+8PRATahVFx+kCxVdMQfhqJFGtQsR+TIhqd+SCYoo4aJXMin/YmQ+s
-         oVyQ==
-X-Gm-Message-State: AOJu0Yzh1yZ8mCUEXs+KPzK3WL02dHtklR3fnOeVB55XA5Z7GEWaHgZ0
-	KQS4Ocs5i6O1EVER21kyX6L8nhr4g8+Xs0IdV+WdsscoBVEGbZPK2zG1+uOGlFU2hoJy3NkuTxm
-	IIpR2
-X-Gm-Gg: Acq92OHCOBpSOJ3ub+G/7Hu4GEpWr07M8LLCaGyW1yWPjV9ahCK+N9gjWaCnHQ6yMV0
-	hY2Xni2Qm0bos7q75NIlWue0yiedLe+BDVqYtJOa52n0MnR8aFBXukv9nfiV+yxBLIsNI2CpZmS
-	ISD4L+QgpuaKpLX0LVJ9NSNHd67W1UKvj4YtMipkwc5TpTVodtdtyZ5bhZABhxntyFTES46e6iF
-	bbsNCZNTiuRaxeVYJ7SJYYZoW6ZL2e92+dh3XJyXqmcvnIrE1m9N/an2+OggX/Kf2qk0d1i1Dne
-	8GHEKvWUelpN8+ArLD0yiEIU6z3ws8atfCrPHrgrNcUp2TzHzEFuMlu33U+Kcj9k5h8RLMrCnNr
-	QOD4toR67yEt23/eopte43ZG3NJr9R5ojObtCAyaAfspH+d5Xn5VdAmCPtCdufpkU0N8EXkHtRg
-	n7Blj97jmNkfxA14px2JNXUBWuhY03hOaQw2uRyNS5AGzcEav9MXSp5QbPUV3eJh4cLVGmgJcku
-	4LgrI4=
-X-Received: by 2002:a05:600c:46d1:b0:490:3d3d:805a with SMTP id 5b1f17b1804b1-4903d3d823bmr15928265e9.12.1779369575712;
-        Thu, 21 May 2026 06:19:35 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:7e6c:bb76:ade5:7e8b? ([2a01:e0a:106d:1080:7e6c:bb76:ade5:7e8b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eaa92f622sm3169586f8f.24.2026.05.21.06.19.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2026 06:19:34 -0700 (PDT)
-Message-ID: <16fc7412-c470-4f3f-b6c8-55c35698a424@linaro.org>
-Date: Thu, 21 May 2026 15:19:34 +0200
+        bh=O4EDYvNhidqTpiXQIIrbD6SRTj3Qr1KMzIp666/F87M=;
+        b=iQGpQv3Ny6fELjKXCU47UexbUsrcK4BfC4+Vo1jVXc7VMgOqD5k4yKNDhqbVOMdBEE
+         wYq/weUWu+2Ai3MMW0hTM9dHJjLJxziCXqv6VrhbmRmlook2TWACtu+AowQICMmntN/e
+         tpC6TR3MRz8gJMCE1OuMH60lPwh3z53W4bUxRHEQomFpG+5sCnm8aenOOcVV4uleCuNx
+         D5Qm6FxGbBZZXf4r33glo+Vu98LIWGzfpxIYM7x3WD/h1zSCHcE0CBTbLxbrSALYnoeS
+         hihoStsEVN0b3mUOcEGF35by8mdvgyNxOB0Nau7FWfur4NOp/iO1SvF0sFTHhPT8mwRe
+         zCrA==
+X-Forwarded-Encrypted: i=1; AFNElJ8rFJBZnuIGIObEY4N3pRfdRY5Nm+m3pd30ctYAnlQ7HKDEsJtOZRrBI5yDKInaaApsE1g=@kernel.org
+X-Gm-Message-State: AOJu0YxyC6yAW10ib04ttYQpLmTi3puRr8JMB9cOrs7D3ZXczMzeXaX7
+	jkO1jBnKjEkkCwFeN24wNPLdmSoKxMVpJM/fof4AwPq4TSGosxLrRcSqTGde/DmRQL4=
+X-Gm-Gg: Acq92OEKvtIEKACv6CG1Fd8isbCyDcvbDOOkqV/1R3wQRXLOJysnR+bsAeg7+2sXvqw
+	LUnU3TrJ7QDQf2y+o8oLwxlDAaP9UOrqQCOO3HoP7FXv6TAcbSfzX13KLo5u/KUnK83aWTU9eFK
+	uOXSu+VRdgt0qbbEBe6VlfLprUhEsIfn3FgPFHsxUOQBIvaNGuYHi9kVDoK3SnF8PjbuW3zCeYE
+	yVXTGppABiTyexxdUUOAi0fhpBWvVYGcuNXUCHy0trsVRge7/6Xy+7U/ferhEaM8vx26O77TB/m
+	BPd9VEmFkCzW4E2oGa1DrVVOTLq4b+ilqd5L4fR3StsuV4H8KJow8nx37lmPSPNPrG21ZibHTsP
+	36MIW8KxUpklftTWkn1XrrF78FzD6+zzG39tBKFpWbGSQPcrnFaFw1cxa0R5N6hVaDsagMdxPti
+	1GCUxtclnL5+ZJOvFdnMfeJjUFn4Z9+jK5Kzk8Ok3D/AuW4EQE3UFWQKvlhyEmhC3nDXRLk6gxl
+	1yiueBS7UCDAz0DN5Mf
+X-Received: by 2002:a05:651c:b0f:b0:394:3edb:eb85 with SMTP id 38308e7fff4ca-395ca169770mr13907641fa.4.1779372149002;
+        Thu, 21 May 2026 07:02:29 -0700 (PDT)
+Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-395d09df4ccsm2850791fa.5.2026.05.21.07.02.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2026 07:02:27 -0700 (PDT)
+Date: Thu, 21 May 2026 16:02:19 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] TEE fixes for v7.1
+Message-ID: <20260521140219.GA1707515@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT updates for v7.2 take 1
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Hi,
+Hello soc maintainers,
 
-Here's the Amlogic ARM64 DT changes for v7.2, contains improvements for the Khadas VIM4
-and VIM1s SBCs, plus some additions for the Phicomm N1 and a couple of low priority fixes.
-
-This PR is largely the same as `amlogic-arm64-dt-for-v7.1`, but I sent the fixes
-separately as `amlogic-fixes-v7.1-rc` as discussed with Arnd, so this tag
-`amlogic-arm64-dt-for-v7.2-v1` is based on top of `amlogic-fixes-v7.1-rc`.
+Please pull these small fixes for the TEE subsystem.
 
 Thanks,
-Neil
+Jens
 
-The following changes since commit 174a0ef3b33434f475c87e66f37980e39b73805a:
+The following changes since commit 028ef9c96e96197026887c0f092424679298aae8:
 
-   arm64: dts: meson-gxl-p230: fix ethernet PHY interrupt number (2026-04-21 15:46:29 +0200)
+  Linux 7.0 (2026-04-12 13:48:06 -0700)
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git amlogic-arm64-dt-for-v7.2-v1
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-fixes-for-v7.1
 
-for you to fetch changes up to 43e6ece01ba673c3bd8dd1638bcd93827d254b3d:
+for you to fetch changes up to 6fa9b543f6b4ed15ff72af266b29f316643de289:
 
-   arm64: dts: amlogic: t7: Add i2c pinctrl node (2026-05-18 16:23:29 +0200)
-
-----------------------------------------------------------------
-Amlogic ARM64 DT for v7.2 take 1:
-- Khadas VIM4 (T7 SoC) features:
-  - Memory layout fixup
-  - GIC register range
-  - Model name fixup
-  - PWM, eMMC, SD card and SDIO support
-  - PWM LED
-  - I2C pinctrl node
-- Khadas VIM1s Features
-  - Bluetooth
-  - PWM LED
-  - Power Key
-  - Function Key via SARADC
-  - RTC
-  - Remote control keymap
-- Bluetooth node for Phicomm N1
+  tee: fix params_from_user() error path in tee_ioctl_supp_recv (2026-05-20 08:49:09 +0200)
 
 ----------------------------------------------------------------
-Jian Hu (1):
-       arm64: dts: amlogic: t7: Add clock controller nodes
+TEE fixes for v7.1
 
-Jun Yan (1):
-       arm64: dts: amlogic: meson-gxl-s905d-phicomm-n1: add bluetooth node
+Fixing:
+- params_from_user() cleanup in error path in tee_ioctl_supp_recv()
+- possible tee_shm leak in error path in register_shm_helper()
+- padding in struct tee_ioctl_object_invoke_arg
 
-Nick Xie (9):
-       arm64: dts: amlogic: meson-s4: add UART_A node
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: enable bluetooth
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: add PWM LED support
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: add POWER key support
-       arm64: dts: amlogic: meson-s4: add internal SARADC controller
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: add Function key support
-       arm64: dts: amlogic: meson-s4: add VRTC node
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: enable HYM8563 RTC
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: use rc-khadas keymap
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      tee: fix tee_ioctl_object_invoke_arg padding
 
-Ronald Claveau (12):
-       arm64: dts: amlogic: t7: Add eMMC, SD card and SDIO pinctrl nodes
-       arm64: dts: amlogic: t7: Add PWM pinctrl nodes
-       arm64: dts: amlogic: t7: khadas-vim4: Add power regulators
-       arm64: dts: amlogic: t7: khadas-vim4: Remove invalid property
-       arm64: dts: amlogic: t7: Add MMC controller nodes
-       arm64: dts: amlogic: t7: Add PWM controller nodes
-       arm64: dts: amlogic: t7: khadas-vim4: Add SDIO power sequence and WiFi clock
-       arm64: dts: amlogic: t7: khadas-vim4: Add MMC nodes
-       arm64: dts: amlogic: t7: Fix missing required reset property
-       arm64: dts: amlogic: t7: khadas-vim4: reorder root node
-       arm64: dts: amlogic: t7: khadas-vim4: add PWM-driven status LED
-       arm64: dts: amlogic: t7: Add i2c pinctrl node
+Georgiy Osokin (1):
+      tee: shm: fix shm leak in register_shm_helper()
 
-  .../dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts  | 215 +++++++++
-  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        | 482 +++++++++++++++++++++
-  .../dts/amlogic/meson-gxl-s905d-phicomm-n1.dts     |  15 +
-  .../dts/amlogic/meson-s4-s905y4-khadas-vim1s.dts   |  81 ++++
-  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |  45 ++
-  5 files changed, 838 insertions(+)
+Qihang (1):
+      tee: fix params_from_user() error path in tee_ioctl_supp_recv
+
+ drivers/tee/tee_core.c   | 56 +++++++++++++++++++++---------------------------
+ drivers/tee/tee_shm.c    |  2 +-
+ include/uapi/linux/tee.h |  1 +
+ 3 files changed, 27 insertions(+), 32 deletions(-)
