@@ -1,198 +1,241 @@
-Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37852372ECE
-	for <soc@lists.linux.dev>; Wed, 20 May 2026 21:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6CD39FCD7
+	for <soc@lists.linux.dev>; Thu, 21 May 2026 08:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779311649; cv=none; b=c1ZdA/GYtmY6F/b1B3AlwPOtnGIcZJ8xRPkr5m+plzFSr0yAgcI4Dm/r/PWo4zGoPQBkilq5RQ8z/JnkiKqRBsoiIgBVzd92Z/vgWUHDwVKenHiDSYmp3a668sgMznNJsiRyNpQeCdEp1t/d9uIRdVfVe0NDp0W1jEf8iPvyGG4=
+	t=1779350425; cv=none; b=MGPKDlGu4VKZzp2Jb1H0Wn9neIKfW30s6JxLRORx5NZtPvm1ECNlV6vbauwaecdPuzzyvBoDACMJprqsbyQgK9JhXvvzNHSy+owtugunNEc1+MiYeuw61G5mJS7oeajtScu45yJ6Bum3x9orztqeVzKQY92rcG6gAnwNLomhNjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779311649; c=relaxed/simple;
-	bh=UX924fPFz4PpUgvGbGRHhBJkkR9vH6f/1D7o7Vxfvxg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=QnEIaDZGM1+4wQpBkesaDABrwaeYYuJAISfuarePn9FW3S3c4wLTFI+lu2yQ8mR1MjF7bq1ihl0DgrE70+8rhA3dmvP1hVH+NZJOeMkIxmsPjnRSfDR7PhelIw4uCQAptwCcIeUwd27j/LzUXk/lKT+o8M/niIB38d0GBe151N0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=pK/sB1ah; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OKN7RzSJ; arc=none smtp.client-ip=202.12.124.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1779350425; c=relaxed/simple;
+	bh=Tx53MwLePeLZ23fDtjKJB5lRx3lgXxTNcSrKPTCnhJw=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=hKx2FelHNXAoGicPoPqF0tV1ilRozJNX/5Zfv0t9/GDFKsuEhu/qsy4OtEA6AH0kpN9i0HQbWddHKuNA0F4iGFlRbqgta0gKtNUFWtQo4IJNwBBMyQYX6VHmk8xx3iNdW6HgjmniF7VsgBOUxZzWzmakh6sdwf/m2TiKy5ReMF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LlFWtnl8; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pK/sB1ah";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OKN7RzSJ"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 759721D00056;
-	Wed, 20 May 2026 17:14:07 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Wed, 20 May 2026 17:14:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1779311647; x=1779398047; bh=Y+
-	g66LUpPOfLPK4MnmYTQ0SqJLvyUF53+oIedys6o8k=; b=pK/sB1ahQHjCcp1IJH
-	CeczDNZRTlYfsv1EjfnjdZh/5ljo5sKnzUTPghFmxFY664DxOlbMh2CGFNTOIwRc
-	d4jNGPUDgsDZpAX74ixEqEnQT3u8JogcxMNcWpNHP5tFqk6VKy7ln0X5b/dHcXQJ
-	8vJ4Ajwx+a3HWoFeQwCgygjX3d7kVWZd3tvKZ6VqbJG6P0Ob9wMvSG33T5rafU98
-	JYxYue2tnX3Wi8qa4Ze/T/BSQNWXlw6LCWRDVvrIxvveBi8H6FpvLhz1eEPLtoxG
-	FRDAVgEEdl+FJsz+RQNdTNR5WTo7lXv8GJTNLimbYMgXnMN+6K8LxDf1G/HMJM0W
-	ytBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1779311647; x=1779398047; bh=Y+g66LUpPOfLPK4MnmYTQ0SqJLvy
-	UF53+oIedys6o8k=; b=OKN7RzSJWEkbanA57oH2L55BqDeVNBCcjHhY4yr/PaWP
-	YLUEVBWWCX/VkbWWeZODRqG/hFRo9h5gMXV/0A1ZSRK9N8WlSomImEfylJNYXtEb
-	kiVBK8I2INDfeL1hH5uFiaCKyZB9iGkRMxLs+dv1K7X7AcEJEI/plyx5ws+sJ+N5
-	lx86uSJJFnI1mbSbUWe3tPXZwc3rRY+NnGPM8lOfXel+MMsDHRZmuC9jv3g4eElX
-	M5c9f4lBuL/eBJl+62fJmtu6kBFUl9EwqI/iCQ0IgjJyow8AkKASfBoc6JxeEu2i
-	d3ImyicVeaLOfWBYz/2cCD5cAgVwyUEYKLKPvYRJBw==
-X-ME-Sender: <xms:HiQOahP7ZYGaxbcCOa0L4R-hKiOTrdLpwTFMLNQ4s61WEqHyeepAkQ>
-    <xme:HiQOauzMEYMqYVYZ4a-frsyAk2PzBfefpNNTAGTmGN9ad0bVMFEyJfx2Yju-OmcPP
-    RWYvuJAN-C-A-wpZV65zF1P5tH_x8nKb63W4JNdY9WyU4v0FdBQ4LQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddugeehieekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkffutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
-    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
-    epudelieegkeevueegtedtjedttdelgeehhfdvhfeuheethfduleffuddvueelveetnecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphht
-    thhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtohhrvhgrlhgusheslh
-    hinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghr
-    mhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
-    epshhotgeslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhk
-    vghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:HiQOai4b4JllBd01QAzGLDCA_42f9qAL1UtGy2aDtbpWdX08tPTIHg>
-    <xmx:HiQOaizNa-qbBPez62dNs-ibFuxeqqt880Yh_6DcSh8ljFl83Ywyig>
-    <xmx:HiQOapx23pk8F7grctr5Dy9herJp7AQ8orBcCHblZm1EQPnll0XykQ>
-    <xmx:HiQOaqzSuYdO7RnOkEoCfO-ias80yEk0d8A16AS6G6QeVkWK0SyNxA>
-    <xmx:HyQOaq6hBPntLmh-6fqSnkhZaIZ6BXmauB5pfVEDt5-Ri_LX_mK-Prmx>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C3984182007A; Wed, 20 May 2026 17:14:06 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LlFWtnl8"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-459bf19e87bso3471521f8f.1
+        for <soc@lists.linux.dev>; Thu, 21 May 2026 01:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779350422; x=1779955222; darn=lists.linux.dev;
+        h=to:references:message-id:cc:date:in-reply-to:from:subject
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z9PrdA31q5x8SAejtf+3EF1jeBrhc3Rg2VGzoBKR6RQ=;
+        b=LlFWtnl85OXEZK8kNrKohE0x+f9j4Ryr0jW9aMHS7dy70me+xH1CAUT8Te6pEq2mDr
+         6yeajiAwb7xf7VS+vCXdlbKKpiSY/zrFXma5cjOYhMns9cKqsiypuWWA7a+0zGRmfjPx
+         EN3Qhc0M14EiAS911qa7H8pv9EgGUk2+PIGC8WJAhULgvuha5FMgUDd3ZIO5c+fwpeC5
+         Rw4JlSStyOoRVjQprOXMpaZfqbeAjVt4m8X7V94lyMH9rUG/Tv5ft+5+52yjZIem+E8i
+         nppQh0SsF31EY1rcLjx1TuE666zUKDpDDZtHtDU6J8LtqirUf9oHq0PiBCAYu1OjAUYz
+         n9OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779350422; x=1779955222;
+        h=to:references:message-id:cc:date:in-reply-to:from:subject
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z9PrdA31q5x8SAejtf+3EF1jeBrhc3Rg2VGzoBKR6RQ=;
+        b=CD+yNysOjun1ehf/sRKJs/6s993AALiKAQZM/q+FzKfWaCYmy0Qoy0Ow8R9qL1Z+xi
+         os3giQIFbco3wsz5dA3DshvI0mhgF3vMnZEuj5KAi/4C8da253XF4QC//QB1JiexA/gl
+         QzmQzx5yl3d1hCiaqVmKv46K9e0KN8QpdDwTEscYgPBD/IlpMWjQqnSo76/SfdmnPb+r
+         e/FO+eDPBM1dCUjrIYFPt7swnl+zFIsg54OEUhCJMjnanrksDqmUZ9oq9eQfG8rXOb+j
+         hrbfxl+pOK0J6tLPVl9rSsH7X56Q/oR9Nl/NfTldjOBpUgfX/QP7EZ+HNNI5sxdyfv7U
+         clnQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9eJzR0AzRxVgCHE0VDAXzWUEWFa+dbQ5sIbtUTWlpQHfYkktpEWuHwVcuSXRmzVtWjxQ4=@lists.linux.dev
+X-Gm-Message-State: AOJu0YyIFzn1YaHKy/tu3R4h52OCWG0rG5HLoglPy1elgUit/GZaUiDw
+	pJT5LSW0MCdd8XQl+4KILSUKWMqplt+yNvrt48n0esrzrKWGarSaFEeN
+X-Gm-Gg: Acq92OHg5meN/+FAZ+kqVVP3+MYw4MRPWwKCCowVbh/9oy9T1cn/1NqnRREL4QRPEdz
+	rQeYpXzde+7Jn+YdbRjuPUOgQ5bccemJATOvORhsACw21PTb8KZvry+0a4PJoHO3H/RmZsBpOKw
+	cX7Wuy9rWhgTH0VwmJkeWq0zPoAT85VRMziNbNILcIw0zGs3CDTRGI01ITBGyFoO7l+eBjPa9dV
+	54NTy+PDmh1oUMtVbzXCJOb2F+xTsePDL+s4JE2ikcNs1OT0OIvaAQx5xLdztqxhfgDGHAyug2i
+	li+DjLdOISYDhVqffLAYYuGJ0zcuhbOTeEY/crSLT4aLFs11nyBOEX0nzR6UGJhJS+CZp4W88W/
+	to+/tzwXXZ18LyiKqf49usl0rx3EX8y0usna+WKwnDe3mEXjoX8mlZi5xii8hYb3kQ38GR17czt
+	7QrkqhjPq8G2jPlJaYPsSV12tSIHPCUQPplQ==
+X-Received: by 2002:a05:600c:468b:b0:488:aa33:dcbd with SMTP id 5b1f17b1804b1-490360c12cbmr24099035e9.26.1779350421276;
+        Thu, 21 May 2026 01:00:21 -0700 (PDT)
+Received: from smtpclient.apple ([197.250.51.26])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eaa92ca96sm726769f8f.19.2026.05.21.01.00.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 May 2026 01:00:19 -0700 (PDT)
+Content-Type: multipart/signed;
+	boundary="Apple-Mail=_5D209284-6E0B-4B8C-B2C6-1CF1063CB628";
+	protocol="application/pgp-signature";
+	micalg=pgp-sha256
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Date: Wed, 20 May 2026 23:13:35 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Message-Id: <fa4afee7-8cb5-4555-b1e0-de376cc901e6@app.fastmail.com>
-Subject: [GIT PULL] soc: fixes for 7.1
-Content-Type: text/plain
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.500.181\))
+Subject: Re: [PATCH v5 8/8] ARM: defconfig: Add a zx29 defconfig file
+From: =?utf-8?Q?Stefan_D=C3=B6singer?= <stefandoesinger@gmail.com>
+In-Reply-To: <30b96e0d-f296-4c31-8701-a15c568ebffc@app.fastmail.com>
+Date: Thu, 21 May 2026 11:00:01 +0300
+Cc: Linus Walleij <linusw@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Russell King <linux@armlinux.org.uk>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Drew Fustini <fustini@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org,
+ soc@lists.linux.dev,
+ linux-serial@vger.kernel.org
+Message-Id: <3B300E28-8603-4881-8A47-E9B86A355090@gmail.com>
+References: <20260421-send-v5-0-ace038e63515@gmail.com>
+ <20260421-send-v5-8-ace038e63515@gmail.com>
+ <CAD++jL=_eDY_mG_QBreSrZiho0hUrDSciedq=vrxXaTiMwrSyg@mail.gmail.com>
+ <30b96e0d-f296-4c31-8701-a15c568ebffc@app.fastmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
+X-Mailer: Apple Mail (2.3864.500.181)
+
+
+--Apple-Mail=_5D209284-6E0B-4B8C-B2C6-1CF1063CB628
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=utf-8
+
+Hi Arnd,
+
+I saw your reply to my defconfig pull request, but apparently never =
+received your original reply. I only found this mail here. It looks like =
+I have to look for a better E-Mail provider as gmail is choking on the =
+volume of the linux-arm-kernel mailing list.
+
+To answer your questions I found at =
+https://lore.kernel.org/all/61452117-0cdc-4ec2-83eb-dc03ccbd410b@app.fastm=
+ail.com/ :
+
+> Either way, the patch description above should at least explain
+> why you think you need your own defconfig, as we don't normally
+> take those.
+
+It was more cluelessness / being new to kernel development that gave me =
+the impression that boards should have defconfigs. Since then I ran =
+across scripts/dt_to_config. I haven't tested it yet on my DT, but if it =
+does the right thing I don't think this board needs a defconfig.
+
+>> +CONFIG_CMDLINE=3D"console=3DttyAMA0 earlyprintk root=3D/dev/ram rw"
+
+> A definconfig should normall not rely on earlyprintk, just add
+> that when you actually need to debug the super-early boot
+> stages. With "earlycon" it should pick up the right console
+> from the stdout path and work almost as early.
+
+>> +CONFIG_BINFMT_FLAT=3Dy
+
+> Are you actually using flat binaries? I wasn't aware that this
+> is still possible on MMU-enabled kernels.
+
+>> +CONFIG_BLK_DEV_RAM=3Dy
+>> +CONFIG_BLK_DEV_RAM_COUNT=3D4
+
+> The old ramdisk boot is going away in the future, please use
+> initramfs instead. This should also save a good amount of RAM.
+
+I'll fix those in my tree and keep the defconfig around just in case, =
+but otherwise drop it from the submission. We can revisit it later when =
+the board is more complete.
+
+>> +CONFIG_DEVTMPFS=3Dy # FIXME: This is specific to my initrd. Remove=20=
+
+>> before upstream
+>stale comment?
+
+I believe I removed this in later versions though :-)
+
+Cheers,
+Stefan
+
+> Am 24.04.2026 um 11:54 schrieb Arnd Bergmann <arnd@arndb.de>:
+>=20
+> On Fri, Apr 24, 2026, at 09:13, Linus Walleij wrote:
+>> On Tue, Apr 21, 2026 at 10:24=E2=80=AFPM Stefan D=C3=B6singer
+>> <stefandoesinger@gmail.com> wrote:
+>>=20
+>>> This enables existing drivers that already are (UART) or will be =
+(USB,
+>>> GPIO) necessary to operate this board even if they aren't declared =
+in
+>>> the DTS yet.
+>>>=20
+>>> Signed-off-by: Stefan D=C3=B6singer <stefandoesinger@gmail.com>
+>>=20
+>> *I* personally (as SoC maintainer) think that having a few more =
+defconfigs
+>> is fine, even helpful.
+>>=20
+>> But I would defer this to the more senior SoC maintainers because I =
+think
+>> their stance is something like:
+>>=20
+>> - We have multi_v7_defconfig for compile testing
+>>=20
+>> - We know that binary gets way to big for your system: it's for build
+>>  testing and perhaps booting in QEMU or systems with many MB of
+>>  RAM, not for actually running it on products.
+>>=20
+>> - You are encouraged to keep your own defconfig out-of-tree.
+>=20
+> Right, we clearly need to do something better than what we are with
+> the general defconfigs, as I'm sure many of the existing ones are
+> never actually used for booting a machine, and are horribly out of
+> date with the Kconfig options.
+>=20
+> I wouldn't object to adding another defconfig for a new (or revived)
+> soc family, but I don't want to have more per-board ones.
+> Overall, we have about 70 defconfigs and 55 soc families that have =
+their
+> own mach-* directory (plus a few without code), and the number of
+> defconfigs alone makes it hard to keep them up to date.=20
+>=20
+>> However I even challenged this myself by adding a defconfig for =
+memory
+>> constrained Broadcoms a while back (NACKed/ignored ;) so if it was =
+all
+>> up to me I would merge this.
+>=20
+> I don't even remember that discussion ;-)
+>=20
+> One idea might be to have a tiny base defconfig, plus platform
+> specific fragments that add drivers. The problem is agreeing
+> what bits are essential enough to still get enabled in the
+> tiny config.
+>=20
+>       Arnd
+
+
+--Apple-Mail=_5D209284-6E0B-4B8C-B2C6-1CF1063CB628
 Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
 
-The following changes since commit 7fd2df204f342fc17d1a0bfcd474b24232fb0f32:
+-----BEGIN PGP SIGNATURE-----
 
-  Linux 7.1-rc2 (2026-05-03 14:21:25 -0700)
+iQIzBAEBCAAdFiEEQxb0tqoFWyeVMl1sPRO8yFRPGiIFAmoOu4EACgkQPRO8yFRP
+GiL8IQ//Zm20DYooaVaVCuklde82UX5X2MHKLX3bEwoqFm8OwrwK1a0bu61uKXRd
+TTj/RVjingjzc/MWqbhSiDLM+1tvrMaa8bhi16TRYn5upIa71KlieKL5Kd/9cmoW
+fqmI+HoIIq6mQTIYJ2GMCp0/ciADEXnE41buFWzPiu7BMeVInJMaYpX6NKyXd7ZG
+oAf3t5tCMMxrRfBq7bv4JV8TAjLdibq+SNyxH6xYoZwrW7J6pLYGeHJcbUNNHJFD
+Vl5PgpflnmNhfcQk7nTKufpY44szSAwB9GmiuOemwzmUEGv3V0e4t8Rni1FlHQsR
+gAUiB04OMbDSDV9kntSrZwbEUR4UkJLZhKanfJOTv/Sy6pNZLpcS0TB5YY7TEfcy
+lr1oKB9HXUka9mhPKFmGrC0TN7jkPKmkTLK70RXVtNX/pU4dFSsm0yP76XL2KrBA
+rfvH0At+i5cU3nPYvoOm56VkiOfHsnQB9adNQ5l8GeAUpQB6HI4jr23IhD8BYvsB
+yKxccCZ4tkD05c9InZqE+lsxvB9esDjo4gKZzFWhuXY/+4rOcRowbxsFGHt/TCWn
+9U7SU0cAsuce6Ex+oPs62EkqM0yyZ0FMVlmVGI9PJ5O1sJ5W6xYOlxwnLGH6TJNE
+bOIJ4WxSJmZra+QaQXak7qAOxAV92+Du/IioWZnoXjGc0BzTjhw=
+=rcPP
+-----END PGP SIGNATURE-----
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.1
-
-for you to fetch changes up to 1fcf4149418e7a8f8253dd74059d56340795503f:
-
-  Merge tag 'riscv-dt-fixes-for-v7.1-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into arm/fixes (2026-05-08 15:33:36 +0200)
-
-----------------------------------------------------------------
-soc: fixes for 7.1
-
-The ff-a firmware driver gets 11 individual bugfixes for a number
-of issues with robustness to buggy firmware or client implementations.
-Another firmware fix address suspend to RAM via PSCI firmware.
-
-The final code change is for the old Arm Integrator reference
-platform that recently started exposing an old NULL pointer
-dereference bug.
-
-The MAINTAINERS file gets two updates, notably James Tai and Yu-Chun
-Lin are stepping up as co-maintainers for the Realtek platform.
-
-The remaining patches are all for devicetree files. Two of these
-are for riscv  boards, the rest are all for enesas Arm platforms,
-addressing build time checking issues as well as minor configuration
-problems.
-
-----------------------------------------------------------------
-Arnd Bergmann (3):
-      Merge tag 'renesas-fixes-for-v7.1-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/fixes
-      Merge tag 'ffa-fixes-7.1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
-      Merge tag 'riscv-dt-fixes-for-v7.1-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into arm/fixes
-
-Conor Dooley (1):
-      riscv: dts: microchip: fix icicle i2c pinctrl configuration
-
-Geert Uytterhoeven (1):
-      arm64: dts: renesas: r8a78000: Fix SCIF brg_int clocks
-
-Guenter Roeck (1):
-      ARM: integrator: Fix early initialization
-
-Jai Luthra (1):
-      riscv: dts: starfive: jh7110: Drop CAMSS node
-
-Konrad Dybcio (1):
-      firmware: psci: Set pm_set_resume/suspend_via_firmware() for SYSTEM_SUSPEND
-
-Krzysztof Kozlowski (1):
-      ARM: realtek: MAINTAINERS: Include pin controller drivers
-
-Marek Vasut (10):
-      arm64: dts: renesas: draak/ebisu-panel: Fix missing cells and reg in DTO
-      arm64: dts: renesas: salvator-panel: Fix missing cells and reg in DTO
-      arm64: dts: renesas: rz-smarc-cru-csi-ov5645: Fix missing cells and reg in CSI2 subnode
-      arm64: dts: renesas: rz-smarc-du-adv7513-smarc: Fix missing cells and reg in DU subnode
-      ARM: dts: renesas: r8a7778: Add missing unit address to bus node
-      ARM: dts: renesas: r8a7779: Add missing unit address to bus node
-      ARM: dts: renesas: r8a7792: Add missing unit address to bus node
-      ARM: dts: renesas: r7s72100: Add missing unit address to bus node
-      ARM: dts: renesas: genmai: Drop superfluous cells
-      ARM: dts: renesas: rskrza1: Drop superfluous cells
-
-Sudeep Holla (11):
-      firmware: arm_ffa: Check for NULL FF-A ID table while driver registration
-      firmware: arm_ffa: Skip free_pages on RX buffer alloc failure
-      firmware: arm_ffa: Avoid collapsing NPI work from different CPUs
-      firmware: arm_ffa: Fix per-vcpu self notifications handling in workqueue
-      firmware: arm_ffa: Unregister bus notifier on teardown for FF-A v1.0
-      firmware: arm_ffa: Bound PARTITION_INFO_GET_REGS copies
-      firmware: arm_ffa: Keep framework RX release under lock
-      firmware: arm_ffa: Validate framework notification message layout
-      firmware: arm_ffa: Align RxTx buffer size before mapping
-      firmware: arm_ffa: Snapshot notifier callbacks under lock
-      firmware: arm_ffa: Fix sched-recv callback partition lookup
-
-Tommaso Merciai (2):
-      arm64: dts: renesas: r9a09g057: Add #mux-state-cells to usb2{0,1}phyrst
-      arm64: dts: renesas: r9a09g056: Add #mux-state-cells to usb20phyrst
-
-Yu-Chun Lin (1):
-      MAINTAINERS: Add maintainers for ARM/REALTEK ARCHITECTURE
-
- MAINTAINERS                                        |   5 +-
- arch/arm/boot/dts/renesas/r7s72100-genmai.dts      |   3 -
- arch/arm/boot/dts/renesas/r7s72100-rskrza1.dts     |   2 -
- arch/arm/boot/dts/renesas/r7s72100.dtsi            |   2 +-
- arch/arm/boot/dts/renesas/r8a7778.dtsi             |   2 +-
- arch/arm/boot/dts/renesas/r8a7779.dtsi             |   2 +-
- arch/arm/boot/dts/renesas/r8a7792.dtsi             |   2 +-
- arch/arm/mach-versatile/integrator_cp.c            |  13 +-
- .../dts/renesas/draak-ebisu-panel-aa104xd12.dtso   |   5 +
- arch/arm64/boot/dts/renesas/r8a78000.dtsi          |   8 +-
- arch/arm64/boot/dts/renesas/r9a09g056.dtsi         |   1 +
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi         |   2 +
- .../boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi  |   5 +
- .../boot/dts/renesas/rz-smarc-du-adv7513.dtsi      |   5 +
- .../boot/dts/renesas/salvator-panel-aa104xd12.dtso |   5 +
- .../boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi |  10 --
- .../boot/dts/microchip/mpfs-icicle-kit-prod.dts    |  10 ++
- arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts  |  19 +++
- arch/riscv/boot/dts/starfive/jh7110-common.dtsi    |  27 +---
- arch/riscv/boot/dts/starfive/jh7110.dtsi           |  28 ----
- drivers/firmware/arm_ffa/bus.c                     |   4 +-
- drivers/firmware/arm_ffa/driver.c                  | 144 +++++++++++++++------
- drivers/firmware/psci/psci.c                       |  10 ++
- 23 files changed, 183 insertions(+), 131 deletions(-)
+--Apple-Mail=_5D209284-6E0B-4B8C-B2C6-1CF1063CB628--
