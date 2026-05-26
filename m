@@ -1,42 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF6A3FFABE
-	for <soc@lists.linux.dev>; Tue, 26 May 2026 14:58:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9E434753C
+	for <soc@lists.linux.dev>; Tue, 26 May 2026 15:26:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779807525; cv=none; b=pIw4b+K9+Ira2Q9Nf0tRjoQnIrACGesBfmXI8sP68i9unjnnwLtMRi1S5qC4eMgRUre/zbRQ4teumoGmVuuhu67Z/FcuLE5rjcTe7o8lwRS3ZLtoSVgi2Rm9iNtaPfxbkfGWfKgtLyosPLU3HJ1J9fjAZaIIeJCC3pSF/ZQ32bg=
+	t=1779809166; cv=none; b=CHt1+9DJnHlhWB99mxvdXQFbIHTH/eN7pVzy/5h3Q5B9pjeAftXKInnHTign58jlwkYsoRX1DQ4an8NhIytUG2dfuLx4+5vOPALE+56WN6L5TuxXZNK9tqoflJ2BXkBAv9o32jtvHvw3lgIcsQqUiYB2J0peh6Nwn5SQgGydq8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779807525; c=relaxed/simple;
-	bh=Q3qtZLbaAxNe/Ml4Vco9cMIjOM7QZfDDdQCMEVNa+bc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fR2ph+vNTZFQE4Um0rgo2Dg1nOuipD9dK2KIUOv65A0TpHB5FrUzwOY8+3488qmtVBo1HDrC59BBGt9o0Z4NXxcMwVaVoJzgnhY5755A7gTC6R9JThgec4cOVNmREmu2BJwGEDUkkSqyeECKdIJoH5kkPsE9GCdPeKxQleddSvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3h9MqkN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779809166; c=relaxed/simple;
+	bh=ep6Fb8P4mvHUe5BtT3gJbMwyR8heCZQ2G/xsx7B1g3M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IVqM/6HSX3dgd9b7iQkvR0cK4GShbwss0KU5KJQiRKFvfHW6YPekXztBDw74a05fffSZf7b7sYG8gBdTXcVKsjq2cl3dSMHiRQk2U//k2zXYhUbq9GrHrvPkRWnHk2zSwiYjOaKe0tSh3c3WwG2UO4f3KVSNTHuHSbCl/c0jeGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DLhTsRoc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3h9MqkN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DLhTsRoc"
 Received: by smtp.kernel.org (Postfix)
-	id 3D67D1F00A3D; Tue, 26 May 2026 14:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C221F00A3A;
-	Tue, 26 May 2026 14:58:40 +0000 (UTC)
+	id A72711F00A3A; Tue, 26 May 2026 15:26:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6417C1F000E9;
+	Tue, 26 May 2026 15:26:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779807521;
-	bh=WnbVx3Wf8n6g8+1K3F3HfJOpAIxDrMkmDGUSYXimutM=;
+	s=k20260515; t=1779809164;
+	bh=uxU73nF8gsoP+9GE3Bs4snys6NdnKXB0MX+R9iiSiT0=;
 	h=From:To:Cc:Subject:Date;
-	b=S3h9MqkNM7nhIQAdnHRqHHOhGORSU9uOCjaf1rtdfYFp1vrt/v0ykAnPzXICAuCZG
-	 vszIoZPShp0ycja1BRp8WG9jZw60mTtiO/zDphA1stmOD7LfQr5UjlkzvvJ1JHYP4L
-	 4KwJLnHx6A9YdOI/CymDyR834bOH2q+oBe/NOTHboC2esPGsC1hIckPl/57dISN2KC
-	 uUTdnHNkwyx4JuO4jm0/6E1thR7T/7IuBbemaAVnHu4XMs/rNdHHssgEOml/bOZdlO
-	 HWzgYF4N6H1Ywnx2EGxu/jxldrmdfeJ070ZINYva1heUwR7IFMTnRWRa9cpC2pqeUZ
-	 /9jrRFihLaxOQ==
+	b=DLhTsRocxrCum8Nohtv0dzZzjlCL5fL5viYcrhzXekCng/Sif+JtLN+m2qi1Zqwd2
+	 H7WaswjdMFgGdEI1hR4+sS23STWN+o0xpdqv/tj17d1Sfxgx1YXHfDShiPXu2dt0M7
+	 NHTX6mbB4cwGCxTOVHaJR+FsV3ZOGYbJmL9q9hESquqSgcKifArqq6fE3eov99cY5A
+	 8PpnMqAcbPTJnXtJUx3hVfBi13pzXPYqkAcE0l+o2zbVSjrY51RtjtKa3g94U9cRMe
+	 aJI11g+kFUJKkqMydcECCTiHQImybTFeyZxLyTT84NZcB3Zq11tkTayKdzV6LI5Yw/
+	 ACMh6Wo4Jo1yw==
 From: Bjorn Andersson <andersson@kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: linux-arm-msm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Arnd Bergmann <arnd@arndb.de>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Subject: [GIT PULL] Qualcomm Arm64 defconfig fixes for v7.1
-Date: Tue, 26 May 2026 09:58:39 -0500
-Message-ID: <20260526145839.3800-1-andersson@kernel.org>
+	Praveen Talari <praveen.talari@oss.qualcomm.com>,
+	Abel Vesa <abel.vesa@oss.qualcomm.com>,
+	Alexander Koskovich <akoskovich@pm.me>,
+	Deepti Jaggi <deepti.jaggi@oss.qualcomm.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Francisco Munoz Ruiz <francisco.ruiz@oss.qualcomm.com>,
+	Komal Bajaj <komal.bajaj@oss.qualcomm.com>,
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+	Shawn Guo <shengchao.guo@oss.qualcomm.com>,
+	Dan Carpenter <error27@gmail.com>,
+	Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
+	Harrison Vanderbyl <harrison.vanderbyl@gmail.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Raj Aryan <raryan@qti.qualcomm.com>,
+	Rosen Penev <rosenp@gmail.com>,
+	Tony Truong <tony.truong@oss.qualcomm.com>
+Subject: [GIT PULL] Qualcomm driver updates for v7.2
+Date: Tue, 26 May 2026 10:26:00 -0500
+Message-ID: <20260526152600.5555-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -53,21 +69,135 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-fixes-for-7.1
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-7.2
 
-for you to fetch changes up to b73953af9bbd5c721c9d92b805a8aea8b0db74b1:
+for you to fetch changes up to 23cee0d07a412f1fadb236358e0d834fabf0efcc:
 
-  arm64: defconfig: Enable PCI M.2 power sequencing driver (2026-05-18 09:56:50 -0500)
-
-----------------------------------------------------------------
-Qualcomm Arm64 defconfig fixes for v7.1
-
-A number of targets now depends on the M.2 PCIe power sequencing driver,
-enable this to keep these devices functional with a defconfig build.
+  Merge branch '20260227061544.1785978-1-praveen.talari@oss.qualcomm.com' into drivers-for-7.2 (2026-05-21 22:00:31 -0500)
 
 ----------------------------------------------------------------
-Manivannan Sadhasivam (1):
-      arm64: defconfig: Enable PCI M.2 power sequencing driver
+Qualcomm driver updates for v7.2
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Enable QSEECOM and with that access to UEFI variables on the Surface Pro
+12in laptop.
+
+Refactor the Geni Serial-Engine helper code to allow the serial engine
+drivers (such as I2C) to operate on targets where power and performance
+is controlled through an SCMI server instead of individual resources in
+Linux.
+
+Extend the LLCC driver to support reading its data from a System Cache
+Table (SCT) in memory instead of being hard coded per platform in the
+driver. Also add support for the Eliza platform.
+
+Add support for the Hawi platform to pd-mapper.
+
+Switch the SMEM driver to track partitions using xarray to handle the
+ever growing number of hosts better.
+
+Extend the socinfo driver with knowledge about the Nord, SM7750,
+IPQ9650, and Shikra SoCs, as well as PMAU0102, PMC1020H, PMIV0102, and
+PMIV0104 PMICs.
+
+Define UBWC 3.1 and add a couple of convenient helpers in the UBWC
+library for MDSS and Adreno.
+
+Fix a memory leak in the WCNSS firmware download mechanism.
+
+----------------------------------------------------------------
+Abel Vesa (4):
+      dt-bindings: soc: qcom: qcom,pmic-glink: Document Eliza compatible
+      dt-bindings: soc: qcom,aoss-qmp: Document the Eliza Always-On Subsystem side channel
+      dt-bindings: cache: qcom,llcc: Document Eliza LLCC block
+      soc: qcom: llcc-qcom: Add support for Eliza
+
+Alexander Koskovich (3):
+      soc: qcom: socinfo: Add PMIV0102 & PMIV0104 PMICs
+      dt-bindings: arm: qcom,ids: Add SoC ID for SM7750
+      soc: qcom: socinfo: Add SoC ID for SM7750
+
+Bjorn Andersson (2):
+      Merge branch '20260507-ubwc-rework-v4-4-c19593d20c1d@oss.qualcomm.com' into drivers-for-7.2
+      Merge branch '20260227061544.1785978-1-praveen.talari@oss.qualcomm.com' into drivers-for-7.2
+
+Dan Carpenter (1):
+      soc: qcom: llcc-qcom: Fix NULL vs IS_ERR() bug in qcom_llcc_get_fw_config()
+
+Deepti Jaggi (3):
+      dt-bindings: qcom: geni-se-qup: Add compatible for SA8797P SoC
+      dt-bindings: arm: qcom,ids: Add SoC ID for Nord SA8797P
+      soc: qcom: socinfo: Add SoC ID for Nord SA8797P
+
+Dmitry Baryshkov (3):
+      soc: qcom: ubwc: define UBWC 3.1
+      soc: qcom: ubwc: define helper for MDSS and Adreno drivers
+      soc: qcom: ubwc: add helper controlling AMSBC enablement
+
+Fenglin Wu (1):
+      dt-bindings: soc: qcom: qcom,pmic-glink: Add Hawi compatible string
+
+Francisco Munoz Ruiz (3):
+      dt-bindings: cache: qcom,llcc: Document Hawi SoC
+      soc: qcom: llcc-qcom: get SCT descriptors from fw-populated memory
+      soc: qcom: llcc-qcom: Capitalize LLCC/EDAC in comments and diagnostics
+
+Harrison Vanderbyl (1):
+      firmware: qcom: scm: Allow QSEECOM on Surface Pro 12in
+
+Kathiravan Thirumoorthy (2):
+      dt-bindings: arm: qcom,ids: add SOC IDs for IPQ9650 family
+      soc: qcom: socinfo: add SoC ID for IPQ9650 family
+
+Komal Bajaj (3):
+      dt-bindings: cache: qcom,llcc: Document Shikra LLCC
+      dt-bindings: arm: qcom,ids: Add SoC ID for Shikra IoT variants
+      soc: qcom: socinfo: Add SoC ID for Shikra IoT variants
+
+Konrad Dybcio (1):
+      soc: qcom: socinfo: Add PMICs that ship with Glymur
+
+Mukesh Ojha (3):
+      dt-bindings: firmware: qcom,scm: Document SCM on Hawi SoC
+      dt-bindings: soc: qcom,aoss-qmp: Document the Hawi AOSS side channel
+      soc: qcom: pd-mapper: Add support for Hawi SoC
+
+Praveen Talari (7):
+      soc: qcom: geni-se: Refactor geni_icc_get() and make qup-memory ICC path optional
+      soc: qcom: geni-se: Add geni_icc_set_bw_ab() function
+      soc: qcom: geni-se: Introduce helper API for resource initialization
+      soc: qcom: geni-se: Handle core clk in geni_se_clks_off() and geni_se_clks_on()
+      soc: qcom: geni-se: Add resources activation/deactivation helpers
+      soc: qcom: geni-se: Introduce helper API for attaching power domains
+      soc: qcom: geni-se: Introduce helper APIs for performance control
+
+Raj Aryan (1):
+      soc: qcom: spmi-pmic: add SUBTYPEs for Glymur/Kaanapali/SM8750 PMICs
+
+Rosen Penev (1):
+      soc: qcom: wcnss: fix leak of fw
+
+Shawn Guo (2):
+      dt-bindings: firmware: qcom,scm: Document SCM for Nord SoC
+      soc: qcom: socinfo: Add PMIC PMAU0102
+
+Tony Truong (1):
+      soc: qcom: smem: Switch partitions to xarray
+
+ .../devicetree/bindings/cache/qcom,llcc.yaml       |  43 ++
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |   3 +
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |   2 +
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml         |   6 +
+ .../soc/qcom/qcom,sa8255p-geni-se-qup.yaml         |  31 +-
+ drivers/firmware/qcom/qcom_scm.c                   |   1 +
+ drivers/soc/qcom/llcc-qcom.c                       | 481 ++++++++++++++++++---
+ drivers/soc/qcom/qcom-geni-se.c                    | 270 +++++++++++-
+ drivers/soc/qcom/qcom_pd_mapper.c                  |   8 +
+ drivers/soc/qcom/smem.c                            |  56 +--
+ drivers/soc/qcom/socinfo.c                         |  23 +
+ drivers/soc/qcom/wcnss_ctrl.c                      |  11 +-
+ include/dt-bindings/arm/qcom,ids.h                 |  11 +
+ include/linux/soc/qcom/geni-se.h                   |  19 +
+ include/linux/soc/qcom/llcc-qcom.h                 |  44 +-
+ include/linux/soc/qcom/ubwc.h                      |  22 +
+ include/soc/qcom/qcom-spmi-pmic.h                  |  15 +-
+ 17 files changed, 920 insertions(+), 126 deletions(-)
