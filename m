@@ -1,96 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94AC3FD15E
-	for <soc@lists.linux.dev>; Tue, 26 May 2026 16:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779814662; cv=none; b=XXMNjwl3woomM6ulxP5pf50KFLp5KnZ613nYuVAzXQ/uVb28eyJ3kHbAS5ai2Wjim4GVoH5UT8qaT7sxRHJN7UgM6RgXmPvc0vKa7d1iVwxDuo0ppCwp0Ir/Ufal92MgGHBSLcbg+d9dr4q75iEINMU/Y8AEEgfML2V4zwYAAuk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779814662; c=relaxed/simple;
-	bh=LrGTK5hEJBJKXpLRrQWnmcNlY+/HIB56ugJXInM0FCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aVCjjPgRToKXXOAfrFZUqw2S4XOG13aGZ0g+Nft0BzGPZk6rw6VewBVLC3F2rSrMPPfLTTqif59lvengS5P4Yyi7Gp3WV/Vpe5Rhfsh/vURdpK3pF4rqkWMD8J9xiKo01B4MX+nwop6K6P1bmB2VBi/AKWAA0mJnMhpbhUaA8g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z5LXTm/V; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AEB33F5B2
+	for <soc@lists.linux.dev>; Tue, 26 May 2026 21:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779830247; cv=pass; b=rqKTiFc0PaGoH7bqMhXsap585X9FfFFfEtU9luJz5JBtmYGWk94NQQ37SoQn/8p+CrkW5aO1tBuTH9TJwmIUnTX0BjRL+lHOnpKvaU6h4ZIApmp7x2D/WfuTVjljJaMUy1z2JOtGvT91fvl2E5f4zCkO3ANlNg7bReMhsROiKlE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779830247; c=relaxed/simple;
+	bh=g7tQWotYtxWvNUunu5u4DxiOI8aghTyRqsgsECoBm1U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WbEtCM9AguDTPncSZO2JuqaTdmJ1sPNhjTfgxwPyayJ5mhSQo8kU2S4V4SyReCGMqaiYxJ3Wh9bHiyyoQAr885w440m5bnAlLSEXLJPwKRLJy7l1BjYlftoGUZUVzii90npZe1wunO0wWGYfTq0uRI+6Fjvb2ZsoHorajhZ7znM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=x3+eEEiF; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z5LXTm/V"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="x3+eEEiF"
 Received: by smtp.kernel.org (Postfix)
-	id B4F041F00A3A; Tue, 26 May 2026 16:57:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2FA1F000E9;
-	Tue, 26 May 2026 16:57:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779814660;
-	bh=4GIS2BQH/0YWDLgStt9K/5Y5CzGpCmL3mhdfIxqrNUQ=;
-	h=From:To:Cc:Subject:Date;
-	b=Z5LXTm/VQSbhUZGks5vPlaIbz8FSxdz/syb/u9WPOAZgH3b0BasTNoagbx8F+xl/C
-	 OR82NyRwsTyTV8P2LaOM22pMJXMIbhnKfGhbQACES4+PIr90FkJjBnxcVT2Th0/CtV
-	 Ud0gY+TBwjH70CwV8sI5dAdQu4+Zot+7WYCsqxi39AE26WDkwwPyKGFqHPA7CSUrzm
-	 xb+5rR6YvM7SBFmbsu19LwKIH2H4T6sagDa3LkodiyP62/Unwk/20WH7uRqlTRJcXB
-	 A5O/+2570yDmPkU0puEWBPGRqoDWxWPxcA9kiT+uvul45liS9ElF5ZEaFvtpGw274b
-	 Tn1K1RmR8Fldg==
-From: Bjorn Andersson <andersson@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Harshal Dev <harshal.dev@oss.qualcomm.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	David Heidelberg <david@ixit.cz>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Abel Vesa <abel.vesa@oss.qualcomm.com>,
-	Alexander Koskovich <akoskovich@pm.me>,
-	Richard Acayan <mailingradian@gmail.com>,
-	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
-	Nickolay Goppen <setotau@mainlining.org>,
-	Paul Sajna <sajattack@postmarketos.org>,
-	Ronak Raheja <ronak.raheja@oss.qualcomm.com>,
-	Kuldeep Singh <kuldeep.singh@oss.qualcomm.com>,
-	Le Qi <le.qi@oss.qualcomm.com>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Mani Chandana Ballary Kuntumalla <quic_mkuntuma@quicinc.com>,
-	Sibi Sankar <sibi.sankar@oss.qualcomm.com>,
-	Taniya Das <taniya.das@oss.qualcomm.com>,
-	Val Packett <val@packett.cool>,
-	Aaron Kling <webgeek1234@gmail.com>,
-	Aastha Pandey <aastha.pandey@oss.qualcomm.com>,
-	Amit Pundir <amit.pundir@linaro.org>,
-	Anup Kulkarni <anup.kulkarni@oss.qualcomm.com>,
-	Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>,
-	Gopikrishna Garmidi <gopikrishna.garmidi@oss.qualcomm.com>,
-	Griffin Kroah-Hartman <griffin.kroah@fairphone.com>,
-	Haritha S K <haritha.k@oss.qualcomm.com>,
-	Harrison Vanderbyl <harrison.vanderbyl@gmail.com>,
-	Jens Reidel <adrian@travitia.xyz>,
-	Jie Gan <jie.gan@oss.qualcomm.com>,
-	Joel Selvaraj <foss@joelselvaraj.com>,
-	Kamal Wadhwa <kamal.wadhwa@oss.qualcomm.com>,
-	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-	Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
-	Pengyu Luo <mitltlatltl@gmail.com>,
-	Petr Hodina <petr.hodina@protonmail.com>,
-	Ritesh Kumar <quic_riteshk@quicinc.com>,
-	Saurabh Anand <saurabh.anand@oss.qualcomm.com>,
-	Shawn Guo <shengchao.guo@oss.qualcomm.com>,
-	Shuai Zhang <shuai.zhang@oss.qualcomm.com>,
-	Vishnu Saini <vishnu.saini@oss.qualcomm.com>,
-	Wojciech Slenska <wojciech.slenska@gmail.com>,
-	Xilin Wu <sophon@radxa.com>,
-	Xin Liu <xin.liu@oss.qualcomm.com>,
-	Yedaya Katsman <yedaya.ka@gmail.com>
-Subject: [GIT PULL] Qualcomm Arm64 DeviceTree updates for v7.2
-Date: Tue, 26 May 2026 11:57:35 -0500
-Message-ID: <20260526165735.17848-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	id 00DED1F00A3D; Tue, 26 May 2026 21:17:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1779830242;
+	b=xmzH70AAepU8V+MqKqU/G7RDJnZgdmgjki5985x0Zf5nIEJmwa71zUdwmLzhQH14Fv8K
+	 uvO8TeFpgpyRQEIpPCPUyID2S7za8mtwp5wgUEAVo7heEOJZFSI+ZCzk45HuaHaZPpF37
+	 42C32XN7NgrZUd/LcXHIlBxJqVUFLdZegc7IpTeRoBzMOfSZka2isQ3J/WS8JZg7hCGw7
+	 D2jNuN6Fde9Z0feesCYcUKX8CU7zp53PLOpSYKyfoo0sAEWo7ewdFhFDBxtAKJFiLUbJa
+	 4adDA022G10l1iAVjXn+6OYavvTpkhlsuLFNk0QD8DiXOh0vYRV+f48RSLz5rnRtHNg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1779830242;
+	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type;
+	bh=ez8fFYJHo+p/fvCYM7xHQav/uAoCjVVTgRtYyWWnalo=;
+	b=RCo/6v8oZJt+/rF3S1f2kBZrMgRRdDlRojsbncGs2WBY/QHEXpG92geVvVrku3M8Da6g
+	 HKrze99qqvwWBHS15SaNDpzWbuSTurlyIMIZOOB1xV3PsXk57aUooDYxPMlxYjrbFiOPb
+	 lAZF0MYDMnmInVOaGpXZsoeHYxaqo0nDQqcHaMJLgd6GJY3lgXZnp0T5ouOXhAwyK3jI3
+	 Dufy6f4YcvDes63vI7yD/n6YNLo+OIulFafasH5A+lWLeIlr4hNgWMC/LKRRDPpd6MPr1
+	 ce14+cqRY+Yrjum+1Zqw66SV/Bj+HCxY7+/wHhAOzWYzJp8nft9xAmpLHf0sDj87MwQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=x3+eEEiF;
+	dmarc=pass header.from=sntech.de;
+	spf=pass smtp.mailfrom=sntech.de;
+	arc=none smtp.remote-ip=185.11.138.130
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 965651F000E9;
+	Tue, 26 May 2026 21:17:20 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=x3+eEEiF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 965651F000E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=ez8fFYJHo+p/fvCYM7xHQav/uAoCjVVTgRtYyWWnalo=; b=x3+eEEiFUkMbB1GyVj297RuTLm
+	sKDuJrenO565G2tj1/XhcIn1GLNitaTXRIAp2O+VOLMnI1Sjbx5PFH6G31gO7jjoN6kAfUnBx1+OR
+	n/h022bMwUTv8XZQTy6jL2VRuoTMWVJEd+LYLA+V8xqmS+Dp4m7CrMOGd91YCflt/vum1xA6e7FQr
+	1wErswHFTC7m5Z8LPkmygreBbEQko4QR2yHQz5k7BcpWuNLZQFichghPAJIUg68Q0kIZSYy+kHuao
+	z++7ACFmxvW53cEVZ9zjxg19S/538K3UJ5gutcNcD0cS83KeVS4BG+9/6Jlob0WxyaNMyxudOTh0q
+	p50zMWjw==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts32 changes for 7.2 #1
+Date: Tue, 26 May 2026 23:17:09 +0200
+Message-ID: <14415443.zAa99ISigo@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+
+Hi soc maintainers,
+
+please find below Rockchip ARM32 DT changes for the merge-window for 7.2 .
+
+
+Please pull.
+Thanks
+Heiko
 
 
 The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
@@ -99,396 +89,25 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-7.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.2-rockchip-dts32
 
-for you to fetch changes up to f3919fa784a3e6dd557dfe2c41072f55742e013f:
+for you to fetch changes up to 98461edf564a35ee00a97a64f5463eaece586546:
 
-  arm64: dts: qcom: add support for pixel 3a xl with the tianma panel (2026-05-21 22:46:53 -0500)
-
-----------------------------------------------------------------
-Qualcomm Arm64 DeviceTree updates for v7.2
-
-Introduce the Qualcomm IPQ9650 router/gateway platform and the RDP488
-board. Add support for the Motorola Edge 30 and the Nothing Phone.
-
-Describe the IPA block on the Agatti platform and missing OPP-levels for
-the video encoder/decoder.
-
-For Eliza, describe the QUP Serial Engines, GPI DMA, SDHCI, LLCC, IMEM,
-QCE crypto, ADSP remoteproc and USB nodes. Enable DSI panel,
-DisplayPort, USB, and ADSP support on the Eliza MTP.
-
-On Glymur enable ADSP and CDSP remoteprocs, FastRPC, crypto hardware,
-CPUfreq cooling devices, and coresight nodes. Enable the remoteprocs and
-the LID sensor on the Glymur CRD.
-
-Describe the CAN-FD controller found on the Hamoa EVK. Correct the
-DisplayPort controller OPP tables.
-
-Describe the watchdog on IPQ5210 and IPQ9650.
-
-Describe USB controller and PHYs for the Kaanapali platform and enable
-basic USB support on the MTP and QRD devices.
-
-Enable the second display subsystem on Lemans and use this to enable
-additional DisplayPort outputs on the Lemans Ride board, and IFP
-mezzanine for the EVK. Also enable the GPIO expander on the Lemans EVK
-to get the CAN signals out.
-
-Add crypto hardware and qfprom nodes on Milos. Reduce the remotefs
-shared memory size to avoid sanity checks in the modem firmware
-rejecting the region.
-Enable the vibrator on FairPhone FP6.
-
-Add GPSDP FastRPC support on Monaco, and describe the Bluetooth
-controller on the Arduino VENTUNO Q board.
-
-Introduce an EL2 overlay for the Purwa IoT EVK.
-
-Enable CAN bus controller on QCS6490 RB3gen2 and add a remotefs node.
-
-Enable FastRPC on the SC8280XP ADSP.
-
-Correct SDM630 and SDM660 ADSP FastRPC channel ids. Also add the ADSP
-memory region on SDM630.
-
-On SDM845 devices, enable NFC on Google Pixel 3, OnePlus 6, OnePlus 6T,
-and SHIFT SHIFT6mq. Enable camera flash on LG devices. Rework the
-framebuffer description on Samsung, SHIFT and Xiaomi devices. Enable
-camera flash on LG devices. Fix Bluetooth and WiFi on LG and Xiaomi
-devices.
-
-Enable MDSS and the display panel on Xiaomi Mi A3.
-
-Scale L3 and DDR clock votes based on CPUfreq selection.
-
-Enable camera clock controller, cpufreq cooling devices, and correct the
-DSI1 reference clock on SM8750.
-
-On the Talos platform, describe the QSPI support, GPR and audio
-services, and enable sound on the EVK target. Enable QSPI and describe
-the SPINOR on this bus, on the QCS615 Ride.
-
-Describe power-domain and iface clock for the Inline Crypto Engine (ICE)
-across various platforms.
-
-Fix the Bluetooth RFA supply name across a variety of devices.
+  ARM: dts: rockchip: Add #{address,size}-cells to Chromium-based /firmware (2026-05-05 19:26:18 +0200)
 
 ----------------------------------------------------------------
-Aaron Kling (1):
-      arm64: dts: qcom: sm8550: add cpu OPP table with DDR, LLCC & L3 bandwidths
+Cleanups for RK3288-based ChromeOS platform.
 
-Aastha Pandey (1):
-      arm64: dts: qcom: sm8750: Enable cpufreq cooling devices
+----------------------------------------------------------------
+Brian Norris (1):
+      ARM: dts: rockchip: Add #{address,size}-cells to Chromium-based /firmware
 
-Abel Vesa (9):
-      arm64: dts: qcom: hamoa: Fix OPP tables for all DisplayPort controllers
-      arm64: dts: qcom: glymur-crd: Enable LID sensor
-      arm64: dts: qcom: glymur-crd: Drop forced host mode for USB SS0 and SS1
-      arm64: dts: qcom: glymur: Mark USB SS1 and SS2 as role-switch capable
-      arm64: dts: qcom: eliza: Describe the ADSP and USB related nodes
-      arm64: dts: qcom: Add Eliza-specific PM7550BA dtsi
-      arm64: dts: qcom: eliza-mtp: Enable USB and ADSP support
-      arm64: dts: qcom: eliza-mtp: Fix the debug UART index
-      arm64: dts: qcom: eliza: Add QUPv3, GPI DMA, SDHCI and LLCC nodes
+Fabio Estevam (1):
+      ARM: dts: rockchip: Remove invalid properies from rk3288-veyron-analog-audio
 
-Alexander Koskovich (8):
-      arm64: dts: qcom: milos: Reduce rmtfs_mem size to 2.5MiB
-      dt-bindings: arm: qcom: Add the Nothing Phone (3a)
-      arm64: dts: qcom: Add the Nothing Phone (3a)
-      arm64: dts: qcom: milos: Add QCrypto nodes
-      arm64: dts: qcom: eliza: Sort nodes by unit address
-      arm64: dts: qcom: eliza: Add IMEM node
-      arm64: dts: qcom: eliza: Fix reserved memory addresses & sizes
-      arm64: dts: qcom: milos: Add qfprom efuse node
+ arch/arm/boot/dts/rockchip/rk3288-veyron-analog-audio.dtsi | 2 --
+ arch/arm/boot/dts/rockchip/rk3288-veyron.dtsi              | 5 +++++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Amit Pundir (1):
-      arm64: dts: qcom: sdm845-xiaomi-beryllium: Enable ath10k host-cap skip quirk
 
-Anup Kulkarni (1):
-      arm64: dts: qcom: lemans-evk: Enable CAN RX via I2C GPIO expander
 
-Bjorn Andersson (3):
-      Merge branch '20260225-topic-wcn6855_pmu_dtbdings-v3-1-576ec5c4e631@oss.qualcomm.com' into arm64-for-7.2
-      Merge branch '20260507-ipq9650_boot_to_shell-v3-1-62742b49c991@oss.qualcomm.com' into arm64-for-7.2
-      Merge branch '20260416-qcom_ice_power_and_clk_vote-v5-13-5ccf5d7e2846@oss.qualcomm.com' into arm64-for-7.2
-
-David Heidelberg (10):
-      arm64: dts: qcom: sdm845-oneplus: Drop address from framebuffer node
-      arm64: dts: qcom: sdm845-shift-axolotl: Convert fb to use memory-region
-      arm64: dts: qcom: sdm845-samsung-starqltechn: Convert fb to use memory-region
-      arm64: dts: qcom: sdm845-oneplus: Enable NFC
-      arm64: dts: qcom: sdm845-shift-axolotl: Correct touchscreen sleep state
-      arm64: dts: qcom: sdm845-shift-axolotl: Enable NFC
-      arm64: dts: qcom: sdm845-google-common: Enable NFC
-      dt-bindings: arm: qcom: Document Xiaomi Poco F1 Tianma variant
-      arm64: dts: qcom: sdm845-oneplus: Enable known blocks and add placeholders
-      arm64: dts: qcom: sdm845-shift-axolotl: describe WiFi/BT properly
-
-Dikshita Agarwal (1):
-      arm64: dts: qcom: agatti: add higher OPP levels
-
-Dmitry Baryshkov (1):
-      arm64: dts: qcom: qcs6490-rb3gen2: add rmtfs node
-
-Ekansh Gupta (1):
-      arm64: dts: qcom: monaco: add GDSP fastrpc-compute-cb nodes
-
-Gopikrishna Garmidi (1):
-      arm64: dts: qcom: glymur: Fix wrong interrupt number for i2c19
-
-Griffin Kroah-Hartman (1):
-      arm64: dts: qcom: milos-fairphone-fp6: Add vibrator support
-
-Haritha S K (1):
-      arm64: dts: qcom: glymur: Enable cpufreq cooling devices
-
-Harrison Vanderbyl (1):
-      dt-bindings: arm: qcom: Add Microsoft Surface Pro 12in
-
-Harshal Dev (12):
-      arm64: dts: qcom: glymur: Add crypto engine and BAM
-      arm64: dts: qcom: milos: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: eliza: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: kaanapali: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: lemans: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: monaco: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: sc7180: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: kodiak: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: sm8450: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: sm8550: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: sm8650: Add power-domain and iface clk for ice node
-      arm64: dts: qcom: sm8750: Add power-domain and iface clk for ice node
-
-Jens Reidel (1):
-      arm64: dts: qcom: sdm845-xiaomi-beryllium: Append compatible strings
-
-Jie Gan (1):
-      arm64: dts: qcom: glymur: add coresight nodes
-
-Joel Selvaraj (1):
-      arm64: dts: qcom: sdm845-xiaomi-beryllium: Correct IPA FW path
-
-Kamal Wadhwa (1):
-      arm64: dts: qcom: fix temp-alarm probe failure for PMH0104 on Glymur
-
-Kathiravan Thirumoorthy (5):
-      dt-bindings: clock: add Qualcomm IPQ9650 GCC
-      dt-bindings: qcom: add IPQ9650 boards
-      arm64: dts: qcom: add IPQ9650 SoC and rdp488 board support
-      arm64: dts: qcom: ipq9650: add watchdog node
-      arm64: dts: qcom: ipq5210: add watchdog node
-
-Konrad Dybcio (10):
-      dt-bindings: net: bluetooth: qualcomm: Fix WCN6855 regulator names
-      arm64: dts: qcom: qcs615-ride: Fix BT RFA supply name
-      arm64: dts: qcom: sc8280xp-crd: Fix BT RFA supply name
-      arm64: dts: qcom: sc8280xp-gaokun3: Fix BT RFA supply name
-      arm64: dts: qcom: sc8280xp-x13s: Fix BT RFA supply name
-      arm64: dts: qcom: sc8280xp-blackrock: Fix BT RFA supply name
-      arm64: dts: qcom: sm8450-hdk: Fix BT RFA supply name
-      arm64: dts: qcom: x1-omnibook-x14: Fix BT RFA supply name
-      arm64: dts: qcom: x1-zenbook-a14: Fix BT RFA supply name
-      arm64: dts: qcom: lemans-ride-common: Fix up WCN power grid
-
-Krzysztof Kozlowski (11):
-      arm64: dts: qcom: glymur: Fix USB simple_bus_reg warning
-      arm64: dts: qcom: glymur: Fix cache and SRAM simple_bus_reg warnings
-      arm64: dts: qcom: ipq5424: Fix USB simple_bus_reg warnings
-      arm64: dts: qcom: sc8180x: Fix phy simple_bus_reg warning
-      arm64: dts: qcom: sdm845-mezzanine: Fix camss ports unit_address_vs_reg warning
-      arm64: dts: qcom: eliza: Add QCE crypto
-      arm64: dts: qcom: Use GIC_SPI macro for interrupt-map
-      arm64: dts: qcom: sm8750: Fix DSI1 phy reference clock rate
-      arm64: dts: qcom: eliza: Add display (MDSS) with Display CC
-      arm64: dts: qcom: eliza-mtp: Enable DSI display panel
-      arm64: dts: qcom: eliza-mtp: Enable DisplayPort on USB
-
-Kuldeep Singh (2):
-      arm64: dts: qcom: kodiak: Fix ICE reg size
-      arm64: dts: qcom: sm8450: Fix ICE reg size
-
-Le Qi (2):
-      arm64: dts: qcom: talos: Add GPR node, audio services, and MI2S1 TLMM pins
-      arm64: dts: qcom: talos-evk: Add sound card support with DA7212 codec
-
-Luca Weiss (2):
-      arm64: dts: qcom: sm6350: add LPASS LPI pin controller
-      arm64: defconfig: Enable LPASS LPI pin controller for SM6350
-
-Mani Chandana Ballary Kuntumalla (2):
-      arm64: dts: qcom: lemans: add mdss1 display device nodes
-      arm64: dts: qcom: lemans-ride: Enable mdss1 display Port
-
-Mukesh Ojha (1):
-      arm64: dts: qcom: Drop unused remoteproc_adsp_glink label
-
-Nickolay Goppen (5):
-      dt-bindings: firmware: qcom: scm: add CP_ADSP_SHARED VMID
-      arm64: dts: qcom: sdm660: set cdsp compute-cbs' regs properly
-      arm64: dts: qcom: sdm630: set adsp compute-cbs' regs properly
-      arm64: dts: qcom: sdm630: describe adsp_mem region properly
-      arm64: dts: qcom: sdm630: assign adsp_mem region to ADSP FastRPC node
-
-Pankaj Patil (1):
-      arm64: dts: qcom: glymur: Add qfprom efuse node
-
-Paul Sajna (4):
-      arm64: dts: qcom: sdm845-lg-common: Add camera flash
-      arm64: dts: qcom: sdm845-lg-common: Change ipa gsi-loader to 'self', add memory-region
-      arm64: dts: qcom: sdm845-lg-{judyln, judyp}: Reference memory region in fb
-      arm64: dts: qcom: sdm845-lg: Enable qcom,snoc-host-cap-skip-quirk
-
-Pengyu Luo (1):
-      arm64: dts: qcom: sc8280xp: Add ADSP FastRPC node
-
-Petr Hodina (1):
-      arm64: dts: qcom: sdm845-xiaomi-beryllium: Introduce framebuffer
-
-Richard Acayan (6):
-      arm64: dts: qcom: sdm670: label the camss ports instead of endpoints
-      arm64: dts: qcom: sdm670: add camera mclk pins
-      arm64: dts: qcom: sdm670-google-sargo: add imx355 front camera
-      arm64: dts: qcom: sdm670: add lpi pinctrl
-      arm64: dts: qcom: sdm670-google: add common device tree include
-      arm64: dts: qcom: add support for pixel 3a xl with the tianma panel
-
-Ritesh Kumar (1):
-      arm64: dts: qcom: lemans: Add eDP ref clock for eDP PHYs
-
-Ronak Raheja (3):
-      arm64: dts: qcom: kaanapali: Add USB support for Kaanapali SoC
-      arm64: dts: qcom: kaanpaali: Add USB support for MTP platform
-      arm64: dts: qcom: kaanpaali: Add USB support for QRD platform
-
-Saurabh Anand (1):
-      arm64: dts: qcom: sm8750: allow mode-switch events to reach the QMP Combo PHY
-
-Shawn Guo (1):
-      arm64: dts: qcom: lemans: Move PCIe devices into soc node
-
-Shuai Zhang (1):
-      arm64: dts: qcom: monaco-arduino-monza: Add Bluetooth UART node
-
-Sibi Sankar (2):
-      arm64: dts: qcom: glymur: Add ADSP and CDSP for Glymur SoC
-      arm64: dts: qcom: glymur-crd: Enable ADSP and CDSP
-
-Taniya Das (2):
-      arm64: dts: qcom: Add support for MM clock controllers for Glymur
-      arm64: dts: qcom: sm8750: Add camera clock controller
-
-Val Packett (2):
-      dt-bindings: arm: qcom: Add SM7325 Motorola Edge 30 (dubai)
-      arm64: dts: qcom: Add Motorola Edge 30 (dubai) DTS
-
-Viken Dadhaniya (6):
-      arm64: dts: qcom: qcs6490-rb3gen2: Enable CAN bus controller
-      arm64: dts: qcom: talos: Add QSPI support
-      arm64: dts: qcom: qcs615-ride: Enable QSPI and NOR flash
-      arm64: dts: qcom: kodiak: Add QSPI memory interconnect path
-      arm64: dts: qcom: sc7180: Add QSPI memory interconnect path
-      arm64: dts: qcom: hamoa-iot-evk: add MCP2518FD CAN on spi18
-
-Vishnu Saini (1):
-      arm64: dts: qcom: lemans-evk-ifp-mezzanine: Enable mdss1 display Port
-
-Wojciech Slenska (1):
-      arm64: dts: qcom: agatti: Add IPA nodes
-
-Xilin Wu (1):
-      arm64: dts: qcom: sc8280xp: drop unused polling-delay-passive properties
-
-Xin Liu (1):
-      arm64: dts: qcom: purwa: Add EL2 overlay for purwa-iot-evk
-
-Yedaya Katsman (1):
-      arm64: dts: qcom: sm6125-xiaomi-laurel-sprout: Enable MDSS and add panel
-
- Documentation/devicetree/bindings/arm/qcom.yaml    |   21 +-
- .../bindings/clock/qcom,ipq9650-gcc.yaml           |   68 +
- .../bindings/net/bluetooth/qcom,wcn6855-bt.yaml    |    7 +-
- arch/arm64/boot/dts/qcom/Makefile                  |    8 +
- arch/arm64/boot/dts/qcom/agatti.dtsi               |   63 +
- arch/arm64/boot/dts/qcom/eliza-mtp.dts             |  156 +-
- arch/arm64/boot/dts/qcom/eliza.dtsi                | 2707 ++++++++++++++++++--
- arch/arm64/boot/dts/qcom/glymur-crd.dts            |    4 -
- arch/arm64/boot/dts/qcom/glymur-crd.dtsi           |   33 +-
- arch/arm64/boot/dts/qcom/glymur.dtsi               | 1856 ++++++++++++--
- arch/arm64/boot/dts/qcom/hamoa-iot-evk.dts         |   21 +
- arch/arm64/boot/dts/qcom/hamoa.dtsi                |   77 +-
- arch/arm64/boot/dts/qcom/ipq5210.dtsi              |    7 +
- arch/arm64/boot/dts/qcom/ipq5424.dtsi              |    4 +-
- arch/arm64/boot/dts/qcom/ipq9650-rdp488.dts        |   79 +
- arch/arm64/boot/dts/qcom/ipq9650.dtsi              |  384 +++
- arch/arm64/boot/dts/qcom/kaanapali-mtp.dts         |   27 +
- arch/arm64/boot/dts/qcom/kaanapali-qrd.dts         |   27 +
- arch/arm64/boot/dts/qcom/kaanapali.dtsi            |  170 +-
- arch/arm64/boot/dts/qcom/kodiak.dtsi               |   17 +-
- .../boot/dts/qcom/lemans-evk-ifp-mezzanine.dtso    |   74 +
- arch/arm64/boot/dts/qcom/lemans-evk.dts            |    7 +
- arch/arm64/boot/dts/qcom/lemans-ride-common.dtsi   |  110 +
- arch/arm64/boot/dts/qcom/lemans.dtsi               | 1001 +++++---
- arch/arm64/boot/dts/qcom/mahua.dtsi                |    1 +
- arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts   |   31 +-
- .../boot/dts/qcom/milos-nothing-asteroids.dts      |  964 +++++++
- arch/arm64/boot/dts/qcom/milos.dtsi                |   52 +-
- arch/arm64/boot/dts/qcom/monaco-arduino-monza.dts  |   11 +
- arch/arm64/boot/dts/qcom/monaco.dtsi               |   37 +-
- arch/arm64/boot/dts/qcom/msm8998.dtsi              |    8 +-
- arch/arm64/boot/dts/qcom/pm7550ba-eliza.dtsi       |   70 +
- arch/arm64/boot/dts/qcom/pmh0104-glymur.dtsi       |    2 +-
- arch/arm64/boot/dts/qcom/qcs615-ride.dts           |   14 +-
- arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts       |   31 +
- arch/arm64/boot/dts/qcom/sar2130p.dtsi             |    2 +-
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |   15 +-
- arch/arm64/boot/dts/qcom/sc8180x.dtsi              |    4 +-
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |    2 +-
- .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts      |    2 +-
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |    2 +-
- .../boot/dts/qcom/sc8280xp-microsoft-blackrock.dts |    2 +-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |   49 +-
- arch/arm64/boot/dts/qcom/sdm630.dtsi               |   28 +-
- arch/arm64/boot/dts/qcom/sdm660.dtsi               |   36 +-
- .../boot/dts/qcom/sdm670-google-bonito-tianma.dts  |   32 +
- arch/arm64/boot/dts/qcom/sdm670-google-common.dtsi |  712 +++++
- arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts   |  614 +----
- arch/arm64/boot/dts/qcom/sdm670.dtsi               |  119 +-
- .../qcom/sdm845-db845c-navigation-mezzanine.dtso   |    5 +
- arch/arm64/boot/dts/qcom/sdm845-google-common.dtsi |   31 +
- arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi     |   22 +-
- arch/arm64/boot/dts/qcom/sdm845-lg-judyln.dts      |    4 +-
- arch/arm64/boot/dts/qcom/sdm845-lg-judyp.dts       |    4 +-
- .../arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi |   79 +-
- .../boot/dts/qcom/sdm845-samsung-starqltechn.dts   |    7 +-
- arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts  |  127 +-
- .../dts/qcom/sdm845-xiaomi-beryllium-common.dtsi   |   19 +-
- .../boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts |    2 +-
- .../dts/qcom/sdm845-xiaomi-beryllium-tianma.dts    |    2 +-
- .../boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts  |   94 +
- arch/arm64/boot/dts/qcom/sm6350.dtsi               |   66 +
- arch/arm64/boot/dts/qcom/sm7325-motorola-dubai.dts | 1456 +++++++++++
- arch/arm64/boot/dts/qcom/sm8450-hdk.dts            |    2 +-
- arch/arm64/boot/dts/qcom/sm8450.dtsi               |   10 +-
- arch/arm64/boot/dts/qcom/sm8550.dtsi               |  375 ++-
- arch/arm64/boot/dts/qcom/sm8650.dtsi               |    8 +-
- arch/arm64/boot/dts/qcom/sm8750.dtsi               |   63 +-
- arch/arm64/boot/dts/qcom/talos-evk.dts             |   56 +
- arch/arm64/boot/dts/qcom/talos.dtsi                |  134 +
- arch/arm64/boot/dts/qcom/x1-hp-omnibook-x14.dtsi   |    2 +-
- .../boot/dts/qcom/x1p42100-asus-zenbook-a14.dtsi   |    2 +-
- arch/arm64/configs/defconfig                       |    1 +
- include/dt-bindings/clock/qcom,ipq9650-gcc.h       |  172 ++
- include/dt-bindings/firmware/qcom,scm.h            |    1 +
- include/dt-bindings/reset/qcom,ipq9650-gcc.h       |  215 ++
- 76 files changed, 11129 insertions(+), 1598 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq9650-gcc.yaml
- create mode 100644 arch/arm64/boot/dts/qcom/ipq9650-rdp488.dts
- create mode 100644 arch/arm64/boot/dts/qcom/ipq9650.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/milos-nothing-asteroids.dts
- create mode 100644 arch/arm64/boot/dts/qcom/pm7550ba-eliza.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sdm670-google-bonito-tianma.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sdm670-google-common.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sm7325-motorola-dubai.dts
- create mode 100644 include/dt-bindings/clock/qcom,ipq9650-gcc.h
- create mode 100644 include/dt-bindings/reset/qcom,ipq9650-gcc.h
