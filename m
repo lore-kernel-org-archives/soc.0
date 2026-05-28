@@ -1,163 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493323EFFDD
-	for <soc@lists.linux.dev>; Thu, 28 May 2026 14:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779979254; cv=pass; b=Fay/XsnOjZNnhMi9bwXVnH8iEXh9FLe2PqRgee4cRTVFgxvt/rQ3URnvP1Lf/QAGWPew6hGn8Se5YzpvbIIRjAUqXZzom5UQFFBNmr/tzQiibSsZhdBhvIXqKuXGoHezMV2LIpUd5PnspRg+PXHhKilZ8yUHWImoiuu+MToV7Z0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779979254; c=relaxed/simple;
-	bh=bKgnmpYXRnOu2VOKL/eVEu3jOsgnQ9M05Vi7I4C2G9g=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pQQp5f3pQSAplpZNo6AU6xHMuvCcGjOq+sAst2LpUyscLJRpbjcZfLVDeIWsr4cigRmJcPzA/kMDVuNJFKDPfZ8Nd4hpImN8WuVQenp/p8d59SBVe9NnZRzqyRl3Aa34pMYi/+ppfRnurPqcZgsFjgBVqaNpxjIhNo3Kl9BcwgY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j6YXOfYE; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E79327C18
+	for <soc@lists.linux.dev>; Thu, 28 May 2026 18:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779994731; cv=none; b=VAZsuZ9bQj1LnCx3kOG2aPEZcRTu+Zj3T6scVgVkJdJQrOwGV65fpfzDclP61ax1RQrq8RyIvWGC8OR0HcymAa8eg2fJx6W2CxBoOx+xsPJsfB1+6j6+RGuQicUWtkQl5i2I1dopTWEqqBt/hUnowZDM7jHr0HMyPw5OqSF6WRc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779994731; c=relaxed/simple;
+	bh=LjGz0M5iAQymTeg/Eu7bZFgolUFPmGasgmTcd72SHjA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JY/DhFNXpidjQq11nIUfySjHjNGj18Aox3hdomhUqHO4eZcu7gKPeBAK1IFg4GYVWSyXa8lOWR8xeUpvqnBL2RD3VpSqAr2+hv+aIfqH+Gj5frcoAMHiEgsNXIk/BQuaf4cljeNZOqq1RowO6pp2jUfTL0gZBvM3M1XAnt8HMJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+XmSXXC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j6YXOfYE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+XmSXXC"
 Received: by smtp.kernel.org (Postfix)
-	id E8CE21F00A3C; Thu, 28 May 2026 14:40:51 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.128.49
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1779979251;
-	b=b1+JfDjzNY/ztADyEf2kDerqCegYzSPcPykzwTLLoYX8FAaoOk3PNZvccWEsFZG9OoKY
-	 yPFBE8DbUY5RcuLo+vXYmQADisLLFIUqugi2RcbWbiym3mKoEvkT4ggzkdek9rLpMHDzX
-	 TEAYi+u6PhRIZSmNyExr7FHmbOkU5VrKry6IfJecYYOA+HeCbJdew5ZDDB9c4XZJskVH3
-	 VdVjX6HwAoybRZ45I2UOZgGVPhIRzDhbmbRMeAojQsamkbOKBphBM55zEZ8axUufj4jdJ
-	 hP024xioA/OStNVKlnfh39iIcw4kbGEmqmZ4RpvgrZVEQXQHg2mknj8Bvsl3df3yTww==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1779979251;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Date:In-Reply-To:References:Content-Type:
-	 Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=bKgnmpYXRnOu2VOKL/eVEu3jOsgnQ9M05Vi7I4C2G9g=;
-	b=q1RhTB49xvzDRBzMTOmP1XibiGtY3c3Dwt6QLkaE6TM5iitkEpyzru52CzCZQMfbRkyZ
-	 +yOcBs6RF8m74+c6hbzIlsBOCHO51r6fpmy7mztd2ANIFOVFRTRuD19E9wN5lRC5E2buu
-	 Om2P8bKb/8JH1aYwNSqPZfGqB6vbil4y7O+JS0tqEKWEA4hgrvEUUAAvdkYuyoOnZGVOp
-	 BkjUnOxQaBrPCpX6llMepAPaNWfFNfdaJZ2VTQGbDe+s/VZLfu2lD51beXgmKyNiiJaNi
-	 aTCIQDc0gvmSAapi4/T08noiDb/LHogOrGhV1KNVOIyDNqkNXbUs36XtgFg79QwVORw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=j6YXOfYE;
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 516241F00A3A
-	for <soc@kernel.org>; Thu, 28 May 2026 14:40:51 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=j6YXOfYE
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 516241F00A3A
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so134974895e9.0
-        for <soc@kernel.org>; Thu, 28 May 2026 07:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779979250; x=1780584050; darn=kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bKgnmpYXRnOu2VOKL/eVEu3jOsgnQ9M05Vi7I4C2G9g=;
-        b=j6YXOfYELfRCuje0K0N5kJgWAapYlL/ISzoq7V8Aon/6XqhKFIbrHu2Rd8VvU4DwBz
-         zzPCgvEgMwyBp/CAGEyJcl/dFwOa6uz+55p/188zW0QmlfeDvnXepUgZE3vEuW05Mnqc
-         bUtC8ukprxRRictkcoZ5VwRaanGPk3gVALeovpVVjrZlYiv2xLElWY51v9d/qwzSGkCX
-         MvUAFxkxwlgM3TAFMVpOVf2cNO81PI+Dhm3mT3pJ/VAm5wr81MlKaBSkf/HP3uPAE5Dc
-         sC0yY2z9+SGGoD00TXUhQO9kFA2pZHB4/t8V43gGCFaR5h3S7TX5mcRjEuhL5wkFw4pN
-         xxUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779979250; x=1780584050;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bKgnmpYXRnOu2VOKL/eVEu3jOsgnQ9M05Vi7I4C2G9g=;
-        b=iw//VHARADpJl4EyCEqAKQVrugb7/mhPPZp0KKW/xh8uxZyjX9cqo2FCEk31H/ufoq
-         YE3AlYHr7ypnBMToRDVyKNzmO1HS6KsYr6UWghUICvH5g/eEl5rMieR3mHEHAUzyHpSr
-         RybE/GebG4T0WHcG9+VNEG7iRSz8srz3Ju1gOH5kCTNQBOucR3H4517zYi3XVeHp8ljD
-         YDgsktaovwWrc2rFdPYJKdxth4qvP8Eh5c2nB0g/KbdM0HWCem5LMesYcs6Gpg4e510p
-         ZFTvS5cwlWPMmZ3n/zuAmI2hGxvsdICZDae+J7icxcy1u5Byn+Yc3wMCr/2TTtdHtR2o
-         gqqA==
-X-Forwarded-Encrypted: i=1; AFNElJ+q8w6wqW5+DczO73zanQFBtkaF/DsWtxPwezhjt9OGH2eUySAbDaJG4MyRHXM0iTNWmmY=@kernel.org
-X-Gm-Message-State: AOJu0YxWg8V1E6Ifds2p9eeyzUR7M31VSv/q0YtP08kSWSI73Waf+fRi
-	bkT7TLOnFnT/7FTxOym6aYAKRvN29/Kbyyg9ckm0OzY+VB+iFPvX4SVk
-X-Gm-Gg: Acq92OENPWXdQVuradkLG1pS7/5CQj4xx3eNYbjpS0TEMTAlJ8+OEydycuaHzG3QLOB
-	gm1RRsxalDFNr7xUx9Mf9WHM4rdDWMZWQmt3q3ySRock0MYZQAMgWVBLw3Pea6gA5fJ6sd8fGC3
-	nVPOhdz2O85OXk8ndUT02ogYDkBwjYbwgW+v6wMe934qtHM4H1CsTvW6R99i25hm7lsCnCm+Msr
-	u6p4XO7vW8nsEylWed6F0bs8QRjhp3bPHJ0Er1gD5Pia/OSVdIK7Tg9O6beBnqVwEbGNb57H8uu
-	0nEWCiqrQpFcFGwKO4dN4K95VU/u2WzQ02KrbN/mf3ey5L9/zjU0BRw89hm3C5GSw5fPtKahW/O
-	v3lei5RHGBog0TvmupOKtPDlntiLo0R3Ow0kfwcq0DfZIAxVeC2NRWQ9OFyEIvExn9ufWiamBMu
-	n8rhyDO4OsfNYRpNbB1RmUyDQEIUJs0rqlYTx4HljRDwtVjaYMfJa3YMiRQ+UAlB+cGEE0w+g59
-	PN/zFpgpSn/9g==
-X-Received: by 2002:a05:600c:4ecc:b0:490:3c15:7146 with SMTP id 5b1f17b1804b1-490426cd872mr441357485e9.19.1779979249429;
-        Thu, 28 May 2026 07:40:49 -0700 (PDT)
-Received: from giga-mm-11.home (72.92.4.85.dynamic.cust.swisscom.net. [85.4.92.72])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909284586bsm43939075e9.8.2026.05.28.07.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 07:40:48 -0700 (PDT)
-Message-ID: <e4d0373e25647cd9a1f4b2cd9d3eb2192d873ce3.camel@gmail.com>
-Subject: Re: [GIT PULL] ep93xx fix for 7.2
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>, Alexander Sverdlin <asv@kernel.org>, 
-	soc@kernel.org
-Date: Thu, 28 May 2026 16:40:48 +0200
-In-Reply-To: <2ef808b6-6454-4bb8-a8ed-dfe9c4bf0ee9@app.fastmail.com>
-References: <20260514174556.1678694-1-asv@kernel.org>
-	 <2ef808b6-6454-4bb8-a8ed-dfe9c4bf0ee9@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 
+	id AF8161F00A3D; Thu, 28 May 2026 18:58:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 617171F00A3A;
+	Thu, 28 May 2026 18:58:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779994729;
+	bh=dDl9WiRVkFnZ4KGhUiamMsE2H6ZfjTwqBgTNaY1yr7U=;
+	h=From:To:Cc:Subject:Date;
+	b=V+XmSXXCwcFoSJLN0hohvGp86TLcp1ewIHOc90trTleZoLNe7H8Cp6uqk7ujSjlR3
+	 Z0Z9XHOml16LfD0G+ulUMz3It+B8WYEQzfSjj1Uc9vcJimt9fApdzT+TxipEFf2eO7
+	 b9PZWyG/EcOelMGiC3Cht0WiLpEyiuU00Vw3TIVJh0kq3JOKWVdOhRS5QB1O/E0d33
+	 Q3JlnkqQO2OqZ+Loe5BkegBKfbI6J4a24vKM7PQf2xpOD8vIZyabUln6xENT7GSTsF
+	 FLurdNIPMLutZAOom3dAQEtdN/iHHze7+2gxPdZxR1mx3xmwWBpqzlFw2rnsLfjFx9
+	 aJqm1JwqhlD2w==
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	arm-scmi@vger.kernel.org,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@kernel.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>
+Subject: [GIT PULL] firmware: arm_scmi: Updates for v7.2
+Date: Thu, 28 May 2026 19:58:26 +0100
+Message-ID: <20260528185827.776851-1-sudeep.holla@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Arnd!
+Hi ARM SoC Team,
 
-On Thu, 2026-05-28 at 15:59 +0200, Arnd Bergmann wrote:
-> > Please pull the following small ep93xx cleanup for 7.2:
-> >=20
-> > The following changes since commit 8bb9429a291964ca7a2244f48a34e02bb862=
-c95d:
-> >=20
-> > =C2=A0=C2=A0 soc: document merges (2026-05-08 15:36:35 +0200)
-> >=20
-> > are available in the Git repository at:
-> >=20
-> > =C2=A0=C2=A0 ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/asv=
-/linux.git=20
-> > tags/ep93xx-20260514
-> >=20
->=20
-> Hi Alexander,
->=20
-> I just noticed I accidentally marked this fix as 'Changes Requested'
-> in patchwork without actually sending the email asking for changes.
-> The patch itself is fine but I can't merge this branch for
-> formal reasons.
->=20
-> Please send an updated version of this pull request, with two changes:
->=20
-> =C2=A0- use a https:// type URL instead of the internal one (you can
+Please pull !
 
+Regards,
+Sudeep
 
-I though I'm doing the extra mile in the right direction because of
-this note:
-https://korg.docs.kernel.org/gitolite/index.html#using-gitolite-instead-of-=
-public-mirrors
+-->8
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
-... but probably I've misunderstood it ;-)
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 
-> =C2=A0=C2=A0 configure an insteadOf rule in .gitconfig for this)
-> =C2=A0- rebase the branch on top of -rc1 rather than the for-next
-> =C2=A0=C2=A0 branch.
->=20
-> Alternatively you can just send the patch standalone.
+are available in the Git repository at:
 
-No problem, I've to be able to get the things stright ;-)
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-7.2
 
-Thanks for the heads-up!
+for you to fetch changes up to 524abd2fa6907ebe2762342be339afcc5b227dc4:
 
---=20
-Alexander Sverdlin.
+  firmware: arm_scmi: optee: Rework transport probe sequence (2026-05-21 17:31:51 +0100)
+
+----------------------------------------------------------------
+Arm SCMI updates for v7.2
+
+1. Improve SCMI clock handling with a protocol-level determine_rate operation,
+   simplified per-clock rate properties, dynamic rate allocation, bounded
+   iterator support, lazy full-rate discovery, and hardened parent/rate
+   enumeration.
+
+2. Fix several SCMI bounds and payload validation issues, including clock rate
+   discovery OOB handling, power domain name lookup, Powercap domain state
+   access, BASE_ERROR_EVENT and SENSOR_UPDATE payload sizing, and sensor config
+   width handling.
+
+3. Rework SCMI transport probing for virtio and OP-TEE using per-instance
+   transport handles and a generic transport supplier, removing the need to
+   register SCMI core drivers from transport probe paths.
+
+4. Add i.MX SCMI MISC reset reason support and print i.MX95 boot/shutdown
+   reasons via the System Manager interface.
+
+5. Clean up SCMI core internals, including base-info naming, quirk parsing and
+   table iteration, and list iteration.
+
+6. Fix SCPI clock provider removal so child clock providers are unregistered
+   using the same DT nodes used at registration time.
+
+----------------------------------------------------------------
+Cristian Marussi (16):
+      clk: scmi: Fix clock rate rounding
+      firmware: arm_scmi: Add clock determine_rate operation
+      clk: scmi: Use new determine_rate clock operation
+      firmware: arm_scmi: Simplify clock rates exposed interface
+      clk: scmi: Use new simplified per-clock rate properties
+      firmware: arm_scmi: Drop unused clock rate interfaces
+      firmware: arm_scmi: Make clock rates allocation dynamic
+      firmware: arm_scmi: Harden clock parents discovery
+      firmware: arm_scmi: Refactor iterators internal allocation
+      firmware: arm_scmi: Add bound iterators support
+      firmware: arm_scmi: Use bound iterators to minimize discovered rates
+      firmware: arm_scmi: Introduce all_rates_get clock operation
+      firmware: arm_scmi: Add transport instance handles
+      firmware: arm_scmi: Add a generic transport supplier
+      firmware: arm_scmi: virtio: Rework transport probe sequence
+      firmware: arm_scmi: optee: Rework transport probe sequence
+
+Geert Uytterhoeven (7):
+      firmware: arm_scmi: quirk: Improve quirk range parsing
+      firmware: arm_scmi: quirk: Simplify quirk table iteration
+      firmware: arm_scmi: Convert to list_for_each_entry()
+      firmware: arm_scmi: Fix bound iterators returning too many items
+      firmware: arm_scmi: Use proper iter_response_bound_cleanup() name
+      firmware: arm_scmi: Fix OOB in scmi_clock_describe_rates_get_lazy()
+      firmware: arm_scmi: Fix OOB in scmi_power_name_get()
+
+Marek Vasut (1):
+      firmware: arm_scmi: Rename struct scmi_revision_info to scmi_base_info
+
+Peng Fan (2):
+      firmware: arm_scmi: imx: Support getting reset reason of MISC protocol
+      firmware: imx: sm-misc: Print boot/shutdown reasons
+
+Stepan Ionichev (1):
+      clk: scpi: Unregister child clock providers on remove
+
+Sudeep Holla (4):
+      firmware: arm_scmi: Read sensor config as 32-bit value
+      firmware: arm_scmi: Validate BASE_ERROR_EVENT payload size
+      firmware: arm_scmi: Validate SENSOR_UPDATE payload size
+      firmware: arm_scmi: Validate Powercap domains before state access
+
+ drivers/clk/clk-scmi.c                             |  48 +---
+ drivers/clk/clk-scpi.c                             |   2 +-
+ drivers/firmware/arm_scmi/base.c                   |  25 +-
+ drivers/firmware/arm_scmi/clock.c                  | 301 ++++++++++++++++-----
+ drivers/firmware/arm_scmi/common.h                 | 165 ++++++++++-
+ drivers/firmware/arm_scmi/driver.c                 |  98 ++++---
+ drivers/firmware/arm_scmi/power.c                  |   6 +-
+ drivers/firmware/arm_scmi/powercap.c               |  18 +-
+ drivers/firmware/arm_scmi/protocols.h              |  13 +-
+ drivers/firmware/arm_scmi/quirks.c                 |  17 +-
+ drivers/firmware/arm_scmi/sensors.c                |  12 +-
+ drivers/firmware/arm_scmi/transports/optee.c       |  46 +++-
+ drivers/firmware/arm_scmi/transports/virtio.c      |  52 +++-
+ .../firmware/arm_scmi/vendors/imx/imx-sm-misc.c    |  86 ++++++
+ drivers/firmware/imx/sm-misc.c                     |  73 +++++
+ include/linux/scmi_imx_protocol.h                  |  14 +
+ include/linux/scmi_protocol.h                      |  36 +--
+ 17 files changed, 802 insertions(+), 210 deletions(-)
