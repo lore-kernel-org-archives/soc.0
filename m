@@ -1,118 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D306386C30
-	for <soc@lists.linux.dev>; Thu, 28 May 2026 08:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779958106; cv=none; b=Gp2uHxlfa6j6hTbzAlU0XNLA2Ak4RGKR3H7RSbWK0Pr5Kg7MrBiRl3HKLTNtQYOu6zLKqA35cBAgcmfuTUN5IZ4vNcwjJc0wXgXRfYEcT7UV9npQLKH7rduTScFmLDN53KNwaOf/XXHyN+AnIh7NLyv+K8aOH+LzsMElDUIifWU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779958106; c=relaxed/simple;
-	bh=vp+mRKbsL1NPgicjfURTD/SJ5L1J+o45tzrNrNb1JMg=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=AzMMLVi+jr8cjmmwvVswAWRgsgRiK5XBT3d6xVX0lugIO4ZomTXKgnHiKmOFm5aNAU6M/bpU8d+//7+EZcSFeMwSTLZSjexT4C2DFxkNJ8qAHsGV81oXFCdrhH85HGIQleoABbdtr8lb4xprau+ut7mY6hc5V77ffvHSTVruNhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdMpBHCg; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A39F264FBD
+	for <soc@lists.linux.dev>; Thu, 28 May 2026 14:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779976854; cv=pass; b=d677F/Jtkf3N6MupdVaEqotUlgTNkPGzRTnqk+kcr73hTRIKyk4NGzHk2/hNIbg4nvmIOx/HRlTcjXGySV74aCTHKir3FJk3MCGIlGvtUUj5+Aqsv69JmSd4Hz83OEkl2Xi669Shq50oo0qDtwGaSNo3qfNnBQWtnG14sjWEZwE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779976854; c=relaxed/simple;
+	bh=IRGG6yFi4P2BX6N9xbm3JUaWCBnu7kklo3+13wSBI/I=;
+	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=HQDsdkbOheNIw7An/Y0UsIeyFGRBCJS4VePkiQswQ6Lga3OawGJ54tNOTmqlFnv3jS5b6DuK1vY2iFP6aapO0VCKA0JPZmutGWIfs5OUxRy67TdQ1W8a5dFOLt2Q4R4fkXwBsoHIhK3xB4Etq4qLt4R0cl7DYzcYaLC+VF7MY9A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=K3xoHEtJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TcfnL6ai; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdMpBHCg"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="K3xoHEtJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TcfnL6ai"
 Received: by smtp.kernel.org (Postfix)
-	id 44E0F1F00A3E; Thu, 28 May 2026 08:48:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F8561F00A3D
-	for <soc@kernel.org>; Thu, 28 May 2026 08:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779958105;
-	bh=6+phZfXHAAOWSe43jY4iEDeIVY0auY/gXg2dprHrXHY=;
-	h=From:Date:Subject:To:Cc;
-	b=QdMpBHCgV3zBSc4CYi0AvkmqhfL5trfwzCVmnb+gReek/lD/Q87OfHeiOhSRvNDu1
-	 Ht03cZGnYqH8kqFZe+kC8HJ+m6aeU/9CjqJpaCtHoSYDZSKHrETHQOtIXHos9rPe6K
-	 P80y/jcsReNrqKMfV3ALdfi/L+RqYu4XZu2aqSXRA+2wKgNEqoQv/JgUJaTBmkiKWz
-	 8dCh7mqAgVbx4ENNUBvD+9iZdQrOiBEdtw3XK7ARVod6IVM2Xo5tQobAleVHM9uzIM
-	 IfBCBHpSAfZoR9wD4szhG+Uw/7sc+HWFP7Ji/E2le6/0ZesTAuqNFNpzCHL8PSmo2L
-	 xj4zTAbL6yrSg==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a74ac8b40aso12316729e87.1
-        for <soc@kernel.org>; Thu, 28 May 2026 01:48:25 -0700 (PDT)
-X-Gm-Message-State: AOJu0YygT973xdTAwx1w2RLFJQg9tyVfvRW3vCJlr+fJyKAFKM/1h0ZN
-	dMdec/J3d+VFqqiqHaAiegdToB0jQlo8atqQncqKdXqoqw9RIX0/LNb0qXp/WqZOOMh52OxC5n1
-	YgnSxxyoXo34Qkib0JvCbZyNbIa9mW8U=
-X-Received: by 2002:a05:6512:159b:b0:5aa:2a6b:c0ed with SMTP id
- 2adb3069b0e04-5aa3237096emr7698159e87.10.1779958103957; Thu, 28 May 2026
- 01:48:23 -0700 (PDT)
+	id DD4141F00A3C; Thu, 28 May 2026 14:00:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=202.12.124.150
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1779976852;
+	b=Glw6/+22P5cqtgzoeAk/BZcB0XzI4DrDgWEavFrNsYRYOm42b40TEBHDf/zkqXyQTi81
+	 TJtWa/IqXhrWeM2HjM4eTCoPsNvO2E8Wf4VE3TPThItJtZR8wgPNFYXbvgVUqJjUyzHqT
+	 pt2B9bkDl+3LxGrnNRrRWkfC1xprz0Tlxv9pGtYZeQ0Wj6KhUEiRECvZWN5czo5NcWwCl
+	 oCihlDRoUvCaEnGNeYPBRZTYRn4bnxHn992RxSk0rATYjY/gVKJIZ8oXvy+WVNhu1uTRc
+	 EldDA6s1/QJ7vp9ABIb3C3cC+OCcQdUHxBGRs8hz+skH9lQ8kpLSfMhbQ5ToxyYkv8g==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1779976852;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=Uf88EQ+6vPctaOIU6w0p1PRPhPZ1OcRgK9H2lUTVJqs=;
+	b=dFKKvcT6yNBrRrGSgjiu1uEOxY2W94sf2CrYRx3swpg929xPalUuCRDOei+3hi9kP8sJ
+	 UZ6xOciIFQfxNjPyEXKLuQbtGbdV+k8WVC06QQDiX3qHBray3cfk3ZYqCrVkJL7X3+weA
+	 0PV/6ddsTksKi3e+VdvG2z7JtvWMkzqF91oRMEMQA9GJ908tppm6EESb1w0nYsToUagyi
+	 mkkBaKpLR2iylyz2d/q9bEyGXwIrvzRMrXg7fHMZJ3Acs6D/RUQWrkpl6MQx6tvzXGOt9
+	 8RWNoATi+fHXITNGZua0jMkMAAOBoVX3Crek2QhFsS/AzAlpbeWVyalnueNGvn3CJQA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm3 header.b=K3xoHEtJ;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=TcfnL6ai;
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	arc=none smtp.remote-ip=202.12.124.150
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B99FC1F000E9;
+	Thu, 28 May 2026 14:00:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm3 header.b=K3xoHEtJ;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=TcfnL6ai
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org B99FC1F000E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id E13391D0006D;
+	Thu, 28 May 2026 10:00:50 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Thu, 28 May 2026 10:00:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1779976850;
+	 x=1780063250; bh=Uf88EQ+6vPctaOIU6w0p1PRPhPZ1OcRgK9H2lUTVJqs=; b=
+	K3xoHEtJimykpbchBvmG6qRIpv0Qhp89Rd087woFcJCGNAKAttEYa6kCq4BktXxE
+	AGfQbRzLKGMBGt4WOja8Wg7oaTAidXBPjNB2hy45ep4kulQwhTwilOSRIVN1VTp1
+	h4WWWkwkpMNjaHVMMx95wlZ9O+0+cKmPKoNkVjRGPTJcFkRBiHdsEXEazdE3cYTr
+	ztuKll967ihpCoPjIAMw7jSuP71cE+ztVyQd/7nRM9UxHu7Sn/YAMttmxWX4mGIX
+	4S8g0J4Ubp7FXzVC6pqTiDWM63T68V9E63zXcEZRsaq+zvLs/+iuHUt30QnYmdVt
+	4TMLlJr44jKDWQml2OOmlQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm3; t=1779976850; x=1780063250; bh=U
+	f88EQ+6vPctaOIU6w0p1PRPhPZ1OcRgK9H2lUTVJqs=; b=TcfnL6aijA0MXapOM
+	1h7eRWufiA8i3DWv6zSPVWUM7Gbbem0H2bJS9f7YsZTzDopTbK/3XmJtpSk+aeB9
+	ksFmLeWrUMeBxRAVN/hBKhCf667LG8S6j6DppNo2cVRHzIOePCkqIJMlDVVOs78g
+	d6TjntsDFgizO+qYgpJMEfjnWOdwLTSaGv9DvNtaLZLb4EthnL8VsSuqDheS9qTP
+	X3S9cLRfYGAl+Yk2SqU+qkFY7Mk6DDZY0AO4lqdJwAlVWFor7UNblkkdnKUg0Rd9
+	Nyw611vRKPb5tLg+2UOt46kh3bXXzfXQ4T1vDK9IyJvkeRgCBa+GHQ6hT7+8x/wo
+	gtMCw==
+X-ME-Sender: <xms:kkoYatdE4a3PctIHqPky9flkwEFh6otDb8PZCD2xNd2BBo444FJrwg>
+    <xme:kkoYamBNhjAVhGtH4Hboq4Cb95JXpkuLM1ywITk3hlR0uYcQoSKMrJA8VW3lppzrF
+    kxU0eDZnwsx6l-MwHX2kPvkAk_JwOCT4QO14paGn6-ubiTJPDc2QHs>
+X-ME-Proxy-Cause: dmFkZTEvkUnYQ/Ul3kadVFY24IS4YzaO/z3A0db1plIFp5V23fwHtDb8JYHB3z3gG4DuI2
+    pr8SC6LjUB/eTQu537dKdN/J42iBqdI7KxTHOO1eJCnz+dATNE3/3xk8u29K5KhJ8cunKO
+    PvI0VPMs30JgYVwifyA5SU/n4GJzfGolpo0Zy1SpOdDrE4WZ8gJ1H07bbbMQHK2a8PgzEa
+    RyIl02C4aYQNunOA7hmvxBbCUJIFrRJOTTRI6s5OWjHd2pLLHbbw2MZdfc5JXi/neekn+2
+    yjU4by+8g7JVTnbeJB3t6etE0uH/ittAi5QBRH+s0SfNs2uYwB/wkqC3YralkOzUwNdeo8
+    TVqjBm6HFadHUtsKuZV8hUH9vLxN+qMuZQfrGb4LR81mJU60ctaHQNBAcDm770UZUXujeI
+    t+8J1d2UNB+orlKmVbHZuDxzWQHAMNwPqGm6iKM8Qf/ywwumyMofeNX7Nmn7SmWJwnmTK5
+    qJS3TtihgGVGnVVImRVG701Sk914dTBq4t4nhpWc1BGS47neHl/d2HzuyLgZ52WLkFVNG4
+    nqAKb+/ldl+n2F0AWxpzzzfocVYrwVcaP2TST7KsDrrFIhq0aUutiQNCE/9uXzfYI7NP9h
+    8CXtTg7JuA4RNxoK+qBhNLoBCq/oQHC/78foVlnhIPdF0Mwu6q4QqbzDDXlg
+X-ME-Proxy: <xmx:kkoYalf7cl65_ffjU6HOrFEFaaceGrROHDN8ZNGYaLMaimWltzTAfA>
+    <xmx:kkoYapPNjIPkVdMKbcelXkcYLkeUiJRzlhC467Wf5hf4bbXRYDsypg>
+    <xmx:kkoYasKPcrW0votkEUcnd3f7LPx_NFdkSeHZMl9n0hRUAIAefeRasw>
+    <xmx:kkoYaqHKoRkdk44L5dJIZ6sJfspZFAbXBPH0Nryx7BibA8TJW24s2A>
+    <xmx:kkoYasfmnv64xMhRrb8XyTCVjRbLWAw0dbpW4EqiUX0l4x3BD-k4MliX>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 7A47B182007A; Thu, 28 May 2026 10:00:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 28 May 2026 10:48:11 +0200
-X-Gmail-Original-Message-ID: <CAD++jLkQ8FEFL4fbOgt+pbT3orGm90Xt1bFeGCKyB-Th=qOrjw@mail.gmail.com>
-X-Gm-Features: AVHnY4LYV0NVvQ3b1yFPz2ZhtORvQzKWhrCgwYSUKdkOvBfUgossOMgOPO5x4Vk
-Message-ID: <CAD++jLkQ8FEFL4fbOgt+pbT3orGm90Xt1bFeGCKyB-Th=qOrjw@mail.gmail.com>
-Subject: [GIT PULL] Gemini DTS updates for v7.2
-To: soc@kernel.org
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-ThreadId: AKip3VoaYoV3
+Date: Thu, 28 May 2026 15:59:43 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Alexander Sverdlin" <asv@kernel.org>, soc@kernel.org
+Message-Id: <2ef808b6-6454-4bb8-a8ed-dfe9c4bf0ee9@app.fastmail.com>
+In-Reply-To: <20260514174556.1678694-1-asv@kernel.org>
+References: <20260514174556.1678694-1-asv@kernel.org>
+Subject: Re: [GIT PULL] ep93xx fix for 7.2
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi SoC folks,
+On Thu, May 14, 2026, at 19:45, Alexander Sverdlin wrote:
+> Dear SoC maintainers,
+>
+> Please pull the following small ep93xx cleanup for 7.2:
+>
+> The following changes since commit 8bb9429a291964ca7a2244f48a34e02bb862c95d:
+>
+>   soc: document merges (2026-05-08 15:36:35 +0200)
+>
+> are available in the Git repository at:
+>
+>   ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/asv/linux.git 
+> tags/ep93xx-20260514
+>
 
-sorry for late pull request for these DTS changes. Had too much to do.
+Hi Alexander,
 
-The changes were posted to LAKML here:
-https://lore.kernel.org/linux-arm-kernel/20260228-gemini-dts-fixes-v1-0-0c6f6d0fb4bd@kernel.org/
+I just noticed I accidentally marked this fix as 'Changes Requested'
+in patchwork without actually sending the email asking for changes.
+The patch itself is fine but I can't merge this branch for
+formal reasons.
 
-This pull request is rebased on v7.1-rc1 and ACKs picked up,
-otherwise it's the same patches.
+Please send an updated version of this pull request, with two changes:
 
-Please pull it in.
+ - use a https:// type URL instead of the internal one (you can
+   configure an insteadOf rule in .gitconfig for this)
+ - rebase the branch on top of -rc1 rather than the for-next
+   branch.
 
-Yours,
-Linus Walleij
+Alternatively you can just send the patch standalone.
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-tags/gemini-for-v7.2
-
-for you to fetch changes up to dce8e0cb88fb12d068459b75f299ff2242172257:
-
-  ARM: dts: gemini: Correct the RUT1xx (2026-05-28 10:38:45 +0200)
-
-----------------------------------------------------------------
-Gemini device tree updates:
-
-- Add two new devices: the Verbatim Gigabit NAS and the
-  Raidsonic IB-4210-B, including ACKed binding updates.
-
-- Fix up boot device for the SQ201.
-
-- Use the right LED trigger for disk activity.
-
-- Add the SSP/SPI block to the SoC.
-
-- Fix up the RUT1xx device tree.
-
-----------------------------------------------------------------
-Linus Walleij (8):
-      ARM: dts: gemini: iTian SQ201 need to boot from mtdblock3
-      ARM: dts: gemini: Tag disk led for disk-activity
-      ARM: dts: gemini: Add SSP/SPI block
-      dt-bindings: vendor-prefixes: Add Verbatim Corporation
-      dt-bindings: arm: Add two missing Gemini devices
-      ARM: dts: Add a Verbatim Gigabit NAS DTS
-      ARM: dts: Add a Raidsonic IB-4210-B DTS
-      ARM: dts: gemini: Correct the RUT1xx
-
- Documentation/devicetree/bindings/arm/gemini.yaml  |  10 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- arch/arm/boot/dts/gemini/Makefile                  |   2 +
- arch/arm/boot/dts/gemini/gemini-nas4210b.dts       | 205 +++++++++++++++++++
- arch/arm/boot/dts/gemini/gemini-nas4220b.dts       |   1 +
- arch/arm/boot/dts/gemini/gemini-rut1xx.dts         |  18 +-
- arch/arm/boot/dts/gemini/gemini-sq201.dts          |   2 +-
- .../dts/gemini/gemini-verbatim-s08v1901-d1.dts     | 225 +++++++++++++++++++++
- arch/arm/boot/dts/gemini/gemini.dtsi               |  17 ++
- 9 files changed, 470 insertions(+), 12 deletions(-)
- create mode 100644 arch/arm/boot/dts/gemini/gemini-nas4210b.dts
- create mode 100644 arch/arm/boot/dts/gemini/gemini-verbatim-s08v1901-d1.dts
+      Arnd
