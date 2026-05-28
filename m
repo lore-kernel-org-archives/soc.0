@@ -1,37 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD82363C6F
-	for <soc@lists.linux.dev>; Thu, 28 May 2026 22:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B7F1E260C
+	for <soc@lists.linux.dev>; Thu, 28 May 2026 22:45:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780006229; cv=none; b=NXC+7FB5rR5TlrEeTE8A03FwMYNRbI3UL4TQK7KFdNpJxAd2d7G13j6BZi0IS4yp21344JRl4KDZEehnwHfC5okYd8kM+jW9L9Ek8qOj59wiUgcNacTGQUngyoEjjQpgtRkTaWS0Xug0tnXpjxtxW6KPmIhQ6sOSfPTe9rzWlMw=
+	t=1780008334; cv=none; b=eGrxK4klcK9GmISRHefaO1aC6RZsqvDSgNr0twWTWAx2dsLhBSlCO+QnzLGTmMUt9aoQuCaIWXjYCm7veslvcpAJkFHIQhZc7LTKFLhIba+F9lfQSh1H3qVQnqctOXFYpjZ0Nrvqq2NtkGTRNSwcCVZxo7cn8UR9kC/qFKqQpfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780006229; c=relaxed/simple;
-	bh=g4EpTx75MbSI60zb9MvuBxQP5CZQvDD11qyQDkPhpCE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=IpuECZTcK4vZXYqShPEDlyD7AjqzSiSBoKCKFvRkgDWX/th6GxO4C8abTtbt2EwvdgtflS70r9ZnrVUPMs/TFsXGyOnpCqb7iRAzo40NkVZ6nBeebYGoWc7P1vJWQSaNylMTdSuwDPezTIcVzsm4YsmhyFV6F5RMiavSbNJEW9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FxmI9k6p; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780008334; c=relaxed/simple;
+	bh=luJ7o3Fq9dr9FP6r+ruVIW5cKdzwpakuT9XmlU3y9LQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Pc3OPcwI3HiFjDK9/g/mtNXNS3eCMIcGlT7K8hRzdQXOYsIDi8R9crQLTDaWNnvdn8i5Mzp2iLxhCNYKZoi0n8JyD7M4QwIgePx6nGmHIkVGbqCIgV0c7iHi2CyuK2GfFJ2dPQOg3jHgLA3VX/8RI9ZHh8OCFAvXuI2u8FqTX6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QoTkmPdF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FxmI9k6p"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QoTkmPdF"
 Received: by smtp.kernel.org (Postfix)
-	id B8C4E1F00A3A; Thu, 28 May 2026 22:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A21EE1F000E9;
-	Thu, 28 May 2026 22:10:28 +0000 (UTC)
+	id 2CAC91F00A3A; Thu, 28 May 2026 22:45:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291451F000E9;
+	Thu, 28 May 2026 22:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780006228;
-	bh=oRH1PizA8D4KDraFS0v1V9tCfYiLY8oPp3aR/Pkxxuo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=FxmI9k6pSsMXECQ0Nu1lCLt0gY5iq5v50QoHgkDgtdrteTbqArlgzDIK6f2v5ZHx8
-	 Y2bWQ3wmlrXPj+pDPeKvpirk5cGAJ9QK7bml+jhNKAGfUMKbJHnoR0CN3vViV6dHvP
-	 aGuveILacypNuvQe1pgAidIQMNTFndvgO8RPCN/BqzTwtFVUsRkx+tU5oLvFE05z9a
-	 GuzUkvIQooSQiiKDo45atCEHUNAlxjH+0XAQUmrnKeP/wEba+KE5P3Saumo/Oib19B
-	 4SalzhnLSCs6D+ci3e7pGNmzNiPZbAv2y+dBe3oYU2+GcmXSoguVKB8aJZgh5zyKpI
-	 bX9dGgmyOfF2Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197E43811977;
-	Thu, 28 May 2026 22:10:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1780008333;
+	bh=8P9iu4RhzPImSb8s5YG8wEEPl94iLkOJbZ39O0b5yeY=;
+	h=From:To:Cc:Subject:Date;
+	b=QoTkmPdF79SFJudB6lyX7mEizNTrE0s69VUXfLHvcCHHhyUZC2W7XMqiu9Wt1VP4M
+	 FpQe+Rwy0gFEaqOLY7YyxTdY0GBX58dC6SgZeYrAh1vu237lBi0bsLnO9bJuemEAY0
+	 meaUw/C5PkfHSKEMCtgms7KKpkwPnxSGiPdqQVI9FM0jxcLRAPZ8nBNqLpYX0DRo+E
+	 dToFMEwMVrkCpwZ2amXSgGSRxcUiPCBXMJLcmDS9qTOeBkuufm+UMC4NC7o2U/cgKe
+	 tgYnfbtOOePMYADfbq4HO41IRUefAB3pX5d6QmlQFc0KsyP5UFNKI9tbFcLl0TywSG
+	 qOIY6GqyWjO5Q==
+From: Alexander Sverdlin <asv@kernel.org>
+To: soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: Alexander Sverdlin <asv@kernel.org>
+Subject: [GIT PULL] ep93xx cleanup for 7.2
+Date: Fri, 29 May 2026 00:45:04 +0200
+Message-ID: <20260528224507.3772367-1-asv@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -39,39 +42,33 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm Arm64 defconfig fixes for v7.1
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <178000623263.1533055.5567037266742096594.git-patchwork-notify@kernel.org>
-Date: Thu, 28 May 2026 22:10:32 +0000
-References: <20260526145839.3800-1-andersson@kernel.org>
-In-Reply-To: <20260526145839.3800-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+Dear SoC maintainers,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Please pull the following small ep93xx cleanup for 7.2:
 
-On Tue, 26 May 2026 09:58:39 -0500 you wrote:
-> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-> 
->   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-fixes-for-7.1
-> 
-> [...]
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
-Here is the summary with links:
-  - [GIT,PULL] Qualcomm Arm64 defconfig fixes for v7.1
-    https://git.kernel.org/soc/soc/c/acbfa4ed973a
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/asv/linux.git tags/ep93xx-20260529
 
+for you to fetch changes up to 7afbe21e94a439874f2df071265a8105efae1244:
+
+  arm: boot: ep93xx: don't rely on machine_is_*() for removed board files (2026-05-29 00:21:38 +0200)
+
+----------------------------------------------------------------
+The patch removes the dependency on <asm/mach-types.h> in the decompressor
+for EP93xx-based boards that no longer have legacy board files. This is a
+preparatory step for cleaning up a large number of stale entries in
+mach-types.
+
+Link: https://lore.kernel.org/all/20260509223820.50347-1-enelsonmoore@gmail.com/
+----------------------------------------------------------------
+Ethan Nelson-Moore (1):
+      arm: boot: ep93xx: don't rely on machine_is_*() for removed board files
+
+ arch/arm/boot/compressed/misc-ep93xx.h | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
