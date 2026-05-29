@@ -1,103 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813703E121E;
-	Fri, 29 May 2026 12:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A0D3EF0A8
+	for <soc@lists.linux.dev>; Fri, 29 May 2026 15:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780057089; cv=none; b=hE8VKjQyYJv/njJwQyhAod1YVbWdyzD3AxxdpzvfHgWthDp5ahQUt4hsH3vY7Q6+VxFI7TnwZbYVLacl+wDxvRkGz3bjF7D3jIo/jXRBN0Wb69K8Qb7P7s4xjA809M+RZjjswGMbWQrV2qKaTTyPb1FSalbmjMxdVtKCYlDiRF4=
+	t=1780067054; cv=none; b=suc665fL6oUW5dVnNcCh5615IzmDTojJCHGbnkbgVlUJfXAA+bUiqyzQi1dY5w1blCJ2kQiHc6U5hMKxdzDsxG7bVVgpdyigrFovBnjMCxBcp4DnZFMQF8y6AHQ7yDl+BucPuFX5o6jLZeOrZEONRXrU/XdTvmAnoyLGSU/dSPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780057089; c=relaxed/simple;
-	bh=ZMjAF+OwBUX1j8RpGOcH8icmR9zWYxGfGHxf/YItcBg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KbLYOV3JlFvtutf4UOrY/IQcgSLiKzGIErXKrd6DKobQybRemZMmVImjk597xuZ25finis2J5fyB5Nk4nbnDqoYoSUwhG0iBhNho8zDFh0FecOSVb6twp2LRD8fbx3h5/F+a7AOjCVf3iDpvdwmE5t+hBL3ALPsSmV7CidrP5T0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=geAcMOp5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780067054; c=relaxed/simple;
+	bh=bQ18QPLL+im82nhYKB017b2zavRhi7h41FQEYN6/t3k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=UbMjt2RB+J9NZQSLcc+V/vrKb7ZPt2JPe1b9Dmi5LeKBRi9irj9u0PQgUwrG5gilKg7c2EaXSYq7E96NQpUSSoxj/JIwunYrBmJB33KeLepw6hYoQwfH0aUmJwX/2JVIO2YcrE+CyGR2fuzBiNUQ3HQVEZcuxnl0aNa6GIJ/yZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mgf3otVK; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="geAcMOp5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F751F00899;
-	Fri, 29 May 2026 12:18:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780057086;
-	bh=CzGNF+VTlvtIapSjsIV5bW5TQhJnEB3/iQPUbpSa5uI=;
-	h=From:To:Cc:Subject:Date;
-	b=geAcMOp56bGWFIr02wcGx3THTHRAt1Sdn54lmekJqxnYyEUoh+mQBnwyuPFnBrzv+
-	 TTj1k0ACRBCKCcQYiZRm9kBn2kTagJaBDAkU+VzNKiGbyPwV9odjPQZZxrYvw5hBU1
-	 ajp3tHKo2h6yxzzZjc799g2GcG2PSawv19H1U6ckpPpzl9+HPpc5LvjC70YzaqutBd
-	 rqVTIwHP2YLZ6UIQ6v0kv72IHVg/zLhm/5xW3+eExKz6KGfjXszIv1of0ePF29WF7+
-	 J2XVtQI8EfxEhGDcxkuU/3UZc3NTWVVA85c6du3r4Vbvtz2CWL22U8eDNeesxBdBij
-	 VHnKbkHGl3FsQ==
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Drew Fustini <fustini@kernel.org>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] samsung: drivers firmware for v7.1, replacement
-Date: Fri, 29 May 2026 14:17:57 +0200
-Message-ID: <20260529121757.13224-2-krzk@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mgf3otVK"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 93DDC4E42D8C;
+	Fri, 29 May 2026 15:04:06 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 68007601FA;
+	Fri, 29 May 2026 15:04:06 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8289D10888CC2;
+	Fri, 29 May 2026 17:04:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1780067045; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=fUWeaNsfFgJU6Qp2lS9wdzvNAu5L3srRKzUtR510ldk=;
+	b=mgf3otVKPRUXFhpVnJ78Lp60lbpvE9XKk2jjeYH47r8V1MgE6/2/7CGUwnSZ5BbjM+ec2Q
+	1a3MmW+WvM1X6MXUISKX9VbbPMOs3VTpwQ3yJkE0chnFTQ5lj3iga19mOl4E1U1/e5m9Gl
+	ZwCPvE730Kp70jTlHWR7C1sEtlK+dPMUU6vAtQo5/7c4qqAA740HQ7UvGplbHoi6r5jcIK
+	Wm3zdae3yU81FhvS2OMJN3OVOJ4lWi5OUe0AO5kzftu9S1HhwvzTJQHt0C6eer/PiJefBw
+	BcM0i1ONwLzaJVERSNfcgPZbkcwrdXXHXv03nAJdIW9iUAEI5/xljJhlfnbs4g==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Arnd Bergmann <arnd@kernel.org>, soc@lists.linux.dev, Andrew Lunn
+ <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Daniel Mack <daniel@zonque.org>,
+ Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik
+ <robert.jarzmik@free.fr>, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Alim Akhtar <alim.akhtar@samsung.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH] ARM: select legacy gpiolib interfaces where used
+In-Reply-To: <20260428162757.540823-1-arnd@kernel.org>
+References: <20260428162757.540823-1-arnd@kernel.org>
+Date: Fri, 29 May 2026 17:04:00 +0200
+Message-ID: <87h5nq1cm7.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2052; i=krzk@kernel.org; h=from:subject; bh=ZMjAF+OwBUX1j8RpGOcH8icmR9zWYxGfGHxf/YItcBg=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqGYP21QR0o7tuEi3Mg+qQ+UoRS4Gpd1oPhE3Go FDcj+ptjJaJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCahmD9gAKCRDBN2bmhouD 1w1MEACCgy6+0dYIFFXZlvyZWmbIS+Ge3Pbw03rpKsktJby8zcvGTsrWW9U+hmfTxRvqJ9FZXQG XGjrj+IOxst9AmogOnewraoEokSI0ZeCP+rAlfT9kTPdp70plfpOi3+JPI5sZBimChUWEZ8D0vF VBVbmOtjqF1HvhwYSo3agk9dIy0Dpu4wWP7OBkaZulXFkR8GSkvnZd+e2a+GgXw0qCajG5i9RF6 03OJmC3jcQgO72+BsLg0gHWKt+QFrrLX9vEB0RonLs8bYpXA8CYOx+owW5gTAXgiaXs4cDtsagB UZbWG78w4S+MPvWwPLvoF2sqmqkWH0Q4UMVoXSJCUOT+gx5qzghAL5FSETykQ8ms7ZE5gtDhSUO 853mdWa3ske8PUFHiX+sSXRGwHI/5z//PcyeWL3fhLvRanRHxQcXl9egQIuRM/kQs4IS/Xhn9NM jGat76mqkd2kIyBMl2tC65KNYliyZuy1c8K5zRWZclfyHZMa/DM+9EUW/WJ9KKA+SxekOsbyJUL 9qtahlHmXrPAdJxUI/Pc/0b7kuan+tfQu9PEcCnIE5/tcUnaT3VSpKrJv/2eO+Ga8dAAfklxGcS CA644PSF1FULCSzz+dMFIKgUPkHPvtwUmil2/JT0gOnaW2xea+JnYMcWEqurg6SgPBQ1Aoh8dhk zPcw6gAqMBcGBwQ==
-X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Arnd and SoC folks,
+Arnd Bergmann <arnd@kernel.org> writes:
 
-This is a replacement/rework pull of previous tags/samsung-drivers-fixes-7.1.
-I also dropped that tag from my repo.
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> A few old machines have not been converted away from the old-style
+> gpiolib interfaces. Make these select the new CONFIG_GPIOLIB_LEGACY
+> symbol so the code still works where it is needed but can be left
+> out otherwise.
+>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Changes against previous pull:
-1. Drop commit: firmware: samsung: acpm: Fix dummy stubs to return ERR_PTR
-2. Drop commit: firmware: samsung: acpm: Add memory barrier before advancing RX pointer
+for mv78xx0 and orion5x
 
-This caused rewritten history, but all of the commits were already in next
-since May 14.
+Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
+Thanks,
 
-Best regards,
-Krzysztof
+Gregory
+> ---
+>  arch/arm/mach-mv78xx0/Kconfig     | 1 +
+>  arch/arm/mach-orion5x/Kconfig     | 1 +
+>  arch/arm/mach-pxa/Kconfig         | 1 +
+>  arch/arm/mach-s3c/Kconfig.s3c64xx | 1 +
+>  arch/arm/mach-sa1100/Kconfig      | 1 +
+>  5 files changed, 5 insertions(+)
+>
+> diff --git a/arch/arm/mach-mv78xx0/Kconfig b/arch/arm/mach-mv78xx0/Kconfig
+> index 9de3bbc09c3a..670e6587827e 100644
+> --- a/arch/arm/mach-mv78xx0/Kconfig
+> +++ b/arch/arm/mach-mv78xx0/Kconfig
+> @@ -6,6 +6,7 @@ menuconfig ARCH_MV78XX0
+>  	depends on ATAGS
+>  	select CPU_FEROCEON
+>  	select GPIOLIB
+> +	select GPIOLIB_LEGACY
+>  	select MVEBU_MBUS
+>  	select FORCE_PCI
+>  	select PLAT_ORION_LEGACY
+> diff --git a/arch/arm/mach-orion5x/Kconfig b/arch/arm/mach-orion5x/Kconfig
+> index ee449ca032d2..cef19bea6164 100644
+> --- a/arch/arm/mach-orion5x/Kconfig
+> +++ b/arch/arm/mach-orion5x/Kconfig
+> @@ -5,6 +5,7 @@ menuconfig ARCH_ORION5X
+>  	depends on CPU_LITTLE_ENDIAN
+>  	select CPU_FEROCEON
+>  	select GPIOLIB
+> +	select GPIOLIB_LEGACY
+>  	select MVEBU_MBUS
+>  	select FORCE_PCI
+>  	select PCI_QUIRKS
+> diff --git a/arch/arm/mach-pxa/Kconfig b/arch/arm/mach-pxa/Kconfig
+> index 10e472f4fa43..66e26990e2c8 100644
+> --- a/arch/arm/mach-pxa/Kconfig
+> +++ b/arch/arm/mach-pxa/Kconfig
+> @@ -10,6 +10,7 @@ menuconfig ARCH_PXA
+>  	select CPU_XSCALE if !CPU_XSC3
+>  	select GPIO_PXA
+>  	select GPIOLIB
+> +	select GPIOLIB_LEGACY
+>  	select PLAT_PXA
+>  	help
+>  	  Support for Intel/Marvell's PXA2xx/PXA3xx processor line.
+> diff --git a/arch/arm/mach-s3c/Kconfig.s3c64xx b/arch/arm/mach-s3c/Kconfi=
+g.s3c64xx
+> index 8f40af063ad6..3f97fba8e4f5 100644
+> --- a/arch/arm/mach-s3c/Kconfig.s3c64xx
+> +++ b/arch/arm/mach-s3c/Kconfig.s3c64xx
+> @@ -101,6 +101,7 @@ config MACH_WLF_CRAGG_6410
+>  	depends on ATAGS
+>  	depends on I2C=3Dy
+>  	select CPU_S3C6410
+> +	select GPIOLIB_LEGACY
+>  	select LEDS_GPIO_REGISTER
+>  	select S3C64XX_DEV_SPI0
+>  	select S3C64XX_SETUP_FB_24BPP
+> diff --git a/arch/arm/mach-sa1100/Kconfig b/arch/arm/mach-sa1100/Kconfig
+> index 0fb4c24cfad5..e23700e0d6c8 100644
+> --- a/arch/arm/mach-sa1100/Kconfig
+> +++ b/arch/arm/mach-sa1100/Kconfig
+> @@ -13,6 +13,7 @@ menuconfig ARCH_SA1100
+>  	select CPU_FREQ
+>  	select CPU_SA1100
+>  	select GPIOLIB
+> +	select GPIOLIB_LEGACY
+>  	select IRQ_DOMAIN
+>  	select ISA
+>  	select NEED_MACH_MEMORY_H
+> --=20
+> 2.39.5
+>
 
-
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-fixes-7.1-2
-
-for you to fetch changes up to 7fe40c32a33905302341797b5d12c541729dd08d:
-
-  firmware: samsung: acpm: Fix infinite loop on sequence number exhaustion (2026-05-29 14:11:23 +0200)
-
-----------------------------------------------------------------
-Samsung SoC driver fixes for v7.1
-
-Fix several concurrency issues present in Samsung ACPM firmware drivers,
-used currently only on Google GS101.  Tudor with help of Sashiko
-identified several missing barriers and incomplete synchronization,
-leading to possible transfer data corruption or use after free.  Few
-other issues related to probe, including missing mailbox cleanup, were
-also fixed.
-
-----------------------------------------------------------------
-Tudor Ambarus (5):
-      firmware: samsung: acpm: Fix cross-thread RX length corruption
-      firmware: samsung: acpm: Fix mailbox channel leak on probe error
-      firmware: samsung: acpm: Fix false timeouts and Use-After-Free in polling
-      firmware: samsung: acpm: Fix missing LKMM barriers in sequence allocator
-      firmware: samsung: acpm: Fix infinite loop on sequence number exhaustion
-
- drivers/firmware/samsung/exynos-acpm-dvfs.c |   3 +
- drivers/firmware/samsung/exynos-acpm.c      | 141 +++++++++++++++++++---------
- 2 files changed, 100 insertions(+), 44 deletions(-)
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
