@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D18368D73;
-	Fri, 29 May 2026 11:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879873CF976;
+	Fri, 29 May 2026 11:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780055381; cv=none; b=cxh+lFht9x8dQe2OC94JY9CWH3W2dFTEJJwG5qPATkgkcA9PjEovmUKJe+u1+fsy4uqyTyfgGm3PFMIGJ72JhmirpUiqAT9VwYzHDD23FD+tv4P9r3gJoblrEILdijaisixdYlCy2Qm24RV01PfPor8gNJkB6nltMw9/NcXJOlc=
+	t=1780055390; cv=none; b=rhCrA4IjGD0BInMBTy3zMgpPiYxXhfQvvJoAHc/FlWwqURGd9xGjiFce0NeyaGOiqAuDjR2UooTOe/F5huRt8cTaue208UL95TaJ+ksTYG1eRGWNpPO4riTpGw2Bj19em6UK4Rr1ShFS/tVlpczmIOZCaw8AaTqpQ9+lvJmLjow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780055381; c=relaxed/simple;
-	bh=Gv6hySGqB+TbKvyVOaRq5oyPeVQavoEiqDBMXcy+e+g=;
+	s=arc-20240116; t=1780055390; c=relaxed/simple;
+	bh=AaDW3gUQxDtj6N/TBqUucb9aJ3ZMPEiBO7h1qYkd/Ug=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DLH3x/33uig1sYwpYB8kKBHjVyx7dzfG8mRlG9eiAEjQnd3LmABBKVewCJd05Byc+9mhNgIzXuRyzNhCAWO01trq77znsPfPdGBJgBhZBSY6njQ5Gd2bnUBoJ4XHVfZF+LaFR9tO2eYhPCu7QI4uaubE7yB9hgce5n7VBP5n6aY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+pZIcpN; arc=none smtp.client-ip=100.103.45.18
+	 Content-Disposition; b=X2FqyqbayE0MDH87ElewoUvGZ0vzDFoXu/8Rs26lJMU91GU+C20BmYSWPBkAQerMMKgF/sFTsBiraMXNSysoDk2WrTwCOJdueK/9GrFtbaUTjKr//daaZEJQse7oy5XkXZCIbLoJYVmzjU9S+f0iOOP4FH0iNv29EFrM3OcsrNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hy65K6Qe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+pZIcpN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAF71F00893;
-	Fri, 29 May 2026 11:49:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hy65K6Qe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED571F00893;
+	Fri, 29 May 2026 11:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780055380;
-	bh=UhHVVbTDLpyL8CkfEhKgwaQRa8ihnoiN8aYpeAsu7W4=;
+	s=k20260515; t=1780055389;
+	bh=FmVc5rfuNKL20/TBZ1WvyWH/vJX1ksbo/UkwXmpMGLo=;
 	h=Date:From:To:Cc:Subject;
-	b=C+pZIcpNd2eOKJd84cQlHKVCC2w5/9HHiN5wIe/c4ptIvN2+I7S+ODEFFJbhMtMkc
-	 kdj99PkoB3HVyNTpaS2iUBBKKrpGBzq6+moQ77RxREbRJ76cF7Kpb33ekHjCDfGEU8
-	 GA63xa0oGNybk+SSJATnWAfmRX1+1nwr4IFQR3CyoRGdczlukD9dNvRRvxdnBzwSMD
-	 Le9EZ8lwssmnqMDt8atZhMQ0dZ0C3+GClUVhEoNogBgLcusZafGBvtqaY4LVZawXKS
-	 4fR/SWG2Vo49YQUCL9l/tfPY1Vwu8V3on4MNQKW4R+F0p9vF12Y9BBdHo04xQttn7B
-	 jyJ5i1JkZQB8Q==
-Date: Fri, 29 May 2026 12:49:37 +0100
+	b=hy65K6QeIetJhPz8hNMF9ES0DmLptgKqb2wLfni3bmoNL+j8UHZhibg5+bBcWZQTG
+	 uBzhuBJwZKdh4Vji8zMgjdnxlqa/9Ml6sa4Qij9BOC2D1C8klPcCij0aH2qVx4Dn8P
+	 Op/yq7Y8jMuSsqKIAnicjTYP3YC8NVMU67kwIfyCrCEolhcTSZ1DE6fuqOsS0HuhF7
+	 k4Mla/pEx1n9iae5UXwejsvUf7M3NDWtR3FuSFo/0tvtB7f9WzHIVuR3FWzeIlu+qS
+	 PFlTVX4A5hi/yt386kbmIZyuFXOUXLZlffYt1JVL7cXg8Bh+oTbgeNs3igUu5Qjt8Y
+	 J1kcKPohbFCyw==
+Date: Fri, 29 May 2026 12:49:45 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, soc@lists.linux.dev
 Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Fixes tags need work in the arm-soc-fixes tree
-Message-ID: <ahl9UR0tWlho_YlM@sirena.org.uk>
+Subject: Fixes tags need work in the arm-soc tree
+Message-ID: <ahl9WYLcYwaMyVJ3@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -39,11 +39,11 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ggY58tqGXEL9n68+"
+	protocol="application/pgp-signature"; boundary="XIAZ1wya8cd5MvRH"
 Content-Disposition: inline
 
 
---ggY58tqGXEL9n68+
+--XIAZ1wya8cd5MvRH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -59,19 +59,19 @@ has these problem(s):
 
   - Subject has leading but no trailing quotes
 
---ggY58tqGXEL9n68+
+--XIAZ1wya8cd5MvRH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoZfVAACgkQJNaLcl1U
-h9DSdgf+NU4Pg2YVURrzEkg+r/PWwXOH0RbtNF9FZ1Grpj8qNWUQSGdbiEqZaR+r
-zenFYaQ3SHKUEPd702U20GvF28tNcXdsG9KKodoZsKbl8EpCBg3ZLh4qnjHkN/9f
-mZ19V1OL/HsErrumAkh+gctIjUbDy8ZA2YNVR2vgWqaHt3SwuA29JNFL/BpEa8Dy
-Jhe5Ir/+sEfCCK9/ZNun1H243hvycLAUm9DHN7a0O0HQGF2rWFwe/kIrqL1swShZ
-AARoYkFY2N7juKc2ktDWjP1IupOAYxWeJJALPfkMNZtIMWWW2gX96KDzHBTSq1i/
-OvY4u4F3DYgojxX4AW9sNe4AeB40RA==
-=0U1i
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoZfVgACgkQJNaLcl1U
+h9DcoAf/eNkzWHr/KmP/SubGREoBDK9xBgWTpFq+sMKfuw2OGHtdAnOFRw1J7XYl
+5l7FYjoCEe/B4l12TW1h5rJa0NJP/Dnl7GyiaxCem1QvHeBwLPCiQR6ZN7IsNBdy
+HC8v6t/+sfyqm9bW4dcfqq/s9vb1ebPkaiYBLfghY0S8IVSZ2zWDat5d1Uwy7m62
+H8UgvTpUjURkxc9thILafB8hkX7sHPc+cDPPgEfR1GPCSeSq4CTMhZUeXsx39B0K
+QNBITi0YpskuYEoLmUo4/UR1ZiwwC8vTXxYPwGeSpsvFOHMuSjfaLYH1Zx2WCiLu
+YuTcBwDWt1Y7CR3+f8XiRuTMFynKGA==
+=7MZL
 -----END PGP SIGNATURE-----
 
---ggY58tqGXEL9n68+--
+--XIAZ1wya8cd5MvRH--
