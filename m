@@ -1,155 +1,73 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A0D3EF0A8
-	for <soc@lists.linux.dev>; Fri, 29 May 2026 15:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B593876BB
+	for <soc@lists.linux.dev>; Fri, 29 May 2026 22:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780067054; cv=none; b=suc665fL6oUW5dVnNcCh5615IzmDTojJCHGbnkbgVlUJfXAA+bUiqyzQi1dY5w1blCJ2kQiHc6U5hMKxdzDsxG7bVVgpdyigrFovBnjMCxBcp4DnZFMQF8y6AHQ7yDl+BucPuFX5o6jLZeOrZEONRXrU/XdTvmAnoyLGSU/dSPA=
+	t=1780094402; cv=none; b=gtVjNsGtU8PEn1G3Du09G/gR+vel267bFB3uFnG2/frOspXNdNYQYoSzPeJ5uLOZmjztLpz7juQPu4YEGmLaGR4Td9wrjWZ+QmPF5/JPUo+OM8Qv6hKGSf8Sb+1lQdAe/Ha7/dMPLA9Q0cFDnzSAmnYtgypmxnK/Tp6vkzoCyW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780067054; c=relaxed/simple;
-	bh=bQ18QPLL+im82nhYKB017b2zavRhi7h41FQEYN6/t3k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UbMjt2RB+J9NZQSLcc+V/vrKb7ZPt2JPe1b9Dmi5LeKBRi9irj9u0PQgUwrG5gilKg7c2EaXSYq7E96NQpUSSoxj/JIwunYrBmJB33KeLepw6hYoQwfH0aUmJwX/2JVIO2YcrE+CyGR2fuzBiNUQ3HQVEZcuxnl0aNa6GIJ/yZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mgf3otVK; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1780094402; c=relaxed/simple;
+	bh=P8VVdNvzOJHCCNHrrkzV3rDeqqWPdZhuSa0ERFTjCRQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=DR0f0qegZW0Li6SuUE7qsgKkxd+nH2td4UNNVLTRtqAEBZjRj5msh43gIhzOU4OsVY47WvtsXgkyFkdO/LYiRCdMHECJukz8I2XnUEUrnXeZh8Zbxzg1JzxMu54sD4PgQ7jkGQwu2QdfH2CkK+CkR0tnYP7kPV5nU9HkUKVaQhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mlp1Wy/O; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mgf3otVK"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 93DDC4E42D8C;
-	Fri, 29 May 2026 15:04:06 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 68007601FA;
-	Fri, 29 May 2026 15:04:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8289D10888CC2;
-	Fri, 29 May 2026 17:04:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1780067045; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=fUWeaNsfFgJU6Qp2lS9wdzvNAu5L3srRKzUtR510ldk=;
-	b=mgf3otVKPRUXFhpVnJ78Lp60lbpvE9XKk2jjeYH47r8V1MgE6/2/7CGUwnSZ5BbjM+ec2Q
-	1a3MmW+WvM1X6MXUISKX9VbbPMOs3VTpwQ3yJkE0chnFTQ5lj3iga19mOl4E1U1/e5m9Gl
-	ZwCPvE730Kp70jTlHWR7C1sEtlK+dPMUU6vAtQo5/7c4qqAA740HQ7UvGplbHoi6r5jcIK
-	Wm3zdae3yU81FhvS2OMJN3OVOJ4lWi5OUe0AO5kzftu9S1HhwvzTJQHt0C6eer/PiJefBw
-	BcM0i1ONwLzaJVERSNfcgPZbkcwrdXXHXv03nAJdIW9iUAEI5/xljJhlfnbs4g==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Arnd Bergmann <arnd@kernel.org>, soc@lists.linux.dev, Andrew Lunn
- <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Daniel Mack <daniel@zonque.org>,
- Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik
- <robert.jarzmik@free.fr>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Alim Akhtar <alim.akhtar@samsung.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH] ARM: select legacy gpiolib interfaces where used
-In-Reply-To: <20260428162757.540823-1-arnd@kernel.org>
-References: <20260428162757.540823-1-arnd@kernel.org>
-Date: Fri, 29 May 2026 17:04:00 +0200
-Message-ID: <87h5nq1cm7.fsf@BLaptop.bootlin.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mlp1Wy/O"
+Received: by smtp.kernel.org (Postfix)
+	id 291121F00898; Fri, 29 May 2026 22:40:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DAB11F00893
+	for <soc@kernel.org>; Fri, 29 May 2026 22:40:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780094401;
+	bh=bhjjKPytn9ny/CBZ23xdbKBjVmHYxhrKwI7V9pZRqGU=;
+	h=Subject:From:Date:To:Cc;
+	b=mlp1Wy/O2KoglzjoDxrA5c2OeqOywDXh/9eunpCdCuaXyiqGFP6D2XaqGgkxjnPan
+	 bh/cITelk+6M8MGsHG6sZaEyCw3Ub9hwM4S7H22WuScg4ezSttcT9vxXOLou1hO1IW
+	 r5IcDT87WDH+A4DgvyX4/FIVaCATfQhCMGWsNG/qGnyH+k5pmJNX0tv9P94yFXe3z2
+	 MGI7YeFVQWnw3AvCq2GGa0p7Oql927GzqejI/QKhQLH0tmlV9k7Lo/4T2w0z34pyj1
+	 6XZ0YI6OuI1WfeL8UIEebAiyV64nt/FKh1+EVQT5HqYotjbRWrGkxXNSdJMycMrO7a
+	 6bacZwIsKAJkg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D2EED39301A3;
+	Fri, 29 May 2026 22:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <178009440426.1985625.8765568182062258614.git-patchwork-summary@kernel.org>
+Date: Fri, 29 May 2026 22:40:04 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
+Hello:
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> A few old machines have not been converted away from the old-style
-> gpiolib interfaces. Make these select the new CONFIG_GPIOLIB_LEGACY
-> symbol so the code still works where it is needed but can be left
-> out otherwise.
->
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-for mv78xx0 and orion5x
+Patch: [GIT,PULL] memory: fixes: driver fixes for v7.1
+  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1102685
+  Lore link: https://lore.kernel.org/r/20260529071949.12520-2-krzk@kernel.org
 
-Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Patch: [GIT,PULL] samsung: drivers firmware for v7.1, replacement
+  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1102879
+  Lore link: https://lore.kernel.org/r/20260529121757.13224-2-krzk@kernel.org
 
-Thanks,
 
-Gregory
-> ---
->  arch/arm/mach-mv78xx0/Kconfig     | 1 +
->  arch/arm/mach-orion5x/Kconfig     | 1 +
->  arch/arm/mach-pxa/Kconfig         | 1 +
->  arch/arm/mach-s3c/Kconfig.s3c64xx | 1 +
->  arch/arm/mach-sa1100/Kconfig      | 1 +
->  5 files changed, 5 insertions(+)
->
-> diff --git a/arch/arm/mach-mv78xx0/Kconfig b/arch/arm/mach-mv78xx0/Kconfig
-> index 9de3bbc09c3a..670e6587827e 100644
-> --- a/arch/arm/mach-mv78xx0/Kconfig
-> +++ b/arch/arm/mach-mv78xx0/Kconfig
-> @@ -6,6 +6,7 @@ menuconfig ARCH_MV78XX0
->  	depends on ATAGS
->  	select CPU_FEROCEON
->  	select GPIOLIB
-> +	select GPIOLIB_LEGACY
->  	select MVEBU_MBUS
->  	select FORCE_PCI
->  	select PLAT_ORION_LEGACY
-> diff --git a/arch/arm/mach-orion5x/Kconfig b/arch/arm/mach-orion5x/Kconfig
-> index ee449ca032d2..cef19bea6164 100644
-> --- a/arch/arm/mach-orion5x/Kconfig
-> +++ b/arch/arm/mach-orion5x/Kconfig
-> @@ -5,6 +5,7 @@ menuconfig ARCH_ORION5X
->  	depends on CPU_LITTLE_ENDIAN
->  	select CPU_FEROCEON
->  	select GPIOLIB
-> +	select GPIOLIB_LEGACY
->  	select MVEBU_MBUS
->  	select FORCE_PCI
->  	select PCI_QUIRKS
-> diff --git a/arch/arm/mach-pxa/Kconfig b/arch/arm/mach-pxa/Kconfig
-> index 10e472f4fa43..66e26990e2c8 100644
-> --- a/arch/arm/mach-pxa/Kconfig
-> +++ b/arch/arm/mach-pxa/Kconfig
-> @@ -10,6 +10,7 @@ menuconfig ARCH_PXA
->  	select CPU_XSCALE if !CPU_XSC3
->  	select GPIO_PXA
->  	select GPIOLIB
-> +	select GPIOLIB_LEGACY
->  	select PLAT_PXA
->  	help
->  	  Support for Intel/Marvell's PXA2xx/PXA3xx processor line.
-> diff --git a/arch/arm/mach-s3c/Kconfig.s3c64xx b/arch/arm/mach-s3c/Kconfi=
-g.s3c64xx
-> index 8f40af063ad6..3f97fba8e4f5 100644
-> --- a/arch/arm/mach-s3c/Kconfig.s3c64xx
-> +++ b/arch/arm/mach-s3c/Kconfig.s3c64xx
-> @@ -101,6 +101,7 @@ config MACH_WLF_CRAGG_6410
->  	depends on ATAGS
->  	depends on I2C=3Dy
->  	select CPU_S3C6410
-> +	select GPIOLIB_LEGACY
->  	select LEDS_GPIO_REGISTER
->  	select S3C64XX_DEV_SPI0
->  	select S3C64XX_SETUP_FB_24BPP
-> diff --git a/arch/arm/mach-sa1100/Kconfig b/arch/arm/mach-sa1100/Kconfig
-> index 0fb4c24cfad5..e23700e0d6c8 100644
-> --- a/arch/arm/mach-sa1100/Kconfig
-> +++ b/arch/arm/mach-sa1100/Kconfig
-> @@ -13,6 +13,7 @@ menuconfig ARCH_SA1100
->  	select CPU_FREQ
->  	select CPU_SA1100
->  	select GPIOLIB
-> +	select GPIOLIB_LEGACY
->  	select IRQ_DOMAIN
->  	select ISA
->  	select NEED_MACH_MEMORY_H
-> --=20
-> 2.39.5
->
+Total patches: 2
 
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
