@@ -1,180 +1,144 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5893C942B
-	for <soc@lists.linux.dev>; Fri, 29 May 2026 10:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082883CDBB4
+	for <soc@lists.linux.dev>; Fri, 29 May 2026 11:12:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780049730; cv=pass; b=SX+RcRN0RSGpOMw+VoYFIT/ihyiNvetsWV4oAvoXU1QEacaZ7PsSXrOjgbCrDkWX9sHiUPffKNCpMgpOlOr4SDwHuRBbTxwYxSlYIPJq3fidezjp2H9oPSyX4LsQwCOjEtNv2pnGbC4z9f1vlOYQYpiKKLfWzM4QeOtjtjEWglY=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780049730; c=relaxed/simple;
-	bh=u+TxELakUQvpO8/ZwykzhJX+RvlzZygF5YDeBq14kdQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=cNVy4qMI6d9pZcaCQkl0rSRCjLU1x4qV0VcEvWD+VP6tf8PDjWMSn2VjGx96U5RoWRz+Nz4TTJ2XaqqLtwGgK51M8iAr5p+wXqQdNdXRFPHantbzu/jwixjNa5XdZo+0dhlJoXrHTFXfvPOfuHZR7dnRZaZg+l9EsUZymz3kHeE=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=P8B8Za/4; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780053124; cv=pass; b=omafHDumCPQUiQG3PMcrsebsyHhxn048AIkn1/VaShR2ACHmmr6A4zvSGX6icGryDDU7u14sNcU3YV/HKn5FSGiNG0E3wuD8F8A1lfc7wHn4ciENntS8/o39owR4Xh3SC43ySydEVRbPcBbYDgik8+MxwxIXfk3ol+VtowDeKTY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780053124; c=relaxed/simple;
+	bh=Kakt6zhxRD0JeRVPS9sWBpYqDU1PaXLGgceuXRbNwLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Qb56PkN9ZftwncYDsUTHdrzt80ibsW5/70iDFCm/tnDO+ZoFE5F9THLCQYZanDq0b0MJ0oLt8txXscLDSjTdtKN4k8TdgBoSqTX3CDjoC4Lj8o36mrUcFQJKggEwiNIbDt5qQEbE/OHBMLbWRm9BWzXu12/qJDQZ/HHQAGsRBb4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Jww+jAPM; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="P8B8Za/4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jww+jAPM"
 Received: by smtp.kernel.org (Postfix)
-	id 3B8621F00893; Fri, 29 May 2026 10:15:26 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.44
-ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
-	t=1780049726;
-	b=JfSdveRK2OJtP4d9Bp7XACwBDbm8fxeZrvNtH2iAOeBtg8iHnddA2UDcHVf22npn99uH
-	 3EXlSxVDqQ3xTG/1rPvMVchF/AHYI5YW5Sf0U++YDnue4ZFtHtHJLYGPQtZFGahsc/56k
-	 DnVueV6XRAUjYPX2gnDPKBCYA/VWDvAz0fBIvcWEiJ82RbS+A3NRodvYJ7+aMkygQT2Zh
-	 NVTc7Uyay3CZbnDvgcAuI/HwtFGOGi0cVSLFaLep6qaTUeIiStzvSIaaUlMPHOhLTbTna
-	 9nUv4Btnnrq2l4SmilDSHzjUV5fEDhXR3k86oiVRnZaoR4LBmo35PyukUmYwcZ6KU7g==
-ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780049726;
+	id AF70E1F00893; Fri, 29 May 2026 11:12:01 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.167.53
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1780053121;
+	b=jJ1ZgSoJtvs02XKXOTg1K8wlpD6GIhlNtLnQy7vTH9gscWr8yLjsOABfna9TLmVCBqOd
+	 7nK+TYWK6ME5yAghrlCbM/RyqZj+1HwOFuBtygsXswg9Ra0eeXfxiKxjQeI0GKQhNbRun
+	 JMOPG4f+Cf5yUqaqmQlaAbvh9zs84UlbHGl/TX9bY+h/jSwAjCpqjmJCE/I4hIwXa/Q2U
+	 sTMbUnn0CXgRO0oPH497cK0bQqCHrnZeyrLbkf7R4A3P13KNJvDG0cLoAsI8P8b5oztlw
+	 7rNVyUhaR2H2h2LcyJ2HJCdBafseeJx5S+/6J3DT6bGWNssze9exxZpLPDa8uR6DfHQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1780053121;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=Q6nxMY8baHQ9SXUgo7tcneXPgF65eVlp4HOdZrI3XL8=;
-	b=ux6Bb675qbWCZjankfeExsyAvOcGgmiYbefMXeGnwJNgtuVUsbP42N1W55Vv07fY7nZt
-	 9GMAKK4CnZvtZERZZNCkfin8rL4XL1AC2rf4f8SYqjv7xXDwrE3xre5VxBzFmGsHXtU/y
-	 LXJLSmBHbhhcPJ+3J14VkPajcVykPoSwdqG1ALvO1L3UTcaG1eJas5r0lPzhcI9KXuyOT
-	 6wIIqW5sLfvuRWmBbdQnmV96C5Zmrz8VMKEe2p2uv0XYFTgrCXFyB51rF25ccrhC27zx3
-	 lNCbOxG3/jxr3QYNtIh0dRfpp/4Nwq0TE0T8Xf77+ju0pZcnWLW1KmLXFFA0SpGaNPA==
-ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b="P8B8Za/4";
-	dmarc=none header.from=monstr.eu;
-	spf=none smtp.mailfrom=monstr.eu;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.44
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition;
+	bh=tJZr4ds5xh06/P7V3+Chp2lk69csiorD96DTJ6REhXM=;
+	b=YGXb67zERcdmgyTwQ2wu42V2hiXVwRiKveVjyijVqfrU2ZYKI5D8IKwi/PkCiXj0VeVm
+	 ui4NHtua8pmEiCi8E3Sct5mgAjVw6my4tmYZtDkIKbFowLeJvsNiZjFNCQQ0/RcsegF4l
+	 77SWZ0ZS2o/fB1muOO8wsY0FX/KFbS94lJFXlreTybrAzmu2jGt1gnvA7AiFrb4GXQ853
+	 M+AlL2xLwooOkP8FnRCRNAZ0i7E4QcnrKKGPqWlXpKhsxj97PrKrdb9Xp64mwkQl7IuXz
+	 5jaEl2nPK5gA5N7uXFHAe4ga64gpK6pZzPUebrhhWtIUnQobagakohGj1bp3Nrqs/SA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=Jww+jAPM;
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	arc=none smtp.remote-ip=209.85.167.53
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 556701F00899
-	for <soc@kernel.org>; Fri, 29 May 2026 10:15:22 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2FE3C1F00899
+	for <soc@kernel.org>; Fri, 29 May 2026 11:11:59 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=P8B8Za/4
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 556701F00899
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-66039d3efcbso2398478d50.2
-        for <soc@kernel.org>; Fri, 29 May 2026 03:15:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780049722; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aDzLac0+2SNWGN/t9fxDOfJffm8+HlDvugGtTHn2ycp4a2n2012wZGONNnzKRv8cl6
-         nM/FzaTAgs8RmlSxBVXwdAV0L+ZXPJCcAGRN8xcWzc3ZR044vfmPWfxdey6aC70yziCm
-         OleQkAsKTdznozjqOh1DNV84oPFBKMQJ653OYF3WHlkTD01XQHWdT53Rn6d5bgnJSoqp
-         MGpegYsp2ZQ+46YACoPbquLoIpZh+hli27eEN3EBApdJ8KN0w7Gp139vfpHRlZqvI+bK
-         +oh7EOwkRMb4P60ObxX1e0ugt5vNk5WzoXJcY2JcqfEO+t5K+4o/BGvNkUm6zUti9osW
-         UJ/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=Q6nxMY8baHQ9SXUgo7tcneXPgF65eVlp4HOdZrI3XL8=;
-        fh=ngnzniW9/251Blo+3H7OvJM/allDljIxuXeYmmxYfks=;
-        b=IIKT1GXn/rBdjQKVhzBHSFSyyPBG6667OBQwyg8If/3x4VSRH5wufiy1jrx401ajWO
-         7rN7NJIMvUnxThmsHvZqf4WNthKOJq+8D7juVgu9RO89ZtwdDyy9Dh4rJlNJ2uAxk7dc
-         kbhG4OMbGbJoqHtJhSzZH5jecLfo3VLvPsi6RTLAmeA4/oq+Pvc3REFW6x7jc8ttWOOy
-         nbKiAuRhE899h1I24mJTx/USrADoRXN5qVC5/IeZ6ZvSrm8b9N9EgHnqDOe99D0AXkb4
-         GxmiLxykHqVfZx+eY/UKeJ6exLl0Sp9krdNNsVe0gHsnHbemwOP0JC3qTF3HDGt9FY3Y
-         /XuA==;
-        darn=kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=Jww+jAPM
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 2FE3C1F00899
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5a8f9841616so11349877e87.0
+        for <soc@kernel.org>; Fri, 29 May 2026 04:11:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1780049722; x=1780654522; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Q6nxMY8baHQ9SXUgo7tcneXPgF65eVlp4HOdZrI3XL8=;
-        b=P8B8Za/4rrmlaF7peF4TaN8DDDc88zgE2y+M0XruHwKbjdxFFwBIz8/n+WPa7DbNTf
-         fdS5eCXxwAdGBe8a5zzERm/Ba30FWQNDELV2HiZAov1RSDoAFjzh0IouDgZd1hibC08T
-         qf0z9+a9djHqgQxOaonbgodbxnOY2Khd5sWQqTg203I/9mE2swZgADuUYxUXLIQSL6Gx
-         u23Afnpv8tushCgBG/Q1P5+WP/pDe4INbRGtHyOPsoHwxhi0s0AabxUkOClXM2Cncdeo
-         iFG6c/BYnBC4cxab0QQwqbOeeKIA99h3MwETmhHXuIujbtwPY5+PP7fVPwnfsA0pDLsw
-         Iu5w==
+        d=linaro.org; s=google; t=1780053118; x=1780657918; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tJZr4ds5xh06/P7V3+Chp2lk69csiorD96DTJ6REhXM=;
+        b=Jww+jAPMaOGB5DHbm35TQPx3RdpvsMTjDwJnnrLMnDrQTBqZDtwbuIrcVx+mEL+Z0j
+         bcsXnWDQOWwxZYW47MsaKS/r/Y8l19x3FkE854EmKK5npaj6cV7E6R9s7sff2tO5Xqps
+         59DAGi4bAj9oEPR8Ht4M+sDbINmSd6At+EaH9YOFTDyGwvM8y7UWaK9cuuifrrpSJ4sV
+         3iEJnaCr1NPNCBVY/qaOKDSGduoFdmkRXQj995be1x/vBCoeWeXy8lhuTKqDl9hEJehv
+         SUODKVItfF1DvKgMhR08Kx1+bsmfcL+5JbSztKM1MicdqzxZ3NHmfC3lp62mwBuYR5th
+         rHXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780049722; x=1780654522;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6nxMY8baHQ9SXUgo7tcneXPgF65eVlp4HOdZrI3XL8=;
-        b=AZ2RBL2mazzDL7DgT064Qmla64qu83n7lftKWnEUfbfrD6BMxWxLPHMP8bY+OzXwlx
-         vKxZAZTv9HO15Rdq9RvMHO4kj8gxLQabFE0Xylme2ziVIH3g9Wr3gjB6pRSUf8uZlIll
-         isI/5stYYirrnu9BY/uGtyaoAW6Dvmc5Lzqo13c4jkgaAUIZZcRU7LBE/2FwTclzKfxR
-         IEWRhc+Zx2NtTRSIgCI2j3ee5s3J27+meOrC4glAFbl0YSQ0eDFCOZzLQmj4NRoPR34Y
-         Q7r1hAONFXMMY0uFnrnhteAp77cfhl07b8h9skF2HoadtvXSoppK7hXQ/XwEdAwtQpZy
-         fpQg==
-X-Gm-Message-State: AOJu0Yx4EFM0YF95KCFL9cvagSkiYqkhqHD4C9cQoodJ1mbOvWjJYxCE
-	jEL/wCGkyjv0IXRUmigafKp3mxHRVPKPmCxycDZ0/R9QgTMlqsBFH3o+f9skeieCjbMPkv6bH0E
-	gLhJqbIOa9PrmVHDCRv2HZeiv09lhega1rwiZuOup0C0pFDPfRGGy5w==
-X-Gm-Gg: Acq92OH+9txjhLiXi3YnC2vSfBSgmeosBLXK+WK77fknOkEzIJylJ6wYA4OJUnnVOEP
-	gYuVYLkt35aHyk5lR6nmK9kFrkzNSrnxu8KTGQHojoxVSHpp/mJBRdggrshkajJ5m3riKxDK1of
-	6oeKK4rKe5GmqTVNGzJkiQS9IJngNyB7KQ1wAi+IgObZUWQg5ge82+1ZfCiP0CUyWtN4U2L5D7S
-	p+b/RZWXbubgKiraY7N7H4Dx1nzgoy8qX0EitDH6IwTslbBOisllJT8B0jCEewOJVGCD6eikVmB
-	MTX28kClF/Mlb+M4Wv0BoTr9HRFVSvekR0B6r9YJW6dDgRwN/qg=
-X-Received: by 2002:a05:690e:1514:b0:660:32d9:22c1 with SMTP id
- 956f58d0204a3-66052ea82ecmr1238384d50.33.1780049721964; Fri, 29 May 2026
- 03:15:21 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780053118; x=1780657918;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tJZr4ds5xh06/P7V3+Chp2lk69csiorD96DTJ6REhXM=;
+        b=ZggOK6ZdJHdEq2GY71oiPR3J2E5WuBhzVmw2X9Swd3Sqg30Lbe6ZRjmpXgbGf4a9/U
+         m66m89LoPv+Tq3dQcHOTS0g1+cnvQL7I6JmSvV0pOSiP5nlQCTAP9eABzcS1itgvuihD
+         QuQ70IR0O3LBt5x3HTDvjliTKtT3vGtLE8BXiQMOlVEVWlmAzjg1YycYoixrddCHEMrp
+         UppgSgT7BMTPlJTvZ1veW9u76mTWntHQM6aS4XnLwD8kBmOqNzwTpbOempNbQYTkzO5n
+         LN30V/uXHhawDNWAOvoNxPQYWtwbUsjWdt0sy22S6XcWo9v6dafFL1o1g8mfeXUnIvWj
+         CrpA==
+X-Forwarded-Encrypted: i=1; AFNElJ8bKO8pMQK1p2ZwBa8LtK8nb3I0MCJIjMdLw2SUEu3VQ1AO3VQE3l14n1pq65wihrmd8hE=@kernel.org
+X-Gm-Message-State: AOJu0YymSNAxDYfFqkv/tOpwxArHZ7x4YhDmJy8dnwUmPj86dmXVZLka
+	XnkZA4wngvB2ESibV97d+QlYDhO9ahEYHLd9/W2NJLqDDvlveyaD25LCpuHi5OpLLJwb/BrQLiJ
+	yPyX5
+X-Gm-Gg: Acq92OE3Q12ivIn7d6qGZxhL6EA8vunSUt+orPwxr97AIHeY+OvbQN3mgvDjSr1TkQQ
+	zXPFHX00J0ZvSxZJ4krB7jOzEICHoH9gT5n4bNdVxMPNWsxRykLLWKTtKaxxUTCAsiJ6P03k4sU
+	Ijcz09M/gQb5i3zaHvIZEly+s/oO9aGDaWbX5i7DbdI1QO8yht+Oz2cSTz4sfMVe+kNxegrVJDd
+	TTBTveX2uy1CkSo5wIVh0iRlFEtQcRdWKVr0nhfqb9FM0bfCQ8wf4b98kXvKUvoxRfgLA98zn8b
+	kpAsAUXW/IA8wxwHxKe+6HAu0qXzl0sG9lFoMVG55icfr+UXifmYHQTbP3/G8uYr89N4wtn4p/f
+	sPS+CXYVAXfolv965BRSej0KOGGO1I5gMiCVLfvstQaKO3hR8SXgIVdFDulI/cuMpF9igZ5syaM
+	phcej2RyHr+duoaf5JHKhXAVXqBJKaPz1Mr1GHX9UDorHgUHrpGZbiZkR0kZkNas6xhe7wSRexA
+	LAXkg1aj/dYYqvpEeDKnPDI2xZb/2M=
+X-Received: by 2002:a05:6512:2304:b0:5a8:d14c:a14d with SMTP id 2adb3069b0e04-5aa5949a3c7mr732639e87.18.1780053118287;
+        Fri, 29 May 2026 04:11:58 -0700 (PDT)
+Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-39660103a4csm357311fa.21.2026.05.29.04.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2026 04:11:56 -0700 (PDT)
+Date: Fri, 29 May 2026 13:11:53 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
+To: arm@kernel.org, soc@kernel.org
+Cc: linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] AMD-TEE for v7.2
+Message-ID: <20260529111153.GA2532355@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Michal Simek <monstr@monstr.eu>
-Date: Fri, 29 May 2026 12:15:11 +0200
-X-Gm-Features: AVHnY4Lal-FfaM_K5u9m3mttSbGCNbBaXcJ-9B1nzkzSgz-ek7xSeV5hmB4qamg
-Message-ID: <CAHTX3dKWE6DOPLXPq31wRiXfjac0TVqSOAOLP8itHoGYpF9eBA@mail.gmail.com>
-Subject: [GIT PULL] arm64: AMD/Xilinx SOC changes for v7.2
-To: SoC Team <soc@kernel.org>
-Cc: linux-arm <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Hi,
+Hello soc maintainers,
 
-please pull these 4 patches to your tree.
+Please pull this cleanup patch for the AMD-TEE driver.
 
 Thanks,
-Michal
+Jens
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+The following changes since commit 028ef9c96e96197026887c0f092424679298aae8:
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+  Linux 7.0 (2026-04-12 13:48:06 -0700)
 
 are available in the Git repository at:
 
-  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc-for-7.2
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/amdtee-for-v7.2
 
-for you to fetch changes up to 47d7bca76dd4f36ba0525d761f247c76ec9e4b17:
+for you to fetch changes up to 84a1e6179bd24dc10e47f6fa2b36f0ed345e68d8:
 
-  firmware: zynqmp: Add dynamic CSU register discovery and sysfs
-interface (2026-05-25 16:09:15 +0200)
-
-----------------------------------------------------------------
-arm64: Xilinx SOC changes for 7.2
-
-firmware:
-- Add CSU register discovery with sysfs interface
-
-zynqmp_power:
-- Fix race condition in event registration
-- Fix shutdown and free rx mailbox channel
+  tee: amdtee: store buffer ID in tee_shm->sec_world_id (2026-04-27 14:13:08 +0200)
 
 ----------------------------------------------------------------
-Prasanna Kumar T S M (2):
-      soc: xilinx: Fix race condition in event registration
-      soc: xilinx: Shutdown and free rx mailbox channel
+AMD-TEE update for 7.2
 
-Ronak Jain (2):
-      Documentation: ABI: add sysfs interface for ZynqMP CSU registers
-      firmware: zynqmp: Add dynamic CSU register discovery and sysfs interface
+Store buffer ID in tee_shm->sec_world_id and remove internal tracking
+structures to align with other TEE drivers
 
- Documentation/ABI/stable/sysfs-driver-firmware-zynqmp |  33 +++
- MAINTAINERS                                           |  10 +
- drivers/firmware/xilinx/Makefile                      |   2 +-
- drivers/firmware/xilinx/zynqmp-csu-reg.c              | 258
-++++++++++++++++++++
- drivers/firmware/xilinx/zynqmp-csu-reg.h              |  18 ++
- drivers/firmware/xilinx/zynqmp.c                      |   6 +
- drivers/soc/xilinx/zynqmp_power.c                     |  47 ++--
- include/linux/firmware/xlnx-zynqmp.h                  |   4 +-
- 8 files changed, 349 insertions(+), 29 deletions(-)
- create mode 100644 drivers/firmware/xilinx/zynqmp-csu-reg.c
- create mode 100644 drivers/firmware/xilinx/zynqmp-csu-reg.h
+----------------------------------------------------------------
+Rijo Thomas (1):
+      tee: amdtee: store buffer ID in tee_shm->sec_world_id
 
-
---
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+ drivers/tee/amdtee/amdtee_private.h | 16 ------------
+ drivers/tee/amdtee/call.c           |  2 +-
+ drivers/tee/amdtee/core.c           | 52 +++----------------------------------
+ 3 files changed, 5 insertions(+), 65 deletions(-)
