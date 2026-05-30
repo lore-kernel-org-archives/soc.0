@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF18548EE
-	for <soc@lists.linux.dev>; Sat, 30 May 2026 19:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A07378D63;
+	Sat, 30 May 2026 21:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780169537; cv=none; b=i+f7ubQ4PSrXPi+5NHxp6Q5bzp6FjA3v+xsr43Y77XysHDHeTq0Y6tPbXm0+bqUu8FTF+KBLAVoBMJKSlBvg5T65BMTyuYhmUcu5SSM3rMb4jOTPXiv79NqAT/8qMFINqgJPtf8LqzFkRg/TrK8Hb5cJQjVmvowcxL6L9Czliuc=
+	t=1780177233; cv=none; b=NJazxZML2/CCiVUZgg7NM46Q2U/dj1h0E1eB/FxbSzLMe3Z4mZL8cLSZef06ARF85HQnbSynx22YPDawtkqs6vcDgaGhbDF3XfDgMwJcllhZfhZuwsfqVkpoliy7XGntmDdTqDLmW3C+/5sRkf1Ps6C3/f+mVIoaQIldt8T3dtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780169537; c=relaxed/simple;
-	bh=uCluxbUQUF0KJf6nI8f+sw4COCRzK2mX+VnuNMLn7Ao=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u3AY5w5zaM3dvAqaZxMp1VLBbPs35YtcarkcjYyPAn4dUzqWbORzxC7LEAFdogUTqnmrxt+nLh518WqH7ujXPR3aHVOg2UBJXLzEjYurXTdyn/e0V+hrciwXsA/LbjxuS+tA6LtyTdRymlPqRx5YfvmanP1AkbAL4k3s2JwNVt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E1kx1UDB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780177233; c=relaxed/simple;
+	bh=+3oUkLbhBpGLFG2o9Qg+l9rh7zW7WSrAKfm+iHX6+y4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QqHf/L0tx3tSrt4pgI6oI5nEd73d/1w89twm6qqaR2Bzsx0wNCr6Xz9+JP3j5D3YpitPNx85bkXSaATWCys6iOofsde0SRTWhcK8olAxDdA8R0HyLpluf82D2T5qYY0pZI1Mj3xg7OyIAWzJZ3iHhVVQgEfSB1Cjjisy+3uT2gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nOwCQWhn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E1kx1UDB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 955811F00893;
-	Sat, 30 May 2026 19:32:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nOwCQWhn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 516A11F00893;
+	Sat, 30 May 2026 21:40:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780169536;
-	bh=T+c+usL06YdXGQD2wlM+jbeU/8sQ6SgTc25rVC+XGKE=;
+	s=k20260515; t=1780177231;
+	bh=0tqOO6Ey8WoBe2Yp/hCytGo0ORoFcd+v8Gfopa8G1bA=;
 	h=From:To:Cc:Subject:Date;
-	b=E1kx1UDBsEyG0XFs/Q3PX6AwKj8ignz71omvZRF+hA9TjOKkPxrK7tKyvkFmEnPse
-	 CDMu7zfqQs7t21pJdv4pw6cPofVq1918ccFP2vQNvuD7irR3GaKzDpM5mYNl+w0QlS
-	 ph6dcH83Pdvg6PXTBGra/QLexXerrW6x+Z3rUvK5ECgdGGGmAwy3Ij+p60LYrHge/q
-	 +LIoDtEc91PUP55pG5nmh2VgeY7hw7HDgdtUl6RzObMe0OQmfli2WnkMagaOJQ5CDM
-	 4hwBt9OkjPTPiCwTD0+gJiz3K8Fw7r+KjWT5r3NFqbMF1DKJ5qijbPoYSGYk6gCnpl
-	 c1e5ZP1dyv5dQ==
+	b=nOwCQWhnIJSoGVStvsqVrDYAB8sSH0GiS5FnlXzTo/3ZQWd8lRQpkaP3agYzsKO/g
+	 bQuNmpR2hSUaWW6fETnSLi6UDC4btu/e67OVbYJLab2tilvKxtSqH6BJDy8eQOKHrc
+	 ONbss7T8ZfbRCeKLVzdPpD5Qj80hQXyKdMjR85D/OohwhWIXOOiJ/AS84tPIw0ggHi
+	 Ift/5HpK58wQIwS41kfjAu2wzgi020gSGGUuwGoFxH2hHYt8f+aaY9OEa51EEtW3oQ
+	 EJ4DxZaK+LZQa38uEKlT1uBzDXtY5JYqqAKv0RPUvTyv/aVE0IITua4eIeITej64vB
+	 CGrSnB0GZuPTQ==
 From: Dinh Nguyen <dinguyen@kernel.org>
 To: linux-arm-kernel@lists.infradead.org,
 	soc@lists.linux.dev
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm: dts: socfpga: fix for v7.1
-Date: Sat, 30 May 2026 14:32:13 -0500
-Message-ID: <20260530193213.158229-1-dinguyen@kernel.org>
+Cc: dinguyen@kernel.org,
+	devicetree@vger.kernel.org
+Subject: [GIT PULL] arm64: dts: socfpga: updates for v7.2
+Date: Sat, 30 May 2026 16:40:27 -0500
+Message-ID: <20260530214027.161945-1-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.42.0.411.g813d9a9188
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -47,19 +48,54 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_fix_for_v7.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v7.2
 
-for you to fetch changes up to 63838c323924fe4a78b2323bd45aa1030f72ca60:
+for you to fetch changes up to 7557d67a6057362a65ad03a03cbefe7f03523003:
 
-  ARM: socfpga: Fix OF node refcount leak in SMP setup (2026-05-26 09:53:20 -0500)
-
-----------------------------------------------------------------
-SoCFPGA dts fix for v7.1
-- Fix OF node refcount leak
+  ARM: dts: socfpga: arria10: Increase JFFS2 rootfs partition size (2026-05-14 06:56:55 -0500)
 
 ----------------------------------------------------------------
-Yuho Choi (1):
-      ARM: socfpga: Fix OF node refcount leak in SMP setup
+SoCFPGA DTS updates for v7.2
+- dt-bindings updates:
+	- Document compatible for Agilex5 socdk debug daughter card
+	- Document compatible for Agilex7-M devkit
 
- arch/arm/mach-socfpga/platsmp.c | 1 +
- 1 file changed, 1 insertion(+)
+- Add support for Agilex7-M devkit
+- Remove reg property in the PMU on 32-bit SoCFPGA
+- Set i3c alias on Agilex3 and Agilex5
+- Update data-width of DMA controller on Agilex5
+- Set phy-mode to rgmii on Agilex5
+- Increase the JFFS2 rootfs partition on the Arria10 NAND SoCDK
+
+----------------------------------------------------------------
+Adrian Ng Ho Yin (4):
+      arm64: dts: socfpga: agilex5: set alias for i3c controllers
+      arm64: dts: socfpga: agilex3: set alias for i3c controller
+      arm64: dts: socfpga: agilex5: update data-width for dmac
+      dt-bindings: altera: add compatible for agilex5 socdk debug daughter card
+
+Dinh Nguyen (3):
+      dt-bindings: arm: altera: document the Agilex7-M devkit
+      arm64: dts: socfpga: agilex7m: Add SoCFPGA Agilex7-M devkit
+      ARM: dts: socfpga: remove the reg property in the pmu
+
+Nazim Amirul (1):
+      arm64: dts: socfpga: agilex5: Fix phy-mode to rgmii as HW provides clock delay
+
+Niravkumar L Rabara (1):
+      ARM: dts: socfpga: arria10: Increase JFFS2 rootfs partition size
+
+ Documentation/devicetree/bindings/arm/altera.yaml  |   7 ++
+ arch/arm/boot/dts/intel/socfpga/socfpga.dtsi       |   4 +-
+ .../boot/dts/intel/socfpga/socfpga_arria10.dtsi    |   4 +-
+ .../intel/socfpga/socfpga_arria10_socdk_nand.dts   |   4 +-
+ arch/arm64/boot/dts/intel/Makefile                 |   1 +
+ .../arm64/boot/dts/intel/socfpga_agilex3_socdk.dts |   2 +
+ arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     |   4 +-
+ .../arm64/boot/dts/intel/socfpga_agilex5_socdk.dts |   4 +-
+ .../boot/dts/intel/socfpga_agilex5_socdk_013b.dts  |   4 +-
+ .../dts/intel/socfpga_agilex5_socdk_modular.dts    |   4 +-
+ .../boot/dts/intel/socfpga_agilex5_socdk_nand.dts  |   4 +-
+ .../boot/dts/intel/socfpga_agilex7m_socdk.dts      | 103 +++++++++++++++++++++
+ 12 files changed, 131 insertions(+), 14 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex7m_socdk.dts
