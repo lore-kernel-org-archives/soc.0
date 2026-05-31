@@ -1,114 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EE330F548
-	for <soc@lists.linux.dev>; Sun, 31 May 2026 06:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E31535675A;
+	Sun, 31 May 2026 11:57:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780207726; cv=none; b=JncVLVwElP1XCT0SA5/d8T3KJkyr9l50hjEGqdRFj1NCrcjOSnKc/KKwfa/yseA/k6Hyg5JYrJ8nXS8mt162p09lr3JdvNsOx23Dl8pJWMZp7FfIDdw+UJfAJ69Do9FzRLPeSIrvxbPjT2soLa2tb/N6O2ndLDcZKL7qsloUPb4=
+	t=1780228644; cv=none; b=srX7Pg0K3CFxsB8RGfooUuTb1JPaF9cOohJiApR0XnCnqXVPS1dy0iB8suz2WmyGDgpNhZJTyWrL3ZSVpHn4pqoqfK9u0w7+iQ5ywVhg4nXv28e6DjRrsh1TTOvSdefsLJTHPbXl7FKGFVZMAlFxmN7krMNAmMSGcSujEmftDW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780207726; c=relaxed/simple;
-	bh=obTKii19n3Fr58xQ9XTnT0LbNjnDGvC46Xif7q1rNzc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iF1RjUvqy8i9B67MpVxjyz+Ee/0XaWKdjDAY7101wYP7BSKVRdHDKVqg+8hr6ESP1ff5+7yxt4U6f3S1bQKsuC4Og0UqFu7eleZtBDlEk/9A/ZFZte1zlugiztENtSDAIQTuG+wFFmpuL5F32+7z+8+W5eD56CLcqMw2qGSrJeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwMipyGY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780228644; c=relaxed/simple;
+	bh=gVCNsDRJ0MP+gZFyRuu3pchetKH69XexU03+lkyuxL0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nRXKjezrcrmbn5yZPMtzQBsjrASAhTMYy9jDGP2x4u3EDzOiSEwyCl3NxS/x013TSSrnniSkAvslEA5NwqmuLRoSDpjjr9puhC9075f1TOndsqSJlPDKrJrUbIa6R3psrsBNOkwBIPhYhTUGaO+ShN2P2BLPc6hHZ/Wrc8xkj5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddRUXK5j; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwMipyGY"
-Received: by smtp.kernel.org (Postfix)
-	id 1C9921F00898; Sun, 31 May 2026 06:08:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730881F00893;
-	Sun, 31 May 2026 06:08:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddRUXK5j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B808A1F00893;
+	Sun, 31 May 2026 11:57:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780207725;
-	bh=D++U1nkKs5wRw2cqvZO4MKORFcaw0F53yOnifOad0po=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iwMipyGYfxQXHLbuQYTrR+ffNueQpMdDdALkh5TmKxXOb7e9BjyTI0SYxMrviWX7H
-	 So6tXHFaXfkeMy0V798kiR1DNLKCn7hzH0iNGkVRqsxG9Df2/jlsJIB/TkeR26xj9F
-	 0GR1f8iQORay/oK4UFbfZnefIZWeazgYo8la7Fr8UmPoTrxJD4B0bgenricwC9lSli
-	 6VSWWI+WZ08tlS5nUtXcGyhPHvKPAltRWhBNeBpoc+2+2MRS8MNJgAp2w5lgxpsCzk
-	 jBE2DZTyTHsflRSvWcaZ56BmBmgxs728PFKZobTPpm1hoZgv3TDmxqRJXf0K9dlvIq
-	 yC32kx1XL7VyQ==
-From: Thierry Reding <thierry.reding@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@kernel.org>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/6] arm64: tegra: Changes for v7.2-rc1
-Date: Sun, 31 May 2026 08:08:23 +0200
-Message-ID: <20260531060825.1855391-6-thierry.reding@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260531060825.1855391-1-thierry.reding@kernel.org>
-References: <20260531060825.1855391-1-thierry.reding@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1780228643;
+	bh=GDk3yFHBk/zRZTj3Jy29GZAPzcAOfnr2evd5A7y/XD0=;
+	h=From:To:Cc:Subject:Date;
+	b=ddRUXK5jflEFNwBOC34dADjqdaCFjtw2/hajiWzfpIo8FHVULo8+/RcSofSMGjbZx
+	 BvQ33hlnwJrMzijKexomSYnJ6/pDZCuApdZEaxGEZm1gzkacsmc4wJZ5ffRfeF2WOK
+	 C2bSo4Jz/GAk3i0InAD6ZgpiSUyjmJ7ERdzlLOvAqelvwl1PBjyAidOXaUHUeqJ8gD
+	 l/GfEJnOL8cOGS8JTxL1z9OR56d9Wxsq8GLmAKg0emJLvbPxlMOblr6fASbdrIlogK
+	 Lys+Hl3brgcjElAWb8U0nTK+/OFPUGhbf4yi67/49eIitp5M6AJRyUBNWlUzx7oWzk
+	 sNFhWXfLYdckA==
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Drew Fustini <fustini@kernel.org>,
+	soc@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Subject: [GIT PULL] samsung: drivers firmware for v7.2 (also for thermal)
+Date: Sun, 31 May 2026 13:57:13 +0200
+Message-ID: <20260531115713.19388-2-krzk@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2701; i=krzk@kernel.org; h=from:subject; bh=gVCNsDRJ0MP+gZFyRuu3pchetKH69XexU03+lkyuxL0=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqHCIZPJQi4wCh/sSHqLVPio01+JR11rQoTyW6z hE0vL0HHluJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCahwiGQAKCRDBN2bmhouD 146AD/sEch8FDXTWsidapkjgCwA9yBLOtWEGOhCT5t+7v8jakJxrE3pEP0ePj6zsy4FCly+S+s7 ic3bVbQXDpMK9ZibCsr+fbxei5K7OSr714E4O76n6zfSFsOX555z7GUXmNuJoa8+7zKwft46ELJ QHvdyz4ZKY2y6QJZW0tOuZ6U1K3+HP0HbeRqeY2CFBtJ6SKkt2efjHIz5LO+zD6oZ9ENqg9Et5d BMmjvbnO27KXpRBGWKLq/9ai+sQhJX6L0tvGjsbvJr3ybUprrd1RQGRcJkFDYO5XTcGxdR8mXCK +Nn/GDxqMvXsd4VNwx6udMNY3L359ZipuDv87gx63mGxpCafq4EWyJxLP08ujvcwW2EJzPKdGhW AuCnLtLLa/vkSUxq9bh+mlyooLxSw3SaKISKl2uEKBXjzZL7Pw8XMohio+VEsXOkeKx29Di9QGS I/zko0DaIc0bMstx2ZD6lN13QIIWD/uN1Q3PvfO8Tz9w3jHTlbHa1dJ0pxk87clsmbbYPppBQm3 rXqbEQ53lcMxhA06Ft4q0ARI1vJN/FBabTOieqQ3C77Oe4vqI17BOVWSvRiUQKIBZsFn41Crmqb tL3IB6QP3zbW/nPSRIKO1wuyUFgOYE2PgaoLuFBJ5ADBGlWVg7JZgJsmrdoffB5xto2uTfloTT7 Pq65vV5jeX9O4Kg==
+X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
 
-From: Thierry Reding <thierry.reding@gmail.com>
+Hi Arnd and SoC folks, and Rafael+Daniel+Zhang+Lukasz,
 
-Hi ARM SoC maintainers,
+This is pull with firmware drivers built on top of my previous firmware fixes:
+tags/samsung-drivers-fixes-7.1-2.
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+The code here will be also necessary for thermal tree for implementing actual
+TMU driver.
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+Best regards,
+Krzysztof
+
+
+The following changes since commit 7fe40c32a33905302341797b5d12c541729dd08d:
+
+  firmware: samsung: acpm: Fix infinite loop on sequence number exhaustion (2026-05-29 14:11:23 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-7.2-arm64-dt
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-7.2
 
-for you to fetch changes up to e1215cd6d3b9338e72573cc1cc60922b5bd34da4:
+for you to fetch changes up to 7b661285aa7507eab79efff0a418445157db4141:
 
-  arm64: tegra: Enable SMMU on Tegra194 display controllers (2026-05-29 14:33:29 +0200)
-
-Thanks,
-Thierry
+  firmware: samsung: acpm: remove compile-testing stubs (2026-05-29 16:05:31 +0200)
 
 ----------------------------------------------------------------
-arm64: tegra: Changes for v7.2-rc1
+Samsung SoC drivers for v7.2
 
-This contains a fix for GPIO on Jetson AGX Thor and enables the PCIe
-controllers used on this platform.
-
-Smaug (a.k.a. Pixel C) devices can now be properly powered off via the
-PMIC.
-
-Miscellaneous improvements are made across a number of different boards,
-such as SMMU enablement on Tegra194 platforms and some better bootloader
-interoperation on Chromium-based devices.
-
-Finally, various minor fixes to device tree properties round off this
-set of changes.
+Improve Samsung Exynos (and Google GS101) ACPM (Alive Clock and Power
+Manager) firmware driver:
+1. Few code improvements.
+2. Add support for protocol used to communicate with Thermal Management
+   Unit (TMU).  This will allow to implement the thermal driver working
+   for newer Samsung Exynos and Google GS101 SoCs.
 
 ----------------------------------------------------------------
-Aaron Kling (2):
-      Revert "arm64: tegra: Disable ISO SMMU for Tegra194"
-      arm64: tegra: Enable SMMU on Tegra194 display controllers
+Arnd Bergmann (1):
+      firmware: samsung: acpm: remove compile-testing stubs
 
-Brian Norris (1):
-      arm64: tegra: Add #{address,size}-cells to Chromium-based /firmware
+Tudor Ambarus (6):
+      firmware: samsung: acpm: Consolidate transfer initialization helper
+      firmware: samsung: acpm: Annotate rx_data->cmd with __counted_by_ptr
+      firmware: samsung: acpm: Drop redundant _ops suffix in acpm_ops members
+      firmware: samsung: acpm: Make acpm_ops const and access via pointer
+      firmware: samsung: acpm: Add TMU protocol support
+      firmware: samsung: acpm: Add devm_acpm_get_by_phandle helper
 
-Diogo Ivo (1):
-      arm64: tegra: Mark MAX77620 as system power controller on Smaug
-
-Jon Hunter (3):
-      arm64: tegra: Fix Tegra234 MGBE PTP clock
-      arm64: tegra: Fix address of Tegra264 main GPIO controller
-      arm64: tegra: Enable PCIe for Jetson AGX Thor
-
-Manikanta Maddireddy (2):
-      arm64: tegra: Add aspm-l1-entry-delay-ns to PCIe nodes
-      arm64: tegra: Fix aspm-l1-entry-delay-ns L1 latency cells
-
- arch/arm64/boot/dts/nvidia/tegra132-norrin.dts     |  5 ++
- arch/arm64/boot/dts/nvidia/tegra194.dtsi           | 17 ++++-
- arch/arm64/boot/dts/nvidia/tegra210-smaug.dts      |  7 ++
- arch/arm64/boot/dts/nvidia/tegra234.dtsi           | 24 +++++-
- .../dts/nvidia/tegra264-p4071-0000+p3834-0008.dts  | 12 +++
- arch/arm64/boot/dts/nvidia/tegra264.dtsi           | 88 +++++++++++-----------
- 6 files changed, 103 insertions(+), 50 deletions(-)
+ drivers/clk/samsung/Kconfig                        |   2 +-
+ drivers/clk/samsung/clk-acpm.c                     |   8 +-
+ drivers/firmware/samsung/Makefile                  |   1 +
+ drivers/firmware/samsung/exynos-acpm-dvfs.c        |  20 +-
+ drivers/firmware/samsung/exynos-acpm-pmic.c        |  20 +-
+ drivers/firmware/samsung/exynos-acpm-tmu.c         | 239 +++++++++++++++++++++
+ drivers/firmware/samsung/exynos-acpm-tmu.h         |  28 +++
+ drivers/firmware/samsung/exynos-acpm.c             | 113 +++++++---
+ drivers/firmware/samsung/exynos-acpm.h             |   2 +
+ drivers/mfd/sec-acpm.c                             |   6 +-
+ .../linux/firmware/samsung/exynos-acpm-protocol.h  |  36 ++--
+ 11 files changed, 393 insertions(+), 82 deletions(-)
+ create mode 100644 drivers/firmware/samsung/exynos-acpm-tmu.c
+ create mode 100644 drivers/firmware/samsung/exynos-acpm-tmu.h
