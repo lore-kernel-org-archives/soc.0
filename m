@@ -1,31 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D5D38643B;
-	Sun, 31 May 2026 12:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCDE372B32;
+	Sun, 31 May 2026 12:19:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780229244; cv=none; b=pbyqG1P98DEM5dnXiQ/eab6Evhl6WrkpmPx092yXQXFHr42HTB8PgJDzlWVOuYyC6T9rfhs/aCuVgMUZa+Y3gsCV+Jn1IOYE0I0P2sElNEn3NA7zzR2vUB2eblG7AqHWf3Gr2TAPQpTgGXxsHhZJHzRR7mneSKMIAXciwhsv4gI=
+	t=1780229970; cv=none; b=hPoRJ/7o3hRYuq8H58MUCg7glZYqkIJZ7pQ5v6KlQwDtrBEsimHBFQUeiojgPOwb7+1GilHAXhBAACjYNEcdO0J2rOjT25i4kA4ZkOcF8zDsLjf64W2Y9DwDvJyjobjPbUWdswv5ycWqt6KqnNAI8Yu3b0DINiMG+GKEMpnAa00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780229244; c=relaxed/simple;
-	bh=pAo6hBdIG5A1dOfFT71zH2XqG2hBMV9l5Je5Gi8xvQI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jp2sAh9/JeMo4ljFgDC3UBWrLN/YQ8gwxO1Cu5K+WbeAT1aEtU5G4AdeN2b4tXAdugFG2D9QmvzeHeITxfowRpKs0uhCULteaBKZuAn9g9YLefQdGj2/hGE/YlYWPpGYJI02c61BqM+K3FS/DztjjV1cD2AWF1s4Rgh5HUFGf0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=js4n3+7+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780229970; c=relaxed/simple;
+	bh=UuG7wp35xIoXgDnOnI4+b6zdYhQkJDtCe8Z57BM2X2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nqomL7OoZDqnUTjOWkX2HZFVFbZrzFWlDgtoEkuocfoIEGrpCfxaOYcYZYd81cjgXf8yU0vvStlr3/fi7yqMZehOlHE+XTovJAeELvZvzYDE6XLmfoIhW9v3OHCMTa74ouAiOyWgPuxNo8L7q59Xb4qRBIYXdrImarLxGjDeoLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eiu3CKHw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="js4n3+7+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1CD1F0089A;
-	Sun, 31 May 2026 12:07:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eiu3CKHw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2083A1F00893;
+	Sun, 31 May 2026 12:19:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780229243;
-	bh=zORGeWuTCNHFb6hRylyD7s9kKaOx02hxKZ8rvXfea0I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=js4n3+7+v3K5Tv77SQsDR7WI0DUARPFkX1P/3XV1SOpo79lKXoU8vfWJ0W9hBrjDs
-	 JNPGS8fpxpahWtWZ20g6C1M/g5yLqn9AhDSlHJ5aj+p7GOApEm5YcWApxicQ3KJ8b2
-	 YSd1qvhzh+guUELpcARykR/XJW//qvUmcbu6pwp1bnKRjhKCsvRgSIGVPjfar8IOMA
-	 OkMAmERCgdNzEpuxnbI35nRDCnQc2ZobKzXCbu+IJVoqza8rDHsraRder+3qqdoh7m
-	 +48oFGlFf+N7z3k1oT/pPRursveUHdD/OnM4DIMPAkJ0DUWaV5SjAeH+4gOHDs5U2N
-	 uFCuy3XXYqVFw==
+	s=k20260515; t=1780229966;
+	bh=BOjNE0ZyCPtHeDevfNwnLaiZk6K+s3a08d/1p4NIqds=;
+	h=From:To:Cc:Subject:Date;
+	b=eiu3CKHw5iSXS6+eJvmat+zT68Ql4iJ2/1r/yCY67AGhixmXWf9uElqnBA4ZdhQVe
+	 oZc5B3vlpvP45Hwch3Rgc+1DPgY7b+Xt5B3cdacoff8sdMGjNwnAYeUt4Y0FvHCno7
+	 F4Wah2cTZE8MRa/SxNKrA2B7sigkh0h8i5DgP7seYilGcLktY303u8FuXYlrRF4Sdr
+	 VqkKs36m8zRcS1LVE7goAFhFin0YpNSbVW4urwGCuyc4E3N2qZFHiDt+A3KyK4g2Ws
+	 ihn4CFI4d/oCq6RmVG7Rft+iTZTeHi14a5Bas2BeXsFEtBBlOUFamBK5mStBifW1im
+	 msQ+n7EV4gj0A==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -33,47 +32,118 @@ To: Arnd Bergmann <arnd@arndb.de>,
 	Drew Fustini <fustini@kernel.org>,
 	soc@lists.linux.dev
 Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [GIT PULL 2/2] ARM: samsung: mach for v7.2
-Date: Sun, 31 May 2026 14:07:09 +0200
-Message-ID: <20260531120708.21017-4-krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers for v7.2
+Date: Sun, 31 May 2026 14:19:15 +0200
+Message-ID: <20260531121914.22421-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260531120708.21017-3-krzk@kernel.org>
-References: <20260531120708.21017-3-krzk@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=832; i=krzk@kernel.org; h=from:subject; bh=pAo6hBdIG5A1dOfFT71zH2XqG2hBMV9l5Je5Gi8xvQI=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqHCRtiR3xlZ356nsuc1DBE4XfIARyYSGCdJvsm L2Hm1zX9CaJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCahwkbQAKCRDBN2bmhouD 19IVEACAfFOV73GgiP7yXctThdSml1CzW9Zaj0e8lmr2ojgWWRP59PTCjnECC1tlzo0ccog+71K iKAoc3Nu1R7gLtjC1q5gwVS5gWS3Eyh7JODGJVnIy/iStFzPwLA0r7rBxXN81NGpnYLsT18exxb ANJty5QhCeXzYw/kh6/11BFKXLiKT9OsZ4Uey9XyQKbV+75Nq18OzOdbOl2pTBkMd7PTkMNvRoU 0ce2pr1U9lzkGtJl7HoBJfBmTfeUOtCC6F6NviXPXhh4615al59ygiUwGHw7sNCOmKJKqVOf7si l9S1FTuVOtLiGYtYFtoWgeplkfHaVCkk3amrJWu1JmKlCrCNl3+PJYOgY9LklE3OFD4o5soCy2P m/qjBFNnoW/jP0snJusas1EHGUMU9Hjn5EQ8w1e+Bh11noyr9k/6FjiNsJyU/xX1ngMPum5Qm2n 77eL2RYrpeB/tKmd5cEVtUz5ZOjS2Z+0w5Z3YJkDJUyYdTr1c5N/4DTemR1FcgLTS0bXucbALz/ Frs5viIBxG+s/GB8E+4PWdmMEINLkLdmEOFdxNHW1MuZksi+o6bWLesMHIgN3LbiXJ0dvV4Wyd0 NWSQFlrjfJR3/G2ICI9xX9j7kKptpKwpAyFdDDMuxW5dCHVvL8mYRx8i+s0lf9modO71K6Dh6xK 5qgnMMtGLUdK20Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4549; i=krzk@kernel.org; h=from:subject; bh=UuG7wp35xIoXgDnOnI4+b6zdYhQkJDtCe8Z57BM2X2M=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqHCdDkA+DDBVmovE0fXNpMnlzWJFTREvJtOSyF V4yKK7iZ3uJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCahwnQwAKCRDBN2bmhouD 18w7D/0bhn/lVoAznd8crm+hAFfKa8lsWH0kX/N4iy/i0d2PXi2NvNQ3xYXjaI5jnMFceLCSWgq EA2nmweGnjeq2n51qCMVAjGGKCGzvUeNYj0mFUD2r1Nqcfva+2S5/Bjr5J9hrmmPlrHl6VZDfxW am/P3cTrY0pYC+Ux/DBiTMhsraXWacvNCBHhNMHCRUlx5uWqj+kBgO4XAKh8ATaEAU6FXNAnMz8 4AJIJ0xOs5CG6/B4wmu0n71ygrHAN/lUOvPtA+nIxFEqeHdqcsj6Y+56TanyXefga74EKlf86sj Se5qnPT24HtocWIDVW8tGiKzuYgT/sKvrn7YW5RnZCm/g3rpYTaRx1HlCLrVvImKGEF4BxjK21I +ICgS1MVDtcVaxg/fiuxU1bSe1vFiTAI1oLSkCyOosdrYrk8MncDfBevQToeoXuTxhZz61assWe OT5NTrfI+3bdDGb01p+6l6qgSoD+YERR2zjvjJCou4rzkovTdH6HMJRFoY/uA9ZzeOeQoUrDGib y6iAjrJlO1XrVQaATd35IepvvCEtwUbWtBsYoxwE00pbFFn2QEdDVGMWQ59WMkSkXUYIv5xsWC/ 7sq78QbgOGTVUu606jMRLarfOrNmYPBOFcNSpPa46HIVDxqllFmoPu7kQ6mzSPvpxrxzoaFv6DS QGaOWUgFx8DEAAQ==
 X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+Hi Arnd and SoC folks,
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+On top of previous fixes tags/memory-controller-drv-fixes-7.1
+(which contains only one commit)
+
+Best regards,
+Krzysztof
+
+
+The following changes since commit 754d60ad1c91895be0bc7d771fbf9fb3c9448640:
+
+  memory: atmel-ebi: Allow deferred probing (2026-05-04 19:15:59 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-7.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-7.2
 
-for you to fetch changes up to b64cbd3f5d96b143fa9f21d84d381b1bb286339c:
+for you to fetch changes up to d530ed059dac445dc5b81d564adf1952b5c4adba:
 
-  ARM: s3c: use gpio lookup table for LEDs (2026-05-04 19:09:09 +0200)
-
-----------------------------------------------------------------
-Samsung mach/soc changes for v7.2
-
-Remove raw GPIO number usage from S3C6410-based crag6410 board.
+  memory: tegra264: Add full set of MC clients (2026-05-27 14:50:19 +0200)
 
 ----------------------------------------------------------------
-Arnd Bergmann (1):
-      ARM: s3c: use gpio lookup table for LEDs
+Memory controller drivers for v7.2
 
- arch/arm/mach-s3c/mach-crag6410.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+1. Tegra MC/EMC:
+   - Handle system sleep, necessary to re-program registers after system
+     resume.  A few more improvements.
+   - Add Tegra114 and Tegra238 Memory Controller, and Tegra114 External
+     MC support.
+   - Grow Tegra264 support.
+
+2. Renesas XSPI: Document RZ/T2H and RZ/N2H variants, compatible with
+   existing devices.
+
+----------------------------------------------------------------
+Ashish Mhetre (5):
+      memory: tegra: Make ->resume() callback return void
+      memory: tegra: Wire up system sleep PM ops
+      memory: tegra: Restore MC interrupt masks on resume
+      dt-bindings: memory: tegra: Add nvidia,tegra238-mc compatible
+      memory: tegra: Add Tegra238 MC support
+
+Ethan Tidmore (1):
+      memory: tegra: Fix possible null pointer dereference
+
+Krzysztof Kozlowski (4):
+      Merge branch 'for-v7.2/tegra114-mc-bindings' into mem-ctrl-next
+      memory: tegra114-emc: Do not print error on icc_node_create() failure
+      memory: tegra114-emc: Simplify tegra114_emc_interconnect_init() error message
+      memory: omap-gpmc: Silence W=1 kerneldoc warnings
+
+Lad Prabhakar (2):
+      dt-bindings: memory: renesas,rzg3e-xspi: Add RZ/T2H and RZ/N2H support
+      memory: renesas-rpc-if: Fix duplicate device name on multi-instance platforms
+
+Mikko Perttunen (1):
+      memory: tegra: Deduplicate rate request management code
+
+Sumit Gupta (3):
+      memory: tegra264: Skip clients without bpmp_id or type
+      dt-bindings: memory: tegra264: Add full set of MC client IDs
+      memory: tegra264: Add full set of MC clients
+
+Svyatoslav Ryhel (4):
+      dt-bindings: memory: Document Tegra114 Memory Controller
+      dt-bindings: memory: Document Tegra114 External Memory Controller
+      memory: tegra: Implement EMEM regs and ICC ops for Tegra114
+      memory: tegra: Add Tegra114 EMC driver
+
+ .../memory-controllers/nvidia,tegra124-emc.yaml    |  174 +--
+ .../memory-controllers/nvidia,tegra124-mc.yaml     |   31 +-
+ .../memory-controllers/nvidia,tegra186-mc.yaml     |   31 +
+ .../memory-controllers/renesas,rzg3e-xspi.yaml     |   60 +-
+ drivers/memory/omap-gpmc.c                         |    6 +-
+ drivers/memory/renesas-rpc-if.c                    |    2 +-
+ drivers/memory/tegra/Kconfig                       |   19 +
+ drivers/memory/tegra/Makefile                      |    3 +
+ drivers/memory/tegra/mc.c                          |   40 +-
+ drivers/memory/tegra/mc.h                          |    9 +
+ drivers/memory/tegra/tegra-emc-common.c            |  143 +++
+ drivers/memory/tegra/tegra-emc-common.h            |   46 +
+ drivers/memory/tegra/tegra114-emc.c                | 1351 ++++++++++++++++++++
+ drivers/memory/tegra/tegra114.c                    |  193 +++
+ drivers/memory/tegra/tegra124-emc.c                |  107 +-
+ drivers/memory/tegra/tegra186.c                    |    4 +-
+ drivers/memory/tegra/tegra20-emc.c                 |  110 +-
+ drivers/memory/tegra/tegra234.c                    |    2 +-
+ drivers/memory/tegra/tegra238.c                    |  391 ++++++
+ drivers/memory/tegra/tegra264.c                    |  568 +++++++-
+ drivers/memory/tegra/tegra30-emc.c                 |  107 +-
+ include/dt-bindings/memory/nvidia,tegra238-mc.h    |   74 ++
+ include/dt-bindings/memory/nvidia,tegra264.h       |  287 +++++
+ include/dt-bindings/memory/tegra114-mc.h           |   67 +
+ include/soc/tegra/mc.h                             |    2 +-
+ 25 files changed, 3291 insertions(+), 536 deletions(-)
+ create mode 100644 drivers/memory/tegra/tegra-emc-common.c
+ create mode 100644 drivers/memory/tegra/tegra-emc-common.h
+ create mode 100644 drivers/memory/tegra/tegra114-emc.c
+ create mode 100644 drivers/memory/tegra/tegra238.c
+ create mode 100644 include/dt-bindings/memory/nvidia,tegra238-mc.h
