@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E31535675A;
-	Sun, 31 May 2026 11:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636B835292A;
+	Sun, 31 May 2026 12:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780228644; cv=none; b=srX7Pg0K3CFxsB8RGfooUuTb1JPaF9cOohJiApR0XnCnqXVPS1dy0iB8suz2WmyGDgpNhZJTyWrL3ZSVpHn4pqoqfK9u0w7+iQ5ywVhg4nXv28e6DjRrsh1TTOvSdefsLJTHPbXl7FKGFVZMAlFxmN7krMNAmMSGcSujEmftDW4=
+	t=1780229239; cv=none; b=AlKlkr+4nkg2TRRgIYwt9hnHHByC9m3iZhtGuVmzFv8hmLw+jWdCIa7I0dU9AFK7X/zSz/lOIf/vMzacxe8J3XDifuq9kDwv1rQVUgZPszU2MIfMYbZ5/N054wPDRWa/4H6vHDYK70QMdYorNTkP11fBhQenbdx6egC4r+J0HRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780228644; c=relaxed/simple;
-	bh=gVCNsDRJ0MP+gZFyRuu3pchetKH69XexU03+lkyuxL0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nRXKjezrcrmbn5yZPMtzQBsjrASAhTMYy9jDGP2x4u3EDzOiSEwyCl3NxS/x013TSSrnniSkAvslEA5NwqmuLRoSDpjjr9puhC9075f1TOndsqSJlPDKrJrUbIa6R3psrsBNOkwBIPhYhTUGaO+ShN2P2BLPc6hHZ/Wrc8xkj5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddRUXK5j; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780229239; c=relaxed/simple;
+	bh=QTutGE9zG2f+Wgcbt0UYC4ZHolWzIcPt+afitFBIpXA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jfb96r/ihylIf8L2opbDaLsBbwKQafgEuvabm1SQMf7Ce5zSy309xw0X5UhDHKfIowU0FUOmj84Tj7LyCc9Q/1LfeI7gMTzMRSY0xCg093dbwWlG6HtYZbkS7c0t/JJVG8hlnOny72h9a0AY1kWmFiM6ao8mwpCR30F6pNzPWGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SglFG5od; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddRUXK5j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B808A1F00893;
-	Sun, 31 May 2026 11:57:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SglFG5od"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61471F00893;
+	Sun, 31 May 2026 12:07:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780228643;
-	bh=GDk3yFHBk/zRZTj3Jy29GZAPzcAOfnr2evd5A7y/XD0=;
+	s=k20260515; t=1780229238;
+	bh=yxZg21Tdekg69TWZwk8L/j9NSFNsg6bUL3zOhnRkZd0=;
 	h=From:To:Cc:Subject:Date;
-	b=ddRUXK5jflEFNwBOC34dADjqdaCFjtw2/hajiWzfpIo8FHVULo8+/RcSofSMGjbZx
-	 BvQ33hlnwJrMzijKexomSYnJ6/pDZCuApdZEaxGEZm1gzkacsmc4wJZ5ffRfeF2WOK
-	 C2bSo4Jz/GAk3i0InAD6ZgpiSUyjmJ7ERdzlLOvAqelvwl1PBjyAidOXaUHUeqJ8gD
-	 l/GfEJnOL8cOGS8JTxL1z9OR56d9Wxsq8GLmAKg0emJLvbPxlMOblr6fASbdrIlogK
-	 Lys+Hl3brgcjElAWb8U0nTK+/OFPUGhbf4yi67/49eIitp5M6AJRyUBNWlUzx7oWzk
-	 sNFhWXfLYdckA==
+	b=SglFG5odoJ/6xb5Aop5GyujemrKt6wALFTSMV8lh1qRcXrK4WaAuaSsRsCzfZTupH
+	 OyNRohGh6hRMEdbwmto4AKEtES4459oncgMVXFT//7NutF4ZjW/98sWSIpSA25JwV1
+	 jDEPXGpnSXMgQ19qrNi1ilYea01ff7juwRNM1xyMJJ3xKypc3bksmKWMutCIlknH70
+	 GKw8VaWTz3qnpBh05D2fvzqOPi+S8YI1geJE1FmuOodSnGee0LQqdDm4IV/ByEAex8
+	 zbkI0b5txmBayA/y/4j+atNapBLnmOCBfPxN7zrpCQczTZWfsUdlQoh7ZXEekABvhB
+	 sbTEdSb0j5MmQ==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -36,14 +36,10 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>,
 	Peter Griffin <peter.griffin@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Subject: [GIT PULL] samsung: drivers firmware for v7.2 (also for thermal)
-Date: Sun, 31 May 2026 13:57:13 +0200
-Message-ID: <20260531115713.19388-2-krzk@kernel.org>
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL 1/2] arm64: dts: samsung: dts for v7.1
+Date: Sun, 31 May 2026 14:07:08 +0200
+Message-ID: <20260531120708.21017-3-krzk@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -51,67 +47,70 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2701; i=krzk@kernel.org; h=from:subject; bh=gVCNsDRJ0MP+gZFyRuu3pchetKH69XexU03+lkyuxL0=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqHCIZPJQi4wCh/sSHqLVPio01+JR11rQoTyW6z hE0vL0HHluJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCahwiGQAKCRDBN2bmhouD 146AD/sEch8FDXTWsidapkjgCwA9yBLOtWEGOhCT5t+7v8jakJxrE3pEP0ePj6zsy4FCly+S+s7 ic3bVbQXDpMK9ZibCsr+fbxei5K7OSr714E4O76n6zfSFsOX555z7GUXmNuJoa8+7zKwft46ELJ QHvdyz4ZKY2y6QJZW0tOuZ6U1K3+HP0HbeRqeY2CFBtJ6SKkt2efjHIz5LO+zD6oZ9ENqg9Et5d BMmjvbnO27KXpRBGWKLq/9ai+sQhJX6L0tvGjsbvJr3ybUprrd1RQGRcJkFDYO5XTcGxdR8mXCK +Nn/GDxqMvXsd4VNwx6udMNY3L359ZipuDv87gx63mGxpCafq4EWyJxLP08ujvcwW2EJzPKdGhW AuCnLtLLa/vkSUxq9bh+mlyooLxSw3SaKISKl2uEKBXjzZL7Pw8XMohio+VEsXOkeKx29Di9QGS I/zko0DaIc0bMstx2ZD6lN13QIIWD/uN1Q3PvfO8Tz9w3jHTlbHa1dJ0pxk87clsmbbYPppBQm3 rXqbEQ53lcMxhA06Ft4q0ARI1vJN/FBabTOieqQ3C77Oe4vqI17BOVWSvRiUQKIBZsFn41Crmqb tL3IB6QP3zbW/nPSRIKO1wuyUFgOYE2PgaoLuFBJ5ADBGlWVg7JZgJsmrdoffB5xto2uTfloTT7 Pq65vV5jeX9O4Kg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2658; i=krzk@kernel.org; h=from:subject; bh=QTutGE9zG2f+Wgcbt0UYC4ZHolWzIcPt+afitFBIpXA=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqHCRskp/GVPLlEa6LJ/D2c64a92TUEdPfVipZ5 N2Xjb6rD8GJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCahwkbAAKCRDBN2bmhouD 1+mVEACEUx1fzPAa3nQag29ixTmdAErCVbmGBXIdz2L4VZ9rH14VAt2M60P3xNycu26KLxpINhe BU8IoxsCz/3v3koiZ90t1ok+bWqWluOifzsva3nYu+DIbPIlCVtKhv5vleLDfRB2ShtGpvaN4cB 1gepl1ha3V1Gt68eoWHuZ+pgjh0fJUbI+aQAXvNILPz4UYkB15bAIV9GJmvz+oTvEZR4LXyEHhO 50OYxRTDMg01ENDu+4fJGMJwmSoozyE+UjXVF2dLYzp1nFd5M9BEu14X5YQu/07Iz8DBpn26ZgV Z1USe//lFYP5tFUE0vBJ/Z+aXoq7wX6jx1Na//INJMRueRCkpxNbo/E9y4OdrtgRJKfKbxTLlKo caOTVqpypzWb/wFLD40P8sOhpY5aSvAotRPmbTHszs5Owt/7fuTi8dnJ8qpDYmvAfXp3AaI5EJd G7MUe6jixMEcs5OCKsPr9VciM7ZFyr4z2QQ+Ax+TbBlzr+9ANOUsRiVdcNnAlhb71fps9L8jUE4 4CnVmCWan6/uc+v8JhEJVz7jC7KFmUzGeUNKzJ9Ui0w7w2JXL5DEzYArACYhfnlQ2D8obDfh3UC b9M5twJ/Mrn6oEhJzqiGExTZZWRhvRyYUtKTWaUN+fN0NKndEIIZC5uZjePTRLcgbqOStKoco61 vFu04e4I7R2ji9g==
 X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
 
-Hi Arnd and SoC folks, and Rafael+Daniel+Zhang+Lukasz,
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
-This is pull with firmware drivers built on top of my previous firmware fixes:
-tags/samsung-drivers-fixes-7.1-2.
-
-The code here will be also necessary for thermal tree for implementing actual
-TMU driver.
-
-Best regards,
-Krzysztof
-
-
-The following changes since commit 7fe40c32a33905302341797b5d12c541729dd08d:
-
-  firmware: samsung: acpm: Fix infinite loop on sequence number exhaustion (2026-05-29 14:11:23 +0200)
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-7.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-7.2
 
-for you to fetch changes up to 7b661285aa7507eab79efff0a418445157db4141:
+for you to fetch changes up to 20550601bf4c23effa013a5f37e5250618869e87:
 
-  firmware: samsung: acpm: remove compile-testing stubs (2026-05-29 16:05:31 +0200)
-
-----------------------------------------------------------------
-Samsung SoC drivers for v7.2
-
-Improve Samsung Exynos (and Google GS101) ACPM (Alive Clock and Power
-Manager) firmware driver:
-1. Few code improvements.
-2. Add support for protocol used to communicate with Thermal Management
-   Unit (TMU).  This will allow to implement the thermal driver working
-   for newer Samsung Exynos and Google GS101 SoCs.
+  MAINTAINERS: Add Peter Griffin as a co-maintainer of Samsung Exynos SoCs (2026-05-30 18:27:52 +0200)
 
 ----------------------------------------------------------------
-Arnd Bergmann (1):
-      firmware: samsung: acpm: remove compile-testing stubs
+Samsung DTS ARM64 changes for v7.2
 
-Tudor Ambarus (6):
-      firmware: samsung: acpm: Consolidate transfer initialization helper
-      firmware: samsung: acpm: Annotate rx_data->cmd with __counted_by_ptr
-      firmware: samsung: acpm: Drop redundant _ops suffix in acpm_ops members
-      firmware: samsung: acpm: Make acpm_ops const and access via pointer
-      firmware: samsung: acpm: Add TMU protocol support
-      firmware: samsung: acpm: Add devm_acpm_get_by_phandle helper
+1. Exynos850: Implement proper power off to fully shutdown the board and
+   reduce drawn current.
 
- drivers/clk/samsung/Kconfig                        |   2 +-
- drivers/clk/samsung/clk-acpm.c                     |   8 +-
- drivers/firmware/samsung/Makefile                  |   1 +
- drivers/firmware/samsung/exynos-acpm-dvfs.c        |  20 +-
- drivers/firmware/samsung/exynos-acpm-pmic.c        |  20 +-
- drivers/firmware/samsung/exynos-acpm-tmu.c         | 239 +++++++++++++++++++++
- drivers/firmware/samsung/exynos-acpm-tmu.h         |  28 +++
- drivers/firmware/samsung/exynos-acpm.c             | 113 +++++++---
- drivers/firmware/samsung/exynos-acpm.h             |   2 +
- drivers/mfd/sec-acpm.c                             |   6 +-
- .../linux/firmware/samsung/exynos-acpm-protocol.h  |  36 ++--
- 11 files changed, 393 insertions(+), 82 deletions(-)
- create mode 100644 drivers/firmware/samsung/exynos-acpm-tmu.c
- create mode 100644 drivers/firmware/samsung/exynos-acpm-tmu.h
+2. ExynosAutov920: Add UFS storage.
+
+3. Add Peter Griffin as a co-maintainer.
+   I have multiple subsystems to care of and limited time. Also, with
+   joining to SoC team I figured out it is good to plan my succession.
+   Or backup.
+
+   Peter shown both time and interest in keeping Samsung Exynos code
+   working.  He already works on and maintains Google Tensor SoC, which
+   shares a lot with Samsung Exynos processors.
+   Considering all this, I proposed Peter to become a co-maintainer here
+   (same for pinctrl, which went via different tree).
+
+   I will still be the one handling patches for this and (probably) next
+   cycle, but in a further timeframe the roles could reverse with me
+   only providing acks or reviews. If this works then depending on other
+   duties and amount of work, I might be slowly transitioning to leave
+   Samsung SoC maintainership.
+
+----------------------------------------------------------------
+Alexey Klimov (1):
+      arm64: dts: exynos850: Add syscon-poweroff node
+
+Alim Akhtar (1):
+      arm64: dts: exynosautov920: Add syscon hsi2 node
+
+Marc Zyngier (1):
+      arm64: dts: exynos: Add EL2 virtual timer interrupt
+
+Peter Griffin (1):
+      MAINTAINERS: Add Peter Griffin as a co-maintainer of Samsung Exynos SoCs
+
+Sowon Na (1):
+      arm64: dts: exynosautov920: enable support for ufs controller
+
+ MAINTAINERS                                        |  2 ++
+ arch/arm64/boot/dts/exynos/axis/artpec9.dtsi       |  3 ++-
+ arch/arm64/boot/dts/exynos/exynos2200.dtsi         |  3 ++-
+ arch/arm64/boot/dts/exynos/exynos850.dtsi          |  7 ++++++
+ arch/arm64/boot/dts/exynos/exynos990.dtsi          |  3 ++-
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi       |  3 ++-
+ arch/arm64/boot/dts/exynos/exynosautov920-sadk.dts |  8 +++++++
+ arch/arm64/boot/dts/exynos/exynosautov920.dtsi     | 27 ++++++++++++++++++++++
+ arch/arm64/boot/dts/exynos/google/gs101.dtsi       |  3 ++-
+ 9 files changed, 54 insertions(+), 5 deletions(-)
