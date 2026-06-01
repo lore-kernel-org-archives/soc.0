@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC2C35AC0C
-	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 20:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6473F44EF
+	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 20:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780345802; cv=none; b=Q0vy+92HQH3JpGXg4SL9EHeTMZEsTSBmB/LG71blCJ1EBiSj0xsnDoajo6HoxjZIBSDPcl/ulTZUGd390a7xCW+5blNHIq5FdonJ9QGVRE4l96LcgnjNsPKklig3Gcm1o8r8zNQ9N4JAbQKuXs6VyDitCuUG6k/fH/POzXB9U+I=
+	t=1780345803; cv=none; b=ZzxqOG0q/avpqwyDAXaaxgZ+42Kt1qNO0P84BlSuXafpZa8jeL/BOOLmPSUAbva4MlFLubvCviWJ7CM1iLOrQztX31mvKwNcHxBrwWclG44BRmLP1VQDwDbLBzenY/CCeJyruPLgJzRDABKzaLCW8FexSsTsbw2ZgW18j0nyilw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780345802; c=relaxed/simple;
-	bh=DTcyR881UIUgAAn8OjwCmCV5/AZ6Mn5+4q6nNdj97nE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=pxuVv6TONSYLVniso2Kdlt0eF1d4pGUmVKlbwoFloBY2ATECGBLOE0WZFa/ii2ivEQ9OtNdQBzTtSM47WWFB2JKEQmfHB2pDOUv2UhgsJeam8DuDH2Nohh5JErFmkRMANCbPHd+lUaqZJsQw1gWFmGVTaIHMxzoyOiohig2H6ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kKRY2Bn+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780345803; c=relaxed/simple;
+	bh=/G1sQD0+ciDy+qquKnmSeckZepS+f6iFqCCnKNo8Wlo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Ml5v3la2ihDQ2keX6W+4haHgc9nDaj76p8r9X24DssE6Em0bGqNs79PLyPKmMd6xCZf0qXrxLp7UQGKoXP8k1QfxgwR4jmZJUpU8XmWMpydqAt+Jkj5tGu5eqzX013Bemv8cnBol9xjRiYG9TDVrW3jarX95vlbBb/7ULyRsvQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CLOvbzv0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kKRY2Bn+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CLOvbzv0"
 Received: by smtp.kernel.org (Postfix)
-	id F16F31F00898; Mon,  1 Jun 2026 20:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC001F00893
-	for <soc@kernel.org>; Mon,  1 Jun 2026 20:30:00 +0000 (UTC)
+	id 201981F00899; Mon,  1 Jun 2026 20:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D3F1F00893;
+	Mon,  1 Jun 2026 20:30:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780345800;
-	bh=A+Wr5rpvLxERjInLUh7j3GGI2jypAc66F9B/Ay1Bvxc=;
-	h=Subject:From:Date:To:Cc;
-	b=kKRY2Bn+C1v3TbudwUKLfhD8cmeN1xqYZkJtB0w+OY6FcOk73K4yD4jjDGlubC7Xw
-	 sP7CH7xtcEHBQNcowZ3fR6ZdbVM74TqAnKibyyE6pVWeaozRRwOSc6TX6OaUoTzWL7
-	 qFIdh0yDB62iQRymLrJEFHmlxJigm6wIYEcwUZorS5oV2iPcwDS1UuXheT0UKTDeCr
-	 recRW+H/kgWfQEvM4mE+pYJDAARmlJll7VSHJU2mZCr2gPYv2ohAOWfdHDW7+X7+AX
-	 lCY6RI0z6g0fYfOD1Kb0NQlH8ZicuOiRfKiLFtySK3qH9Jgfoq/ngSHQA82gWMoD7d
-	 zwc9O4BxR2rOA==
+	s=k20260515; t=1780345802;
+	bh=toL6WGg2FQNmQIWMBV0nOx9X1beOJjFj6q7oYn5UKtU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=CLOvbzv0aBYFuGfdN9DiLTLedE5VIFdfxzwoy9bHV72MbiuM0USMQFFBOR/Nt8Myt
+	 DbSdbhL70raV8A37At6lNATv/DWlspnGYBWXZJjrSRFY4F5B0Y3Us62+u/Y4Qz1DK2
+	 qKgd9oc9kf+AqUpSsqT9Ri99V6LpIh/JLXMVcWdnnMY0/jp/9FTd05HqgmHy3KQJ1d
+	 XHkqUGBjwYFNo+crHd1EjhLOj6rk/KSoe9j7WAkahGnt7rus3+WvYyedBii/XNWMNP
+	 VPjGQcxw2sTDSuP9Au+jvFA+9FAdtVETFbLF9g5NHOgqtQTFZNhQRz/5ZFyUp/skje
+	 6XW05xK2TBntA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 591E138119F4;
-	Mon,  1 Jun 2026 20:30:04 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9397138119F4;
+	Mon,  1 Jun 2026 20:30:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,34 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Microchip AT91 fixes for v7.1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178034580303.84967.12259607737788272428.git-patchwork-summary@kernel.org>
-Date: Mon, 01 Jun 2026 20:30:03 +0000
-To: soc@kernel.org
+ <178034580439.84967.5472680964341700469.git-patchwork-notify@kernel.org>
+Date: Mon, 01 Jun 2026 20:30:04 +0000
+References: <20260601114010.2652407-1-claudiu.beznea@tuxon.dev>
+In-Reply-To: <20260601114010.2652407-1-claudiu.beznea@tuxon.dev>
+To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Microchip AT91 fixes for v7.1
-  Submitter: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1103986
-  Lore link: https://lore.kernel.org/r/20260601114010.2652407-1-claudiu.beznea@tuxon.dev
+On Mon,  1 Jun 2026 14:40:10 +0300 you wrote:
+> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+> 
+>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-7.1
+> 
+> [...]
 
-Patch: [GIT,PULL] arm: dts: socfpga: fix for v7.1
-  Submitter: Dinh Nguyen <dinguyen@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1103394
-  Lore link: https://lore.kernel.org/r/20260530193213.158229-1-dinguyen@kernel.org
+Here is the summary with links:
+  - [GIT,PULL] Microchip AT91 fixes for v7.1
+    https://git.kernel.org/soc/soc/c/d4715546cc4c
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
