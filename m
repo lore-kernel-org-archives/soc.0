@@ -1,36 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51488248B
-	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 20:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90D23F4DD7
+	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 20:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780345804; cv=none; b=ZTT50KhNw/2TmkjkrSMGRLqmQFYNbKSmAwdfUZK/3AtTH9j2wpCCiJB07bpjDuXnUp+1VV+CJ3A9hFqd/yXHAq7GLQ7DfXi+Muqw+F/vDO3CP5NbjqzJFgCRtt0TemcCk1t1oHC2tQgI049z81CMVFay5rX7ijJH3aKZJcdOrn4=
+	t=1780345806; cv=none; b=WV/MsaD2bPLgfgWe7FQUEnt2kOkTd67s0i7YUKVZdtLMkBSBTRgL30nKtj4/DWpfWQm/LUWG6c3YHBdwr/PSZHpvDuefigEx+/7WT8dVWSU3dLYyu7u2aZOa8vrXtvDltUy7nJ1tUXIhOJCJArPgTGH/meGL5kL7z2YhTYGk+gQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780345804; c=relaxed/simple;
-	bh=6AzIT9wWb/JfBN6hwH9fZYPetI6Xzu3wUCjSd36tcJI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cardfsr6NlnZGJhHk7YCZQntX3Rh7URUA/Nr4gp43krkMdiXnlm2qRQtQmkvQdRrxMB6H3ON5uHdazsKXyLzi1OKzTf0cm7YxLnrJUEWvj1PPtfTIdFmp6eM0/FBF/rq0T0HhrmNVSk0pgBVJahBkwtS589paIi+pSMU742RoKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nFMw5/tv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780345806; c=relaxed/simple;
+	bh=3qzTOKCS0H/ElZVkDzVSNDEL+i4XrVwkRBfvhbyq1KU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=UQkS+P66X2TdIOkAiq7IpKxGyoj1I+A1ze1W7ZYuyPTE2IJqqWafgk40lMMGAFEkiwgSivrC1Nsis3utIdR8AosMfNu4ZEsquoLmE86tlc9BPVWM7jv98TFNQa/sontedAwlQikG6aDw1fOpcETFaTUWSufGtPS7aAhwLmNgXAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B7VBpJoL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nFMw5/tv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B7VBpJoL"
 Received: by smtp.kernel.org (Postfix)
-	id A26591F00899; Mon,  1 Jun 2026 20:30:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 889701F00893;
-	Mon,  1 Jun 2026 20:30:03 +0000 (UTC)
+	id 96CE01F00899; Mon,  1 Jun 2026 20:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F4E1F00898
+	for <soc@kernel.org>; Mon,  1 Jun 2026 20:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780345803;
-	bh=eat0gisst7DuCSZsxP+0vx9JPr1Fr/m+ugwxCb8iKEU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=nFMw5/tvPquwEfBkHIb6BJvibPgjnFSxgT2jFT9fF4JJk0qHxriJHo5CMtf/aWrR1
-	 RNhbbu9vY+M4G9oaUqCE3mmaZCusZRwGMOJxYPGiX+YhbL7Tu97LR7oth6vhSLvFYO
-	 gc50PryBt0jRN0/sDK2RO1PN4lQuMTdKBhlgUjSRWfES5bVHxqJiPX8qu0zjzGFNr7
-	 jNLgxIdMhxC7kcYpvY6D4LRmP0UkPfU5eFuaJSZ4Neo/Tgu8rEtdVJMUqH1Nl8AUV/
-	 tMZnemNX63Xsu6SRExT25YAPD4i5ZSbGJ+oOI5CZYJPBHlBXrEyOydjcx3QFtUCJk8
-	 BY1azvsaVROGA==
+	s=k20260515; t=1780345805;
+	bh=++m33a3ZYVvgokMvcVc0qqTEf0VoZBy81yCrBgVxNYk=;
+	h=Subject:From:Date:To:Cc;
+	b=B7VBpJoLPnAzsdEeyea3DD/e4gj+lXFO7iRjk6xQ/CLrbYeb0x2KFyDNxMCD1+c1A
+	 bDI+b0hsouJpRfV/65SxVQ+HPuOsZ4asFF/wJPh6StAYHuNqCVHf1uBivneaFbhJ8V
+	 HPj6mrqCwpCTAF6mJox7F7VnUPYZd32DSR84kNZXCP9O8UzdrS+7+sUJJpFxhaj4Df
+	 se/6W4Sj7vbAzgT4gmm3UkepLZxWvO7FIN1ape3/8hkILZ/YBN3llofopyfl4yRfAF
+	 r/2MQQ4rWGamD2yVJ0JSN+8p+8ClOQIsilAciImPA9sVOqiv+zZu8lFfuc0EGZZspa
+	 uWwLDAH4OwJLw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1978F38119F4;
-	Mon,  1 Jun 2026 20:30:07 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 196E538119F4;
+	Mon,  1 Jun 2026 20:30:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,37 +38,28 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm: dts: socfpga: fix for v7.1
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178034580564.84967.14557046020208852154.git-patchwork-notify@kernel.org>
-Date: Mon, 01 Jun 2026 20:30:05 +0000
-References: <20260530193213.158229-1-dinguyen@kernel.org>
-In-Reply-To: <20260530193213.158229-1-dinguyen@kernel.org>
-To: Dinh Nguyen <dinguyen@kernel.org>
+ <178034580752.84967.4461959124029502722.git-patchwork-summary@kernel.org>
+Date: Mon, 01 Jun 2026 20:30:07 +0000
+To: soc@kernel.org
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Sat, 30 May 2026 14:32:13 -0500 you wrote:
-> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-> 
->   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_fix_for_v7.1
-> 
-> [...]
+Patch: [GIT,PULL] CIX dts changes for v7.2-rc1
+  Submitter: Peter Chen <peter.chen@cixtech.com>
+  Committer: Linus Walleij <linusw@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1099120
+  Lore link: https://lore.kernel.org/r/ag/Lo+ss9sSnBSLU@nchen-desktop
 
-Here is the summary with links:
-  - [GIT,PULL] arm: dts: socfpga: fix for v7.1
-    https://git.kernel.org/soc/soc/c/fce4668a0122
 
-You are awesome, thank you!
+Total patches: 1
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
