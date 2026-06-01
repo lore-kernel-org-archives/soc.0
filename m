@@ -1,149 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB97364EA5
-	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 19:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D172594B9
+	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 20:06:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780340998; cv=none; b=IXrUQyZkTHWJkyyzr7BcyvnePdhuzhopIlk0srHm+bzb3EPEx5KZOtFbvyRLLyfuwj9AgJMXD2cKl4+cDMr886Zl1t02VgUrfgO1BzSq1aJj5jMZBbV3c40L0sVTr+phfEwP7M/i41fwgJ98pDJHo8ylLA3aptlxlq8Z1V3LKdc=
+	t=1780344375; cv=none; b=upLjWPUifYo7YDRfb3lXpPrj1DZggNoKkdu77jyzcT5QEcdBwvEcmkY90R9LEhMVV07ckHlCZbGAdnqxraN8K5KWW+Dr/Cbj/JrHPOHEs2oMuwQR+rWaxDx8yk90XDrctLAm/enXOVvYFvC6y9F/Ambf4B8WLGDmoW5NRGa9XbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780340998; c=relaxed/simple;
-	bh=/jCmX1hmw1gi/GBZtrt2+AtXMrbTsUNbtGtBZ8THZrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aQw8xYvLAF23wO4d+D48awsm+QBJhKOj5sWUwH1zxYpT0DDzXKOpaHqYNlB6AdO6EVwPn78fpwCRSeqTi1f1yu28htezLHIOeiQmCzyyVSQe05ULV6JO1ejbjVVITXskCIS7yuV3PGFR/0B1/z/ehfwuQR0z433OOdFFDBOh8YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYFjMXiT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780344375; c=relaxed/simple;
+	bh=tPp08SqgvWIL/cXEIjMePhCNGm+zdimnhyqsKAc4Zls=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jvKRnWY4OpIcgbQOkAG81emxYUHnek8gwt58ULBTBAsTxu2A1eb0aJRP9U8wsQg6LwZNsgv94LI1k9UgmPx5C+YaUH4dByWMq6lmrpBPWETv+Cdf29KGT7UN1fHI4UR3qSzryAtUgKqA/Qlnm5car31gEJWyBr7P94QKgJaJEvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLQxdGdN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYFjMXiT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLQxdGdN"
 Received: by smtp.kernel.org (Postfix)
-	id EAB3A1F00898; Mon,  1 Jun 2026 19:09:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8D91F00893;
-	Mon,  1 Jun 2026 19:09:55 +0000 (UTC)
+	id 539C91F0089C; Mon,  1 Jun 2026 20:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E6701F00899
+	for <soc@kernel.org>; Mon,  1 Jun 2026 20:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780340996;
-	bh=W43qI/57Dq34auorc7rm5R4Kf1qpPgs0LDeJ2dQV7M4=;
-	h=Date:From:To:Cc:Subject;
-	b=JYFjMXiTbTwgfk2vu8SK6JiKGJNyCAywoTY0e5JJUjtqH2PKQhxhDQOlm7Iagwy7O
-	 jTuX8o4YgPLbvC351hyUVHPn+O2SLgdRzmfDbbpdIg6e1aryHrBat2DVGKo1uFM5h4
-	 FO9m7maUkpOv95jAJI1ZybfvbeeZwmr4Kxfl0pv8yMQyLFj6h5MJHoRMWvCVQ0lNzc
-	 xT3TUIZas7Fy2865h0hEAebi5DVBLNEDMJi0AVs3waehoX9b+N1Y7aaOM7q9J5Jkw1
-	 ZaYnIfXFd1OIQHs2juZZxLQPqkJOAFwceQBSq37UyKFMpoSC0+uhUU2XpO1dR5fFAW
-	 1Dr41pr1nEfkA==
-Date: Tue, 2 Jun 2026 03:09:52 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Stephen Boyd <sboyd@kernel.org>
-Subject: [GIT PULL] Allwinner DT Changes for 7.2
-Message-ID: <ah3ZAPLzh8ORGmpH@home.wens.tw>
+	s=k20260515; t=1780344374;
+	bh=s14BrCNKw5biHzAbTs/7/BHxIivmPKRyhGyt3zFJ42s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=kLQxdGdNOe4WAEbHBkITeF72kb2AlxBmTVmE3SUR+hxPNzSrxMJ3Dc2M8M3fwuDhb
+	 dMA+dyw0besE/LJl+JFci2ecBZdwLXJJZGxXRrkuJZMNIUUTCF2nHBuDrLlLHIGvwp
+	 1x3YsaXmjrQt2XDXtF3TV5gijfYdJq52cj2KoouXuMbbzvE2AOxMLEtQk2HB13VbfD
+	 LUYlJvdW0+ZLC0IdPNdLNIppnxjLDAvwdNlAec2Oc1VPhxr4OUIZFhZBMt2zakDqjX
+	 FKiliHyUxtDVmdvCqgyx8TGYSIga8SqoYqU7l0ywT/PQJGktU0i7Dj1qKwIgrXLtcy
+	 Ct35td3mH45zg==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5aa68d9d56fso1775304e87.2
+        for <soc@kernel.org>; Mon, 01 Jun 2026 13:06:14 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxX3qYoQCzTDMQHjqhHWKkti0kPCSw+dxlRpoIYrKgiqDSUbhQD
+	hX/okwA9CpahvmdtgSlKNPFoTF52WywLbjwZQa3degoBuariPKlG19vpduiUNzvYvgjMeAxidlY
+	5bf1OAg0xP2e9yq21qooAsvY+UY9OSQQ=
+X-Received: by 2002:a05:6512:1250:b0:5aa:6cfc:771e with SMTP id
+ 2adb3069b0e04-5aa6cfc7c86mr1598474e87.2.1780344373039; Mon, 01 Jun 2026
+ 13:06:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SU/u6IheFArjYhKz"
-Content-Disposition: inline
+References: <16fc7412-c470-4f3f-b6c8-55c35698a424@linaro.org>
+In-Reply-To: <16fc7412-c470-4f3f-b6c8-55c35698a424@linaro.org>
+From: Linus Walleij <linusw@kernel.org>
+Date: Mon, 1 Jun 2026 22:06:00 +0200
+X-Gmail-Original-Message-ID: <CAD++jLkiZD6tyUW6k2wt_TD3MeLNVDZNa0N+Rhwb0mAAGfLMvA@mail.gmail.com>
+X-Gm-Features: AVHnY4K0SnpwSd7TlxazfH13zL4pKXTV_yuQj-jItkV28NmyUihecMzf4bInR58
+Message-ID: <CAD++jLkiZD6tyUW6k2wt_TD3MeLNVDZNa0N+Rhwb0mAAGfLMvA@mail.gmail.com>
+Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v7.2 take 1
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: soc@kernel.org, arm@kernel.org, linux-amlogic@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Neil,
 
---SU/u6IheFArjYhKz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+thanks for your pull request!
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+On Thu, May 21, 2026 at 3:19=E2=80=AFPM Neil Armstrong
+<neil.armstrong@linaro.org> wrote:
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+>        arm64: dts: amlogic: t7: khadas-vim4: Remove invalid property
 
-are available in the Git repository at:
+This commit has a problematic Fixes:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-7.2
+commit 6f14ba3c3fa3d67b72e052f431f6776470eb2cbd
+Author: Ronald Claveau <linux-kernel-dev@aliel.fr>
+Date:   Mon Mar 30 14:11:21 2026 +0200
 
-for you to fetch changes up to 44cf19e41c769720750dbb8752aca75c247e565f:
+    arm64: dts: amlogic: t7: khadas-vim4: Remove invalid property
 
-  arm64: dts: allwinner: a523: add gpadc node (2026-05-25 05:02:58 +0800)
+    Fix introduced invalid property for Khadas VIM4 sdcard regulator.
 
+    arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dtb:
+regulator-sdcard-3v3 (regulator-fixed): Unevaluated properties are not
+allowed ('enable-active-low' was unexpected)
 
-As mentioned in the tag, this pull request contains a change that should
-be shared between the soc and clk trees. However since I don't have any
-clk changes to send this cycle, I think it can just go through the soc
-tree without any issues.
+    Reported-by: kernel test robot <lkp@intel.com>
+    Closes: https://lore.kernel.org/oe-kbuild-all/202603290828.5gt393t6-lkp=
+@intel.com/
+    Fixes: 60eff75ac67b ("arm64: dts: amlogic: t7: khadas-vim4: Add
+power regulators")
+    Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+    Signed-off-by: Ronald Claveau <linux-kernel-dev@aliel.fr>
+    Link: https://patch.msgid.link/20260330-fix-invalid-property-v2-1-228c5=
+1c8de93@aliel.fr
+    Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-----------------------------------------------------------------
-Allwinner device tree changes for 7.2
+Commit 60eff75ac67b does not exist in the SoC tree nor in Torvalds'
+tree.
 
-Some changes for old chips and some for recent ones.
+What's up here, it looks incorrect?
 
-- A83T gained the MIPI CSI-2 receiver
-- overlays enabled for Pine64 boards
-- V3s gained the MBUS interconnect
-- D1s / T113 and H616 gained the high speed timer
-- T113s watchdog enabled (for reboot)
-- H616 gained proper SRAM regions
-- A523 family gained EL2 virtual timer interrupt and GPADC
+Can you look into it?
 
-This tag also contains a clk DT binding change that changes a private
-header of the clk driver to export some extra clocks to the device tree
-on the V3s.
-
-----------------------------------------------------------------
-Chen-Yu Tsai (1):
-      Merge branch 'sunxi/shared-clk-dt-ids-for-7.2' into sunxi/dt-for-7.2
-
-Jernej Skrabec (1):
-      arm64: dts: allwinner: sun50i-h616: Add SRAM nodes
-
-Marc Zyngier (1):
-      arm64: dts: allwinner: Add EL2 virtual timer interrupt
-
-Michal Piekos (4):
-      riscv: dts: allwinner: d1s-t113: add hstimer node
-      arm64: dts: allwinner: h616: add hstimer node
-      arm: dts: allwinner: t113s: enable watchdog for reboot
-      arm64: dts: allwinner: a523: add gpadc node
-
-Paul Kocialkowski (5):
-      clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header
-      dt-bindings: media: sun6i-a31-csi: Add optional interconnect properties
-      dt-bindings: media: sun6i-a31-isp: Add optional interconnect properties
-      ARM: dts: sun8i: v3s: Add mbus node to represent the interconnect
-      ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller node
-
-Peter Robinson (1):
-      arm64: dts: allwinner: sun50i-a64: Enable DT overlays
-
- .../bindings/media/allwinner,sun6i-a31-csi.yaml    |  6 +++
- .../bindings/media/allwinner,sun6i-a31-isp.yaml    |  6 +++
- arch/arm/boot/dts/allwinner/sun8i-a83t.dtsi        | 43 ++++++++++++++++++++++
- arch/arm/boot/dts/allwinner/sun8i-t113s.dtsi       |  4 ++
- arch/arm/boot/dts/allwinner/sun8i-v3s.dtsi         | 15 ++++++++
- arch/arm64/boot/dts/allwinner/Makefile             |  6 +++
- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     | 38 ++++++++++++++++++-
- arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi     | 16 +++++++-
- arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  |  9 +++++
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.h               |  4 --
- include/dt-bindings/clock/sun8i-v3s-ccu.h          |  4 +-
- 11 files changed, 143 insertions(+), 8 deletions(-)
-
---SU/u6IheFArjYhKz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmod2QAACgkQOJpUIZwP
-JDBE7BAAhgTSkzIg3EDmxIDjfjZ4N7NoRIkrn/5E8EyHdBkkCDrZYioibHuPmnzh
-pDSkuab3Jk6ZRbEXTvyoxHZbjU7Ed33bbuRv7ISDs058iJCDhgUs8uuI0Y3XbBSi
-5CYYIJMf800oG09rNFYr9F8IEgiBU7qi2uTJxCHa9Rjvm64NOUnXhE5D/m5PhfbU
-9e/+d1C4sixqgtNE36w6h7l+rGH3Ow51NM2f+D41mSRcuYATEC7EmpmdHpuF0lEn
-gi57YQuQnfa3zmMvm9G0RSKoMiuC7zoxEEibXQkYfXtbwh+WbD/NbLrblFftRk6I
-M5eFVDKKrduTJzkOzwvfxqTMhgURmR/XVa/DAYv324bJbz4cLml251GV+PJIl8jD
-LjkIuS9qeHSDD8fd2T1LM3NGeGX3y3TYyGQm7k1oMr2g8UGRxatP4JcwGEF+PhQE
-GPOEabV1pN3tYNecbs4C7B/B1Er2pKmyrz+v+qyRHi74Tdqq0P9fDiGx0exzODb6
-Nmh4GnSdJ3IhtBvCHknKo+CoZP1xsfQGlJl/TvizANN+NBnqFLZ8wSmnyzHRGirH
-xnfCy41UviL2niTNRGNFhPXCqFftt1NuORZXVAMDs/ciN+ROYoL41ZEU/eJnYQo/
-CixzCK6ZA/azao6Ra/CYOs6iBrHSP9eebA+D4tqvK9/YDXrLkFw=
-=4TaZ
------END PGP SIGNATURE-----
-
---SU/u6IheFArjYhKz--
+Yours,
+Linus Walleij
