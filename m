@@ -1,131 +1,115 @@
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FC32D781B
-	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 17:37:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22793672A1
+	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 19:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780335430; cv=none; b=fbLeExU6Fqg4voh87v0p4vpCC6syzMLpaiy+Mbwm9wFvdETmzIcGUUgWUKDT8OkRwHIG1vKN/ZEJKmQ1VRIbQHX1nbvIM7kQKXf+JjRxbu6U2pq2413wGd6S5Zu/JA3aLWS/lZkFiE0oYszymNfB6sX4Iyog87B1J01VIQeC0vQ=
+	t=1780340887; cv=none; b=Z9cAEsssOdEPPACBy7DV6aDDEib/+vQHnq1rGbUlVNTMxwPOX66zibleaeYs76+MKUML1dKskUxX26qPiTu37AbQJqUwj9ceiq1LbAN0d3tfHVerhdhy7A309IMQhv0yWQw8ZiKiRGdYlx7ZOEqMzpltH6z8LfjUJrj8PGex3SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780335430; c=relaxed/simple;
-	bh=Wv9usFZnfS7kK95hkSPiPI2QnCEnCaHz2isr2NMGWUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kyTZfcLrZ85OefvfOkcOKx+OhS9gRKfekx9eY4v4QXeXzuDF+WQIBxH8I+YG1z66fMNLNkC2MeQrBHCPojAHhO3J++5zxSfcIw7FFFvJjxbZRYe18OhM9/Sa7bvqpGuaHSjJYl3KqCf/Lt5dBwJYU8lQnQpzF5+VyBUTHNdAjk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-59c627b53a0so785244e0c.3
-        for <soc@lists.linux.dev>; Mon, 01 Jun 2026 10:37:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780335428; x=1780940228;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f9sxbisFtWpwoKU7G3mS5YfDApAUtM0f1mz57V6Gziw=;
-        b=AIr0dRuzydXabV2duQBGQXtkS7GXgkilHWvVkORbzVbc0tELq1+sbTm44d9ubidX0L
-         LDchulBlpznyTdjlZOFKPJoNV0CyqisMrL4PJkSQkaSaVkHrhKrw2KAiDRJQeUr5ZKJx
-         Ujh2zr8fRnt+wwAUYmvsCFVPEvt2v6AFyinj2x9KnE6jFXu14Grxv3ukVAm1yQ414QOq
-         yw7UQazptpwxcigSmWeFzDM6q7uzcVrUIO4R+FipMTpnILmqdAsiO5+eCiqAcq2Iu5Hx
-         NxbCc+KP5rVvBvACKaG9QIamaadTIbxGb2yFF5OoDi28xyHkToK7FOuJlE3mDoWxehJL
-         VFjw==
-X-Gm-Message-State: AOJu0YzfNKqrFy4R3iSvCrXvCXfjmOZre2lbv0k8DOl9b3iyt1pwmpPA
-	i+6zTosl7OB0jm9z6Jk2GP1yFU7DYFVl3aBCOSlS7i0dzl3rhckwHvXwi7ciCah8
-X-Gm-Gg: Acq92OEQh8Kpm8rjiLKCCkuYoSM/sqTbSENqEA22TLSO0WZ71jnCr0UQ3st3a4IAitk
-	VLilaQFQMFitwZ1tuT08k7gNc6ngDcqu2o7aTkZzmBdBBjvkYIO0tbXBD4cWfbFjyapuzgSaANJ
-	r6iuJKEUCAnPBbMxKGZQhcMrcyXuQSdX5q1+n8El+1OX3J4D3y3bjK+BUmaFnh3ZV2PLVzD1C6b
-	DLnWJAo2yPCO2lsT5hg6cJafDHykH2u6eSb10MAgwVXPx1IuCvww7Osw/TPSSdydJUqQ/w9fePe
-	TVKuyHObsn8suZ+GhVqrOSijxzsbzxjwg/1dadI+7vjxYDzPHbkZrLCOt++ItbM1ol0OowaPfYQ
-	XzqvKaqpC4EBaHhKVMDY5nGuKcUVN2cQyGqZ/vtSSPPbLr+8Vd1oWTg/bL1RdMHmKhLoXHn4s82
-	uOaB223eHh0DtMVJE9PnRAZTxlIEgACYvz5WkqGhK8qXzsIf1QeD9zPE64VS8G0F/QB6H2p6mZb
-	5Q=
-X-Received: by 2002:a05:6122:6e0f:b0:575:360e:6009 with SMTP id 71dfb90a1353d-59bf9084071mr5571186e0c.4.1780335427982;
-        Mon, 01 Jun 2026 10:37:07 -0700 (PDT)
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-59b7521675bsm7323831e0c.13.2026.06.01.10.37.07
-        for <soc@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jun 2026 10:37:07 -0700 (PDT)
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-59cfbfe64baso755040e0c.2
-        for <soc@lists.linux.dev>; Mon, 01 Jun 2026 10:37:07 -0700 (PDT)
-X-Received: by 2002:a05:6122:a26:b0:575:29ef:7df8 with SMTP id
- 71dfb90a1353d-59bf84c927amr5742975e0c.2.1780335426878; Mon, 01 Jun 2026
- 10:37:06 -0700 (PDT)
+	s=arc-20240116; t=1780340887; c=relaxed/simple;
+	bh=Gic55DZm7vnn+2LPNNiwlR1R7141b2vZIM9Xan8vBsA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CXOb3k3Rwdiw1fpC84aG05ywGx2haNwhrROhU0fZ0zDKXyPWTXRyd/9qkupLig2oWJhTASegvOcEm5827QFg9XPCBkkgnphMgt1RDVJbeEDmjnbljc2Kddp2wFnCEbrzlsRo4sKyxLn53QJ9WldZwSua4fsLDO8oQM2AuRvxyo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lBM3ebbe; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lBM3ebbe"
+Received: by smtp.kernel.org (Postfix)
+	id AD0BB1F00898; Mon,  1 Jun 2026 19:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4AF1F00893;
+	Mon,  1 Jun 2026 19:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780340886;
+	bh=5BBooQ+POiDj884MIiobYfemB6cKypHIDePShLGDwAA=;
+	h=Date:From:To:Cc:Subject;
+	b=lBM3ebbe9lmiNelN1SZsZyIQSG0p8EK04o1Wgb6+YGsr5Wg6fEIGbsm4MTlvyTPDy
+	 Byr9a2TILbEzLQkx0p+KszgyZJLPSWQ0bCrhFZVeWJcseFsK17n9PN6ykzRNLYUbUA
+	 Ga2vhcJ1jQ3rq/KtN9m1C6iEo+nCrTrPKDzSziboMtAhCoHpSVB6iiqbmVWnvm7Gt/
+	 d+Re7CsZjqrxvgkxYeyLPeFuLe2mRQyrU7lwpezY+i/YKmGlSZ38tezYXgrdvPtLC1
+	 iRb3ACgZerQ0B0QK9gVwEbKL6QicBj7FOltQmbEchNTsh4wsSCX53E2F9DkYxdT4nb
+	 4MJkIULoRcV6A==
+Date: Tue, 2 Jun 2026 03:08:01 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner Driver Changes for 7.2
+Message-ID: <ah3YkTZAR2GXlC3x@home.wens.tw>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.178031911driver8.git.geert+renesas@glider.be> <ah2t8FPZpJCF6CL7@shikoro>
-In-Reply-To: <ah2t8FPZpJCF6CL7@shikoro>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 1 Jun 2026 19:36:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXFUObHJSaFg5Xb359AWwFejtA5n-Hn2dF4WFtC5-eXgg@mail.gmail.com>
-X-Gm-Features: AVHnY4LGrjuiK8Yupb4kRE62mimooYo_V8U0dBYQY870ZETHUqYjUyV_8zVtMJo
-Message-ID: <CAMuHMdXFUObHJSaFg5Xb359AWwFejtA5n-Hn2dF4WFtC5-eXgg@mail.gmail.com>
-Subject: Re: [GIT PULL 0/2] Renesas SoC updates for v7.2 (take two)
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: soc@lists.linux.dev, soc <soc@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="VfsGAi0BIhPgGehB"
+Content-Disposition: inline
 
-Hi Wolfram,
 
-On Mon, 1 Jun 2026 at 18:06, Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> On Mon, Jun 01, 2026 at 03:18:17PM +0200, Geert Uytterhoeven wrote:
-> > This is my second pull request for the inclusion of Renesas SoC updates
-> > for v7.2.
-> >
-> > It consists of 2 parts:
-> >
-> >   [GIT PULL 1/2] Renesas driver updates for v7.2 (take two)
-> >
-> >     - Identify the R-Car M3Le SoC,
-> >     - Add Multifunctional Interface (MFIS) support for R-Car V4H and V4M.
->
-> The bindings patch for this V4H update...
+--VfsGAi0BIhPgGehB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[A]
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
-> >   [GIT PULL 2/2] Renesas DTS updates for v7.2 (take two)
-> >
-> >     - Add timer (MTU3) and xSPI FLASH support for the RZ/T2H and RZ/N2H
-> >       SoCs and their EVK boards,
-> >     - Add PCIe support for the RZ/V2N SoC and the RZ/V2N EVK board,
-> >     - Add support for the R-Car M3Le SoC and the Geist development board,
-> >     - Specify ethernet PHY reset timings on various R-Car boards,
-> >     - Add (more) serial, I2C, DMA, and sound support for the RZ/G3L SoC,
-> >     - Add PSCI, Multifunctional Interface (MFIS), and SCMI support for the
-> >       R-Car X5H SoC and Ironhide development board,
->
-> ... depends on the initial X5H binding addition in this pull request.
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 
-[B]
+are available in the Git repository at:
 
->
-> >     - Add serial DMA support for the RZ/G2L SoC,
-> >     - Add keyboard, I2C, Versa clock, and audio support for the RZ/G3L
-> >       SMARC SoM and EVK boards,
-> >     - Miscellaneous fixes and improvements.
->
-> I am confused, does this really work?
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-drivers-for-7.2
 
-Thanks for your comments!
+for you to fetch changes up to 61192938a5870ac36edae81e4775b680dcf02c61:
 
-[A] does not depend on [B].  Both [A] and [B] depend on commit
-0f63ba15dde8748e ("dt-bindings: soc: renesas: Document MFIS IP core"),
-which was merged through renesas-r8a78000-dt-binding-defs-tag1 in both
-renesas-drivers-for-v7.2 and renesas-dts-for-v7.2.
+  bus: sunxi-rsb: Always check register address validity (2026-05-25 06:37:11 +0800)
 
-Gr{oetje,eeting}s,
+----------------------------------------------------------------
+Allwinner driver changes for 7.2
 
-                        Geert
+Mostly changes to the SRAM driver to allow for one SRAM region to be
+"claimed" by multiple changes. When a region is "claimed" it is removed
+or disconnected from the CPU's view. This is needed on the H6 and H616,
+which have one alias region seemingly shared between the video codec
+engine and the display engine.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+One minor fix for the RSB driver is also included.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+----------------------------------------------------------------
+Chen-Yu Tsai (6):
+      dt-bindings: sram: Document Allwinner H616 VE SRAM
+      dt-bindings: sram: sunxi-sram: Add H616 SRAM regions
+      soc: sunxi: sram: Const-ify sunxi_sram_func data and references
+      soc: sunxi: sram: Allow SRAM to be claimed multiple times
+      soc: sunxi: sram: Support claiming multiple regions per device
+      soc: sunxi: sram: Add H616 SRAM regions
+
+Samuel Holland (1):
+      bus: sunxi-rsb: Always check register address validity
+
+ .../sram/allwinner,sun4i-a10-system-control.yaml   |   5 +-
+ Documentation/devicetree/bindings/sram/sram.yaml   |   1 +
+ drivers/bus/sunxi-rsb.c                            |   3 +
+ drivers/soc/sunxi/sunxi_sram.c                     | 196 +++++++++++++--------
+ 4 files changed, 127 insertions(+), 78 deletions(-)
+
+--VfsGAi0BIhPgGehB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmod2JEACgkQOJpUIZwP
+JDAwzg/9FDd9z1H9vB3wTj2ptls9aWIdVQ1kIinzaIl3/AzoSdJXNevbei+l0njd
+plqY6KeJIT8DDIR9d548fEFsQt5E7LIrDXxSx+lk+VfynjFlORlCwTNM8DbqtRMB
+hw5iAZAm8krS/QP3CRMgZ/wKzwwNLabjdLDB+7lDGVBxAIQOoOuSqU/CSpWrro8u
+mCY1M2xYN4yf1Hn8+dwAgKBEp+DbmlZCuD2SFWM4JeII2jNKTaq1P88pVGHpZsTe
+Kf07EppN4gllUIrHoPchRzoumuUG2ix5/CtseEm2D8MUDLwPqDPt0U0uwERhvJ5W
+U3QGN24gtcX7CyMhfoA8Gowbn0+0j/1EnlNBS4UY8frdHItbXMDcwgrTvA0M1eEe
+FbyNKqD2/a8kwEn2avghaWu/qL7+CPoU3YB0A3aJyfRZbXPL6lL1BHZ1GcEWPa8y
+WqmS3GwbeJ5Za2dI9BG7f45rpF2cfntUbVclMO28LsI9uDTaFCO7WcLxeMrY7Ipy
+jwd4bQhynnM3d8qS2f/628+jGQ9qmjmaGAfyOrusrkYLqHpRI9wiq7kMSzCcy/5t
+n58YlYxoNNeivq4ZOZPvL+/jVDOFGE/aNfoJT6xjA/WYjtdZ4hBZT7/+GRWHOckN
+VBmYdIkScoL/FPdLyx1mUcUGT8NhfPpbH6kGWCyWm69k0nLqKro=
+=Bcm6
+-----END PGP SIGNATURE-----
+
+--VfsGAi0BIhPgGehB--
