@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD19C38E8BD
-	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 09:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D54738F230
+	for <soc@lists.linux.dev>; Mon,  1 Jun 2026 09:12:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780305161; cv=pass; b=A1f2AoaWDWHrPRx2VXWthUrZ/VXzeS4bjmEI9udgz8hTyoOv2ffv/60pIcooSTKy15g02xf1DY7VlBopk/PAKQ8di/m82t9sReeU8JHzBFqs7X15Hk0AgrfsFC8IECVkNhlazDQZXTjQfyIBlQgzvoubLD7HqP4xqLjH0R06OEA=
+	t=1780305161; cv=pass; b=h3F3Bvkist/oJZYwx6sZ9lsk+P6sCS/cKCBJ7I35OsFmXLCoaZqFO1BRaOanCe+/Z4n+Q7ixwQqlQXssGg65+/EHEaOK1a43mFaiSQZq5vWVlQJ+MpJHLdp88nAml76Gudr0OQosadp4miIJfkghOa0qLsLL2d6Pw190KL4iM6w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780305161; c=relaxed/simple;
-	bh=ZMQig1G0kI/9KDHbMpaDNt380R1SRF5p144eDOFLNgI=;
+	bh=3EBzF0o7UMrIWjYtGu04a8kA/zPPANrCK9tLqcFMPCY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JThzecw5ovo+724CmidTJEs6zeNdlVRjJe2Q1w3S7hMjCsYQAv0kNJAWL+s8SeXVW0L/+52WQCvdZpRi+72vs2qmUMbTc3/nNXXy9uKW9X6fmHSJQCyDLMVGpN4xuBGlMhgV1bpSmuctS+2vP9d1X4c0bc6PwGfaRungSwX4/6E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=pxmwyCIX; arc=pass smtp.client-ip=100.103.45.18
+	 MIME-Version; b=iP4vx0kwPvaiyF7WyOssbIpcfMZDek5OLzGEdLFNPGKYHUEhDRWbGgQ+ybvXisoxoTZVhYuxtUqn3gGvNsrViRgJz1Ze4sdvGg+CgCMe8HPo5f4Nkom+3d100QS+gnkc/FhrWJQgN/E/y4lAYDJ8HXRx/XIOCDr63xujPkL8boQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=c5kJ4FU1; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="pxmwyCIX"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="c5kJ4FU1"
 Received: by smtp.kernel.org (Postfix)
-	id 711E11F0089C; Mon,  1 Jun 2026 09:12:39 +0000 (UTC)
+	id 1BF401F0089A; Mon,  1 Jun 2026 09:12:40 +0000 (UTC)
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=148.251.105.195
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1780305159;
-	b=OpZ78aDJF/krFFkeu0CfZHw/KOhsYlPqxYCp63r5+EnVzYt3Y2raxvuCLUyI7GEpO6J9
-	 YjE6FzxULtQvztCCmryZqa4fYqqY6NRXp/XKtXtmt73LezmxW0joqOs62K41w/VB8MUpB
-	 iQNsnLgr/W/PaQK1bnepGtJSxUavM8wFhKe/Ggt6obnvtkqjG02zki6P/TTOM0qbmrWTO
-	 /nGX0QMOeAIsEV7nC1RaI8KHJJGyGJuhGaM+VoecgHjs3iolqLEHEqtrsXA0b1bgc5CaW
-	 V12UJDRgizfUJ8ZZtAtBrrUAJCI3cUIrsdZPg5mX1Zx8MTAY2qM28NGz1YPKwDJgl9g==
+	t=1780305160;
+	b=CHmI637l1ez99mGPW4wed1ZzMcqb5rnifFRQmSMdq4X+gDNWjr9GRViN06uZ/zj60rfi
+	 kUkqqUzbxHj7XB2ypWPp6FNSkFi/AWvap5QRZr670ftxLR0Ht0XJu+hneQHrVcCM4OpgT
+	 PiM8LuIzZB18y92hU/E0wjJAsd+Tcr56fqd0uXDBbi6OMdeP2hqVQZpqEDGLpLo7uOtbT
+	 dpiz+BFb/7AaNQhT4iBUHgcazQwsXp/yDe7HiicBY5a9gH66arUdULQx4FupCMzg18PxB
+	 kC8nJgJwvBt7ljLOkHf2AhJt/ln20Z+zjx2naSXhzd0alnJ9zZBlsEOI3VeJApsTL7Q==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780305159;
+	c=relaxed/relaxed; t=1780305160;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=pQHXnv+zTI6JRHEdJGtJjegFX1lIGlI0OuTgX9tK2C4=;
-	b=QKBOsimed81Dc4qlTQ53YaqZvmW1Fpz4SRW7WFotrrFxFF3MhHLLvskV0aea8DJ8r2Yp
-	 R9TphTDk0qjhdMn9Ls+YadAyWtBUQTGGn4ATJmPgPUo6dya4mPUbg4tnohuNC/lmQJnlP
-	 Zs4f3goAOMtEbJ1mBOi4Ct88O0LQgz9UjoEbqmGj9ISPGDWZkEp2U3wX3vBqo04v1NsES
-	 W1UbbLKog/BnKbscLF/MEHfdgd82+f4mQXSld1ftv86G+d9579a2DFEvgE05WXOaGJCND
-	 Q+XGNphAW5cpPrL0P+jRCix0YwU4oz+Z7r5jCzQMay/So3XWD4tIB1YF+Gr+5m9WwZg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=pxmwyCIX;
+	bh=CNCluDpOanFg1v+YVv1UW9l5c1iZx+9+vsAQtqKL0SI=;
+	b=YT1u6oVMxOBD6FlF7uqDz/w7kXR3imFsxa5SSH5+mBSUf7wXD6E2bO/XjKj4Dq6Y0OpQ
+	 y5CwTn9lHyE8t+9EpRLVi0fTBO/w6SiFtr3UGIk+kkqmUTZWMKGVl+U72vViCgCvt7ro4
+	 GU0LJ7eg92xfnaTsP2WBJNibZzD/XXxJzET2744D7enkqZTtSMftwiwenWAxCychA1my2
+	 y7H1hyA/fYZ1rBQDzOEGL6QdLuL5NTbG2b8soWK3WcBPsSOR16xZxdOOtrxPqHL7juw0l
+	 E4twZKz2BpguEZoAk0ivbCGKGESGfkwuZLg3bORMgXj+HH9yafvnIueovJFevChRhPg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=c5kJ4FU1;
 	dmarc=pass header.from=collabora.com;
 	spf=pass smtp.mailfrom=collabora.com;
 	arc=none smtp.remote-ip=148.251.105.195
@@ -43,40 +43,39 @@ Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9E1701F00899;
+	by smtp.kernel.org (Postfix) with ESMTPS id 9DDEB1F00898;
 	Mon,  1 Jun 2026 09:12:38 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=pxmwyCIX
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 9E1701F00899
+	dkim=pass (2048-bit key, unprotected) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=c5kJ4FU1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 9DDEB1F00898
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1780305151;
-	bh=ZMQig1G0kI/9KDHbMpaDNt380R1SRF5p144eDOFLNgI=;
+	bh=3EBzF0o7UMrIWjYtGu04a8kA/zPPANrCK9tLqcFMPCY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pxmwyCIXwbzWqHXCNEbgl0y5hr9CjXFyBXtIj/H/oV4FHhjUM1WulsHn6MEI8CFc/
-	 Zx3ykqnlb3qTd6FbYQVnrRXFV2030kvf82xnh28iiVIfrqK3ow/QeZn9TP4Ii+RXxu
-	 47Sy/H7x3qjAa01qBwINyQqrvuptKd4VJOhoGjEF62QNQkzjtUu/W32JoYIE0U/Pxn
-	 S2qQMEEcG+mPW6jj7S23ZmWw+eIFeAdyrTxOX1/t9uN36SKvoC6C0l7oPY5bW70EsF
-	 eb2Nz4BY/fbSw1lYIK19Tl7TSliK/efZKnUTJ8SGdtcONzmsHKocV+hmGOQUEkIJyI
-	 94NZQsDmkxVFg==
+	b=c5kJ4FU1M6cLL7Ci/otmQbIOa2DZbdSPZWqYr+DSCGm7pSsw+xSUBCcMKemg9UzDC
+	 G/mDvM4qmKD4Ppg1mXcC656y59QFIrsouXGv9wAF0yHdafaAYnhYseCfffYa9Eutk1
+	 9maZJmu1Z6H5185nWk5aRx8zmQ25MUkDGRw5WGN08kptD9dN49S5WUbrtbL00l5J+6
+	 04mYEbqHLQjU2hJpKtQYfWSFXtdEQmp9aUoP1XXIuIbi0s75Zw2hC2KJMuChAg9rU4
+	 G/qrAcXL+hbv7PVPFbeNUBdIfoBENcgy7XprjZW/w8k+Uyu0DauM5Ev2Hg+29IVRJP
+	 kKUc7ZyjYKR9Q==
 Received: from IcarusMOD.eternityproject.eu (unknown [100.64.1.21])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 3148717E0B66;
-	Mon,  1 Jun 2026 11:12:31 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id BB0C717E0566;
+	Mon,  1 Jun 2026 11:12:30 +0200 (CEST)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: arm-soc <arm@kernel.org>,
 	soc <soc@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org,
-	matthias.bgg@gmail.com,
-	matthias.bgg@kernel.org
-Subject: [GIT,PULL,2/3] MediaTek SoC driver updates for v7.2
-Date: Mon,  1 Jun 2026 11:12:22 +0200
-Message-ID: <20260601091225.5223-3-angelogioacchino.delregno@collabora.com>
+	matthias.bgg@gmail.com
+Subject: [GIT,PULL,2/3] MediaTek ARM32 Device Tree updates for v7.2
+Date: Mon,  1 Jun 2026 11:12:21 +0200
+Message-ID: <20260601091225.5223-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260601091225.5223-1-angelogioacchino.delregno@collabora.com>
 References: <20260601091225.5223-1-angelogioacchino.delregno@collabora.com>
@@ -94,30 +93,30 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ tags/mtk-soc-for-v7.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ tags/mtk-dts32-for-v7.2
 
-for you to fetch changes up to 7d462de9f65b002b439b1b168bf3b5579b0de48b:
+for you to fetch changes up to ba6afff1d9b70028a5fc3df2d3acbee501c20a53:
 
-  soc: mediatek: mtk-mmsys: Restore MT8167 routing masks lost during merge (2026-05-11 11:20:48 +0200)
-
-----------------------------------------------------------------
-MediaTek SoC driver updates
-
-This adds subsys ID compatibility in MediaTek CMDQ, paving
-the way for adding support for the MT8196 SoC, and fixes
-the Multimedia System (MMSYS) routing masks for the MT8167
-SoC.
+  arm: dts: mediatek: mt8135: fix pinctrl node name (2026-05-11 11:39:02 +0200)
 
 ----------------------------------------------------------------
-Jason-JH Lin (2):
-      soc: mediatek: Use pkt_write function pointer for subsys ID compatibility
-      soc: mediatek: mtk-cmdq: Add cmdq_pkt_jump_rel_temp() for removing shift_pa
+MediaTek ARM32 DeviceTree updates
 
-Luca Leonardo Scorcia (1):
-      soc: mediatek: mtk-mmsys: Restore MT8167 routing masks lost during merge
+This adds support for the ARMv7 Timer node in the MT6589 SoC
+and performs a couple of dtbs_check fixes in MT7623 and in
+MT8135 devicetrees.
 
- drivers/soc/mediatek/mt8167-mmsys.h   | 11 ++++++++---
- drivers/soc/mediatek/mtk-mmsys.c      |  8 +++++---
- drivers/soc/mediatek/mtk-mutex.c      |  5 +++--
- include/linux/soc/mediatek/mtk-cmdq.h | 24 ++++++++++++++++++++++++
- 4 files changed, 40 insertions(+), 8 deletions(-)
+----------------------------------------------------------------
+Akari Tsuyukusa (1):
+      arm: dts: mediatek: mt6589: Add Arm Generic Timer node
+
+David Lechner (3):
+      arm: dts: mediatek: mt7623: fix pinctrl child node names
+      arm: dts: mediatek: mt7623: fix pinctrl controller node name
+      arm: dts: mediatek: mt8135: fix pinctrl node name
+
+ arch/arm/boot/dts/mediatek/mt6589.dtsi | 11 +++++++++++
+ arch/arm/boot/dts/mediatek/mt7623.dtsi | 64 ++++++++++++++++++++++++++++++++--------------------------------
+ arch/arm/boot/dts/mediatek/mt8135.dtsi |  2 +-
+ 3 files changed, 44 insertions(+), 33 deletions(-)
+
