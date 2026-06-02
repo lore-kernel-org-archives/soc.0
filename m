@@ -1,90 +1,102 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA9E373C00
-	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 17:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE24D3815CC
+	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 17:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780421370; cv=none; b=UsH/NEC87v7jWsDCjPd596cZHRqbAu/RSiGn1wUeWkn4VWIpEC2//hzggxE5ZwGwKLB8pdWKGE3AK5fCRV9tB6SK1NltcBc50JiGcCg/7vYCTVLZHqfvRTJGD82e2q3r4v6clP1wvJEg0nhcjIq94C1GxJPz5dWr2HJUGM1DBrA=
+	t=1780421814; cv=none; b=ZrMA8wKtDPr4vOEkulWaGzCZrNAwA9oH3QX4BIZ6BCWMhMUUF6fwNPAJLll3hdY6kF2+EsRP2HpEqxmVuMbDNymVpLWRU6jj6UXqbimHGgWA14JEMN8l/L82u91f+8jtEvdfsjpNmiYF+Wq1Ug1tYQpC/4Qq1ojlUAl/EMA5p7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780421370; c=relaxed/simple;
-	bh=8WspfoL4gpujRM39oWh+TRtiUAik2MWWILwxqkCuc6Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L48rn02OA/wEazI6jzs1ooTo62dTVlrgIOPR99GCxBZYy8S/8P6JTiGrfw9yB93XN9KU7G/iXpeuFgU9gHtKA/qwmucB4SigmihD+PC+HLXpQbK7e7KQGfpfT6p9On/YEO0ElxPOXsa/LTNPcbROnBseOGWTXMHs4OnS+LUU6+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=apGzBkEp; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1780421814; c=relaxed/simple;
+	bh=OVvMVuZPlhVOThwdLzV9uPmq/ncwBotYjyG5XkUzR08=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=G1mTHspGPVRT8hAxvaEWetBLgn3FNbv05WU073DDZOrC9GNafGxJlmx2CSmVhZwYHKKdzvYW/j+bdIqtBByvgaCmQPfkKVCHkGtnaN91V3ej3X3smDxF93wzgnDzYHexrcbuMypeOCKM04QC0WGT0TCSO1APW3ionKF5Hkh921Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=IdIEkmVL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=g8GkeDGb; arc=none smtp.client-ip=202.12.124.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="apGzBkEp"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-687ed9aabb3so8944130a12.1
-        for <soc@lists.linux.dev>; Tue, 02 Jun 2026 10:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1780421367; x=1781026167; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1e86C8e3IWXqubUsFl/vjUmwWGVV15AJsQpCoxLfCDc=;
-        b=apGzBkEpFG1hK5mP8m0q3pPUkiT3kABpJibLl39p9v2Xy0d7WADIYGcKzjVflXi/jQ
-         Yr0fNQLMUUbN3yFSMsskEbND5frC3KnfT8wBkSaWWwhctNtDOTbejzUZqHZswA/C+cYP
-         UVTXo2yOn8CO/kqmEctYN1rTcCOzO9DevQPqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780421367; x=1781026167;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1e86C8e3IWXqubUsFl/vjUmwWGVV15AJsQpCoxLfCDc=;
-        b=UP37tAc5zN2RDybbW6C7zJDpqae/vUDWnzXd5l6p1IjWu3U2HUSXCXIAIRMYqUBwMd
-         b9yRSctowLLAwxPK6os0q56xPYCZcoIXtzCLy8ttfY1TSxXcPMCJHG2WOtRgtsM36S1l
-         mRiIyGvmPMV/Ks0BeBRz67UYgMlDuEW9ue0ECPXAo51dOQwxr0NycIxtARGe4jLJhk4y
-         /P0x8Xm3oqf/peDv+anSWtn98IrpZnDKDmPrCu8UtzCHpZTqMdkbfqd6TrDHi8u8tpBc
-         X3VJGHquaLLONNNj6e/ht+fB7d5JP7K7Q0RFSd2IpHciabJUss2PNP5gai4aRBqe0/nU
-         WM2A==
-X-Gm-Message-State: AOJu0YwdJBH7OSYyTc4N6cYmv/QJzlbttYn+hdZ7Jd9Q7it8NY06sD8s
-	auG69Ai67Z9dnYALqAI0THBYGoAmKxq8awC6ENrWZFbW18aABBfpqBWgdrzL0RyaYs0qxr70Urz
-	Qokn79CA=
-X-Gm-Gg: Acq92OEIkRGnXcyXSZ84lK8bBjYnYFf0jTNfCRZ0Q+LA//xYLmqB/UxU6K+37f51JtQ
-	b+ble/ACnPsrCR+lWpVXLfEL8pH55HUcVf+WNsXFkcCSnNwD5QyQmLbKJ41DAh38oE66hLWV4I4
-	rcJUoC2awnvioRULbgMytq1/Dp4Kte2qXOk/KTP6G6l4qniPXmMgdWFeyIz4RMIhR0tX42hBfL1
-	astWQWSe0zAWKBS3V7mTQmZ0WDGRsAbGaW2s2gEQy61r2L+uwU5fiZUezfaO2VhODVJwpMY7A3l
-	9nC295IT+w29kJcSkPPsvWXMmML6gACB4D9i17Z5ZNUizstIKOaKdR3HIaZvYpUHw9klUGlGTMn
-	WYjqnZpkqNre2QAcDBiLDECoPEgn/K8vOd0g9G3E80MfdFbTj6chSj20Huduu3KWg2FIOuJZsxc
-	/8CQxuV7PVI6MY0KO8eUMKQ429F2dYF9rU2+YWKoqGQi28Nn+0mBG7gb6iUhurTHhB5BrEPVko9
-	yMSyglT2a8=
-X-Received: by 2002:a17:906:ef02:b0:bec:fa92:d370 with SMTP id a640c23a62f3a-bf0611033e3mr30758266b.33.1780421367351;
-        Tue, 02 Jun 2026 10:29:27 -0700 (PDT)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bf05177150esm21272766b.5.2026.06.02.10.29.26
-        for <soc@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jun 2026 10:29:26 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-beb8a08a6c8so486079066b.2
-        for <soc@lists.linux.dev>; Tue, 02 Jun 2026 10:29:26 -0700 (PDT)
-X-Received: by 2002:a17:907:6088:b0:bed:7ce4:20c3 with SMTP id
- a640c23a62f3a-bf06261a692mr32768366b.42.1780421365921; Tue, 02 Jun 2026
- 10:29:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="IdIEkmVL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="g8GkeDGb"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id E1C551D001C7;
+	Tue,  2 Jun 2026 13:36:51 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Tue, 02 Jun 2026 13:36:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1780421811;
+	 x=1780508211; bh=NYHYysqppdiy+0C79in3LcRu0+DMcwMDrDw+rHUi7xc=; b=
+	IdIEkmVLs0WYQjCtE4cWIYhom/vubGVDQmPVsWy+WsB9jEOZ5V/+3P3J1V4jV3vZ
+	d6HBNRNgpwAutLCD4CO8m2mxHRIR06R9peBpZK1yV1KoQOenG38wc5wa2j9BJyNg
+	ODjQ5x6RV7rT7mD7ymBpL2arI9obBh70cO3qZVIvVaYSs/O9osk/xSC3ywNog9me
+	5dZO2FLR4WD1pbEC/25oYvVZWL/NAH6iDhFLfVqjT36cMh/IKxBF2bgNdfLWPP7s
+	/49WtOX8AyljnTV1lyne6+h5szOjWZo05L84KB1HwRgUXGPN+sYFQ/pGOra6U/8r
+	Ntba8OeGQmz7ECDP+huI5A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1780421811; x=
+	1780508211; bh=NYHYysqppdiy+0C79in3LcRu0+DMcwMDrDw+rHUi7xc=; b=g
+	8GkeDGbT8R1grKT7kUn8zPgCWqtO/DT6Bhm2MdZqlbT3aoQt16rZphGMP8HYYLse
+	wlFzX7chdYyS763iw8+AYxULev4kZ6P5rwqA0tPlWRr0YX2r3lLbldOUNU0ztPyk
+	q13yXz3pDAuZooDUauxsFfeeJJ9tM1J6T+qQctxGoAK877Llflk7fyuOlOPgBckr
+	26hyXrdbjH5tly4s6WdfNhHaNUdpR1bXtjVXqj13N7ebTTW6WyPRxsHmhKTCHsRI
+	77fCMGEmQiV0di9AtsLK4inN7yVKfn74NrZz+XL+iUx+/qF0I/KKdx7joRBjrgiL
+	qXDS0T1Gjhn2EI06LeH6g==
+X-ME-Sender: <xms:sxQfaipblXE4Eq2aXLsl0hXpXPGPA8P1jbOBQrVHiGf7r1Itu7JRGQ>
+    <xme:sxQfardgxt6pMgDTe4fd-zpqxNkIXBK58deZvv0lMSY-y1wyD-3YSiwef5IbftnsF
+    3zmzYTiMxSLlbi4Ivi5L8iyD1CS56wDLZJNsG4UQinVwYtG1VNgfBFh>
+X-ME-Proxy-Cause: dmFkZTEgxIPPHILuLEuAopiSr+Qmcyw4pb55DsBJ5PhNektQUO4GR5iC0IdHd72dMUwmZn
+    S1csBobcgSvaIQyA2ppcCLjdZv5vittOcgklQGjLrdupmNwPjEICIKStOlu55b2I7NJrOk
+    Hp71apCqA6p6iFZHliu2sJvFmMIZovPzvnyvAuFnia1TkhfG/X2Y6VZc/IJSB7GCpU6j7v
+    9CCmHwvolO32kjRCE6h2f2lqgaG5TYrT8teX4Nzj7pAW51nLGNe126D2MY8ikgxOVNeQ+D
+    xanHXt6qkIpYwJyq62Q49YduUVFY4t0We8F2/HqekyXLQLbh/bBhXtejq3VLc0BXl+giN6
+    7Nh3jY2M+v3cRw24NDoWrw8peUuPWAszqjayMbMnu03JmrYCYA/ACwHm2RZHBW6Ke572Bf
+    aYdCU1Jtx1RxdDagufPve8Q82VphPK4c/723+ordLj9C7cIrnEVkdWe1cIQPPZKbQeuEoI
+    MS65a0X0I7hjf2qhKJj4VdNSJsz6PNspwYz3dYVWf7WF86nLDtsJ6mE2Zzlso2PvFj0zbl
+    o7XHuUAqqW0Qd/0NKXe5K9UcobBgHKV55AuAPnIQzpreyu9TGauwxPztCxEno3tr+6aKLK
+    l2S0jl//v9T+7EvtU3B+Ah2qGqlk1FztQsPsj3bDoT+xm1iaJ3LSSERohIWA
+X-ME-Proxy: <xmx:sxQfasVSjHC9nwmyP41RSeJnZgYhep7nWb7BzTXHziNw--UAz9XiEg>
+    <xmx:sxQfanci5TxqgQx57n9OTRmfRpvDfwml9MxqMmKivXnzPPZhNEXMTQ>
+    <xmx:sxQfaospTWWbHJ4Q0NDOxYVDX9QdVTkt-2syEjTZT0betqqHPOG35g>
+    <xmx:sxQfam-88tD7s6EM9YcBE96eiwspOVWd9YIS2S0rvGj0jtOxCa64aw>
+    <xmx:sxQfaisC3P3j-A26tX_libse7r_cin0qL0n-fjbvs_hCVzw9UPbAXt9T>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 7954B182007A; Tue,  2 Jun 2026 13:36:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-ThreadId: AcNZTq_C4ItF
+Date: Tue, 02 Jun 2026 19:36:30 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <a4a9e96c-b4de-4c59-b6ca-6dd1d0398ca7@app.fastmail.com>
+In-Reply-To: 
+ <CAHk-=wj=uJU0PFrRjqTuOKcYnN92V0FXyn_v+x7c6rWhLoJi=w@mail.gmail.com>
 References: <7636fe41-9a6c-4494-b0fd-a55387b92f29@app.fastmail.com>
-In-Reply-To: <7636fe41-9a6c-4494-b0fd-a55387b92f29@app.fastmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 2 Jun 2026 10:29:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj=uJU0PFrRjqTuOKcYnN92V0FXyn_v+x7c6rWhLoJi=w@mail.gmail.com>
-X-Gm-Features: AVHnY4JwG8vkxEEDUE-lF3DtF4IebX5U7ta8Sr6Fwn-szma_vB7QEtdj0pMqTDs
-Message-ID: <CAHk-=wj=uJU0PFrRjqTuOKcYnN92V0FXyn_v+x7c6rWhLoJi=w@mail.gmail.com>
+ <CAHk-=wj=uJU0PFrRjqTuOKcYnN92V0FXyn_v+x7c6rWhLoJi=w@mail.gmail.com>
 Subject: Re: [GIT PULL] soc: fixes for 7.1, part 2
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, 2 Jun 2026 at 01:03, Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, Jun 2, 2026, at 19:29, Linus Torvalds wrote:
+> On Tue, 2 Jun 2026 at 01:03, Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>>   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.1-2
 >
->   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.1-2
+> That is indeed a tag - but just a bare one, not a signed one. Please
+> do make proper signed tags for me to pull..
 
-That is indeed a tag - but just a bare one, not a signed one. Please
-do make proper signed tags for me to pull..
+Sorry about that. I pushed a signed tag with the same contents now.
 
-            Linus
+      Arnd
