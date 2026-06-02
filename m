@@ -1,178 +1,202 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D0430EF95
-	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 07:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780384225; cv=none; b=opCsKSlx2xaEWqqO3hk2C5uxyOOgKxMcZWpXOMO0VNcpVpM50xnykpRJYTBEEDcTItwwiqND+82PBU02EKJCAYeD4607W4on6CzTyMVvTm8hiA7rGSP+glIOjPqH05v9seMdQe5o1ivngsVumGlR7H4EVXtYsbOL+K2WMiPrvjs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780384225; c=relaxed/simple;
-	bh=mi+Ui8uhpiFLF54HFLHPUPVEUd58KrSEXZRn3Ux4u88=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TXKSdu0wLrita97Lxw2b74S4CbZGPBNXhwT9TCv1LDYeln5j0m9rtfq0kcEzk+MPU08eCRM4lnmxDbWP5y/Kl+DOuWvIwBYPoR+vRXWHA2aK+kGIPwc1Ay+XUq97aWisiOZXqKn4iw5KmEQLl5ZEZ26Q2awhB25nfxZEsjimMxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nd7OQAge; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F31D3B5E08
+	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 07:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780386442; cv=pass; b=Ga3CqMWgJPKM7Gq7h7VE13hLQ6PYh8okOKXcNhP3l/SIW5gKY1cL/0qt86eRKn71wDIvSwRM0MX9Og/MFOx/GuqVM0VZN4/UuRThSB0TAy3icTcUd+hajSAVYMAslyP+4lqarxLlnh06ovRvJWHc1jYdLLBcKd4dZUykJTtDuno=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780386442; c=relaxed/simple;
+	bh=tSsP2qOiMDfZMEStOA5Jj8GLDM7ZmkRpJHsPd7CKvlk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=c0D4BvblatXWjDGo8yxtM7aWHmCpNpl7x+dxYM+ayMNWejuMsuAK3unCYK+nMGLyIycrT3SzXZ3oK7eEoQIbPg2Y8mF5mEU6s9cazoPsYCT3iGEw9/pt0l35KUJHLMaYyCX6fFTH7UufWeC3OLLkBcvf9h1Qy0wwhzhMfK8xxpg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UpfjsI50; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nd7OQAge"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UpfjsI50"
 Received: by smtp.kernel.org (Postfix)
-	id 3BF1C1F00898; Tue,  2 Jun 2026 07:10:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45AD1F00893;
-	Tue,  2 Jun 2026 07:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780384224;
-	bh=1KZd8akmP8KBtmPjtnCo0FTThqVg1y62b9+Gritm7ys=;
-	h=From:To:Cc:Subject:Date;
-	b=nd7OQAgeW2M/11z4Ea4pVVlbUv9nz9VyJaN4u8dp8hilAfL3vy3l5EOEGCty8kona
-	 ek5VCXz+xRJm0ALJHs3eW3mI+wpH7p8xUajm77j97odYFUNF5FzoR2eTejVxnBX8GU
-	 Dtt0OK0hMQ/VGOWkbsXTSQQ/6SdJHrOrbcWq9OY9eGYdaYSTVON8G06QJJOWFp4jNK
-	 sqgNYDE9+SC5FOYe6h7znC1d0oadduBBRviHxxa3Vhss8yMv+IxnwuKICYWeKJw+2i
-	 sB1y4UBnY6jAUHEKkgp4UwqeCMGZiQCFR5GxAeim2auI2jBLDQ0BWbxCAOutRUhu0/
-	 sX20jIw2xSj5g==
-From: Yixun Lan <dlan@kernel.org>
-To: soc@kernel.org
-Cc: Yixun Lan <dlan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.2
-Date: Tue,  2 Jun 2026 07:10:07 +0000
-Message-ID: <20260602070257-KYC5031219@kernel.org>
-X-Mailer: git-send-email 2.54.0
+	id 3F5AF1F00899; Tue,  2 Jun 2026 07:47:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.221.41
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1780386441;
+	b=ndIg5y5r7kw9Y5Iu2F/lOwRIXToa1Vg7arp1L/Md1gqd4e+byMd7IQmV2qYNOuZTqtvm
+	 u8Wc70rFxZ+i6r8Y2qFR/ZD0AMbG1Jv08K9cyT0avagWnnkLXkwNeyyvs4d7ij7MGk93f
+	 /ZNkObOtKfxk0hjlQWD0jU94ILLEwi4un0G+eQyLVdectjuBE3kt5Gfde4+VM4jONqZDM
+	 0g+Jt8X6Jj2dAWNhZAe+C9sgYRBMRxapLfzDA5GVpKCH8nOYDgZ/XAA1GOnkXQK9JHlxW
+	 7tubOhJYkbTLnGnWINg1EWGVXm9i4lGMMXcR4uKPfLMeTUtu7qnJm6erRvqkbOzPAxQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1780386441;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:From:Reply-To:Subject:To:Cc:References:
+	 Content-Language:Autocrypt:Organization:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Vh2zzywQb2LDD0ApyXrtv/dbmsJmDaoaJ1y3lBs52fU=;
+	b=fSXENUHenLN34bDFqRA9kZM2e/46zbsksl2MNuOhcPBOYQVZTvFjGS3NQL3bvshoNp9/
+	 vfzGNxkNOr4Etud8WBsJBuEOUv+vbeeDWlMadnzLcq9vuhuF7O8G2aTntkPSkiiVbz0Jd
+	 MLnVZb8F/SEnfxwYPt3S7Gei4ILdMB2PMRII1sXRJZnibOnG6s5CA5nHbKIDoa6C4+qCM
+	 SE5ZU1qBcjR2+LfxS5dFA4e/DAJGTs8ZkA3AjcX3w4tgbvtg04lGikZPNgLvXIbIIkV5c
+	 KubjaeQPokJrPgpjgTfdjZeC8SrdCppo5ug/VXblOG6ndpAGRgSkczfTSZ9moMNgBLg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=UpfjsI50;
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	arc=none smtp.remote-ip=209.85.221.41
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5173F1F00898
+	for <soc@kernel.org>; Tue,  2 Jun 2026 07:47:20 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=UpfjsI50
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 5173F1F00898
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-45ef6565cfdso1672034f8f.0
+        for <soc@kernel.org>; Tue, 02 Jun 2026 00:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1780386439; x=1780991239; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vh2zzywQb2LDD0ApyXrtv/dbmsJmDaoaJ1y3lBs52fU=;
+        b=UpfjsI50LTQn2YDP+gEmFH53ONMeaGlLhK8Y17A+IrZ8OphoP+bAsuNo2LG5trwRrQ
+         LPXb4kRb2cQ+Fm9+0+UUFjWS0QaWtnRXJA835T662EugeSaG7NNVIDXZ4otY2FV0xurT
+         LSjJa8rTlQLMsba7v9I/CGzeT/vW6xrlQ6Ez31kWV43AQcM4aOzk1hICiObOriPny+sO
+         HvQHeombQBb/ESKop+5Fq09DKCpW6+KuJDDbScGRZdtSaa1pLlHRdnSm6Khz8FIFA0Qr
+         qqz81neseGBCmHvdYeH4b0up2LdcEsc6BvSVCOFHhsTYqOmSnG1EbVLRwXUOZfpnAeFo
+         zRuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780386439; x=1780991239;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vh2zzywQb2LDD0ApyXrtv/dbmsJmDaoaJ1y3lBs52fU=;
+        b=KPajsV54Aw0P36dAGWHE16gsP8HzrXEeBMJIqMXYLcc6BGGEQ/2i1cfnsRP1gJ/mZc
+         oOckgZVQHkPV1Qc0L3gKJMhOTkYAwcGYL+ma7HPQPcShTMulnIAWgrOvHv1BwBKn4wXs
+         xZE1APCwwrapgvWxdhWa2d47g4BUfg0Ksp7t4TvSHabqqTJkdNMJypZQjF+4yhILzqEv
+         HNHDuyv1kjBLPNd/cNiG6O5zIUl+TWB70xDkr9Vhqb2f1ObO69bepCPFF22VNWTG/mtv
+         i4L96gL2iYZ1yPTwqCcVy2gVyiLjekmbwgVvOzVYw2ejoEn9tFjxZDVQbAd5LeKbFgDl
+         PKjg==
+X-Gm-Message-State: AOJu0YyNxnYWivz2tZAsJyiEpxti103+mLcI6658skPYHPPVKVwiu8C0
+	0VnM4duaHqMwxmkE6AaXpHgIB3UxgIEA+dB0NMOWFXSttRRr/gE4MPaAI9Sv4LtzOTE=
+X-Gm-Gg: Acq92OEbYSE5/IK4ZjgGJpFPUGCsCFNN9snTH2zsIH12TTMLYLDSLElQNxtEjmMWr2k
+	SB2409t9uawnrvajbfV+oR3EM0may9i4aQo45OxLRKA9Ky57ObNBhCEEv89NKeIkpDa2jjuJfqQ
+	H5XkpSptjGESs0OW9DV5/cDtZU1f/ouIQk98+h4q0aUImggXEpRAQsAXTRPUFHlKEGh2O2VzkK4
+	qAoGz+oa6cH84u3yiKw1PUkLOPWenpCtoF9el7Qfh+/JVPWsDTjCAX5xhaOBpbwXT+H+IOpE+eL
+	tN9SzdG6T8/q3JaAjJgwX8OzM7+pRRuU1my4kONseRxSsGftksX/PuvPSGHEgl5mTHucN6O7Dac
+	SHcdTgQPQQY4ci0bMwSCoFfvrjz+b3QkyXkNVfjY4YAMnSSCTTi60VMx17QQg2lQH3XK7NjROgL
+	CkVb6GOBDpAwnNPJfFKCQtHcRG7cCsHdCQBeqgmWKyvFn1e2rgPTnvfd4RnCan0jLDz8p9dC1Cw
+	lGMAGLsgzJetQp7gL1GVy2CLNh3
+X-Received: by 2002:a5d:674d:0:b0:454:a41f:d082 with SMTP id ffacd0b85a97d-45ef6aea78dmr20394102f8f.3.1780386438514;
+        Tue, 02 Jun 2026 00:47:18 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:106d:1080:13a7:124b:487c:e2bc? ([2a01:e0a:106d:1080:13a7:124b:487c:e2bc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34b834esm31159663f8f.11.2026.06.02.00.47.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Jun 2026 00:47:18 -0700 (PDT)
+Message-ID: <9267eeb5-a221-4108-bc7a-57e88347e7a7@linaro.org>
+Date: Tue, 2 Jun 2026 09:47:17 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v7.2 take 1
+To: Linus Walleij <linusw@kernel.org>
+Cc: soc@kernel.org, arm@kernel.org, linux-amlogic@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+References: <16fc7412-c470-4f3f-b6c8-55c35698a424@linaro.org>
+ <CAD++jLkiZD6tyUW6k2wt_TD3MeLNVDZNa0N+Rhwb0mAAGfLMvA@mail.gmail.com>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <CAD++jLkiZD6tyUW6k2wt_TD3MeLNVDZNa0N+Rhwb0mAAGfLMvA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi SoC Maintainers,
+Hi,
 
-   Please pull SpacemiT's DeviceTree changes for v7.2
+On 6/1/26 22:06, Linus Walleij wrote:
+> Hi Neil,
+> 
+> thanks for your pull request!
+> 
+> On Thu, May 21, 2026 at 3:19 PM Neil Armstrong
+> <neil.armstrong@linaro.org> wrote:
+> 
+>>         arm64: dts: amlogic: t7: khadas-vim4: Remove invalid property
+> 
+> This commit has a problematic Fixes:
+> 
+> commit 6f14ba3c3fa3d67b72e052f431f6776470eb2cbd
+> Author: Ronald Claveau <linux-kernel-dev@aliel.fr>
+> Date:   Mon Mar 30 14:11:21 2026 +0200
+> 
+>      arm64: dts: amlogic: t7: khadas-vim4: Remove invalid property
+> 
+>      Fix introduced invalid property for Khadas VIM4 sdcard regulator.
+> 
+>      arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dtb:
+> regulator-sdcard-3v3 (regulator-fixed): Unevaluated properties are not
+> allowed ('enable-active-low' was unexpected)
+> 
+>      Reported-by: kernel test robot <lkp@intel.com>
+>      Closes: https://lore.kernel.org/oe-kbuild-all/202603290828.5gt393t6-lkp@intel.com/
+>      Fixes: 60eff75ac67b ("arm64: dts: amlogic: t7: khadas-vim4: Add
+> power regulators")
+>      Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+>      Signed-off-by: Ronald Claveau <linux-kernel-dev@aliel.fr>
+>      Link: https://patch.msgid.link/20260330-fix-invalid-property-v2-1-228c51c8de93@aliel.fr
+>      Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> Commit 60eff75ac67b does not exist in the SoC tree nor in Torvalds'
+> tree.
+> 
+> What's up here, it looks incorrect?
 
-Yixun Lan
+Yeah sorry it was probably based on an earlier apply for the previous rejected PR
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+The right commit is 8f4e4fbd5072 arm64: dts: amlogic: t7: khadas-vim4: Add power regulators
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+But since it's in the same PR I will just squash it...
 
-are available in the Git repository at:
+@arnd I'll post a v2 of this PR with this issue fixed.
 
-  https://github.com/spacemit-com/linux spacemit-dt-for-7.2-1
+Thanks,
+Neil
 
-for you to fetch changes up to 793cc54475b49b5b558902b5c13e4bfe66530a50:
+> 
+> Can you look into it?
+> 
+> Yours,
+> Linus Walleij
 
-  riscv: dts: spacemit: enable PMIC on OrangePi R2S (2026-06-01 06:32:42 +0000)
-
-----------------------------------------------------------------
-RISC-V SpacemiT DT changes for 7.2
-
-For K3 SoC
-- Add Ziccrse extension
-- Add PWM support
-- Add PDMA support
-- Add USB2.0 support
-- Add CoM260-IFX board
-- Add DeepComputing FML13V05 board
-- Fix I/O power of pinctrl
-
-For K1 SoC
-- Add Micro SD card support
-- Add baudrate to console
-- Add SPI support
-- Enable thermal sensor
-- Fix 32K clock
-
-For boards of K1
-- Milk-V Jupiter
-  - Enable eMMC
-- MusePi-Pro
-  - Enable EEPROM/PCIe/QSPI/USB
-- OrangePi R2S
-  - Enable PMIC/USB3
-- OrangePi RV2
-  - Enable eMMC/I2C/PCIe/PMIC/QSPI/USB
-
-----------------------------------------------------------------
-Alex Elder (1):
-      riscv: dts: spacemit: define a SPI controller node
-
-Andre Heider (6):
-      riscv: dts: spacemit: k1-musepi-pro: add PMIC and power infrastructure
-      riscv: dts: spacemit: k1-musepi-pro: add 24c02 eeprom
-      riscv: dts: spacemit: k1-musepi-pro: enable QSPI and add SPI NOR
-      riscv: dts: spacemit: k1-musepi-pro: enable USB 3 ports
-      riscv: dts: spacemit: k1-musepi-pro: enable PCIe ports
-      riscv: dts: spacemit: k1-musepi-pro: set default console baud rate
-
-Aurelien Jarno (5):
-      riscv: dts: spacemit: set console baud rate on Milk-V Jupiter
-      riscv: dts: spacemit: sort aliases on Milk-V Jupiter
-      riscv: dts: spacemit: enable eMMC on Milk-V Jupiter
-      riscv: dts: spacemit: enable SD card support on Milk-V Jupiter
-      riscv: dts: spacemit: fix uboot partition offset on Milk-V Jupiter
-
-Chukun Pan (4):
-      riscv: dts: spacemit: enable eMMC for OrangePi RV2
-      riscv: dts: spacemit: enable QSPI for OrangePi RV2
-      riscv: dts: spacemit: enable USB3 on OrangePi R2S
-      riscv: dts: spacemit: enable PMIC on OrangePi R2S
-
-Conor Dooley (1):
-      dts: spacemit: set console baud rate on bpif3
-
-Guodong Xu (1):
-      riscv: dts: spacemit: k3: Add Ziccrse extension for X100 cores
-
-Han Gao (3):
-      riscv: dts: spacemit: Enable i2c8 adapter for OrangePi RV2
-      riscv: dts: spacemit: Define the P1 PMIC regulators for OrangePi RV2
-      riscv: dts: spacemit: Enable USB3.0/PCIe on OrangePi RV2
-
-Iker Pedrosa (3):
-      riscv: dts: spacemit: k1: add SD card controller and pinctrl support
-      riscv: dts: spacemit: k1-orangepi-rv2: add SD card support with UHS modes
-      riscv: dts: spacemit: k1-bananapi-f3: add SD card support with UHS modes
-
-Sandie Cao (2):
-      dt-bindings: riscv: spacemit: add deepcomputing,fml13v05
-      riscv: dts: spacemit: add DeepComputing FML13V05 board device tree
-
-Shuwei Wu (1):
-      riscv: dts: spacemit: Add thermal sensor for K1 SoC
-
-Trevor Gamblin (1):
-      riscv: dts: spacemit: k1-musepi-pro: add SD card support with UHS modes
-
-Troy Mitchell (1):
-      riscv: dts: spacemit: Add PDMA controller node for K3 SoC
-
-Yixun Lan (6):
-      dts: riscv: spacemit: correct 32k clock frequency
-      riscv: dts: spacemit: k3: Add USB2.0 support
-      riscv: dts: spacemit: k3: Add pwm support
-      dt-bindings: riscv: spacemit: Add K3 CoM260-IFX board
-      riscv: dts: spacemit: k3: Initial support for CoM260-IFX board
-      dts: riscv: spacemit: k3: Fix I/O power settings
-
- .../devicetree/bindings/riscv/spacemit.yaml        |   6 +
- arch/riscv/boot/dts/spacemit/Makefile              |   2 +
- arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts    |  33 +-
- arch/riscv/boot/dts/spacemit/k1-milkv-jupiter.dts  |  38 +-
- arch/riscv/boot/dts/spacemit/k1-musepi-pro.dts     | 329 ++++++++++-
- arch/riscv/boot/dts/spacemit/k1-orangepi-r2s.dts   | 157 ++++++
- arch/riscv/boot/dts/spacemit/k1-orangepi-rv2.dts   | 292 ++++++++++
- arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi       |  60 ++
- arch/riscv/boot/dts/spacemit/k1.dtsi               | 131 ++++-
- arch/riscv/boot/dts/spacemit/k3-com260-ifx.dts     |  21 +
- arch/riscv/boot/dts/spacemit/k3-com260.dtsi        | 190 +++++++
- .../dts/spacemit/k3-deepcomputing-fml13v05.dts     |  31 +
- arch/riscv/boot/dts/spacemit/k3-pico-itx.dts       |  24 +
- arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi       | 623 +++++++++++++++++++++
- arch/riscv/boot/dts/spacemit/k3.dtsi               | 281 +++++++++-
- 15 files changed, 2200 insertions(+), 18 deletions(-)
- create mode 100644 arch/riscv/boot/dts/spacemit/k3-com260-ifx.dts
- create mode 100644 arch/riscv/boot/dts/spacemit/k3-com260.dtsi
- create mode 100644 arch/riscv/boot/dts/spacemit/k3-deepcomputing-fml13v05.dts
