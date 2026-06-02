@@ -1,163 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC943EBF0C
-	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 13:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780408570; cv=pass; b=FL9cASz4nkJhdeHXNHwNCxsEtOPBONg4fSmwB1GppVfHstlxcDVVjL4FdqpOpz5w4Kq2mupQ12y9sskgdYoCu8F7o1941DuVQEEOCGb0KGLpR186yUs5o8MKdu1HCQe4oqM6gGNPP1Ll2F8/IQKt1hvNgCmTalhjp2j6Dg1TXX8=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780408570; c=relaxed/simple;
-	bh=2XMsycIqZi5cVvZqoNufjj6G9eiRxyRPfMPVVwer/Tw=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=jWQcsYY9YKymHL2EQ3VenpywNZqqhk7VgOzQTGXvvG56oGdgJZbqbXVYoOl+GsDHa4tCLe0ihnXAGpC1X+jjZTXEeTjMnijLAOI4lFYwN0w6MFi45Z4KsQo//yglku29HW6GIMOqAazMQeuPom5MY8BfgN+ZwDJbVdEmApC/afQ=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=z24Wo/ZZ; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA9E373C00
+	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 17:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780421370; cv=none; b=UsH/NEC87v7jWsDCjPd596cZHRqbAu/RSiGn1wUeWkn4VWIpEC2//hzggxE5ZwGwKLB8pdWKGE3AK5fCRV9tB6SK1NltcBc50JiGcCg/7vYCTVLZHqfvRTJGD82e2q3r4v6clP1wvJEg0nhcjIq94C1GxJPz5dWr2HJUGM1DBrA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780421370; c=relaxed/simple;
+	bh=8WspfoL4gpujRM39oWh+TRtiUAik2MWWILwxqkCuc6Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L48rn02OA/wEazI6jzs1ooTo62dTVlrgIOPR99GCxBZYy8S/8P6JTiGrfw9yB93XN9KU7G/iXpeuFgU9gHtKA/qwmucB4SigmihD+PC+HLXpQbK7e7KQGfpfT6p9On/YEO0ElxPOXsa/LTNPcbROnBseOGWTXMHs4OnS+LUU6+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=apGzBkEp; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="z24Wo/ZZ"
-Received: by smtp.kernel.org (Postfix)
-	id B947B1F00899; Tue,  2 Jun 2026 13:56:07 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.52
-ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
-	t=1780408567;
-	b=d29yoQdPwu2PVCoOWLK/vfr0QKQ2gfE3tr3M/XQUcxZcNBGd0/sj32BVtKuky/p9s9WD
-	 kn8H3LGl98u9a8LpFy/RDoFw4h5ozBjbQQ7X09GgXZE/N6+ejWS9DhKs55qznmZf0S5gP
-	 pp5FXsns72aC7Ms7KKrYren9Kh4MFNnDxYjjORe77Gx9iDvm7es8bt9ubmGtUcl78jJeu
-	 PnGRV+Rpkbstva9zUAFVjU2+C2Mhkak/hQrPiWGY0iJp3ZdLxybjZu7gUmkjlbKPO676+
-	 kYKUsYyM1pdjrdwMIagczq+HNPZuzXFqLdErqCZr5POrLg7ENHPbnztAqt+x3vwdL/A==
-ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780408567;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=t9jtpHRRJE/DKOFfDRogyp/xh/qyYac7Jc/ujWsn6Ik=;
-	b=nJqez8UquQ08KZhrszXQ2KQgsDkOr31+M5c1Q09XP+7cllGbBL17uT/26aO3FUsJpoCq
-	 SUO6nmRgYmDMdJz4I3tYNIFatXHiTAxQRmE1EW1lXucc5nql3gbWVWD5FgPAkrQz1fYcJ
-	 wAtMcOBCTzEzHumvPwEoPjXMz95vBnbLPcAqfVatQY4vavXLnlP+Xa9VOqGPRjgn0ZOXj
-	 iDYTKJt2Fffcr5/HitI9enNo9utwDiHrqs4l//F4tjD40C7y0bakj7VPpGwqZ3vOIrrU3
-	 34z8O0JrspE5FMs/6JqQNwe43ccqR/q7pMrw9FlJGiDweGTtLfWwWiYX2nQQhkJEYNg==
-ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b="z24Wo/ZZ";
-	dmarc=none header.from=monstr.eu;
-	spf=none smtp.mailfrom=monstr.eu;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.52
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 20D831F00893
-	for <soc@kernel.org>; Tue,  2 Jun 2026 13:56:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=z24Wo/ZZ
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 20D831F00893
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-66039d3efcbso5587319d50.2
-        for <soc@kernel.org>; Tue, 02 Jun 2026 06:56:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780408565; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SthaoumLdOwBcaMZkS8R9l8E6Nc49nRL4ITJpT+AjBpqWiEspDqCC1ndL3ZJDgd/jM
-         5zo1j84FDLtduRnv2Qun1MGOSvivyr2hWTtuKd3fM1kT4b9r8NXRkAXYvbOyAgeRjMJ7
-         0UmrI3Y1RNEQsp3nIMbTy+xfpW14v+7ko2C0IbN4V8029fX12GCsTmoNehWTyXAptXj0
-         fiCLutv73C0IVUA1z0lVNpeQvbgyk7dLJQOiuzJKaeYkFD2c4nmZX8o59vL6LylcBEkZ
-         rMfyoh/zX3omwvxBz7MFGPLC95y2rquijkshOT0b3hFd+92BOKi2UFhPGHRvuPizzum+
-         g6FA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=t9jtpHRRJE/DKOFfDRogyp/xh/qyYac7Jc/ujWsn6Ik=;
-        fh=ngnzniW9/251Blo+3H7OvJM/allDljIxuXeYmmxYfks=;
-        b=DpuWrMXZQAcoJTuCZMAheFNgLDqxivCi2YNbJTc4TvhePYIk+6T1PnD08KtBq9Md23
-         5SVL63txQiz5gEXYlxGIULbeJISsAK6eLKT8vXWbu1FV8DMz1vafot/lVCgXg0KsHbI7
-         Ohk2TvvPOGEWYp9cL6++LY9OYnma4/sE0QNPMbyXWZgVtAXXGI2eCSnU/sN4SJKeQFUi
-         DZnFN/v+cIdZCSFkKAX5zWQgXDo+ITatIwIK+VSf9sNRzRNaOJFJJx2fDxcy+KW8w+yB
-         qKpOEi8iO9oLjq5IvAMe6Ku/IKmnisPUMqBKsz7JUDv0N9BHJ38Q6Xs784KYCCtIfn/4
-         RTcg==;
-        darn=kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="apGzBkEp"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-687ed9aabb3so8944130a12.1
+        for <soc@lists.linux.dev>; Tue, 02 Jun 2026 10:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1780408565; x=1781013365; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=t9jtpHRRJE/DKOFfDRogyp/xh/qyYac7Jc/ujWsn6Ik=;
-        b=z24Wo/ZZy3RzcFwU0hjbkODuOVEBkQpYTfeGLQE3NHaGEOwpRJ01eyH3EmE+C31kEV
-         F7PAyLk2psTgks4UaJQK40NvVbXSjTbaj1Qo4f6u0ry4cTqb/jQrmu6y0ASMckpBz1uP
-         9SHgIlzvObGk2tsSYNitENYLksh0NcYT3uQsLUTcM85i6rl72NspUXA4D7h0WmJAoqrk
-         igG6xxoEJa2ZMeptFEv/otu4c3UICOelTMwk2w5eZMxYnBntBwNrOuPF/aDh35kiOfBr
-         VEoKuhBoJ40r2YfDkAgwGhkyme/cbOYLSkh3HZS4u7I4NZ5Jl/YsF8/5+dYbsOw1E/Ki
-         82Ow==
+        d=linux-foundation.org; s=google; t=1780421367; x=1781026167; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1e86C8e3IWXqubUsFl/vjUmwWGVV15AJsQpCoxLfCDc=;
+        b=apGzBkEpFG1hK5mP8m0q3pPUkiT3kABpJibLl39p9v2Xy0d7WADIYGcKzjVflXi/jQ
+         Yr0fNQLMUUbN3yFSMsskEbND5frC3KnfT8wBkSaWWwhctNtDOTbejzUZqHZswA/C+cYP
+         UVTXo2yOn8CO/kqmEctYN1rTcCOzO9DevQPqg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780408565; x=1781013365;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t9jtpHRRJE/DKOFfDRogyp/xh/qyYac7Jc/ujWsn6Ik=;
-        b=dOonazgG43RoHl4Q4LYU2cVkLzysxVVKBF7U+gvt1ly4E5MwQVHCNitH9E3oqACscV
-         ZlHOxhYDOV36x5Hawu70p1Wzmdgu58DfbaSym1d+ii2eXsYIPnUaDXAwuiI00Zr0jw5p
-         am1Ymf8V97OIpmvecJ9heiLLEDU8dT+ZbTlRhAyRJ2rwv8DeT5zJElsecoON4iEx3F0d
-         18yYQa/RI9scKJM4xSSFjmDRiQg5K+QZOw+aiaLV9o/A7MEZj81q0Z6DNYAvrgxhUvB2
-         DaBVah8nZe8vQ7LBjrtCrpEz1aCjvcFTeb9AfQiElBFqKjUUOphBWxWZz/2xizyXhDKb
-         01eA==
-X-Gm-Message-State: AOJu0YzEsypGLaMEMHY/DHumiRlFl3BgcN+3dNYA4lAYxoln+VmpY/2g
-	ionpUZ2OYv0UsYXkZBYZhC4WaXf7DtYw45thcF5RlZjxTPxpOCGesPgSZuBsrjumftWBCQpkBpy
-	wwKSCQP9aKm10xw8wqecGxJqmolUyjRcmnpjt3Q70o0vvmCvYoKu9GKt2
-X-Gm-Gg: Acq92OFCrR8QGw1RAaaRtA5CZCdw/l3H4zN7JqcetnVFQ7kbCQqrbEA92QDKZRqunsX
-	vE1TWsJZNwLHZRzPWDz95zqSpbuwXae6ZI+6SMmGq1bADTNpZSh3O/l1aubhRbS8PWXHhA7DjF1
-	TDVK3KTM5Wg6XRYI+ofwe8ptWb21bip/7LweErXsHPTBpRSwk+eFy1YpESZqgax8fGn193BBEEw
-	RCUqRN9WyeyIMcbo8tgM2f33YNRTjcT4onmOFebRaZuVVrGksyaqGZMrpH+f1fculomZJfR6SVZ
-	g0rPHItd8ydYd+s29bpQ/bJ6ehJzobP+GyZZcPNMA+HlWGjO9LM=
-X-Received: by 2002:a53:ac81:0:b0:660:55e1:5bb0 with SMTP id
- 956f58d0204a3-6605edd30e6mr13392101d50.22.1780408564617; Tue, 02 Jun 2026
- 06:56:04 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780421367; x=1781026167;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1e86C8e3IWXqubUsFl/vjUmwWGVV15AJsQpCoxLfCDc=;
+        b=UP37tAc5zN2RDybbW6C7zJDpqae/vUDWnzXd5l6p1IjWu3U2HUSXCXIAIRMYqUBwMd
+         b9yRSctowLLAwxPK6os0q56xPYCZcoIXtzCLy8ttfY1TSxXcPMCJHG2WOtRgtsM36S1l
+         mRiIyGvmPMV/Ks0BeBRz67UYgMlDuEW9ue0ECPXAo51dOQwxr0NycIxtARGe4jLJhk4y
+         /P0x8Xm3oqf/peDv+anSWtn98IrpZnDKDmPrCu8UtzCHpZTqMdkbfqd6TrDHi8u8tpBc
+         X3VJGHquaLLONNNj6e/ht+fB7d5JP7K7Q0RFSd2IpHciabJUss2PNP5gai4aRBqe0/nU
+         WM2A==
+X-Gm-Message-State: AOJu0YwdJBH7OSYyTc4N6cYmv/QJzlbttYn+hdZ7Jd9Q7it8NY06sD8s
+	auG69Ai67Z9dnYALqAI0THBYGoAmKxq8awC6ENrWZFbW18aABBfpqBWgdrzL0RyaYs0qxr70Urz
+	Qokn79CA=
+X-Gm-Gg: Acq92OEIkRGnXcyXSZ84lK8bBjYnYFf0jTNfCRZ0Q+LA//xYLmqB/UxU6K+37f51JtQ
+	b+ble/ACnPsrCR+lWpVXLfEL8pH55HUcVf+WNsXFkcCSnNwD5QyQmLbKJ41DAh38oE66hLWV4I4
+	rcJUoC2awnvioRULbgMytq1/Dp4Kte2qXOk/KTP6G6l4qniPXmMgdWFeyIz4RMIhR0tX42hBfL1
+	astWQWSe0zAWKBS3V7mTQmZ0WDGRsAbGaW2s2gEQy61r2L+uwU5fiZUezfaO2VhODVJwpMY7A3l
+	9nC295IT+w29kJcSkPPsvWXMmML6gACB4D9i17Z5ZNUizstIKOaKdR3HIaZvYpUHw9klUGlGTMn
+	WYjqnZpkqNre2QAcDBiLDECoPEgn/K8vOd0g9G3E80MfdFbTj6chSj20Huduu3KWg2FIOuJZsxc
+	/8CQxuV7PVI6MY0KO8eUMKQ429F2dYF9rU2+YWKoqGQi28Nn+0mBG7gb6iUhurTHhB5BrEPVko9
+	yMSyglT2a8=
+X-Received: by 2002:a17:906:ef02:b0:bec:fa92:d370 with SMTP id a640c23a62f3a-bf0611033e3mr30758266b.33.1780421367351;
+        Tue, 02 Jun 2026 10:29:27 -0700 (PDT)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bf05177150esm21272766b.5.2026.06.02.10.29.26
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Jun 2026 10:29:26 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-beb8a08a6c8so486079066b.2
+        for <soc@lists.linux.dev>; Tue, 02 Jun 2026 10:29:26 -0700 (PDT)
+X-Received: by 2002:a17:907:6088:b0:bed:7ce4:20c3 with SMTP id
+ a640c23a62f3a-bf06261a692mr32768366b.42.1780421365921; Tue, 02 Jun 2026
+ 10:29:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Michal Simek <monstr@monstr.eu>
-Date: Tue, 2 Jun 2026 15:55:57 +0200
-X-Gm-Features: AVHnY4L18eyVlhjycUY5iNpuboxB-7Rv0SWEmLrcTIjnB41jeLOIdSTZeBHV958
-Message-ID: <CAHTX3dKJBTQ9TF2TeTTjsWBo9bkV=39b5YjTG7j+tqct0Q-E5w@mail.gmail.com>
-Subject: [GIT PULL] arm64: AMD/Xilinx SOC changes for v7.2 v2
-To: SoC Team <soc@kernel.org>
-Cc: linux-arm <linux-arm-kernel@lists.infradead.org>
+References: <7636fe41-9a6c-4494-b0fd-a55387b92f29@app.fastmail.com>
+In-Reply-To: <7636fe41-9a6c-4494-b0fd-a55387b92f29@app.fastmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 2 Jun 2026 10:29:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj=uJU0PFrRjqTuOKcYnN92V0FXyn_v+x7c6rWhLoJi=w@mail.gmail.com>
+X-Gm-Features: AVHnY4JwG8vkxEEDUE-lF3DtF4IebX5U7ta8Sr6Fwn-szma_vB7QEtdj0pMqTDs
+Message-ID: <CAHk-=wj=uJU0PFrRjqTuOKcYnN92V0FXyn_v+x7c6rWhLoJi=w@mail.gmail.com>
+Subject: Re: [GIT PULL] soc: fixes for 7.1, part 2
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+On Tue, 2 Jun 2026 at 01:03, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.1-2
 
-please pull these 2 patches to your tree. I have removed that 2
-problematic patches from my queue.
+That is indeed a tag - but just a bare one, not a signed one. Please
+do make proper signed tags for me to pull..
 
-Thanks,
-Michal
-
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-
-are available in the Git repository at:
-
-  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc-for-7.2-v2
-
-for you to fetch changes up to fdee7c66c0d7b6869c36b9f9a915abf29ab5b550:
-
-  soc: xilinx: Shutdown and free rx mailbox channel (2026-04-30 12:50:05 +0200)
-
-----------------------------------------------------------------
-arm64: Xilinx SOC changes for 7.2 v2
-
-zynqmp_power:
-- Fix race condition in event registration
-- Fix shutdown and free rx mailbox channel
-
-----------------------------------------------------------------
-Prasanna Kumar T S M (2):
-      soc: xilinx: Fix race condition in event registration
-      soc: xilinx: Shutdown and free rx mailbox channel
-
- drivers/soc/xilinx/zynqmp_power.c | 47 +++++++++-----------
- 1 file changed, 20 insertions(+), 27 deletions(-)
-
-
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+            Linus
