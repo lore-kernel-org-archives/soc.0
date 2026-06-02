@@ -1,98 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352683C9898
-	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 09:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBB2370AFE
+	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 11:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780391664; cv=none; b=DqJAbzGoN0b2ifHv8iGCGHzewEudIJhTvT8RTJ3V70BxPoLkfsnJKKtjTCnsMHN1/5W+32ZyquzVwB4MCG+1V7Uk51eekPrHPjrVd9HbgMlOvd/w0//P9xitmEM4w1fB1vezqIZFy9wn+xkZDfmb5OcNqNed6v7QyVXInShF+1U=
+	t=1780400412; cv=none; b=JXKsPw9n3g4FQdZxrzhqCQZRyD+dfkL2mAK70FY9u1sE7k2i9ZMg3WHAagGQ9ByS7MrbC0j6VI3mA1FKwfsFUDygWHmc9YeKXFlvwoX+MI9CNOjG4PTZPZHAr9KNcicEKQb+1mLS3ZZkO+xdBkJueSQw4IPLtkrL0BSToNHn95g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780391664; c=relaxed/simple;
-	bh=vCFSwJoi5ogOjplJDdhhqISDeGFms4ZxZKdpge0zlyc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jgIV17ZLxcNzx3khRt7tRgJ5l33VyhabNd2DPCoovICKeoGVFp9ETc4V6Qh+6r/P1eUUgaP+k5O333j4K8T/W0OAMpv6iaU0Gy3sWfNECSgN9IB5wuF+fnb6TWvXUlsz/5HxtYwRzbs+O50jMbmkxVsYsFq03qumQDlI3aEh4fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XnJbnEBn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780400412; c=relaxed/simple;
+	bh=0qaTQ7OJswHQLYVM+kY9nNV1Fw8utFSSMEaEsBtTclY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=VsG/Yc4JGYxe6lckWJDX6GX5G5IvWjzrTDpSuoZmPd09xuXtsJHwG1uRl+3OzATtvWp3iHZh/0E0/iT9mWuSBxjIbvGd7E/3akyuglAkYODVuIVnbDwRmpOElwJgAMfO4hqpLAVhzYn9/JYvdQbXV8FZMNeutsLhsnv6gt+uscs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NgtoNGC+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XnJbnEBn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NgtoNGC+"
 Received: by smtp.kernel.org (Postfix)
-	id 30C571F00898; Tue,  2 Jun 2026 09:14:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268771F00893;
-	Tue,  2 Jun 2026 09:14:21 +0000 (UTC)
+	id 7D1D61F00898; Tue,  2 Jun 2026 11:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B271F00893
+	for <soc@kernel.org>; Tue,  2 Jun 2026 11:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780391663;
-	bh=vtlReEb+fitYDnn2AECwEnIKcGiaa/0Qcud+2B4xY04=;
-	h=Date:From:To:Cc:Subject;
-	b=XnJbnEBnEikSpe7xzBasBpNsfePZbYmDD4XSHbcEHrP83Paq0aICBPassN36RJwDw
-	 0ysgoLJaqlJyTcLCcwGSXQsFYXDon3yLjs/tSHkejW4v+ert5TECJSllmdmxaR9xhi
-	 g5noy9dLAx1CY8dCAAHDoPtaU1WBQlmDiQstgnJS5D/OzlhjjNihvGjUUDF0LIYlrf
-	 9yFS6gajyPfNfWZd11etmuwb8Ct9mjLrzcSO6nTLaWu/47PwDluoS8Z/gBIioWLqDL
-	 DHMMAZGjouOzjaKuyRhohAfnlvpgn6cuTZMwpYz3xfb1a+djoSY4OHD9WNo8AVjQ5v
-	 Z+37HR+32R4hw==
-Date: Tue, 2 Jun 2026 10:14:20 +0100
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RISC-V soc fixes for v7.1-rc7
-Message-ID: <20260602-brought-impaired-e5cc81043a9e@spud>
+	s=k20260515; t=1780400405;
+	bh=1EXUcImwYz/ctSLtoI/UMztk3ADXTdqAjvA0n/L2Ex0=;
+	h=Subject:From:Date:To:Cc;
+	b=NgtoNGC+PAKdI7MT3HUYmMy6hJ0GlzPSGgfJnd1UF5es9+2+flnaDblnv6UyNJcfO
+	 6jrHB6ggJ82GFSQXB1H3WeDuLbx/WAjFQaO2eutFwjYN7p082aizeGYSbx10PGOB9w
+	 bJNMwzLKKyTEtfArFU2v/wXv5TBd6jOS+7LQfdIx2id28e+LZzqZqmMz4uamLUdvqs
+	 +L+PZSU2l10Qp8P7/vwe+xML8zUqarH4EIyncVR4pt3FNILPcim/WzoKBa51U8l1t6
+	 yByuUfsgoNKjcGiDnp2t5WG6m+q+/rJjlngi2w0s762RiO1QFKmLod9HeOrYsjY18V
+	 y5tz9NVbnM4LQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 965133811A53;
+	Tue,  2 Jun 2026 11:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kZxeEu5T5ohTJHqe"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <178040040728.402603.16793509033197948698.git-patchwork-summary@kernel.org>
+Date: Tue, 02 Jun 2026 11:40:07 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
+
+Hello:
+
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
+
+Patch: [GIT,PULL] Rockchip dts32 changes for 7.2 #1
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Committer: Linus Walleij <linusw@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1101271
+  Lore link: https://lore.kernel.org/r/14415443.zAa99ISigo@phil
+
+Patch: [GIT,PULL] Rockchip dts64 changes for 7.2 #1
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Committer: Linus Walleij <linusw@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1101272
+  Lore link: https://lore.kernel.org/r/3616130.jNaZZp9DzI@phil
 
 
---kZxeEu5T5ohTJHqe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Total patches: 2
 
-Hey folks,
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Please pull a single minor fix.
 
-Cheers,
-Conor.
-
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-soc-fixes-for-v7.1-rc7
-
-for you to fetch changes up to 75ef233975589d9a8c88bc8822a7c725c71ff650:
-
-  soc: microchip: mpfs-sys-controller: fix resource leak on probe error (2026-05-14 21:03:34 +0100)
-
-----------------------------------------------------------------
-RISC-V soc fixes for v7.1-rc7
-
-Microchip:
-Fix a resource leak in an unlikely probe failure case.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-----------------------------------------------------------------
-Felix Gu (1):
-      soc: microchip: mpfs-sys-controller: fix resource leak on probe error
-
- drivers/soc/microchip/mpfs-sys-controller.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
---kZxeEu5T5ohTJHqe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCah6e7AAKCRB4tDGHoIJi
-0twHAP4l+t/k8RmJleiq+9W6StNpGFdjnATo/PGRBbTCqDVbsAD+O2ZK/BQCpOVJ
-IcTS2uJAv/rJOSxEcUHmrQ/JqMzSbAs=
-=V7+B
------END PGP SIGNATURE-----
-
---kZxeEu5T5ohTJHqe--
