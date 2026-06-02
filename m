@@ -1,221 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22292C029D
-	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 07:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780386779; cv=pass; b=ajhaMdP3aXOpQsaY9on30EVgeZhxJVj7pFrUERpcQc4M65uvuEJ206c1TyZzG7Q0Nz6LXwwSbj+rkCSCyrgzjvEaEMBjOIpLcOY6qAEy9EtECPhsk032+QXx0WqUYIkcPdNlYRa/ifzO33I/saaUCimsQ66XqEMHJAW8EPSl2iI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780386779; c=relaxed/simple;
-	bh=yNFRBreW/BX12EDuBGkXF8iRUYkym2vI2tdboFFQNGo=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=dZxJYhaHDvx6H7iuN/99Go4NPrDvR7zR9Kb8t3UBP/FRmy/5w991GSljVk8t6Sx09H6aFsQE+iik1oWZ9KtXP9Ht0hEXqVH5N4OlZtsQ0Zt+ypuY+Wr871E9mumuI+t+ih9NA2Vv7h/z/qZ9q5+l9q0IpmRfmf0psru5KIq8hwM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=P+i6wOYT; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0FD230FC1B
+	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 08:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780387407; cv=none; b=Ky1ZnzhE35f2KLPPLxYGNoDrJsJF/m8waSQzAzUepuIc4XL0397uAhB1QzRuGM2jtBnIrPyRpZ4JFFD1II+EkRKidz2ktuAQv0gWsEfcogUj27ySJM/s3a652qLQFQl9WrFHYC2pb5kOIFoHPWtDMR1xXpLXzw/Y2UNWwIbQ/NU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780387407; c=relaxed/simple;
+	bh=1mr9nm4Dc0N3JmKzF/yrreIgXI3dlyUAzgaf5+t3SmI=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=MLJHaINU6U7U3ut69+SVY/t03gWhwot8VANYvdYKeSO2M4V8iw6mjgI0wYaq3hFNej7at+sIt52X6GYnTqpsh58L3T9fh+RQX46v0QgbahglDSzo9DM7lkWXdXyKGHlh8EIyvzyHuB6CW/zmHqdxOeunRN+p8ODgkHiNVdzflYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Lq6i9H7h; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aPhoWO/D; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="P+i6wOYT"
-Received: by smtp.kernel.org (Postfix)
-	id 84DC91F00898; Tue,  2 Jun 2026 07:52:58 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.128.45
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1780386778;
-	b=MdEsYgKzQ1w0BTod4TmN1ClrzaH2/kxrWxYmiZQ5/0TcWR193ZHvhG8lQkMRVA29Q9HM
-	 Kb+qVhDOpiYLaAJhlrOJzGmszkEzVVWBtpOeXfsWGH/D8uQvEVq6VOlrrsM2aUBrWeBQV
-	 FVr+h+ujsTlGimozaQt2iZm1RfH3OZ7e6ITF2q6uyKAWGw8phMNmW2TrSimLpz55FfOci
-	 OoYUe/zainwuAB2/Jc1NP5Alsv1Km9+qEE4hYZxKKCbUF2mpWRPxi58zOnPV6mhf5pXu9
-	 i8I3N3v6h3wkdNT+C8e9S9L0a/9ACFwePeAMbUEiCI2/wzwL86lZLy+k4fpxNRCKQjA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780386778;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:From:Subject:Reply-To:To:Cc:Content-Language:
-	 Autocrypt:Organization:Content-Type:Content-Transfer-Encoding;
-	bh=Jx/6Xb8+7JpGADIReL9AI9hs8frXGu+k1KWWs2BVpLs=;
-	b=ZloswZMlqXZ2VWV6n0dX8sCCuDCIoL2lowndxT7yS+uR90boe/4SQNdK9rj2yP6ircH8
-	 7tU9Jq/1+Tt9AAP+Aphmt8y/QPNm8Wi1eU8HNCDlbLIp6HjNHdzvqJ0h9+cmpunBVOTPC
-	 nbmDij/RgeBOfz6dWPVjxhBIzJvTpUA8Slxj+gvQo5g+LqpPSjUAVZ7OGt5btDvha9X1k
-	 8mjMMgnFxAP43dGV9he0BXc8UrqSx1q91zn3vW2TYCeFqG/D1IPoejLfBxPzBhLvUR1xe
-	 fDavmSoAiavHQ69owAcovB8hOQLw5BRio9D0qZYK9zl1wauGfYUZutwqAAtxsu1JWzQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=P+i6wOYT;
-	dmarc=pass header.from=linaro.org;
-	spf=pass smtp.mailfrom=linaro.org;
-	arc=none smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8B5E91F00893
-	for <soc@kernel.org>; Tue,  2 Jun 2026 07:52:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=P+i6wOYT
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 8B5E91F00893
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490aaeabdb4so10929945e9.1
-        for <soc@kernel.org>; Tue, 02 Jun 2026 00:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1780386776; x=1780991576; darn=kernel.org;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jx/6Xb8+7JpGADIReL9AI9hs8frXGu+k1KWWs2BVpLs=;
-        b=P+i6wOYTzbbiF2X0VDhIPEMjrqvEnvdbI/tOGkpRcVsMTrf2q8vutFEaRRX84oQpeu
-         dGU7hTZecj2VqgWJn0wh+0S8FbpCzHavFJI4DRdHRWb3V3XDMIMUneSu+1+zHJDnj23o
-         9L7T8TGsdt4I0SbhOyXB7rwzTF3dPd57bI/n/UmwflQqu8dFoDJSrqUupowTkC84uk8L
-         U2VmnAlfFQDSALpJZahhzF4DkO20L1YADx37OMZrrT8jZJOQaJBS39qLD4yKdBHvBokA
-         T3FdRsqTPASTpZhZO6vElny/fYjl6Cl1F4mhJkIbW0H12HQJspAAfVgeum9PNZeU+z4h
-         GmEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780386776; x=1780991576;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jx/6Xb8+7JpGADIReL9AI9hs8frXGu+k1KWWs2BVpLs=;
-        b=ANC6f9kJS05/oHY8IkPjXFPbR5wGIhlK+ADGs12Rq1ETnJX66QWbupLPDiyKyyx01B
-         56FVQvemPmnqSYgPj/2YdBVL/bLzxAyhvyH5cerCCePqIEFOIFo1ZCUE+2xdRYZKN/a8
-         VAOcAxdwnDi+HG5sCFfyal4JlkNPvNSF2xnXxIjI7A3YyUNYfIqtZsmm9SIUex8TIV08
-         lmVX9qUS7/dNhedjHyDAAKH9W59VzPi7Ev7+7bByUttIczpqdlqeeIzmz5AXJfQ3xt2e
-         j1u7JngYKrG/w2j0RSvkjYYy0yjgydhx2auUm8Ybyww6EulywHfGw+5s09wawavDeDVZ
-         qM+A==
-X-Gm-Message-State: AOJu0YxTfRr2t8t7UJQrjoVqMTsmQ8ntX6oEyRer40irvpBb6lncQeFX
-	8gyNQOnU4Yx2Y1NiISwOe2OGq7FFqkksKz33CnJhBmh2jyRS2bmrBclunuA7n2klFdLzlGuJHGV
-	/4hS1
-X-Gm-Gg: Acq92OF1zfldhCojjOM0ypwkSBRkSYLnqk5aBMcxletT45fRGwkZC4q+dAW7wqvPiNl
-	xj6vQG8LiInQS1QAdMjFADW3AiV6yFQ+TmiIpy2nf5gYmG0UP57sldVwTENyBnrueewGXMbNiME
-	xcZv1x7uSU1RphBRIIpCwhb2jclHwuY4Mbe/RnCrJQx0lf9mmBWS7D7kZI7lWpofhlL1+Vfqj7B
-	AwLZG7ogKGC+Qt0PDdeqk1c+jt2kIr1zDknEB2sYNy0YjKm1MtmCKrW6dnleJqLEwKta8YhpR9X
-	i99x++o9/GAU5fQQtxUKnMLVrdhpbsOJc5V6xV3IV1ti/odVZ7Y5kydA1jSxJrwGuaL/gnT9kNR
-	uOZs454Pno88AqkrCgiFRy5i9aWOxZjt18Cyi4lG4LcLcv1C6kFjYkWjuexb1HxL2/3OlCMhbvf
-	jnBqoVq97MmwoOsJoF91HcPw0xxYJtVOEHzNrJVpHt9eTl15dC2SvCXXIRjn5AIZHlLAb5omqJl
-	BmXOLfXY4Z7HApx1A==
-X-Received: by 2002:a05:600c:46d1:b0:490:a7ab:bbe3 with SMTP id 5b1f17b1804b1-490a7abbd7fmr191381215e9.0.1780386775846;
-        Tue, 02 Jun 2026 00:52:55 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:13a7:124b:487c:e2bc? ([2a01:e0a:106d:1080:13a7:124b:487c:e2bc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490b0da5ae2sm44609215e9.0.2026.06.02.00.52.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jun 2026 00:52:55 -0700 (PDT)
-Message-ID: <9d4694cb-f596-4538-a437-6f2fbb6304f4@linaro.org>
-Date: Tue, 2 Jun 2026 09:52:55 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Lq6i9H7h";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aPhoWO/D"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id B19E91D00009;
+	Tue,  2 Jun 2026 04:03:24 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Tue, 02 Jun 2026 04:03:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1780387404; x=1780473804; bh=lG
+	XmSGFIRxw5W1S4psSWKsImg7Oh95YsvbBNegnem7g=; b=Lq6i9H7h30HaajJArR
+	IJvUpDcLVuf//GX+fjV8rWwA7W23frAFyO9KBXg12u1xr9CJTcqLT/ToBefuFgj7
+	QiKL+mDTJwyP+nm/EJtugDsOk+5Bv8AIhS8wuqijUSzodewalaOd4HPfxqY3zdGf
+	RlJOta55lZgLuuRNlvGDlEHr88F11JPsZ7wyb6pZgrHaTWmk3CmdOSs60OAB1qm7
+	6OfbzMGv1vGNJgds53yNiNoiGdjoDf89M7lS6rD0teGTinsBP86zg608xe4v4APM
+	prwhJ3uXychW+DzXgFTsgarkxMvofg8s7T74l4V6Nopmh/RXWuHTRqaeIkNIjZ0Q
+	0zqw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1780387404; x=1780473804; bh=lGXmSGFIRxw5W1S4psSWKsImg7Oh
+	95YsvbBNegnem7g=; b=aPhoWO/DeWxFjOh4QGX0+NGNHgjfItci/odL2X/5vFb9
+	ZVN8LePxj3f/c3/XWTMlHllr7uwvUidiaUSQmVhQi9M5JTaUQYZ7JKt0JQadD6C4
+	6wsr0P5Z6hV7hsXX17DKoz8Ejc9UfZl35vLwwi/pLyOhg7plLlgDzZPUXvtENEk7
+	EnoYXhBxFqig3gRYvWdYGotHnnM2aD2qj6dSUt9Zk0QGX8ggLCILdq9VVmJM8pB4
+	Ue//IqJBlb49HLi4bsSiv5cuFEUK2K0y6G4ixKTO6M/XcCIUQ70/09HNeJ/MDLB4
+	OqcbqmPRE3I1cisgz5vALgDdUQ7FInJd7E1Osnz4CA==
+X-ME-Sender: <xms:TI4eaqbvnh-KDqW92_fXUY5U6f4Jc47CSoveUXLFfA4wM5ScnP-h8w>
+    <xme:TI4eaoMBkv6QicH0xwJTJYao2jhx4o3PLd2llDZ1LZ5k7QmD8nbgdjIE4ugFp0OME
+    -IGTvwpjPs3rp_cqUn5Xl9HxyraHxtNQgbVdjQ81xxnpWNNum8b5Fw>
+X-ME-Proxy-Cause: dmFkZTFkCBjeOzK27OZlT8TCpLHMh0wPKNivPsBRQ4KXfdCIvBncT0uoU4oljEEx4lnhjP
+    Iymx/e26CX8qEBAB6sL45gGjW5ttfxkWfePDWlMNTsHtRQWCCU0WVbNvy40bsLbQBKy6DS
+    bT4Mp43bqRT2B/bzIicT5vd/8rAW7qPjynn8yPckFB599tU8Kdek288olub1mjfOLnyBVZ
+    n3EM0P8aRIQnBfPtgVCVshgnpnGN8UubxnkHa65iXjX0II974XaZ2ezrrXQqbDT6eOS+i0
+    OmuRpj8Nn/BQ7/7D+sEeyh11x30JkMEPv1iEVPQl8mTz7DdIrTReqYbi2wuyCJ5u2rU6jq
+    lkfkceNbXlQqcXsTv2ASHmcTBpUVk9yPnhugz88vvrFb+PC/hZ4HLF/Ud1/KEkYppwuq5A
+    85SL4IggIq97XLKV6akj2S0tg+rpN80AapF5dyLhiYiWQL090sHJweXa4qT//D+fiwLMPA
+    jNnxZE6BbDuz3+dHmLjXjbWEeh/orIqERYbBI2b5FpdkX4XAUr4xOrS3CCDkqAUaJXYjlJ
+    CTW+cx+zuO//u3RL8GzDls/j53eZ9lUgiay7eH96fcQGDRfHRVbrOYSQ/+TC0XNlrgRGDQ
+    dvQpcsVgV3E8CydP0s/jltFKi/oWSeuzerSwjr7gJY/YapbJlMeOHP1mm8yQ
+X-ME-Proxy: <xmx:TI4eakMZ7f-ApYEZagNf8Xxl8H7WhdNaFknPQUcNZl1aO1aFaCHSHQ>
+    <xmx:TI4eameGfAPFMMuXhGwKfBNje7NAPUjo590CRsN4040s9A-rhJQ1Hw>
+    <xmx:TI4eahvuWhuxEf5pLDuq8O_w_eIRCvUx5PRdw3hBAu_l1DIuLK6hAg>
+    <xmx:TI4eanlgnXcdm6XDZozPzOYSLXIbpd0HgMhGUSiaGBe17EstGtW0iw>
+    <xmx:TI4eamtXSx-xissyFJ83fHShhUllUCmHKCZI1-yeKooP3h9UuUTVNAFZ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 21D6A1820082; Tue,  2 Jun 2026 04:03:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT updates for v7.2 take 1
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ThreadId: AcNZTq_C4ItF
+Date: Tue, 02 Jun 2026 10:03:23 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <7636fe41-9a6c-4494-b0fd-a55387b92f29@app.fastmail.com>
+Subject: [GIT PULL] soc: fixes for 7.1, part 2
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-Hi,
+The following changes since commit 7fd2df204f342fc17d1a0bfcd474b24232fb0f32:
 
-Here's the v2 of Amlogic ARM64 DT changes for v7.2, contains improvements for the Khadas VIM4
-and VIM1s SBCs, plus some additions for the Phicomm N1 and a couple of low priority fixes.
-
-A bad "Fixes" commit sha was introduced for a commit in the same PR, I squashed it with the
-appropriate commit and dropped the previous tag.
-
-This PR is largely the same as `amlogic-arm64-dt-for-v7.1`, but I sent the fixes
-separately as `amlogic-fixes-v7.1-rc` as discussed with Arnd, so this tag
-`amlogic-arm64-dt-for-v7.2-v1` is based on top of `amlogic-fixes-v7.1-rc`.
-
-Thanks,
-Neil
-
-The following changes since commit 174a0ef3b33434f475c87e66f37980e39b73805a:
-
-   arm64: dts: meson-gxl-p230: fix ethernet PHY interrupt number (2026-04-21 15:46:29 +0200)
+  Linux 7.1-rc2 (2026-05-03 14:21:25 -0700)
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v7.2-v2
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.1-2
 
-for you to fetch changes up to eec0722a5cac08ba995847c8eb63118cc708560b:
+for you to fetch changes up to fce4668a01227abb2c60e3202cf866137fbfcef2:
 
-   arm64: dts: amlogic: t7: Add i2c pinctrl node (2026-06-02 09:49:46 +0200)
-
-----------------------------------------------------------------
-Amlogic ARM64 DT for v7.2 v2 take 1:
-- Khadas VIM4 (T7 SoC) features:
-  - Memory layout fixup
-  - GIC register range
-  - Model name fixup
-  - PWM, eMMC, SD card and SDIO support
-  - PWM LED
-  - I2C pinctrl node
-- Khadas VIM1s Features
-  - Bluetooth
-  - PWM LED
-  - Power Key
-  - Function Key via SARADC
-  - RTC
-  - Remote control keymap
-- Bluetooth node for Phicomm N1
+  Merge tag 'socfpga_fix_for_v7.1' of git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into arm/fixes (2026-06-01 16:25:19 +0200)
 
 ----------------------------------------------------------------
-Jian Hu (1):
-       arm64: dts: amlogic: t7: Add clock controller nodes
+soc: fixes for 7.1, part 2
 
-Jun Yan (1):
-       arm64: dts: amlogic: meson-gxl-s905d-phicomm-n1: add bluetooth node
+Following the previous set of fixes, this addresses another significant
+number of small issues found in firmware drivers (tee, optee, qcomtee,
+qcom ice, exynos acpm) drivers through various tools. This is about
+error handling, resource leaks, concurrency and a use-after-free bug.
 
-Nick Xie (9):
-       arm64: dts: amlogic: meson-s4: add UART_A node
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: enable bluetooth
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: add PWM LED support
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: add POWER key support
-       arm64: dts: amlogic: meson-s4: add internal SARADC controller
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: add Function key support
-       arm64: dts: amlogic: meson-s4: add VRTC node
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: enable HYM8563 RTC
-       arm64: dts: amlogic: meson-s4-s905y4-khadas-vim1s: use rc-khadas keymap
+The fixes for the Qualcomm ICE driver also introduce interface changes
+in the UFS and MMC drivers using it.
 
-Ronald Claveau (11):
-       arm64: dts: amlogic: t7: Add eMMC, SD card and SDIO pinctrl nodes
-       arm64: dts: amlogic: t7: Add PWM pinctrl nodes
-       arm64: dts: amlogic: t7: khadas-vim4: Add power regulators
-       arm64: dts: amlogic: t7: Add MMC controller nodes
-       arm64: dts: amlogic: t7: Add PWM controller nodes
-       arm64: dts: amlogic: t7: khadas-vim4: Add SDIO power sequence and WiFi clock
-       arm64: dts: amlogic: t7: khadas-vim4: Add MMC nodes
-       arm64: dts: amlogic: t7: Fix missing required reset property
-       arm64: dts: amlogic: t7: khadas-vim4: reorder root node
-       arm64: dts: amlogic: t7: khadas-vim4: add PWM-driven status LED
-       arm64: dts: amlogic: t7: Add i2c pinctrl node
+Outside of firmware drivers, there are a few fixes across the tree:
 
-  .../dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts  | 215 +++++++++
-  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        | 482 +++++++++++++++++++++
-  .../dts/amlogic/meson-gxl-s905d-phicomm-n1.dts     |  15 +
-  .../dts/amlogic/meson-s4-s905y4-khadas-vim1s.dts   |  81 ++++
-  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |  45 ++
-  5 files changed, 838 insertions(+)
+ - Minor driver code mistakes in the Atmel EBI memory controller,
+   the i.MX soc ID driver and socfpga boot logic
+
+ - A defconfig change to avoid a boot time regression on multiple
+   qualcomm boards
+
+ - Device tree fixes for qualcomm, at91 and gemini, addressing
+   mostly minor configuration mistakes
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      arm64: dts: qcom: glymur: Drop RPMh CXO clocks from QMP PHYs
+
+Alexander Dahl (1):
+      memory: atmel-ebi: Allow deferred probing
+
+Amirreza Zarrabi (1):
+      tee: optee: prevent use-after-free when the client exits before the supplicant
+
+Arnd Bergmann (12):
+      tee: fix tee_ioctl_object_invoke_arg padding
+      Merge tag 'tee-fixes-for-v7.1' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+      Merge tag 'optee-fix-for-v7.1' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+      Merge tag 'qcomtee-fix-for-v7.1' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+      Merge tag 'qcom-drivers-fixes-for-7.1' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+      Merge tag 'qcom-arm64-fixes-for-7.1' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+      Merge tag 'qcom-arm64-defconfig-fixes-for-7.1' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+      Merge tag 'imx-soc-fixes-for-v7.1' of git://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux into arm/fixes
+      Merge tag 'samsung-drivers-fixes-7.1-2' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/fixes
+      Merge tag 'memory-controller-drv-fixes-7.1' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl into arm/fixes
+      Merge tag 'at91-fixes-7.1' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
+      Merge tag 'socfpga_fix_for_v7.1' of git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into arm/fixes
+
+Bjorn Andersson (3):
+      Merge branch '20260416-qcom_ice_power_and_clk_vote-v5-1-5ccf5d7e2846@oss.qualcomm.com' into drivers-fixes-for-7.1
+      Merge branch '20260518-qcom-ice-fix-v7-0-2a595382185b@oss.qualcomm.com' into drivers-for-7.2
+      Merge branch '20260416-qcom_ice_power_and_clk_vote-v5-13-5ccf5d7e2846@oss.qualcomm.com' into arm64-fixes-for-7.1
+
+Georgiy Osokin (1):
+      tee: shm: fix shm leak in register_shm_helper()
+
+Harshal Dev (4):
+      dt-bindings: crypto: qcom,ice: Fix missing power-domain and iface clk
+      soc: qcom: ice: Allow explicit votes on 'iface' clock for ICE
+      arm64: dts: qcom: milos: Add power-domain and iface clk for ice node
+      arm64: dts: qcom: eliza: Add power-domain and iface clk for ice node
+
+Linus Walleij (1):
+      ARM: dts: gemini: Fix partition offsets
+
+Manivannan Sadhasivam (7):
+      soc: qcom: ice: Fix race between qcom_ice_probe() and of_qcom_ice_get()
+      soc: qcom: ice: Return -ENODEV if the ICE platform device is not found
+      soc: qcom: ice: Return proper error codes from devm_of_qcom_ice_get() instead of NULL
+      mmc: sdhci-msm: Remove NULL check from devm_of_qcom_ice_get()
+      scsi: ufs: ufs-qcom: Remove NULL check from devm_of_qcom_ice_get()
+      arm64: defconfig: Enable PCI M.2 power sequencing driver
+      soc: qcom: ice: Fix the error code when 'qcom,ice' property is not found
+
+Mihai Sain (1):
+      ARM: dts: microchip: sam9x7: fix GMAC clock configuration
+
+Peng Fan (1):
+      soc: imx8m: Fix match data lookup for soc device
+
+Qihang (1):
+      tee: fix params_from_user() error path in tee_ioctl_supp_recv
+
+Robertus Diawan Chris (1):
+      tee: qcomtee: add missing va_end in early return qcomtee_object_user_init()
+
+Tudor Ambarus (5):
+      firmware: samsung: acpm: Fix cross-thread RX length corruption
+      firmware: samsung: acpm: Fix mailbox channel leak on probe error
+      firmware: samsung: acpm: Fix false timeouts and Use-After-Free in polling
+      firmware: samsung: acpm: Fix missing LKMM barriers in sequence allocator
+      firmware: samsung: acpm: Fix infinite loop on sequence number exhaustion
+
+Val Packett (1):
+      arm64: dts: qcom: x1-dell-thena: remove i2c20 (battery SMBus) and reserve its pins
+
+Yuho Choi (1):
+      ARM: socfpga: Fix OF node refcount leak in SMP setup
+
+ .../bindings/crypto/qcom,inline-crypto-engine.yaml |  35 ++++-
+ arch/arm/boot/dts/gemini/gemini-sl93512r.dts       |   2 +-
+ arch/arm/boot/dts/gemini/gemini-sq201.dts          |   2 +-
+ arch/arm/boot/dts/microchip/sam9x7.dtsi            |   6 +-
+ arch/arm/mach-socfpga/platsmp.c                    |   1 +
+ arch/arm64/boot/dts/qcom/eliza.dtsi                |   6 +-
+ arch/arm64/boot/dts/qcom/glymur.dtsi               |  20 +--
+ arch/arm64/boot/dts/qcom/milos.dtsi                |   6 +-
+ arch/arm64/boot/dts/qcom/x1-dell-thena.dtsi        |   7 +-
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/firmware/samsung/exynos-acpm-dvfs.c        |   3 +
+ drivers/firmware/samsung/exynos-acpm.c             | 141 ++++++++++++++-------
+ drivers/memory/atmel-ebi.c                         |   3 +-
+ drivers/mmc/host/sdhci-msm.c                       |  10 +-
+ drivers/soc/imx/soc-imx8m.c                        |   2 +-
+ drivers/soc/qcom/ice.c                             |  66 +++++++---
+ drivers/tee/optee/supp.c                           | 107 +++++++++++-----
+ drivers/tee/qcomtee/core.c                         |   6 +-
+ drivers/tee/tee_core.c                             |  56 ++++----
+ drivers/tee/tee_shm.c                              |   2 +-
+ drivers/ufs/host/ufs-qcom.c                        |  10 +-
+ include/uapi/linux/tee.h                           |   1 +
+ 22 files changed, 327 insertions(+), 166 deletions(-)
