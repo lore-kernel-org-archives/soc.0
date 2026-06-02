@@ -1,189 +1,231 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1DD21A95D
-	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 13:00:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0422222C5
+	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 13:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780405255; cv=pass; b=icRMNitcqWcG/gcctJ3UIX1R0GHGvcak3JVmeUigKG6tcRIsNkTV9CH3aEjYotnYTcjzMM+5GiGSozpEGezm3WGh64JjuyrSkWbd3o0LpyCDyRIIoPY/Mx9m1QWqzCLsP+FT1KgI2CLeapabPFpL4kROOaUIklMilsePjAqmkxU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780405255; c=relaxed/simple;
-	bh=tsOsFguntWmtZfFDpsPye6GJE8zC1k74H3xDjPWskvM=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=VvEamdFdhFHXRMLKV00PLN7CW4ey65rI5vbvBEKQk86sFIjgeple5NJCQIS/X4rORXcIgr6HpARLvmeNqHIARViFEz7yxh91mM9cDyfOZGJ9vZo3D+mebDbGmBT8Q2iXreqpkTbZxa/bjIe7FHNQzXG0MAnhqs0jjsl2OQE5Ef8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=mmizrCdc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=b9Uhk8R6; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780407946; cv=pass; b=aRZyQM8kWrIYtqDLXXKh829USo34pWuZu9FezfiNu78Biv9rhuBE/BZaOabVG/Dz9PDOz8lvl5S7hqAbG/fPKacQn6RQLr10DM5k/cgfliybXXL3BIm1wdVDKv+a7QQOofXMqZpcPHoYtzJckwV47AzLq9+VVQuOLf/jLw82IYg=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780407946; c=relaxed/simple;
+	bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M2FE+t9W7A8gAlLZpeahzbfYcGOfGkKZwJ4TRPTKwXYuC+6s/tHC5E6HXN89/nmHmf1vyPpYuQWkMKgJBR0u7FG93l9EiQdFgpHhpxZpAjss4cHtpxYDJxOziHlwZGoCWSCt7tvslKzqbcmaVXjutZD+QrGLu+4pugBhHwSLtmQ=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=y9397x9k; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="mmizrCdc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="b9Uhk8R6"
+	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="y9397x9k"
 Received: by smtp.kernel.org (Postfix)
-	id 1CC4E1F00899; Tue,  2 Jun 2026 13:00:54 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=202.12.124.146
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1780405254;
-	b=fBWTpaMQV4CZTbdoJBAIOmYm/x519PxcbyOwBO5ZwjBBQldGHGTzwNdSac2+Ztuu5OrU
-	 vPcLmYzmvuT8puGlDCAghm2zTtoRY1j/UudEzQel42//MXn8vnVFCWhdmGag/Gx0V+Fsk
-	 hKN6Wwrd6GEem2Elv1LqOkd5i7R/aghjyV+zEXf3HyfIVgP0mZid/8ECKEGE0cFXi+bwW
-	 RPA7vfwtTqnF0Qfa5qwecat5Kk/8sPkmuSYR9UVipUhAKu/+Iihr28dXTZ30coWnzluyc
-	 5YBYUBVgh2rLbMI/DCC7Oz9RuxuCUcBppHM4g2v2OEdQrZB9xQVPDXw1L2Iln3JyQng==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780405254;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=9RL4IXQNnvR5OrJ4NDd1gnd5VsgEFCOVln1CtTd3y+4=;
-	b=rXLQPAOpIf9P+oz0Uk+H1dglP84s1Uwf5AnHdaxt+h+AFlcO6OyW0cHaZT9igcNZp93S
-	 1aStQ7NSK4pLiul/lHCWv3xI/v6qArSJJgH3US1JR4F/mWKjjzvGrRKGiWElIqWOLAHWc
-	 vQsaEyI3isdHzRCIvU+EszBOouXtD+qxTI48H6xxOCuzG9ECFAVK6Djpq6Eee+2mdokiZ
-	 pNe8M5w/XuPY0n9pMrHx0Lm2pywsedpHF5NUphoG2cCOp9wq/LFZylTsM4PyN5DVIcequ
-	 OWj85l6e4JBDO0f628eZWInTzmWj0DX22QMEVAtdkAeG6aFsZ/4xRLxhFXQlLCzYP5w==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm3 header.b=mmizrCdc;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm1 header.b=b9Uhk8R6;
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	arc=none smtp.remote-ip=202.12.124.146
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id BCAC11F00898; Tue,  2 Jun 2026 13:45:43 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.42
+ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
+	t=1780407943;
+	b=GDYsSj3aV7tw8WurcmLlAmYyO3lYvuFwM4vR8qtZh9rwaf84nOqWNFLHuF6tOFxLyzKa
+	 uW0I7cpdKp4Z6bU5k7jOFtTkCE/E21faZuhvP3NVheVGlIKuEEnw0rAZ/eRXJGkdmUQRt
+	 eGT1awoQvE3a0fBGRNW9v5GvfEHqHpwhjilQtteZ43z1OV4NXX2qYYCME54X23f7EdNpQ
+	 WIv4/UDPDSH1cnh9eCYpoMJfyZu3+23g1r++s21JCTKesu3FOYBdxXPT7UuIRpvD5h56i
+	 DxxZ0BKprJBRPfXh1vj/LegcuS0JEWxGwGj36I7BUBD29PdlDf4U0zHf63CNQwg3IUg==
+ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1780407943;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
+	b=cFjCmSwoksLvqwqhFBTgr2hZZw+6F/7eV2v4eZoeju+cGM16dJXCru5+0tsixbYHAa7b
+	 BPEDxPKHuGCV1uzDGjA5yvS/3FPVQZET5g79mJFyizfzPcqGAEqhHm34sZwCGQ63UXbSe
+	 IZuMKvTI0dJF3mI2fcx827Rus9J9vQLzIC2bIWmRIWhSpvTVZsWyvivBFg+g7uTn2YHK4
+	 w3g3TEnCFbGEAXUalHrUCxp490RqvBbn/wtCmiZgNh8hd9eqrQlXFOGbr/s2I53dMP/VY
+	 qYaVLsmX3km9AzdMs2Yw5ZSaOi/19Q7jA3PEl6biG2EFjPBruwgOf+QF1dP2h794Zuw==
+ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=y9397x9k;
+	dmarc=none header.from=monstr.eu;
+	spf=none smtp.mailfrom=monstr.eu;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.42
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6AC061F00893
-	for <soc@kernel.org>; Tue,  2 Jun 2026 13:00:53 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6BC0B1F00893
+	for <soc@kernel.org>; Tue,  2 Jun 2026 13:45:41 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm3 header.b=mmizrCdc;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm1 header.b=b9Uhk8R6
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 6AC061F00893
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 60D361D00134;
-	Tue,  2 Jun 2026 09:00:52 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Tue, 02 Jun 2026 09:00:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1780405252;
-	 x=1780491652; bh=9RL4IXQNnvR5OrJ4NDd1gnd5VsgEFCOVln1CtTd3y+4=; b=
-	mmizrCdcSfqMpOhwJLMZc2rgzEMfq/9VHbsXQJrAZK4yDF/Zb9SRL7yqHcGff4ES
-	SLjPWLb8W3FFHk27lNy3CTWhIYaLO2fTPYXWRZ5+a2LE8WGE5aC0hDu1N5vC1wxt
-	pNDmDuebEWXgeeKT+caA8B+KKsJ2zL0OCVnOTkMj+BzKRH7I65B9cMknXmzWBG6U
-	YTNdmP5AgJ///n/VB/GFTv1T2c4+2d1I2E+5zCdZgNGBm34uh+COkAT6ZuswePPl
-	LBM80yRU47BrpTyKPKG7fxVTEgI7eyu5YBWkMJxlHJmoiMuw22LEKo1aF3O3u4F6
-	eyYYYtvVdefqfT4hgxnoNg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1780405252; x=
-	1780491652; bh=9RL4IXQNnvR5OrJ4NDd1gnd5VsgEFCOVln1CtTd3y+4=; b=b
-	9Uhk8R6PraKpomx7srRF/IdaHyANkG768YgEUeExwdcGM0gP8aPPcgUoEhUxXnRL
-	Fz0M/yOaTqFAb+xtg+sJ00dbmyMYVgVNdWnh0MWv0MnujVHZbWM80XDsy70crbu1
-	6Tc6AIOx8qA2DCAr+xsDeu67p4q7em9DL5ORoInAkvWNY4nNzqZ/c2bzpoVglKYb
-	UKyVATN/4uEEiDGLElmlgPdklG7iPGpfcVp6ePYq3uTOaISM068IR0qvT3V2XF13
-	arXkLn4wBsci1aYD9Myqy4a3igrPnxx4c9B6Tq9O7jVParm0BajuAauLQmd4Y0zD
-	bjfhJFg4IvFUrrDgYt/0A==
-X-ME-Sender: <xms:A9QealOcueNJlXmZE7esHCVh9Lgv8jT7Wf_G5zqm1br7mrZ2G3X2cA>
-    <xme:A9Qeaiz1jKrvJajzSwVRjhVTtqkinRZXpKQk4n_XEr80Tte2wHrcPFACYjC_fMKSB
-    5iNqVXdTTMZhvaQITijpEMdSnsJX2E_3Qb39DkJrtT7OGFwc4c6Alc>
-X-ME-Proxy-Cause: dmFkZTEkGxuOs3ouQCYFDPFIXOCBzJZhfyxXsy6mF8/MHRRceXWHbd28wwpFrVim7zFH2R
-    EpfelRrXVhA4cl+WsZ1yXDgjP0wmXhRiLFsaEICAaHzj7RzuwoElNSRFsm+X/unjJuNWRI
-    60fozwWXNzA2fhHsvSRscDKK6oRBMtM2bYckwKTSAwn70iiwNKLdBYp1l4gHRbsxi2pXhS
-    6FkI2i2SZr6kthqMH6hqabRjsz6foE0lnipRLyeAWWajU8VvBkC/YDe+eVgq76uiOmjBFm
-    KyhtTkTypoM5LL8BZWqtvbMA/CJ1/JbdCpvYXsdX8E9UCX38cp6jUl4UCH5DOjh8hK3qoH
-    Sz3FH7Y7bhA49kJFT9B7CxwgU/tFK2s8TmFGlZ7OGCDrIK5kLUIWFdhCw8+QrMKosyJbZY
-    MempC9KOKEMGoCOQ7qDhIyzinJpPTZbN+2LN6IB+odiPCOOBS6OFL9MulsKCB039vLCuQp
-    zdklBlJzoh0rnWYowX9hA3u3ARcCTSdm4QEC/ADW7ixQiMy3m4RLdS4l0WEmBPph+59WUR
-    fja4QbbhbM5A909i8fRjuCCPWjRkrofLV9aBM1iL7Gzrk8xULFnvF0YhMsoV4ZGauKIle8
-    QtX6GYi+uZtDMjDg7pQNagLGNe7xxRc7HlkC1IbgzTy/tsjRLOqJWCxEqqeQ
-X-ME-Proxy: <xmx:A9QeatKDPlfYqBg6RvQMCcBnKFgIJpCa5mLUPmlhBUUDazNQhV5WqA>
-    <xmx:A9Qeag5Qb9oPvETgXgbCGwCZnxACZNOF1z_dkVb4pF0FnkX8lZHJ1A>
-    <xmx:A9Qeaowlm17_TfFJfJWcF5ThLhpOIrI9Sfz2qU2cuZSWZkyBclCvPw>
-    <xmx:A9QeasZFbLsOpiX7L5Y6_MWCzFMTo8mQB1UdDAZW_QG7CliyeQwK4w>
-    <xmx:BNQear0j3vKQ0Wo0gUyoTULMQIUjeDu_qx2pMdquThuq0xYWpSRHqjKJ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B7043182007E; Tue,  2 Jun 2026 09:00:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=y9397x9k
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 6BC0B1F00893
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-660512d80b4so4730729d50.1
+        for <soc@kernel.org>; Tue, 02 Jun 2026 06:45:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780407941; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YZn0z88dE6xbqJcv//wKsjq+8LSD/1YksUGN8q1O0m0ua2KDGyjsBGRa1MP7NMmtx2
+         8y5qT0ZxiJRISe6t+2eY6fWWXg8MaVjhuX2k6+87RgG3yq+9RyolU7V/vskBKkQuHmsD
+         wBGs0mC2xFJIIeZ/CrnXpce/nDo8Krtdxy4QegZtilnZQnYTi+FuGIYFpS8vIAyfReTq
+         o4XCC9jvdzFYKCcIYZikPRyi4qv/xIUoJJ75GKnMkp2MvHioYGminL5J/CDY46vg2yc7
+         YD9GNPIbszfm/wLfbmfweC+YLaChp55JkHSyANH9aHqcYUIatOSsPc423jbvEozs40ue
+         R6Og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
+        fh=bs3v2HfsAanL2bQQ/nfgMMAb4LR6Z1jOsS0y+9U1ZaQ=;
+        b=ZE9HJyKN4KXOufFmh7KuQOPDIExtBT8Hih5VdLBv2CXiLF7e9po6zjPBlTBW3uMzT/
+         LKDMVaq6udEX+RZ09CFf/4WohbuEYQdra7m+qK7QvCQ4T0D6pahHiBmMzarYZ/go0XhK
+         AhEj5rXRoHPbdUB7RXYfdajcxMuJSxEwI6SZR2sPlCKEsGmoYS8TRr4Fh0+EbfRAWMv6
+         flSSE5lvNI22pH7X13/XLRltGvHecyZA23ZKWqHUt3xa89pvEYkFTOJvwPwsKpztREIv
+         sCQnBx/sg2EPLpcGwK9jOQSw+1KqeQDuAmt9c3az4doP/Z4DoEhXkmMHTOmDzyRNDe5r
+         SuVQ==;
+        darn=kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1780407941; x=1781012741; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
+        b=y9397x9kEjmIHSLFpSuLDk0zvBRhXhxuqWJ0RmlJToBnM76o7zWUNrMSCBjdZMJdjO
+         9mM4sZEsYYobVWvVbq5sjLiOaPpNLdg5tVfdnrvHC+I7KPPM67I/qXeQx3cjX2v83CvH
+         0CoQWyTv+NWBMwVzxRcLi0Qhy7ds7vGr7GXdFBO5RiyLX7IdqH/ocKp3DNn5SnH7mCqs
+         AOrYY7KEiA7z8jqy+GElmsuJd0Dgmj+oDaUImAdBi8WitKUt+j+L5nh2ogImRNjklvTQ
+         KJQhZIldjW26L1opgjIqOLSiQ/wRoyZaSYR/EjWJ7Y4vwIQMB3mCbMML1VOZ6xpybVH8
+         iFcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780407941; x=1781012741;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
+        b=YqWLk+eu+nO0INxGhX+a5An8zPSbBP2wdfDo0OwV/cjr/ir49ERudWK7LzikIlPmrt
+         rUqU7zMJTFzwciqDInBvDEotSSMpgTNqanbBig4qs2h2j/3Hg2fhTcUJ/gNKvbgaLTIs
+         8h39U/AvaW8bhvmL4TlJWG/N5ciTLE5kJbJ5+9Rfjj15W4pOpTeE4Ip2GjLJ2Pwa5/X1
+         Q7sRHJVXbObZyBc7sESg2UE8Q4JKK69zpDYscHbcE2BHzEljiE46+dm9RRTHN5G1K7tv
+         gxIylWXYw1Y1+qsC+nBnavokQvQ0TbRuG9aMY+oe+OgdekemcIHENdt8JeGJEdG+Uj3e
+         7TTw==
+X-Gm-Message-State: AOJu0YwUPJLNunXiJoICzdHr663nZZSrhYowp+aCjWADaicB1wAZv/5i
+	FfrSiQnuKLAtmM5uk0p36lMd/1iyTk2y/OqTkGRJmd+TwZOFDpCXMlakZSxff+SO2YjPNnNaTv1
+	QJFiTxvjFKPxpg0AufSGVz49pv5xpTJhR86ZOqOx4
+X-Gm-Gg: Acq92OGR/hoqGZFGTV2nEwl0zDFn1iEEAqmvLAqWDbaePClQ0ST5WsFDP/nOY9S8xa2
+	vrtARJ/Yk5OfkOIvHzppqnkB5qDyMEV++q1tJgH7qdHUmOGZ3/ZCHBMWTyh3lp7Rf9j7+WlKrsM
+	J4SDf3NJiVNXq6IB8VQpfn7DK82aDbXfqc3998DiPB+BHGjSjIFERMNWlUCufFcKPsBCGk5+4J2
+	3Insc2e3Ga9FLaKoqtp4VxY7pxYREEQ7OoQMhynPhcGOyjAHfoK/Xhk/cj8voaY5t4Ai1SN+kF/
+	y9a8EQJq6A9YSmrgToP+oriUif3RzkN/mtoUxv1D0oHBRwoadK42noki4stfJg==
+X-Received: by 2002:a05:690e:408c:b0:65c:290a:d7ac with SMTP id
+ 956f58d0204a3-660a60f477bmr2995698d50.6.1780407940794; Tue, 02 Jun 2026
+ 06:45:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AXmBUbiQg2Mg
-Date: Tue, 02 Jun 2026 15:00:31 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Michal Simek" <monstr@monstr.eu>
-Cc: "SoC Team" <soc@kernel.org>,
- linux-arm <linux-arm-kernel@lists.infradead.org>
-Message-Id: <55c1b29a-cdea-4508-b77f-d5a2da247662@app.fastmail.com>
-In-Reply-To: 
- <CAHTX3dL2W9iZDWLk=OVmno0ZUHx_EkXrJqskmpXCM_CQROWgEg@mail.gmail.com>
-References: 
- <CAHTX3dKWE6DOPLXPq31wRiXfjac0TVqSOAOLP8itHoGYpF9eBA@mail.gmail.com>
- <b56b09af-cd0a-4061-8cce-5e8a50033b4f@app.fastmail.com>
- <CAHTX3dL2W9iZDWLk=OVmno0ZUHx_EkXrJqskmpXCM_CQROWgEg@mail.gmail.com>
+References: <CAHTX3dKWE6DOPLXPq31wRiXfjac0TVqSOAOLP8itHoGYpF9eBA@mail.gmail.com>
+ <b56b09af-cd0a-4061-8cce-5e8a50033b4f@app.fastmail.com> <CAHTX3dL2W9iZDWLk=OVmno0ZUHx_EkXrJqskmpXCM_CQROWgEg@mail.gmail.com>
+ <55c1b29a-cdea-4508-b77f-d5a2da247662@app.fastmail.com>
+In-Reply-To: <55c1b29a-cdea-4508-b77f-d5a2da247662@app.fastmail.com>
+From: Michal Simek <monstr@monstr.eu>
+Date: Tue, 2 Jun 2026 15:45:31 +0200
+X-Gm-Features: AVHnY4IJdLvmxR6QW8fYJcxGv1ygcnwa_HYL_gCiFtUQ8w0cJZRCGJCbylQkZy0
+Message-ID: <CAHTX3dLhDT0TVD1+=MVzjNPAY6yi9Yba6WfZO1ihq+k_82n7Wg@mail.gmail.com>
 Subject: Re: [GIT PULL] arm64: AMD/Xilinx SOC changes for v7.2
-Content-Type: text/plain; charset=utf-8
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: SoC Team <soc@kernel.org>, linux-arm <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 2, 2026, at 14:29, Michal Simek wrote:
-> po 1. 6. 2026 v 22:39 odes=C3=ADlatel Arnd Bergmann <arnd@arndb.de> na=
+=C3=BAt 2. 6. 2026 v 15:00 odes=C3=ADlatel Arnd Bergmann <arnd@arndb.de> na=
 psal:
->>
->> What type of userspace would access those, and why can't
->> this be done in a portable way?
 >
-> multiboot is useful for A/B updates when used. It is also pointing to
-> where the boot image exactly is.
-
-That sounds like it should use a reboot-mode driver. There is
-a patchset that streamlines the reboot parameter passing that
-will hopefully get merged soon, see:
-
-https://lore.kernel.org/all/20260514-arm-psci-system_reset2-vendor-reboo=
-ts-v22-0-28a5bde07483@oss.qualcomm.com/
-
-If you can't fit this into PSCI reboot arguments, you can
-add a custom driver here that picks the A/B update etc
-
-> idcode/pcap for fpga programming case. That your bitstream matches the=
- device
-> you use.
-> Scripts or user programs can use them.
-
-You already have an fpga driver, right? Why is that not part of
-its user interface?
-
-> IDcode could be the part of SMCCC_ARCH_SOC_ID but we can't change what
-> we have done in the past
-> but we plan to implement plat_get_soc_name() which will also contain
-> IDcode. That's the one where a standard interface could be used.
-
-I'm not sure what plat_get_soc_name() does, I don't see that in
-the current sources, but can have multiple soc_device drivers
-and use soc_device_match() in drivers to compare the ID
-string from the platform with a known lists for things like
-driver quirks.
-
-If there is a hardware interface to find out the ID, just add
-a driver that registers another soc_device in addition to the
-SMCCC one, and soc_device_match() will attempt to match each
-one separately.
-
->> > zynqmp_power:
->> > - Fix race condition in event registration
->> > - Fix shutdown and free rx mailbox channel
->>
->> No objections here, though they look like bugfixes that
->> may be 7.1 material. Up to you, but don't be shy about
->> sending things as bugfixes when they address real
->> problems, it's better than waiting for the merge window
->> and then immediately asking for a backport.
+> On Tue, Jun 2, 2026, at 14:29, Michal Simek wrote:
+> > po 1. 6. 2026 v 22:39 odes=C3=ADlatel Arnd Bergmann <arnd@arndb.de> nap=
+sal:
+> >>
+> >> What type of userspace would access those, and why can't
+> >> this be done in a portable way?
+> >
+> > multiboot is useful for A/B updates when used. It is also pointing to
+> > where the boot image exactly is.
 >
-> It is more about time not about being shy to send it.
+> That sounds like it should use a reboot-mode driver. There is
+> a patchset that streamlines the reboot parameter passing that
+> will hopefully get merged soon, see:
 
-Ok.
+not really. When you ask for a reboot you could reuse this mechanism
+to boot to a different
+image but in A/B which would be a very hard way to do it. We do use
+ARM DEN0118 spec
+with mdata for it. It means actual change in multiboot is done by low
+level firmware where
+different values are read based on mdata structure.
 
-     Arnd
+> https://lore.kernel.org/all/20260514-arm-psci-system_reset2-vendor-reboot=
+s-v22-0-28a5bde07483@oss.qualcomm.com/
+>
+> If you can't fit this into PSCI reboot arguments, you can
+> add a custom driver here that picks the A/B update etc
+
+A/B in our way will be handled via capsule update/u-boot via ESP partition.
+
+Maybe it was misleading to point to A/B. Even when you have a single image
+it is useful to know which offset was used for boot. Because you can
+have fallback images
+if the first one is broken/corrupted.
+I was more thinking that maybe useful would be to share it via nvmem
+like it is done for some other options
+drivers/nvmem/zynqmp_nvmem.c.
+
+> > idcode/pcap for fpga programming case. That your bitstream matches the =
+device
+> > you use.
+> > Scripts or user programs can use them.
+>
+> You already have an fpga driver, right? Why is that not part of
+> its user interface?
+
+The fpga driver is just loading the boot image and providing a way to
+firmware to do it.
+There are different types of bitstreams/formats. Bitstream in bit
+format has header which you can validate,
+bitstream in bin format don't have this header. Then you have also
+encrypted bitstreamed, compressed one, etc.
+
+When you have support for more silicons (different PL sizes) you
+should know which bitstreams need to be loaded,
+passed to be programmed.
+
+Maybe at the end of a day instead of creating a custom driver with a
+custom sysfs interface we can create a nvmem driver
+which can dynamically create cells based on firmware interface.
+
+>
+> > IDcode could be the part of SMCCC_ARCH_SOC_ID but we can't change what
+> > we have done in the past
+> > but we plan to implement plat_get_soc_name() which will also contain
+> > IDcode. That's the one where a standard interface could be used.
+>
+> I'm not sure what plat_get_soc_name() does, I don't see that in
+> the current sources, but can have multiple soc_device drivers
+> and use soc_device_match() in drivers to compare the ID
+> string from the platform with a known lists for things like
+> driver quirks.
+
+Sorry that's function name from TF-A
+In Linux kernel you have smccc_soc_name_init()
+
+in our case version/revisions are defined (and to be fair to say our
+firmware messes up with version/revision)
+but SOC_NAME is unused today for us and that can be used for passing more
+information about system/chip.
+
+> If there is a hardware interface to find out the ID, just add
+> a driver that registers another soc_device in addition to the
+> SMCCC one, and soc_device_match() will attempt to match each
+> one separately.
+
+yep.
+
+Thanks,
+Michal
+
+--
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
