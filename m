@@ -1,229 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0422222C5
-	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 13:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC943EBF0C
+	for <soc@lists.linux.dev>; Tue,  2 Jun 2026 13:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780407946; cv=pass; b=aRZyQM8kWrIYtqDLXXKh829USo34pWuZu9FezfiNu78Biv9rhuBE/BZaOabVG/Dz9PDOz8lvl5S7hqAbG/fPKacQn6RQLr10DM5k/cgfliybXXL3BIm1wdVDKv+a7QQOofXMqZpcPHoYtzJckwV47AzLq9+VVQuOLf/jLw82IYg=
+	t=1780408570; cv=pass; b=FL9cASz4nkJhdeHXNHwNCxsEtOPBONg4fSmwB1GppVfHstlxcDVVjL4FdqpOpz5w4Kq2mupQ12y9sskgdYoCu8F7o1941DuVQEEOCGb0KGLpR186yUs5o8MKdu1HCQe4oqM6gGNPP1Ll2F8/IQKt1hvNgCmTalhjp2j6Dg1TXX8=
 ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780407946; c=relaxed/simple;
-	bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M2FE+t9W7A8gAlLZpeahzbfYcGOfGkKZwJ4TRPTKwXYuC+6s/tHC5E6HXN89/nmHmf1vyPpYuQWkMKgJBR0u7FG93l9EiQdFgpHhpxZpAjss4cHtpxYDJxOziHlwZGoCWSCt7tvslKzqbcmaVXjutZD+QrGLu+4pugBhHwSLtmQ=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=y9397x9k; arc=pass smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780408570; c=relaxed/simple;
+	bh=2XMsycIqZi5cVvZqoNufjj6G9eiRxyRPfMPVVwer/Tw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=jWQcsYY9YKymHL2EQ3VenpywNZqqhk7VgOzQTGXvvG56oGdgJZbqbXVYoOl+GsDHa4tCLe0ihnXAGpC1X+jjZTXEeTjMnijLAOI4lFYwN0w6MFi45Z4KsQo//yglku29HW6GIMOqAazMQeuPom5MY8BfgN+ZwDJbVdEmApC/afQ=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=z24Wo/ZZ; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="y9397x9k"
+	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="z24Wo/ZZ"
 Received: by smtp.kernel.org (Postfix)
-	id BCAC11F00898; Tue,  2 Jun 2026 13:45:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.42
+	id B947B1F00899; Tue,  2 Jun 2026 13:56:07 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.52
 ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
-	t=1780407943;
-	b=GDYsSj3aV7tw8WurcmLlAmYyO3lYvuFwM4vR8qtZh9rwaf84nOqWNFLHuF6tOFxLyzKa
-	 uW0I7cpdKp4Z6bU5k7jOFtTkCE/E21faZuhvP3NVheVGlIKuEEnw0rAZ/eRXJGkdmUQRt
-	 eGT1awoQvE3a0fBGRNW9v5GvfEHqHpwhjilQtteZ43z1OV4NXX2qYYCME54X23f7EdNpQ
-	 WIv4/UDPDSH1cnh9eCYpoMJfyZu3+23g1r++s21JCTKesu3FOYBdxXPT7UuIRpvD5h56i
-	 DxxZ0BKprJBRPfXh1vj/LegcuS0JEWxGwGj36I7BUBD29PdlDf4U0zHf63CNQwg3IUg==
+	t=1780408567;
+	b=d29yoQdPwu2PVCoOWLK/vfr0QKQ2gfE3tr3M/XQUcxZcNBGd0/sj32BVtKuky/p9s9WD
+	 kn8H3LGl98u9a8LpFy/RDoFw4h5ozBjbQQ7X09GgXZE/N6+ejWS9DhKs55qznmZf0S5gP
+	 pp5FXsns72aC7Ms7KKrYren9Kh4MFNnDxYjjORe77Gx9iDvm7es8bt9ubmGtUcl78jJeu
+	 PnGRV+Rpkbstva9zUAFVjU2+C2Mhkak/hQrPiWGY0iJp3ZdLxybjZu7gUmkjlbKPO676+
+	 kYKUsYyM1pdjrdwMIagczq+HNPZuzXFqLdErqCZr5POrLg7ENHPbnztAqt+x3vwdL/A==
 ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780407943;
+	c=relaxed/relaxed; t=1780408567;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
-	b=cFjCmSwoksLvqwqhFBTgr2hZZw+6F/7eV2v4eZoeju+cGM16dJXCru5+0tsixbYHAa7b
-	 BPEDxPKHuGCV1uzDGjA5yvS/3FPVQZET5g79mJFyizfzPcqGAEqhHm34sZwCGQ63UXbSe
-	 IZuMKvTI0dJF3mI2fcx827Rus9J9vQLzIC2bIWmRIWhSpvTVZsWyvivBFg+g7uTn2YHK4
-	 w3g3TEnCFbGEAXUalHrUCxp490RqvBbn/wtCmiZgNh8hd9eqrQlXFOGbr/s2I53dMP/VY
-	 qYaVLsmX3km9AzdMs2Yw5ZSaOi/19Q7jA3PEl6biG2EFjPBruwgOf+QF1dP2h794Zuw==
-ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=y9397x9k;
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
+	bh=t9jtpHRRJE/DKOFfDRogyp/xh/qyYac7Jc/ujWsn6Ik=;
+	b=nJqez8UquQ08KZhrszXQ2KQgsDkOr31+M5c1Q09XP+7cllGbBL17uT/26aO3FUsJpoCq
+	 SUO6nmRgYmDMdJz4I3tYNIFatXHiTAxQRmE1EW1lXucc5nql3gbWVWD5FgPAkrQz1fYcJ
+	 wAtMcOBCTzEzHumvPwEoPjXMz95vBnbLPcAqfVatQY4vavXLnlP+Xa9VOqGPRjgn0ZOXj
+	 iDYTKJt2Fffcr5/HitI9enNo9utwDiHrqs4l//F4tjD40C7y0bakj7VPpGwqZ3vOIrrU3
+	 34z8O0JrspE5FMs/6JqQNwe43ccqR/q7pMrw9FlJGiDweGTtLfWwWiYX2nQQhkJEYNg==
+ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b="z24Wo/ZZ";
 	dmarc=none header.from=monstr.eu;
 	spf=none smtp.mailfrom=monstr.eu;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.42
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.52
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6BC0B1F00893
-	for <soc@kernel.org>; Tue,  2 Jun 2026 13:45:41 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 20D831F00893
+	for <soc@kernel.org>; Tue,  2 Jun 2026 13:56:05 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=y9397x9k
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 6BC0B1F00893
+	dkim=pass (2048-bit key, unprotected) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=z24Wo/ZZ
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 20D831F00893
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-660512d80b4so4730729d50.1
-        for <soc@kernel.org>; Tue, 02 Jun 2026 06:45:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780407941; cv=none;
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-66039d3efcbso5587319d50.2
+        for <soc@kernel.org>; Tue, 02 Jun 2026 06:56:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780408565; cv=none;
         d=google.com; s=arc-20240605;
-        b=YZn0z88dE6xbqJcv//wKsjq+8LSD/1YksUGN8q1O0m0ua2KDGyjsBGRa1MP7NMmtx2
-         8y5qT0ZxiJRISe6t+2eY6fWWXg8MaVjhuX2k6+87RgG3yq+9RyolU7V/vskBKkQuHmsD
-         wBGs0mC2xFJIIeZ/CrnXpce/nDo8Krtdxy4QegZtilnZQnYTi+FuGIYFpS8vIAyfReTq
-         o4XCC9jvdzFYKCcIYZikPRyi4qv/xIUoJJ75GKnMkp2MvHioYGminL5J/CDY46vg2yc7
-         YD9GNPIbszfm/wLfbmfweC+YLaChp55JkHSyANH9aHqcYUIatOSsPc423jbvEozs40ue
-         R6Og==
+        b=SthaoumLdOwBcaMZkS8R9l8E6Nc49nRL4ITJpT+AjBpqWiEspDqCC1ndL3ZJDgd/jM
+         5zo1j84FDLtduRnv2Qun1MGOSvivyr2hWTtuKd3fM1kT4b9r8NXRkAXYvbOyAgeRjMJ7
+         0UmrI3Y1RNEQsp3nIMbTy+xfpW14v+7ko2C0IbN4V8029fX12GCsTmoNehWTyXAptXj0
+         fiCLutv73C0IVUA1z0lVNpeQvbgyk7dLJQOiuzJKaeYkFD2c4nmZX8o59vL6LylcBEkZ
+         rMfyoh/zX3omwvxBz7MFGPLC95y2rquijkshOT0b3hFd+92BOKi2UFhPGHRvuPizzum+
+         g6FA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
-        fh=bs3v2HfsAanL2bQQ/nfgMMAb4LR6Z1jOsS0y+9U1ZaQ=;
-        b=ZE9HJyKN4KXOufFmh7KuQOPDIExtBT8Hih5VdLBv2CXiLF7e9po6zjPBlTBW3uMzT/
-         LKDMVaq6udEX+RZ09CFf/4WohbuEYQdra7m+qK7QvCQ4T0D6pahHiBmMzarYZ/go0XhK
-         AhEj5rXRoHPbdUB7RXYfdajcxMuJSxEwI6SZR2sPlCKEsGmoYS8TRr4Fh0+EbfRAWMv6
-         flSSE5lvNI22pH7X13/XLRltGvHecyZA23ZKWqHUt3xa89pvEYkFTOJvwPwsKpztREIv
-         sCQnBx/sg2EPLpcGwK9jOQSw+1KqeQDuAmt9c3az4doP/Z4DoEhXkmMHTOmDzyRNDe5r
-         SuVQ==;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=t9jtpHRRJE/DKOFfDRogyp/xh/qyYac7Jc/ujWsn6Ik=;
+        fh=ngnzniW9/251Blo+3H7OvJM/allDljIxuXeYmmxYfks=;
+        b=DpuWrMXZQAcoJTuCZMAheFNgLDqxivCi2YNbJTc4TvhePYIk+6T1PnD08KtBq9Md23
+         5SVL63txQiz5gEXYlxGIULbeJISsAK6eLKT8vXWbu1FV8DMz1vafot/lVCgXg0KsHbI7
+         Ohk2TvvPOGEWYp9cL6++LY9OYnma4/sE0QNPMbyXWZgVtAXXGI2eCSnU/sN4SJKeQFUi
+         DZnFN/v+cIdZCSFkKAX5zWQgXDo+ITatIwIK+VSf9sNRzRNaOJFJJx2fDxcy+KW8w+yB
+         qKpOEi8iO9oLjq5IvAMe6Ku/IKmnisPUMqBKsz7JUDv0N9BHJ38Q6Xs784KYCCtIfn/4
+         RTcg==;
         darn=kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1780407941; x=1781012741; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
-        b=y9397x9kEjmIHSLFpSuLDk0zvBRhXhxuqWJ0RmlJToBnM76o7zWUNrMSCBjdZMJdjO
-         9mM4sZEsYYobVWvVbq5sjLiOaPpNLdg5tVfdnrvHC+I7KPPM67I/qXeQx3cjX2v83CvH
-         0CoQWyTv+NWBMwVzxRcLi0Qhy7ds7vGr7GXdFBO5RiyLX7IdqH/ocKp3DNn5SnH7mCqs
-         AOrYY7KEiA7z8jqy+GElmsuJd0Dgmj+oDaUImAdBi8WitKUt+j+L5nh2ogImRNjklvTQ
-         KJQhZIldjW26L1opgjIqOLSiQ/wRoyZaSYR/EjWJ7Y4vwIQMB3mCbMML1VOZ6xpybVH8
-         iFcQ==
+        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1780408565; x=1781013365; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=t9jtpHRRJE/DKOFfDRogyp/xh/qyYac7Jc/ujWsn6Ik=;
+        b=z24Wo/ZZy3RzcFwU0hjbkODuOVEBkQpYTfeGLQE3NHaGEOwpRJ01eyH3EmE+C31kEV
+         F7PAyLk2psTgks4UaJQK40NvVbXSjTbaj1Qo4f6u0ry4cTqb/jQrmu6y0ASMckpBz1uP
+         9SHgIlzvObGk2tsSYNitENYLksh0NcYT3uQsLUTcM85i6rl72NspUXA4D7h0WmJAoqrk
+         igG6xxoEJa2ZMeptFEv/otu4c3UICOelTMwk2w5eZMxYnBntBwNrOuPF/aDh35kiOfBr
+         VEoKuhBoJ40r2YfDkAgwGhkyme/cbOYLSkh3HZS4u7I4NZ5Jl/YsF8/5+dYbsOw1E/Ki
+         82Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780407941; x=1781012741;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PucKtDJMe6zdtKxDZ+KDmDvt++ux5fvyPgJXVX2gaxM=;
-        b=YqWLk+eu+nO0INxGhX+a5An8zPSbBP2wdfDo0OwV/cjr/ir49ERudWK7LzikIlPmrt
-         rUqU7zMJTFzwciqDInBvDEotSSMpgTNqanbBig4qs2h2j/3Hg2fhTcUJ/gNKvbgaLTIs
-         8h39U/AvaW8bhvmL4TlJWG/N5ciTLE5kJbJ5+9Rfjj15W4pOpTeE4Ip2GjLJ2Pwa5/X1
-         Q7sRHJVXbObZyBc7sESg2UE8Q4JKK69zpDYscHbcE2BHzEljiE46+dm9RRTHN5G1K7tv
-         gxIylWXYw1Y1+qsC+nBnavokQvQ0TbRuG9aMY+oe+OgdekemcIHENdt8JeGJEdG+Uj3e
-         7TTw==
-X-Gm-Message-State: AOJu0YwUPJLNunXiJoICzdHr663nZZSrhYowp+aCjWADaicB1wAZv/5i
-	FfrSiQnuKLAtmM5uk0p36lMd/1iyTk2y/OqTkGRJmd+TwZOFDpCXMlakZSxff+SO2YjPNnNaTv1
-	QJFiTxvjFKPxpg0AufSGVz49pv5xpTJhR86ZOqOx4
-X-Gm-Gg: Acq92OGR/hoqGZFGTV2nEwl0zDFn1iEEAqmvLAqWDbaePClQ0ST5WsFDP/nOY9S8xa2
-	vrtARJ/Yk5OfkOIvHzppqnkB5qDyMEV++q1tJgH7qdHUmOGZ3/ZCHBMWTyh3lp7Rf9j7+WlKrsM
-	J4SDf3NJiVNXq6IB8VQpfn7DK82aDbXfqc3998DiPB+BHGjSjIFERMNWlUCufFcKPsBCGk5+4J2
-	3Insc2e3Ga9FLaKoqtp4VxY7pxYREEQ7OoQMhynPhcGOyjAHfoK/Xhk/cj8voaY5t4Ai1SN+kF/
-	y9a8EQJq6A9YSmrgToP+oriUif3RzkN/mtoUxv1D0oHBRwoadK42noki4stfJg==
-X-Received: by 2002:a05:690e:408c:b0:65c:290a:d7ac with SMTP id
- 956f58d0204a3-660a60f477bmr2995698d50.6.1780407940794; Tue, 02 Jun 2026
- 06:45:40 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780408565; x=1781013365;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t9jtpHRRJE/DKOFfDRogyp/xh/qyYac7Jc/ujWsn6Ik=;
+        b=dOonazgG43RoHl4Q4LYU2cVkLzysxVVKBF7U+gvt1ly4E5MwQVHCNitH9E3oqACscV
+         ZlHOxhYDOV36x5Hawu70p1Wzmdgu58DfbaSym1d+ii2eXsYIPnUaDXAwuiI00Zr0jw5p
+         am1Ymf8V97OIpmvecJ9heiLLEDU8dT+ZbTlRhAyRJ2rwv8DeT5zJElsecoON4iEx3F0d
+         18yYQa/RI9scKJM4xSSFjmDRiQg5K+QZOw+aiaLV9o/A7MEZj81q0Z6DNYAvrgxhUvB2
+         DaBVah8nZe8vQ7LBjrtCrpEz1aCjvcFTeb9AfQiElBFqKjUUOphBWxWZz/2xizyXhDKb
+         01eA==
+X-Gm-Message-State: AOJu0YzEsypGLaMEMHY/DHumiRlFl3BgcN+3dNYA4lAYxoln+VmpY/2g
+	ionpUZ2OYv0UsYXkZBYZhC4WaXf7DtYw45thcF5RlZjxTPxpOCGesPgSZuBsrjumftWBCQpkBpy
+	wwKSCQP9aKm10xw8wqecGxJqmolUyjRcmnpjt3Q70o0vvmCvYoKu9GKt2
+X-Gm-Gg: Acq92OFCrR8QGw1RAaaRtA5CZCdw/l3H4zN7JqcetnVFQ7kbCQqrbEA92QDKZRqunsX
+	vE1TWsJZNwLHZRzPWDz95zqSpbuwXae6ZI+6SMmGq1bADTNpZSh3O/l1aubhRbS8PWXHhA7DjF1
+	TDVK3KTM5Wg6XRYI+ofwe8ptWb21bip/7LweErXsHPTBpRSwk+eFy1YpESZqgax8fGn193BBEEw
+	RCUqRN9WyeyIMcbo8tgM2f33YNRTjcT4onmOFebRaZuVVrGksyaqGZMrpH+f1fculomZJfR6SVZ
+	g0rPHItd8ydYd+s29bpQ/bJ6ehJzobP+GyZZcPNMA+HlWGjO9LM=
+X-Received: by 2002:a53:ac81:0:b0:660:55e1:5bb0 with SMTP id
+ 956f58d0204a3-6605edd30e6mr13392101d50.22.1780408564617; Tue, 02 Jun 2026
+ 06:56:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAHTX3dKWE6DOPLXPq31wRiXfjac0TVqSOAOLP8itHoGYpF9eBA@mail.gmail.com>
- <b56b09af-cd0a-4061-8cce-5e8a50033b4f@app.fastmail.com> <CAHTX3dL2W9iZDWLk=OVmno0ZUHx_EkXrJqskmpXCM_CQROWgEg@mail.gmail.com>
- <55c1b29a-cdea-4508-b77f-d5a2da247662@app.fastmail.com>
-In-Reply-To: <55c1b29a-cdea-4508-b77f-d5a2da247662@app.fastmail.com>
 From: Michal Simek <monstr@monstr.eu>
-Date: Tue, 2 Jun 2026 15:45:31 +0200
-X-Gm-Features: AVHnY4IJdLvmxR6QW8fYJcxGv1ygcnwa_HYL_gCiFtUQ8w0cJZRCGJCbylQkZy0
-Message-ID: <CAHTX3dLhDT0TVD1+=MVzjNPAY6yi9Yba6WfZO1ihq+k_82n7Wg@mail.gmail.com>
-Subject: Re: [GIT PULL] arm64: AMD/Xilinx SOC changes for v7.2
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: SoC Team <soc@kernel.org>, linux-arm <linux-arm-kernel@lists.infradead.org>
+Date: Tue, 2 Jun 2026 15:55:57 +0200
+X-Gm-Features: AVHnY4L18eyVlhjycUY5iNpuboxB-7Rv0SWEmLrcTIjnB41jeLOIdSTZeBHV958
+Message-ID: <CAHTX3dKJBTQ9TF2TeTTjsWBo9bkV=39b5YjTG7j+tqct0Q-E5w@mail.gmail.com>
+Subject: [GIT PULL] arm64: AMD/Xilinx SOC changes for v7.2 v2
+To: SoC Team <soc@kernel.org>
+Cc: linux-arm <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-=C3=BAt 2. 6. 2026 v 15:00 odes=C3=ADlatel Arnd Bergmann <arnd@arndb.de> na=
-psal:
->
-> On Tue, Jun 2, 2026, at 14:29, Michal Simek wrote:
-> > po 1. 6. 2026 v 22:39 odes=C3=ADlatel Arnd Bergmann <arnd@arndb.de> nap=
-sal:
-> >>
-> >> What type of userspace would access those, and why can't
-> >> this be done in a portable way?
-> >
-> > multiboot is useful for A/B updates when used. It is also pointing to
-> > where the boot image exactly is.
->
-> That sounds like it should use a reboot-mode driver. There is
-> a patchset that streamlines the reboot parameter passing that
-> will hopefully get merged soon, see:
+Hi,
 
-not really. When you ask for a reboot you could reuse this mechanism
-to boot to a different
-image but in A/B which would be a very hard way to do it. We do use
-ARM DEN0118 spec
-with mdata for it. It means actual change in multiboot is done by low
-level firmware where
-different values are read based on mdata structure.
-
-> https://lore.kernel.org/all/20260514-arm-psci-system_reset2-vendor-reboot=
-s-v22-0-28a5bde07483@oss.qualcomm.com/
->
-> If you can't fit this into PSCI reboot arguments, you can
-> add a custom driver here that picks the A/B update etc
-
-A/B in our way will be handled via capsule update/u-boot via ESP partition.
-
-Maybe it was misleading to point to A/B. Even when you have a single image
-it is useful to know which offset was used for boot. Because you can
-have fallback images
-if the first one is broken/corrupted.
-I was more thinking that maybe useful would be to share it via nvmem
-like it is done for some other options
-drivers/nvmem/zynqmp_nvmem.c.
-
-> > idcode/pcap for fpga programming case. That your bitstream matches the =
-device
-> > you use.
-> > Scripts or user programs can use them.
->
-> You already have an fpga driver, right? Why is that not part of
-> its user interface?
-
-The fpga driver is just loading the boot image and providing a way to
-firmware to do it.
-There are different types of bitstreams/formats. Bitstream in bit
-format has header which you can validate,
-bitstream in bin format don't have this header. Then you have also
-encrypted bitstreamed, compressed one, etc.
-
-When you have support for more silicons (different PL sizes) you
-should know which bitstreams need to be loaded,
-passed to be programmed.
-
-Maybe at the end of a day instead of creating a custom driver with a
-custom sysfs interface we can create a nvmem driver
-which can dynamically create cells based on firmware interface.
-
->
-> > IDcode could be the part of SMCCC_ARCH_SOC_ID but we can't change what
-> > we have done in the past
-> > but we plan to implement plat_get_soc_name() which will also contain
-> > IDcode. That's the one where a standard interface could be used.
->
-> I'm not sure what plat_get_soc_name() does, I don't see that in
-> the current sources, but can have multiple soc_device drivers
-> and use soc_device_match() in drivers to compare the ID
-> string from the platform with a known lists for things like
-> driver quirks.
-
-Sorry that's function name from TF-A
-In Linux kernel you have smccc_soc_name_init()
-
-in our case version/revisions are defined (and to be fair to say our
-firmware messes up with version/revision)
-but SOC_NAME is unused today for us and that can be used for passing more
-information about system/chip.
-
-> If there is a hardware interface to find out the ID, just add
-> a driver that registers another soc_device in addition to the
-> SMCCC one, and soc_device_match() will attempt to match each
-> one separately.
-
-yep.
+please pull these 2 patches to your tree. I have removed that 2
+problematic patches from my queue.
 
 Thanks,
 Michal
 
---
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc-for-7.2-v2
+
+for you to fetch changes up to fdee7c66c0d7b6869c36b9f9a915abf29ab5b550:
+
+  soc: xilinx: Shutdown and free rx mailbox channel (2026-04-30 12:50:05 +0200)
+
+----------------------------------------------------------------
+arm64: Xilinx SOC changes for 7.2 v2
+
+zynqmp_power:
+- Fix race condition in event registration
+- Fix shutdown and free rx mailbox channel
+
+----------------------------------------------------------------
+Prasanna Kumar T S M (2):
+      soc: xilinx: Fix race condition in event registration
+      soc: xilinx: Shutdown and free rx mailbox channel
+
+ drivers/soc/xilinx/zynqmp_power.c | 47 +++++++++-----------
+ 1 file changed, 20 insertions(+), 27 deletions(-)
+
+
+-- 
 Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
 w: www.monstr.eu p: +42-0-721842854
 Maintainer of Linux kernel - Xilinx Microblaze
