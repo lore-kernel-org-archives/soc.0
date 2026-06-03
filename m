@@ -1,40 +1,40 @@
 Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED0B381B17
-	for <soc@lists.linux.dev>; Wed,  3 Jun 2026 01:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460C4382F18
+	for <soc@lists.linux.dev>; Wed,  3 Jun 2026 01:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780451131; cv=none; b=hRVL5LQ+x0RUrGzCn1Nk3t+njaG/uFwlCMaoU0rVqKShdePeR718YXurr4MOMIxun5PIKm1hTW5apyvXaAZB4ZHL9n4rTG2KQsGeifOQyIYK8wsGEZdbTUToUA5OBMfjfmL7ldCiSm9nl99QXV1mrBnOYSvaqFS+m0bWdXfVAfI=
+	t=1780451733; cv=none; b=FwRrVaBSnkWkZy+dN+E5YtR4MhlJ6esmgGZG5hCuTlMhPi2k67bqfaJ0jtiONchaKVNlSwEFDJ3oWbnkHLpF5qoNfOJMnzWRQSTCMfxyhOT2rhy+3nxhWyW6hYMXsyutyqvVg7KFMjt5VOzZak25LVcKG2CAEZrD/brLBIF5XmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780451131; c=relaxed/simple;
-	bh=kMzsOxgPbAMZl7euMqrW7SRtuP+QzNU2pcEr/aekx28=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=RjB23eCF4d0sbfzmnv4E/5abl585pIY4PFQkXFmEMdJgsqbPHwk/m7ZLuHZzOgAK3iOKJtfnEBpLdpAajXKuPbSBSoEyiFCXCvCtdPyUIXtHNXLiw3Our9nCz0JS1jQddwJs/Rvnj0hSy0KikLa6qxb0InUPVWBEGnV70mBecIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=Pzsp8wid; arc=none smtp.client-ip=203.29.241.158
+	s=arc-20240116; t=1780451733; c=relaxed/simple;
+	bh=DJwqSdphS1rp84oa6H/3bmv29GRu+T4mFlHuZMb0rpw=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=qCwsVKIO3jVNRQTcljUaQQZD30K0Sx2F+D1ktG2aYa9Sn/1ig8lh+eitvCE+Awk7vLCRO230lf2JvNRJUjpD5XwPJXECISEcqHnR4qSNKj9v/zz8LoRH1qw22Xh/yqrJfdGuAjCfGYXkpKrqpZZKOAnry7QcuWGMc635kVKrfGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=bCn2zoTl; arc=none smtp.client-ip=203.29.241.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="Pzsp8wid"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="bCn2zoTl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1780451126;
-	bh=6sNKaf6Emxid3ZVnRf3FrHFQvVHAGDbo00Rv0+jMbEM=;
+	d=codeconstruct.com.au; s=2022a; t=1780451730;
+	bh=tx82nXcNwoZBDaSltchd88wfYFzbl1TA2nlVTrEqhtg=;
 	h=Subject:From:To:Cc:Date;
-	b=Pzsp8widNNQW7lqYjOla9SV0FDAI+RLJyW+mVvMJR4Uqg8RR3xCb5tR/ehxAWXxhW
-	 6CPj7Sz8sHE83Jc8qynufLBIG4JAk44kcJtAg68SDJnPV/B2IwL7s5ZcCv2y5r1ocU
-	 LdjthGl3VI7blsWS8gJiC48QHG6NQAb7GXJ0dSANxhXjAxzvIAOaaddUU8ti2tTYSH
-	 q0IUd3HvVe5fjzz4deqhllDjKgLVnJMtFVShHDe2QG+z5FKjy13tSh399hxRONzUqO
-	 AL1ev+iZvi3fIZtXaKR/02pKI+ImwZiqd92b5zcRF3SpF4u6qtXryJFN6MqsDd5MiM
-	 lEJkg7RMGrRcw==
+	b=bCn2zoTloqOxxDig5JmDUJm6foeRhBtzOX06v24QuFpeEjX86wYXplBnnTpBJPJfk
+	 ih1moDj6u1KxTKfjvzvsxivMT6Z6NWmGeAvVsWM0ujjYUrseXUDfxszU6lg5YSXDaV
+	 OvPbBIHLJZxAP33hcJOscqqQxTFfYEatcUIG93f222aVOm8igbNg8LOJMEoR0OXYxi
+	 S7Y+FwoafaPjMtHQPCSt/Dhvk5CwhDZJ40NoP3qpw6nPJpmK7CJnqX96gA0oTzyVPS
+	 5L19RZvH4Qrv9rUOIdrNLqRo5qXDYG45kKZdoLaxUwk1BMH/lFw4U+C5qVgYilnpc9
+	 GV8o/lchiUpAg==
 Received: from [192.168.68.117] (unknown [180.150.112.11])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 1B9F66025D;
-	Wed,  3 Jun 2026 09:45:25 +0800 (AWST)
-Message-ID: <6b6b592163523beea48e875a047afc8b4bdbb00b.camel@codeconstruct.com.au>
-Subject: [GIT PULL] aspeed: First batch of driver changes for v7.2
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 302CA60087;
+	Wed,  3 Jun 2026 09:55:30 +0800 (AWST)
+Message-ID: <0743460993783da99c633acbfb84bfe065cb303d.camel@codeconstruct.com.au>
+Subject: [GIT PULL] nuvoton: First batch of arm64 devicetree changes for v7.2
 From: Andrew Jeffery <andrew@codeconstruct.com.au>
 To: soc <soc@lists.linux.dev>
-Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+Cc: linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org, 
 	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
-Date: Wed, 03 Jun 2026 11:15:25 +0930
+Date: Wed, 03 Jun 2026 11:25:29 +0930
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-0+deb13u1 
@@ -52,35 +52,27 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731=
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed=
--7.2-drivers-0
+  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/nuvoto=
+n-7.2-devicetree-0
 
-for you to fetch changes up to bc13f14f5cd3d15054de38dc1232b49343d36297:
+for you to fetch changes up to eae82b6e8c2399892e145195cae9aaa0b960fdaf:
 
-  soc: aspeed: cleanup dead default for ASPEED_SOCINFO (2026-06-03 10:47:55=
- +0930)
-
-----------------------------------------------------------------
-aspeed: First batch of driver changes for v7.2
-
-While bc13f14f5cd3 ("soc: aspeed: cleanup dead default for
-ASPEED_SOCINFO") was committed just now it has been in -next for a while as
-b333a0f1c857411d83a02aa6f1d9ecc7666d6179. The commit is fresh as I moved it
-between branches.
-
-Other than that it's just the one other patch from Krzysztof tidying up the
-location of MODULE_DEVICE_TABLE().
+  arm64: dts: nuvoton: Add Ethernet nodes (2026-05-18 23:18:01 +0930)
 
 ----------------------------------------------------------------
-Julian Braha (1):
-      soc: aspeed: cleanup dead default for ASPEED_SOCINFO
+nuvoton: First batch of arm64 devicetree changes for v7.2
 
-Krzysztof Kozlowski (1):
-      soc: aspeed: Move MODULE_DEVICE_TABLE next to the table itself
+Just the one patch adding ethernet nodes for the MA35D1 development board.
 
- drivers/soc/aspeed/Kconfig            | 1 -
- drivers/soc/aspeed/aspeed-lpc-ctrl.c  | 2 +-
- drivers/soc/aspeed/aspeed-lpc-snoop.c | 2 +-
- drivers/soc/aspeed/aspeed-p2a-ctrl.c  | 2 +-
- 4 files changed, 3 insertions(+), 4 deletions(-)
+----------------------------------------------------------------
+Joey Lu (1):
+      arm64: dts: nuvoton: Add Ethernet nodes
+
+ arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts | 25 +++++++++++++++++++++=
+++++
+ arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts | 24 +++++++++++++++++++++=
++++
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi         | 52 +++++++++++++++++++++=
++++++++++++++++++++++++++++++++
+ 3 files changed, 101 insertions(+)
 
