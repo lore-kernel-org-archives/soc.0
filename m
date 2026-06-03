@@ -1,151 +1,273 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107603DCD90
-	for <soc@lists.linux.dev>; Wed,  3 Jun 2026 02:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780454055; cv=none; b=L4a+gHt7FEF+FMDikpM4f02cQP6EAg/OeVRc4om6leVUh4HxCJ6HC2QiXL4l5ZiIdNWKfrzIR0t+DER3JBUuzI/CQFlr1MqWMNpI16Uykh8hHXO9KaUe+V1ISz2p5UhQI/xtPNsbBVnvbCUh7z4vgEBPq4jdN/C28ZoSvcU9H7w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780454055; c=relaxed/simple;
-	bh=wVOOQ+6WhGSiVVsawtdWnT/QGZOJjV0ves/S8+rZuXQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=YdYR4+HWPdfIWLHmvRhe9aadtl2PJdeecFaNWeSFnFzivqSI1I4SNQ2eEoaf0RTYJd7RgFHkpurjs5+4OX7PS0DgSkLuHL8/uBaTUfOg/oEJeO18xNsPtOkcfKqcoBMpLBJf9YxIVowA7RTBtddNEuBuvsszN0a8oN3GmMDShOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=LY5gsaZE; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF505346ADB
+	for <soc@lists.linux.dev>; Wed,  3 Jun 2026 06:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=100.103.45.18
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780467478; cv=fail; b=FNBMI9OTecj/kupfa+96TUKfDlj+Wn35lPMh/SFSzRg/dXJkgd6Yddd7ieu+liQz0EK1aS2+iPuaHInY/PCupixBJjh9wuz+Yng0PrVaUbWII0kst8I7/s+n/HCj7zI6QuQEyQd/FxnxspXxKKIDpo4F2y3CF/TER6LpCAN0s6U=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780467478; c=relaxed/simple;
+	bh=LddQ2Qv+hr/QGy+y5bh0KKTRT2mSS9V0jH+3icsBk2Q=;
+	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=H1idBGiiaWDDoj+lFpurfxK2JdRBSsU7AVD9clLBASEHecdi4ToRCp+DaDaPtGx3eoDsJsWSWvUvVdVj9LTJx/34KK6srvo9fsHbTGHA00lum16T/jDHBz9uM4s2PanWGyIG+ujt8fGB2chs2hJtbZ3IR7pCITRPPwkFn++YT1I=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=hSXiuoEE; arc=fail smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="LY5gsaZE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1780454050;
-	bh=0P5xTtK6qJk11drFxut88gGWQ14R3F9398eX/Saen6s=;
-	h=Subject:From:To:Cc:Date;
-	b=LY5gsaZEH8JGU8zm2qE+glifMq+UTc38flMyOSQoQ6WcAyQUQSpa4NdyJnnAk16zV
-	 OaloRtqWrAABbM6nKhJ2NqxjBV/eMzuw9kFzyHnklntr58HYkBpeb6M33FBfBIeVxN
-	 IMAbL3qUOjTHOpmsPdB21cxUYB9kuhaC5/VEDsGu5+GxSr9EfAJ2eZHcFaalS6qW8K
-	 E/VZUKf/kTpYVvQ6wO7QjFrCG824k8kbaUpEpJ1mNMseE+syVhLK+dK6/2z99TSNHk
-	 93NZY/ZgvTam5ER0zT5A2k4K3Aqn8U/zQ5kYv3J3csekPY+O+Ucwe0ndsh1mxRzW8Q
-	 MUeDo3GpFnvCw==
-Received: from [192.168.68.117] (unknown [180.150.112.11])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 44A5960087;
-	Wed,  3 Jun 2026 10:34:09 +0800 (AWST)
-Message-ID: <55ab27bc5e09252b1dbfdf1505693eb193b8e846.camel@codeconstruct.com.au>
-Subject: [GIT PULL] aspeed: First batch of ARM devicetree changes for v7.2
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: soc@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
-Date: Wed, 03 Jun 2026 12:04:08 +0930
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="hSXiuoEE"
+Received: by smtp.kernel.org (Postfix)
+	id 6952F1F00898; Wed,  3 Jun 2026 06:17:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.68.8
+ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
+	t=1780467477;
+	b=FOmt2RAJVODuKjDpvyvpXIS5vuJdKqkfF88jODKwXRO4mQo1bBu4iL3B/bxDxvwTUGRZ
+	 79XbpH/j8MKWmJ4GnZqI7i9q8gq416xYAJG4R6BT5dpvZ5zFigcSjZb2lsbZkHGY7TLTe
+	 2jEZ03BDiAnEzfEaXJgkm2iM6xdwYD1ca19UxiW46UHqAPXXIQwyf8HEWvNVJosSSYctq
+	 jcwgOv5Ji7y6Nfr8+lalYGl+piQY9nhIWDoUWrxrq4yTrka0xQk4nqmykudQs1bdLvnef
+	 S31sHcK1IS9PGxv1uAIshAiPC2602/Tc32V6n5UAGI0dV2wcyef5eY9KOBPvpjO8liQ==
+ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1780467477;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:To:Cc:From:Subject:Content-Type:Content-Transfer-Encoding:
+	 X-ClientProxiedBy:X-Microsoft-Original-Message-ID:MIME-Version:
+	 X-MS-Exchange-MessageSentRepresentingType:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SLBlob-MailProps:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=OG2FsrK1mTXw3lxfDoaOeiWWa+iK541Z80lf93+rIF4=;
+	b=Osk7upI4W1Vt5we4cNRCinNt97n+LkT2Zt9bm6LvcUQE9QYPLcplCEDgn7maPLFFOzD9
+	 pUOAg8GWuo2j/go+rUuyV2yEDZqKP60JL6fQL6KqDwzfh+gQcI/t364p4gXXgSj789Du2
+	 wYi+CPm6a8QKEVB9t9fUFDrClJ1ufCtfSl9l/G2Vb+WYWZgeG1HfSmGn+BWwpIVn5uk2p
+	 je51woBuvOebLBmh3VBu3ur4xKgB3Nsxb8UIuzd53Od2fbQWR7FO0/Ee4FXe2IUTojAOD
+	 fPlbjqNjRiyWQAJujjh/bp6MUbC3+dwCOI3RD+/ayrs8+A60NfU1mPC8vMq3u5rraNA==
+ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=hSXiuoEE;
+	dmarc=pass header.from=outlook.com;
+	spf=pass smtp.mailfrom=outlook.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.68.8
+Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazolkn19010008.outbound.protection.outlook.com [52.103.68.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7AD7B1F00893;
+	Wed,  3 Jun 2026 06:17:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=hSXiuoEE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 7AD7B1F00893
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Zqd/8xZgfTdMMijzAR7miocvoG/2LRTRqtTjkTYKIhSqgw4RGD+GDI2TBjUPSvpvtjPfaips+HxTULnNIexIuvSuOHKAOYMDmYvdrCA66zzWJxdMVeP/QlP0HOtkmEm18Ndj9LKIEwL325v2NsCgS9OCc2JPPUSsYnkqYJkvEqwL1FCQzbio7TdjVW0JMKBvxpIqesr6hPPNJxe1DMnHX+BDSNTVo7ueMb8VOe93sePEZSZl2BRNUF/GlT7Jp9fMB77kTgTWuhJr/khLnyxKiJK5IUjd7Ww7es3EtunwGTSTx9I6qw7yJft1f9klbNs6l3eux24HV6vcTV5GcuVJFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OG2FsrK1mTXw3lxfDoaOeiWWa+iK541Z80lf93+rIF4=;
+ b=JtiTnMFwsC23hu3avry5Ps6D7T8dZtfiaSuJ02NKTpABhQHQc995OtB6xMcthDvNKsNiU2ZcxT9FwrxePOn30FDmSbs4fRxUwdNzYYvcJxg+swwoYavfNElgn51vS/38kboku903GPPSb7+pb31PVThfPuR3ydc+qu+KtnUEwdslq/tWoDdMrraagnk/XXSUczoayoPe1lvM9zOPpfelrILruwJxEF0lpZwxliu6klSKEBot/K2FmzajvTMrhm0YmzRDqoZr3ojOhW21swwql0bWaXHdji1+fViU4uCrqWxM9a5Fm1m7xzLG82ZNECpTCCn1RhDgFL4k0S75XdLj9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OG2FsrK1mTXw3lxfDoaOeiWWa+iK541Z80lf93+rIF4=;
+ b=hSXiuoEE4ncIJ1h4L+ttPY1vjXUW56M8il2/G76Pls9NlZz5CwilCh6I6yipBmAhcxSfrPyru9QwuYgpcp40kZAX3cbV16xiM6lliu536ijv6+OOqhrFEBkrAeiRVUyEv9BB776GCyojmAyCy3vRcrwXXw0P95uTMwpPRDct09AwWBxrFUUv336g0qZ2d+9n7tJbfNVtfu0+Z0WCyg8O6AyZPl/+lvrIqy4saDfIV964HT9Jculiudu+xh4JqPVItZTrENw3keFo7aRkQpV7oOMQBGhPfKQuzmHk3dF53SRpHPMQgKRRBdOyRee2DHtZlTdXszegqCysd7x5nPrD+A==
+Received: from MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1e9::18) by PN3PR01MB9872.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:171::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.7; Wed, 3 Jun 2026
+ 06:17:48 +0000
+Received: from MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::8a6b:3853:1bc:67e4]) by MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::8a6b:3853:1bc:67e4%6]) with mapi id 15.21.0092.006; Wed, 3 Jun 2026
+ 06:17:48 +0000
+Message-ID:
+ <MA5PR01MB1250024541E71412DDA04B4AAFE132@MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM>
+Date: Wed, 3 Jun 2026 14:17:42 +0800
+User-Agent: Mozilla Thunderbird
+To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
+ "sophgo@lists.linux.dev" <sophgo@lists.linux.dev>,
+ linux-riscv <linux-riscv@lists.infradead.org>, Han Gao <gaohan@iscas.ac.cn>,
+ Chen Wang <unicorn_wang@outlook.com>, Chen Wang <chen.wang@linux.dev>,
+ Icenowy Zheng <zhengxingda@iscas.ac.cn>, Joshua Milas <josh.milas@gmail.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+Subject: [GIT PULL] RISC-V Sophgo Devicetrees for v7.2
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: TP0P295CA0002.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:2::15) To MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1e9::18)
+X-Microsoft-Original-Message-ID:
+ <f753d849-646a-46a4-81ac-9bec1d0875ed@outlook.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA5PR01MB12500:EE_|PN3PR01MB9872:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d3117fb-aa40-48b3-d171-08dec137d52a
+X-MS-Exchange-SLBlob-MailProps:
+	dx7TrgQSB6cUe9t9Fs5HiWpFB4Son1rThDsT5s0bDrrcDFrizuIyvdxXV71tVgUc7w3iiYwPePtsxyHfZvnuusx6b+cqj12USBjSkEPPHemeO1QpbqIwk7vl2YFfBXTwx7omQlCRUs/LWugcf4TIWrhsob+nTze3WqWuel7CMMddQ6H7/uqMD6Mm8HUPHnjUUMST7bnm4/0i759J44cyXKWYq99zNoIT2U1I3E20QPgsKupWfmGJb75PtV6Cp+Jm5hmOM9PViEhL0PqTfVSPlkVcgoukqMftR+KSnR1b7jklar0g+mUp3+zObDcc600vin1deNDZY8j2Vq7HOP1UWIunz1z7rZbpopoAhs2l9yQuvWjq2KFW07OlhIDglQKKmBC4WlRCLnm8kG4OzAIp1Dm72KEZ4Ju4KZhZY/sDqpJg+gb5C0qq4s8JwedUQiKKlCHkGqug4oa8HEu6jfJdnsOcwzdJ3lB4EJaZmS9muyZ3VSx0SU6BURpNt01A6gmcglRjzTWGzKlUwc3bIoZ/A0lZOSI0cYsZznowQOPIaPrqK69qP3bxTEgcTm1TbhuVwmxmikcu+RKB/nVQTmWSP8K1tiw1i8/EJv5FrOp6pxO/1JPhFz+cv6aE2Ws+3C/xWVXWnKy2/czHFomEj9q/CJvOWAHdeUdvmrFMCEF4mspQ9lw9By60sbUs8hq2oxizdS5CLMe+7kK8eJqMkw4JFXNxRjy+Ng09NxJFpHQqA8FLJulPc38Cz+MJ6OCEf7q5Tt96tu7tAS8=
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|24021099003|5062599005|51005399006|6090799003|24121999003|25031999004|22091999003|8060799015|19110799012|23021999003|41001999006|5072599009|15080799012|40105399003|10035399007|440099028|3412199025|1710799026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?QzFiZ3Jkanp1RmdOVXpKM1paR3M2VlpTLzVvMWdvd0dnaEpIQjNuRkVwL3px?=
+ =?utf-8?B?Z0d2emZIU3QvMjJjUUVCWGFiY0cwS3JsczVsYUVXRUhSd3Y2cHhNdldyUmtZ?=
+ =?utf-8?B?dHJEYzRsR1NDSGt6OHJSTVJXaVZHdTNTMGZNaHFpYVMxWEY5U0diVlplOEJo?=
+ =?utf-8?B?ckRoUkZLVThzelpkOE5aWm4rTDF3T3RrQkptbzlXU0E0TkpxM3dOZ3ZLTXdv?=
+ =?utf-8?B?dC91WElMSjJmTE9rMnhOdmptcFJQN1NjZ1pSdzZnS1p3WVcvbUhvWnlzZ3BG?=
+ =?utf-8?B?TnZzUForL0V4RllodVlGa3F1Q2t5RlJwUUJiTGJZWlZidStldWQxZ1lCOGV5?=
+ =?utf-8?B?aFBONEo4Q21SWVUyS092VjVTMklEM01BSEsxWGYxV2JrUHNIOERCT0VaRnEw?=
+ =?utf-8?B?YVFHSGxMR1lRcWRhbWNxREx6Nk82V0dKWDk5U01iTFpLSklTYUtIMkdWbjIv?=
+ =?utf-8?B?aDM0Sld3MXAyTUlBNFYvdFQ0SDBOM2VCamlocXFua0IrU2Via2dyNU5pWGpY?=
+ =?utf-8?B?THFWZnhqZnIxVUlHQTVZM2VtTkRObmI3RUw1TU5Mcll1K1BHaEUrU3pZZlgv?=
+ =?utf-8?B?YjV1azBtVDVoZExGSlZoRDYwTnpWVTJoVkdqRHJSbHpaUFY0cG1MZ29lUEVH?=
+ =?utf-8?B?SkZTS0xlZVdoUXB0UThBMXpWQm51S3BIcTFST1RFclVUSlpSekZ3bXFXZGx1?=
+ =?utf-8?B?aTloMHAvN08wL3R2T1lvQkxBQmNXODdnYkdVa0VHQ3gwTko3OEhqVmlBREdM?=
+ =?utf-8?B?bmhFN3lHSzFBdGFHQkFGQ3lmS0Y4OUdKNzlOZ2ZTVmtlNDV5bllFR3kzcUtx?=
+ =?utf-8?B?RDlJbURCM3VhQW9qVUhUU3JXazBlTGdKYkVkTkZ4L1dHTUZMS2tzUEp6Z3U5?=
+ =?utf-8?B?RnFBWHJSUEpPaXNEZHZrK01OZ1dnWCt3czA5ZE5PdEVCWjFVVXJKZzQ0Qm5n?=
+ =?utf-8?B?S1AxQ05XbXVOR3h2OC9HUUxLNnJPVzlLY0JuL290UTU1eCtCbGJCRThTaFhm?=
+ =?utf-8?B?SlJnUlV4ZFg3cDE3djJOOUU5c1pZb3F6ZXFsMDZiT01NSXYyM2JnOGlOblJo?=
+ =?utf-8?B?WmcrTTdNb3k1T2RDQ203ckljL0tkNjRBdkRRL203a3gzcWZidFN2anJpVGhL?=
+ =?utf-8?B?bzd0Z1ZJSUF1ejlBWURDa0M4aEJiUXFsaXJYVjB4eFErMllka2s3dEF6OEor?=
+ =?utf-8?B?a1NUc29RVnl2c1VkemxpRFRJT09WSzMwWEYrZ1FwZGo3NStiZGQ5YlV3eHJx?=
+ =?utf-8?B?NURSMXRLcWtBb0pQNG9VWVh5OHUrWFQxVWR6czdHbUdkbnpFZllKTFE2eUhK?=
+ =?utf-8?B?VXY1OEtXYThlQVc1K3YzU2pHVnkrWXdWcjZEbllmaVBKMFp1YXQxWHBCNG41?=
+ =?utf-8?B?WnpFc1BQdW8xSGZpR0JMM0FLYk5ndWZyZU9KdkpMMy94NlNQbkJrZWVXL3VK?=
+ =?utf-8?B?Z2kxVmsxYTFHMTJOM0JONVhkcUhheUNLaEswYVVFSEx2OG0yM3U2M3RyaXAw?=
+ =?utf-8?B?Ry82d3htWnJFSUQyT0NvaFc2WUxBeEhLVXJ0Z043M2xmN0l1cHNBOGN0ZnAy?=
+ =?utf-8?Q?TpqD8OiWiqk9Op05VyqUUl8Gj7XtKnNKfrsEBwjkgFob5i?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R2IyR05teE5mNHduOGNDMFY4aXJkd1VtREl1Tno1Q3h0am55R3cyaGRBYm1B?=
+ =?utf-8?B?WmVlbkFsazlLWExnZG01dHUwRmxwa3dLNDJtUXVHQzJKcEY3QzUrQnhHcm9U?=
+ =?utf-8?B?VTgwdUZxb2VlblNqVHJGKzdteWp2NG5paHNwMm1GT2tXZEFaTzY0NXBmVHMy?=
+ =?utf-8?B?cXpoZ1dKNnpLZ1hyYjU0a2lwTUtGWXhGVW9nTHUwOGt2ekxMNHhHS1V3Znhk?=
+ =?utf-8?B?N2ZHL0V1Wk0xWVM5T0ZoMWVHTlFEdGlzbUN0N1RGWGhlK1BBSEJ1WTJBVVdW?=
+ =?utf-8?B?OXB5d2VJc0l5c2FjQmg5MjM1cXBTWjNNd0prUnlLaElpa1ZIOXNOTWo2Njdr?=
+ =?utf-8?B?R0RES0Q1Vm1tdnNtVTRHdE03THh4djdWU1JvbzhEMDc2RStZbWJ4cjNNcGlT?=
+ =?utf-8?B?cW10bjNwMDZnWlBWVTJCZ2FhbFJlM0ppWjUzUXd3V20reVo0a0tDNnZMdENR?=
+ =?utf-8?B?dVJneXZUWXczTVkwd3BCK0pWZm5zdVVYUEtwOFJEMkZNMFFzdDByOXNTakNB?=
+ =?utf-8?B?TlhOTzBuZFU2eElhK3R2dlpnbUp0c1dGQU5zcWlVWGpWckQxRmNiU3BaSFZy?=
+ =?utf-8?B?S2wyd0RaNTljL3c3SkF6MlpwRlE5NGdQRjBGK2ptQW5yU3pVVnQ4dWx5UE1B?=
+ =?utf-8?B?VllzY0tDMFVNZmN5cW9TR2Y2K1B4b3BtdVZUYU1tSE43cFBmOHN2UlBSWU5r?=
+ =?utf-8?B?RThRY1lYOGgyQlZQckk1bGFPTmkxTC9JT0VSSUdJUVcxbG9YVmpOY3FzUEZp?=
+ =?utf-8?B?YTBiaTlPRnhSM1hDNnkyWXZHL3BOeVoyaHFKeFB2UG90NHBCanFoSEw1ZGFR?=
+ =?utf-8?B?NVd6QSs4VDZNelZiSEcxV3pzVm1tL2JDQWpGNTg3ZTFWT0UzRDBNSkdySWVL?=
+ =?utf-8?B?cElSOVJobHdQeVFhdWhHdTFKZTllNDBVeWcwaDZDUGxtbWtJRHFlYm5SOGJH?=
+ =?utf-8?B?NmxESXpPTEZxcUFMM3M4dEpzdFhNWGlONVhJTXJhUEZkRUFQVS9vNHJtQ3BT?=
+ =?utf-8?B?blQ1R01pZWJMTkViallNdHNySndGQ01Td0R6eHNWOEVrQnNyQS9aeDNVN1Nu?=
+ =?utf-8?B?T0dLTDJ1Mlpudm9la2FVanlqZXp1QmRkV3lwMHpWUkNkQXNpdVRjQkZ5K2tK?=
+ =?utf-8?B?Q2IrOVNjaXFZaGJuOW4rQWQwd3g3bTR5dVVmbUFTUm1VZFd1T0FBemJGTTBu?=
+ =?utf-8?B?Y3l1Vm9xV1h5L0tNNDN0VFkvZnd6TTlKa3Q5aVNrMUk5K0dpcDFFNm41RjBB?=
+ =?utf-8?B?anliZEhXR2QxR0JudE5LajFxc0VvZWpzcXpvNldBbWhJRTc5U2tnYkVRNGZF?=
+ =?utf-8?B?NURPNW83Qk5FeW8zRXNCMWhYU1c0cnBLWlEwVHAyb1BpWG9RWUlZKzQxMUx0?=
+ =?utf-8?B?bDQxNGRuTFNmdXI3dGMyQ3VaM0cyVTNYUU9oZkY4bnBxL2JwVmR2ZnlIQ2Np?=
+ =?utf-8?B?SGQ5OWVZSnpKTGcxYTE4L0JoL1pIZHBIZkQrTWdJN3VwblUzM29JOENMdXlG?=
+ =?utf-8?B?Q3ZpanhHQURDV2pYK3pGbUxxNVAwVVBwemhkcUtuRzRZQm9leEN1RmdHUzFq?=
+ =?utf-8?B?UExyV3ZaSGlpUGh0WG11WkR3bVhOenp1K0c5dFdkZ2FlR3NmVkwrWmk4SW9x?=
+ =?utf-8?B?Q0xWTE54WWxESm1xbVFjYkZQc0V0TFRVWFE3QlhWMkxjR01vc1c5QXUrS3pn?=
+ =?utf-8?B?ckdzSEhKdVo0R0ZUamEzNFIxSWxONUJTYVM4NzFYdTRYaVJsWUd5ektrUHln?=
+ =?utf-8?B?elNTeWNaTVpqL2VnVGlsSWRVTmFLTml4dWRvSndZdS9hcDkyQXl1MVNPTjVV?=
+ =?utf-8?B?TU84TDRwcjFoSHN2azFTWEFFTlFwdnFQL1VYY25jeXBjSGRFQnZ4QXQ5d0di?=
+ =?utf-8?B?V1RYNjJEMzJXT0FDVFdaMHphY0xOZWJhQTdaWGpINlpESmxiU0lSOHVFcGIy?=
+ =?utf-8?Q?E73pZ+xXlE1xlmpVLpwJn7y9KdCyOiVJ?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d3117fb-aa40-48b3-d171-08dec137d52a
+X-MS-Exchange-CrossTenant-AuthSource: MA5PR01MB12500.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 06:17:48.0562
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3PR01MB9872
 
-aspeed: First batch of ARM devicetree changes for v7.2
+Hey Arnd,
 
-New platforms:
+Please pull this dt changes for RISC-V/Sophgo.
 
-- Rainiera6 (Meta)
-- SanMiguel (Meta)
+BTW: Next PR, I will start using my new work email address: 
+chen.wang@linux.dev.
 
-Updated platforms:
+Thanks,
 
-- Anacapa: SGPIO line names and interrupt configuration
-- Clemente: Remove TMP421 nodes
-- Kommando: Enable networking via MAC2/MDIO2
-- SanMiguel: Line names and interrupt configuration
+Chen
 
-AST2600 SoC updates:
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
-- Describe PWM/Tach
-- Describe I3C controllers
-- Reorganise I2C nodes
+   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 
-Other notes:
+are available in the Git repository at:
 
-91b9aed7381c ("ARM: dts: aspeed-g6: Add nodes for i3c controllers") current=
-ly
-causes a new warning:
+   https://github.com/sophgo/linux.git tags/riscv-sophgo-dt-for-v7.2
 
-  ... /ahb/apb/bus@1e7a0000/syscon@0: failed to match any schema with compa=
-tible: ['aspeed,ast2600-i3c-global', 'syscon']
+for you to fetch changes up to 903a9364e40563faf4730dc63ad7446246f494ff:
 
-The patch necessary to address it has an R-b tag from Kryzsztof[2] but as b=
-est
-I can tell is yet to be applied to the MFD tree. I've left the change in fo=
-r now
-as the warning will resolve once the binding patch is applied.
-
-Lastly, as part of improving support for the Kommando card Anirudh has also
-addressed[1] the persistent pain we've had with the phy-mode property for t=
-he
-AST2600 MACs. Thanks to Andrew Lunn for being on the case for a while now, =
-and
-for those who tested Anirudh's patch.
-
-[1]: https://lore.kernel.org/all/20260525-asus-kommando-v3-0-e6a0ca1b4a3e@g=
-mail.com/
-[2]: https://lore.kernel.org/all/20260425-poised-accomplished-hyena-d2c1a0@=
-quoll/
+   riscv: dts: sophgo: reduce SG2042 MSI count to 16 (2026-06-03 
+10:09:38 +0800)
 
 ----------------------------------------------------------------
-Anirudh Srinivasan (1):
-      ARM: dts: aspeed: Enable networking for Asus Kommando IPMI Card
+RISC-V Devicetrees for v7.2
 
-Billy Tsai (1):
-      ARM: dts: aspeed: g6: Add PWM/Tach controller node
+Sophgo:
 
-Colin Huang (1):
-      ARM: dts: aspeed: anacapa: Add JTAG CPLD TRST pin to SGPIO map
+For CV18xx serials:
+- Add bindings for Milk-V "Duo S" board.
 
-Daniel Hsu (1):
-      ARM: dts: aspeed: yosemite5: Add MP5998 power monitor
+For SG2042:
+- The CPU unit address incorrectly used decimal numbers,
+   especially for those nodes which value >= 10. Now
+   corrected to use hexadecimal.
+- The MSI controller actually only supports 16 interrupts;
+   corrected to match the actual situation.
+- PCIe RCs are cache-coherent with the CPU. Marked it out
+   for RC nodes.
 
-Dawid Glazik (2):
-      ARM: dts: aspeed-g6: move i2c controllers directly into apb node
-      ARM: dts: aspeed-g6: Add nodes for i3c controllers
+For SG2044:
+- The same as SG2042, use hex for CPU unit address.
 
-Ender Hsieh (1):
-      ARM: dts: aspeed: msx4: enable BMC networking via MAC0
+In additional, update Chen Wang's email address for Sopgho
+SoC maintainer.
 
-Mike Hsieh (1):
-      ARM: dts: aspeed: clemente: Remove IOB NIC TMP421 nodes
+Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
 
-Neil Cheng (2):
-      dt-bindings: arm: aspeed: Add Meta Rainiera6 board
-      ARM: dts: aspeed: rainiera6: Add Meta Rainiera6 BMC
+----------------------------------------------------------------
+Chen Wang (1):
+       MAINTAINERS: update Chen Wang's email address
 
-Potin Lai (4):
-      dt-bindings: arm: aspeed: add Meta SanMiguel BMC
-      ARM: dts: aspeed: Add Meta SanMiguel BMC
-      ARM: dts: aspeed: sanmiguel: Add IOEXP interrupt pin settings
-      ARM: dts: aspeed: sanmiguel: Fix the CPU_CHIPTHROT linename
+Han Gao (1):
+       riscv: dts: sophgo: Add dma-coherent to SG2042 PCIe controllers
 
-Rex Fu (2):
-      ARM: dts: aspeed: anacapa: Add interrupt properties for PDB PCA9555
-      ARM: dts: aspeed: anacapa: Correct SGPIO names for monitoring
+Icenowy Zheng (1):
+       riscv: dts: sophgo: reduce SG2042 MSI count to 16
 
- Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml        |    2 +
- arch/arm/boot/dts/aspeed/Makefile                               |    2 +
- arch/arm/boot/dts/aspeed/aspeed-bmc-asus-kommando-ipmi-card.dts |   18 ++
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-anacapa.dts        |   34 ++-
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-clemente.dts       |   20 --
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-rainiera6.dts      | 1012 +++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-++++++++
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-sanmiguel.dts      |  672 +++=
-++++++++++++++++++++++++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-yosemite5.dts      |    5 +
- arch/arm/boot/dts/aspeed/aspeed-bmc-nvidia-msx4-bmc.dts         |   15 ++
- arch/arm/boot/dts/aspeed/aspeed-g6.dtsi                         |  552 +++=
-++++++++++++++++++++++++--------------------
- 10 files changed, 2074 insertions(+), 258 deletions(-)
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-rainiera6.=
-dts
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-sanmiguel.=
-dts
+Inochi Amaoto (2):
+       riscv: dts: sophgo: sg2044: use hex for CPU unit address
+       riscv: dts: sophgo: sg2042: use hex for CPU unit address
+
+Joshua Milas (2):
+       dt-bindings: soc: sophgo: add Milk-V Duo S board compatibles
+       dt-bindings: soc: sophgo: add sg2000 plic and clint documentation
+
+  .../interrupt-controller/sifive,plic-1.0.0.yaml    |   1 +
+  .../devicetree/bindings/soc/sophgo/sophgo.yaml     |   4 +
+  .../devicetree/bindings/timer/sifive,clint.yaml    |   1 +
+  MAINTAINERS                                        |   2 +-
+  arch/riscv/boot/dts/sophgo/sg2042-cpus.dtsi        | 236 
+++++++++++-----------
+  arch/riscv/boot/dts/sophgo/sg2042.dtsi             |   6 +-
+  arch/riscv/boot/dts/sophgo/sg2044-cpus.dtsi        | 236 
+++++++++++-----------
+  7 files changed, 248 insertions(+), 238 deletions(-)
 
