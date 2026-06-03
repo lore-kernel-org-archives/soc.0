@@ -1,36 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7B4392C4B
-	for <soc@lists.linux.dev>; Wed,  3 Jun 2026 12:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBF44611E5
+	for <soc@lists.linux.dev>; Wed,  3 Jun 2026 12:30:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780488611; cv=none; b=bhOOd6EI+PBau52HNMFvN8NnlomlRm77PUKID6RYnDstOTS+rJOX2STksaip4XWodFquOHGLv/xTItm96P04wBY46xsV3JBhrXE5pLqiutBxNQNoSF9V0FXvgUzZAS5t02Aw9cG9R0eCoQPLrTXfO+m1gyfdH0eXO3R4bbxY6bY=
+	t=1780489807; cv=none; b=ETdwu3pR8xceIONXmlKpLiNxOp6T4s8v59UQL7cT2aV4zDnyc/K1/Iuk7k+lDSg08ad/+4Elh8BzEuYDy8vL+75e23o6Nh7FRVKvTPJAPsTeRRCuG0Aj53WtTzQVtEQ3ep634zJ053DQ8pRpNjrHNE9El6JHBfO321w6cyGwsqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780488611; c=relaxed/simple;
-	bh=/NtWRtswRbu+hyos6XyjlrlSjTFqa1QElqrAZxE+9qU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=nf9/fL+rQNMKiJDY6NCVHhZj0MAGLHhBX5fiii4Da8ugCbXdwIdMcgBir4Xqqf7lJOecEDFMYYmpn5GaPhh3zbXyrRRxMx96Fm74wKsn/8a7UOeKO8Ri30XjC5zZGHK6Yn1hlnl6+qtsEYGJS3fNavH4vXaDUW/4/gxWM9UkLX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nV6iMXLK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780489807; c=relaxed/simple;
+	bh=s9hu+OPFsRDoNohTTQZxEdI7GtIp2lHOiOIiAy2iOIY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=HrpxFP6cONTco60wXRXDldgA5aRQkBrq3JPb/1WBlCnHhM7+imtlZTiVX/rJbUGyYZHZgBR3cjaRXTxqT1VGtF3ZZbKDwv3ZSFdEVOxuXNCVpRxGvyM+PkHUx7gjO/nOHFLYfwLi5V2ojyFRfI+Z1YIyzEfVbxgxYGDT7fs3s1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CfwoQOAE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nV6iMXLK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CfwoQOAE"
 Received: by smtp.kernel.org (Postfix)
-	id DF09A1F00898; Wed,  3 Jun 2026 12:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B4E1F00893;
-	Wed,  3 Jun 2026 12:10:09 +0000 (UTC)
+	id 292801F00898; Wed,  3 Jun 2026 12:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E5E1F00893
+	for <soc@kernel.org>; Wed,  3 Jun 2026 12:30:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780488609;
-	bh=/sW4+KQqa9dlS3sU6G/bak7GKfp2ujIMptoruWigjNg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=nV6iMXLKL8ViniAQtJ9NiHkAUvy5hpVM+KZiTymOmQfnCZRsoIwc64v8pNdDieFgx
-	 lF3CqVbJAV/njfgLoEYvdofDopUsVlmLSZNCBVO2KFhqcr9XXlIaDOHCbqtu8FcaS1
-	 +WBLZuuOD0YVK3bXTP6bU74TnuSQpr5al4/QFNe7hU45hIF3sW2nMY+cE4n8h/txpK
-	 AZTlQEnrZSQcq/2ENCpWWARSFTeUpWP3B8dNKnAjhOcNUwf7Lv8flvrdlMP2x0nbGl
-	 VXYCeXVzQuQUN/6FJSsaipiU/MNzXtGmEpGFZI+W9mTf6EEFNPZcDFXh5/T3Q+6UW2
-	 WC3e+73L6CIpQ==
+	s=k20260515; t=1780489806;
+	bh=U8p+9Sn7oIE/apQdxRi/1l+5HZthROdZEi0nov0w1LU=;
+	h=Subject:From:Date:To:Cc;
+	b=CfwoQOAEnLseZiVOxARQijcjJKN4Z13Skgx5JnvhzvHHp1pPkGO0FNEJgZgNak+8G
+	 lNpvFPUL178CjfTUUcOYo/qbDf+fMc2/Dn9M2eafLhVbdITCEPH6NZiRuYkioCJjd4
+	 U8fQRHfWDQXJAgiG19PQfbkAjBLjMzitdIGC0tZzpPqLrKxfTY9/emClUwge90p4LA
+	 /02Ited5nUpYbkj+jjoGDmzS6c8Oe3RYfwNucxc8+85GSAwZQ5Lap1/tX+k9r1MdQA
+	 CXiqjkWRKa47kxKvXl80vOKpq5ytoUMEMNG18bLou5eu19dDLAL6FboXS3cFI1SCtq
+	 CndcSSiLMrWww==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 827DE39307B3;
-	Wed,  3 Jun 2026 12:10:12 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B3C1139307B6;
+	Wed,  3 Jun 2026 12:30:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,38 +38,44 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Gemini DTS updates for v7.2
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178048861132.1379714.17269851639812707392.git-patchwork-notify@kernel.org>
-Date: Wed, 03 Jun 2026 12:10:11 +0000
-References: 
- <CAD++jLkQ8FEFL4fbOgt+pbT3orGm90Xt1bFeGCKyB-Th=qOrjw@mail.gmail.com>
-In-Reply-To: 
- <CAD++jLkQ8FEFL4fbOgt+pbT3orGm90Xt1bFeGCKyB-Th=qOrjw@mail.gmail.com>
-To: Linus Walleij <linusw@kernel.org>
+ <178048980764.1389067.14350537867195247882.git-patchwork-summary@kernel.org>
+Date: Wed, 03 Jun 2026 12:30:07 +0000
+To: soc@kernel.org
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Linus Walleij <linusw@kernel.org>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Thu, 28 May 2026 10:48:11 +0200 you wrote:
-> Hi SoC folks,
-> 
-> sorry for late pull request for these DTS changes. Had too much to do.
-> 
-> The changes were posted to LAKML here:
-> https://lore.kernel.org/linux-arm-kernel/20260228-gemini-dts-fixes-v1-0-0c6f6d0fb4bd@kernel.org/
-> 
-> [...]
+Series: [GIT,PULL,1/6] dt-bindings: Changes for v7.2-rc1
+  Submitter: Thierry Reding <thierry.reding@kernel.org>
+  Committer: Linus Walleij <linusw@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1103497
+  Lore link: https://lore.kernel.org/r/20260531060825.1855391-1-thierry.reding@kernel.org
+    Patches: [GIT,PULL,1/6] dt-bindings: Changes for v7.2-rc1
+             [GIT,PULL,5/6] ARM: tegra: Device tree changes for v7.2-rc1
 
-Here is the summary with links:
-  - [GIT,PULL] Gemini DTS updates for v7.2
-    https://git.kernel.org/soc/soc/c/f8160c84dd88
+Series: [GIT,PULL,1/2] arm64: dts: samsung: dts for v7.1
+  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
+  Committer: Linus Walleij <linusw@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1103564
+  Lore link: https://lore.kernel.org/r/20260531120708.21017-3-krzk@kernel.org
+    Patches: [GIT,PULL,1/2] arm64: dts: samsung: dts for v7.1
+             [GIT,PULL,2/2] ARM: samsung: mach for v7.2
 
-You are awesome, thank you!
+Patch: [GIT,PULL] STM32 DT changes for v7.2#1
+  Submitter: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+  Committer: Linus Walleij <linusw@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1103844
+  Lore link: https://lore.kernel.org/r/5f52acde-00e3-4f9c-97bd-9ab068320bc2@foss.st.com
+
+
+Total patches: 5
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
