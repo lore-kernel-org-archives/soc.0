@@ -1,89 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DDA381AFB
-	for <soc@lists.linux.dev>; Thu,  4 Jun 2026 09:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780565266; cv=pass; b=skZwK36uiz9+Y/lE1+FJMmS0yr0XPZT4O+VXa/0d1rbeHM3U54oQnx2lFmzqnO93KHkRTgS6uG5p6Fhic62oLEN7qsexOpp4OR+Oyu2kx1m/28cV+y43iincXhcWgd+PDJXaXl/HkvV9hgA4r7Ihskf5JNYQV4R/8NELw2DTjTU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780565266; c=relaxed/simple;
-	bh=q8c4zbHii6t+x68azYK7KTMzCgmmnVPFCmjaUCpItlc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=A++9aNs3glzaPy5vmwBrcmfoHcG6aY/5kWDz8zkpQHhuaATGe/BV98or51KHnD//4pT4oHPtmkMKncLYnYJKygrz8lhVNkySOwJ2swPi5O55rTVfPxSkfhLmaTO1VHakNg3PceEz1cLu4HLU6V/Pw8oCkCWIJL+P6gpdIAj/44o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=0TD4G51d; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3028389118;
+	Thu,  4 Jun 2026 10:26:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780568777; cv=none; b=Z/Svj0SNVdyF51zDjsFEwfOutSL0hmeEs93Gub1iZUm0PuCSiE2s+zR9MpYNqe7Ngw+MSf77Vf18dZ3qLJzjbuXkNfJnLQtBL+Vjp1Ll6GNdHuTCeZ7ZmnxSkzyWT0WuqJY8IJw0cDNKJsDracdTOYJMNEI7wIXWH45Sho8PUAI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780568777; c=relaxed/simple;
+	bh=rx9XYRZ9P6MsSQlFryH1uAKkyo0nFf5xFk05gwMgjks=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UzBQR8q9MoSwmRTLIuQ7XketFV1ifWJ8UIs/M8jnN2zBYgZgjE9zqBbo2MnEgsT/52elvuqSo3+Huh5h+J2N27VpmsP30whHR6y9fyGOnJW4ib93LEe9fTFOIPSthZ0FTz78pJ4nhU5F/Jq3iXtZTeqmZ/KuqGvwh70NBjvdz58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OsjDmmXu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="0TD4G51d"
-Received: by smtp.kernel.org (Postfix)
-	id E81321F00893; Thu,  4 Jun 2026 09:27:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1780565263;
-	b=Ci4aQQXgGt3x6At+Xxlc7KuDclQlaiD/dP2yHUPltNLBblR0efeU1xBfzH/Bfk5RsTza
-	 M7vGtBR0PWm0tmO16JP1lpIV07H1CdhkjPSEKt90RlTfM/OfWfgcVlqarp0x4ygw9b+MJ
-	 MznmwrGpfgbOsCEzIXU9HhGTlHkmdIw1FnA8wxuMBKifnEop59qwhLgchCO6XydC7zwo/
-	 UCjyVEMunOBfRRUmCa2ofWk45ea1/JYy+riOv6e0uEPc+ZxaMt6Y2t+WPlTu/gjVM2eLb
-	 Aw1xNZ4zSW3PZwXt4iTfshNK3RaOZMA2N5Y67l7Q8v78v9nXBiKZ5p0xzlOt7/W77+A==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780565263;
-	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type;
-	bh=+JPtmIpKJxkCCHhFEXHwMh6xG5uc6TqOuOvNrIN6iU0=;
-	b=Y2qmm2ROMFbV2Q1w/3XyeitgrP3yFcsOq7duSV0NLVejhNhWG0NLWjYjQ9jsGOSWEprj
-	 fkH19Frv4CudDRCSYhO9doatMbyt6EgP6MGM2nKrStheQ9HpkLs0xTWThQxpgLLRmfRU7
-	 VW8E8I0bJVMXKV4ldghYho06vXv/Q0bUHjMaZ52rV4BBlVrJcVP9MgFIBVj3G2c8f8m1K
-	 oKQ2iecZLnA56UfKtARJ2vHzK8m8TAI/pUEDG6+sH1zSTDuw1g7i+v+T2WECjxOVBkFjN
-	 N1H6tfGH9LHBBg45j26tCO1BmGaplYLrB112PaXKi3i47+I/qXmdlBCL4XbWfC2v+Gg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=0TD4G51d;
-	dmarc=pass header.from=sntech.de;
-	spf=pass smtp.mailfrom=sntech.de;
-	arc=none smtp.remote-ip=185.11.138.130
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8CE6C1F00898;
-	Thu,  4 Jun 2026 09:27:42 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=0TD4G51d
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 8CE6C1F00898
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=+JPtmIpKJxkCCHhFEXHwMh6xG5uc6TqOuOvNrIN6iU0=; b=0TD4G51dpPFZcOXT6rd4xHwOJe
-	6bN/A4XEMo3hrWK7YcH7kDTvJiibpCuKWtLMUnwbsWA02kDJ+4D/oFdX1lmkCY6JZPvnFRDHD/Rbe
-	JJS/ieamJWI9EFIvTzG1l0uHJyTSMTGbqVnf9NkFfb3TtecI2W76uRl7xgt+vne8EwL0DRcohm1P7
-	vmjo9eDBTZhPXsLvbshVigoJTLVg4zty3kTb6PNESl8YLQnCk+WTdQdVPfZPLsBj460ZcKVDI9yy9
-	7wZRGS1cPrQfZazsToBukBxlaGro9OyvIIc0t5mTSXlD6k4knlsqpwO2fi6k+68KHpOx+Oiv9kBu8
-	gA2d9YtQ==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip arm32 fix for the current 7.1-rc
-Date: Thu, 04 Jun 2026 11:27:34 +0200
-Message-ID: <4474108.o2A3GueYyp@phil>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OsjDmmXu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C4A1F00893;
+	Thu,  4 Jun 2026 10:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780568775;
+	bh=tfu9KnLGfgoGr3OfG2c4EY0cS/9adxdzuVFmvrPD2NY=;
+	h=From:To:Cc:Subject:Date;
+	b=OsjDmmXu3EGiqTrDmFydvjZVHEoMiUjY1LgfSfDNjor50LcXF+VgmxDc5rjTEjnWb
+	 fRwJyKVo5hacT+VJYqCbsH2LoKi7GuQvqsYVLPDWHHXU2tBbp/x9ytgKHYqzfQ7yNc
+	 13nCSpNr8P+UCvBy5tYsvEme/yGSXzhNYWduGuQtZPOKA5rJq7wpsjUSo8B4ifdVkU
+	 Os59Gp2HoUqGBGLZlul97z8uaNfFutby329qEqVmwCEQQmbkbp5QpngcpNC0a52mTD
+	 d1bMb1TwY63+cjXzqAVBRpRDHlBpTMGM5SB6x621hf2d2/YgHtvyW62ZHprlfaL5xc
+	 SNbc13/9SIJ/A==
+From: Sven Peter <sven@kernel.org>
+To: soc@lists.linux.dev
+Cc: asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Sven Peter <sven@kernel.org>
+Subject: [GIT PULL] Apple SoC DT changes for v7.2
+Date: Thu,  4 Jun 2026 12:25:58 +0200
+Message-ID: <20260604102600.3790-1-sven@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-
-Hi SoC maintainers,
-
-please find a below a fix for an issue in the ARCH code for 32bit
-Rockchip SoCs, that appeared with 7.1-rc .
-
-
-Please pull
-
-Thanks
-Heiko
-
+Content-Transfer-Encoding: 8bit
 
 The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
@@ -91,26 +49,51 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.1-rockchip-arm32fixe
+  https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git tags/apple-soc-dt-7.2
 
-for you to fetch changes up to 6fc5666aa576c6c3bec256fa31d72653210319d5:
+for you to fetch changes up to c65ab4905e5874a1a489c72da4d6e78a6c9b5943:
 
-  ARM: rockchip: keep reset control around (2026-05-26 23:20:39 +0200)
-
-----------------------------------------------------------------
-A change in 7.1-rc improved the general handling for reset controllers
-using SRCU, but at the same time broke really early users before work-
-queues are available.
-
-So adapt the SMP bringup to keep the core-resets around, instead
-of aquiring/releasing them on ever SMP action.
+  arm64: dts: apple: Initial t8122 (M3) device trees (2026-06-01 21:25:24 +0200)
 
 ----------------------------------------------------------------
-Heiko Stuebner (1):
-      ARM: rockchip: keep reset control around
+Apple SoC DT update for 7.2
 
- arch/arm/mach-rockchip/platsmp.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+Add minimal device trees for all t8122 / base M3 based devices and some
+required new compatibles to the dt-bindings. These are enough to boot
+Linux on these devices to a simple serial console but future work is
+required to make these machines useful for end users.
 
+Signed-off-by: Sven Peter <sven@kernel.org>
 
+----------------------------------------------------------------
+Janne Grunau (5):
+      dt-bindings: arm: apple: apple,pmgr: Add t8122 compatible
+      dt-bindings: power: apple,pmgr-pwrstate: Add t8122 compatible
+      dt-bindings: pwm: apple,s5l-fpwm: Add t8122 compatible
+      dt-bindings: arm: apple: Add M3 based devices
+      arm64: dts: apple: Initial t8122 (M3) device trees
 
+ Documentation/devicetree/bindings/arm/apple.yaml   |   18 +
+ .../devicetree/bindings/arm/apple/apple,pmgr.yaml  |    4 +-
+ .../bindings/power/apple,pmgr-pwrstate.yaml        |    4 +-
+ .../devicetree/bindings/pwm/apple,s5l-fpwm.yaml    |    1 +
+ arch/arm64/boot/dts/apple/Makefile                 |    5 +
+ arch/arm64/boot/dts/apple/t8122-j433.dts           |   19 +
+ arch/arm64/boot/dts/apple/t8122-j434.dts           |   19 +
+ arch/arm64/boot/dts/apple/t8122-j504.dts           |   37 +
+ arch/arm64/boot/dts/apple/t8122-j613.dts           |   35 +
+ arch/arm64/boot/dts/apple/t8122-j615.dts           |   35 +
+ arch/arm64/boot/dts/apple/t8122-jxxx.dtsi          |   48 +
+ arch/arm64/boot/dts/apple/t8122-pmgr.dtsi          | 1149 ++++++++++++++++++++
+ arch/arm64/boot/dts/apple/t8122-usbpd-i2c.dtsi     |   32 +
+ arch/arm64/boot/dts/apple/t8122.dtsi               |  444 ++++++++
+ 14 files changed, 1848 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/apple/t8122-j433.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8122-j434.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8122-j504.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8122-j613.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8122-j615.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8122-jxxx.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8122-pmgr.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8122-usbpd-i2c.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8122.dtsi
