@@ -1,121 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0823CF665
-	for <soc@lists.linux.dev>; Fri,  5 Jun 2026 08:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424362D2496
+	for <soc@lists.linux.dev>; Fri,  5 Jun 2026 15:20:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780648581; cv=pass; b=C3ApaIOD30uwQv6aJlNERZLHXDBbJmvgBFKCcyASVya23WssxYAW52Izimu/EhbDpYbxDHB2SKsuA67ap2bpI0gyFbWgx55f0eCjb6g7JfZQJZ7f8NwVB3jy0/SfcHMuc9uyn9K6U0luXFoYhNbt8+x9o+F4rkNRHEcCpE4ksEI=
+	t=1780672834; cv=pass; b=aOnziHpTOnRKBXffu8kg4oKnQOtWm/kFw5FZ2niku4gs+80n2/ZgT5LQHI8bqZcORUv0NAghsjQfP9zAg7dhi0mh3IWApgNvu6KbtzdYQkAmmXW+jVJTJlegmm/R8+dFSYTUReKMIuixq7gBcccfy+tMFesmLpgQxKHzKOpAw/4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780648581; c=relaxed/simple;
-	bh=dHLIVVmdEnfs6WUsEAgxZfYepx1fI1w33if2ybxYCyU=;
-	h=Message-ID:Date:From:MIME-Version:To:CC:Subject:Content-Type; b=cjTBDYoLmlCjVtLk7qMGApRqoug6gFC720lY8WCtGp+CPEt3KQHmGxEnLbnDejFfJ75vQIL7f9WymCiGeANPcPGy1AOic//lGwKBrfjhsAh9hhfIlICoIKv5bJepWP3TcwkgeVCxZbLnwvTKXbcRzfgijzxUEiV7mWWpAmDFeC0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=1Z6eLHqL; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=1Z6eLHqL; arc=pass smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780672834; c=relaxed/simple;
+	bh=UeNVA1mvHrnMBzIMZjO01djJdBgo2zGd+enzKhqwxRw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ucqYrr3YOr5vbOl+fHSsySE6CCCh4atdxNI7Thj+fVg/JT7y+ro+a9k3y+Bsk7g388LsRiuFosMF7/C3XtPmVZ46nFEeBEHdOdkjTdapmC5c1OuNNDP7Z28/bLFFa3PAF2zrKUj5HlovO53aZUYbVK95YtQrDtBrFRs7k6ho+Qg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QkOa2YZ8; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="1Z6eLHqL";
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="1Z6eLHqL"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QkOa2YZ8"
 Received: by smtp.kernel.org (Postfix)
-	id 995471F00893; Fri,  5 Jun 2026 08:36:18 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=45.249.212.187
+	id 1C88C1F00898; Fri,  5 Jun 2026 15:20:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.246.85.4
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1780648578;
-	b=ssl7QEJc/MG8nIUpYErg8AuESYZyVDka+OxTldhGNVlrYfpMWgy79MWx7UlpE8xyHcxT
-	 iR+Od/fpKyCVapNNh24eRa/Ec72OUD1zJ8WlnEOj80MkGEzV16qzElD0HQIZb4lo5C+rP
-	 E1m9gSP1Shk7/t64ZCCGaqGEOx8vDOs68ivEL0DVgWXTSKmo+XhPJhkJSkcc1fTN+HKdM
-	 ETKML9AernFUTcSbbZFwGF4z345hJLK/KEhDDcmaIJkift/IdYnd5pPVdzIUPXcFivKVp
-	 +QpLR9l79pP+v6intYTZMr2CKxMxyPCsyvgIHecmmQeiJr2da8rZfZao1gNCqN3a3rg==
+	t=1780672833;
+	b=ZI32NUNBsI5YsBH85e+d290p1mf+QzHqFijYHiLgl4Yv7x9Y8LRPYwdcWwEtd6daXGPk
+	 jiStlT26KuosBgAE4Cwxa5FNKoJFPr5bIbgjiL5GaM8afptbD2033mPk9PfpFAJe6gFsp
+	 /e3May5MKWbU/hCRx+CLypp9T4xf2ufLJYpx+aX0TJFhP/JYTGtBU5r/xGoC69BX87mVn
+	 B9yNgPItYxRgJnEMwRfjpocjG1ppO1HfE0XXt6JhMmWBedPzNJIX3bsLwIxFJhP+kEn0q
+	 ceCywobJdIpDyRfUs3L+ZXJ9Gjoq9HABjNktZO6osnS8d7Kr/R3megKwfiIA/moE/Fg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780648578;
-	h=DMARC-Filter:dkim-signature:Received:dkim-signature:Received:
-	 Received:Received:Received:Message-ID:Date:From:User-Agent:
-	 MIME-Version:To:CC:Subject:Content-Type:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy;
-	bh=OX8DgfWF30QEwxNEMg3rfeDEk29FdACgJkomvM/mw7I=;
-	b=KDWOIr4uXFfqsQnuFWTR3tWFgw3WQRtg3xHuksL3OT5I3KG0OHQFFdmVkdU5DAy7kzSW
-	 jYCHv0nuTnfijUAJwf8KMLnsmq6esZK38mz7YvFT8qd/+nZS9LYa/0Wd00GSO0nNrGmQb
-	 4nqah8Gjlo6pOOmBlONMCMxbD8DcxxtpsgiZxINlHytfIga0zTO0f8rXvHZEnjnRwO4cN
-	 muZWKFwlrALew+qkex9ytIex/J8QXm9VIAW3vXtmlBoph4NfvqkfVvPg7+JSeAXLISrK+
-	 4cWRq5+RX3DfcCVQQR+L04a5VYUqsuRX4pUP5Tk/oNRqw5PgTXszEPW+f73h+ldza7g==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=1Z6eLHqL;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=1Z6eLHqL;
-	dmarc=fail header.from=hisilicon.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	arc=none smtp.remote-ip=45.249.212.187
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	c=relaxed/relaxed; t=1780672833;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:To:Cc:
+	 Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 X-Last-TLS-Session-Version;
+	bh=bTvm5jVvvuCGHXiCCu3K99as49t50DTZUW0kkqW9Rvw=;
+	b=cgFClCKEiLXHG4UV1VgRIosXQJk01k2GaLGhkrsDW29gOr7MXuf20ISKgUix39KfMLtj
+	 g990XcpqLZww6vQunML4oic5o5QLW4A1flIehBsN1iX7W0CP0tinY8Bjnd++y/pQ/iO7L
+	 xAnfg8xltk1cuEkEChEUcQXYv//lXHAR67+iTKKgOFO92UgLNbpIluqUg7hQ9VDAJxZ7F
+	 gJXnt9wSJjli6samRfEEyvqwnuRuoRN2DYJB5JRZkcxUxWJujnmwWsDoaQVptGp5863dg
+	 pWHAMpetU0XiTF8FjvOM/Zez9lJNeD+Hj3bME63TtZRwSb1bE51qrNDYfH9kJgGxyLg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=QkOa2YZ8;
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	arc=none smtp.remote-ip=185.246.85.4
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7DA3D1F00898;
-	Fri,  5 Jun 2026 08:36:17 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 46EF11F00893
+	for <soc@kernel.org>; Fri,  5 Jun 2026 15:20:32 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=1Z6eLHqL;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=1Z6eLHqL
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 7DA3D1F00898
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=OX8DgfWF30QEwxNEMg3rfeDEk29FdACgJkomvM/mw7I=;
-	b=1Z6eLHqLo8i5hGoDClzEjbV2FpLGfRzbkqAwmUIwmT9uzD92KtEUxqu2rafEfC1JEUUYhIHh8
-	3rXiu6xHpLklj/7fo+h5BA9eDRSeDs22uL+5zL64C9od40r7qt/T42x36QdbU3dhllPwNSNGaRA
-	zioyY4c2jA+KjnT7LeeJDAg=
-Received: from canpmsgout03.his.huawei.com (unknown [172.19.92.159])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTPS id 4gWvsb5gHRz1BGjR;
-	Fri,  5 Jun 2026 16:36:03 +0800 (CST)
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=OX8DgfWF30QEwxNEMg3rfeDEk29FdACgJkomvM/mw7I=;
-	b=1Z6eLHqLo8i5hGoDClzEjbV2FpLGfRzbkqAwmUIwmT9uzD92KtEUxqu2rafEfC1JEUUYhIHh8
-	3rXiu6xHpLklj/7fo+h5BA9eDRSeDs22uL+5zL64C9od40r7qt/T42x36QdbU3dhllPwNSNGaRA
-	zioyY4c2jA+KjnT7LeeJDAg=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4gWvhg1QHjzpSv8;
-	Fri,  5 Jun 2026 16:28:19 +0800 (CST)
-Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1FC374056D;
-	Fri,  5 Jun 2026 16:36:01 +0800 (CST)
-Received: from kwepemq100003.china.huawei.com (7.202.195.72) by
- dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 5 Jun 2026 16:36:00 +0800
-Received: from [10.67.113.213] (10.67.113.213) by
- kwepemq100003.china.huawei.com (7.202.195.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 5 Jun 2026 16:36:00 +0800
-Message-ID: <6A228A6F.7010502@hisilicon.com>
-Date: Fri, 5 Jun 2026 16:35:59 +0800
-From: Wei Xu <xuwei5@hisilicon.com>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=QkOa2YZ8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 46EF11F00893
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id F308D4E40835;
+	Fri,  5 Jun 2026 15:20:24 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C5F4A5FED1;
+	Fri,  5 Jun 2026 15:20:24 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A5EFF106A2500;
+	Fri,  5 Jun 2026 17:20:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1780672824; h=from:subject:date:message-id:to:cc:mime-version:content-type;
+	bh=bTvm5jVvvuCGHXiCCu3K99as49t50DTZUW0kkqW9Rvw=;
+	b=QkOa2YZ85E51nzSVc7/1MGGgrDBSCOwI4619e9+pLMEznCkUKyCYSJm0n7e3bdwGZzN8Jq
+	Psbhe0NxmHLVDKabRbTOgZHfpEXBRGRRfqun7WYDp/nIA+22zaFBKDvZrsxtZSQVVa9SoO
+	gFlhGrbKgKQMH44SPxxk1liec8kZYCMfdJWoPdppwcIne2HNub/OXLXGIRZk9KCtVUeEFd
+	FHd/KPgZn3WRbyT8O+EX5usnDwPCj/v+HLr9ga3rzSOtt0DjL9WDUbXNGkNUjh6Qth6YPZ
+	0t+rdeqLfs6VF3Z8MJbwdGS7AJA2+841BhfOwHsZ5muzOOp8Ox/yqtcnP/YcdA==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Arnd Bergmann <arnd@arndb.de>,  <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v7.2 (#1)
+Date: Fri, 05 Jun 2026 17:20:20 +0200
+Message-ID: <8733z1c8uj.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-To: <soc@kernel.org>, <arm@kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-	<xuwei5@hisilicon.com>, <zhangyi.ac@huawei.com>, "Wuliebao (Joab, Turing
- Solution)" <wuliebao@huawei.com>, "Shenqingchun(DanielShen)"
-	<daniel.shen@huawei.com>, <huangdaode@huawei.com>, <liguozhu@hisilicon.com>,
-	"Zengtao (B)" <prime.zeng@hisilicon.com>, Akash Sukhavasi
-	<akash.sukhavasi@gmail.com>
-Subject: [GIT,PULL] arm64: dts: hisilicon dts updates for v7.2
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemq100003.china.huawei.com (7.202.195.72)
+Content-Type: text/plain
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi ARM SoC maintainers,
+Hi,
 
-Please consider to pull the following changes.
-Thanks!
+Here is the first pull request for dt64 for mvebu for v7.2.
 
-Best Regards,
-Wei
-
----
+Gregory
 
 The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
@@ -123,20 +93,20 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  https://github.com/hisilicon/linux-hisi.git tags/hisi-arm64-dt-for-7.2
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt64-7.2-1
 
-for you to fetch changes up to b54fcf7a2df1124a21195afde508369e47067a1f:
+for you to fetch changes up to 5dd98e0389545b302b0c46cef2264b5b09c01677:
 
-  arm64: dts: hisilicon: hi3660-hikey960: move role-switch endpoint into connector (2026-06-04 15:23:27 +0800)
-
-----------------------------------------------------------------
-ARM64: DT: HiSilicon ARM64 DT updates for v7.2
-
-- Move role-switch endpoint into connector on hi3660-hikey960
+  arm64: dts: marvell: armada-37xx: mark EIP97 as dma-coherent (2026-06-01 10:04:36 +0200)
 
 ----------------------------------------------------------------
-Akash Sukhavasi (1):
-      arm64: dts: hisilicon: hi3660-hikey960: move role-switch endpoint into connector
+mvebu dt64 for 7.2 (part 1)
 
- arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+Mark EIP97 as dma-coherent for Armada 3720
+
+----------------------------------------------------------------
+Aleksander Jan Bajkowski (1):
+      arm64: dts: marvell: armada-37xx: mark EIP97 as dma-coherent
+
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
