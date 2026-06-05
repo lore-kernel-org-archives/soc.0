@@ -1,123 +1,175 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC17376464
-	for <soc@lists.linux.dev>; Fri,  5 Jun 2026 15:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A5C30C145
+	for <soc@lists.linux.dev>; Fri,  5 Jun 2026 22:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780673287; cv=pass; b=CQ47S535IFlFu4Qr8L+yOWE6BgxillrnRHZ6KJkGfBm0pA46r1U05bzsNNgOtpdLXwfzCh8ZqBqwD0r3unMe3PnvJhpqlWWPvfSAHiktbukvri+boXwjcXNYA2pKkmOsDeQA0Glnalcyr1UoLXEEPiFZejYYXK2YtRyoM4jwUH0=
+	t=1780697947; cv=pass; b=utRKpZC/YSvVMi4XFME/6eSTE7mn1E24ibNiOePrzOJKDHq5KacsMh+fV9eif+9EsdKRdBJO3dieprLViLptlhaYAtaroYPwrSbRG/ufTvlYkfzXQGebVtxRwCypgeMueP4QcJDCWWnOQSXkBuVZJc1oa3wDbV8NF/LiilZpcQQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780673287; c=relaxed/simple;
-	bh=Nzc2IvXRJaAfYb8HuHzNZV4U1n7ICbsbHuDfJPbU3Hc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n4hFrcNCeRMMWugd2kzr7Fx0/N4dSp1rLE6OqUx0QerLL5z0z2xCueiQP+C6xkyO5IgWO6A7zqsuA+00Pjor5BQ+IVgamNIV/6irsFk4fy/yCDS16wR5DmTb1UifTX+Sspjzpuunjqc4xBq64waQCaG0RSUx9w03VpYlysYv3sc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Zy4URk/T; arc=pass smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780697947; c=relaxed/simple;
+	bh=5KZyHGLAko2ln6l6/YvlegFxQmm4BDDmuLTCEUgs0gY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nSkRoo0bcngl2Z3Zvbz7Oec8YTEUwhEveez/W9jYb/nbOQTlhg3sKBaEfzzVi/wXzpuMsBGeDHLEBiYeA6SloP8xj7zImKdE1eGfUyKhpbUIxOZz5aHWnYpISl0ouzGs01cSAHHCBneAvqff5hwXOKO8FV9dUneIR7X7vxt7NiU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=loz66b8d; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Zy4URk/T"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="loz66b8d"
 Received: by smtp.kernel.org (Postfix)
-	id D328F1F00898; Fri,  5 Jun 2026 15:28:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+	id 1F9CE1F0089A; Fri,  5 Jun 2026 22:19:04 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1780673284;
-	b=VS4460T0I8dZ0jcTcxzc+gsnsSS8lM4WAdH3E9KfxjC31EJIDhiXpMq7XqUTcgGU7DrD
-	 vPAulkqUScKjZL0dS2t+tZLA2N0WHx1ZbCJGWfBJRB42WIUX5nNZhMBbCiFgBSKKOEzVG
-	 1A+ndYuhMNKMx0MvH7bvebrPBuxLU0p1S0gWhAFKHppHCPvjAv34D977HBbPIHmafRzdq
-	 ihRDXOMdIyW0kfjTQpJogYrXItx0iOX2Zk+hEluZ/j5oMfVqAun1V9Xn46ATXphohz4r0
-	 v+zHKywPUpdhPIKagMB6tyxP/a5Wm4KwX3Fhf80Z8F5yLS2WYx8+/cFzgmvGkJwDiRA==
+	t=1780697944;
+	b=wz60nGUiwy9aOL6gceY8qhpzpTr9I47odVMy8PJf1S8w8kadt7RR4LCLmeMrkt0wkl02
+	 Cb9Sy9SOk332qBHClTmbaFu1vobDeBiOKliJar8PW72UTONLn5sP+PJHdrtOO5jpPQb/x
+	 /SX2enFYhx0vFHrD4YvlNAfMIK1uBl5tMf4OecZjrYmvZAQbsOk/yR8wL8AMsiRIXVK/y
+	 YYYCyOY7Xu0UbuS6/41dh/uGgLyRLLbtb5nTtRfNtKzeanTHhoOrIfyMBtQU05JPgdcXD
+	 JCZzimzLhY/zlDCwhFnccc7cqEYVQVEjf+1vndJ/ASMKZalLBwFcxMsFoSY0F1YgmKQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780673284;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:To:Cc:
-	 Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 X-Last-TLS-Session-Version;
-	bh=jkcwehCu+0OeNZKIbUXSujcXjfc/ESvUqTFvx/NqvIc=;
-	b=ykqdJ1zqDT6is00E0gvO95Verolqq1Lw2osRfcEejmceRR+8Gfkq/6pjMXl6xdi5nDEW
-	 8aH+Q/OIqEKf9Vc5yyADaWA8MZBGXFIrvsWItVt8HBU3RwpmCK9zbck4o7Yeo2g9YTcrl
-	 MSIkAQMlNgmZqJFQq/fve1fsnXCtaeqwXqH41aTVWMm4rxlgin0m3/XexhJzlwdDBMsc6
-	 dOApg3hklwoJgobzHyh7o15IwdwVzkn5zF/IdlnoHcJyty2vfnHCY1efTA3kUUK1SJIW8
-	 xpe3f/0FXEo4dYjCEozBHkP+TRAH0Y1wV0UoU46f9xHXCay9uF+7oCIgbSJxe38OKuA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b="Zy4URk/T";
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	c=relaxed/relaxed; t=1780697944;
+	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type;
+	bh=SyL+KhKJOkLBPVYqIVEYemJAAJqjAzpI1nf+X+CuAeI=;
+	b=bJer89APGXgWnbOeOK6TLEu0SVg3stCPJn+21wJH95/INrueTlnk5Jq+jBFg55rRwF/9
+	 FEhujgPQE3ghq5tbkMbhZZgnKKuxx2Df9kQyVBAsY1dyyHPJihYf8m1aikdEv148QuKWE
+	 kZssGGeEFkScdvDePP+pKyWNNm/SuiOOuqqDaYEkMJMrv0pjnAf1Svcq0SeZp79ntjvNs
+	 h2kJgOlvwWxPuz0ur+6lSCrhWd5RIWcIZ+c33jukYkL7mmpv6KYzaInIynKSULEqnFh3B
+	 CMtKurEiiura9zOBGdpdYrE78vs+kCYD97rINl/nIs1aGMdOuICfWvzpq3d1IrcWpCA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=loz66b8d;
+	dmarc=pass header.from=sntech.de;
+	spf=pass smtp.mailfrom=sntech.de;
+	arc=none smtp.remote-ip=185.11.138.130
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8C47E1F00893
-	for <soc@kernel.org>; Fri,  5 Jun 2026 15:28:03 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5A4681F00893;
+	Fri,  5 Jun 2026 22:19:02 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Zy4URk/T
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 8C47E1F00893
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id A61ABC58476;
-	Fri,  5 Jun 2026 15:28:01 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C34765FED1;
-	Fri,  5 Jun 2026 15:28:01 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3A2C9106A24F0;
-	Fri,  5 Jun 2026 17:27:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1780673281; h=from:subject:date:message-id:to:cc:mime-version:content-type;
-	bh=jkcwehCu+0OeNZKIbUXSujcXjfc/ESvUqTFvx/NqvIc=;
-	b=Zy4URk/TEcoKsonq8DbxWxdKGfHoZAZ0hMphy1u/HoI2P2ozmAyTXAIx+twIrPov+V+Vo6
-	l4R5h1qguezCUIzagn2MriW7A7sLx6K9i7zLQvv9LRIt8iPvFw6EyNLjxzXkjjRIVnGNgX
-	uCAW3UA4YSJjUps5y64nHe90Byizw9fch02AmW1zGuD+qG5Vuqf+pHJgJkaN/uhhstiuAg
-	i9XjlBDZVXPstHyaNDhfXBtPH1hKXhIBxjnXAE9q6J/xv0bweFvmzrXIp6YGaC0mEvtsIG
-	yuCA19oOyJOtkngx0/30o/zt/FNs3oyAMjjA2E4l5kYQ1IEa0Hyi7vWa8yzI2g==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Arnd Bergmann <arnd@arndb.de>,  <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: arm for v7.2 (#1)
-Date: Fri, 05 Jun 2026 17:27:59 +0200
-Message-ID: <87zf19atxc.fsf@BLaptop.bootlin.com>
+	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=loz66b8d
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 5A4681F00893
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=SyL+KhKJOkLBPVYqIVEYemJAAJqjAzpI1nf+X+CuAeI=; b=loz66b8dq7vrC22SV6JKCgdn34
+	hgTPGakmdzwdWJHUXt9X50+NVZoUo4lxK4zPXerHNV+3lgNVgXi07/g2qP+wswru4+ErYkLjRTmYO
+	p4PuwoqA3RAIFR8gYelrynX0d1CifSbPci/Kba8VUI10IkHhCQhnaDhi5xFBuRWED3Q3hkrjHqdL/
+	hX8hiGO9UZU1Fl1SkWBgl3SJ3zfHcJSzIFiYXmO8vD8KRedruytvxXAj7LwfTfKbdlKRThbGeBCKt
+	NcqteKD0kr7CZKGlyDSNVwECPFYjF2DD61BQD0QLUNUy7BFubjlgNsEp8hjlU+JU06EYoR7nwdWe0
+	QUlqP5KA==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 7.2 #2
+Date: Sat, 06 Jun 2026 00:18:53 +0200
+Message-ID: <21578066.fAMKPKieAE@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-Hi,
+Hi soc maintainers,
 
-Here is the first pull request for arm for mvebu for v7.2.
+please find below some more Rockchip DT changes for the merge-window
+for 7.2 .
 
-Gregory
+The most interesting addition is of course basic camera support
+on RK3588 which enables unfiltered camera capture (i.e. without
+postprocessing for whitebalance etc)
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+Please pull.
+Thanks
+Heiko
+
+
+The following changes since commit eb24b60553e0692cbbec2863ca31d2a56bff098d:
+
+  arm64: dts: rockchip: Add watchdog node for RK3528 (2026-05-07 13:27:53 +=
+0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-arm-7.2-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git =
+tags/v7.2-rockchip-dts64-2
 
-for you to fetch changes up to bf4ad3be0679460585ab17dbcf298d085cf23429:
+for you to fetch changes up to 8545eda00fdf3d7e17933ce0f706d005b1bad42d:
 
-  ARM: orion5x: update board check in mss2_pci_init() to use the DT (2026-06-01 10:26:30 +0200)
+  arm64: dts: rockchip: Fix vcc_sdio regulator max voltage on Pinebook Pro =
+(2026-06-02 22:47:18 +0200)
 
-----------------------------------------------------------------
-mvebu arm for 7.2 (part 1)
+=2D---------------------------------------------------------------
+We've got basic camera support on RK3588!
 
-Orion5x: Replace machine_is_mss2() with of_machine_is_compatible() in mss2_pci_init()
+New peripherals RK3588 vicap plus camera addition to some boards,
+RK3528 USB and USB enablement on some boards, RGA3 support on RK3588.
+Missing EL2 virtual timer interrupt added to RK3588.
 
-mvebu_v5_defconfig: Remove stale MACH_LINKSTATION_LSCHL reference
+Some more added peripherals for the Khadas Edge 2L board.
 
-Armada 370: Simplify of_node_put calls and drop redundant NULL checks
+=2D---------------------------------------------------------------
+Chen-Yu Tsai (2):
+      arm64: dts: rockchip: Fix EEPROM compatible on rk3399-nanopi-r4s-ente=
+rprise
+      arm64: dts: rockchip: Disable removed devices from rk3399-nanopi-r4s
 
-----------------------------------------------------------------
-Ethan Nelson-Moore (2):
-      arm: mvebu_v5_defconfig: remove stale MACH_LINKSTATION_LSCHL reference
-      ARM: orion5x: update board check in mss2_pci_init() to use the DT
+Chukun Pan (1):
+      arm64: dts: rockchip: enable adc button for Radxa E25
 
-Martin Kaiser (2):
-      ARM: mvebu: drop unnecessary NULL check
-      ARM: mvebu: simplify of_node_put calls
+Gray Huang (2):
+      arm64: dts: rockchip: Enable USB for Khadas Edge 2L
+      arm64: dts: rockchip: Add Bluetooth support for Khadas Edge 2L
 
- arch/arm/configs/mvebu_v5_defconfig | 1 -
- arch/arm/mach-mvebu/coherency.c     | 9 ++-------
- arch/arm/mach-orion5x/board-mss2.c  | 4 ++--
- 3 files changed, 4 insertions(+), 10 deletions(-)
+Hugo Osvaldo Barrera (1):
+      arm64: dts: rockchip: Fix vcc_sdio regulator max voltage on Pinebook =
+Pro
+
+Jonas Karlman (5):
+      arm64: dts: rockchip: Add USB nodes for RK3528
+      arm64: dts: rockchip: Enable USB 2.0 ports on Radxa E20C
+      arm64: dts: rockchip: Enable USB ports on Radxa ROCK 2A/2F
+      arm64: dts: rockchip: Enable USB 2.0 ports on ArmSoM Sige1
+      arm64: dts: rockchip: Enable USB 2.0 ports on NanoPi Zero2
+
+Marc Zyngier (1):
+      arm64: dts: rockchip: Add EL2 virtual timer interrupt
+
+Michael Riesch (3):
+      arm64: dts: rockchip: add vicap node to rk3588
+      arm64: dts: rockchip: add radxa camera 4k on rock 5b+ cam0
+      arm64: dts: rockchip: add radxa camera 4k on rock 5b+ cam1
+
+Sven P=C3=BCschel (1):
+      arm64: dts: rockchip: add rga3 dt nodes to rk3588
+
+ arch/arm64/boot/dts/rockchip/Makefile              |   7 ++
+ .../dts/rockchip/rk3399-nanopi-r4s-enterprise.dts  |   2 +-
+ .../arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dtsi |  68 +++++++++++
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |   2 +-
+ .../boot/dts/rockchip/rk3528-armsom-sige1.dts      |  25 ++++
+ .../boot/dts/rockchip/rk3528-nanopi-zero2.dts      |  29 +++++
+ arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts |  60 +++++++++
+ arch/arm64/boot/dts/rockchip/rk3528-rock-2.dtsi    |  17 +++
+ arch/arm64/boot/dts/rockchip/rk3528-rock-2a.dts    |  11 ++
+ arch/arm64/boot/dts/rockchip/rk3528-rock-2f.dts    |  12 ++
+ arch/arm64/boot/dts/rockchip/rk3528.dtsi           |  80 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts  |  14 +++
+ arch/arm64/boot/dts/rockchip/rk356x-base.dtsi      |   3 +-
+ .../boot/dts/rockchip/rk3576-khadas-edge-2l.dts    |  82 +++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      | 135 +++++++++++++++++=
+++++
+ .../rk3588-rock-5b-plus-radxa-cam4k-cam0.dtso      |  99 +++++++++++++++
+ .../rk3588-rock-5b-plus-radxa-cam4k-cam1.dtso      |  99 +++++++++++++++
+ 17 files changed, 742 insertions(+), 3 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b-plus-radxa-=
+cam4k-cam0.dtso
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b-plus-radxa-=
+cam4k-cam1.dtso
+
+
+
