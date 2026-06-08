@@ -1,60 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B63C346766
-	for <soc@lists.linux.dev>; Mon,  8 Jun 2026 11:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FAD53F4DDC
+	for <soc@lists.linux.dev>; Mon,  8 Jun 2026 15:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780917384; cv=none; b=NbxHBz9rIIi1Popxek6VNZg7f8q2hOAuIj2ZJhhHRkgF4oYaSfdBCdIY+A1yDnNNDcanD3I5EAMpNsN/5Ja31v7+IyICDDVCFbcgUI9MNNeuLO0pPFiYfmxprULToPirz8lFr3kFwUF2Da8MDrbum3bncC0ji69EqGwPtCfUkW8=
+	t=1780931988; cv=none; b=rl0Z1uYIq7RfzrIMYmsntC3Y2IfuBA4cg9/UxsMaFt6KCcZKmnTkdq00y1DGL7p2paSr/FCq3bW5kyNeaTg2H+caZ1vneLJMwDftizGFy4OQ8NXlv0H/JbKHu7e00jaUFy6Bbtw2WDBxM7AJ1MFRwIF9u+U2/fXC3kuzA8qIuyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780917384; c=relaxed/simple;
-	bh=XDMQacNyfx4n3g7/PgUe72vk2eAA6Klx6aepKG3gQXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TbsqRbkHZuW0XPJtLKRtTF5SbAC9rj4EIsPxoPatzNTJ7tX/+p/xMFk0Gu/xF+PY1rP0jsaUn1pM+VSUQy+qcwY/G7gvb/Ckk3PW5ruNXPkRNz1x4uCbgXVgvdHizKYcvisM3F/9Lii2sI4SzG5Kyczrx0bGMaCelcsb7Ss0rWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IU6Ph3/w; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780931988; c=relaxed/simple;
+	bh=k1s0VB9TgaMOMV66fAfiCRAE+O1DR3Txvggw9WOuKn8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FneSArwuS8kyMxTFDqVlF+SdVbzk1r378dLqtNRHAoZlP3eeva68xXHTmAfZAVEzZcteeDiBbbnb2miti+/PvL4FngYs2mV6ucjOXkKTvNH+HYJcJ93yyr7wyqEVyTwvCGU5rmWfSPzDjtgRVcLSfRj0Dis9Taf/MpKGhIA3McI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=lMS3WFJJ; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IU6Ph3/w"
-Received: by smtp.kernel.org (Postfix)
-	id 19D591F00898; Mon,  8 Jun 2026 11:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37CD21F00893;
-	Mon,  8 Jun 2026 11:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780917383;
-	bh=SWeNawLNhjULISRTxxyiDbsmHwEMxRPRgtI7FlyYxgg=;
-	h=Date:From:To:Cc:Subject;
-	b=IU6Ph3/wOHLQkTZo5izOY5o7O28nPZD9bznAMBRPPuPaPQASjs0wSiz+fZ/J3qA0o
-	 Jqqq91JDDzEFpDzwjgiMGTvhJYZnWj3iuqubW9UpmA3BubNW1V682GgEFbaGtdTHie
-	 YQrKh8FPf8ssd3B6h/R/i7iUt63uEnpTElDj1UrzlfD4u+HbsTpya7/8NLalw9bAoC
-	 K3wEkQOGQxX3rxOGefDs0k2XPrh8A6ICfGfvZg8ZICvk8dEfSNNdxURUR8Pei6Fqke
-	 7P24dL0+E9vwZF7rzdvZCagnRDr5QWa6VL6LE29Bq2JuU+nxMWitB7KBoTKdDH/dkg
-	 sjQdk74n2MOaA==
-Date: Mon, 8 Jun 2026 12:16:19 +0100
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] Microchip RISC-V soc drivers for v7.2
-Message-ID: <20260608-vacant-slit-9499ba5eb8f2@spud>
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="lMS3WFJJ"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c8583b8fd89so2751260a12.0
+        for <soc@lists.linux.dev>; Mon, 08 Jun 2026 08:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1780931985; x=1781536785; darn=lists.linux.dev;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=33VwqNJKC3vQHdZOYexSv3O8gJeHLE5NCtrHEddwJEI=;
+        b=lMS3WFJJoQlj2sbb8QvUpcjnZQIAj2O4wDo2F6vHcmUVEzJbzxsXT40YGKJtUkD1Nc
+         wtq0quUIYEF+Xn4Zr1VuFx/XZ7HfVgBAu53ySd+VIQEgCXcdZDQskqnjZzfpIUVFR2fP
+         Y961rrzOTDPQFbaVwxXEH91xfp9VYajMjK/DSF8BtqZif3Om/HGjbAwf8Iq5/BYKKx9T
+         0uOki0LF0hIEbubblHarfQ0kDWMNJkj3hKHmg8Sejv58Ncg3F2Syi5dyMRVrheVs1erF
+         ziAfcl6n1jvwC6dOlxuzXJ16lOLRY7RaPRpcGn6n5C3UMKP3UKi8fIIvx4kVkTKWuzXK
+         5tjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780931985; x=1781536785;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=33VwqNJKC3vQHdZOYexSv3O8gJeHLE5NCtrHEddwJEI=;
+        b=qIbEJ+izlbiRMv9uz5xvR2h1CfmjxoPp8DLQOAXXTQX/SIxN5NUJ4torLo8InGgpJj
+         N3NM0RCcINO8kaU7gzbtDBIFqVSDwd0TK9U4s+Kx4bkz+OAu7oymp+GgmdgyKCRwgvmk
+         87H6R54E3Q+TBwHHwQr14tlxafko+gdE8/ygkjDKG/4V8dPmCDqs7k3x0IDH2gywSi/0
+         u1vSPpKoI+7ZBZlzaw8TOBLpzvbGRo5CmDVKEbwb0LaW/i0akIffu5BIcX12C1kStkQo
+         vw6YU2FciUzcz+wQH5g3sAi1xECxG2U133t+1SWSbhleIx5fm1mEb/0xWEaO+rrWqj7y
+         i1jA==
+X-Gm-Message-State: AOJu0YyPyQwoG01grGiVUajyKQNQVCWeYWBllLPK/SSehTJwv4t6aV8M
+	PxiwsGrWw+7RDpj2sn7SHSr0auY7y/7J+L1X0yYhqs0oKEYNiFA4qWqyjwpkNOpJN9AyhCF6Ds+
+	ByXPQgq4=
+X-Gm-Gg: Acq92OEw1AiRtxUvvvLo9q6LMPo7/JFbJSEDbo2j9rZECPOLNX9TF/xX27TgPhg9fAg
+	+giypobsqMHqOEVAWJShTqcdhvVl5NWYnAmG6usyArjlF2XbRTDqe/Wfw1lCGckT5B3wBQKD4iw
+	aseA8vSZVUzd90dzlP7pooLqfWpDtPJzQxDB5REWiIHPFrre6Xfba9Q0HuicuoEZNTmcW22sm6d
+	Qtbzt6f9E2A+HPiwFSSY7BjdA4tAGFfFe7d5i9m1KJPAuh+ACSWxeUxpng2qj686hTSfE1th8i+
+	gOzZKqjdi3ulG6gTvz8DL48RKstmx/VXhrmsHrmXjhf2gLn0kdesDZ+TzsMU0YaqrV2VDxSZibd
+	AruDAzfq//W46O2O035dkjTnFL7wtMT7UuL4AtOckyLQr8S947SwwsTFj5lMvm1fAJUMVazsN+0
+	1tpXZPvKNRllfsSUiBVhYI/8FcA45WRrk=
+X-Received: by 2002:a05:6a21:2c11:b0:3b4:81b4:9b74 with SMTP id adf61e73a8af0-3b4cd0cbd08mr20264896637.42.1780931984644;
+        Mon, 08 Jun 2026 08:19:44 -0700 (PDT)
+Received: from localhost ([71.212.202.210])
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-c85df0a505fsm16290448a12.20.2026.06.08.08.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 08:19:44 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: soc@lists.linux.dev
+Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: dts: OMAP updates for v7.2
+Date: Mon, 08 Jun 2026 08:19:43 -0700
+Message-ID: <7hqzmhm54g.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/r+1Y7YsIXScGctB"
-Content-Disposition: inline
-
-
---/r+1Y7YsIXScGctB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hey folks,
-
-Another single patch PR here, this time with a binding change.
-
-Cheers,
-Conor.
+Content-Type: text/plain
 
 The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
@@ -62,35 +75,33 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-soc-drivers-for-v7.2
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.2/dt-signed
 
-for you to fetch changes up to 17d9064987ca4e0b05b670da48ca93edb0796810:
+for you to fetch changes up to b6aefeea7b4aa9158c1dcec8c050a678af7bf9b0:
 
-  dt-bindings: soc: microchip: document irqmux on pic64gx (2026-05-21 11:00:05 +0100)
-
-----------------------------------------------------------------
-Microchip RISC-V soc drivers for v7.2
-
-A single dt-binding compatible addition for the irqmux on pic64gx.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  ARM: dts: dm8168-evm: Set stdout-path to uart3 (2026-05-06 14:23:24 -0700)
 
 ----------------------------------------------------------------
-Conor Dooley (1):
-      dt-bindings: soc: microchip: document irqmux on pic64gx
+ARM: dts: OMAP updates for v7.2
 
- .../devicetree/bindings/soc/microchip/microchip,mpfs-irqmux.yaml    | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Minor DTS fixes & updates
 
---/r+1Y7YsIXScGctB
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Andreas Kemnade (1):
+      ARM: dts: ti/omap: omap4-epson-embt2ws: fix typo in iio device property
 
------BEGIN PGP SIGNATURE-----
+Christopher Obbard (1):
+      ARM: dts: dm8168-evm: Set stdout-path to uart3
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaiakgwAKCRB4tDGHoIJi
-0kcrAP9cpEQRIO74ZkX+A/x/04CoXO+GBWKwUdefvC+Ua09nfAEA6hBz7rT9hqoo
-LVcmf1tBYT8JUivr1+Hwq00c3bRIqgE=
-=gA5l
------END PGP SIGNATURE-----
+Ivaylo Dimitrov (2):
+      arch: arm: dts: cpcap-mapphone: Set VAUDIO regulator always-on
+      arch: arm: dts: cpcap-mapphone: Add audio-codec jack detection interrupts
 
---/r+1Y7YsIXScGctB--
+Jihed Chaibi (1):
+      ARM: dts: am335x-sl50: Fix audio bitclock and frame master endpoint
+
+ arch/arm/boot/dts/ti/omap/am335x-sl50.dts              | 4 ++--
+ arch/arm/boot/dts/ti/omap/dm8168-evm.dts               | 4 ++++
+ arch/arm/boot/dts/ti/omap/motorola-cpcap-mapphone.dtsi | 6 +++++-
+ arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts      | 4 ++--
+ 4 files changed, 13 insertions(+), 5 deletions(-)
