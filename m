@@ -1,175 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A5C30C145
-	for <soc@lists.linux.dev>; Fri,  5 Jun 2026 22:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780697947; cv=pass; b=utRKpZC/YSvVMi4XFME/6eSTE7mn1E24ibNiOePrzOJKDHq5KacsMh+fV9eif+9EsdKRdBJO3dieprLViLptlhaYAtaroYPwrSbRG/ufTvlYkfzXQGebVtxRwCypgeMueP4QcJDCWWnOQSXkBuVZJc1oa3wDbV8NF/LiilZpcQQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780697947; c=relaxed/simple;
-	bh=5KZyHGLAko2ln6l6/YvlegFxQmm4BDDmuLTCEUgs0gY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nSkRoo0bcngl2Z3Zvbz7Oec8YTEUwhEveez/W9jYb/nbOQTlhg3sKBaEfzzVi/wXzpuMsBGeDHLEBiYeA6SloP8xj7zImKdE1eGfUyKhpbUIxOZz5aHWnYpISl0ouzGs01cSAHHCBneAvqff5hwXOKO8FV9dUneIR7X7vxt7NiU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=loz66b8d; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FE13C0613
+	for <soc@lists.linux.dev>; Mon,  8 Jun 2026 10:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780913686; cv=none; b=iNQT5hcy68LjSRLRbeAx2PwthpDHzBjKsX65I7PF9uYNaKKw9faFgWhV3FUMlUURX2hNRheTAcKsuY4aEFd4qYnR0WJv47B3iV1E9MczDkefn6l0+MJTuIigln45KGJi9GClT0PiIREd31sxNcHFDQM19hk1tLqSV2xk8w1K8+E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780913686; c=relaxed/simple;
+	bh=jziwyAjpsen7nuygP4gis8O+XcY7KVvTyTzKjCmRCSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oQARXhVAEPKIy9YBBRbyaMEK3T58FPTIqqPRd+mp68K73iUjnovJoQoyODTKXZNwIzp3B6bBsRmHvTHl2k7xpP9yxyBTPLZ1UIkkwq165ADImPJYBhPpLstR/rT7zzFORq0k7jCjd25pfaO4dd8sXYgJ+VTbYUxRGJ7O8J4zF2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=apbmPii0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="loz66b8d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="apbmPii0"
 Received: by smtp.kernel.org (Postfix)
-	id 1F9CE1F0089A; Fri,  5 Jun 2026 22:19:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1780697944;
-	b=wz60nGUiwy9aOL6gceY8qhpzpTr9I47odVMy8PJf1S8w8kadt7RR4LCLmeMrkt0wkl02
-	 Cb9Sy9SOk332qBHClTmbaFu1vobDeBiOKliJar8PW72UTONLn5sP+PJHdrtOO5jpPQb/x
-	 /SX2enFYhx0vFHrD4YvlNAfMIK1uBl5tMf4OecZjrYmvZAQbsOk/yR8wL8AMsiRIXVK/y
-	 YYYCyOY7Xu0UbuS6/41dh/uGgLyRLLbtb5nTtRfNtKzeanTHhoOrIfyMBtQU05JPgdcXD
-	 JCZzimzLhY/zlDCwhFnccc7cqEYVQVEjf+1vndJ/ASMKZalLBwFcxMsFoSY0F1YgmKQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1780697944;
-	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type;
-	bh=SyL+KhKJOkLBPVYqIVEYemJAAJqjAzpI1nf+X+CuAeI=;
-	b=bJer89APGXgWnbOeOK6TLEu0SVg3stCPJn+21wJH95/INrueTlnk5Jq+jBFg55rRwF/9
-	 FEhujgPQE3ghq5tbkMbhZZgnKKuxx2Df9kQyVBAsY1dyyHPJihYf8m1aikdEv148QuKWE
-	 kZssGGeEFkScdvDePP+pKyWNNm/SuiOOuqqDaYEkMJMrv0pjnAf1Svcq0SeZp79ntjvNs
-	 h2kJgOlvwWxPuz0ur+6lSCrhWd5RIWcIZ+c33jukYkL7mmpv6KYzaInIynKSULEqnFh3B
-	 CMtKurEiiura9zOBGdpdYrE78vs+kCYD97rINl/nIs1aGMdOuICfWvzpq3d1IrcWpCA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=loz66b8d;
-	dmarc=pass header.from=sntech.de;
-	spf=pass smtp.mailfrom=sntech.de;
-	arc=none smtp.remote-ip=185.11.138.130
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5A4681F00893;
-	Fri,  5 Jun 2026 22:19:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=loz66b8d
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 5A4681F00893
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=SyL+KhKJOkLBPVYqIVEYemJAAJqjAzpI1nf+X+CuAeI=; b=loz66b8dq7vrC22SV6JKCgdn34
-	hgTPGakmdzwdWJHUXt9X50+NVZoUo4lxK4zPXerHNV+3lgNVgXi07/g2qP+wswru4+ErYkLjRTmYO
-	p4PuwoqA3RAIFR8gYelrynX0d1CifSbPci/Kba8VUI10IkHhCQhnaDhi5xFBuRWED3Q3hkrjHqdL/
-	hX8hiGO9UZU1Fl1SkWBgl3SJ3zfHcJSzIFiYXmO8vD8KRedruytvxXAj7LwfTfKbdlKRThbGeBCKt
-	NcqteKD0kr7CZKGlyDSNVwECPFYjF2DD61BQD0QLUNUy7BFubjlgNsEp8hjlU+JU06EYoR7nwdWe0
-	QUlqP5KA==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 7.2 #2
-Date: Sat, 06 Jun 2026 00:18:53 +0200
-Message-ID: <21578066.fAMKPKieAE@phil>
+	id 591201F00898; Mon,  8 Jun 2026 10:14:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5CC1F00893;
+	Mon,  8 Jun 2026 10:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780913685;
+	bh=YQrV6yiTXhTJTiEMyFNXs8wBs1V6hB9Az82uhmiDxIE=;
+	h=Date:From:To:Cc:Subject;
+	b=apbmPii0hnBIMFovwfQfkWKIp+JqKWjxhSJDqota4g8FCLfrLxvPDvaDVM4EzcaXh
+	 u9g2RNTT0+GL7BEg9Rtdkqd38qGtLZlWdFBg01sZCyekpW+SC46wCk0WL7TaYXGJzK
+	 SZDP1iIYVCr6oRoEQP2yQ6GTO8SkAyWnEGciG2kfBETQXej0pvenkBTIcZ0yFQJSRd
+	 f+AVNALBoPtVpURkFCSoAAGq5n/emLvnJRQTuWqonlPNBI9NIrjCJ2YA6TCsC9CFN3
+	 W5/6ufaAogQpy5S2FomdCHiedVhLfM/4/+X6vRowvRrSRoKJ/nqJxxjhpr+DrXvaes
+	 yTopcxCpe4yAQ==
+Date: Mon, 8 Jun 2026 11:14:42 +0100
+From: Conor Dooley <conor@kernel.org>
+To: soc@kernel.org
+Cc: conor@kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Microchip RISC-V devicetrees for v7.2
+Message-ID: <20260608-grumbling-gigantic-b0bb128634f2@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-
-Hi soc maintainers,
-
-please find below some more Rockchip DT changes for the merge-window
-for 7.2 .
-
-The most interesting addition is of course basic camera support
-on RK3588 which enables unfiltered camera capture (i.e. without
-postprocessing for whitebalance etc)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4x40SOgMRt7pnXoG"
+Content-Disposition: inline
 
 
-Please pull.
-Thanks
-Heiko
+--4x40SOgMRt7pnXoG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hey folks,
 
-The following changes since commit eb24b60553e0692cbbec2863ca31d2a56bff098d:
+Please pull my changes for 7.2, all of which are cleanup/low priority
+fixes written by yours truly.
 
-  arm64: dts: rockchip: Add watchdog node for RK3528 (2026-05-07 13:27:53 +=
-0200)
+It's probable that I will have a second PR, because I am waiting for
+Stephen to hopefully merge my Canaan clock driver series that is a
+pre-requisite for the addition of the Canaan k230 SoC. I'd have sent
+this earlier, but I was hoping that k230 support would be ready in time.
+
+Cheers,
+Conor.
+
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git =
-tags/v7.2-rockchip-dts64-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-dt-for-v7.2
 
-for you to fetch changes up to 8545eda00fdf3d7e17933ce0f706d005b1bad42d:
+for you to fetch changes up to 3869417f8996fb076998342d0db560fdd795a3a6:
 
-  arm64: dts: rockchip: Fix vcc_sdio regulator max voltage on Pinebook Pro =
-(2026-06-02 22:47:18 +0200)
+  riscv: dts: microchip: remove redudant enabling of syscontroller (2026-05-15 17:51:09 +0100)
 
-=2D---------------------------------------------------------------
-We've got basic camera support on RK3588!
+----------------------------------------------------------------
+Microchip RISC-V devicetrees for v7.2
 
-New peripherals RK3588 vicap plus camera addition to some boards,
-RK3528 USB and USB enablement on some boards, RGA3 support on RK3588.
-Missing EL2 virtual timer interrupt added to RK3588.
+This time around, there's nothing other than patches for Microchip
+boards. All of this is low priority fixes and cleanup, centred on the
+pic64gx and beaglev-fire boards. There is no new support added.
 
-Some more added peripherals for the Khadas Edge 2L board.
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-=2D---------------------------------------------------------------
-Chen-Yu Tsai (2):
-      arm64: dts: rockchip: Fix EEPROM compatible on rk3399-nanopi-r4s-ente=
-rprise
-      arm64: dts: rockchip: Disable removed devices from rk3399-nanopi-r4s
+----------------------------------------------------------------
+Conor Dooley (10):
+      riscv: dts: microchip: add tsu clock to macb on pic64gx
+      riscv: dts: microchip: update pic64gx gpio interrupts to better match the SoC
+      riscv: dts: microchip: sort pic64gx i2c nodes alphanumerically
+      riscv: dts: microchip: gpio controllers on mpfs need 2 interrupt cells
+      riscv: dts: microchip: remove gpio hogs from beaglev-fire
+      riscv: dts: microchip: clean up beaglev-fire regulator node names
+      riscv: dts: microchip: add adc interrupt on beaglev-fire
+      riscv: dts: microchip: add gpio line names on beaglev-fire
+      riscv: dts: microchip: fix pic64gx gpio interrupt-cells
+      riscv: dts: microchip: remove redudant enabling of syscontroller
 
-Chukun Pan (1):
-      arm64: dts: rockchip: enable adc button for Radxa E25
+ .../riscv/boot/dts/microchip/mpfs-beaglev-fire.dts | 37 ++++++------
+ arch/riscv/boot/dts/microchip/mpfs-disco-kit.dts   |  4 --
+ .../boot/dts/microchip/mpfs-icicle-kit-common.dtsi |  4 --
+ arch/riscv/boot/dts/microchip/mpfs-m100pfsevp.dts  |  4 --
+ arch/riscv/boot/dts/microchip/mpfs-polarberry.dts  |  4 --
+ arch/riscv/boot/dts/microchip/mpfs-sev-kit.dts     |  4 --
+ arch/riscv/boot/dts/microchip/mpfs-tysom-m.dts     |  4 --
+ arch/riscv/boot/dts/microchip/mpfs.dtsi            |  6 +-
+ .../boot/dts/microchip/pic64gx-curiosity-kit.dts   | 67 ++++++++++++----------
+ arch/riscv/boot/dts/microchip/pic64gx.dtsi         | 46 +++++++++++----
+ 10 files changed, 95 insertions(+), 85 deletions(-)
 
-Gray Huang (2):
-      arm64: dts: rockchip: Enable USB for Khadas Edge 2L
-      arm64: dts: rockchip: Add Bluetooth support for Khadas Edge 2L
+--4x40SOgMRt7pnXoG
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Hugo Osvaldo Barrera (1):
-      arm64: dts: rockchip: Fix vcc_sdio regulator max voltage on Pinebook =
-Pro
+-----BEGIN PGP SIGNATURE-----
 
-Jonas Karlman (5):
-      arm64: dts: rockchip: Add USB nodes for RK3528
-      arm64: dts: rockchip: Enable USB 2.0 ports on Radxa E20C
-      arm64: dts: rockchip: Enable USB ports on Radxa ROCK 2A/2F
-      arm64: dts: rockchip: Enable USB 2.0 ports on ArmSoM Sige1
-      arm64: dts: rockchip: Enable USB 2.0 ports on NanoPi Zero2
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaiaWEQAKCRB4tDGHoIJi
+0uiKAP90AYti2LQE3wO9hYO4xVpMawT/WiBimG6wfGNpIzArpgEAqJOL/r/LL23q
+ZJrKrsiZMbyOcltRla49S8jWGM2F0Qw=
+=U2AX
+-----END PGP SIGNATURE-----
 
-Marc Zyngier (1):
-      arm64: dts: rockchip: Add EL2 virtual timer interrupt
-
-Michael Riesch (3):
-      arm64: dts: rockchip: add vicap node to rk3588
-      arm64: dts: rockchip: add radxa camera 4k on rock 5b+ cam0
-      arm64: dts: rockchip: add radxa camera 4k on rock 5b+ cam1
-
-Sven P=C3=BCschel (1):
-      arm64: dts: rockchip: add rga3 dt nodes to rk3588
-
- arch/arm64/boot/dts/rockchip/Makefile              |   7 ++
- .../dts/rockchip/rk3399-nanopi-r4s-enterprise.dts  |   2 +-
- .../arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dtsi |  68 +++++++++++
- .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |   2 +-
- .../boot/dts/rockchip/rk3528-armsom-sige1.dts      |  25 ++++
- .../boot/dts/rockchip/rk3528-nanopi-zero2.dts      |  29 +++++
- arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts |  60 +++++++++
- arch/arm64/boot/dts/rockchip/rk3528-rock-2.dtsi    |  17 +++
- arch/arm64/boot/dts/rockchip/rk3528-rock-2a.dts    |  11 ++
- arch/arm64/boot/dts/rockchip/rk3528-rock-2f.dts    |  12 ++
- arch/arm64/boot/dts/rockchip/rk3528.dtsi           |  80 ++++++++++++
- arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts  |  14 +++
- arch/arm64/boot/dts/rockchip/rk356x-base.dtsi      |   3 +-
- .../boot/dts/rockchip/rk3576-khadas-edge-2l.dts    |  82 +++++++++++++
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      | 135 +++++++++++++++++=
-++++
- .../rk3588-rock-5b-plus-radxa-cam4k-cam0.dtso      |  99 +++++++++++++++
- .../rk3588-rock-5b-plus-radxa-cam4k-cam1.dtso      |  99 +++++++++++++++
- 17 files changed, 742 insertions(+), 3 deletions(-)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b-plus-radxa-=
-cam4k-cam0.dtso
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b-plus-radxa-=
-cam4k-cam1.dtso
-
-
-
+--4x40SOgMRt7pnXoG--
