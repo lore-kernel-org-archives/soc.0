@@ -1,40 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D043385B2
-	for <soc@lists.linux.dev>; Mon,  8 Jun 2026 10:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B63C346766
+	for <soc@lists.linux.dev>; Mon,  8 Jun 2026 11:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780916210; cv=none; b=ak+S0YOEUfUJeSNgPucxW3VOivUxMi7ggyPh+eHGLScZlSTVJq8QUaVc7lAauIdIjASCK20RVgeD2/qLqEvmmpfyrSwJQ7DPjZ82XN5iPzjPLc/xcLtFFChn6RMoz4BL7SeBWRZXwspF2kQm3DnuoytxpG6DFfI1Q8wgOuzYp5w=
+	t=1780917384; cv=none; b=NbxHBz9rIIi1Popxek6VNZg7f8q2hOAuIj2ZJhhHRkgF4oYaSfdBCdIY+A1yDnNNDcanD3I5EAMpNsN/5Ja31v7+IyICDDVCFbcgUI9MNNeuLO0pPFiYfmxprULToPirz8lFr3kFwUF2Da8MDrbum3bncC0ji69EqGwPtCfUkW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780916210; c=relaxed/simple;
-	bh=AnsKeoDkPcFNjb/Pr4hNBK2FqbW/xCMgCWu1+s3PfVg=;
+	s=arc-20240116; t=1780917384; c=relaxed/simple;
+	bh=XDMQacNyfx4n3g7/PgUe72vk2eAA6Klx6aepKG3gQXc=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=loHAOT3eWsU7YQ5UVlO34UdfrcL6CmaT6MyX7xFiJAO/K0rHpEY7gtvK1bRkZCRQTam7adA72wNQepENThwFZrCBWslH9b3BjFYsH6UdxtrDqpMLtS3ehnRSXs1THxH8wpk7T+KeshpVOz28ac7E1CcRFIE21XiiVq9vEJ5VZ5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1dILxmI; arc=none smtp.client-ip=100.103.45.18
+	 Content-Disposition; b=TbsqRbkHZuW0XPJtLKRtTF5SbAC9rj4EIsPxoPatzNTJ7tX/+p/xMFk0Gu/xF+PY1rP0jsaUn1pM+VSUQy+qcwY/G7gvb/Ckk3PW5ruNXPkRNz1x4uCbgXVgvdHizKYcvisM3F/9Lii2sI4SzG5Kyczrx0bGMaCelcsb7Ss0rWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IU6Ph3/w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1dILxmI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IU6Ph3/w"
 Received: by smtp.kernel.org (Postfix)
-	id 09D211F00898; Mon,  8 Jun 2026 10:56:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 006191F00893;
-	Mon,  8 Jun 2026 10:56:47 +0000 (UTC)
+	id 19D591F00898; Mon,  8 Jun 2026 11:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37CD21F00893;
+	Mon,  8 Jun 2026 11:16:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780916208;
-	bh=fyBk0eZtnLfb+bujJcB9CnVICzL/3aVTwKLHeGlIQlQ=;
+	s=k20260515; t=1780917383;
+	bh=SWeNawLNhjULISRTxxyiDbsmHwEMxRPRgtI7FlyYxgg=;
 	h=Date:From:To:Cc:Subject;
-	b=F1dILxmIICyZXo9qIqCFY7hlL45UN3CzT4gtQ67qRGVW4qd4LOYbSViismY7sg5fN
-	 S71WsthRoxqXGKn6fzWUmIRZQwTtMgV2GMVhmFYx8Dn45WuAAPiKieuIvisZ6Jvuw5
-	 GoQ5I3DbQuj+kOPqzbPwQY3FgiPyLtkjMIG/534sV65iFTd3ssJWswd9E2u7bMrB+o
-	 uXsdPPcBSWWc86MabZK+63hdjvcojUDfiPHXrBcpCq7/4CL0Fmu7Kqc4KGO9J8XPHg
-	 WcU7KPzQozo3YoZJs87Bn4y3YcSIGNpBQHPTs9AipmAW43qBfTE3y0AWa51nTLxGZb
-	 CpUt0HSF3MhQw==
-Date: Mon, 8 Jun 2026 11:56:45 +0100
+	b=IU6Ph3/wOHLQkTZo5izOY5o7O28nPZD9bznAMBRPPuPaPQASjs0wSiz+fZ/J3qA0o
+	 Jqqq91JDDzEFpDzwjgiMGTvhJYZnWj3iuqubW9UpmA3BubNW1V682GgEFbaGtdTHie
+	 YQrKh8FPf8ssd3B6h/R/i7iUt63uEnpTElDj1UrzlfD4u+HbsTpya7/8NLalw9bAoC
+	 K3wEkQOGQxX3rxOGefDs0k2XPrh8A6ICfGfvZg8ZICvk8dEfSNNdxURUR8Pei6Fqke
+	 7P24dL0+E9vwZF7rzdvZCagnRDr5QWa6VL6LE29Bq2JuU+nxMWitB7KBoTKdDH/dkg
+	 sjQdk74n2MOaA==
+Date: Mon, 8 Jun 2026 12:16:19 +0100
 From: Conor Dooley <conor@kernel.org>
 To: soc@kernel.org
-Cc: conor@kernel.org, jonathan.cameron@huawei.com,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] standalone cache drivers for v7.2
-Message-ID: <20260608-retool-automatic-2e55911639f9@spud>
+Cc: conor@kernel.org, linux-riscv@lists.infradead.org
+Subject: [GIT PULL] Microchip RISC-V soc drivers for v7.2
+Message-ID: <20260608-vacant-slit-9499ba5eb8f2@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -42,19 +41,17 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SfyJYZuN7jyFlQRq"
+	protocol="application/pgp-signature"; boundary="/r+1Y7YsIXScGctB"
 Content-Disposition: inline
 
 
---SfyJYZuN7jyFlQRq
+--/r+1Y7YsIXScGctB
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey folks,
 
-Just a single two-liner patch here on the cache front.
-A new driver popped up in the last few weeks but isn't ready for this
-cycle.
+Another single patch PR here, this time with a binding change.
 
 Cheers,
 Conor.
@@ -65,38 +62,35 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ cache-for-v7.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-soc-drivers-for-v7.2
 
-for you to fetch changes up to 8e2501e1494c8d27f62eb8d36bba5af465f48962:
+for you to fetch changes up to 17d9064987ca4e0b05b670da48ca93edb0796810:
 
-  cache: sifive_ccache: Add StarFive JH7110 SoC support (2026-05-21 11:12:00 +0100)
+  dt-bindings: soc: microchip: document irqmux on pic64gx (2026-05-21 11:00:05 +0100)
 
 ----------------------------------------------------------------
-standalone cache drivers for v7.2
+Microchip RISC-V soc drivers for v7.2
 
-SiFive ccache:
-Add the Starfive JH7110 to the list of devices that need the
-non-standard cache ops, because the GPU appears to be DMA non-coherent
-unlike other peripherals.
+A single dt-binding compatible addition for the irqmux on pic64gx.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Dominique Belhachemi (1):
-      cache: sifive_ccache: Add StarFive JH7110 SoC support
+Conor Dooley (1):
+      dt-bindings: soc: microchip: document irqmux on pic64gx
 
- drivers/cache/sifive_ccache.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/soc/microchip/microchip,mpfs-irqmux.yaml    | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---SfyJYZuN7jyFlQRq
+--/r+1Y7YsIXScGctB
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaiaf7QAKCRB4tDGHoIJi
-0jChAPwKrfXAngc+nIHH6lI/EghzbEhEsp3WC9hY7MD0mLmYtAD/b9XfGoZLb7P+
-X4qS+dbvZuctM3ds7fYKqtJNvFrJWAI=
-=FUKS
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaiakgwAKCRB4tDGHoIJi
+0kcrAP9cpEQRIO74ZkX+A/x/04CoXO+GBWKwUdefvC+Ua09nfAEA6hBz7rT9hqoo
+LVcmf1tBYT8JUivr1+Hwq00c3bRIqgE=
+=gA5l
 -----END PGP SIGNATURE-----
 
---SfyJYZuN7jyFlQRq--
+--/r+1Y7YsIXScGctB--
