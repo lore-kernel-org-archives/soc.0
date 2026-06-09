@@ -1,139 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54514028E9
-	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 11:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D160403138
+	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 11:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781005895; cv=none; b=McYYk01k444PfKyqT8Mi3DY+EGNj8v+GvO210RcaLEpI73lR/sDh+yqqiszuwHrpzZG/kC4JtFK6Huh0n6kLUgT5SmASJNfj9DR/i3zpKs8NKh2Px0oKMURDdB1YltfKIktIHh+rn2aAw0FOZzGQ/kuU3fQ7XwiyGRHAFORPucA=
+	t=1781006090; cv=none; b=d7ozeTMEiedzGI00DZuolml2yQinkUWiGEUskgkrtZzpovewADzBhDDbZZ/d2ZJZkM70Sj78wKl1Wo3CBcXqBFE3BSmYZCcpi2I2wiEuRdIneAF7VJUXN76BwJ/hZINs+MsAae38sHnptOVb+rZgnryARi/DGM6/pcBcAxq7Wzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781005895; c=relaxed/simple;
-	bh=bIw83UGLkLrnJxxjpvyThwuhRZPbHIEeyGM/RrYwLTY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pJvyVDZYddLvPEGqcrSarjVW1ICtnwPdDGKS7B69x0uhOzHiEziwbdxnoHV6tv6/Gx2VPdyOUGQb/hcurNRlbpHdqEkJlePM7533lkD/mjXc2UAnzdLKogFb26Iw1yrSWvHhHdzykGIw+sb0OjfJyZ2ajuvsnab+j8bTVvzwGzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SqZO31Z6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781006090; c=relaxed/simple;
+	bh=JDRLa0zhWX0fBo2wiIs7TnZ8Ao/NqKSx4G1V4grOBAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tzmb+ueOtPrGiSTmP3LFvPjoaqP9nch/W9AX9DPh8Jclcb3cLotNZpJuPM1zLfWVgzy8Iy0TsGnqJ8qoIiKS/uotNB1KNR2VUoWlrbyDZ44yAxBsJh1Ust2kdgiII43PWFdvJ6nfgsOtnxXP4khV57k+gRLLW3CtjOQ1j6g98hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cD3eMsp/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SqZO31Z6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cD3eMsp/"
 Received: by smtp.kernel.org (Postfix)
-	id 70A4D1F00898; Tue,  9 Jun 2026 11:51:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7EA1F00893;
-	Tue,  9 Jun 2026 11:51:30 +0000 (UTC)
+	id 178601F00898; Tue,  9 Jun 2026 11:54:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EE71F00893;
+	Tue,  9 Jun 2026 11:54:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781005893;
-	bh=u3LDWTRsN1cKuv8FC5z2+sA9gRCsd2Tw/CSKqKmGbxk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SqZO31Z6JT6wYAc/xN3odI0sbYrz3YUp6LUJunyZcL7IjyEwHSfLOX8+Kior/oZ3k
-	 PqZqQ57rD+SD6dCyzt1ijaF2FOgQVT/gnzZUicFlP8RzwAF7Ya5YB3BQRVDdkOCyL9
-	 Nrn5XGdnjn3d4AqJj8D7ALfzmS1Tv4qoDDX8qP5O/uuLPk/yra9jpKAJWYYULgK5fO
-	 hc2Q55D3PooZ73f8/VTurSjWXMQSI6H/mM8I4pKCaZ9nZct/SAnH8sDeDkMJB3uLsB
-	 ghVRBJmb7KC7dqEUcCS/GIOMVGsFOrEAIlaUczmi+G71/s9Gday+QyZHSwuzdKhd7Q
-	 ysGQl9jbt1cbQ==
-Message-ID: <98f3e864-3a9e-4f96-a633-0c0053ec35fb@kernel.org>
-Date: Tue, 9 Jun 2026 13:51:28 +0200
+	s=k20260515; t=1781006089;
+	bh=PMbkNq4forlPN2WLVH3jEvvF5QOaHxUbNdvdwiYst6A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=cD3eMsp/H1Yx6/Ub6PFAjd1MNIhYbfVILicMCU9oOLoU0tRjVQ6M5gMeZZFkLbXl9
+	 JeDEsTygss44gc6ySTDoZqXPr1ZsKC51zpg1SsLlHzUkLDUj2rJv0vNAIPLKLCp+pt
+	 1XAzlI4uyke/9xXF50qvJxA6rqS6PR5RKlJ6oCJmJPSA9O/3XE4gX7Ve0bCJRDkiK/
+	 BTw1kq5Q/xpv/G3U+GHzULq9+2TMjQgrwc54ECo87lubtr8uPOuaNEBdxm8xIGEoAU
+	 MGZo76wQv6whgbmm/sWtK3zgIwzfi7vQtWaA2uKn74Zfrqef/G0FXBLuCxcRzvgK8q
+	 r5Al2hAZFuPSQ==
+Date: Tue, 9 Jun 2026 13:54:45 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Drew Fustini <fustini@kernel.org>
+Cc: soc@kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, MoeLeak <i@leak.moe>, 
+	Thomas Gerner <thomas.gerner@muenchen-mail.de>
+Subject: Re: [GIT PULL] RISC-V T-HEAD devicetree changes for v7.2
+Message-ID: <20260609-shaggy-careful-rabbit-e0fc2a@quoll>
+References: <ah4lkWh2eD6l7W7n@x1>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Allwinner DT Changes for 7.2
-To: wens@kernel.org
-Cc: soc@kernel.org, Jernej Skrabec <jernej@kernel.org>,
- Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, Stephen Boyd <sboyd@kernel.org>
-References: <ah3ZAPLzh8ORGmpH@home.wens.tw>
- <20260609-mighty-excellent-shoebill-04d7fa@quoll>
- <CAGb2v64guguXmg-=WYmZyz=rw3PNRvh+TnEE1yWFz=AJbryssw@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <CAGb2v64guguXmg-=WYmZyz=rw3PNRvh+TnEE1yWFz=AJbryssw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ah4lkWh2eD6l7W7n@x1>
 
-On 09/06/2026 13:48, Chen-Yu Tsai wrote:
-> On Tue, Jun 9, 2026 at 8:43 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On Tue, Jun 02, 2026 at 03:09:52AM +0800, Chen-Yu Tsai wrote:
->>> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
->>>
->>>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
->>>
->>> are available in the Git repository at:
->>>
->>>   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-7.2
->>>
->>> for you to fetch changes up to 44cf19e41c769720750dbb8752aca75c247e565f:
->>>
->>>   arm64: dts: allwinner: a523: add gpadc node (2026-05-25 05:02:58 +0800)
->>>
->>>
->>> As mentioned in the tag, this pull request contains a change that should
->>> be shared between the soc and clk trees. However since I don't have any
->>> clk changes to send this cycle, I think it can just go through the soc
->>> tree without any issues.
->>
->> But the clock driver change cannot be in the DTS branch. This should go
->> via clock tree even if it is one change. And definitely not via DTS
->> branch.
+On Mon, Jun 01, 2026 at 05:36:33PM -0700, Drew Fustini wrote:
+> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 > 
-> It is a shared change, because it moves two symbols from the driver's
-> private header to the public DT binding header. I don't see how this
-> can go through just the clk tree when one of the subsequent patches
-> uses those new symbols.
+>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 > 
-> "clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header"
-> is needed by "ARM: dts: sun8i: v3s: Add mbus node to represent the
-> interconnect".
+> are available in the Git repository at:
 > 
-> The other way to go about this is to use raw numbers first, then
-> another patch in the next cycle to switch the numbers to actual
-> macros. IMHO not worth the churn and headache.
+>   git://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/thead-dt-for-v7.2
+> 
+> for you to fetch changes up to 3a5791956edbfa84d7256224167941931cbc46e7:
+> 
+>   riscv: dts: thead: Enable wifi on the BeagleV-Ahead (2026-05-25 01:36:56 -0700)
+> 
 
-You can have a duplicated define.
+Thanks, applied
 
 Best regards,
 Krzysztof
+
