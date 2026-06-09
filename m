@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA81329B77E
-	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 16:40:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6716129B77E
+	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 16:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781023233; cv=none; b=YVshDJ4oQm2vO87WY0iYGVI99lSoeXK8ixXRgpCbIKfZ40kugNNqCzo15pHJelv/Ai4UMUvvZQuOIzXhWWT/+YEeqxbSdM5mO0NvJfAjADeNDBUCBMQv301M0ELlqoJjyikkqd7swcznbX+Ju7uofaVznaI3qpNBHBVV4WM1f3Y=
+	t=1781023235; cv=none; b=dpeKN+pJPFgwkZORnLf4tjDOplAbiNpwuZ5X06/P34aHnM2z+xutV/Sj0SIfeHY9LXtF16aZo9v+Bdv+rAUJd/ods57WuDvF2HCjQx9r8OQk7YKlTZ+NkN+eJ8oSEbAFlVOO/yelbHSGK9WOMpQ4IoGFmeOW5YYsRBg0oTdjMuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781023233; c=relaxed/simple;
-	bh=Co9h6Xnt1uXDf0J6TT4FUSYDyOryyVDnoqRrTT9g+eo=;
+	s=arc-20240116; t=1781023235; c=relaxed/simple;
+	bh=sZZGeHB3cngrK6/SLg+1/DhCp2BRqG1U+svyweYibi8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lUnyGa7c6y3wFNjHvCCbGqkD4h0I5BCg4vScksA8CtPEe1XJbGnh+eXqXsHqmCWwTDOC8hIQGnaD+C6MHKME/bEvuFsLmF8O/eZCp037G27a2Cx9o7rVpgZWSesb7L6//FsE1wrhcb4MK3R55w8UIah/i2zUvqtUEjAIY39EkuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CEQn8u/r; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=Q29ALh8ekBS41YSTIY3OeKw3zEcJMGC0smEf2e72SnhfsR0qm4TP+fgjHyklgbgjHkClOa+QptBYxFpVj/uGX7vnSJzGV5bnc7tc2ikbQtaauTataGXrZ7HWNs6LaOYXpoHQ0dNUMB3ePdgEXcW9jvc1hB3rFuB0SUsfjWgjO10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMG3wwah; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CEQn8u/r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMG3wwah"
 Received: by smtp.kernel.org (Postfix)
-	id 989CD1F00898; Tue,  9 Jun 2026 16:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B641F00893;
-	Tue,  9 Jun 2026 16:40:32 +0000 (UTC)
+	id 201F51F00898; Tue,  9 Jun 2026 16:40:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4DC1F00893;
+	Tue,  9 Jun 2026 16:40:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781023232;
-	bh=mYfbuVRNXGoOsV7YKHyaMsUp9iikstYvtljzOp28uqw=;
+	s=k20260515; t=1781023234;
+	bh=wJVxjM40pfeW05/cnod4rWV/l1XuaEMiAiH5LtJlBnU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=CEQn8u/rRvgsLHkOWVEgT3VYlmyFz1mRbaneicGuYR3RAuvCOFsALqsKGNpeIkXzD
-	 qE399NpCturQdVxezb2F1VWtRuw+d5OsRfI4xReRxQ4m+PYVVWT5ECFDpdVGf730Ra
-	 lCapMN/IqlMd5YvvxPqrfHMESyiTo+0KJsQWt5SwDLOMmNXAKN6lb2Afqj0d/ug7CC
-	 RckgjLfWnosBWce0Q8PcOo6AcBiHUERlk46EivMmsk8FXhbKSkUqEneVstSyOVKhQo
-	 nxcY373I8o+538SxYdZ9rwyzEd/jpacgqLvaUzgZ/ZGksG/XuWVQLYK9ORCESozrl7
-	 93BP7Sz5gj0Vw==
+	b=SMG3wwahJ8CdehbQXYCIWnPHiYiNbksfv0ioThEMV4N7kxUwaygzc0Nb+NcFmi35I
+	 Zl/Fn/YOwo+fuDk0rFPMeACV30AZMOwLBf3U9S+Ji5OJpSA7/aHv5TMTuqdZ6HtstF
+	 7P7ujZUEuf33kIBJ75ElDYJR5y1p8xyDxdnr3grduayJNvlrStottN9uhBTJw1kLXV
+	 tQT4FiL6AoVHs81GDAHsL+oZzwWVWVF14mT2RMANgDYp/CouhBLcNhSBxH/4FjXPTw
+	 xhBeLRk0wx8Mb7SczdrCkZdEIpzCBN79Z/z47bW1JloME3E9uR4tiJYbJJKqYGQhdN
+	 Pg2/66vcMpL7Q==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198E33930989;
-	Tue,  9 Jun 2026 16:40:32 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A023930989;
+	Tue,  9 Jun 2026 16:40:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/6] dt-bindings: Changes for v7.2-rc1
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 7.2 #2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178102323063.2135346.7022522069915966165.git-patchwork-notify@kernel.org>
-Date: Tue, 09 Jun 2026 16:40:30 +0000
-References: <20260531060825.1855391-1-thierry.reding@kernel.org>
-In-Reply-To: <20260531060825.1855391-1-thierry.reding@kernel.org>
-To: Thierry Reding <thierry.reding@kernel.org>
+ <178102323213.2135346.1473477658792199932.git-patchwork-notify@kernel.org>
+Date: Tue, 09 Jun 2026 16:40:32 +0000
+References: <21578066.fAMKPKieAE@phil>
+In-Reply-To: <21578066.fAMKPKieAE@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,30 +54,21 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 31 May 2026 08:08:18 +0200 you wrote:
-> From: Thierry Reding <thierry.reding@gmail.com>
+On Sat, 06 Jun 2026 00:18:53 +0200 you wrote:
+> Hi soc maintainers,
 > 
-> Hi ARM SoC maintainers,
+> please find below some more Rockchip DT changes for the merge-window
+> for 7.2 .
 > 
-> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-> 
->   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+> The most interesting addition is of course basic camera support
+> on RK3588 which enables unfiltered camera capture (i.e. without
+> postprocessing for whitebalance etc)
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/6] dt-bindings: Changes for v7.2-rc1
-    (no matching commit)
-  - [GIT,PULL,2/6] soc/tegra: Changes for v7.2-rc1
-    https://git.kernel.org/soc/soc/c/aa75b5370d8e
-  - [GIT,PULL,3/6] soc/tegra: pmc: Changes for v7.2-rc1
-    https://git.kernel.org/soc/soc/c/c731ec167781
-  - [GIT,PULL,4/6] firmware: tegra: Changes for v7.2-rc1
-    https://git.kernel.org/soc/soc/c/0d519d755c16
-  - [GIT,PULL,5/6] ARM: tegra: Device tree changes for v7.2-rc1
-    (no matching commit)
-  - [GIT,PULL,6/6] arm64: tegra: Changes for v7.2-rc1
-    https://git.kernel.org/soc/soc/c/47be56c13c02
+  - [GIT,PULL] Rockchip dts64 changes for 7.2 #2
+    https://git.kernel.org/soc/soc/c/a9219ea848a4
 
 You are awesome, thank you!
 -- 
