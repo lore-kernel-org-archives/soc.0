@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB92854652
-	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 07:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395583DFC8F
+	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 07:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780990785; cv=none; b=LNW8bSRaSBh089NYVfyiWD1+fczPFNSJ4EJ1at+1XuVvzVfWocrYD5jjt0nujwKQmFk9q099b3v6rbyYAj2E/xSbjvbmPnfehYrYOyYk+MtuqnqlZ/H089yRAs0o/Ic1viDhhCgRTADvzH1eJE8p7BbhfeyzdgziBfl7Ms9LJnI=
+	t=1780990868; cv=none; b=fLpOtR+GVTAXG1GxxyUH0B+LlfZtkIChXXn1F6g0My3SmulWnf1K6pokXApm3DYKXO1Jv6nvpQRI97meOENy6G2PvLyNPt1pALkEBsB/vB6eFk9e+MtQ1TZ4twzHVJLR6l8qe/bXV3nlRHpzWRcg/rXRL7bGmQKf3nfbhftaG4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780990785; c=relaxed/simple;
-	bh=mx7QXRja6Y2Mzn1lH5wc5Nw0BE/VycpWjcJDj9/CJ/s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bOvR07pjoZdhwZT3stJGpIAfLjBcRnVThlikFQv5LB9haF4sbnJaIkRBv0F/hxLegvz5l3ei+Gdf09G8yNAojlP28lsqV+8UVhXJ5z/97NYdllySPNq90KebaD7XBpBAJMPUOaQX70InPe/WzauWrFmLkHlB4JdBPGpr4b3xrXE=
+	s=arc-20240116; t=1780990868; c=relaxed/simple;
+	bh=tkrT4OnJTK1gaReiS1wvP62R23/1yp8exExNM9thIqI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g/Jl4iEXghsj6A8DUxXxQQYLWCvGix2t/lAQOg4vVhMTXCfzbRQaj7vlx2ht2L1UkPhF2M+CLzpoWxd4tmZrymMQziHdqsTF9Oyd0KzVFxJLcirzrRh+zvXopDzEjkLrB2ZZeZPJ+vIq6QgECQn5fHWxiKBm/nyrcFDTIdUv1NU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 Received: by smtp.kernel.org (Postfix)
-	id 81D111F00898; Tue,  9 Jun 2026 07:39:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AF61F00893;
-	Tue,  9 Jun 2026 07:39:42 +0000 (UTC)
+	id B94E71F00898; Tue,  9 Jun 2026 07:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB7831F00893;
+	Tue,  9 Jun 2026 07:41:04 +0000 (UTC)
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 To: soc@kernel.org,
 	arm@kernel.org
 Cc: claudiu.beznea@tuxon.dev,
 	nicolas.ferre@microchip.com,
 	alexandre.belloni@bootlin.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Microchip AT91 device tree updates for v7.2
-Date: Tue,  9 Jun 2026 10:39:39 +0300
-Message-ID: <20260609073939.813573-1-claudiu.beznea@tuxon.dev>
+	linux-arm-kernel@lists.infradead.org,
+	conor@kernel.org
+Subject: [GIT PULL] Microchip ARM64 device tree updates for v7.2
+Date: Tue,  9 Jun 2026 10:41:03 +0300
+Message-ID: <20260609074103.814073-1-claudiu.beznea@tuxon.dev>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -40,21 +41,21 @@ The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-7.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/microchip-dt64-7.2
 
-for you to fetch changes up to 96b33938cf783c790036e35860b206cf029f2e2a:
+for you to fetch changes up to 8071815790141d3f05e32b972a6c79fdbbb88cfa:
 
-  ARM: dts: microchip: add I3C controller (2026-05-25 22:54:37 +0300)
+  arm64: dts: microchip: lan969x: add OTP node (2026-05-25 22:59:07 +0300)
 
 ----------------------------------------------------------------
-Microchip AT91 device tree updates for v7.2
+Microchip ARM64 device tree updates for v7.2
 
 This update includes:
-- I3C controller device tree node for SAMA7D65 SoC
+- the device tree node for the OTP controller on LAN9691 SoC
 
 ----------------------------------------------------------------
-Durai Manickam KR (1):
-      ARM: dts: microchip: add I3C controller
+Robert Marko (1):
+      arm64: dts: microchip: lan969x: add OTP node
 
- arch/arm/boot/dts/microchip/sama7d65.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/microchip/lan9691.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
