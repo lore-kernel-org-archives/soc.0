@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A7537206F
-	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 16:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDB33B19CA
+	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 16:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781023241; cv=none; b=gPN3IShetfk3xkLR7MQz3Huoa3EWF+9ZpDOeXlFL2Wsysrku67mddmmRYOpMz5LXMABFY8GZahwiedEp2U0dwiJG39ox/KqO1pqIDorCbvunubuMBoEziTD9OCEYKtjrDeaFu2Eip+y8NJTEie2PsfrF+KYOAdkeq+Hc85c0Ef0=
+	t=1781023242; cv=none; b=U416Us9TTkY6kcUTOCBOpdqF27SWwXNG1tWrOX/w3810bSDNgm9Ke5AQxBrWiw50Ok0984l8FVy5Ujlk4bcNeuaaK00snxNAAk2GJzAMmDMDHluMnNPJo256RSyRCOUWPWsES+u2XR9QhOugicnMqkNjpaYMStz6pgLSOnuE7og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781023241; c=relaxed/simple;
-	bh=08RzQWuaaTDmpW+1C9+jYB2W+mJiYkMKmhXDOUfdAkI=;
+	s=arc-20240116; t=1781023242; c=relaxed/simple;
+	bh=KE4aqOOGLjLSq3CVZgrabjAjXWgk32H/al9DnlXauD8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=U6xpYMZBC7XcDjfPGBEttc1GhHO+eK0nC/UMs4ZmORQ5ljJSAH1ZQfUeBdJ0FECQ2FP/FTXFKUV0pYPjlJuWz1GdFYCbGb4wGbKLuUih8v9Uoc8Xu4+Zv9gHxTSM6BwWeDqFGqtW1ap3nJyxfjNIE4pwr+JURqqZgSMq2AXEv7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PwGdNC59; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=HXhriLN+6HS0bUvfryyryERu+hbTcdoNvUv3QtOdAL7A4lPtmRwhd+9voxeRdgEtAVgfMZuZMSVuTlBN5GJE660fdqNPYh5D/w5ETl3rdcOVnb/dfjZGV09U6bLDZAhYta5ZeuUIpDE/7R9D8/+t+OHEOAzWq5myJIkh0xTc17s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZRw3N0Ca; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PwGdNC59"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZRw3N0Ca"
 Received: by smtp.kernel.org (Postfix)
-	id 1E5E61F00898; Tue,  9 Jun 2026 16:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 085681F00893;
-	Tue,  9 Jun 2026 16:40:40 +0000 (UTC)
+	id 98F741F00898; Tue,  9 Jun 2026 16:40:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82BC41F00893;
+	Tue,  9 Jun 2026 16:40:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781023240;
-	bh=WRHHTdpSXn0J6YGyQupHhUmjT1Wkg8swILYHI/Oho+A=;
+	s=k20260515; t=1781023241;
+	bh=DgpnrKTCgPX7m+3U5ZW+xtwioIUio8k/BJQtEwekOrE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=PwGdNC59hhmoksGVe8+7qQwnSug1b+5ZuHcUPjZDP6rYJV4paVICP4VbRA43hejzS
-	 k+nM6Ln72n0P3KTffMsLUajeDU92JbzWs55U75i1uR+WryMcSYlonMKfq4gqidjq7s
-	 1fkX659NeOJBb6KXpxGNQSH5vBvMnSZskL7QL6TsW3Ag0ZFwBk+sfVKUsTgZZFTOTL
-	 ld6nbxbZTakDUUaw93Vk4R3rgwIg/T/6Oi0t46ycemi286AgR6KTCDt4riiw5C28Xj
-	 TYcU5s01doCyjGXkmYEQKMQ2hdaqi1f207qUKiOViYZn6FYosrC+C2FNslseOkfA9r
-	 +8DOvZW/Q1Bew==
+	b=ZRw3N0CaXDNII9dq5NUqK3NdkcMIcO+dtSVXAJSoG4oHuTll7twho21le8e+JA6zq
+	 z/SNoOQZqvWZUk+B3S28e1lpjXAHWQch3bbmpHiAxFnV17nBTgQZL9hqmhncFgqRPP
+	 yus70AXTQ9n24RZQrKEergXiA1HkR1/KNBGQLb66YgOIe3ld8Xtw+UNeLfPmjsku7J
+	 OAz1K7V4GupNZQGBrdTIp2zOD5KZDHsHd170Xoil47SW/FU3YppJxHluf/BV8ToWZZ
+	 FcvmJ8nWcm90P+AM5NX3GxXTUUKdu/iKPAZOC66Q+SNYTUe5DRtijpXxtpP95ErUpk
+	 gKS8wgBIF9QIA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9388E3930989;
-	Tue,  9 Jun 2026 16:40:39 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198B63930989;
+	Tue,  9 Jun 2026 16:40:41 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Microchip RISC-V devicetrees for v7.2
+Subject: Re: [GIT PULL] samsung: drivers firmware for v7.2 (also for thermal)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178102323813.2135346.16496740232802300426.git-patchwork-notify@kernel.org>
-Date: Tue, 09 Jun 2026 16:40:38 +0000
-References: <20260608-grumbling-gigantic-b0bb128634f2@spud>
-In-Reply-To: <20260608-grumbling-gigantic-b0bb128634f2@spud>
-To: Conor Dooley <conor@kernel.org>
+ <178102323964.2135346.17529440959749334290.git-patchwork-notify@kernel.org>
+Date: Tue, 09 Jun 2026 16:40:39 +0000
+References: <20260531115713.19388-2-krzk@kernel.org>
+In-Reply-To: <20260531115713.19388-2-krzk@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,22 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 8 Jun 2026 11:14:42 +0100 you wrote:
-> Hey folks,
+On Sun, 31 May 2026 13:57:13 +0200 you wrote:
+> Hi Arnd and SoC folks, and Rafael+Daniel+Zhang+Lukasz,
 > 
-> Please pull my changes for 7.2, all of which are cleanup/low priority
-> fixes written by yours truly.
+> This is pull with firmware drivers built on top of my previous firmware fixes:
+> tags/samsung-drivers-fixes-7.1-2.
 > 
-> It's probable that I will have a second PR, because I am waiting for
-> Stephen to hopefully merge my Canaan clock driver series that is a
-> pre-requisite for the addition of the Canaan k230 SoC. I'd have sent
-> this earlier, but I was hoping that k230 support would be ready in time.
+> The code here will be also necessary for thermal tree for implementing actual
+> TMU driver.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Microchip RISC-V devicetrees for v7.2
-    https://git.kernel.org/soc/soc/c/1012d4d9f72c
+  - [GIT,PULL] samsung: drivers firmware for v7.2 (also for thermal)
+    https://git.kernel.org/soc/soc/c/c711f432e209
 
 You are awesome, thank you!
 -- 
