@@ -1,158 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5F325DB12
-	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 13:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62ECC29C327
+	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 13:25:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781011089; cv=none; b=Ty1GOutSjLeRN7fRZNauZL4/Y7lqn3LwEjHxM+P3DbEnD6FiZ71mnDXvvlOYlF9nkSzztu8Al6b1VJT7OGUr5DjeRAbIJDctYzv3QLscTuAhM2iKqWa1bGebLGzXfWFSEk/72+51M3YuCrSbwbvhu1ei1g+6d9yHllrogrtFTVQ=
+	t=1781011519; cv=none; b=MSYjTA09dZmgoBoXWi4ovNbT/8ej9ocSIzz7Oov1dTJ3VWzqoWzjPdPhneOlk3vGYYnGKgYs69vXA8/0tpudimS4AKjZ5SAPJEnWLfeZlg8sdKvJKzQyVU4tPUjctUgZHO9FCezovC35crS97yKaNPCCd7F3zyNh3a6JxnkthNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781011089; c=relaxed/simple;
-	bh=otRlthK/Gv83VdKjUgaYqAIKUmxRJQ0SLaBXiDnpccA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nn26Ll819wtPF3u+EvdeeKmofdfzEZi/GBNv8U69oqRG/pQv+3c4CL0HGfqi9fnfVLmv19LaaE4Pv7sGUkBlRtc7Um7Vv8bBaFYKGTmNO0/Mqdx0aSEnW9YLSC7fEL9zyoFT2kmKNB2sk5u8uYmYCNjbpM+JEcGgm8xjXKO2jz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mumQ40iU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781011519; c=relaxed/simple;
+	bh=g9gTfVfRyn4qnAYOCossZ811oqGpq25xyht6sEd3tgw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=QgJSa8m+3felfrRTjyjVqC4QYIuvCgxUiiIarJlDA38rKlNpcizOVXdpHJ1TQkyT4VA4u9x4MTJ9zqBw7Fab1VyM8hA7Jii/KyXTTwcufOQfUP2/H5FTuCem6Xy8KFn2KIanykFGKY/cvKLaiy0LYVAP1aVhjc5S4sOitfDkPj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bai9tG1z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JrGtkjA0; arc=none smtp.client-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mumQ40iU"
-Received: by smtp.kernel.org (Postfix)
-	id AC0EC1F00898; Tue,  9 Jun 2026 13:18:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C121F1F00893;
-	Tue,  9 Jun 2026 13:18:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781011088;
-	bh=u9qQyIW7o6DCu+mNhXKcjjfee6yGqblUEOyM3JGRz3Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=mumQ40iUTeqjgzPAOz8A3wd/Dw9ibbr9m2wx+zodzHxsqvuEFtkuEKPSAaBA0emUC
-	 mB0X5rx5KPR70GOAUlKBxryjU+/k+eXCWL/nu+nghwR3CltV/zNVnbiTqauP9Rh4CS
-	 wv7pu4RVC4mLvG6owG72dWs5PW3kL+7DJItXvpdLfDcBP5Bs96DpRjLPyN8gEfcU9t
-	 nmA2ubVG9DLMCbD0g92haa8nipgoSeuwiP3Yk3sOtlF/HJDYO7xGkppBSU4sbb1ddi
-	 FH74Bv7S93wgY3RvCGodEPUtZde4PKfUa2nO/uYHAz0sVVj4G5sypu60R3Mqao+QWI
-	 xzWb8LrCIOyLg==
-Message-ID: <e2bf1f8b-677e-4184-b752-26e987f29121@kernel.org>
-Date: Tue, 9 Jun 2026 15:18:02 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bai9tG1z";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JrGtkjA0"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 6136E1D0005B;
+	Tue,  9 Jun 2026 09:25:17 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Tue, 09 Jun 2026 09:25:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1781011517;
+	 x=1781097917; bh=JGqLSUHMGrATPT+jYKhYD8UW7g72lzD3aJqot7FLQWg=; b=
+	bai9tG1zDY0suc4xGLSOP1BXIZWsjzOPZJ378ur6a5Vzue0j1KiUXX92wj2FcmWX
+	4LFQwOZDV65hHGHAhRZNO+24/urkA7OSV3ea8F8prJU2Zigim/OAAubkj6Keb9Rd
+	oDPN3TThCjZ5fCB5jpL3Kfk56ssOxiAa4sY/2CoCLHb1OM99Ipd+yRCJvjRgOkDj
+	s/nBL77DBDopetNrl/d3N68OKW8CfOGnMvd3d7ouLuEzGCg08Idx0WEz9v71H+HG
+	112EFbg7ReP73Y27dovdZ4nLuR4ZOZU8SOEptSgoPN8+PylIcUq5E8TjIW8Wkc4x
+	bigGBKIlrPwM2r8NYoGjew==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781011517; x=
+	1781097917; bh=JGqLSUHMGrATPT+jYKhYD8UW7g72lzD3aJqot7FLQWg=; b=J
+	rGtkjA0n7vKr3prxXunRreKsNMMGN4sZdMG8i15VdVsljZtGtq8BEIBhXcHRg0xJ
+	Mkqh707HdChSXBVGE3ZmadRtTUODs3pdM8Lk0zp7Hare9TGC7OyyLGoYVC7w0e81
+	0+10PuoKgH4kEgUxuNo7tEMGOo9HPD7fyUijHKakc5yzDijrsfxzNHxr0ZrQCIC6
+	fDP8TRCI2zTdaM1Ug22pXttPPXRPOwWS8fvjWTbZruc8Q3mmzBJcLnZzPmMjOTW7
+	f/ZAGoqYXgg7ahv4PSDDIf7fxc0BXq+lJSWjnbIV0HF6Q1m8SLqJbrg3zUMfIMYa
+	iSa+vUjmJwiChZoPiubCg==
+X-ME-Sender: <xms:PBQoalySK3aGwQ4qKFjTiPibZ3AaM27fPG7nv_8tKc0cknB8WN_0Fg>
+    <xme:PBQoagHNaga0aIoU7HeabYEswpUBTPDhGKKMB9bbEtFVppC8eJe-Fe8OTDkHjGQ9M
+    OITy4G-hZWaHvzeL7EhvGNBHnL6nygHRv3fU96MfXR8QlE-LHoAXzQ>
+X-ME-Proxy-Cause: dmFkZTGtDpmmqoVfbHshe/GUl4vxwrhmR3uE88+49PG2mSnnxVFhi4azEwaA/T/pbhx7fW
+    94SNaqBYBaPTi/WA17tT+vXokIGOVe30XUtprKU0Pie4wSZwE9uoth/TKnZuOuUDTROf46
+    EPFaNLzsKxt+/U8JYMV5D1d+T54ve9UDbRfuKSuSfXuo0aBFhZvUEdnQdMNMM69lh8cbUl
+    1qZIy+JKNofuEfl/kL8scEpjULVxKUGMc001RVWwzLPO69go1Bf6HfoQqYzSyCO5nXGXEi
+    8woC0VoZM5styGPHdORTUrSEDd6SDg/81zXqsLnULnvjCmjosrpGpmTnEpgU3Hmvmt0lLt
+    /Ndon63Z2i/D60XQ2jNiE5YerAk3xGorkctqFqQ77MXkRRValthqC+7LjDmojSFfoNHFRS
+    7sNtxxEV/3ujtysXn3lj5vsoJCxOMKMy6rD39/qcPbyoqHMrjYpt85pZu7qAFQvmOjC68C
+    jArwes5YNtQELKiEVstjjN1D6jHBmTyLAvN69Le33jSkAXh7fRi92Frw3UyfOr88yE89Vz
+    WOsXiD+I+XfHRHpbRgZ48QY3zOuTVQhky+/nFXiAyu7g4G6xVkzXb1zzVIygk/U0xn0nMN
+    b2pdp80S5ytdhyhlO3POd5HoCGRpxbq0DawzU12zZzCOlRbH9Van6Qg9hniA
+X-ME-Proxy: <xmx:PBQoao97CWiJ9OP4ZcHAz_NATMQCzwyY5EpusLbG1NWBTyuYgGjY8Q>
+    <xmx:PBQoappv3L5z0TuY5xQ3MKSDX-33o_CYZqgm5jMFH1n2M7cqT3DW-Q>
+    <xmx:PBQoapkoURRYNNcHQZMze9I9L5b-BXYRM8JxUE-4L-QtElJTk8rgKQ>
+    <xmx:PBQoaogAhaPjd1uJvTze6RsPsoBqIjAx8_2c3AnYxSrS5vTmB8Q9aQ>
+    <xmx:PRQoapBFmEAGYI1fVPruCi8kGAS7XRgrzjk8IbpjHKEPNR_U2-UpAQ8P>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2246B182007E; Tue,  9 Jun 2026 09:25:16 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Allwinner DT Changes for 7.2
-To: wens@kernel.org, Stephen Boyd <sboyd@kernel.org>
-Cc: soc@kernel.org, Jernej Skrabec <jernej@kernel.org>,
- Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org
-References: <ah3ZAPLzh8ORGmpH@home.wens.tw>
- <20260609-mighty-excellent-shoebill-04d7fa@quoll>
- <CAGb2v64guguXmg-=WYmZyz=rw3PNRvh+TnEE1yWFz=AJbryssw@mail.gmail.com>
- <98f3e864-3a9e-4f96-a633-0c0053ec35fb@kernel.org>
- <CAGb2v64o+tgnLqK_xDoauB4ThF_0979_5XPB38KiZHYyh1BnVQ@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <CAGb2v64o+tgnLqK_xDoauB4ThF_0979_5XPB38KiZHYyh1BnVQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AWnOTg1RWIwJ
+Date: Tue, 09 Jun 2026 15:24:54 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "gordon.ge" <gordon.ge@bst.ai>, soc@lists.linux.dev
+Cc: "yangzh0906@thundersoft.com" <yangzh0906@thundersoft.com>,
+ linux-arm-kernel@lists.infradead.org, bst-upstream <bst-upstream@bstai.top>
+Message-Id: <731e235f-96c0-4233-b316-c7887fb99bf9@app.fastmail.com>
+In-Reply-To: <20260603.193147-gordon.ge@bst.ai>
+References: <20260603.193147-gordon.ge@bst.ai>
+Subject: Re: [GIT PULL] arm64: BST C1200 eMMC DTS + defconfig for v7.2
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On 09/06/2026 14:38, Chen-Yu Tsai wrote:
-> On Tue, Jun 9, 2026 at 8:51 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On 09/06/2026 13:48, Chen-Yu Tsai wrote:
->>> On Tue, Jun 9, 2026 at 8:43 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>>>
->>>> On Tue, Jun 02, 2026 at 03:09:52AM +0800, Chen-Yu Tsai wrote:
->>>>> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
->>>>>
->>>>>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
->>>>>
->>>>> are available in the Git repository at:
->>>>>
->>>>>   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-7.2
->>>>>
->>>>> for you to fetch changes up to 44cf19e41c769720750dbb8752aca75c247e565f:
->>>>>
->>>>>   arm64: dts: allwinner: a523: add gpadc node (2026-05-25 05:02:58 +0800)
->>>>>
->>>>>
->>>>> As mentioned in the tag, this pull request contains a change that should
->>>>> be shared between the soc and clk trees. However since I don't have any
->>>>> clk changes to send this cycle, I think it can just go through the soc
->>>>> tree without any issues.
->>>>
->>>> But the clock driver change cannot be in the DTS branch. This should go
->>>> via clock tree even if it is one change. And definitely not via DTS
->>>> branch.
->>>
->>> It is a shared change, because it moves two symbols from the driver's
->>> private header to the public DT binding header. I don't see how this
->>> can go through just the clk tree when one of the subsequent patches
->>> uses those new symbols.
->>>
->>> "clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header"
->>> is needed by "ARM: dts: sun8i: v3s: Add mbus node to represent the
->>> interconnect".
->>>
->>> The other way to go about this is to use raw numbers first, then
->>> another patch in the next cycle to switch the numbers to actual
->>> macros. IMHO not worth the churn and headache.
->>
->> You can have a duplicated define.
-> 
-> I honestly did not know that it worked.
-> 
-> However, splitting what is effectively one logical change (*move*
-> something) into two patches just to be able to merge them through two
-> separate trees still seems wrong to me.
+On Wed, Jun 3, 2026, at 13:31, gordon.ge@bst.ai wrote:
+> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+>  arm64: BST C1200 eMMC DTS + defconfig for v7.2
+>
+>   Black Sesame Technologies:
+>
+>   Enable eMMC controller on BST C1200 CDCU1.0 board:
+>     - Add mmc0 node in bstc1200.dtsi (DWCMSHC SDHCI controller)
+>     - Add fixed clock definition and reserved SRAM bounce buffer
+>     - Enable mmc0 with 8-bit bus on CDCU1.0 ADAS 4C2G board
+>     - Enable CONFIG_MMC_SDHCI_BST=y in arm64 defconfig
+>
+>   The MMC driver was merged via mmc-next in v7.1-rc1.
+>   These are the remaining DTS and defconfig pieces.
 
-It is not really one logical change. Defining a new ABI (binding header
-define) is considered one change. Merging binding change into driver
-commit breaks rule of splitting bindings from implementation.
+Hi Gordon,
 
-Second rule is that DTS branch CANNOT take driver changes. So if you do
-not want to adhere to the above rule you still cannot combine it into
-DTS branch.
+There are two more formal mistakes here in your
+pull request, please fix:
 
-Best regards,
-Krzysztof
+- keep the defconfig patch separate from the devicetree changes,
+  as we will merge them separately.
+- on each patch, make sure there is at least a 'Signed-off-by'
+  tag from the committer (plus author, if different), and
+  ideally any 'Reviewed-by', 'Acked-by' or 'Tested-by' tags
+  you have received.
+
+        Arnd
