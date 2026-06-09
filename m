@@ -1,76 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B65401A01
-	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 11:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635123F5BD9
+	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 11:48:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781005593; cv=none; b=N2XJpix2ouCaIvaSjEIP6QELf+A6yC4MHw5G/pSsoNrMuftyxBU9wYx1d9oQagK67cOfIQVuROVXftRIg+VotkILZgkYlDcP/4MdHtDuRFOdk6NmVDQde+Z7Mogb1nzhoO4PaKC00JyxUCaoz7fJCx4n713/3Ne5+3YZTe5Z210=
+	t=1781005713; cv=none; b=CVdK+vnPVqmC8Yo2IBcwJ1GT4r0gTjSzrJ6vuu3xwrtUayyVut56UDh18FrfUULt/1F1ZpJBuyCB0VC1ouJo+Wig3RDZo76+s1pJnyzBuHK9bK0Wsb43G0yRO2sc3Utuli3ps290LTo66lCMJktT8uqslp+Lehfi4gp1NAbefFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781005593; c=relaxed/simple;
-	bh=XWO1jpgKwoF2mIZ699M7q7ZCt7nn0b1kbEIeJhAMLDs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m9PJ0wJ+Y378rHDLuC9M4CSWwJiAgdQ5UJOHJMLSTLxOER9Y0ib3gT2pMs8Ez58cINRyuFnW72qMs9DJGlZKnAjG8sQp5779l5ap+pyvn0tpNdFoQNlEppsOK1GYZqyuHU7TmnU1EJlUfZea8Yau/kv3ufxJuEs9vUhLirJrz5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U/ZwcKmw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781005713; c=relaxed/simple;
+	bh=cY8C1DuzDsjJ3gDJqSkziJHtiW3ma9geQETt7bhGXyU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LrMwxiwPHpMwceFDiHO/PeaL2pJKHdP0fmggqwIH8vR21ybbVXgZ95881uf3oHC6E4ALmfM59Y+lwBetSgGk8Wk4lW/rP0B24db/Q3NqRcNiRxoNqmdQippSs0C1ke44I9kuEVOs/ueS73wo4KVOXwgAxUa/dresWnj8mLZ2FgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YebtZ3Rq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U/ZwcKmw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YebtZ3Rq"
 Received: by smtp.kernel.org (Postfix)
-	id 9F9221F0089F; Tue,  9 Jun 2026 11:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B77E1F00893;
-	Tue,  9 Jun 2026 11:46:31 +0000 (UTC)
+	id 17E651F0089E; Tue,  9 Jun 2026 11:48:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0136D1F00899
+	for <soc@kernel.org>; Tue,  9 Jun 2026 11:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781005592;
-	bh=VlXt+ZybZsncmnBJW1Bj+bdrQxweMBWKapap64spOHE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=U/ZwcKmwj6er9JEd1XP1dPWNkQqOrp1JehNoKh9PeyThlOmnYXM/ipNLFObu8tNxW
-	 +ZMvLumVFQMPYC8OnYGeRpF2UORVB85Sd9IS8kRLh+uWStah6cX77ZmJyKjU1qouBz
-	 Bobt+DO/W+eiRHniiFEF83SCKY5kGbd2pEf5QTxleT2zDoDEk+q7XYaTP3lRUcGSb5
-	 e6AbpSa3vwmvqUkkQMSIHcJCbVHwDjDwZHhu9fY2bKf9NAkIOgonn0hoi0/joczgWr
-	 fdSPqjrdtZ3ytEp8Qk0fGg+y2Qsm3W43j3q07Ma19J0GO5jfjabY3vvsZHkYWUMeTP
-	 yWYPEAlfvAnpQ==
-Date: Tue, 9 Jun 2026 13:46:28 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Drew Fustini <fustini@kernel.org>
-Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Samuel Holland <samuel.holland@sifive.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Anup Patel <anup@brainfault.org>, Joel Stanley <joel@jms.id.au>, 
-	Joel Stanley <jms@oss.tenstorrent.com>, Nicholas Piggin <npiggin@oss.tenstorrent.com>, 
-	Michael Neuling <mikey@neuling.org>, Michael Ellerman <mpe@kernel.org>, 
-	Andy Gross <agross@kernel.org>, Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>, 
-	Paul Walmsley <pjw@kernel.org>, Drew Fustini <dfustini@oss.tenstorrent.com>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [GIT PULL] RISC-V Tenstorrent devicetree changes for v7.2
-Message-ID: <20260609-wise-fragrant-sturgeon-4e5eda@quoll>
-References: <ah4Qfro/wUyhByF8@x1>
+	s=k20260515; t=1781005712;
+	bh=8letKVTX9hNzpm/6EzAg1nRrooRLvfpVgQ+GnYYjMQY=;
+	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc;
+	b=YebtZ3Rqlnmo/sHNQ0U75sTLrXNbrSWH68R1cGT2QTEARlpoNb4BDCrFpNvVn44N5
+	 ybLzDIe/3ee+1E2e3J5UlO/rk9ADqPgAMFyoZlJB36kSmiFIuqFO8qu/1HNGmOBwor
+	 /t1VzoGZpZ8XQY2t83DmhDTXhso3bNYMDtfml4S6/6HibdIHIr72tRwhbgtw/Cphcj
+	 4DncdCsYWSxPVUDYhkq0bOEoLQXtRpXuxVyZkHLoRpEeyCVIEWa/Yf9ox3fvE+Rt96
+	 9XSOSEdyjihJHEicyY8N24bAGT8UA2c3/0mkR8c+jStAQr2CkKzVuEsGDXgpl70ZsZ
+	 gG4H/vek+pWtA==
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-3965eab14cfso40531491fa.0
+        for <soc@kernel.org>; Tue, 09 Jun 2026 04:48:31 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwUGG6lk8m+tywQOI9KeWPRTTGTHq1zDKmZ9lHu7tfNJOSeWbM7
+	keoz2f54GV/L1jB7UODBe0qrIlaUu3VRHoUqtWzumbTDkOCJaTxFKliMjPLczKb5J1A+bJAWuwk
+	YDt8Cfv9PZxmHnRSpNVdkUEYzEodpg/8=
+X-Received: by 2002:a2e:be2a:0:b0:396:a77d:210d with SMTP id
+ 38308e7fff4ca-397f76fc095mr6358901fa.7.1781005710235; Tue, 09 Jun 2026
+ 04:48:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ah4Qfro/wUyhByF8@x1>
+References: <ah3ZAPLzh8ORGmpH@home.wens.tw> <20260609-mighty-excellent-shoebill-04d7fa@quoll>
+In-Reply-To: <20260609-mighty-excellent-shoebill-04d7fa@quoll>
+Reply-To: wens@kernel.org
+From: Chen-Yu Tsai <wens@kernel.org>
+Date: Tue, 9 Jun 2026 20:48:14 +0900
+X-Gmail-Original-Message-ID: <CAGb2v64guguXmg-=WYmZyz=rw3PNRvh+TnEE1yWFz=AJbryssw@mail.gmail.com>
+X-Gm-Features: AVVi8CfgpRUT0LSxSlMDKOy2NI7ybB5lvzBRW7huka_cDgtqrOHRbP6ahpPHR0w
+Message-ID: <CAGb2v64guguXmg-=WYmZyz=rw3PNRvh+TnEE1yWFz=AJbryssw@mail.gmail.com>
+Subject: Re: [GIT PULL] Allwinner DT Changes for 7.2
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: soc@kernel.org, Jernej Skrabec <jernej@kernel.org>, Samuel Holland <samuel@sholland.org>, 
+	linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 01, 2026 at 04:06:38PM -0700, Drew Fustini wrote:
-> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-> 
->   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tenstorrent/linux.git tags/tenstorrent-dt-for-v7.2
-> 
-> for you to fetch changes up to 33583baeb1ba7d328e6a9775d889036900b74cdb:
-> 
->   dt-bindings: iommu: riscv: Add bindings for Tenstorrent RISC-V IOMMU (2026-05-23 17:14:35 -0700)
-> 
+On Tue, Jun 9, 2026 at 8:43=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
+> wrote:
+>
+> On Tue, Jun 02, 2026 at 03:09:52AM +0800, Chen-Yu Tsai wrote:
+> > The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45=
+e731:
+> >
+> >   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+> >
+> > are available in the Git repository at:
+> >
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/=
+sunxi-dt-for-7.2
+> >
+> > for you to fetch changes up to 44cf19e41c769720750dbb8752aca75c247e565f=
+:
+> >
+> >   arm64: dts: allwinner: a523: add gpadc node (2026-05-25 05:02:58 +080=
+0)
+> >
+> >
+> > As mentioned in the tag, this pull request contains a change that shoul=
+d
+> > be shared between the soc and clk trees. However since I don't have any
+> > clk changes to send this cycle, I think it can just go through the soc
+> > tree without any issues.
+>
+> But the clock driver change cannot be in the DTS branch. This should go
+> via clock tree even if it is one change. And definitely not via DTS
+> branch.
 
-Thanks, applied
+It is a shared change, because it moves two symbols from the driver's
+private header to the public DT binding header. I don't see how this
+can go through just the clk tree when one of the subsequent patches
+uses those new symbols.
 
-Best regards,
-Krzysztof
+"clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header"
+is needed by "ARM: dts: sun8i: v3s: Add mbus node to represent the
+interconnect".
 
+The other way to go about this is to use raw numbers first, then
+another patch in the next cycle to switch the numbers to actual
+macros. IMHO not worth the churn and headache.
+
+
+ChenYu
