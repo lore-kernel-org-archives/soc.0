@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADA83F8881
-	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 10:55:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988AD322B87
+	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 11:38:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781002548; cv=none; b=hrkF0uhJ+47do3CaGh3LVqukUvfumyNx+k+QUX2PGckoM0dQoTbO5Y1PDf2kCLYhqry4Hx/bTsHf9LOMxwS/1peu6uMQaFqOrzGBsvS4oj3YU+LBDqIex9MXnegTUtlROorKBYHq5TnniLJrf7LyGu97vtZccVL5hIUs3gO5ADc=
+	t=1781005124; cv=none; b=I9DQ9FKzhcYJgJvwC+VXlt0Dd2Xfld7Hj2+ncN+TTn68RQ8uqxLuTOYet3gvNpCF9GDMrZQ2pT+BN4QdzxkSC9ud01KI4CFTmiZ0x2XST6kymciFc76oqLpAJivqri3xFlknIVv9SqzX1tSYBuFw5HmrqhxQLwAG/AOti+bZeRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781002548; c=relaxed/simple;
-	bh=beKfc4r4KzVPu14v7c2Up2dCryd+1ea0ljrSoi4u1vY=;
+	s=arc-20240116; t=1781005124; c=relaxed/simple;
+	bh=qT1gAh/2yJfydzE3oHcr0+95O4w2bX3LLlw3C8FpJlQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J8qF42uunVftopwvCR7H8qzgAm2W+VErMe51sP3KtkJ9gvTlodO9IOZgrw2fdB/VEK7/0hFfBNLUDBjnut+ruIsP3szbDGqPivATcLaMmFXy11NbSpyh8rgdBvjwl0g4gGjO/5pfIeZc56MTg2LSbN65ZGiLtE35w5SSl2dqvp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nh0+1DoW; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=eqQXkW16y+ux3EUToBsn39rqQ3u99t5Fg/qkVBy0N4zowtRMaVUF2IEcarzELk/6j2zMZyYLlCoXj/hsApkAXgN1rcKhf41HXfDZunXGlVKwcFrf+B3Rw1PHPuk+oY8kPtdfIBQg8jdRlcGRIX4EHZZN4OOrdmwIRAdHw0HuuBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zhb8Ij8T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nh0+1DoW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zhb8Ij8T"
 Received: by smtp.kernel.org (Postfix)
-	id D14F51F00893; Tue,  9 Jun 2026 10:55:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB5A1F00899;
-	Tue,  9 Jun 2026 10:55:46 +0000 (UTC)
+	id 7202B1F00898; Tue,  9 Jun 2026 11:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14111F00893;
+	Tue,  9 Jun 2026 11:38:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781002547;
-	bh=eWt1hIGUG4VVl6t3Lb7SwzBt8jaRjmM77PJvAbXYh6U=;
+	s=k20260515; t=1781005123;
+	bh=8Kq9pjIGs4k5XRIg8S2MPS7in6Zvm8dz813etexEqlE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nh0+1DoWGz8PxRCjAefH/c7JUS42e1lHnLFPOcQEFnOJQO9/ipqJR2pb5SUwjLoNz
-	 opn2WT/tah17G395xBWCFM1u2SlSD3Sd03U3P9omegst+hOVt5ZvgKj7goVFV8IBA/
-	 BwMWEagqWbIfuRd9RdrN3Gej3IX3RiSo4LmSZyh6jNpr4Wnmql9VwgAHTsIPXaNyaX
-	 6Qy+s4ROu7fcKvbGB62YHRGU6/oZ6o1qJKNc5nmLQGQFiQzJ1zdZ+CevFDS0GPejBI
-	 0+r7oHmMCy5n14HxKscWKfFn5SNkJEswN1gCYxAxiXrxd9HE/cebhQUaJomBfDBUUo
-	 /iSy26G8OMqwA==
-Date: Tue, 9 Jun 2026 12:55:43 +0200
+	b=Zhb8Ij8T8ArBH7SDGoyhQpRzEkfu8n+prIpwV14sOpuYTah5F5worInEqZIu2tGim
+	 lMziWyx3GFhQhyPmu2G4h1oUZSIfzV7br9w8uaoeglhGGt677dUNDgLhFjXL6dadGU
+	 wyJgzgX3vKpT5F6pKmLo+ffpohejn6raoXz0c8if1APUowHTok0M2qQGEFzkNgT954
+	 yUw6YfBTxUs/802RoHOvqfAiPcWOXxZgX2c5CF+SWwCjyEXKIncYvvpFTlXJBlJVT7
+	 gzlTe8vUQURw28EpN6OoccewGnZkEHiwJtNoC1+gJNgQTxoKa7MWB+Kuayp5Ne58wS
+	 3Uz7YXBfzwH/g==
+Date: Tue, 9 Jun 2026 13:38:39 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: soc@lists.linux.dev, soc <soc@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [GIT PULL 2/2] Renesas DTS updates for v7.2 (take two)
-Message-ID: <20260609-imposing-noisy-griffin-5c87ea@quoll>
-References: <cover.178031911driver8.git.geert+renesas@glider.be>
- <cover.1780319122.git.geert+renesas@glider.be>
+To: Chen-Yu Tsai <wens@kernel.org>
+Cc: soc@kernel.org, Jernej Skrabec <jernej@kernel.org>, 
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Allwinner Driver Changes for 7.2
+Message-ID: <20260609-woodoo-tremendous-beagle-15cf3a@quoll>
+References: <ah3YkTZAR2GXlC3x@home.wens.tw>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -46,20 +45,20 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1780319122.git.geert+renesas@glider.be>
+In-Reply-To: <ah3YkTZAR2GXlC3x@home.wens.tw>
 
-On Mon, Jun 01, 2026 at 03:18:19PM +0200, Geert Uytterhoeven wrote:
-> The following changes since commit 44f1ef06ceec55b7704c7d773d6136ca8b90f8b7:
+On Tue, Jun 02, 2026 at 03:08:01AM +0800, Chen-Yu Tsai wrote:
+> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 > 
->   ARM: dts: renesas: r8a73a4: Describe coresight on R-Mobile APE6 (2026-05-15 11:35:25 +0200)
+>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v7.2-tag2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-drivers-for-7.2
 > 
-> for you to fetch changes up to 0d4ed954061efc3e47fa889d3de0675f933f438f:
+> for you to fetch changes up to 61192938a5870ac36edae81e4775b680dcf02c61:
 > 
->   arm64: dts: renesas: r9a08g046l48-smarc: Enable audio (2026-05-31 10:52:23 +0200)
+>   bus: sunxi-rsb: Always check register address validity (2026-05-25 06:37:11 +0800)
 > 
 
 Thanks, applied
