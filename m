@@ -1,79 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC3A416CEB
-	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 12:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B506408608
+	for <soc@lists.linux.dev>; Tue,  9 Jun 2026 12:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781008232; cv=none; b=BAMdsm4FI6pP/VzriB7zDOu6wmMbm0dkWXUbeSDxO3ZttsbFAcoNd7KB40G18A0P3M5p7+yOsxNYobxKwHlOTablquB5D3CY5iK83CJhzZ2Tm9+qTwYjI2O30peyzHMU6DFghS8yobJ+8YR/kuJbSLZY4OReZpyw8G+bRaMZ/1M=
+	t=1781008737; cv=none; b=Oft8w33F/lufUF17OapWBbUqTWDfsVR3z53behURQujmYTlIULuV/Rbrdgh7nYvjfFMhGtC7HqjznckTCCy/jWFEMOCrjSSreiUh7ZmypXJcrnEpC86TBl4Z5VO251nCfT/yLTJBBIxxAc9liPHiXqZ1AqgS6QyuTFe16zpFR+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781008232; c=relaxed/simple;
-	bh=E1ae7ZQS8RJUSLRikG7NT1coJcrsI10ZGDXfq9C59Q4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=t46bBygfPamqEGql48/pXskDEIYMdCiiVGaBXqgJ5YImbm9cDVWqlKDfpdkW5C/FnFOGcVwQkQZDblAa7iCd3R3Dq8vVkMfWUERVVl3WroNRW3o8f3FK+46c7Ka5E/NcYpFEvjrC3f+QGgnSN92qrpIdCg3JsXBL/NaXTGOFe5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LL6Pu1EC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781008737; c=relaxed/simple;
+	bh=/r+WTcxg/v4+c6CzD61XZv8A+8vyDIcgIPi1JGJfrzo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ROvzrSHXxAX29StUtYfFZ/bvgG+a5gBAGDqgT2O6WuKymj5xP79H8jkg5Lgwgg995Q7xjBPbPCBcpU1I8ZcvxpWs5siiDdxApKEGAzjh7hzyWPQAlleMcYQAPrQ3v47cpxhZW0hbgW1wJZAjV6h+IxYZsGxBaWzFnlIG3/IxJUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W5AMJ8BX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LL6Pu1EC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W5AMJ8BX"
 Received: by smtp.kernel.org (Postfix)
-	id C011E1F00898; Tue,  9 Jun 2026 12:30:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96601F00893;
-	Tue,  9 Jun 2026 12:30:31 +0000 (UTC)
+	id 2C68A1F00898; Tue,  9 Jun 2026 12:38:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B081F0089B
+	for <soc@kernel.org>; Tue,  9 Jun 2026 12:38:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781008231;
-	bh=YSf6+ZQVeVm2RS5OuFWipjc0ys7XKd6+IT0r8+OKjF8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=LL6Pu1ECNhtij8e04Dl6zmpV/4WPXqAaKVaiJO93685ru2aJH07X2DtuvzvhS0gQb
-	 E5xgzB71/GUvqobbR3xBidiWQZm2NUJNYapatpIImgU3bw5FbNLTAYPvyDEuwAvNAD
-	 p40/gktavxXEfgmDPBY6JyBKoF4VMExMCe4q6VRBorH8gv0Mk7Ywtji9S5BMw+Kycu
-	 Lc6x+jvUpLflJ6LaFTGSNI2SRyagN2OiSSs0FzIfI83eCKeVgnaamIkm/6MPkM4nEf
-	 P39KXy8+HIYJB6u6QueD4DnScOgZMEFn2jeA1W1cmxXH4B7r46bw+DL4G8LkusHlHE
-	 iAJrtVQHnarBg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568E739308CA;
-	Tue,  9 Jun 2026 12:30:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1781008736;
+	bh=JEzkvlBFFvYKUxV+2A69a6nCqpUbqrOObJ/AftXL8E0=;
+	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc;
+	b=W5AMJ8BXLyS7hYvQYZS2SXfIrXt2JycaIQ+7d9SrPGm9LZxmU08PzNsdnEZbREmSx
+	 b6ZgcCmEc+6daNrDyfqEVHTD+mRil0D5+ZB1AnvqC/071ygNFUOUqGLGe2FwBewiZe
+	 NdxeG0R1Jm6B1auzzLvww07FBOhGWZlVfCZrSKGo+/cQuVANfL9m62yLAsjak5sF50
+	 k0tlF7I5XPYgXE0lOIbKXGrNImOmuELP8rRNHpY7C0F2JKmeUv1q44c6CdM7TS+2ON
+	 NlEaimbfcPv2YKgEcFzuZAHaWU1eEgs2YTXml30d+J9Yag0GJpeIYbLidCCHz+iP4d
+	 a+NS81M6AigQw==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3965adfd75fso48513811fa.1
+        for <soc@kernel.org>; Tue, 09 Jun 2026 05:38:55 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwV2TzCjeI7KERAsp/fTnxCG04cbutB+IMtfVZIc4Lzi4hQDEPS
+	n7P7zoVKWoOhls1I1HtTAKjSk/pI0PvkpeTLkji5BYG5q7W3TELXjm1HCf5XVfcv5CBZ4GzwIG4
+	suNGJ1TZncjp0sC03/8POZNxFhh8YDQc=
+X-Received: by 2002:a05:6512:3347:b0:5a8:9f6f:3212 with SMTP id
+ 2adb3069b0e04-5aa87b88f32mr5272366e87.34.1781008734298; Tue, 09 Jun 2026
+ 05:38:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT,PULL,1/3] MediaTek ARM64 Device Tree updates for v7.2
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <178100822993.2001790.12062044070498210737.git-patchwork-notify@kernel.org>
-Date: Tue, 09 Jun 2026 12:30:29 +0000
-References: <20260601091225.5223-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20260601091225.5223-1-angelogioacchino.delregno@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: soc@kernel.org
+References: <ah3ZAPLzh8ORGmpH@home.wens.tw> <20260609-mighty-excellent-shoebill-04d7fa@quoll>
+ <CAGb2v64guguXmg-=WYmZyz=rw3PNRvh+TnEE1yWFz=AJbryssw@mail.gmail.com> <98f3e864-3a9e-4f96-a633-0c0053ec35fb@kernel.org>
+In-Reply-To: <98f3e864-3a9e-4f96-a633-0c0053ec35fb@kernel.org>
+Reply-To: wens@kernel.org
+From: Chen-Yu Tsai <wens@kernel.org>
+Date: Tue, 9 Jun 2026 21:38:42 +0900
+X-Gmail-Original-Message-ID: <CAGb2v64o+tgnLqK_xDoauB4ThF_0979_5XPB38KiZHYyh1BnVQ@mail.gmail.com>
+X-Gm-Features: AVVi8Ccop8L6DDH-VT7ntRT5GDaoDpK71wx4lOBSA8i77A6ck-ulE7QwflSieZw
+Message-ID: <CAGb2v64o+tgnLqK_xDoauB4ThF_0979_5XPB38KiZHYyh1BnVQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Allwinner DT Changes for 7.2
+To: Krzysztof Kozlowski <krzk@kernel.org>, Stephen Boyd <sboyd@kernel.org>
+Cc: soc@kernel.org, Jernej Skrabec <jernej@kernel.org>, Samuel Holland <samuel@sholland.org>, 
+	linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Tue, Jun 9, 2026 at 8:51=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
+> wrote:
+>
+> On 09/06/2026 13:48, Chen-Yu Tsai wrote:
+> > On Tue, Jun 9, 2026 at 8:43=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel=
+.org> wrote:
+> >>
+> >> On Tue, Jun 02, 2026 at 03:09:52AM +0800, Chen-Yu Tsai wrote:
+> >>> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f=
+45e731:
+> >>>
+> >>>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+> >>>
+> >>> are available in the Git repository at:
+> >>>
+> >>>   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tag=
+s/sunxi-dt-for-7.2
+> >>>
+> >>> for you to fetch changes up to 44cf19e41c769720750dbb8752aca75c247e56=
+5f:
+> >>>
+> >>>   arm64: dts: allwinner: a523: add gpadc node (2026-05-25 05:02:58 +0=
+800)
+> >>>
+> >>>
+> >>> As mentioned in the tag, this pull request contains a change that sho=
+uld
+> >>> be shared between the soc and clk trees. However since I don't have a=
+ny
+> >>> clk changes to send this cycle, I think it can just go through the so=
+c
+> >>> tree without any issues.
+> >>
+> >> But the clock driver change cannot be in the DTS branch. This should g=
+o
+> >> via clock tree even if it is one change. And definitely not via DTS
+> >> branch.
+> >
+> > It is a shared change, because it moves two symbols from the driver's
+> > private header to the public DT binding header. I don't see how this
+> > can go through just the clk tree when one of the subsequent patches
+> > uses those new symbols.
+> >
+> > "clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header"
+> > is needed by "ARM: dts: sun8i: v3s: Add mbus node to represent the
+> > interconnect".
+> >
+> > The other way to go about this is to use raw numbers first, then
+> > another patch in the next cycle to switch the numbers to actual
+> > macros. IMHO not worth the churn and headache.
+>
+> You can have a duplicated define.
 
-This pull request was applied to soc/soc.git (for-next)
-by Krzysztof Kozlowski <krzk@kernel.org>:
+I honestly did not know that it worked.
 
-On Mon,  1 Jun 2026 11:12:20 +0200 you wrote:
-> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-> 
->   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ tags/mtk-dts64-for-v7.2
-> 
-> [...]
+However, splitting what is effectively one logical change (*move*
+something) into two patches just to be able to merge them through two
+separate trees still seems wrong to me.
 
-Here is the summary with links:
-  - [GIT,PULL,1/3] MediaTek ARM64 Device Tree updates for v7.2
-    (no matching commit)
-  - [GIT,PULL,2/3] MediaTek SoC driver updates for v7.2
-    https://git.kernel.org/soc/soc/c/adbd66a8f7cf
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Would it help if Stephen gave an ack?
 
 
+ChenYu
