@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB6C329E79
-	for <soc@lists.linux.dev>; Wed, 10 Jun 2026 22:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5785E329E79
+	for <soc@lists.linux.dev>; Wed, 10 Jun 2026 22:20:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781130015; cv=none; b=cdYVRwsjMSlCYY9BdZEF7W1Lh1IOd3ujjQnO98igCfoSMT1tGzK4vmNZAWv2ygM5V5ny7BP4493nOQ7a4GEKYSw24YDzjC/CNi0Q/CLbaqfEcc1yVp+QJuK8sDXpGJOV6f6Q6/eebQdPlZaD+TeCmwm4V6UoqjMKhMZCWz5JjP4=
+	t=1781130016; cv=none; b=JVUdp1EEi5/5r2Mgw08ufLHcql740KtTURVZhHZUQGqCXU1TdqEgqfq09eo0jX3QTz8UvO0huG4zaFoBJE+EcsaOrHDc4A7ZMUWIJ6M7umrFWdLSkZW69YlA10L6kFhJgBD6IH5cGB1nOBSiaOtr9X9vVt5j5DIsW7z0qV+IgJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781130015; c=relaxed/simple;
-	bh=6Gi4JkPcp7rih2LCHCcOQ5e+okmoSaOV0rYSXB0KOIo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=kYlG6jCzP7u8ZRBlL43SI+Dc+ZbZIwfQKESHZTIsf7g0Wn6Jm8as+e1/RUAQLIFg4uMta+DBeJoKq2FMWv2bUZaai+cQPHxW1JXJmMy4/YlPy17psyz2uExpoMDcpCL1IJ0Nxy/71JJbEB+MRL/xJtFzB9O5nqkkGJI8gXNiRV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bctKeu8+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781130016; c=relaxed/simple;
+	bh=8csdBVnUa6fL0Zc7WIkib4up37CajCGuIvhkSsoGlK8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=b/zs0GtL4QdNCELYmKvPrVm8H0zSx7VU73FKy8WCRhGS/M38Ve57UusLNgghfPtnUNNtF6MagzIsoDuBadmtmEuWLS3fLQ/CYwY8Ue8xZlEjKCRaV87VqH+gyPdcowTYcsr81dE4fk7w9eVuFVt8LmY9hhgoh6pKGfRPJDLf6Ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jcM6rDYy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bctKeu8+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcM6rDYy"
 Received: by smtp.kernel.org (Postfix)
-	id CEF211F00898; Wed, 10 Jun 2026 22:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8CE21F00893
-	for <soc@kernel.org>; Wed, 10 Jun 2026 22:20:13 +0000 (UTC)
+	id 02AA31F00899; Wed, 10 Jun 2026 22:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B3A1F00893;
+	Wed, 10 Jun 2026 22:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781130013;
-	bh=DABZofaY+u1SyuYNDQTHiQ+zdupeHIP3kaQkTiFeSYQ=;
-	h=Subject:From:Date:To:Cc;
-	b=bctKeu8+gc+fYUUXgY9S6zvV5o3RiqDmkWDqkYO3LIYGt0cjybAA0nDxNmaiWP8AV
-	 C7JCxW5tqgRl6DeUV4OcgMHqk9cOVp35gfvvWv9ygdbiqUTQUHNM9mDXh+q7XR62JR
-	 qn7FhbGzmsjsGy/l8l/zpzlWVymIsyW8KFO08w3T4G7x/DGJGXmQCGGP0cY2TyRu/m
-	 Du5tf05vm62U3dzx7yzyp38TpM2FVKVN7mhKlPxROnRjcprUmN/S2xtyKL2oVRIj5b
-	 l42uGp451MW5Iv3392u4Nlv/AYFLp1gpvbj5ArTGaGUEbsQkF5sk23nYbslLtUI84C
-	 1eXZFssj0yseQ==
+	s=k20260515; t=1781130014;
+	bh=BOFKtZCHPGxPIMzI1nVxJeTGfeifbFPqy/DBACISlEM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=jcM6rDYyqPMybZsIYevpTGH2OuEiagHwDNQcQQ5TSVeidBvCOjnIzolroUU7c9rSN
+	 d1ZxJTVHYylVWFb+2u8ng34p9TEpKjjV34kp75D5AgTsl3dLmmlv0ju6rNETBx/vbz
+	 oOZlawBWF/X3r2M9Bg8ZB+3FDNrlPToo0GSazA3+XMOYmHWjJNie0RQ/FrYvv7HwjF
+	 MWIU072qzEDuz1TBx2diFVkcTEp0TiVJxASNluFcpI+YqwM9Fn4S69SQmJuMHhXl+d
+	 7DJGWRJyL/h3/O+TAZaOV9Ym/7X6blay1RMhS9hq9A5yn9Kw8qdAxmXtlmnXR8npX7
+	 aSbTIekrweZrg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 963C43930DFC;
-	Wed, 10 Jun 2026 22:20:12 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A543930DFC;
+	Wed, 10 Jun 2026 22:20:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,40 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] i.MX arm64 dts for v7.2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178113001117.3654873.513148293021255264.git-patchwork-summary@kernel.org>
-Date: Wed, 10 Jun 2026 22:20:11 +0000
-To: soc@kernel.org
+ <178113001264.3654873.3765240570916564610.git-patchwork-notify@kernel.org>
+Date: Wed, 10 Jun 2026 22:20:12 +0000
+References: <20260608155731.2323181-1-Frank.Li@oss.nxp.com>
+In-Reply-To: <20260608155731.2323181-1-Frank.Li@oss.nxp.com>
+To: Frank Li <Frank.Li@oss.nxp.com>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] i.MX arm64 dts for v7.2
-  Submitter: Frank Li <Frank.Li@oss.nxp.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1107995
-  Lore link: https://lore.kernel.org/r/20260608155731.2323181-1-Frank.Li@oss.nxp.com
+On Mon,  8 Jun 2026 11:57:30 -0400 you wrote:
+> From: Frank.Li@nxp.com
+> 
+> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+> 
+>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
-Patch: ARM: remove the last few uses of do_bad_IRQ()
-  Submitter: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1108956
-  Lore link: https://lore.kernel.org/r/20260610045626.248643-1-enelsonmoore@gmail.com
+Here is the summary with links:
+  - [GIT,PULL] i.MX arm64 dts for v7.2
+    https://git.kernel.org/soc/soc/c/b8d5578e2e3e
 
-Patch: [GIT,PULL] i.MX arm64 device tree changes for v7.2 (part2)
-  Submitter: Frank Li <Frank.Li@oss.nxp.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1109406
-  Lore link: https://lore.kernel.org/r/20260610154001.609755-1-Frank.Li@oss.nxp.com
-
-
-Total patches: 3
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
