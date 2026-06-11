@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC913803EF
-	for <soc@lists.linux.dev>; Thu, 11 Jun 2026 21:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6C332863D
+	for <soc@lists.linux.dev>; Thu, 11 Jun 2026 21:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781213409; cv=none; b=LTleikENWHEaPo2zq1U/GFmZKPW0l34pkF/ewHblAlkn2IQv23WQUSy7tW2eZeEmTAPoW9wHpwZTJeIa01qVY2ttBLeJdNi7BjIz0x2re40PeK/lmaQ02QWqRuFd4TMGh6xMZnVoculRhs0HyLnae28Ibp0wkUKGdeSjnHtesaE=
+	t=1781213411; cv=none; b=lLbcPWmz26zoZiQwkL2fAnxmPkdybbLT+88EfozDx5PdNSU/uYk6kB9UQuwqqkmj0l5/sRXiqRXuxXgIaOK97+SBlYSVLD6/JJbhJlFAO8dh29ic8MRkolsioRWz/xgmL+zyyRaauCb2yFsUW+I38K8u7rS0b6r7QEQBR51s7CY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781213409; c=relaxed/simple;
-	bh=YHQwk7/5M3sKJ4VJOQ8b9e0gIDYB0S1t2wJf+49PdQ4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=LTqt4aA8KGzwLQJsTgLFBkOq6Abs0uWb3IcdQd8mLEixznUWGCMQhofKX2b5WqjdKVfFKk3eyJtLaDDu7Uto+UxH/C8fJ82klughK8LI8qOPuf6ftdsO5Mt6oPBDhrGph1UJlj8kBEvr4kQ1EmqPCLYOCChYqbMHLfUh9xPB1b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAu60G+P; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781213411; c=relaxed/simple;
+	bh=GrfjV8uWiMsUxv/uKifa/2rXzTQNnioLd2oTj8lDQ0c=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=B0jCVSQyfmqmQhM8Zc3vLN8G2nK2pfUjt6UrLmnrcVoyDWjmQ72Sncc3byQbh6x3P15mrTT1NN0vgAGcSpDQhQXWZbVtsl4NdC1z6V2wt5mBUKsTT8s7g/ogEDO+6bsyGel6adngtWFc11X4+ZtN50TBl79reGQqhISCilJs+s4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdHpanY5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAu60G+P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdHpanY5"
 Received: by smtp.kernel.org (Postfix)
-	id C72841F00A3A; Thu, 11 Jun 2026 21:30:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B168A1F000E9
-	for <soc@kernel.org>; Thu, 11 Jun 2026 21:30:08 +0000 (UTC)
+	id 3EDB91F00A3A; Thu, 11 Jun 2026 21:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E3D1F000E9;
+	Thu, 11 Jun 2026 21:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781213408;
-	bh=ZB59OFdcDAagsvbvc2TuKmHKvsuAvQMNksYIxRlG9wQ=;
-	h=Subject:From:Date:To:Cc;
-	b=aAu60G+PupscOPd9M4QwCFGOcIKzuUx7I2mZdwP5RGlbeOX1rskP2wWaOLa1hiiTq
-	 xTMQKqeiJQMrqnG/+GyvsPhmSg10Yb0QxHjLBjgL8qE4OE4rHHUf+aFFlCD6jyRoi9
-	 SGX73kvAwipYo2zzLZVJsUdgS+W1Y8PnGPRhonYx+3FAZO21QUYVxbKZisrHltFbVm
-	 363e6NHgV7hsgwIAMOfqWY5WsF/jKt/SbrXknsxsYwQl+Wxe8zFdzL9MnhXBukUsqv
-	 ned/XQRodyQLMPCJkTTY9/W9eV8wLEetF8sdYLX0f0MmGLFC48QhYBzBdkWaKXwQj2
-	 yckJOCeTvtN2A==
+	s=k20260515; t=1781213410;
+	bh=8wTghSR1nxxHIDHNFjZMQIvPbtbfQHcnH/uz5C15E1Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=hdHpanY5Suh+lx67p5anYZ4LL74SFJcGgk/wQDbfh7S2t7/b65f2ncjk9JLKApg8k
+	 PhU1tBNzFd2xqxznfziaGHcAaqjOZk+neIOWeAbifO4sLjWp0ax4Etla0oVpVNSYQ3
+	 sZLGVQAj5K+EgRPcOg+MtVdPhF2yaZ8juhil8TVjSYZIvwhFU2FDlqbrvgQwinTGBZ
+	 clRAx1++XekGtQJbpVmRFVXixAwUhVisNmlF/sQk1ImAqww9QuNirRQb/qzvgznuZd
+	 tDIbN42QWfvSZLYC1ggYZVX4U3+LMIp0U4tjhCn/TlbSgYJlahkWsBVZ/YrThmlHVh
+	 QXELrs6U7WPLA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1C2A23930FAB;
-	Thu, 11 Jun 2026 21:30:07 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939C93930FAB;
+	Thu, 11 Jun 2026 21:30:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,34 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] i.MX binding (display/lvds-codec) for 7.2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178121340556.373642.336522245101786228.git-patchwork-summary@kernel.org>
-Date: Thu, 11 Jun 2026 21:30:05 +0000
-To: soc@kernel.org
+ <178121340714.373642.11087801768650081010.git-patchwork-notify@kernel.org>
+Date: Thu, 11 Jun 2026 21:30:07 +0000
+References: <20260611144912.3860262-1-Frank.Li@oss.nxp.com>
+In-Reply-To: <20260611144912.3860262-1-Frank.Li@oss.nxp.com>
+To: Frank Li <Frank.Li@oss.nxp.com>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] i.MX binding (display/lvds-codec) for 7.2
-  Submitter: Frank Li <Frank.Li@oss.nxp.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1110119
-  Lore link: https://lore.kernel.org/r/20260611144912.3860262-1-Frank.Li@oss.nxp.com
+On Thu, 11 Jun 2026 10:49:10 -0400 you wrote:
+> From: Frank.Li@nxp.com
+> 
+> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+> 
+>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
-Patch: [GIT,PULL] Allwinner DT Changes for 7.2 - take 2
-  Submitter: Chen-Yu Tsai <wens@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1110099
-  Lore link: https://lore.kernel.org/r/airAH8n0YEtB3i2a@home.wens.tw
+Here is the summary with links:
+  - [GIT,PULL] i.MX binding (display/lvds-codec) for 7.2
+    https://git.kernel.org/soc/soc/c/74b1b75a32ff
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
