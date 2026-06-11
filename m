@@ -1,127 +1,141 @@
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27AB820C00C
-	for <soc@lists.linux.dev>; Thu, 11 Jun 2026 13:45:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739173EAC9B
+	for <soc@lists.linux.dev>; Thu, 11 Jun 2026 14:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781185541; cv=none; b=gcX3kTmdGmZRwY6C+GZMk2xqw/piCmerwc8baMx88TwJI2JW4dYkwXDScKMaMEp+zjRQva4DHMrU9xMFn8v3SArkmXxBQZtTCK123pqp78XJWVK0pZxv10W8FweOS0syc4raQehZO+QU6rJpoD80657SrngSxWdq67gHq30K5L8=
+	t=1781186598; cv=none; b=m0cFbtdcMm2EyIoxg1fb49eof/oGGEe8SgMiJDrV0P88LC6EGy2WUhzggslXHZIh4HZrGc8JUjHN8C+mDEP8HCFGHQb/8k2txdJ9RF8+ruXDEcIReA4URvyqmU94WUD7Qpu87fBDerOAj9I71d5J5C6D5fkeE124YwDXxt81nQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781185541; c=relaxed/simple;
-	bh=QgOBt4+zbAuHTXO4FftMqSLICaU51LkCCfwNtr71mIQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=U+DQ2co4TkKhRhybZ2rmIus5VRrcOOdp66WTV1Pv6oJMFzOqMuWY1Z9pv143rI6ANwqRcn8o5crMekdET2q3vW+y9RlyGM/bfeEBE5mHKDZKtOolIpKjvoHckRo2BNi8wSRlmDlUV6bfHgrZpNybcGt6u5mqsUb7vDaB40G88V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JSr4cfGm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=A0qy5V+X; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1781186598; c=relaxed/simple;
+	bh=KM4LL8Gh8xGad4QI9XcVPIlus9WKFwleUkdRr5fjPXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=so2BLyG+i8Km7JPcAo8rceC4KJlO2QMkFJ/9UI2dMBUUdKO4yj6nUXw5mwLjISoHdYX1zRzIGlkbWzZoU8fydnXiDgMwIwSXxWsq67y/3o5v0PPH0QEl35ygfMc8ix0qk+QdFSFp5mcJnBHYMFrtWWIdNxs9HJNDy9KbX5pw8Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dXe9Ur/g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JSr4cfGm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A0qy5V+X"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 4FA3B7A00E0;
-	Thu, 11 Jun 2026 09:45:39 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Thu, 11 Jun 2026 09:45:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1781185539;
-	 x=1781271939; bh=uSlBi62DRLhtbWpbozky+npCQI+7r3jm0jNsMTz2JG8=; b=
-	JSr4cfGmrHhJLg9IlliPuBxanoSFSCra6aV8fO9gfAG0wPJvqKq0Eez4NnaTWcf4
-	d6jlzhj6afzvpEtWcljENgkXxGb6qW+7lS6jXm2xBWuCICNFiPRSopw2sGGt11Fk
-	i37YzzTAroOnkQ3B8ZFydSjolyGyudwEh2e8op7Cc1a/oI+7M28OxhymwXxfQoMC
-	QxkdKeuhEjMigtnA5hvkB2L03iP1RW02vyRwVmarP4BRt6ZdBRUfNKBOTgfeYmlr
-	kaw62m5pkVTLDyE2BLYcx/MpxyeIqPziBiJXBjMquqL0i9Xzw9uxfR/ctGSVH1oZ
-	vp9YTIKEvMsUP47QjbFkMQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781185539; x=
-	1781271939; bh=uSlBi62DRLhtbWpbozky+npCQI+7r3jm0jNsMTz2JG8=; b=A
-	0qy5V+XgxPigtlNruvE0nN/LNaqh8Ml6TFEdUtBFWXj/mVA4xbzf0TbsEc8xezog
-	FyMFnJO6UGQo0usgM89K1L8N6cJm47PFP7tfwD4hcs63N0KdQap2rQNlG0ZcN45p
-	J8qlfv1hWSahVGjI7Yg8zBuflPSVBK7YyfQU/Yoflq8A508Gs4zpkENGO+tKml/6
-	Gv/ycxu88NA6mQ/1plOPNnUHYqtoih17KEiOvmx41wCUdq5XvMOU+YAccQRa4lKn
-	Yalp1tG7Ds6KVDJTJIbYQh+5eODSEKWXhnFAruVqWHBvEyUJbDGac40sS6WfE60E
-	SlvAEIfe2Nw9cu/8rYRgQ==
-X-ME-Sender: <xms:AbwqavHd45SO2KLVjhT1kwMVfKTS-Q2i9vvscQocY1rEYKBu0fI67w>
-    <xme:AbwqanLZJpKaGZhBcoUYDoQ4cKNv6UMof9YeYzSWWP4JPMk3MqXuOh-5zw8RwnAWu
-    e-eeNXRzwOo4SYsruq8SdHEPbmvwp7mucINssJsYdk3CX0b2QkOs313>
-X-ME-Proxy-Cause: dmFkZTGfu7NDfkRH3y24s4d4VazmqpPJmqhXz2XhxBopq5M4jlwRDwG6u8+9WGoh/C1xe7
-    BRUDqVnAz7cWydFlYUlRI2kdc2SRaIo0UXOnlBHeAqS/hqqt7EfTUImmm/vAliqHRon2qQ
-    Lo4+r+nvbe9tOvcnI0hW3ydk8ifRwxOiY794yrHBBMMjtkNnrGZk3fX5f2C1C32oXqRyWl
-    3DWgFHrPV7DGtOB5Dvfqlxh+PQjskE+gOaSCPwwkrqjQgPpOYUZhQsh3s60WWFPdVm4kor
-    P0TIf3mjkKysod9ng8Q6iwrRwq3EClxw+SZilzMcubnqBhcMFjTPN2KiyQ68qvvmfj6uAc
-    xsB8m481785bALhzD9trhKNwgv2EN+WQkV0cs9InAi7Tze7WWRNFOH30yDT0OsrGoNVf7t
-    51Ok7zPKMPb3+s69HC9XvqWGCJmTf3+pxl79HBKUZ1ubihZVBjoaJdsZsAGWV5SUlddtP0
-    EuinbZXvMd9i4Et+cxM8m5TGZw506lWUmdLs27jXdMcqr3w2dF+k59g3bO2OjLXsAiosuo
-    aVJZHQH04ZYox5o/id5g5oNe3fyD/apP8bONuAFS3Is+jJfyvLKzVMKS71OlpqU5ZFr1la
-    WUi2fm8XMshwNIMkH7aRMoiZj3UD4vCL1DXhCHUvLLo2vhkvm9VKQ6THUpOA
-X-ME-Proxy: <xmx:AbwqavSh1Rx3xpuHa0Gs2qCQuPxN1ZU1SZU12omKe7GRGpUBLvkB5A>
-    <xmx:AbwqapuGYx8ztaQjfF9Q4JMHNCcae9Ko9xNbFqc3ML5zJLylHfQQgQ>
-    <xmx:AbwqagbabJ8cJUOxCUZmCiTt_bNC112VUTPvEIons5IuTy5rkUoMSQ>
-    <xmx:AbwqavF5M9a2CWHUkdQ84CUMlOokr3_PbyvKuDQAGfmPG_Elu8_AHQ>
-    <xmx:A7wqak1o8jFkLwCjEGkW0AedBxh0bu6dbCgfg9Zlkr3Huu3Y5OiTUxh7>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id ED615182008A; Thu, 11 Jun 2026 09:45:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dXe9Ur/g"
+Received: by smtp.kernel.org (Postfix)
+	id 379FF1F00898; Thu, 11 Jun 2026 14:03:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E2C1F00893;
+	Thu, 11 Jun 2026 14:03:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781186596;
+	bh=5DHHyzLEfw3GTU4oBkJkB3iK+XV3OFBbTGTbLxfr4IM=;
+	h=Date:From:To:Cc:Subject;
+	b=dXe9Ur/gCDsCGP9BHXfYJ4cZ5PQRdbtr/IcXQWn1RrkY66fLe5sWl9AlrF0vmaX5O
+	 Ju65FBO7/IXscgKD3270ZN/Kbs9XyfoFdTMjo+Ck6OcZS1l1+ZNRqB5f+y7tLwGbKn
+	 /4n4miM7gjBeiKNcOX7AVYNFYCMsxwlfq0hpzozAuH6O57YDENSKH2nDGyHbf5o8sR
+	 mbVqMI+/QPV5CQbGXpS+kztKG5m7exMbMr8wvEm8Rr9MztsOJbBlPeo+g3XnHBq48r
+	 A5SMZda86jWkUKAolKWCrC9o741RC7THdZ8McHw1uc08Pxnwmf80Q+FXMvC/wifklF
+	 Ylj8bCDeyRdkQ==
+Date: Thu, 11 Jun 2026 22:03:11 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner DT Changes for 7.2 - take 2
+Message-ID: <airAH8n0YEtB3i2a@home.wens.tw>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AbO0-6eGr7Ag
-Date: Thu, 11 Jun 2026 15:44:55 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "gordon.ge" <gordon.ge@bst.ai>, soc@lists.linux.dev
-Cc: "yangzh0906@thundersoft.com" <yangzh0906@thundersoft.com>,
- linux-arm-kernel@lists.infradead.org, bst-upstream <bst-upstream@bstai.top>
-Message-Id: <c7aa4a27-d523-4c83-8a5b-d2e7998d7e97@app.fastmail.com>
-In-Reply-To: <20260611.111859-gordon.ge@bst.ai>
-References: <20260611.111859-gordon.ge@bst.ai>
-Subject: Re: [GIT PULL]arm64: BST C1200 eMMC DTS for v7.2
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dusNKKIGbS/LLl67"
+Content-Disposition: inline
 
-On Thu, Jun 11, 2026, at 05:21, gordon.ge@bst.ai wrote:
->
-> Thank you for the review.
-> I have fixed the two issues you mentioned and updated the pull request.
 
-Hi Gordon,
+--dusNKKIGbS/LLl67
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-unfortunately, I'm still seeing new problems here:
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
 
-- you use a git@github.com url, which I can't pull from. Please
-  add an 'insteadOf' rule to your .gitconfig that rewrites this
-  to an https:// style address (or edit the text manually)
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
 
-- https://patchwork.kernel.org/project/linux-soc/list/ does not
-  actually show the contents of your pull requests. This is
-  probably not caused by something you did, but it may be
-  related to the URL problem.
+are available in the Git repository at:
 
-- The commit you have contains
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-7.2-2
 
-  Author: Gordon Ge <gordon.ge@bst.ai>
-  Commit: Gordon Ge <gordon.ge@bst.ai>
-  Signed-off-by: Albert Yang <yangzh0906@thundersoft.com>
-  Acked-by: Gordon Ge <gordon.ge@bst.ai>
+for you to fetch changes up to 6b81aa0c8a4f038712fa549e4d44d8279eeb0440:
 
-  which is not correct. If you commit the patch, your own
-  Signed-off-by needs to be included, see
-  https://www.kernel.org/pub/software/scm/git/docs/SubmittingPatches.html
+  arm64: dts: allwinner: a523: Add missing GPIO interrupt (2026-06-11 21:46:33 +0800)
 
-  If Albert was the original author, you should also reflect
-  that by using 'git commit --author="Albert Yang <yangzh0906@thundersoft.com>"'
+This is a respin of the previous pull request, minus the V3s clk
+bindings change and MBUS node addition.
 
-Since we are getting very close to the merge window, I can't
-guarantee that the patches make it in, but please resend
-anyway. It may be easier to send these as individual
-patches instead of pull requests, but that is up to you.
+Another patch, a fix for the A523 pinctrl interrupts, is included. This
+patch was just merged, but is long overdue from pre-7.0, the binding and
+driver changes were just picked up for v7.2, and we are confident this
+will not cause more issues.
 
-       Arnd
+----------------------------------------------------------------
+Allwinner device tree changes for 7.2 - Take 2
+
+Some changes for old chips and some for recent ones.
+
+- A83T gained the MIPI CSI-2 receiver
+- overlays enabled for Pine64 boards
+- D1s / T113 and H616 gained the high speed timer
+- T113s watchdog enabled (for reboot)
+- H616 gained proper SRAM regions
+- A523 family gained EL2 virtual timer interrupt and GPADC
+- A523 pinctrl IRQ fix
+
+----------------------------------------------------------------
+Andre Przywara (1):
+      arm64: dts: allwinner: a523: Add missing GPIO interrupt
+
+Jernej Skrabec (1):
+      arm64: dts: allwinner: sun50i-h616: Add SRAM nodes
+
+Marc Zyngier (1):
+      arm64: dts: allwinner: Add EL2 virtual timer interrupt
+
+Michal Piekos (4):
+      riscv: dts: allwinner: d1s-t113: add hstimer node
+      arm64: dts: allwinner: h616: add hstimer node
+      arm: dts: allwinner: t113s: enable watchdog for reboot
+      arm64: dts: allwinner: a523: add gpadc node
+
+Paul Kocialkowski (3):
+      dt-bindings: media: sun6i-a31-csi: Add optional interconnect properties
+      dt-bindings: media: sun6i-a31-isp: Add optional interconnect properties
+      ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller node
+
+Peter Robinson (1):
+      arm64: dts: allwinner: sun50i-a64: Enable DT overlays
+
+ .../bindings/media/allwinner,sun6i-a31-csi.yaml    |  6 +++
+ .../bindings/media/allwinner,sun6i-a31-isp.yaml    |  6 +++
+ arch/arm/boot/dts/allwinner/sun8i-a83t.dtsi        | 43 ++++++++++++++++++++++
+ arch/arm/boot/dts/allwinner/sun8i-t113s.dtsi       |  4 ++
+ arch/arm64/boot/dts/allwinner/Makefile             |  6 +++
+ arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     | 38 ++++++++++++++++++-
+ arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi     | 19 +++++++++-
+ arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  |  9 +++++
+ 8 files changed, 128 insertions(+), 3 deletions(-)
+
+--dusNKKIGbS/LLl67
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmoqwB8ACgkQOJpUIZwP
+JDAD5A//djDPJ8AgAYJEx/+UhvSbVJaDgrM+3z6ZNKoTblwS052gP0PR5n65Rdv8
+wAqc63YXeDX2a/19UJPYP5K4DyRPWR8qxl32AEEprSFikiy2lB0DztklCKxHodYE
+HmeBsaXEioccXGUAN0p/9CH9DnBBw5LNMKNgmGPJ/ComopfC6U6ITgAP3gB9+0VY
+AtkrCoaV+f7iWROLQMTHdV3lFBO8195TyC6abrww+eLgc2+3nwSRYhcMTMis7+/N
+x6vr5JpdoaUCpdQEnCHinP7+DGlzMdSgYFo++akkgArfRopJSH7fdD+k/V0DSCz0
+le07XIVEzg/4o9x+9P0oy0KTwcxWebEcf2SP5ylVOJ3bu6zkVCXcvCeKubm0/QDZ
++m6ktbPK86ubMXYzb6FYJw28lUndEShEOWfW4OQ3bsnBl2gZvmrgErUybYrQV8ob
+nrEcUllBOTE46bfI42wiPrFo91oH8YybTe7uFC7jzOZ4GI4NGOgBaDVp+w7er0Sg
+DBMUti5R0oWtaf2mTnQZbB6C4xM/6boVlijnizEUBttjMVcXjC2EKIXqyX+/VXaR
+47sThcuJTPSTtZtdxP3ar48z7NWNowFx092Jn0suSd3EU8HVDf6Am/TmIsONwrom
+mqI0E3H7aI+xRnkQStqIQ1YPUN4VBn6ubis4oLByQlLFLgAES3g=
+=6DUJ
+-----END PGP SIGNATURE-----
+
+--dusNKKIGbS/LLl67--
