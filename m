@@ -1,167 +1,169 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11021086.outbound.protection.outlook.com [52.101.57.86])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FFF313293
-	for <soc@lists.linux.dev>; Thu, 11 Jun 2026 03:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B362D8DB5
+	for <soc@lists.linux.dev>; Thu, 11 Jun 2026 13:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781148368; cv=fail; b=hPNPfuT2x1geFErv8jGAdOl2/y/3q7c8Yxj1onsTZXhe+/WYhz9nQqxrKsunW8vAsYALmskpiw7gz+uDoNiXljjZC2lQjm6X9/noSiRkG7aHrC/l3JJC+JA/bnMR90PPNPAocOaXWBqSEr+4UaJk1qwM3GwNIQHoLFdkY7ZLbxo=
+	t=1781184691; cv=pass; b=VtdszfHhQrYSQhxqcBQxUzuM+X7FlsXuiQMli31x2ArFQY3f0CctudyZOvzekh54qhAa0EMkKIKf+WvrEiywX7owqaR066aJhl7IbJ9AES+wRB9SdVqzKDOE6FNEUipQgEFTf5OvZsL6vG7HIm7lW1kUvmXXUahrNmYJGIfcWuU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781148368; c=relaxed/simple;
-	bh=UgbsderIMYboAgED5+VPeFgV/ABvzr5iT0GlJfI9yl0=;
-	h=From:To:Cc:Subject:Message-ID:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=XT2YBsvErIzo9PjIMJnFeXqQVUXtjkOhjUtoOKPK7Jj1+id0akujJGSf6p1m5uyJl7+xCro97sZ0Ayt8P/lZe7G6Dppt5UIsxWlqI0/WUYZ9eB8rx+67Z6y1iyqHQPYyCwjv5ZWG6kwO2hoh6lfWjTqUS8mvrxUzw31nFFahBWI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bst.ai; spf=none smtp.mailfrom=bst.ai; dkim=pass (1024-bit key) header.d=blacksesame.onmicrosoft.com header.i=@blacksesame.onmicrosoft.com header.b=RHvx8087; arc=fail smtp.client-ip=52.101.57.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bst.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bst.ai
+	s=arc-20240116; t=1781184691; c=relaxed/simple;
+	bh=eNfReQwiSfYmgkbHcm0VimweVkqjvCRmOms5GoUSXhY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=r6A6bUnHxGj6q6hLQCW25ouJYywjndhF1g5ho/MkqgNk5YE0Psikokz0PkAN2+kWjPY1QPxjayUuI8UKTR450e6nzXMNS6lPvsYoFZGswktaWUOUkWYzn78hDWk8tkdCyJtbSRDRXrFuWx0Duq1rJtgceLhMMFlhmbPOZDi+he8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=PssYklmM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CT1UiX+l; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=blacksesame.onmicrosoft.com header.i=@blacksesame.onmicrosoft.com header.b="RHvx8087"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GDo8Y1ybmcEIwE5F5G7s2O9c/YZY+EVsbC3U4Xqvuey3pHBX99QfI3S7aQlM9oZZr3gm1uzfcA2Vir0RSe4nWXnobna+lIbW0En1Sy+dm6JdOkLt7AIFrc03t07t4lKqThDJYmq58EYfgebP1lNH2iK1qdHOyorK7fFf4emUuUhF33Q7Rgim7c2jFqPG/wA79+uoTZLbC8H/f0zbQg2v2cl0PIM4dJHgioqj5ehh96VaR4l8wdCxrIbNwjHzca98CpFtp0byQIQwv143oDZsFqNgNkiYbJiLSRHrpVaeZJcIq8gTGYVECmzTdGkhqvBgq11yTvcFi1ozgzXHgB2X0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8HwZCR7CXSepUsMbY+93SJP1bjRl8zYzozj1KBBR75A=;
- b=Yh9P23sFxGRFHSQaAqSFj722KdETkPgvXQRq5YFRVV56HBDIui9JvIF3KukGTax1Rr94bg59KIrSoupnH+dh6Gv14rYw9uAW2IISmT5yG25/xXwJPXOxM5Bv957EHP+OeOO2tuCWfKUidhdSl7Efq0SQz5N4UzEHPGsJ5oGXzvnChRCWp032rHuYFC7bX+PMZyKyiebNVf/ZyCUFLk1kWvxH9aeeXWjSCiWOYEMdElEZAO6iN9TUEhvVtvCtESWeI50tzesbm/YuH4ods7tw1AWvsRvxjBJXJXAzmJy7M3F6FCPwt0ZJ4Lg4MbzhOwwgXlN6rY3xiy72JGV6tYq6LA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bst.ai; dmarc=pass action=none header.from=bst.ai; dkim=pass
- header.d=bst.ai; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=blacksesame.onmicrosoft.com; s=selector2-blacksesame-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8HwZCR7CXSepUsMbY+93SJP1bjRl8zYzozj1KBBR75A=;
- b=RHvx8087w0XN0TM/H/KHj8+tDq5QFsZVNX461MxIGOkRgp7MqXIe5YDrWgZAwEEdXDkUbD0MtlqelmITHiDDdHezGSu6BVkWysm8bqcIvXWqBcy/t3NMWsx0lOqiTjIWxwS6LatQacAVLG9gsCo51Vz1p04dvz1BrBP1kI0vPkA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bst.ai;
-Received: from CO6PR18MB4434.namprd18.prod.outlook.com (2603:10b6:5:35d::16)
- by SN7PR18MB4096.namprd18.prod.outlook.com (2603:10b6:806:103::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.11; Thu, 11 Jun
- 2026 03:26:01 +0000
-Received: from CO6PR18MB4434.namprd18.prod.outlook.com
- ([fe80::66c:c77f:192a:f885]) by CO6PR18MB4434.namprd18.prod.outlook.com
- ([fe80::66c:c77f:192a:f885%7]) with mapi id 15.21.0092.011; Thu, 11 Jun 2026
- 03:26:00 +0000
-From: gordon.ge@bst.ai
-To: soc@lists.linux.dev
-Cc: arnd@arndb.de,yangzh0906@thundersoft.com,linux-arm-kernel@lists.infradead.org,bst-upstream@bstai.top
-Subject: [GIT PULL]arm64: BST C1200 eMMC defconfig for v7.2
-Message-ID: 20260611.112340-gordon.ge@bst.ai
-In-Reply-To:
-References:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 03:25:59 +0000
-X-ClientProxiedBy: SI3PR01CA0011.apcprd01.prod.exchangelabs.com
- (2603:1096:4:296::6) To CO6PR18MB4434.namprd18.prod.outlook.com
- (2603:10b6:5:35d::16)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="PssYklmM";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CT1UiX+l"
+Received: by smtp.kernel.org (Postfix)
+	id 4E6A01F0089A; Thu, 11 Jun 2026 13:31:30 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=202.12.124.153
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1781184690;
+	b=vkYBJJ1DiF7ioV6gcy0u8FfWtG0vPrJcAE5nGiMCrGX46jaTke0yf2ESm9Fo3ul2lEjN
+	 UHVR+5OOetIx8Oy1w+m9doOuRsOeil6nivQ99RPI9hVWkOw691vepae5yOOVfrTK2zPdj
+	 Dm3TklJXErcsbuGdzFvycMAL+elK27z7xovEYnC1Da0bvXMeWKYr1ZkNzHNclVsUjJHDu
+	 gNLARoIT2V5x/vpb/7pAJQND0avPE65GMquk4pu3ikVETWWnvU2DLv714O0o36dxA6BN+
+	 K1T4IQiOZfSjxN1WY5QdtHFEdBA7odgkf6pOER7gQRss+UyPpIh1Ra7DpXfE2lo8+NA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1781184690;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=219KhmwH9vSJQBVzznt3qHsEccda/bfcCm5kTcULkl0=;
+	b=n+YR9JUFs4esKkFRYOJJ1wjAR/0zWeoqjYtngJRywEGZKwbbpDZPCeKqdSJ7nnEarx5T
+	 BSCg66tSEvvwQxn05YzaWePibUAkW+rKrEX7OO4xi1gPomIXEkns2qGbx7MhPzGUlZPze
+	 2spJXM9AQVzk8MENAri/7CtnKaQM+Bux6nnxngOpqxPnUhbENyvoLTOqtO/b+HzZmCgCc
+	 JT3xO7lS/MGLWvKXuU5SKsTAMk0sKSe2GrMCAXyF2ExLQONKL1ujxAsn0ykwSC09HKU6w
+	 64tiyBpVYo4ovlf0LaqyOCNvIcxJV8g8kbOL9lIWbHn3wzEkyi5jm42nzmsu+nouUyQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm3 header.b=PssYklmM;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm1 header.b=CT1UiX+l;
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	arc=none smtp.remote-ip=202.12.124.153
+Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E53921F00898;
+	Thu, 11 Jun 2026 13:31:28 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm3 header.b=PssYklmM;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm1 header.b=CT1UiX+l
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org E53921F00898
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id D31537A0126;
+	Thu, 11 Jun 2026 09:31:27 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Thu, 11 Jun 2026 09:31:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1781184687;
+	 x=1781271087; bh=219KhmwH9vSJQBVzznt3qHsEccda/bfcCm5kTcULkl0=; b=
+	PssYklmMgQd/NnegOykes7WiD+c+jK3rBjaDDaJP/DERwZGNjRRwtlcHp8N57RKr
+	vmIMcgBnRxvlvarv270mXZtqRCfGDw3b6hsmA+Wc7GnG5kp5Yc/hVywPw2IAy74e
+	lyXDf7kxzoyx80QgZQdm71OaC55kzXmzHTr52L2CB3Ps1HciFs95N5Vt0UcNN/TN
+	mcdy/5YCSfPQy68XCSBRN5HUIFlflTKxfHBVuo8sgnYCZ4w7HgyGHsCMK7LJuhCa
+	eUUOtI6IbzuOCnqnt6W2bUmphB2JSkR56/8ukmtzB4QaPhEhTtuNG5rslDUTv8Ak
+	zXZdXVsBHJGIXVhYkTyiLg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781184687; x=
+	1781271087; bh=219KhmwH9vSJQBVzznt3qHsEccda/bfcCm5kTcULkl0=; b=C
+	T1UiX+luP1/onOleAgWv7yjEiLS0siasnezAEza95WW4YPytNdDXaKBnz4qb9bVS
+	z7cinPN4gt2gQ51Pa6SBqMy6FCHcYdc+cAmwBeFvPRMI9qXgDVihCntsACGlnrT2
+	0kC9EyhlPU9DTZbI1v32V/CZ8Nl0Xr9tUh73bdp6XdwRAht+sV1FLkL3RgYCxRQ1
+	ri/Z4E4YZ4eSm66OhdmNpkp/GfggZgLSLQbIZvJQ92NA2CNeBHYDFAxgQ0vSBIZq
+	ck1GH1hZiciCZp53yrAgQ1LrtY7t+VtTmYhSS1kZbKGnrUG4ytByP2DLUT9YqWlz
+	fDyGUK+UunpkIUNwXj9tg==
+X-ME-Sender: <xms:r7gqag0bpm5ww4T4HVsdr1TbWgLE5SRfgGoIXQKRPTwZSA02XdPjRQ>
+    <xme:r7gqal4GkmrHtD36sCj56PA4-gdPtkdMGZKwoINR-AlD49Q8fTy6oCad9QBQMHNEB
+    5CC2Qr153-gE1JvnWc02wNPAYXdnJeIbc7vGw-Hzr7a_gS2ZDR1YiM>
+X-ME-Proxy-Cause: dmFkZTEYPqUH0OyBvMlLDpHJgbwSXLSQRB+fH/e8ybYbUTpYWToxjLYyQcEgHUbFh1Itst
+    k1oaJ0vZMj1Koa8RVRsUGgbbmsxoeIikzMQYu24GAbbg+bSzyIDj7KhlGyveNB+3XbBaf+
+    bGX1zT8pAOH5krjE28tdXN/MBAYm4hJ8X7oBRR/c7NJaWCwmcTWXFAN2Nq1zE2AhzTioVc
+    Fbe3kvg905wdMZSZn9Aa45i0Dd7qKvGzjnTUzqOme2F1QTxJEjX3AjhfDMc7g/KJRTeyfF
+    Jpewztda69LMKEvcDiqniX6hxoBhvTAnVmAqL0S4saJWPiA7ROKw6xK3lOo+lmS28t80FU
+    7wPr2i6w1USiY0fGZ3qEZ+ixFLgWOfxum225M09NG77ib+epuzVstK7xnAeNopFkRThc2b
+    RcNSt8wZiyrnTIjZrKmyvgOjX9NgodFH0qGHw2KTtM5IVbbEmZe7hW2Osdc3T88TcKvl+8
+    6Hvpk/fgQtUVdG24zGzhh6Bi10wtdpos5nhEKmuiLGJjWqOWupETIFuJfwGmCtreYCLuuK
+    HuTnjxnEzf7hbWiNQ507mvE0OxwbHhEw0lDU3yjXxp+vvsmobXQ11JdPdLrgTdnRR0qWzU
+    SsxUYZj6kjc6CfXUOfcPhK2V95EN+DJRDs2owabgnGC4RC3LSmMdM469yegg
+X-ME-Proxy: <xmx:r7gqalP7iWbxcYWIDa-10JIZ8EjTgLtM3dSkyrDor0fPdZYLGibJew>
+    <xmx:r7gqaooCwNmbhXeW4Bly6JjDjg_sgnqEnwXyz3DF9rlNhZnGAfV4zw>
+    <xmx:r7gqaifl9YMKpjlDQlmpnLXekeJFMCOccEnebvnSOc_r3ZOsTrLGgQ>
+    <xmx:r7gqamT71H8pbY9om7MsLzSMh_5aBUDLq-YG8i4QsFdlPMCIPc8SYw>
+    <xmx:r7gqar6kd_mA-GCgtKwWlBp_Zt8Tt-_Dnnrbum4Jj1rzq5ouW8d5TE9i>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4E2EF1820082; Thu, 11 Jun 2026 09:31:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR18MB4434:EE_|SN7PR18MB4096:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd5b9c64-34c7-4cbd-279e-08dec7692912
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|11063799006|56012099006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	Gyj2Z7OOqN2lqvwFsM8zKDVcrukt0jGfz0LIQB6SaPxuSV12Udh5djdUNJsjB0MJiyc0tUlS9u/4A5M0rBZB4C70BSaPRhzkQp6ftiUO7Wn0y4narStt4QkJFYEsCpMsYj+HTeAcOkqIfKacOgJeI0CpXQZ2Gpl6/YFobDYkAybftCsXVDZ4CTGxTbQqd3xmogAGcKj4HXQeQvEedxx50DevaXCWjRMQCHpaPn1uCDjvrVVmIiqDkAUR/wQq2OF4lvHsOT45XPHchvVoLB8tphmcfu9H+iwD6vDKbMTtl1/0gUTHmpp/mI3pzj+oRne4nWpzpV2SwTMYxT5a/hE9HaOjehWIMem+aDLfT0pDrhX6gemE+qidEdVw4ySULo0EiKBeIcHm7ocnEFbPSqps8+OmWpdFQW6ysI6cM5cm4JJqVQsH0nDX9LY2BchhMwyAXo+LLiVDgquGHza9zB7D794DKdr+xtzNQcUXVNPGM8UXMeR4ZHExYimM6sLrFS7CcjvifANJTrq6cYhs0+sGvy6zBaKQIouzA4J6SodMpSyoPX+DIfgKXWJB4NZP/f3jSq4/DifdaaDVumh0nf2wQpAYj4AXTCLPckaxpZHlSu1mCVrx24tRA3R+m0FBJ31JLeG3T4Rtw4F6Y4Amj4OEr3g1lsy7s60rcd2stzvSObuj/9S8tUIQFGqfRpc1nrJ7
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR18MB4434.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(11063799006)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VG5yUldMcVVCSE5LRXU1bXRlcnE3ekI0QlFrcmxQR0xtQVZaUlNGSklpTzJp?=
- =?utf-8?B?ZFllUWFGVzREZUE5M25rQ0h6ZGRNcnNFT3pmKzBsRFErV1pEdklwdGQxQkxo?=
- =?utf-8?B?MXVFWmVOVDhXUWNTZjkxQTc4Wjc3a2NoTTVQRzJjbXB0dlZ6L2NFaW9aYjN4?=
- =?utf-8?B?dnMxci9MNzVJRVBnbDVZaS9nNEdFWlRiNExFL1BWdEVXV3BaR1JwbHRpYlZU?=
- =?utf-8?B?TGlMYisxRVV0NGZxQW1TRzh4U21MaVphL29Lc3BTMlZ0Q1dpb0cxU0cyZnAx?=
- =?utf-8?B?aW51dWwzVkVXbElwOGw0THhwUExwSDJpUDVTTWt4Q2xmTlpRdEh4d0I2YUpO?=
- =?utf-8?B?R2xlUThRcHZXNnQ2MFhCUXRKOGNkckkwT3BIdXhGbmpmYktTMVRIL3NFNjNF?=
- =?utf-8?B?ZUdBVzIyVitTRUF1WEhpMkp5NW1DR0gwWktsejk0V0E5dXUxVHJWcmhqQjVG?=
- =?utf-8?B?azh0ZGw5cGVnNXFnd2ExZ1NWRGxqVTBqUldpR0VSV2RGRTNLbnlYSFJ5Q0cw?=
- =?utf-8?B?VDVleDYvK3dETFRKOGVWTWFHU216YUZTL0hJWjR3aXRFTVg0a3pZQTdxWXZ6?=
- =?utf-8?B?TDd5V0kxb1hmaGVYLzVvNTV3SEJlbTEwNStHVytTdHF3a0pWNnhPbVlDMDFT?=
- =?utf-8?B?bVdGT2hONm42Vi80RWRaL205NVIrb2lEZUZ3eHIycnZiUEZySDNNWDc5d2hM?=
- =?utf-8?B?MG9BY01FTmZzbGswVmdkemlPQmNqQTV5TWUreHRpNjZrcmlyNWQ0RElydFpI?=
- =?utf-8?B?cTk0MnZvdVFIVDAydXY4N3NZczJjM29Pbi9WTDVNY3l1UnVSTmQ3a1ByOVpG?=
- =?utf-8?B?QTg1Y2NLZlU3NXNQY1dEeUt2dDg1VkVCbG1WdVQ1Mm0yUThnVllBeFZCVFNv?=
- =?utf-8?B?RDVUMEZUdGd5cjhTeU5nMVp6akRINnMyLzY1U3FLNy9SVDdVc1R6SWc4ZFg0?=
- =?utf-8?B?aUxGV3dCTG9TNzJEZUNEUUV3Y0tpb1RGaHg4VGFLL1A5SnAvWE81UHhFWmNu?=
- =?utf-8?B?L2U3aDJiV3JzTzVzSkNvRmx4dW1uTk50S0dHbFhpVDVBNmxtWENBU1ZkUEVM?=
- =?utf-8?B?d0F5Tmd6UC9mWTRVaDdhajhtZmlSSWk5UDNyMHQyeWdrOXV6bDMwbUs2eUs2?=
- =?utf-8?B?aFI1NzZyM3phRTVtVG5saFdyaHJqNmJwRFR3UnZyTVpMbDdTejRhZS9vclpa?=
- =?utf-8?B?QVZ2ZXhzZmlZQ002cGhPQ1hJMmJBbkpsVmdNUjhJNGdzMlNjcFRTNUhUK3Yv?=
- =?utf-8?B?Yitua2hSUGxPditGRkpncnY0VVNHemNJZUYyTnphbUJ4ZTdHYWpJanZaa2xE?=
- =?utf-8?B?dXU2ZjAxd0dBZkVXbWRVOFpDWTZER3kwc0pvY3owdE5CaCtwcEVxUjh3TUZv?=
- =?utf-8?B?VU5mbjFrbENWQlQ0WEUwd09pa3p3TW00VW1aVituT1YvOGROZ3NWRmZDQ1Fa?=
- =?utf-8?B?cXNKTUl5WEUrUGhYdjMwMjVzNUVEWk4vTTF5Y0NnZGlveDFLbTljbFFlWlpI?=
- =?utf-8?B?QXIxU1J2MDJJSGtpK3BZQnhMMHl6d3FCcmxBcGtnVzBoanQ2R3JSeTRxUkZl?=
- =?utf-8?B?aVgycEFveVZUUWJ0SVdGZTVvdUk1cHU3Y3o5a3BqbHJJZjVhRVorOUFEaHUr?=
- =?utf-8?B?U09xNzRobURUUmM1eVlUM0Q2Nm1lbTVVOHhtWVNYTDhOaG91MWtqTTBPNEV1?=
- =?utf-8?B?RVRad1FEQ0ZuNWwxMDNsS05lOWFBZTU3SHpqZFQ1bzk4N0RmWkVBdFluZjVN?=
- =?utf-8?B?QlMxSFRmdENMRXJkSUw2aTFGRTh3YU95SXYrZ0M5OHhqRkZUZzN6V0lCa3ht?=
- =?utf-8?B?Zkd0Wit1dXV3dkRncUl6ZWM0OTN0WXFqWXZnOXhuTnlJRHMyR3BxVDkvbzBK?=
- =?utf-8?B?cjh3Z3F2UmUrVnY5M3cwMENlRHpsZnFnK0hKaU9QOGo2NThxQXRrYU9iWlVP?=
- =?utf-8?B?c0FxZ2JPbStnNEZUU0pBMk9la3UrT1ZVbVVZeCtyUEpvd0gzMmc2bTAwZVdD?=
- =?utf-8?B?aEdjT1NIZUVxcUJhMWRETmxEVDRWTy9YSE1GNllMOWkrTEpQRG1wYUdxUVhN?=
- =?utf-8?B?UUxRRTMwUEhRWFBBWHJMRzNSa1d0amUvT1FuMGtzZ0x2UitGS3ZudDZ4eEtw?=
- =?utf-8?B?SmFucXRWME5oYWhLNHJaampyZ1hNWG5DcjdRa3JjV1RuSzhxTU1iZ2NDM2xQ?=
- =?utf-8?B?WEVuR1BKSWRxdTNxd1V3M0tyTHVmaEVRTHRvRUcyQnpsYVNsQVFndytMZ0tJ?=
- =?utf-8?B?eVErek53ZDMzMlZTb0xxOEhpRTl0QUJFSzNFNm4rSGpFUnlndGJ6K0kyUVkr?=
- =?utf-8?Q?Ps4XYBFAs6S0lrF1cB?=
-X-OriginatorOrg: bst.ai
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd5b9c64-34c7-4cbd-279e-08dec7692912
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR18MB4434.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 03:26:00.9127
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 00dc1a43-b766-4686-8706-33adb3b74360
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TNJ1/aBTekB1sB2oNw8ryCqo03CYJmuHj5xJHmmZmzVGiI3TWi6j33Kud09zHMTB608fapVNotfPJSVVW9bvCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR18MB4096
+X-ThreadId: AUV8JOC_Zpjc
+Date: Thu, 11 Jun 2026 15:30:55 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Aleksander Jan Bajkowski" <olek2@wp.pl>,
+ "Gregory Clement" <gregory.clement@bootlin.com>, arm <arm@kernel.org>,
+ soc@kernel.org
+Cc: "Andrew Lunn" <andrew@lunn.ch>,
+ "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
+ linux-arm-kernel@lists.infradead.org
+Message-Id: <8de15abe-8352-41f2-85c6-bdb50eb18e9a@app.fastmail.com>
+In-Reply-To: <956403e3-d47f-498c-9f62-79d39c1cf5db@app.fastmail.com>
+References: <8733z1c8uj.fsf@BLaptop.bootlin.com>
+ <bf8092a3-d037-44ee-8e08-8b2204e5cc95@app.fastmail.com>
+ <4e690104-b42f-4a2b-ac52-5ebfc82f6853@wp.pl>
+ <956403e3-d47f-498c-9f62-79d39c1cf5db@app.fastmail.com>
+Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v7.2 (#1)
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Arnd:
+On Tue, Jun 9, 2026, at 21:29, Arnd Bergmann wrote:
+> On Tue, Jun 9, 2026, at 19:35, Aleksander Jan Bajkowski wrote:
+>> On 09/06/2026 18:11, Arnd Bergmann wrote:
+>>> I'm a bit surprised by this oneline change. Since you successfully tested
+>>> this, I assume the change is correct, but I have two questions that
+>>> I would like to have an answer for before I pull it.
+>> By the way, the upstream safexcel driver works correctly only on 
+>> coherent
+>> platforms. On non-coherent platforms (MediaTek), the SHA-384 and SHA-512
+>> selftests fail. Since the selftests pass on Armada's SoC, I assume I'm 
+>> right.
+>
+> It's not necessarily proof that this is correct, but it is quite likely.
+>
+> After checking the datasheet some more and finding that this should
+> indeed be coherent everywhere, I remembered that even the old
+> 32-bit Armada 370 had a coherency manager. At the time, we used a hack
+> in  arch/arm/mach-mvebu/coherency.c to mark all device nodes as coherent,
+> since the original DTB did not contain the correct annotations.
+>
+> I suspect that the Armada 37xx started out with a copy of the
+> old DT files and also never had the annotation, but then never
+> had the same hack because arch/arm64 does not have platform
+> specific code.
 
-Thank you for the review.
-I have fixed the two issues you mentioned and updated the pull request.
+After investigating a little more, I think the correct fix here
+will be to mark all DMA masters in this SoC as dma-coherent.
+I thought there was a way to do this for an entire system,
+but I could not find that, so this likely has to be done
+for each DMA master separately.
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731=
-:
+Not sure who still has the hardware and has time to
+test this properly. Given that the incorrect DT has
+existed for over 10 years now, I assume this is not
+urgent and I will skip the pull request for 7.2.
 
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-
-are available in the Git repository at:
-
-  git@github.com:BlackSesame-SoC/linux.git tags/bst-arm64-emmc-defconfig-fo=
-r-v7.2
-
-for you to fetch changes up to 6e2453ddd971f598290da40a0bcc8cf5c11f50c7:
-
-  Enable CONFIG_MMC_SDHCI_BST to support eMMC on Black Sesame Technologies =
-C1200 boards. (2026-06-11 10:42:11 +0800)
-
-----------------------------------------------------------------
-arm64: BST C1200 eMMC defconfig for v7.2
-
-Black Sesame Technologies:
-
-Enable eMMC controller on BST C1200 CDCU1.0 board:
-   - Enable CONFIG_MMC_SDHCI_BST=3Dy in arm64 defconfig
-
-The MMC driver was merged via mmc-next in v7.1-rc1.
-This is the remaining defconfig piece.
-
-Signed-off-by: Gordon Ge <gordon.ge@bst.ai>
-
-----------------------------------------------------------------
-Gordon Ge (1):
-      Enable CONFIG_MMC_SDHCI_BST to support eMMC on Black Sesame Technolog=
-ies C1200 boards.
-
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+     Arnd
