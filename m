@@ -1,281 +1,114 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12F3221721
-	for <soc@lists.linux.dev>; Fri, 12 Jun 2026 08:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3509037F8A0
+	for <soc@lists.linux.dev>; Fri, 12 Jun 2026 09:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781253242; cv=none; b=UIS94WibCjNVs/DK5njOihRXZTwUjxBkf0UpctpK/h+YEZC/WewN2rli4ScZYqr6tGMSXGqa359XpmgkqoE5ICqz4Pfv03TUbFkBNzD9q5D2iAi8fLPP6PUzeUypsIpdrjO3H4GfCUito0xB6+OLUe++8bbYglitYaHhZhQg+/U=
+	t=1781257322; cv=none; b=XFuAhQZefXnSToPZWDuXt2G2BzqbPTKbyteDFiXkwB8bbb7tMTujOo5tdHrRyfw2CZ/c86pjhCy/09yYg8i0Wbo6tTJy9Kbvtzgi57mB5e7CNPjyGGH6Ni2gklApORLMJLSdFBXSVr5fOa4wmXSp0SDKJbEuan7PbndZPDKnyNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781253242; c=relaxed/simple;
-	bh=Qw9CmmbTM2OR/h7z5k1909e5cZsAQE0kNkFhRVvNdtA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GcDvuxqZIMkV8xmxhyMJxkI/qx+hIOCV79pTMj9M6cCrcezxt3ubeZlta33hU0T4rGLdyooDtKYBTYKzEu4OliQ/mH5kPS/xf3lhhKPsIzSMOoa0wovJBWyovccmvqa9WJsgt5kL5j5eEaenxnJRLFVAEl6m5HEl1qLXVTmK0Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=EEgF/PvF; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	s=arc-20240116; t=1781257322; c=relaxed/simple;
+	bh=JyRvb+y32F/YvAKoZ9WhbssqIxQEB98UBI8wChPTZeY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=YEy+Pb/rHAlRQJpAzPE6kekTniNHgYlLrVtM+tx7rBkL1Ljlh14p2PZDIJDKmmEK/zRQuEoyHu+fqBFJbINprzX9lPZN/sj/mfWcjzpAKQABdYEfmPkFPwYp5P+NvL9VC5D9wKrFmHB4h8u0xsukg4zjxrHwZGsJLj3Ttlu81Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=D8dKg5fa; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EBMEYjKf; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="EEgF/PvF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1781253238;
-	bh=prAEBrzKIWuMkPm2FcUrO0qI2deWE7cYQ4+upoac854=;
-	h=From:Date:Subject:To:Cc;
-	b=EEgF/PvFQ0IsQ9p8/kc3TKc68eIKvTFg/E3j9lx/aiOAItCi/icSFcYEBe/9xdcmR
-	 ZUSONM71odncnQoSCNkGtS+d+RZc+Uct3JMSkI2ib2oY8mBCmLS/A+JdOcVnt1rQhB
-	 XYYzT+lo8cDLJjNhKmfiQtUxXixm5TVnU/YXyi3Oixc9yvJDoq1oRjKq07AoqvGAO7
-	 H9T+Ad3FebZUhGWNKbS90Q7Q4msS4ZSlxcLnr5n8OHDQmQAPN6UWrg02rDjUSQ8kma
-	 FUdpXd7noUd+BnzaH3wx5r3FQOzygD0F67J5vunbJpO/+S7/Ywl/GiF8NSk0HrjF1M
-	 8lGfj40pdwAmg==
-Received: from [127.0.1.1] (unknown [180.150.112.11])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id E3E3F60931;
-	Fri, 12 Jun 2026 16:33:57 +0800 (AWST)
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-Date: Fri, 12 Jun 2026 18:03:27 +0930
-Subject: [PATCH] arm64: dts: aspeed: Fix duplicate pinctrl labels and
- address scheme
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="D8dKg5fa";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EBMEYjKf"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 13D17EC0064;
+	Fri, 12 Jun 2026 05:41:58 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Fri, 12 Jun 2026 05:41:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1781257318;
+	 x=1781343718; bh=i/SGUs0YIEd66VF0qWd6efTVsGi0XgveZiOoh/RTgHw=; b=
+	D8dKg5fajuE3OL0JkbZbNuDlvTzK3k2/SSOqUTeN46HcOkwbX2uea6DrkqbPigc5
+	DnmTW+NVkTjVEOtAuNDBV30W/aGdRvTL+yDZDBs6wnF4x5vANJJW6MA9pxKEeXcG
+	PnS7mkIxWMunvC1qmz2tajAkFMbx1BSqsa34SaOAEMzz7LOBd00eY8vRv7C5HPv0
+	M/4G+9RuA+Mx2ui3P/OeH2frqJZYEfUO9ald0ZfgFYOeoaJsXnjd60HsRarERANk
+	/PG88QJaUp0fY2lazG/QmR/atQTEmZCiTcF7LKtyhNNWSdUJP9g4Kv12uXaYDG6Z
+	4TXLdyqf4yuM4OaoGTtHuA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781257318; x=
+	1781343718; bh=i/SGUs0YIEd66VF0qWd6efTVsGi0XgveZiOoh/RTgHw=; b=E
+	BMEYjKfnEP8rMDXG+OnyejCTZegA0X8TZ1+hSuenPePtlylK5z6qmzAgS3SEReI0
+	gvRahFO/RV+lgQhXfM5kzwKtxJbKEECaJBjCcJtJXFpsj7Wed52Xi2KwgcCdodP3
+	uKAxMz1KP80qMCyz5Lt9M/L92jx3XLfHYBnHH5bIRw6ryQqvzM0ExmN9/4SEKOyq
+	UI4Nc2liXduATAPihz63xu37md+6nAyxUR9EvkMXOM/DHRshRiATpPU0pciGEsuj
+	eMEO6SjQsotigpUNAFtd4RObbyyAWz0AZn3o4ZJk2p0aA8HyBIg2oXKFftZx1oxH
+	6YiMC70O3hpf7ds75nwJg==
+X-ME-Sender: <xms:ZdQral3Txnp_3JimMTsQwUPG-p2Y4AeM7fLWFnmN8Tv9iMsZmNQ7jQ>
+    <xme:ZdQram5g2ENuFmc5k_iNJajQmhQIVdoqgCi56fac6LiSeZ7ouIDInoAk28OLZT77h
+    PHPhhjSJdwmyHx28jivF_IxwHRIwvPymedlub3aaoq5L3DTjiujlPGH>
+X-ME-Proxy-Cause: dmFkZTEgOGkI4ef/CF24QtYWuT/qA10jYmWmTDetkenrgcnokgLI/1fIQX65pyUvZ6BqIF
+    oKAfkJNgTaftZi+RwmlzvUhIM7wxaAJxC0Hy72I31N0XOwabtUw9tNg8DnBTL2+1UlrsNy
+    8PXIVHl8E46TxotjHiKb7G/VQUBHqwZe+RcsEw4y1Bv1kVDYNE4PLKkB3aSY/F1OgAdu8v
+    1xf96B7Rmc3aeaL5ouKhVsigTyeA3Q6vbC3hHePAipDPme76TA4rKM55E0eoEDX4EQsJX5
+    79aIr1uzAzomOmVMv0FbvZCLSwgdxNYjKhaRCQNxhoXHlcMxIKqWERgg5XyMq9IKETVhsV
+    Yle1f60NkBMJVML+stKP8wOJnQLIKeQ4BPZg3AXwO6FelAZHVhLlSQ06mqEUeIzvoOysKz
+    9NLBorfV7y88B6MlRj90JtWCmo3DsoyYYLaJxn5X6RfKhtzYZxlSUVoCro5kyKYn6fo3ap
+    Rp0lZ5N6Cx+Dt7e5jz7v2W9Mym2gBnR1isHRdxGTCC12s3DJot8YsdcV5psh/bFvWRxkJR
+    wnxrk5x5ZksQfuh/OIwbq12bFqToGL6d8SGhpj8cB546XcpY106x75yXI8toT3yezQEdWO
+    6lfcR0g1GGptt5+xGN6GAwG8OqdVBN16YvKfhB7g4mNlCqdChPaVpHQh38GA
+X-ME-Proxy: <xmx:ZdQragX2QwQR8V3xWTpjKfUkq0QTKfTtjvu2Z-GoNQcFoKyKgu4ZeA>
+    <xmx:ZdQragk8TOPrA0pEPVQ6WRnxflCwXPxdPDIJC_xmNgLfdZ8n3tiX7A>
+    <xmx:ZdQramn2dO6dxAOsn5Towq7cXu06X0G9DzfmnqTg42xHDp0sNgt3CA>
+    <xmx:ZdQragYhrwb1gx-RPOZ0hbNPdxYFL-670bBm-wvWhEsRYAA-ZdSCFA>
+    <xmx:ZtQrakQYYh83HJpCgwDuIYjEPHBH2cpbM5MTwOcpGxDWDAio0DHZXVNm>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id BB036182007E; Fri, 12 Jun 2026 05:41:57 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-ThreadId: Ap3K6gjQ-9OJ
+Date: Fri, 12 Jun 2026 11:41:18 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Maxime Ripard" <mripard@kernel.org>
+Cc: "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Linus Walleij" <linusw@kernel.org>, "Drew Fustini" <fustini@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
+ "Andrew Davis" <afd@ti.com>
+Message-Id: <6a93097b-fc06-414d-a5f4-cf2dc98474d5@app.fastmail.com>
+In-Reply-To: <20260612-indigo-sparrow-of-action-d2bcbe@houat>
+References: <20260527084135.842736-1-mripard@kernel.org>
+ <422d7885-67bf-485b-b2fc-f0604a2213db@app.fastmail.com>
+ <20260612-indigo-sparrow-of-action-d2bcbe@houat>
+Subject: Re: [PATCH] ARM: multi_v7_defconfig: Enable dma-buf heaps
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260612-aspeed-arm64-dt-v1-1-d1d1a4737905@codeconstruct.com.au>
-X-B4-Tracking: v=1; b=H4sIAFbEK2oC/yXMQQqDMBBG4avIrDugUYLtVaSLmPzVEaqSURHEu
- 5va5bd47yBFFCi9soMiNlGZxoTikZHv3diBJSSTyY3NbWHY6QwEdvFrKw4LPyvjautbhLKkVM0
- RH9nvY/P+W9d2gF9+GzrPC8V0WEhzAAAA
-X-Change-ID: 20260612-aspeed-arm64-dt-942a86cbed33
-To: soc@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org, joel@jms.id.au, 
- Ryan Chen <ryan_chen@aspeedtech.com>, 
- Andrew Jeffery <andrew@codeconstruct.com.au>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6435;
- i=andrew@codeconstruct.com.au; h=from:subject:message-id;
- bh=J1juUJ02HqSgk/LBAT55Ph6yeet02dscpZhfvtggV1Q=;
- b=owGbwMvMwCW22PjiTL8dD5cxnlZLYsjSPlLw58GEVddbU67Frv5V2vysc11KGs8MMwX1ltwsQ
- +35L93edJSyMIhxMciKKbKsCLQtvLt5UvzPA9nHYOawMoEMYeDiFICJZCcy/K9TvGCoVrzU8ZlQ
- 7tvrLq7h7Tw8DjZrJ+XL3Q4L7GJofsbI8G1Vl87l8ML/M5SSw166Mh9WsZhuwcx79SCrZszzZzM
- 2cgMA
-X-Developer-Key: i=andrew@codeconstruct.com.au; a=openpgp;
- fpr=C0F5E25A7D30ECBBF3BE3CEC3B837651FC0D8CF4
 
-From: Ryan Chen <ryan_chen@aspeedtech.com>
+On Fri, Jun 12, 2026, at 10:33, Maxime Ripard wrote:
+> On Wed, May 27, 2026 at 10:50:02AM +0200, Arnd Bergmann wrote:
+>> On Wed, May 27, 2026, at 10:41, Maxime Ripard wrote:
+>>
+>> I'd like to wait until we have resolved the build regression
+>> from the earlier patch[1][2]. I don't have a strong opinion on how
+>> to resolve it, but at least for now Christoph is asking to have
+>> your change reverted.
+>
+> I believe it's now fixed, even though not through a revert, and is on
+> its way to Linus:
+> https://lore.kernel.org/dri-devel/c7a9dbb0-a5c8-4e67-904e-1a52b3de9bb4@linux.intel.com/
+>
+> arch/arm doesn't select ARCH_HAS_MEM_ENCRYPT afaik, so this patch can be
+> applied as is I think?
 
-A report from shashiko-bot highlighted some concerns concurrent to
-application of the series[1].
+Yes, I've added it to the soc/defconfig branch already, though
+the automatic notification apparently did not trigger.
 
-Fix duplicate pinctrl_tach{0-15} and pinctrl_n{cts,dcd,dsr,ri}5 labels
-in aspeed-g7-soc1-pinctrl.dtsi. These didn't cause errors from dtc
-because dtc accepts duplicate labels for duplicate nodes specified
-through a node reference[2].
-
-Drop the cpu-index from secondary/tertiary container nodes: reduce
-the "#address-cells" from 2 to 1 and update unit-addresses and reg
-accordingly. The 2-cell scheme was proposed in an early mailing list
-sketch to prompt discussion[3], but the design evolved in ways that made
-it unnecessary.
-
-Also remove URL comments from the DTS. The links were to comments in
-the kernel sources with discussion justifying the approach, but are not
-necessary to carry forward.
-
-[arj: Extend discussion in the commit message]
-
-Link: https://lore.kernel.org/all/20260609025708.ADBFE1F00893@smtp.kernel.org/ [1]
-Link: https://lore.kernel.org/all/b226339bb2abe42ce23e90eadbc654b426131083.camel@codeconstruct.com.au/ [2]
-Link: https://lore.kernel.org/all/1a2ca78746e00c2ec4bfc2953a897c48376ed36f.camel@codeconstruct.com.au/ [3]
-Suggested-by: Andrew Jeffery <andrew@codeconstruct.com.au>
-Fixes: e77bb5dc5759 ("arm64: dts: aspeed: Add initial AST27xx SoC device tree")
-Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-Link: https://patch.msgid.link/20260611-dtsi_fix-v1-1-ef2b7cd86d6d@aspeedtech.com
-Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
----
-Hello SoC maintainers,
-
-Here's a patch containing Ryan's fixes for issues in the report from
-sashiko-bot linked in the commit message. The series in question was
-inadvertently sent to soc@ before consensus had been reached through
-review, and applied to soc/dt concurrent to some of the discussion on
-the list.
-
-Thanks,
-
-Andrew
----
- arch/arm64/boot/dts/aspeed/aspeed-g7-a35.dtsi      |  14 ++-
- .../boot/dts/aspeed/aspeed-g7-soc1-pinctrl.dtsi    | 102 ---------------------
- 2 files changed, 6 insertions(+), 110 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/aspeed/aspeed-g7-a35.dtsi b/arch/arm64/boot/dts/aspeed/aspeed-g7-a35.dtsi
-index ef283d95649a..58193c3c3696 100644
---- a/arch/arm64/boot/dts/aspeed/aspeed-g7-a35.dtsi
-+++ b/arch/arm64/boot/dts/aspeed/aspeed-g7-a35.dtsi
-@@ -84,32 +84,30 @@ l2: l2-cache0 {
- 	};
- 
- 	secondary {
--		#address-cells = <2>;
--		/* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/of/address.c?h=v6.16#n491 */
-+		#address-cells = <1>;
- 		#size-cells = <0>;
--		/* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/of/address.c?h=v6.16#n430 */
- 
--		ssp_nvic: interrupt-controller@1,e000e100 {
-+		ssp_nvic: interrupt-controller@e000e100 {
- 			compatible = "arm,v7m-nvic";
- 			#interrupt-cells = <2>;
- 			#address-cells = <0>;
- 			interrupt-controller;
--			reg = <1 0xe000e100>;
-+			reg = <0xe000e100>;
- 			arm,num-irq-priority-bits = <3>;
- 			status = "disabled";
- 		};
- 	};
- 
- 	tertiary {
--		#address-cells = <2>;
-+		#address-cells = <1>;
- 		#size-cells = <0>;
- 
--		tsp_nvic: interrupt-controller@2,e000e100 {
-+		tsp_nvic: interrupt-controller@e000e100 {
- 			compatible = "arm,v7m-nvic";
- 			#interrupt-cells = <2>;
- 			#address-cells = <0>;
- 			interrupt-controller;
--			reg = <2 0xe000e100>;
-+			reg = <0xe000e100>;
- 			arm,num-irq-priority-bits = <3>;
- 			status = "disabled";
- 		};
-diff --git a/arch/arm64/boot/dts/aspeed/aspeed-g7-soc1-pinctrl.dtsi b/arch/arm64/boot/dts/aspeed/aspeed-g7-soc1-pinctrl.dtsi
-index 72d93323593d..6edf14617b09 100644
---- a/arch/arm64/boot/dts/aspeed/aspeed-g7-soc1-pinctrl.dtsi
-+++ b/arch/arm64/boot/dts/aspeed/aspeed-g7-soc1-pinctrl.dtsi
-@@ -496,87 +496,6 @@ pinctrl_hvi3c15_default: hvi3c15-default-state {
- 		function = "I3C15";
- 		groups = "HVI3C15";
- 	};
--
--	pinctrl_tach0_default: tach0-default-state {
--		function = "TACH0";
--		groups = "TACH0";
--	};
--
--	pinctrl_tach1_default: tach1-default-state {
--		function = "TACH1";
--		groups = "TACH1";
--	};
--
--	pinctrl_tach2_default: tach2-default-state {
--		function = "TACH2";
--		groups = "TACH2";
--	};
--
--	pinctrl_tach3_default: tach3-default-state {
--		function = "TACH3";
--		groups = "TACH3";
--	};
--
--	pinctrl_tach4_default: tach4-default-state {
--		function = "TACH4";
--		groups = "TACH4";
--	};
--
--	pinctrl_tach5_default: tach5-default-state {
--		function = "TACH5";
--		groups = "TACH5";
--	};
--
--	pinctrl_tach6_default: tach6-default-state {
--		function = "TACH6";
--		groups = "TACH6";
--	};
--
--	pinctrl_tach7_default: tach7-default-state {
--		function = "TACH7";
--		groups = "TACH7";
--	};
--
--	pinctrl_tach8_default: tach8-default-state {
--		function = "TACH8";
--		groups = "TACH8";
--	};
--
--	pinctrl_tach9_default: tach9-default-state {
--		function = "TACH9";
--		groups = "TACH9";
--	};
--
--	pinctrl_tach10_default: tach10-default-state {
--		function = "TACH10";
--		groups = "TACH10";
--	};
--
--	pinctrl_tach11_default: tach11-default-state {
--		function = "TACH11";
--		groups = "TACH11";
--	};
--
--	pinctrl_tach12_default: tach12-default-state {
--		function = "TACH12";
--		groups = "TACH12";
--	};
--
--	pinctrl_tach13_default: tach13-default-state {
--		function = "TACH13";
--		groups = "TACH13";
--	};
--
--	pinctrl_tach14_default: tach14-default-state {
--		function = "TACH14";
--		groups = "TACH14";
--	};
--
--	pinctrl_tach15_default: tach15-default-state {
--		function = "TACH15";
--		groups = "TACH15";
--	};
--
- 	pinctrl_thru0_default: thru0-default-state {
- 		function = "THRU0";
- 		groups = "THRU0";
-@@ -940,27 +859,6 @@ pinctrl_uart3_default: uart3-default-state {
- 		function = "UART3";
- 		groups = "UART3";
- 	};
--
--	pinctrl_ncts5_default: ncts5-default-state {
--		function = "NCTS5";
--		groups = "NCTS5";
--	};
--
--	pinctrl_ndcd5_default: ndcd5-default-state {
--		function = "NDCD5";
--		groups = "NDCD5";
--	};
--
--	pinctrl_ndsr5_default: ndsr5-default-state {
--		function = "NDSR5";
--		groups = "NDSR5";
--	};
--
--	pinctrl_nri5_default: nri5-default-state {
--		function = "NRI5";
--		groups = "NRI5";
--	};
--
- 	pinctrl_ndtr5_default: ndtr5-default-state {
- 		function = "NDTR5";
- 		groups = "NDTR5";
-
----
-base-commit: 564edaca14861ba9e58d4e646d272c677296d285
-change-id: 20260612-aspeed-arm64-dt-942a86cbed33
-
-Best regards,
---  
-Andrew Jeffery <andrew@codeconstruct.com.au>
-
+     Arnd
