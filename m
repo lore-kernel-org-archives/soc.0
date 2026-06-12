@@ -1,118 +1,85 @@
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17533DE43A
-	for <soc@lists.linux.dev>; Fri, 12 Jun 2026 07:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609173D9DB9
+	for <soc@lists.linux.dev>; Fri, 12 Jun 2026 07:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781249037; cv=none; b=OoOqMvOFZ5AT6Sm5DsNBQ799V21cV2y8x+LjdK71xzS3gUlZ2vJYVYj4oPypxbaSqseZKfReHKJe12P4gqaGMpW5r0O6lB3N9RGZnjEUxYoi6yahuYmhGqn9+eRQFXWH+Rpruf9OW6wCslE5QhBBh6IbO/cva7proL/elYUSvI8=
+	t=1781249408; cv=none; b=buj/hNLa1Qb9ydZFOZy1RbtAY7z5xr05XDL+O6fUwuqBTRb4kofX3CBUldSUQUW91Pg3+MsfLNjP15pWx9rTLCdkk4oU1Qa4YygAeCeKj2JQ2BQBQW1c/POeFhGwymDwKd7W0KTTU3h6myJr0F/vj9ZMUIMWamvuqeibbD1pH9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781249037; c=relaxed/simple;
-	bh=vMVPc8MlD4phQOM2dwYIAk0P341SgHo9D3n4pgEUOX0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=hnQcTcWQ3h7B7OEZ3H3bagG7JwrijIiqUGhFH+FJKihNxewoHjHXrKEiSVppRoSBm26tw0YiEe1Adtwsf2vjs3y//81BrAxsDsKvHH8aviyikOpbz2rtHu3Tcj8p29LQviBlzLEON7gGpqDHl17moo5SjsPM/tlQPUa7HwaTbc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=hsblgYSd; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eKcMAIyR; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1781249408; c=relaxed/simple;
+	bh=YEfKryLRG8Kc/XdX5cMCnHL7lfh9FjAq45x2+XDL+54=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=SK0OFjln5o6J2Vg4i6wCBbx9n/UEBhAXNjUjGl7l2+ApLro8+860x494dZRe4SV4atZqI5DhN9AwwCo09oNZz53oPaXBd20k9rKP2vXlJQ7dk4xtrxNM9Y9cu3EJlNnkAE0FAnIOHQsKS2ME3yK1dxnuhth0ydOzhcOOmH5quc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VdZRlCMY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hsblgYSd";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eKcMAIyR"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id F0C6EEC00CA;
-	Fri, 12 Jun 2026 03:23:53 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Fri, 12 Jun 2026 03:23:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm3; t=1781249033; x=1781335433; bh=VJ
-	WqjLWdqxiOOONLY1vYfV81aAYcYQpnBLK55L9RBKk=; b=hsblgYSdEsC5CntnS/
-	NXEZLp3a1V1vJhlbeAeWy4bdJ48VJw5GV5Kp0pUsMw4tG+8FGrpADx6AWwVCzQs4
-	PKR0UEf5w/DwHZkRBDcMORbMt/7BjL8TL77cQZjgEi7RXXjmx9COfPB2oNQtkrj0
-	g7SZKwq2tpzADtAbdS2abBjJb1jZQxfftC2UF7E4XDmLI2e/bcZf5zcRteVt+O8S
-	1VDX7A7In2rX8KtsAdPadI7Hpu1KHoSktvIQ/hJwZvwqM/Zf2sFVf4kvVtEuSzJc
-	cs/YZjGCv9MdAM7B1nD9NBntJRXj2xGocGCn5DGTAOKLdHCTItjk6q9e7RlkeyaH
-	NXgg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1781249033; x=1781335433; bh=VJWqjLWdqxiOOONLY1vYfV81aAYc
-	YQpnBLK55L9RBKk=; b=eKcMAIyROJVuCJ6p0h2qDEuvcUWTOmZeUPXsaMgEhGnF
-	BVAs2HyQ9LcfMiCZSJ/8aCvMTJJDLDYATDfYRRu0x9I/GHi8WZk53YhRcHYb96Cr
-	7bg0IbAKxNq1lCmiq6+/EgjjJiln5X5gYZnMH/r21vTg2YNm5Bl2czQbT2Uup5MY
-	xrd35O7ZL/c8G87p17JjmKpiH3pZlLmNUZ4GiEio2jYdhwKc28LdgAJtyA6yPMGQ
-	chfx3KY1FK24PK7cAd+uWjMdpPWQyxWEtNB7ppqGC/34e4hJ6JyHfjkxLmZKksFk
-	U+9BzlCw4VRzS46QC/DrlzcOfGBDKbL5guPObic3hQ==
-X-ME-Sender: <xms:CbQrahckZ0DXUECCFwJxqlFLXjjPgZGVfc2KoxxJTK_QPL3-7OpLPg>
-    <xme:CbQraqDbGSlKpWC1lbW7Y-niPkvpZ9TqyxoeO61sG-9twS1zZEoa10L0hIaw6q3AV
-    kuhjDChPcXkdkfXOtMCOxIgpB_tNB6PBAXDwOZLZy_Uq1ecFAZuK4ib>
-X-ME-Proxy-Cause: dmFkZTFCU8dyaOy0zPeQGTvbpEbEEj+fc1idaXb0IffyRnewPAWGTHIcvNY0sgnO47EBFn
-    BrbzSozhTykbwTc/DamWcLo9lQsFdWgn1+2gv6iY6IHpDqOhNshVCTRyWhBuhX8Lmjkois
-    BXSu+MRZIFvBr86oY6weB194BWISCtyyPWmGeXsFhzo1pr+x2Xu25sCh1YRMNl1r66pWy7
-    sMAsiIO2OMgiAt4q+lZ0bGNdY/XaNSNqKGhmLdczDXzKQQw6zqtCrbBbg9vN/m2ICgGLlU
-    fFu1oJbvEeUOArewe0xb17KqMyFCE0PaOyf4xOIwLmuwaHjAYa5c5ZjK6+sj2GF+ixJwn/
-    qWRMwR9LC2+OSPHUzraVb4Jrnd7fsFpT+VMW2p+wSpWo8hufaXAVQypTmSCfpfmPgxi2xR
-    03cQQP7uZLIYO0rY1HtWptEY95g0tupOLZxpqe2DUh5HrpH3G9w8RzXEEcLMY3XobiCqzS
-    YZtkzlKse6CT4+gKPRfwoF1lchheORQI1XuV+ff2w0HQGgAj6huulXQyUDjwcyH1GqGBbu
-    bacd3rg86ayP6krOjjkHfdDeZnGxIpf1eDvyvV+PHsBDvyKPLXdVcdFHSwnkHADyrEk2Cg
-    rL7XVTpmvUbSugxmLXg7/doamAl+WzS1JJkYARrhmpK3Mf3iBOPdAgvmVCyw
-X-ME-Proxy: <xmx:CbQrajIWXhGXE5BQmqGZEQ6Ysjo_OHi6Zw6JpbQJPFkRwLxsYLjZ8w>
-    <xmx:CbQrauBFRdpmbESH-AZw6CPMubPTH2rmkYViZAGJNj6QJaSFvGOUdg>
-    <xmx:CbQrakCT2Hl9_jZWXOEQ7d22kfq6PYeCznt1JX_cgxMUY-DSUk-ghw>
-    <xmx:CbQraoBcIzry-YaCGuapBEMNiavonnhgTcTFtfDRsZMTPScUY4m09g>
-    <xmx:CbQramTkhpTVUqWqPl6YCvwfnB6dpLVszg2xG1jh8tOiK7uZBAPLwzJm>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 44B22182007E; Fri, 12 Jun 2026 03:23:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VdZRlCMY"
+Received: by smtp.kernel.org (Postfix)
+	id 135701F00A3E; Fri, 12 Jun 2026 07:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F074F1F00A3A
+	for <soc@kernel.org>; Fri, 12 Jun 2026 07:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781249407;
+	bh=j3KyVriGg8LEGT/+n1jeG6kK9yPTHoovu/oyHH7wTuM=;
+	h=Subject:From:Date:To:Cc;
+	b=VdZRlCMYW+1pTcpOpZ+muPLNYuI+5FgUVdNNifP58OVhlM9Fp/sK3hCdr+T4iCgsf
+	 iDiEundWqfBtjckbPzlWa1MKrk47hQuHUtfaJ340KExJABLG1qnYvaB9Xie85Urv4H
+	 MRvmoEOomQhrBr/DEaUE5p2olFsl+/GcmJuCBWiZPIf9UCDcK4iNItEo+TC3OFUrBC
+	 aHHJxlDGFA3uQLLi0uHzBuU3c/A/tREShQIYftadWU1mAoVcSzcslGG4TX7ufxX2XZ
+	 YSzPIIMQHu/otHV18bqzUdG6UzwuItnui13uF/hl1fTYxtVDzDBTBpJ673QLtAn2sO
+	 Z295PyizBTYKg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1C11E3931000;
+	Fri, 12 Jun 2026 07:30:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: A92O7juWEyRc
-Date: Fri, 12 Jun 2026 09:23:32 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Message-Id: <f4034eb3-455b-4172-872a-5e94a53627b0@app.fastmail.com>
-Subject: [GIT PULL] soc: fixes for 7.3, part 3
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <178124940366.526649.1081696694845956633.git-patchwork-summary@kernel.org>
+Date: Fri, 12 Jun 2026 07:30:03 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-The following changes since commit 7fd2df204f342fc17d1a0bfcd474b24232fb0f32:
+Hello:
 
-  Linux 7.1-rc2 (2026-05-03 14:21:25 -0700)
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-are available in the Git repository at:
+Patch: arm64: dts: bst: enable eMMC controller in C1200
+  Submitter: None <gordon.ge@bst.ai>
+  Committer: Gordon Ge <gordon.ge@bst.ai>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1110388
+  Lore link: https://lore.kernel.org/r/178123037729.455092.8454252669856079676@bst.ai
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.1-3
+Patch: arm64: defconfig: enable BST SDHCI controller
+  Submitter: None <gordon.ge@bst.ai>
+  Committer: Gordon Ge <gordon.ge@bst.ai>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1110389
+  Lore link: https://lore.kernel.org/r/178123038058.455092.2553110009023696912@bst.ai
 
-for you to fetch changes up to 9c648f3554920721d8878807cd794fe2d7f989e8:
+Patch: [GIT,PULL] arm64:Add eMMC controller support to the BST C1200 device tree
+  Submitter: None <gordon.ge@bst.ai>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1110476
+  Lore link: https://lore.kernel.org/r/178124706736.583168.7192372166865774364@bst.ai
 
-  Merge tag 'v7.1-rockchip-arm32fixe' of https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes (2026-06-09 09:16:26 +0200)
+Patch: [GIT,PULL] arm64: BST C1200 eMMC defconfig for v7.2
+  Submitter: None <gordon.ge@bst.ai>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1110474
+  Lore link: https://lore.kernel.org/r/178124682783.542254.4976938369452006836@bst.ai
 
-----------------------------------------------------------------
-soc: fixes for 7.3, part 3
 
-Two more small fixes came in, both addressing corner cases in platform
-specific code: the microchip mpfs system controller probe and the CPU
-power management on 32-bit rockchips SoCs.
+Total patches: 4
 
-----------------------------------------------------------------
-Arnd Bergmann (2):
-      Merge tag 'riscv-soc-fixes-for-v7.1-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into arm/fixes
-      Merge tag 'v7.1-rockchip-arm32fixe' of https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Felix Gu (1):
-      soc: microchip: mpfs-sys-controller: fix resource leak on probe error
 
-Heiko Stuebner (1):
-      ARM: rockchip: keep reset control around
-
- arch/arm/mach-rockchip/platsmp.c            | 16 ++++++++++------
- drivers/soc/microchip/mpfs-sys-controller.c |  6 ++++--
- 2 files changed, 14 insertions(+), 8 deletions(-)
