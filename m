@@ -1,60 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444F337A48D;
-	Wed, 17 Jun 2026 18:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788643803D2;
+	Wed, 17 Jun 2026 18:37:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781721419; cv=none; b=MdUo61gljL6AlatGnzgJl9i+jHCntiEGrkNBTGdFT6m9F6CCa23MELVUsYRIFapeNNJHoeVIJmxXxcKYtkCJv0Xf2n1ooVy9OMN9cokKHnYD08GLzy/MjOI2jTJeWyQ9Qt7dGTfXdg0oUA4L143K4yXmLdAeGuoMRkS/1vSsbg8=
+	t=1781721421; cv=none; b=YfDpZ07pEa09I+RlTNzn97jzdg5UdGk4wm/+llm+x//iWeXtBUU/tBfVWWaz7Idxfr9ZSAU6Loq35RpJ9fq6HDYp/glUmRm9zaxsqVHhcvQD8WxyBhqGP2vjYw7oDbNBkFMhHF5xBM3qHRf9AIqLAsak3PNbo/RspM62xCHkLUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781721419; c=relaxed/simple;
-	bh=0bVrl8Hn5uWNZf5DmY8mdl46xDOY1BAfAwrS8kogbvk=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=J0+UC8GAgdt2zK5q5K2nTkWjHoHzAuwp+1DgkBRJV/H8uoHc71pjz7TBUt0GbDyamXb6YqgH7+Foflkteli5LkklXE7U9PLIEJK7HbmHaloUJdtB5Lv9OyvVTjJUYFDNQ0HqcS+Oyej9yf0BhPcUYPUvWsBNCCDGqOoCgb5uiVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ThEU5PLX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781721421; c=relaxed/simple;
+	bh=TZAs5H2sYdi7CdhYOEIzfXf7gBi7ee9QxPE00TcS4ic=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=KatY27eagmBtlstAE4yjNDTQdZl1o+5GEuYt77BcHeE+kvloRQY4evGgKqAzJrpQnTZBtpsxdKB0cKS0lv7vIpp9RNZKpuGgZHH9t2whuPA1x0gOdiDyXJbt3+7Xv9Vu1sUj90lWduD26dJQgkAVXQLi0p7NuAqm5ytXKWlOpAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDB0+OML; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ThEU5PLX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F161F000E9;
-	Wed, 17 Jun 2026 18:36:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDB0+OML"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52BAA1F000E9;
+	Wed, 17 Jun 2026 18:37:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781721418;
-	bh=ciQOt6NWwfOog9VoModtejysuadNlQaMBIW440bGX6A=;
+	s=k20260515; t=1781721420;
+	bh=K98T3XteSTOhsyQJSjHjvWz/YyBhfYKEk/9xZSB6Vds=;
 	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=ThEU5PLXWXdgatxdxme6fxBxazWqxrclLqPSl1OQeetAt+toZ2hZw58PBX3Tv0Fg4
-	 FHKpWBtSCUKOUSPqcLsZflM3wNcg294GOzx7tSMEEnsUrJxktBTeJXQeRplzwpobrK
-	 BVU3pvaeizwOjTh0hoTEmkpBMNHiAp18Heu+/Sl5oh6+5gHF8AWizpu+XumoBngKkK
-	 QDzdATMjzZbXXc7lbzyRlkWtOipoWnGxkxsWbckGDB7/SJsRvG14fk8tpFbsVJ33ek
-	 vZIW45YmvS8jII3YrAmY5FyRmfh4g2OhMzhzgGeW6qQk+gpeX5yuxIXq+J1suJBV0m
-	 2jrS8WRkVhM0w==
+	b=BDB0+OMLdR/FJ1vhAPLknh+oXF368g5+ByOhHVhFgOepX0yXVPCDtBOIsTn7ilQzE
+	 mwUyPautF3NvNj9eyjs7QMM+PaOsbleJp7Pl9WSCZ175qV9nBY3/ZCRLaRsr4FoTsp
+	 Bl9qXbQ6E876euoSKi3miipC+Iatd18+32gLKd6xPNBt4Ohku7PMOjoSCoSR2nT4vr
+	 ks+el7Z/MiEXtc9MYcIXUFPurZIqNzQcfWwoP4eQj1DE2IcKsrl8fAs3A3OgRJShPd
+	 1y70905rKXJLKr0RY776TILi0TZ5awVxEeG2jHEdA0evjS3rCyJLifP1GKHJNjUCWb
+	 wbqec2cvHRCiQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56C153930FA7;
-	Wed, 17 Jun 2026 18:36:53 +0000 (UTC)
-Subject: Re: [GIT PULL 1/4] soc: devicetree updates for 7.2
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568BA3930FA7;
+	Wed, 17 Jun 2026 18:36:55 +0000 (UTC)
+Subject: Re: [GIT PULL 2/4] soc: drivers for 7.2
 From: pr-tracker-bot@kernel.org
-In-Reply-To: <ef5fa237-1d2f-4c1d-8940-0e8c6c156759@app.fastmail.com>
-References: <40c8ebc3-d681-4dcf-b3f2-ce0d780c539e@app.fastmail.com> <ef5fa237-1d2f-4c1d-8940-0e8c6c156759@app.fastmail.com>
+In-Reply-To: <528465a7-4ffb-45ed-82e4-898b01d2da98@app.fastmail.com>
+References: <40c8ebc3-d681-4dcf-b3f2-ce0d780c539e@app.fastmail.com> <528465a7-4ffb-45ed-82e4-898b01d2da98@app.fastmail.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ef5fa237-1d2f-4c1d-8940-0e8c6c156759@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-7.2
-X-PR-Tracked-Commit-Id: 9e84fd546dc3f9f97bfbf2717c2d71d878a4f46f
+X-PR-Tracked-Message-Id: <528465a7-4ffb-45ed-82e4-898b01d2da98@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-7.2
+X-PR-Tracked-Commit-Id: c7437fab2f2249c1f12d805770c5ba15cbd0e46a
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: aab799b1bdd1ff3e6912f96e66c910b8a5d011bb
-Message-Id: <178172141188.1757661.2783841397380560114.pr-tracker-bot@kernel.org>
-Date: Wed, 17 Jun 2026 18:36:51 +0000
+X-PR-Merge-Commit-Id: 70cb95c736807da2c4952423c9f9afe470341996
+Message-Id: <178172141384.1757661.11904060001732717806.pr-tracker-bot@kernel.org>
+Date: Wed, 17 Jun 2026 18:36:53 +0000
 To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, Krzysztof Kozlowski <krzk@kernel.org>, Linus Walleij <linusw@kernel.org>, linux-kernel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, Krzysztof Kozlowski <krzk@kernel.org>, Linus Walleij <linusw@kernel.org>, Marek Vasut <marek.vasut@mailbox.org>, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 
-The pull request you sent on Tue, 16 Jun 2026 09:51:35 +0200:
+The pull request you sent on Tue, 16 Jun 2026 09:53:00 +0200:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-7.2
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-7.2
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/aab799b1bdd1ff3e6912f96e66c910b8a5d011bb
+https://git.kernel.org/torvalds/c/70cb95c736807da2c4952423c9f9afe470341996
 
 Thank you!
 
