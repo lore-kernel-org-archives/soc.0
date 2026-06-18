@@ -1,118 +1,152 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4059318872A;
-	Thu, 18 Jun 2026 08:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A093E0C4C
+	for <soc@lists.linux.dev>; Thu, 18 Jun 2026 09:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781770559; cv=none; b=iSx7cl1eCUJtJytNm4++787mQSPSkPZB6ueN91p0HeehyAZf6+/pZaouAnOzfb57c+Pcxw0DCdAXn/z6Eb1XEna5E95F4+q98as+BwY+vg7Wk33+d75Z0++7s7xzYNWVH01KmgzVzo3Ta5hF1uMsrjGGVPw5h16ZzY3h1F+pSsE=
+	t=1781776470; cv=none; b=P0tdpH8oqcH7S+a323m51L4bhRJYil8GI562Nny+jVvx5PqZOy/f3J6diRg1yJ0H4SdicyUVSuBK1l6jWXoGjGzy24erejlVRrbxYCRaAEyU8f9HDmOs9Schg1HdkGBaUoEPkO72CuSd/WDUr0AQlAwdYukWuDjsDGFTyPtRHEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781770559; c=relaxed/simple;
-	bh=Ft3DR8HYqhv7bLm/AkmBWtVUOn1fgDkjToaIGnHHPQc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CRgu72CWAD3+eOYqhqmLtHMKM7fOYiIrxCbyuVx1RueaDZqVNwR/aCEgelwgKnuhWc/6lKTiLxQvjN7B4VMionDgGOlwa6VFF7ZvfjGWYOAGbdbRSAMUqUHX4YcgYdgdXZMctqeN245yutNw6kLa7rWL/YhpdWf7D53RTNyW3kY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=r0y5D7NJ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5CPeMOk3; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1781776470; c=relaxed/simple;
+	bh=4uJCDCF5AjST5Im305PEl9dVzRJgMK7rgnKd0CVoeTw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ti8LZ6NwSYSA0cRG7uenSFBuO3OAKdmfmxMiehvqIOodjMjNfFZXwKo1PAeHrwYm93a4SGLSK6ZVym6Z8E6Wgy1w5uOcVfz5/Isg9GxffwRGg30PXNQ60QNWbgJ0VMKh1piZ+OPxa/Yrav9Jpnjy5o5Q7wBpQvwgF/PZPNweNXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KyUQ5AXZ; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="r0y5D7NJ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5CPeMOk3"
-Date: Thu, 18 Jun 2026 10:15:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1781770556;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bfKiKVq3hU3pjcBqUpBBITy3boOVHoqwPFPh0Ujjzk8=;
-	b=r0y5D7NJYb4QTTOEoORJ6biEUdtaD8LliAbG4rfJBSYfP0u/4miH20xoNkr3VAJVDDr+hC
-	2kw2RkVTQhqwfZ3NbbLjKlVNdqpSNWt05bqc2Cmou0QG4NwzmxuSAv0cZtsEvMfp4bst5e
-	YyY6mDGnP6vXPicLqUmAjUycpPhx6b0CFwsKA5m1cGmF0wx5zPIVU5pypGLf2IpVyj8IWg
-	4Dz+Ji6QZpVMFvIvCkBOWOtIp/rftXIsEtbwCmDputtdUXO6yOxWfmrHJvZAaBYGS/oAE+
-	XQgLfSbYtvGuLL6Bjvyv9y1vmxnDnBRfP8kv1iniZV3g3lCp9K8AqP7ya9QmAw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1781770556;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bfKiKVq3hU3pjcBqUpBBITy3boOVHoqwPFPh0Ujjzk8=;
-	b=5CPeMOk3GIo1h9V/CqjAAL8dMVouMDzCVxeFdnTfaVIMu/N/0RPcwSBhdwm/hFObeI/2/w
-	39FONTNnrS0xcEAQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Runyu Xiao <runyu.xiao@seu.edu.cn>, Mark Brown <broonie@kernel.org>
-Cc: Viresh Kumar <vireshk@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org, jianhao.xu@seu.edu.cn
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KyUQ5AXZ"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 823EB4E42F9A;
+	Thu, 18 Jun 2026 09:54:27 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 385B55FF03;
+	Thu, 18 Jun 2026 09:54:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7BF15106C8326;
+	Thu, 18 Jun 2026 11:54:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1781776466; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=UWjxZPbO7YyWOylyQwzbH8jAmeHC+JWQnIMid9X14ts=;
+	b=KyUQ5AXZua/L2ZCNVAnSqLro4Y3sx4uqBwBsTO7cJFgnu5Rp+dqmtK1F/xgk8G0UvQOK4L
+	VwI2xMwITW95tQSPsvqn224uNxRy/BsjM2iTHP6lFxamo0rj3pbFdCprNH+8SmbVEfETA+
+	tj8K1oaMbgnQOw/RPm1/UAoG1+wu6eFZ8Fg+nuTL0BnAYcYm57WDABzLeV2duWrbWhlSri
+	j24g4Z7zs8RgCQ3QSAfHymrBB2m3ATV+2t1Hi0uOgunt/EeTGx2jOIlEfq8Q2mxI9pzbTP
+	89ennLqwDihGKNA968tH7zjBHocVAbQjRWUuky+IYz3Fb/BW7nHMMavOdizaxg==
+Date: Thu, 18 Jun 2026 11:54:15 +0200
+From: Herve Codina <herve.codina@bootlin.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Runyu Xiao <runyu.xiao@seu.edu.cn>, Viresh Kumar <vireshk@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, Steven
+ Rostedt <rostedt@goodmis.org>, linux-arm-kernel@lists.infradead.org,
+ soc@lists.linux.dev, linux-gpio@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org,
+ jianhao.xu@seu.edu.cn
 Subject: Re: Question: SPEAr PLGPIO irq_enable on PREEMPT_RT and regmap
  updates
-Message-ID: <20260618081554.zifCwv4I@linutronix.de>
+Message-ID: <20260618115415.28b99ea2@bootlin.com>
+In-Reply-To: <sj3oxg5ymbe2ac2geznsidsxz23rkqzqc4ir3pkjc7bsrzaorw@cw3waaj6xxkx>
 References: <20260618023418.213453-1-runyu.xiao@seu.edu.cn>
+	<sj3oxg5ymbe2ac2geznsidsxz23rkqzqc4ir3pkjc7bsrzaorw@cw3waaj6xxkx>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260618023418.213453-1-runyu.xiao@seu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 2026-06-18 10:34:18 [+0800], Runyu Xiao wrote:
-> Hi,
 Hi,
 
-=E2=80=A6
-> The repair I am considering is to keep the gpiolib resource updates in
-> the fast irq_enable/irq_disable callbacks, but defer the actual PLGPIO
-> IE/EIT register writes to irq_bus_sync_unlock(), after the IRQ core has
-> dropped desc->lock.  The driver would keep per-line shadow state for:
->=20
->   - IRQ disabled/enabled state
->   - pending IE update
->   - edge direction state
->   - pending EIT update
->=20
-> and then synchronize those shadow updates from irq_bus_sync_unlock()
-> under a mutex.
+On Thu, 18 Jun 2026 13:10:31 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
 
-Not sure how this will look like, but okay. I was looking at making the
-a lock a raw_spinlock_t for fast_io. Since it is just a read and write
-it shouldn't be a problem. But then there is the regcache and the sync
-of many registers might be painful. The actual problem is the type MAPLE
-and RBTREE which have an allocation in their write callback. That is a
-no but the FLAT ones should work since there is just one alloc during
-init. Well, wouldn't it be for the lock that is acquired during the
-callback.
+> + Herve (the last guy to work on this driver).
+> 
+> On 18-06-26, 10:34, Runyu Xiao wrote:
+> > Hi,
+> > 
+> > While auditing GPIO/pinctrl irqchip callbacks, our static analysis tool
+> > flagged the SPEAr PLGPIO irq_enable path, and we manually reviewed it
+> > against the current tree.
+> > 
+> > The path is:
+> > 
+> >   irq_startup()  
+> >     -> plgpio_irq_enable()
+> >        -> gpiochip_enable_irq()
+> >        -> spin_lock_irqsave(&plgpio->lock)
+> >        -> plgpio_reg_reset()
+> >        -> regmap_update_bits()  
+> > 
+> > On PREEMPT_RT, plgpio->lock is a regular spinlock_t and can become a
+> > sleeping lock.  Since irq_enable/irq_disable can be called from IRQ
+> > management paths while the IRQ descriptor raw lock is held, taking that
+> > regular spinlock there looks unsafe.
+> > 
+> > A minimal Lockdep reproducer preserving this irq_chip::irq_enable carrier
+> > reports:
+> > 
+> >   BUG: sleeping function called from invalid context
+> >   irqs_disabled(): 1
+> >   plgpio_rt_spin_lock_irqsave
+> >   plgpio_irq_enable
+> >   request_threaded_irq_probe_path
+> > 
+> > My first thought was to convert the PLGPIO register lock to
+> > raw_spinlock_t.  However, that does not seem sufficient because the IE/EIT
+> > updates go through regmap_update_bits()/regmap_read()/regmap_write().  For
+> > the syscon/MMIO regmap used here, regmap may still take its own regular
+> > fast-IO lock unless the regmap was created with use_raw_spinlock.  So a
+> > raw_spinlock_t conversion in the PLGPIO driver alone may just move the
+> > PREEMPT_RT problem one level down into regmap.
+> > 
+> > The repair I am considering is to keep the gpiolib resource updates in
+> > the fast irq_enable/irq_disable callbacks, but defer the actual PLGPIO
+> > IE/EIT register writes to irq_bus_sync_unlock(), after the IRQ core has
+> > dropped desc->lock.  The driver would keep per-line shadow state for:
+> > 
+> >   - IRQ disabled/enabled state
+> >   - pending IE update
+> >   - edge direction state
+> >   - pending EIT update
+> > 
+> > and then synchronize those shadow updates from irq_bus_sync_unlock()
+> > under a mutex.
+> > 
+> > In other words, the fast callbacks would only update local shadow state
+> > and call gpiochip_enable_irq()/gpiochip_disable_irq(), while the sleepable
+> > regmap writes would be batched into the irq bus sync phase.
+> > 
+> > Does that sound like an acceptable direction for SPEAr PLGPIO, or would
+> > you prefer a different fix, such as changing the underlying syscon regmap
+> > locking model or handling only the IE register path?
+> > 
+> > The draft patch I have locally is roughly:
+> > 
+> >   pinctrl: spear: defer PLGPIO IRQ updates to bus sync
+> > 
+> > and it changes only drivers/pinctrl/spear/pinctrl-plgpio.c.  
+> 
+> I haven't worked on this for a very long time now (15 yrs). There are some
+> people who use this hardware, and so it is not removed until now.
+> 
+> Also I am not sure if RT kernel is a valid use case here for this SoC family.
+> 
 
-I don't think this is required given that it is init time so
-holding the lock shouldn't be required. This was introduced in commit
-fd4ebc07b4dff ("regmap: Hold the regmap lock when allocating and freeing
-the cache"). This change broke gpio-104-idio-16.c, pio-pci-idio-16.c,
-pio-pcie-idio-24, gpio-ws16c48.c and pinctrl-apple-gpio.c.
+I know some users and they don't use RT kernel.
 
-So unless there is something that I miss=E2=80=A6
+But well, isn't the pattern present in some other gpio controller drivers ?
+How it is done in others ?
 
-> In other words, the fast callbacks would only update local shadow state
-> and call gpiochip_enable_irq()/gpiochip_disable_irq(), while the sleepable
-> regmap writes would be batched into the irq bus sync phase.
->=20
-> Does that sound like an acceptable direction for SPEAr PLGPIO, or would
-> you prefer a different fix, such as changing the underlying syscon regmap
-> locking model or handling only the IE register path?
->=20
-> The draft patch I have locally is roughly:
->=20
->   pinctrl: spear: defer PLGPIO IRQ updates to bus sync
->=20
-> and it changes only drivers/pinctrl/spear/pinctrl-plgpio.c.
->=20
-> Thanks,
-> Runyu
+What is specific in this controller compare to others ?
+We take and release spinlock in gpio chip .irq_enable(). I think we can
+find other drivers doing that and probably drivers using a regmap as well.
 
-Sebastian
+Best regards,
+Hervé
