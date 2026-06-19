@@ -1,162 +1,116 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19E3390CBA
-	for <soc@lists.linux.dev>; Fri, 19 Jun 2026 13:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7C230498E
+	for <soc@lists.linux.dev>; Fri, 19 Jun 2026 13:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781874725; cv=none; b=cY6X55jXYuu/98zpw29w2OJWzWY1K+4FqsnMpTttuEmqIMHuxGXuT2qEyIzweKTmonTVMyvC9gz7ALAXAEbkW8osHjtw4CNdW+R+Ov8o3CSp/zmeikgNq1Zrpy83w4yTXBUk4eKg6pE/MdxNHVvvjxFgcYP+Bnm+3fLJcVzNAx8=
+	t=1781877284; cv=none; b=Azk19C4D4O3WS6mY5m5PPgCKf7psn/kGO7CNKZNidHZ16e6BPU7xv00hLihCdYVeDI4YFnMTaYAOlmRlL7XE1BM9wQ09GQtUCjU8v6Ya/eqa3CTNrq/faNdMAHRH1d6N33ioZJuF90iDhhxxdf01GaJYPjdG54u2ksI4qCOtdC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781874725; c=relaxed/simple;
-	bh=4ry7dWwDqy+5DMW6DFyri1Xj7ugqGCrI6plXuJpvo5c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SX555PSVExk7GnQNmS7J7Yt8fxM/qxlIMn802PMhOXfvEuIjJ1munP1DjNcTPW8IijVnOdbfsEnFPiSf9+lZ488Jvn6rbUmrX5Y+9rLyCkzBqNOelYJrlzMu3GoSOHQkVU+QJwywabFQl31LxnxU4Ppt0NlcqHHti5MbHCyME9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DzanUwzY; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=OoZMiQYR; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1781877284; c=relaxed/simple;
+	bh=r4XLIPU7DmrQYWkVnd061xM3DzeraiEWiBBApibhNsk=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=AN4bn+HyxlaPzaJQ6RvxBQ2bD8K+dbp77iFvwCPqMqLjyGdfLBhuJKdXMm5Gr2Ke5HqaZhEaRQ/rt6Ay5r9YadL4Q4MB/7h7Agjyy91D6i+4+VyZgl5cjkc4J4JwpgvdyLVY69vDugjx+IqheZHGttE6TYBQ1m0BiO6f8sD8Ax4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=X/Xb0wZe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SCAYL4Cx; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DzanUwzY";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="OoZMiQYR"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65JD9Whb291571
-	for <soc@lists.linux.dev>; Fri, 19 Jun 2026 13:12:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	NRfoyPQGltYSRfxFZr8LolOMz3lbDOSEI4D1n3rMg0U=; b=DzanUwzYzk9w2Wzn
-	f2lfzsZUjTymklzrnsb8cRGHznXx1jppvjnmevQ1qfWaf2eNwGWehwauL/3+wo2F
-	COhk5zenHTfembdrc7N+izw5OAk/oS/pjaHdXYe1t8koUbIKglI4w8MBGDt38So1
-	DihcbIzURhCGIJd2c1/P8zeDnCDO/lTG5gsGqhvDt95ikPurg2byggA5KkTHo9gg
-	kdjIuJNV1Y7ON2cRjzpeGnoI4CWT8bQPelL3zl8mBHfX3IzQ5yzxdMiWgrfRFM2l
-	Lym1ZMoA0+Xhz8Xcns4pwAASdAHWmfBStcA/rkPfKdTf0wowUk4ECSuNoPxfDQXZ
-	qkqAHA==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4evm26bw19-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <soc@lists.linux.dev>; Fri, 19 Jun 2026 13:12:03 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2c725d3e886so10891715ad.0
-        for <soc@lists.linux.dev>; Fri, 19 Jun 2026 06:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1781874723; x=1782479523; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NRfoyPQGltYSRfxFZr8LolOMz3lbDOSEI4D1n3rMg0U=;
-        b=OoZMiQYRgD/PTMsSb1Z9v27KR6xvzgyeyPnstMXctxoAlOwXlC6E19jcOWsFqk5Xt/
-         HQdUgeCWs2u8ae5/wRJfaRLz73QS/S5pPXA0vQ75VCXJV7fd2tR/jySOLP7EBJ3+ENLz
-         dGXoMzsQkjvtsvtEJAV9t0b33FHC078H3LBQguToQnGYKqEHsAmqTpI/l0rqMO13wx74
-         3auFvC7HhgQRQ5851VGxmqZ/TXTdEsGVi/aexv6S+3BeGjh/joX3l0zK9etRv9t8Npwk
-         MJCoXl1brnmV0A89jDrzWa+IeVNI77rSqbDQjHpYaouXGX819pqE84eVbgH3b1Y8VHpy
-         5XuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781874723; x=1782479523;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NRfoyPQGltYSRfxFZr8LolOMz3lbDOSEI4D1n3rMg0U=;
-        b=R56EzkMEqUFZCQ25OJEzP7Y8OCKWOAr4NBA2OrpsMbNbJo0BI/sopNYpGkdvI5+AeS
-         c0Gho2VRjsRUOwD7wQrsaD7TCbcAHRZKD6596Ji/vE42cWX76YgjxbWd8cCbqvjqipX/
-         HYNxFhMLI5CEYTvOvk+SnKCj7VEn23WdncWd+T7+72uYTYBHTy7+pwDWbdmhq2J90zbc
-         gQaahHyRZN5hn9Dp0UeTSVee99pmXMBDdnKxq28ezW7mtFttMQZm3tbHoyYTjwz/A0rN
-         otgAcRs0nAjQb+c/emCWnpPz48eoC/aQ1utjHNt8fLoYgM2IOP0hXXGCb1rmE4lDnR7f
-         +WqQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/jjYEJrDx+cOKG1xTDn49CfrPJR38zGpLUHxyUq1oAosuD4K5F7pDqdk/z46KSaNs0svk=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzk+eEZXfhqzj9P4L6ZYnssj1VuZOpIqmzqn9OYHgMS4YsHU4wk
-	eawHbcjwSiOebCVlpyKcdrGxrzLFT5qTaLrog9l0mo7QfEYSPPlQ3Mlz96CLtmFaT4E19PfjBhb
-	C2I1jLafl9uspwN7KJnK4N+nkLdg9LVqkN83pPPZ0KLgu1xGmZdBnoZoo+/ngdbY=
-X-Gm-Gg: AfdE7clexfPz6whSV+f10Llm5LKJ/wcJZvKjSwij/PhY48+79ZYfsJU/ffaCkAgoiEP
-	mfsg9Gup1vNDX0AKPiLWGcYR8jYyBLvOdzjL2yqGmOIUnn2Ci4ywumU3Pw68WN2hx2PGWZOtXsm
-	h2/NSRPYs33T25qisAICwkmtaGaFImwGG1gszs9M0YncB+c04RxLGrx5fAeWMOcO1dIQikLrJGG
-	oNZ7r7k0cWPQyoQzPdsa+ta4FM2WYrtmr+G1f8VULI3f5olPHDOPtbGRypjHGSEHAcTxwSbxIkW
-	v751WOOd4iSZe3NEQOEjAj7n/3P5STPgeyMUfB5ecNaX+ZeJvcWIEelkScfYFMkAKY6wbwOOLHh
-	oNE3otxDDciMBbZN09jCafv3SBZNx7vkpXko=
-X-Received: by 2002:a17:902:ec85:b0:2c0:db23:4c1 with SMTP id d9443c01a7336-2c718c77ec9mr39866975ad.5.1781874723148;
-        Fri, 19 Jun 2026 06:12:03 -0700 (PDT)
-X-Received: by 2002:a17:902:ec85:b0:2c0:db23:4c1 with SMTP id d9443c01a7336-2c718c77ec9mr39866605ad.5.1781874722686;
-        Fri, 19 Jun 2026 06:12:02 -0700 (PDT)
-Received: from [10.210.86.66] ([14.195.1.178])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7316d44a3sm19597625ad.13.2026.06.19.06.11.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2026 06:12:02 -0700 (PDT)
-Message-ID: <ed070807-d2dd-4f0b-9ba1-8d2c8c93c30e@oss.qualcomm.com>
-Date: Fri, 19 Jun 2026 15:11:57 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="X/Xb0wZe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SCAYL4Cx"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id A892DEC02DA;
+	Fri, 19 Jun 2026 09:54:36 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Fri, 19 Jun 2026 09:54:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1781877276;
+	 x=1781963676; bh=fGhiVMwPkreKp0vHZtTTCkMwKPr/e26nfYjRzDJCX+8=; b=
+	X/Xb0wZeFaM0bGpYpDvP8pANEC2yjPKnVlSUr9ZgEgfo830lYuQBlPc6mGy16c+b
+	cilFtsdbYMh+KWTyasxrnwds6iVmOD41cvdWsMs2N61RgxuxaeKz097Bsq3ZRpxQ
+	wlTgKuSQMMC13oD4g99LI7G5pPYpB5UObLVvMG0Ir/zhiPIKTc72ASdVoBV9zr/3
+	qVn9SITEluBt3CcunzDMfKoX21EW5ZQFFZ/Os4J8tSNDvULGcYGUPn2DgJEOMjms
+	v/Nb79rNu+6cUPrYXC1Zss9Muo5Rer3nhxnaKh0LVKsEu5wDjhWqXt4ifQWQyTjI
+	vgI9YVgh/XUZM4kuWCc0dA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781877276; x=
+	1781963676; bh=fGhiVMwPkreKp0vHZtTTCkMwKPr/e26nfYjRzDJCX+8=; b=S
+	CAYL4Cx+YVlyZleyr1bqqCCzpLzx42CRoZgnq2C6k1MOSmVZc4toOD/v4XSbQRVP
+	yn2v2ol8BTTuewgKl5FLLf4hqwM8sW3GO0GPJxO1gOAK1SN5xOuN8i2nBYDuA3It
+	V3qkcDU1t56PUlG4d4bQkP57M+ICYz6miKH/D/NUIV4kYspN/fcEELrxd/QZ4kf4
+	yrjCRJ2iTH6jo6p9Zx/OIsf0DxBpST02jrsllXyBonMwIG1VE5wup78TUQAiOPhd
+	0qY6n3eM1uTg4ShqOpsmWKc9cspiKMotXN/Hw/6dxtGUE/RWSS7lqCkM4IjTUz7a
+	CxBPsG/ObM7TTD8Bvl1RQ==
+X-ME-Sender: <xms:G0o1aoYysvl-fdnI-BXvdvagZEaqODokYW7Y1xV_5kZnARpQ7tN1vw>
+    <xme:G0o1auO6Wg0GCnV2GKK3XxLmXszdPhwIG83cp0eUv3c1HnSp5Za2ZoyLGEDCfKY0c
+    Yfe7IvX15_Ylzpb_0tMPSH1ZvIgNhHFPFY3K9L3LMCR1naz9fltXXk>
+X-ME-Proxy-Cause: dmFkZTEME0i7hFkUzbVaA8Blwt5lFCClrIVHk96pidkFC9CoLs+NZJibpKcjbdNBA/GqX8
+    OHotBRwN4B+uk6gSRtG+lr75wy4a+ISIQwYbSV/CmUPmE+2mpxozY6dZmXz/gERBe103Do
+    7+iYxl+TaJCGq0xHkKbuwM5nVV8WfGGE0KKSi1f5fNL1pgTP27kyDx5j63funhXxCCjvaK
+    V1enqJePl7rsfllgQ9spD886+NhEoX66pi/pIWtKFWKNKJQfHvvPSg1NrKc0qqSDSd+XoN
+    lvr6nqNjvbwteNjhLvaOhJ6szLcVXiA15ZIpT6RcNIBa3kzt5pz+HG3EOqK0HosibjZ1Py
+    oswmHTM7d7SEXsMQaCPrj1M/c2V0hy1ehtY8WHPF3NwtnWBaDJIdNsrTcNyqxsESLr2ygn
+    QAKne8sW2HU5WzygNyHY25puYkS1iXkaK1V1WfSaYwJYBl6CZgtvgJcpSmDY0CexOykhk0
+    wwHADwhoLi+09pnKWjwA2lG2grCL6GasZ7CWbz95S+jXVxA2fWT26WnFLFzv9dNXJD3wqt
+    3HodDyNM9nfYq9x4cIL6O3rO9a2QSBXK49vdy/OcAG7rvCYHPLbCJW0GuQVuxm8cK6an/A
+    1atTaIworsTj5eEpJcx1Lvs+5yNUgRktkdmyvyXkpCH4Tc/NaXXcbqPBvz5A
+X-ME-Proxy: <xmx:G0o1aqliEpSFMCeC89Vs9PfUKGS42VFMY4zD2oKDMjgtbTJ2sngMFQ>
+    <xmx:HEo1agFevHRJyitLqWnp2jlpQQ-zLSZbIiVhu47qb3NVzMDrRNaiOQ>
+    <xmx:HEo1ah8w42448NXmDmaNiwzo5cSfFStKqN5hzjX8j1XshJ_8y65lWw>
+    <xmx:HEo1ahkqcIlzM-ywGLrKFHohqI7tOpaHjG-L3HoXCPO3MVuNticokQ>
+    <xmx:HEo1ahoV06yv9yBqHeyXpjBFZxRFT2-iOLIOagdnfxLjelKQsweA3FVP>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id DF18E182007E; Fri, 19 Jun 2026 09:54:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/5] arm64: defconfig: Drop unused Ethernet vendors
-To: Geert Uytterhoeven <geert@linux-m68k.org>
+X-ThreadId: A94YXJhgp2v7
+Date: Fri, 19 Jun 2026 15:54:15 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>
 Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>,
-        soc@lists.linux.dev
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Linus Walleij" <linusw@kernel.org>, "Drew Fustini" <fustini@kernel.org>,
+ soc@lists.linux.dev
+Message-Id: <b04972c7-2c5e-40fe-a8a6-7ade300cd4b2@app.fastmail.com>
+In-Reply-To: <ed070807-d2dd-4f0b-9ba1-8d2c8c93c30e@oss.qualcomm.com>
 References: <20260429-defconfig-v2-0-e4ed4186028b@oss.qualcomm.com>
  <20260429-defconfig-v2-4-e4ed4186028b@oss.qualcomm.com>
  <CAMuHMdVH6-5ZAjTyF3m=wF5-XiSDqwcgRhZWxJv6y0FoCnk4MA@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <CAMuHMdVH6-5ZAjTyF3m=wF5-XiSDqwcgRhZWxJv6y0FoCnk4MA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE5MDEyNCBTYWx0ZWRfX9ru2neGgFuIW
- MYnspisxMaIlIMaCyq978vtVLRA1sscANnB3BvIGSBw/wG/dzMGL1D2jfvGFKI+mQ4g2jfQWXJE
- 2gG8RX8USN9QewFY0WUUwKIDrhWknyU=
-X-Proofpoint-ORIG-GUID: UInkHhvQe2n9ym7yAL28T75ckSOxJjT3
-X-Authority-Analysis: v=2.4 cv=dL2WXuZb c=1 sm=1 tr=0 ts=6a354023 cx=c_pps
- a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=ZwZsPVarQD+7k2c32RDHKQ==:17
- a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
- a=1SjQUAddwDT2XRhnGokA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=GvdueXVYPmCkWapjIL-Q:22
-X-Proofpoint-GUID: UInkHhvQe2n9ym7yAL28T75ckSOxJjT3
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDEyNCBTYWx0ZWRfX4lBt4muYls1n
- 8JR8GsvaQL3PyoFliTI9GI6pflrdc7+9FzmtyhkXKMJ6objhM/75uuafF//Zj/kIp+ln2ZW4R6t
- YuBK4wRwWtvvQ3h0pNFawUDOya5hqvjR4OFEYbZjeuQu1KpBdgk6dHMM15zvijsffcvZofJX5nX
- ejk2n0hgJkzWedTtunF/wBSfp1s4fIzcPiU1zlWcl0Rrl+Nms0ZwMnq+tfI1nH8+M7fzm1YdWvX
- 3J+mxQQT68EDPlbba0GgnhCa/uqAgu7X+TwI043RF16LkBujh7EUc6MxFSeImC6OabS5izWr4fN
- bBa5SqGy6OdXrkN9Znm4appghPUJ2T1OGCMzqzlrbKcMyb95Iz30oVmVHN4A9hCzx2viCojiDfv
- Bh+iXfgALa7sTCEw/CpRwr49aLNS/1YMZ86YcXwBmHJLK3cuZW18W4PzEWsQ4KSYW2yWBkxh8DZ
- xcB1givljpRd9bZeZ9w==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-19_03,2026-06-18_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 phishscore=0 bulkscore=0 adultscore=0 spamscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 malwarescore=0
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2606190124
+ <ed070807-d2dd-4f0b-9ba1-8d2c8c93c30e@oss.qualcomm.com>
+Subject: Re: [PATCH v2 4/5] arm64: defconfig: Drop unused Ethernet vendors
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On 19/06/2026 12:12, Geert Uytterhoeven wrote:
->> +# CONFIG_NET_VENDOR_ACTIONS is not set
->> +# CONFIG_NET_VENDOR_ADAPTEC is not set
->> +# CONFIG_NET_VENDOR_AGERE is not set
->> +# CONFIG_NET_VENDOR_ALACRITECH is not set
->> +# CONFIG_NET_VENDOR_ALLWINNER is not set
-> 
-> [...]
-> 
-> I am not sure this new policy is a good idea: none of this affects
+On Fri, Jun 19, 2026, at 15:11, Krzysztof Kozlowski wrote:
+> On 19/06/2026 12:12, Geert Uytterhoeven wrote:
+>>> +# CONFIG_NET_VENDOR_ACTIONS is not set
+>>> +# CONFIG_NET_VENDOR_ADAPTEC is not set
+>>> +# CONFIG_NET_VENDOR_AGERE is not set
+>>> +# CONFIG_NET_VENDOR_ALACRITECH is not set
+>>> +# CONFIG_NET_VENDOR_ALLWINNER is not set
+>> 
+>> [...]
+>> 
+>> I am not sure this new policy is a good idea: none of this affects
+>
+> I would not call it new policy. Just an idea which got accepted. :)
 
-I would not call it new policy. Just an idea which got accepted. :)
+I think when we originally added the CONFIG_NET_VENDOR_xxx symbols,
+the idea would be that we would one day change them to
+default-disabled, but that never happened, and generally causes
+more problems than it solves.
 
-> actual kernel size, but it does increase defconfig size, and churn.
-> E.g. for the m68k defconfig, I dropped all these disablements
-> several years ago.
-> 
-> I don't use menufconfig, so just my 2€c...
-
-I understand, feedback accepted. Patch got merged, so you know...
-
-To share my point: I don't edit defconfig by hand but through
-menuconfig+savedefconfig, thus size of defconfig is acceptable to me
-price to pay for smaller menuconfig choices.
-
-Best regards,
-Krzysztof
+      Arnd
