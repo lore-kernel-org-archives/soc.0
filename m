@@ -1,116 +1,112 @@
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7C230498E
-	for <soc@lists.linux.dev>; Fri, 19 Jun 2026 13:54:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F83394490
+	for <soc@lists.linux.dev>; Fri, 19 Jun 2026 14:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781877284; cv=none; b=Azk19C4D4O3WS6mY5m5PPgCKf7psn/kGO7CNKZNidHZ16e6BPU7xv00hLihCdYVeDI4YFnMTaYAOlmRlL7XE1BM9wQ09GQtUCjU8v6Ya/eqa3CTNrq/faNdMAHRH1d6N33ioZJuF90iDhhxxdf01GaJYPjdG54u2ksI4qCOtdC0=
+	t=1781878898; cv=none; b=t1Ad2fq8totMLvLDYbklQ1vmXB779P0jQ6w5DOah3Wj4422EA4Uqo+lIeLAdSEZ9GrZ4A8mhXXPxbb+FTa8mtEVBaGzjpz8lMPTVyNtaFLi/unfxMOPScMp4E9X/eP0i74SP0DuPpItgb6wXzZrnXPU2xB0B832dGmlFa6RWVmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781877284; c=relaxed/simple;
-	bh=r4XLIPU7DmrQYWkVnd061xM3DzeraiEWiBBApibhNsk=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=AN4bn+HyxlaPzaJQ6RvxBQ2bD8K+dbp77iFvwCPqMqLjyGdfLBhuJKdXMm5Gr2Ke5HqaZhEaRQ/rt6Ay5r9YadL4Q4MB/7h7Agjyy91D6i+4+VyZgl5cjkc4J4JwpgvdyLVY69vDugjx+IqheZHGttE6TYBQ1m0BiO6f8sD8Ax4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=X/Xb0wZe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SCAYL4Cx; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="X/Xb0wZe";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SCAYL4Cx"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id A892DEC02DA;
-	Fri, 19 Jun 2026 09:54:36 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Fri, 19 Jun 2026 09:54:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1781877276;
-	 x=1781963676; bh=fGhiVMwPkreKp0vHZtTTCkMwKPr/e26nfYjRzDJCX+8=; b=
-	X/Xb0wZeFaM0bGpYpDvP8pANEC2yjPKnVlSUr9ZgEgfo830lYuQBlPc6mGy16c+b
-	cilFtsdbYMh+KWTyasxrnwds6iVmOD41cvdWsMs2N61RgxuxaeKz097Bsq3ZRpxQ
-	wlTgKuSQMMC13oD4g99LI7G5pPYpB5UObLVvMG0Ir/zhiPIKTc72ASdVoBV9zr/3
-	qVn9SITEluBt3CcunzDMfKoX21EW5ZQFFZ/Os4J8tSNDvULGcYGUPn2DgJEOMjms
-	v/Nb79rNu+6cUPrYXC1Zss9Muo5Rer3nhxnaKh0LVKsEu5wDjhWqXt4ifQWQyTjI
-	vgI9YVgh/XUZM4kuWCc0dA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781877276; x=
-	1781963676; bh=fGhiVMwPkreKp0vHZtTTCkMwKPr/e26nfYjRzDJCX+8=; b=S
-	CAYL4Cx+YVlyZleyr1bqqCCzpLzx42CRoZgnq2C6k1MOSmVZc4toOD/v4XSbQRVP
-	yn2v2ol8BTTuewgKl5FLLf4hqwM8sW3GO0GPJxO1gOAK1SN5xOuN8i2nBYDuA3It
-	V3qkcDU1t56PUlG4d4bQkP57M+ICYz6miKH/D/NUIV4kYspN/fcEELrxd/QZ4kf4
-	yrjCRJ2iTH6jo6p9Zx/OIsf0DxBpST02jrsllXyBonMwIG1VE5wup78TUQAiOPhd
-	0qY6n3eM1uTg4ShqOpsmWKc9cspiKMotXN/Hw/6dxtGUE/RWSS7lqCkM4IjTUz7a
-	CxBPsG/ObM7TTD8Bvl1RQ==
-X-ME-Sender: <xms:G0o1aoYysvl-fdnI-BXvdvagZEaqODokYW7Y1xV_5kZnARpQ7tN1vw>
-    <xme:G0o1auO6Wg0GCnV2GKK3XxLmXszdPhwIG83cp0eUv3c1HnSp5Za2ZoyLGEDCfKY0c
-    Yfe7IvX15_Ylzpb_0tMPSH1ZvIgNhHFPFY3K9L3LMCR1naz9fltXXk>
-X-ME-Proxy-Cause: dmFkZTEME0i7hFkUzbVaA8Blwt5lFCClrIVHk96pidkFC9CoLs+NZJibpKcjbdNBA/GqX8
-    OHotBRwN4B+uk6gSRtG+lr75wy4a+ISIQwYbSV/CmUPmE+2mpxozY6dZmXz/gERBe103Do
-    7+iYxl+TaJCGq0xHkKbuwM5nVV8WfGGE0KKSi1f5fNL1pgTP27kyDx5j63funhXxCCjvaK
-    V1enqJePl7rsfllgQ9spD886+NhEoX66pi/pIWtKFWKNKJQfHvvPSg1NrKc0qqSDSd+XoN
-    lvr6nqNjvbwteNjhLvaOhJ6szLcVXiA15ZIpT6RcNIBa3kzt5pz+HG3EOqK0HosibjZ1Py
-    oswmHTM7d7SEXsMQaCPrj1M/c2V0hy1ehtY8WHPF3NwtnWBaDJIdNsrTcNyqxsESLr2ygn
-    QAKne8sW2HU5WzygNyHY25puYkS1iXkaK1V1WfSaYwJYBl6CZgtvgJcpSmDY0CexOykhk0
-    wwHADwhoLi+09pnKWjwA2lG2grCL6GasZ7CWbz95S+jXVxA2fWT26WnFLFzv9dNXJD3wqt
-    3HodDyNM9nfYq9x4cIL6O3rO9a2QSBXK49vdy/OcAG7rvCYHPLbCJW0GuQVuxm8cK6an/A
-    1atTaIworsTj5eEpJcx1Lvs+5yNUgRktkdmyvyXkpCH4Tc/NaXXcbqPBvz5A
-X-ME-Proxy: <xmx:G0o1aqliEpSFMCeC89Vs9PfUKGS42VFMY4zD2oKDMjgtbTJ2sngMFQ>
-    <xmx:HEo1agFevHRJyitLqWnp2jlpQQ-zLSZbIiVhu47qb3NVzMDrRNaiOQ>
-    <xmx:HEo1ah8w42448NXmDmaNiwzo5cSfFStKqN5hzjX8j1XshJ_8y65lWw>
-    <xmx:HEo1ahkqcIlzM-ywGLrKFHohqI7tOpaHjG-L3HoXCPO3MVuNticokQ>
-    <xmx:HEo1ahoV06yv9yBqHeyXpjBFZxRFT2-iOLIOagdnfxLjelKQsweA3FVP>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id DF18E182007E; Fri, 19 Jun 2026 09:54:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1781878898; c=relaxed/simple;
+	bh=pk7dUICJeGv4cZD7dIWaCs7bQECpS833h8dQY918+1o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AMVXlKKDYawz4/97sEy2DecxGv1qMfjeVZB56SJhpvfdlsZ5RR9oveoG6LQMnvNTzNwBW2tHaKxEbVpL1bza9g7RobIsOkDTpceDsP1xRSow9KwNqe2G7I3ole57SBtJEpl9huRcUvYoTES7Jze57ilr9JYoHBq8YS5lf9uYdTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-966db0b76daso1996845241.0
+        for <soc@lists.linux.dev>; Fri, 19 Jun 2026 07:21:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781878891; x=1782483691;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oy4khWhmG8SG6J19dWJnQfN4DUKYCIX4D5weoKLMQgs=;
+        b=Yo/VrpqQpRZ/Rq0OAWs6zcBQOgkqW9JDXHSvhct+kqgRHi+ofeWid8xmWAt9C7JPNm
+         NImsu6citGGpCRWNN397ot8JpryqUmgLH/xr7o2jNfBtbty+fLle1Wbct4vP5MNhFq5Q
+         B2T+kbZc5bWCyzLrjK4payXTTHgDreGxMfuSsknAoJkAwObxPY9H4Q/HuxFCw98C7g/s
+         udqbE5tdkhyH5bBWjLw0JEYmcO0J4MDUAvJH2JNVTLzJAPTmwDH2QTKwuNSfGqN8JFoG
+         nuTiRxJctVWWzfytWliokPN49lhMir5XsmW41WtWnqVaQ2T2net00AaY8Dp+QF8JWmoD
+         fmjw==
+X-Forwarded-Encrypted: i=1; AFNElJ8EVKQwwr5Tv7qK1phMCScrL2vsxDxrjZxv7HhaTcYeyCp6PflRYDCZdsjKcEN+ujjR14Y=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxa5kVc0nT9KnHZWplXKSRc3nRFpE0eQ//m3jkIf6eu5MIMVAul
+	LjUHyZZgaPNxzMJ1n76sE6UiAyiga42B2lzXjCMW50FMlAQ9VlLwwjYMdnTDbtWA
+X-Gm-Gg: AfdE7cl79fN82XzVQj7YpLkdsiyIg8lMfVdh3dOzb/k14c6hWyzZmBMGQp3+3T7j/V3
+	iW8tpHPztORn2HBonqdCM1R7dChMv3nKFUlhBDSZNUeAnv08597J8OcxuevrnblwRdge3hIKPOQ
+	kF0ppZrF1pnDuQCLakhwgbZ/vikzjT3IZCvIoU3cgNWZO2eRO1wFY/+aTAzTKe+i9Ydw0KGoCbb
+	IfouOXxieRU6oXEHbqze6/eDsPOybpclgAFNatdtjfcBwrva1+bu1k1BHZtvGYhA8GAaQncx3wZ
+	ihOQHFm1+jCQqw0wUjydudrnRZJ5Fsu2VeNNlziEwLucx0WpU7jBnmuvNduAFlNaAH6XVGoHjnR
+	vTptv/21Yr/2TMDQs3SS8cGwGfk5zZlyxvf3VSD7Xw//NXUAWDpnTgkBLRH68jFW9no8l0ESJMh
+	WXjd9QmF00S+apxaFkwP9t7/bWvvMOn9kXxVJKWH4/ngFxh5CvFsEdZLWh6p47dkv0
+X-Received: by 2002:a05:6102:5cc5:b0:632:5db8:f672 with SMTP id ada2fe7eead31-72a2775c997mr1363138137.6.1781878891318;
+        Fri, 19 Jun 2026 07:21:31 -0700 (PDT)
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com. [209.85.221.169])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-72a36bfe9edsm1636158137.11.2026.06.19.07.21.30
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Jun 2026 07:21:30 -0700 (PDT)
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-5bbca605be3so1900639e0c.1
+        for <soc@lists.linux.dev>; Fri, 19 Jun 2026 07:21:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/cCeMocO0rUh69qPPob2JJA6sQcgmfbPM/YvIBRU1RNox6wfkCy/l5wbUITtctTE2H5rE=@lists.linux.dev
+X-Received: by 2002:a05:6102:ad1:b0:6c9:d9f3:1e20 with SMTP id
+ ada2fe7eead31-72a293dfd7emr1104952137.15.1781878890690; Fri, 19 Jun 2026
+ 07:21:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: A94YXJhgp2v7
-Date: Fri, 19 Jun 2026 15:54:15 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Linus Walleij" <linusw@kernel.org>, "Drew Fustini" <fustini@kernel.org>,
- soc@lists.linux.dev
-Message-Id: <b04972c7-2c5e-40fe-a8a6-7ade300cd4b2@app.fastmail.com>
-In-Reply-To: <ed070807-d2dd-4f0b-9ba1-8d2c8c93c30e@oss.qualcomm.com>
 References: <20260429-defconfig-v2-0-e4ed4186028b@oss.qualcomm.com>
- <20260429-defconfig-v2-4-e4ed4186028b@oss.qualcomm.com>
- <CAMuHMdVH6-5ZAjTyF3m=wF5-XiSDqwcgRhZWxJv6y0FoCnk4MA@mail.gmail.com>
- <ed070807-d2dd-4f0b-9ba1-8d2c8c93c30e@oss.qualcomm.com>
+ <20260429-defconfig-v2-4-e4ed4186028b@oss.qualcomm.com> <CAMuHMdVH6-5ZAjTyF3m=wF5-XiSDqwcgRhZWxJv6y0FoCnk4MA@mail.gmail.com>
+ <ed070807-d2dd-4f0b-9ba1-8d2c8c93c30e@oss.qualcomm.com> <b04972c7-2c5e-40fe-a8a6-7ade300cd4b2@app.fastmail.com>
+In-Reply-To: <b04972c7-2c5e-40fe-a8a6-7ade300cd4b2@app.fastmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 19 Jun 2026 16:21:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXnR38X-Baqzb0Dm+Mq3=LH6RFt+7=wU46DrkP2gqiWbQ@mail.gmail.com>
+X-Gm-Features: AVVi8CcX7ozhPh8JhyNR7a8r_7a1qss6QfZz7-KfzrH_7gCDXRho6nLaKkb4lJo
+Message-ID: <CAMuHMdXnR38X-Baqzb0Dm+Mq3=LH6RFt+7=wU46DrkP2gqiWbQ@mail.gmail.com>
 Subject: Re: [PATCH v2 4/5] arm64: defconfig: Drop unused Ethernet vendors
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Linus Walleij <linusw@kernel.org>, 
+	Drew Fustini <fustini@kernel.org>, soc@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jun 19, 2026, at 15:11, Krzysztof Kozlowski wrote:
-> On 19/06/2026 12:12, Geert Uytterhoeven wrote:
->>> +# CONFIG_NET_VENDOR_ACTIONS is not set
->>> +# CONFIG_NET_VENDOR_ADAPTEC is not set
->>> +# CONFIG_NET_VENDOR_AGERE is not set
->>> +# CONFIG_NET_VENDOR_ALACRITECH is not set
->>> +# CONFIG_NET_VENDOR_ALLWINNER is not set
->> 
->> [...]
->> 
->> I am not sure this new policy is a good idea: none of this affects
+Hi Arnd,
+
+On Fri, 19 Jun 2026 at 15:54, Arnd Bergmann <arnd@arndb.de> wrote:
+> On Fri, Jun 19, 2026, at 15:11, Krzysztof Kozlowski wrote:
+> > On 19/06/2026 12:12, Geert Uytterhoeven wrote:
+> >>> +# CONFIG_NET_VENDOR_ACTIONS is not set
+> >>> +# CONFIG_NET_VENDOR_ADAPTEC is not set
+> >>> +# CONFIG_NET_VENDOR_AGERE is not set
+> >>> +# CONFIG_NET_VENDOR_ALACRITECH is not set
+> >>> +# CONFIG_NET_VENDOR_ALLWINNER is not set
+> >>
+> >> [...]
+> >>
+> >> I am not sure this new policy is a good idea: none of this affects
+> >
+> > I would not call it new policy. Just an idea which got accepted. :)
 >
-> I would not call it new policy. Just an idea which got accepted. :)
+> I think when we originally added the CONFIG_NET_VENDOR_xxx symbols,
+> the idea would be that we would one day change them to
+> default-disabled, but that never happened, and generally causes
+> more problems than it solves.
 
-I think when we originally added the CONFIG_NET_VENDOR_xxx symbols,
-the idea would be that we would one day change them to
-default-disabled, but that never happened, and generally causes
-more problems than it solves.
+Yeah. While "make oldconfig" would handle that fine, all defconfigs would
+need an update.
 
-      Arnd
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
