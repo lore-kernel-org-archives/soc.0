@@ -1,97 +1,91 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068473603D9
-	for <soc@lists.linux.dev>; Thu, 25 Jun 2026 09:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E5A3E3D89;
+	Fri, 26 Jun 2026 08:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782380466; cv=none; b=tjj6Pu6suNGE8qtv6v/DNgvpT+hju3DeKjX3Ce6+DEAwsm5BCfRhSxbbkh5SVYSkAH9uAbgITRKtgvspvv0Lbax0S/gcfCpJZvshuA8moXPpVU4FxsgKBjKRW4wOqGvJBjhci2KxYhq0C8DNkgZ8b4UMZ6YsM9P/fjxjfU8t31U=
+	t=1782462087; cv=none; b=QmMk8zranDV9QIvzJxtdYyMLWWFKXrvxT5oThh+vQUjHNO4RBMtVD4aB70krTN0f3dfwnRYvEOFbdhKD4xxje8FUy/7WhLkz2z/FPqKq7+fP+yQEmMHpvW52SFn/7OwiiXgaswHqjMgYSeO86L91G7j5MMy8z1tbOhMWI4L8Wzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782380466; c=relaxed/simple;
-	bh=01TQELyIGZMIZ6ifnSQh3g6j84rp/OerX7AwLUwHD48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sQiYsH+9HYkXzGokR0LHPPPE/sXsz7kUD4BpcSNF0MPx6aXzPoPd4W8jNL4g0rSob8LpwAVY9w0GGgVz0+5ruUN7zinhnAOHAm3n5xVqljORrIHk5DS8oVDPYT/CfXW/fZs+ckbEO+TgVXWxLStClfkOu4UlwRjvp6NqsUNnvBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BpjLZ4O8; arc=none smtp.client-ip=74.125.82.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1782462087; c=relaxed/simple;
+	bh=hRPd+g9ODFZEheZ9pUuMMOA161rtDcsucEGKN32Gs9w=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=sgRXPJAtTN2JSKyA3cz5j9cb26bd+1BAEzJkSSKyVbtAYqyJsPinLBAThoaH52QlUe5BHCwdnlAx+1tgMOa0hYjarGMQkrhYYllxYSC+hmwCSeAAfR4Bfnt1XFY4448lFfDXflr87HNQjqBT/soRL63npZYFcPUO13UYQyvpgz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aA/AaODJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BpjLZ4O8"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-30b6dad2382so3653302eec.0
-        for <soc@lists.linux.dev>; Thu, 25 Jun 2026 02:41:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1782380464; x=1782985264; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l7XIr/SVC6sMz8goU/VKpbT2rVvzknx033F8HOJiudg=;
-        b=BpjLZ4O8heacWu1DGsAu8cw4GFfvAUH/VRLqmuWnMJMkNHQjd1yOEeDKMLw6F/de4V
-         Y9r7Mk3cPlUqVFft9kEYzKkeawJjGbRzk4BfTdW5kgRsQi6lKZwNZH2hQnVEeSVnLtMW
-         0yZhB5RMSOWTmikwscmRSvSJlhdBXiBYM05xKZvSfcRDvVQNlSDFIvjYuyBdnH+89Ucj
-         HZl3Gai4gaA1uYNmQBwJE3kSWPw7LK1dmTjURAXt6/udHyyEIwisguUZtqNDU6hwXV2q
-         kppOgwhzqRtQv4mmCXoL/BoqcS+Bl/kbRvsT5BnFk2FWdLFyVXDTETCdOJD22iUhJERo
-         6v+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782380464; x=1782985264;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l7XIr/SVC6sMz8goU/VKpbT2rVvzknx033F8HOJiudg=;
-        b=D9LfqJTf1+wUU3KB73KtfTvUQs2xqS5F0UgmLEROExMXtTpziU2et/C31t2+ll6ZkV
-         7W9wu8yTKbD/++X8w+br4xUvgDvuHGKEkrNXfz63CSTuRUhzyD7vTuxYN0vExRed98RF
-         nHakXBTaROgmAe63M51bELxvcrPLxDS28auVoqw6esuChcswGF12YlRK6wQIjrPZY6Rm
-         X7HtVa/KL/7ixB22VcEJ9xlvzM7MEkT59hsGNljb9DfgRSi9OUhlxMrRgbvt6bh7wHGr
-         U7DMwsEkrTFyERsUCQMIQVQPU2IdqM2SdADMpxzCHXIEW7/Xsv0OUwxMMB3gU+vmIAlr
-         b8gQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrUoDr71F8DvPEufpMYTwheTMpdKkVMOkYUYzwnR4/SIa3nXA4celbhgsOIWZUIj+SzVDA=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyPmBN6Iqnygr8/LWzhOynhV5PeL2VzSCYV6CeONB4oHWiTkqZ1
-	EW94p6ImBcBLJqnEaXW1fqdk5+tSYBttUBYi4KShg6C2uDEjIziB7I23bFtUWaHnK2o=
-X-Gm-Gg: AfdE7clzEhhCXwN4htMFVn5V6+UTikwDe+0jWs8Wj1HLB5c9uSpF7hHbdSHtqzFTKCL
-	959s9kUu/SrSLsYxvyGi0FMvggjcVB6JonHBZhLHJFk9RXn0ztMKIkAC4UQk7IRC1usXLqrPWOJ
-	/ryMap5ZQhmOvltomYfevrOOKs1mqMYWt6tpPL2CEMNyhlrrhMVMgPhpYOI3IKUVGmpyt4HK+qz
-	FLRqaijz8KOLOOZKYqcHKUYu1m7brHWKTs8Q36MF/axKLPMBg3tMTxFw1+z7ERjaUJG8GQgC7U/
-	x/MQAQ2tq82Sqn1aaArD1wiuepxHPnjkosumVZIF7/uuxEt+Cebt83aJ2UhKIaOf+CRpaX9rCbU
-	JyEFpysfIAUCyo6TiMMJv69Ces41fM+wDXxl7eh2MzLYc/4wwFwipWSThTqFQ0qBVDeD1jjb5SO
-	feYJ8Z9bGn/fdt
-X-Received: by 2002:a05:7301:9f01:b0:2ea:b85c:153d with SMTP id 5a478bee46e88-30c84d435f3mr1984449eec.27.1782380463873;
-        Thu, 25 Jun 2026 02:41:03 -0700 (PDT)
-Received: from localhost ([122.172.82.94])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7c52eed6sm6731893eec.9.2026.06.25.02.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 02:41:03 -0700 (PDT)
-Date: Thu, 25 Jun 2026 15:11:00 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: st: spear13xx: Drop unused/incorrect usbh0_id
- and usbh1_id
-Message-ID: <eckh7zm6qgtnlo6itbq6w5s5hvss2b6pbp23lyoaqpfzixghvb@skswhqwiwoy7>
-References: <20260625091355.107054-2-krzysztof.kozlowski@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aA/AaODJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0AC1F00A3D;
+	Fri, 26 Jun 2026 08:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782462080;
+	bh=Xf3kAwe5ywIQY//rN3h6sBdlm1lF9rusVsWktLYdFkk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=aA/AaODJC9hNx87l7DWmFqF1ycvUQDGXM6GzZfkNDnaN83wpqMr7NjTKa3W749koe
+	 hwI7hQleW1NVEl2PH70tTqE+TBtvDm8AwRL2dm6Hcj+k9PQxhyaItrC9HsLeyyIqR0
+	 zndpM5dfZUZ+rxd7ac/2X/rhEe3gGN3uSkL1j5ZvFuZKkz4qiMsVS0UdRBcW255bmd
+	 B7KThCYiQMxkacYR+Lx1CIiiqfC6QKOcMNcIWeEeOhqYwGxKSKPiOIfXmLesV17yR2
+	 Odx/7NmU+bJ7ZzRHg/3Xun0PK3w6/xBip2pDM77MGz/xkgB+IWxpgu7gJukMW3wPcN
+	 lLNjFjZn/RKUw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5695239389E8;
+	Fri, 26 Jun 2026 08:21:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260625091355.107054-2-krzysztof.kozlowski@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v9 0/4] Introduce ASPEED AST27xx BMC SoC
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <178246206701.3816447.15009741745882675380.git-patchwork-notify@kernel.org>
+Date: Fri, 26 Jun 2026 08:21:07 +0000
+References: <20260609-upstream_ast2700-v9-0-f631752f0cb1@aspeedtech.com>
+In-Reply-To: <20260609-upstream_ast2700-v9-0-f631752f0cb1@aspeedtech.com>
+To: Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: linux-riscv@lists.infradead.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au,
+ catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, krzk@kernel.org,
+ alexandre.belloni@bootlin.com, linusw@kernel.org, fustini@kernel.org,
+ pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ soc@lists.linux.dev, conor.dooley@microchip.com
 
-On 25-06-26, 11:13, Krzysztof Kozlowski wrote:
-> "usbh0_id" and "usbh1_id" properties were never documented and never
-> used by Linux drivers, thus should be safe to drop to fix dtbs_check
-> warnings like:
+Hello:
+
+This series was applied to riscv/linux.git (fixes)
+by Arnd Bergmann <arnd@arndb.de>:
+
+On Tue, 9 Jun 2026 10:47:17 +0800 you wrote:
+> This introduces initial support for the Aspeed AST27xx SoC and the AST2700
+> Evaluation Board (EVB) to the Linux kernel. The AST27xx is the 8th
+> generation Baseboard Management Controller (BMC) SoC from Aspeed,
+> featuring improved performance, enhanced security, and expanded I/O
+> capabilities compared to previous generations.
 > 
->   st/spear1310-evb.dtb: usb@e4800000 (st,spear600-ehci): Unevaluated properties are not allowed ('usbh0_id' was unexpected)
->   st/spear1310-evb.dtb: usb@e5800000 (st,spear600-ehci): Unevaluated properties are not allowed ('usbh1_id' was unexpected)
+> AST27xx SOC Family
+>  - https://www.aspeedtech.com/server_ast2700/
+>  - https://www.aspeedtech.com/server_ast2720/
+>  - https://www.aspeedtech.com/server_ast2750/
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> ---
->  arch/arm/boot/dts/st/spear13xx.dtsi | 4 ----
->  1 file changed, 4 deletions(-)
+> [...]
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Here is the summary with links:
+  - [v9,1/4] dt-bindings: arm: aspeed: Add AST2700 board compatible
+    https://git.kernel.org/riscv/c/34efd73379ff
+  - [v9,2/4] arm64: Kconfig: Add ASPEED SoC family Kconfig support
+    https://git.kernel.org/riscv/c/df6f379eb4ac
+  - [v9,3/4] arm64: dts: aspeed: Add initial AST27xx SoC device tree
+    https://git.kernel.org/riscv/c/e77bb5dc5759
+  - [v9,4/4] arm64: configs: Update defconfig for AST2700 platform support
+    https://git.kernel.org/riscv/c/512cef2af615
 
+You are awesome, thank you!
 -- 
-viresh
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
