@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CD9396B68;
-	Wed,  1 Jul 2026 21:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0DB3C13EC;
+	Wed,  1 Jul 2026 21:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782941171; cv=none; b=swwUNtDjTFmk5WbR7qvtkF6+W8gMoaHqaIAqvZ8tpIQiyAO3DCa2z7FDwaAOQBbbFPDHnkQXcAA7t6m/b8/WM0RxybWrny+zlijO9g7gLg7EKCrtPoXC238CmmZV6D0UC/4Lu3NMOvVptH+tzRIApHdU6qoVlGP1JGT6Yj7K6mU=
+	t=1782941179; cv=none; b=HjhD0o1AE5ipHfAkXObx5TO9aImvxEWrzVrxpSdRiH9dWuj1SFDluUhoLalaDjb6a16go04Izyz3oLuR7zfx9R0XjXyVN6XmFYxcmTf70Giuo1z0QezPKaehBS9e4wLP+i7YJTNrAoX8IwXwH5nz2/yLx7zqrJ9Cf254Tc5OXPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782941171; c=relaxed/simple;
-	bh=DO7CKYeU4WXMde2wSYkeJZAsqLzmeg4tlNl440Xo0SU=;
+	s=arc-20240116; t=1782941179; c=relaxed/simple;
+	bh=uxNjB5QuoBAO9JvKfaH1I63LAqb9LjaR/qx3z6uVHyU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=T7fGUvHv/HZVSmNUwdyzRNZkOfT5v/LEmgkGrabAJ6a/8zIsdMH6fu8p7q9KDt8OyVgydhIgTKWApNj/vPA7RAOh7MI+e0FZvDkRrn3zBsvg5FwQKF3e5sVfwG3H62Kz/vfN3HkW/j5HbzcaSqa0H2AKly/W39ITIs0XaP0KNzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSDiCCJ+; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=XL3neIRUfbsSGiGFvrWa0heX2miBPPdo3QL8/1bSfIOpJSEagjdBfODzcytMowQ8+XnidJfgN8I0tCDv0hgmM7RLmdNtellZyZlzd8ocapuoBKRArz0iXlyIt75wWv8ftt5a7PuOFyBd0A+K51cQMJCZEI0cuxJS9GzWJnyKdyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxgA8TWC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSDiCCJ+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325E91F00A3A;
-	Wed,  1 Jul 2026 21:26:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxgA8TWC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C74B81F000E9;
+	Wed,  1 Jul 2026 21:26:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782941170;
-	bh=WTJ0R7e1Q47azBR5F9YcK+atCEC47tjq96vRaQRcYFU=;
+	s=k20260515; t=1782941178;
+	bh=claxqKdJjDBG4bp86+Kgv1KwKi6DWddvXbYHWowqs7M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iSDiCCJ+HfLjkGZv7RW0R2fE7e9auJCiPwCohbdaPdK+sTsqWsR9DD4QYFHkCh3fj
-	 oxjPGgmwO9g1sBnn0VsiD7bz336KkC0Z4SXcWAjOjKarEFs1dTVtyJ6NRR5V58kb3s
-	 /rrtNdsegXMuHNDkAiNDuo8rx58XbtzJ4MNTBbrEEpJ4Tg1UzmEys8J3og2IUkdhsz
-	 3MzUQw+aOYwufXnZNsHQEgseSjZkOVMAGQAJVcgn8HT4h4Hw2phw9f8cf59JhmQNEL
-	 CQ4zJk81jklJ6/P+gMdgSGfcKJY3s8Rp+I5qknEbpepsGyX5nqQ70dvF85T11nyBII
-	 7uHk72SWFeF6w==
+	b=YxgA8TWC2w0t5bEKvxhTKBYvk7Q93vFUa2kdPOexxkZDugTuHJgugP5p6ZsMhC6FM
+	 24o3Im+1r0Yth6zWiAgs+B8e4CKfrdO80T/2/lb4m590l/zB55VHHD0jVGsbH4K+zR
+	 p8ZMPrE/Rw5/d5am40SxvfXIm6A/FCBicZuUGRr0QIs094BFHaMdZNoRPq9XIHR0j5
+	 7FCCqyF6YM+7TrtIvz9+j2vGtL5MPnX0bRhtdpOxQICtrixOL3jeHXSA2l5gxzPv66
+	 eHxwpZa6pw6N9T+7yAZCwCSF8e45nan7GNd33X63wLNFH1T5E+sD0WZ5VhicmkAFN+
+	 vdA3j3ec7kFzQ==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-arm-kernel@lists.infradead.org,
 	soc@lists.linux.dev
@@ -61,10 +61,11 @@ Cc: linux-kernel@vger.kernel.org,
 	Stefan Wiehler <stefan.wiehler@nokia.com>,
 	Tony Lindgren <tony@atomide.com>,
 	Vladimir Zapolskiy <vz@mleia.com>,
-	Will Deacon <will@kernel.org>
-Subject: [PATCH v2 15/19] ARM: mark RiscPC as deprecated
-Date: Wed,  1 Jul 2026 23:23:49 +0200
-Message-Id: <20260701212353.2196041-16-arnd@kernel.org>
+	Will Deacon <will@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v2 16/19] ARM: mark footbridge as deprecated
+Date: Wed,  1 Jul 2026 23:23:50 +0200
+Message-Id: <20260701212353.2196041-17-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260701212353.2196041-1-arnd@kernel.org>
 References: <20260701212353.2196041-1-arnd@kernel.org>
@@ -78,46 +79,53 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-This platform is the oldest still supported machine, dating back
-to the original 1994 ARM610 version.  The only currently supported
-configuration uses an ARMv4 StrongARM but still requires building
-for ARMv3 because of the board design not supporting 16-bit
-data access.
+Along with RiscPC and SA1100, these are the last remaining Intel StrongARM
+machines. The Corel NetWinder used to be particular popular in the late
+1990s, but was discontinued during the bankruptcy of rebel.com in 2001.
+The other machine is the DEC (later Intel) EBSA285 evaluation board that
+was made in small numbers in 1997 for software developers.
 
-ARMv3 support has been removed in gcc-9, and the gcc-8 release
-is already old but still supported for building the kernel.
+The footbridge/netwinder platform was the main target for the first Debian
+2.0 "Hamm" release on the Arm architecture back in 1998, but was dropped
+in Debian 6.0 "Squeeze" in 2011, which only supported ARMv4T and higher
+with the EABI based ports as ARMv4 hardware had fallen already out of
+use by that time.
 
-The only set of machines that lacks support for 16-bit load/store
-instructions (Alpha EV5 and older) was recently removed from
-the kernel.
-
-Since there is little hope of this being maintainable much
-longer, plan to remove it in early 2027 while it is still expected
-to mostly work.
-
+Link: http://netwinder.org/
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Ralph Siemsen <ralph.siemsen@linaro.org>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-rpc/Kconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm/mach-footbridge/Kconfig | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mach-rpc/Kconfig b/arch/arm/mach-rpc/Kconfig
-index 55f6d829b677..60b3823b690c 100644
---- a/arch/arm/mach-rpc/Kconfig
-+++ b/arch/arm/mach-rpc/Kconfig
-@@ -1,5 +1,5 @@
- config ARCH_RPC
--	bool "RiscPC"
-+	bool "RiscPC (DEPRECATED)"
+diff --git a/arch/arm/mach-footbridge/Kconfig b/arch/arm/mach-footbridge/Kconfig
+index 78189997caa1..96a74d447028 100644
+--- a/arch/arm/mach-footbridge/Kconfig
++++ b/arch/arm/mach-footbridge/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menuconfig ARCH_FOOTBRIDGE
+-	bool "FootBridge Implementations"
++	bool "FootBridge Implementations (DEPRECATED)"
  	depends on ARCH_MULTI_V4 && !(ARCH_MULTI_V4T || ARCH_MULTI_V5)
- 	depends on !(ARCH_FOOTBRIDGE || ARCH_SA1100 || ARCH_MOXART || ARCH_GEMINI)
- 	depends on !CC_IS_CLANG && GCC_VERSION < 90100 && GCC_VERSION >= 60000
-@@ -19,3 +19,6 @@ config ARCH_RPC
+ 	depends on !(ARCH_MOXART || ARCH_GEMINI || ARCH_SA1100)
+ 	depends on ATAGS
+@@ -12,7 +12,10 @@ menuconfig ARCH_FOOTBRIDGE
+ 	select NEED_MACH_MEMORY_H
  	help
- 	  On the Acorn Risc-PC, Linux can support the internal IDE disk and
- 	  CD-ROM interface, serial and parallel port, and the floppy drive.
+ 	  Support for systems based on the DC21285 companion chip
+-	  ("FootBridge"), such as the Simtec CATS and the Rebel NetWinder.
++	  ("FootBridge"), used in the EBSA285 and the Rebel NetWinder.
 +
 +	  Support for these machines will go away in 2027,
 +	  unless there are any remaining users that speak up.
+ 
+ if ARCH_FOOTBRIDGE
+ 
 -- 
 2.39.5
 
