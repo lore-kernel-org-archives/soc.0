@@ -1,65 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F050F45BE3
-	for <soc@lists.linux.dev>; Wed,  1 Jul 2026 00:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05EE3603C0
+	for <soc@lists.linux.dev>; Wed,  1 Jul 2026 15:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782864909; cv=none; b=grAn6Wj1GI7M7qT3jGNYU4D9ehY1vuYT9+q+13k/Efn7ycZjkQB1hJT6SzomQzWtvDxPYRw4+HXNIYP6XL19utQXYV2mtkcC3ITtE8zpQ/lFKI+GhDyIZYsk+2EhVCq+xxwi641ba/Vyj5GNjjbnmygFQrU88cntGA7atST4H3U=
+	t=1782920846; cv=none; b=sxO6ac8G1mhqdygb2DeezB3L0aKE+5t/iF9jdfWdrZg6aI9F0xBltgZo9IUeSeWVdYNuPSGmoQaPoYO/a7/DcsI/4lN3fb1pWoMi16VErxnNkoOHIJ8SIGNVVBaDlRBx6sOl8wjQAgLOXPBFkNtPz4g19/ol/jgT0aYwfYcL1lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782864909; c=relaxed/simple;
-	bh=fUcNDgaltXOzL/x86jKEg0jBQVyzR3xS+vpiKAG37fs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=C7IzVbgIQxUPX7CCKmyTii7EmwRZJOwIA+l9lvIFhwYGIFyGRqNq9CesQiJLY7mf+6fLHw0mBeXLaTdEDpj+9B6VfP33GR+yIwDxe3aYDGnnO1Vnhh++/EJREy1iLe5UuKc6hZlcf8L2MuAisZ2mA4qjbNm5aE8MyWTdLXqkA4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddrOKvFJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782920846; c=relaxed/simple;
+	bh=NcgWAkkpvQ6GIyO0lNfvcz5hShiLJ0aGbZIzu82PdNk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=twGk6ixbCytxEo7T2UEysZTjWjC7ZYRIUfn6bnyJHaSj5bOH5S+4BDTzJoPXuaY/db6+6cJ5dq7VHx/Jtfaql/03KUH9xZUQXr1l8Z67bSaHYMWK30Vl4ZJOx6947LDKL7Idu7RWmXhe9zo2m0iMiJ/dWtQJlM70cxSZjrnZBBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IflC72ft; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddrOKvFJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IflC72ft"
 Received: by smtp.kernel.org (Postfix)
-	id B8C9B1F00A3A; Wed,  1 Jul 2026 00:15:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E1DF1F000E9;
-	Wed,  1 Jul 2026 00:15:07 +0000 (UTC)
+	id 639EC1F00A3A; Wed,  1 Jul 2026 15:47:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6090B1F000E9;
+	Wed,  1 Jul 2026 15:47:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782864908;
-	bh=Tpbz57NKNTsydLxlNb8KBsQaA4f/n2UQCvIOTkKm2Ts=;
-	h=Date:From:To:Cc:Subject;
-	b=ddrOKvFJmMD+KnDy4pgter1ApsScuWzoJ1OhQYYeSPGGOtn3QVA2o/bjwlTLB7Coj
-	 Ieo/mTrhXIrfIP+9/RlDat3d0fF+fqg8kXt6YfjJj56t3qf/44CXJlhS2WsTEPDQps
-	 b/474mCheQ4DxqzlGx23nJepC1JrZ0wPhs7Cup/zNbE8YLg4apDOoiYJLT380KIS5o
-	 8luz3nQp6C+UdiIwqnDlne/LL17975rsGvRobJsCvKRtiFGa8BeWpmu8blqVcFmRYQ
-	 02GlZouJULUpqk8HFLNmPcWZ9NdPJ4WOvxnO8J3pcIyP0HTI6ht7OhOeKwOJ6e6G8A
-	 JdCYhsLrkU68w==
-Date: Wed, 1 Jul 2026 00:15:06 +0000
-From: Yixun Lan <dlan@kernel.org>
-To: linux-next@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>, soc@kernel.org,
-	spacemit@lists.linux.dev
-Subject: Include in next: Switch SpacemiT SoC tree's repo
-Message-ID: <20260701001506-GKA20854@kernel.org>
+	s=k20260515; t=1782920845;
+	bh=F1d53/TBKMgbtfDcw1+aV1I5xnxDEUc79F11nQ0A4cU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=IflC72ftbroGcxiInCSEuqCl31BxPbBA3SEZdpE+F01220IMOaDKLlwUBPvSaWztX
+	 s6hp+2f2KfRXr7jP7W6CaZAqstAke0DMIwhPVZ6icN61fHoGz39YFsgwX5H8gGZS0r
+	 nKsW58hEPcG6FFkhTfqXVd+DPYrOLZUY92DSUxNE7F5esGosa3cdfecoW68g6KgsZJ
+	 XRsxQoSEcTqH/ctXo5isbcshBNLD7aSBoooN9NYnXW7C4SmOXdT8YBs5hdFaf/tUzG
+	 f8Q464Fw6wfHw2MS8o6QGik1WH98FAQNPU3C/AqgBMeJBgK3Pmv7v/c2E35AEVZefu
+	 nki6I5cEQZkQw==
+Date: Wed, 1 Jul 2026 16:47:21 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Yixun Lan <dlan@kernel.org>
+Cc: linux-next@vger.kernel.org, soc@kernel.org, spacemit@lists.linux.dev
+Subject: Re: Include in next: Switch SpacemiT SoC tree's repo
+Message-ID: <5a6b7770-948f-41ac-9956-e0646228ed5e@sirena.org.uk>
+References: <20260701001506-GKA20854@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HIzxHE8oQ4+E41L0"
 Content-Disposition: inline
+In-Reply-To: <20260701001506-GKA20854@kernel.org>
+X-Cookie: Do unto others before they undo you.
 
-Hi Linux-Next Maintainer,
 
-  Previously, the SpacemiT SoC tree was hosted in github.com[1],
-while now we've created a new kernel tree at kernel.org[2],
-so please help to update the repo url for linux-next tree to the
-new one, and the other info should being unchanged, that's:
-  branch for master: for-next
-  branch for pending-fixes: fixes
- 
-  I will also switch to new repo for sending next Pull-Request to
-SoC tree maintainer.
+--HIzxHE8oQ4+E41L0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Thank you
+On Wed, Jul 01, 2026 at 12:15:06AM +0000, Yixun Lan wrote:
 
-[1] https://github.com/spacemit-com/linux
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/spacemit/linux.git/
+>   Previously, the SpacemiT SoC tree was hosted in github.com[1],
+> while now we've created a new kernel tree at kernel.org[2],
+> so please help to update the repo url for linux-next tree to the
+> new one, and the other info should being unchanged, that's:
+>   branch for master: for-next
+>   branch for pending-fixes: fixes
+> =20
+>   I will also switch to new repo for sending next Pull-Request to
+> SoC tree maintainer.
 
--- 
-Yixun Lan (dlan)
+I've updated the -next configuration, the new locations will be used
+=66rom tomorrow.
+
+--HIzxHE8oQ4+E41L0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpFNokACgkQJNaLcl1U
+h9CwYwf8DmpHFH8encN3APwISqw4XWsjz1H2GlfBxN43/vu3YcAPfSHbd7EDeD7v
+DbaZ44PJSuoKKrSNl6eYmHH3xr19aO/smoBilNTG8kDE8V+O8xOu+/tycJnFFu0V
+vRtt3WuN5Gwmr9AOQXNT2gGLJo+dyAyJBg0rlWmUYHC6Hy0n7DYBVOUyBVuoi+Rv
+ciA/0YW3wJzN63YJSo5wjRt4e8HT4OrWARGUAvDk7kn6JzMOuHIyrX/REBStbSlm
+Dl8oiJbnZHtuiIf2+l3rBLcYlqGZs1AM845maODE6tWLCwNWp7Gq2ylhYoJs8s7R
+YoV8uUFNpPJYh797AnHblGLsf8kvhg==
+=lCDk
+-----END PGP SIGNATURE-----
+
+--HIzxHE8oQ4+E41L0--
