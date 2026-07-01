@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C4B36C9E4;
-	Wed,  1 Jul 2026 21:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26F73DE447;
+	Wed,  1 Jul 2026 21:25:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782941143; cv=none; b=YrDB9FrtjBjNwipAKRyDpBMtIIO8csbOm6EVBcdQ6zOVjkfAKGtgZzgrEJOTObjTsiNuIX8iFcDHkk68g6qjMIqJ9GU1Z3DVfBYI2vZC5DvQkMR7AsXZg8FSFdYoCfxbiW5loNYAa7+3yOYxGdxdz+z1TtftGbYx/2LY+nq+8+Q=
+	t=1782941150; cv=none; b=PJvc1Ojp8wjxahm+YVcoQD98MoFX1tg8sMuJYmIoIkx96r9of14m+jiZEz0bNP/ij9emZ8XcSOsCaqXe72TTIGcqiRXLVdVQdhi5C9MadoDzFsUB/WNh6Xfu+zjK4Udn5SslWO9maOyFpst153L9PanEw/QYDzr05vwH6BJqC+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782941143; c=relaxed/simple;
-	bh=JvPRJ2sOlQjQTnVS8jmUjlWmh8btfgjiDxlS+BDBRcM=;
+	s=arc-20240116; t=1782941150; c=relaxed/simple;
+	bh=DVQ/vZVFITdeywO93mSOUaY3nuy/xBCJk2K6n32kK+g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SValUMc7R+B1Abgi2oQNS+3xPj6f2fDF2JJojvEhXX3Oica6Hepx9AgOl/V23gEpHyVgOChEJWrwXgrabyWcYUq+Zjfho1TtNwXz0ok26EGuqkWOTYbg9L5q0ejaalMOFTVpN0MBCtWlPUwiuv+XdKnwHSeb/suziyuYxh+kWUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=drMX/zVM; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=idUD527Ql/tosI/egtCJ/eUQhxrGsdS6Cwf04R4Mr0EHRdew85d34Z27DL7qDCXOLBkeX1nMhpNIQx8mVcuqxmr6RRvIbRVJNFwlEW2ksmGb8XPhSV/pCYo46u/YO8H8qEh0hLljzTVN9Qw7+YmXedJJgKvrtwuohTFLHUQtpts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGuO26ph; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="drMX/zVM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 691811F00A3A;
-	Wed,  1 Jul 2026 21:25:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGuO26ph"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11A6F1F000E9;
+	Wed,  1 Jul 2026 21:25:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782941139;
-	bh=99rTkGtMEhY28UmP5cIJYBXAGUjxeodjcs2HZAq97+I=;
+	s=k20260515; t=1782941147;
+	bh=g0Gr+nS5mCCQMtHO6PX506rXj22uuIPGttVk73FvkJ0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=drMX/zVMUi6s614tuhfwQRqRrQHr6+zq4Y5CybzpIA2njdUcZR+VYgbQICRIUsuVW
-	 vtqQsl310YGSy/QMtESwwJkMisKBLCpbg/FSD5DHIVy8NA73wp7EqpgYCMK0/MSi55
-	 7zSzytbdEkCy+FheLAH3R/jru4JEgnlpV9Fi56BjSLVoKxD5HxBd4PSZzOlvtacIaS
-	 QF6VorAoIbPH2jD72LBHyFDyp6vtothOeXCYxk+1hPiPGvbrGfT8wd6pRvR0YtEvyS
-	 QWtQ4qGgmJepkhuR8ecSWbPT3fYTFUNVwawVD70Uf0rYQl7FdHpPPftXks3ZD53T7Y
-	 qIQGzxzdGrf8Q==
+	b=aGuO26phr8PkWfQc53Z8FnkPJK/4L/Noq7AKU3jcM/lvzw/RXgctcm0Nq9SLyYBuj
+	 ujFJEGG8lRONAlHWG+JZqm0OWqjBk8nav5y1iM56Nn6lf8FlLnpUiItnjUfZeJe8O8
+	 poVjtL8VSDOQCd+gLtXQbTdzbrI4qsSWzP5oN6Dzib7Vw4JanIceDvQ+cUXyLEBc+8
+	 AjrZEo2J1DUV6qWzyqMKSDU7RXgVWoWuc+3DKFN43HtNrFwLRKuI+vmPzmc61B+H1n
+	 dCoKYfAFRXRY2sI6FqjIurIkovRzxDxlWLFWJbL/KjEX3Dx0gL69SI8aYoa7TydxRL
+	 7wAo14QV/Bcuw==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-arm-kernel@lists.infradead.org,
 	soc@lists.linux.dev
@@ -62,9 +62,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Tony Lindgren <tony@atomide.com>,
 	Vladimir Zapolskiy <vz@mleia.com>,
 	Will Deacon <will@kernel.org>
-Subject: [PATCH v2 11/19] ARM: mark ARCH_DOVE as deprecated
-Date: Wed,  1 Jul 2026 23:23:45 +0200
-Message-Id: <20260701212353.2196041-12-arnd@kernel.org>
+Subject: [PATCH v2 12/19] ARM: PXA: mark remaining board files as deprecated
+Date: Wed,  1 Jul 2026 23:23:46 +0200
+Message-Id: <20260701212353.2196041-13-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260701212353.2196041-1-arnd@kernel.org>
 References: <20260701212353.2196041-1-arnd@kernel.org>
@@ -78,44 +78,86 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The Marvell Armada 510 (Dove) platform is supported both as devicetree
-and atags/boardfile variants, with varying degrees of hardware support.
+In the 2021 board file removal, the gumstix and sharpsl
+support was left around in order to make it easier to convert
+more of the PXA platform to device tree, given that both
+platforms had some level of support in qemu.
 
-Russell was the last known user of the board file version, and there
-are very few users overall. Unless Russell still needs this variant,
-let's remove after the next LTS kernel, leaving the CONFIG_MACH_DOVE
-variant with devicetree.
+As far as I can tell, nobody has worked on additional DT
+conversion in that time, and qemu has in turn deprecated
+the entire PXA platform.
+
+Schedule the remaining board files for removal now, as they
+are unlikely to be of any help in the future. If anyone
+wants to revive support for these machines, they can
+obviously still contribute device tree based code and
+work on updating the corresponding drivers.
+
+Any drivers that are only usable on legacy PXA board files
+can also get removed along with the boards, or saved by
+adding devicetree support.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-dove/Kconfig | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/arm/configs/pxa_defconfig |  4 ----
+ arch/arm/mach-pxa/Kconfig      | 10 ++++++++--
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/mach-dove/Kconfig b/arch/arm/mach-dove/Kconfig
-index 996888ffcfe7..f547120e223e 100644
---- a/arch/arm/mach-dove/Kconfig
-+++ b/arch/arm/mach-dove/Kconfig
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- menuconfig ARCH_DOVE
--	bool "Marvell Dove" if ARCH_MULTI_V7
-+	bool "Marvell Dove (DEPRECATED)" if ARCH_MULTI_V7
- 	depends on ATAGS
- 	select CPU_PJ4
- 	select GPIOLIB
-@@ -11,7 +11,11 @@ menuconfig ARCH_DOVE
- 	select PM_GENERIC_DOMAINS if PM
- 	select PCI_QUIRKS if PCI
+diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+index 396680975506..e7a7ed2b7ef7 100644
+--- a/arch/arm/configs/pxa_defconfig
++++ b/arch/arm/configs/pxa_defconfig
+@@ -16,10 +16,6 @@ CONFIG_PROFILING=y
+ CONFIG_KEXEC=y
+ # CONFIG_ARCH_MULTI_V7 is not set
+ CONFIG_ARCH_PXA=y
+-CONFIG_ARCH_GUMSTIX=y
+-CONFIG_PXA_SHARPSL=y
+-CONFIG_MACH_AKITA=y
+-CONFIG_MACH_BORZOI=y
+ CONFIG_ARCH_FORCE_MAX_ORDER=8
+ CONFIG_CMDLINE="root=/dev/ram0 ro"
+ CONFIG_CPU_FREQ=y
+diff --git a/arch/arm/mach-pxa/Kconfig b/arch/arm/mach-pxa/Kconfig
+index 66e26990e2c8..1fa282a9ef38 100644
+--- a/arch/arm/mach-pxa/Kconfig
++++ b/arch/arm/mach-pxa/Kconfig
+@@ -58,12 +58,15 @@ if ATAGS
+ comment "Legacy board files"
+ 
+ config ARCH_GUMSTIX
+-	bool "Gumstix XScale 255 boards"
++	bool "Gumstix XScale 255 boards (DEPRECATED)"
+ 	select PXA25x
  	help
--	  Support for the Marvell Dove SoC 88AP510
-+	  Support for the Marvell Dove SoC 88AP510 using board files.
+ 	  Say Y here if you intend to run this kernel on
+ 	  Basix, Connex, ws-200ax, ws-400ax systems
+ 
++	  Support for this machine will go away in early 2027,
++	  unless it gets converted to device tree.
 +
-+	  Support for this machine will be removed in early 2027, unless
-+	  there is a strong reason to keep it. Users should migrate to
-+	  the devicetree-enabled version (CONFIG_MACH_DOVE) instead.
+ choice
+ 	prompt "Gumstix Carrier/Expansion Board"
+ 	depends on ARCH_GUMSTIX
+@@ -77,7 +80,7 @@ config GUMSTIX_AM300EPD
+ endchoice
  
- if ARCH_DOVE
+ config PXA_SHARPSL
+-	bool "SHARP Zaurus SL-5600, SL-C7xx and SL-Cxx00 Models"
++	bool "SHARP Zaurus SL-5600, SL-C7xx and SL-Cxx00 Models (DEPRECATED)"
+ 	select SHARP_PARAM
+ 	select SHARP_SCOOP
+ 	help
+@@ -87,6 +90,9 @@ config PXA_SHARPSL
+ 	  SL-C3000 (Spitz), SL-C3100 (Borzoi) or SL-C6000x (Tosa)
+ 	  handheld computer.
  
++	  Support for these machines will go away in early 2027,
++	  unless they get converted to device tree.
++
+ config PXA_SHARPSL_DETECT_MACH_ID
+ 	bool "Detect machine ID at run-time in the decompressor"
+ 	depends on PXA_SHARPSL
 -- 
 2.39.5
 
