@@ -1,214 +1,162 @@
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk2-f3.google.com (unknown [74.125.230.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4250434AB00
-	for <soc@lists.linux.dev>; Wed,  1 Jul 2026 22:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.79.152.223
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782944420; cv=none; b=Us+yGRKtHXbCmnPfAcqtlfTkwGJtEOjPWzgKEqXLiSSo7bTzhAv65EEK4HvlcTEAIR9E4tG4xexTeY3+rW7qZ5Id0UaZUrcCeHp+09ZpYUN7ohfRSzFi561B8k5hSFpUsGXlgN31cpvUzJdlkWrN6Hong5d/ijD+37nQ78FDgD8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782944420; c=relaxed/simple;
-	bh=PJ2SDvKqqc4aQ/2saQc79Z5u8elwI767ZgepY9FlJS4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tWNYWS5voRthwVModCojueUuVGJH1S4nVyXyMfop1qp0IMCp2KEIqfGly5Q6b9+e6FEmGuL+NWJrNDH2Dcf+HwJworFZsEfd0k2QOFdagXgUubWOdJOcTgInSPgQnW6631t2ioo0ngul2cpUk4JxnPObpgQ76uOdnchoXdsMuio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com; spf=none smtp.mailfrom=mleia.com; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=Uo2ccDT0; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=dmk19z/m; arc=none smtp.client-ip=178.79.152.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mleia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F37939E9AD
+	for <soc@lists.linux.dev>; Wed,  1 Jul 2026 22:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.195
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782944550; cv=pass; b=X0Xj76eCLQCdlZjFI+AibDgW12KvDDFFQiSB7JexfIeYga2BTGQ6JqNGIj2Gt/HpFrfvHJQaW9rr8K8M+Zqi/fLYR1RDioZO9v+hs4B+x+zLweOSAViQ6WnB3dkXCpTP6uF4HkyhQPQglDPshVFRLrtRfKoOMGxYaTRcINSFQYg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782944550; c=relaxed/simple;
+	bh=Jda+gAYXbk7PHfgm1C0E/dvQ9lFBrVT/hvWOqrR70io=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U8rv3Dr6HHVOW/5yGxr7LX4ohfqfzWwBPO37zV2YMsJjYQmOGVlpu/UH+JB3586/YPmXpe2vGqu5YY6clHZKSo9n4yNiWEbEtDEhMMrmxGSWkeNT5bNEXI+jqTEL+qh5jnvgf4et/M/RE7fPFZW0pgHpGLJLxlwf/B9ulWzwj6I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PpHdWB4e; arc=pass smtp.client-ip=74.125.230.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="Uo2ccDT0";
-	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="dmk19z/m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1782943877; bh=PJ2SDvKqqc4aQ/2saQc79Z5u8elwI767ZgepY9FlJS4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Uo2ccDT0JltghcupX6v+4mSMli4bMGyZEoFRYbkwFCmBaR8w+wAfWCoRLz8DL3R84
-	 hcKawMMVEm/2aXxcVvfwowzu0INc9a7EIEh/13PuxmmyFcgish49zstw5xQSu2BJmP
-	 8ENrwZ/D52iL3ER9vNBxDGPvM7XWMdXKWepbOjI8CfogKekXk7K5laIHZFw+UlVu4q
-	 hox+4OIjqO9xZNs6JIZbzbWXotviZkr8mWV2A7S+7I9nyJptWbC1Gc85VlTuCQvJRq
-	 REsYtNLuYjWw2IyyGxR+6J6zYLy+8eq96efjeWysb12Ozp+Px8sycYUqLbcFpCmgIP
-	 DSEzEBRf/cc+w==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-	by mail.mleia.com (Postfix) with ESMTP id E6C0339470B;
-	Wed,  1 Jul 2026 22:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1782943876; bh=PJ2SDvKqqc4aQ/2saQc79Z5u8elwI767ZgepY9FlJS4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dmk19z/mFKmG+RdhmtzpbzPp4KzYkBTY1W25BQcXo0AeHyzYCrvkp86qgM5EASmY3
-	 QVHhy7du6/hryqez4wneXjTACxvcx49MkxSBJXJABj2HSwg+KgXIEPcuutskiEdHQQ
-	 UeWrH8o9mjFN7rhSpu3d6nj2N99PD1PENVeeZBSnFZVuRgycjb+Sx4RzCBAsRTh5jP
-	 Cf1CBa4flTMkyCzvr0SgGVW01echqFQlqzGMLdTTm3P1hi8PTp3aU+r0nbH1TOlCSJ
-	 AYJJExEk9ei5VH3oHmqazSdLVw70JL28jMO8LfNrwE/GuuQ9kth2egOvj4MbIMEYVw
-	 WyLM4JSyQnT/g==
-Message-ID: <1f18b016-15c8-4b13-a143-23c9af22339a@mleia.com>
-Date: Thu, 2 Jul 2026 01:11:13 +0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PpHdWB4e"
+Received: by mail-qk2-f3.google.com with SMTP id d75a77b69052e-51c0f88ca6aso2045221cf.0
+        for <soc@lists.linux.dev>; Wed, 01 Jul 2026 15:22:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782944548; cv=none;
+        d=google.com; s=arc-20260327;
+        b=FbUl0hrqBuytSjNca7irjI8D6QtnIzf/pWeK/E4YZiBsTIMrAWFp+ndXReadVL0//z
+         8tlUViLMMo+c/taQaJ29hTNSd2chX32C9Jh85bxgSEKXutJ5gG2A5C7w3NQX0EzLho/f
+         zC3AuC5CRWkyQ6Wk7mEXM4M7bZi3II/sDXkSLzLq6oxMjusUdap6qwUxWa6p13Ara0Cn
+         Fe+0S4e7o6qHOtppZTNbyHkjI+RfHKnjXIIwqnUIIOAuBvf5YcPGJi7jog0PrN/doGf9
+         gYZHafd4t0IaK0MpMWq6VRNsqVcYCd5G2T9r9Hi7JgYFYFOcBogZWmybpxvUtY1sHuLO
+         pQrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=MVhzVy40B70l/jqexwyJaSJ3X5bFGEqAL47A5U/79HE=;
+        fh=qkm4T+QLFfJiDC5VSAEYom1OeVzeoSjYbCB/qeNAhEg=;
+        b=WC0cT7fPKRhT5PAK4fD6YZkqcEaiBB0lw2qLGYUSepjHSsXzUu1qzqUqxlorrSyteu
+         XRmQsQpfkof9+FTV3LTk8MtWVq2q/cLxadl+hxsjpJJQ2bPnA5hLMqhH4nWApfbON9XT
+         3Yea38NqlScnZzWZQH8vIBACK5C0Ig22atrDWwXdY7sdvH+salelt0iOHAusf4lnrPWP
+         cXDwSxFk0tmlQ+lHcT+2yFYucLjDvF5hjaFSzf6pZG/0s8EYr8kC4htZjmZ8MVUnjhph
+         1c/nxpuvgMOSJRZDzrq0iuA2Mxf6NvBcnustr2O9bOhIxsQwoFPcGD6KUZLk2wv10Tme
+         Z4Vw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782944548; x=1783549348; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MVhzVy40B70l/jqexwyJaSJ3X5bFGEqAL47A5U/79HE=;
+        b=PpHdWB4eMQer/tu9HGPPiEfbLn2sMEjlXHkq3Zemiq3uXZvn6j549BSDhmO05HKerK
+         bOCaqlOVpzlQzmAMhf+c9fGCzK8JoTXlpwanP7Pe4+IWrbswR/2H85XMUtjFFmtikui6
+         AYdmInKguS63HzLVV9s1VRCYXpl0p74OKrhdFihGDK4WRV/S024FUN+C/LO8RLa65raA
+         HkpC8XlR1Rj+WcynwFviEO8BENtx+Z2oPvJlcqIQU8G1u1Dp6CJ/rwD2beBqaguo0kMj
+         SOEU/3cR2Hb54WxzB8eoYrobqfr1wm5C/aMsJxyV1Fda7J0a1Lm6juU4yjxJQIVUsggZ
+         z5aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782944548; x=1783549348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MVhzVy40B70l/jqexwyJaSJ3X5bFGEqAL47A5U/79HE=;
+        b=Svkp2FsQ0V91bcLKzprY1K0zkltLq0Ti2prrjP/q43c4fwUux6dQY0QjMg46aVxn1Y
+         3GQ6CV+CncS+F8WsMpFYFlD9YwoLSyLZTH8lI5li0FUuNGFsDTnkpdL3ENCO14qmsrZN
+         Tn+/gEXQUreNg51tRYhch/sUkFMmSevouUNxdCC59NdvMvdYMtsYQ3lTzco1S+gWnCJm
+         wp709IETz8Dz3EsUizZO6XWHRfDy6ijfI+b842GYvnijM9RpSbDPPLCCxAbx635usv8g
+         pTxFs6zx30+KDTRsP00uB/Ok6HOeipxAIQqOo7wgUwC8B5v/2X6icUvK+sZM7yCBr84R
+         t7WA==
+X-Forwarded-Encrypted: i=1; AFNElJ8+lYN1OAIFvpRIFTL+ooyRiBUkvaL1upVcotqHCsYB8E0EKqQWZWEa2q0QmBsmU6hu0Gs=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx9zzrQjeEGzvA7WTfZsaBkp8PKvIzq0ERTgM93u8j6/lbu3X/K
+	yv2Af1y+7s8NUAxAEGz0XYA2wBN7Qk2RqqQJFbuHQfoRx/E/OqT+pPHquDZ+afN2uoBOh1bSbL/
+	szFmM/iHbWxlT950jeLvOh3YXYA2Q5OYNB6o9
+X-Gm-Gg: AfdE7cmApgqQnc5tZj8SEjPTyXtQROh9HkC/iHWKsQUunaHy1WKij6jF3+nKnzLWheo
+	sVDjN0ShQRepzMOmokR9r7LmhJoZzxNkuBTfabM9YbkvHWxo1gX7u69F3L17gKvQtSeQD4hJYwC
+	gCJVHdb/XUv5d30ySbFkCttsIItH+iK8+ktGdllEpCEqs2KZsfItwJWV2vrzukQDG1GPiQWyAUJ
+	ysuj16rjWZ38GVvJeNxXjiwxvJe0WHkAiZ5OsPFU1lUqiPNOQrcm6GEnIz6EbY1ckAC7NruXzvt
+	iCs9cKh2AE/jV/WxB7VdVhoN6IffYDQTJqEiEAvTzh/3A/wGXIC/ZaisK3HnW4bF/6Zj
+X-Received: by 2002:ac8:5981:0:b0:51b:fca2:af71 with SMTP id
+ d75a77b69052e-51c26b14753mr45380561cf.42.1782944548094; Wed, 01 Jul 2026
+ 15:22:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 04/19] ARM: deprecate support for ARM1136r0
-To: Arnd Bergmann <arnd@kernel.org>, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Alexander Sverdlin <alexander.sverdlin@siemens.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, Andrew Lunn
- <andrew@lunn.ch>, Ard Biesheuvel <ardb@kernel.org>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, Daniel Mack <daniel@zonque.org>,
- Ethan Nelson-Moore <enelsonmoore@gmail.com>, Frank Li <Frank.Li@nxp.com>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Haojian Zhuang <haojian.zhuang@gmail.com>,
- "Jeremy J. Peper" <jeremy@jeremypeper.com>,
- Kristoffer Ericson <kristoffer.ericson@gmail.com>,
- Krzysztof Kozlowski <krzk@kernel.org>, Linus Walleij <linusw@kernel.org>,
- Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Patrice Chotard
- <patrice.chotard@foss.st.com>, Ralph Siemsen <ralph.siemsen@linaro.org>,
- Robert Jarzmik <robert.jarzmik@free.fr>, Russell King
- <linux@armlinux.org.uk>, Sascha Hauer <s.hauer@pengutronix.de>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Stefan Agner <stefan@agner.ch>, Stefan Wiehler <stefan.wiehler@nokia.com>,
- Tony Lindgren <tony@atomide.com>, Will Deacon <will@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>
-References: <20260701212353.2196041-1-arnd@kernel.org>
- <20260701212353.2196041-5-arnd@kernel.org>
-From: Vladimir Zapolskiy <vz@mleia.com>
-In-Reply-To: <20260701212353.2196041-5-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20260701_221116_972652_31659974 
-X-CRM114-Status: GOOD (  21.07  )
+References: <20260701212353.2196041-1-arnd@kernel.org> <20260701212353.2196041-6-arnd@kernel.org>
+In-Reply-To: <20260701212353.2196041-6-arnd@kernel.org>
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Date: Wed, 1 Jul 2026 15:22:17 -0700
+X-Gm-Features: AVVi8CdgN18Vc-unGLPG99aYWmbh8Lx3HkejzODRi3mFEu8urukn9hQEI-DKk2E
+Message-ID: <CADkSEUhif4s5sSHe-bMapxEiM4bksaNkS+R5EtWOV2kgsk-29w@mail.gmail.com>
+Subject: Re: [PATCH v2 05/19] ARM: turn CONFIG_ATAGS off by default
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>, Alexander Sverdlin <alexander.sverdlin@siemens.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Ard Biesheuvel <ardb@kernel.org>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Daniel Mack <daniel@zonque.org>, Frank Li <Frank.Li@nxp.com>, 
+	Gregory Clement <gregory.clement@bootlin.com>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
+	"Jeremy J. Peper" <jeremy@jeremypeper.com>, Kristoffer Ericson <kristoffer.ericson@gmail.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Linus Walleij <linusw@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Patrice Chotard <patrice.chotard@foss.st.com>, 
+	Ralph Siemsen <ralph.siemsen@linaro.org>, Robert Jarzmik <robert.jarzmik@free.fr>, 
+	Russell King <linux@armlinux.org.uk>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Stefan Agner <stefan@agner.ch>, 
+	Stefan Wiehler <stefan.wiehler@nokia.com>, Tony Lindgren <tony@atomide.com>, 
+	Vladimir Zapolskiy <vz@mleia.com>, Will Deacon <will@kernel.org>, Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/2/26 00:23, Arnd Bergmann wrote:
+Hi, Arnd,
+
+Looks good to me, though I noticed a few small issues.
+
+On Wed, Jul 1, 2026 at 2:24=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
+e:
+>
 > From: Arnd Bergmann <arnd@arndb.de>
-> 
-> This CPU revision remains a special case as it is now incompatible
-> with CONFIG_SMP. Only the Nokia N8x0 is used in practice, and even
-> that one is fairly rare these days, so let's plan to remove all of
-> them after the 2026 LTS kernel release.
-> 
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   arch/arm/mach-imx/Kconfig       |  5 ++++-
->   arch/arm/mach-omap2/Kconfig     | 15 ++++++++++++---
->   arch/arm/mach-versatile/Kconfig |  5 ++++-
->   arch/arm/mm/Kconfig             |  2 ++
->   4 files changed, 22 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm/mach-imx/Kconfig b/arch/arm/mach-imx/Kconfig
-> index 041e73ad203a..f85a5f8c0a58 100644
-> --- a/arch/arm/mach-imx/Kconfig
-> +++ b/arch/arm/mach-imx/Kconfig
-> @@ -40,13 +40,16 @@ if ARCH_MULTI_V6
->   comment "ARM1136 platforms"
->   
->   config SOC_IMX31
-> -	bool "i.MX31 support"
-> +	bool "i.MX31 support (DEPRECATED)"
->   	depends on !SMP
->   	select CPU_ARM1136R0
->   	select MXC_AVIC
->   	help
->   	  This enables support for Freescale i.MX31 processor
->   
-> +	  This SoC is scheduled for removal in early 2027,
-> +	  since it uses the ARM1136r0 CPU revision.
-> +
+>
+> Only a very small number of machines remain that rely on
+> traditional board files with the ATAGS boot data instead
+> of devicetree, and we have not accepted new ones for
+> a decade.
+>
+> Most of the remaining ones are on their way out of the
+> kernel, but the Kconfig option that controls ATAGS
+> is still enabled by default.
+>
+> To reflect the actual status of ATAGS support and alert
+> the remaining users of upstream and out-of-tree platforms
+> with this, chanyge it to being default-disabled and
+nit: change*
 
-Acked-by: Vladimir Zapolskiy <vz@mleia.com> # Freescale i.MX31
+> add a dependency on CONFIG_EXPERT.
+>
+> The board specific defconfig files that rely on ATAGS
+> are changed to turn on both EXPERT and ATAGS if they
+> were not doing thath already, and the ones that explicitly
+nit: that*
 
-It's a nice SoC, long time ago its watchdog driver was broken in upstream
-and never got fixed unfortunately...
+> turned it off before no longer need to.
 
->   config SOC_IMX35
->   	bool "i.MX35 support"
->   	select CPU_ARM1136R1
-> diff --git a/arch/arm/mach-omap2/Kconfig b/arch/arm/mach-omap2/Kconfig
-> index 13987ffbba00..79f8afe3a6bf 100644
-> --- a/arch/arm/mach-omap2/Kconfig
-> +++ b/arch/arm/mach-omap2/Kconfig
-> @@ -207,18 +207,24 @@ comment "OMAP Core Type"
->   	depends on ARCH_OMAP2
->   
->   config SOC_OMAP2420
-> -	bool "OMAP2420 support"
-> +	bool "OMAP2420 support (DEPRECATED)"
->   	depends on ARCH_OMAP2
->   	default y
->   	select OMAP_DM_SYSTIMER
->   	select OMAP_DM_TIMER
->   	select SOC_HAS_OMAP2_SDRC
-> +	help
-> +	  This SoC is scheduled for removal in early 2027,
-> +	  since it uses the ARM1136r0 CPU revision.
->   
->   config SOC_OMAP2430
-> -	bool "OMAP2430 support"
-> +	bool "OMAP2430 support (DEPRECATED)"
->   	depends on ARCH_OMAP2
->   	default y
->   	select SOC_HAS_OMAP2_SDRC
-> +	help
-> +	  This SoC is scheduled for removal in early 2027,
-> +	  since it uses the ARM1136r0 CPU revision.
->   
->   config SOC_OMAP3430
->   	bool "OMAP3430 support"
-> @@ -249,11 +255,14 @@ config MACH_NOKIA_N810_WIMAX
->   	bool
->   
->   config MACH_NOKIA_N8X0
-> -	bool "Nokia N800/N810"
-> +	bool "Nokia N800/N810 (DEPRECATED)"
->   	depends on SOC_OMAP2420
->   	default y
->   	select MACH_NOKIA_N810
->   	select MACH_NOKIA_N810_WIMAX
-> +	help
-> +	  This machine is scheduled for removal in early 2027,
-> +	  since it uses the ARM1136r0 CPU revision.
->   
->   endmenu
->   
-> diff --git a/arch/arm/mach-versatile/Kconfig b/arch/arm/mach-versatile/Kconfig
-> index de42da7de8c8..1ee9b6608d71 100644
-> --- a/arch/arm/mach-versatile/Kconfig
-> +++ b/arch/arm/mach-versatile/Kconfig
-> @@ -110,11 +110,14 @@ config INTEGRATOR_CM1026EJS
->   	select CPU_ARM1026
->   
->   config INTEGRATOR_CM1136JFS
-> -	bool "Integrator/CM1136JF-S core module"
-> +	bool "Integrator/CM1136JF-S core module (DEPRECATED)"
->   	depends on ARCH_INTEGRATOR_AP
->   	depends on ARCH_MULTI_V6
->   	depends on !SMP
->   	select CPU_ARM1136R0
-> +	help
-> +	  This machine is scheduled for removal in early 2027,
-> +	  since it uses the ARM1136r0 CPU revision.
->   
->   config ARCH_INTEGRATOR_CP
->   	bool "Support Integrator/CP platform"
-> diff --git a/arch/arm/mm/Kconfig b/arch/arm/mm/Kconfig
-> index f3d71e89a31f..27010b9389ad 100644
-> --- a/arch/arm/mm/Kconfig
-> +++ b/arch/arm/mm/Kconfig
-> @@ -410,6 +410,8 @@ config CPU_ARM1136R0
->   	help
->   	  These early revisions of ARM1136 lack support for the
->   	  ARMv6k extensions for multiprocessing.
-> +	  Support for this revision is scheduled for removal
-> +	  from the kernel in early 2027.
->   
->   config CPU_ARM1136R1
->   	bool
+> --- a/arch/arm/configs/stm32_defconfig
+> +++ b/arch/arm/configs/stm32_defconfig
+> @@ -20,7 +20,8 @@ CONFIG_ARCH_STM32=3Dy
+>  CONFIG_CPU_V7M_NUM_IRQ=3D240
+>  CONFIG_SET_MEM_PARAM=3Dy
+>  CONFIG_DRAM_BASE=3D0x90000000
+> -# CONFIG_ATAGS is not set
+> +CONFIG_FLASH_MEM_BASE=3D0x08000000
+> +CONFIG_FLASH_SIZE=3D0x00200000
 
--- 
-Best wishes,
-Vladimir
+^ These shouldn't be here - they depend on CPU_ARM740T || CPU_ARM946E
+|| CPU_ARM940T, and they were manually removed previously. If they got
+added when you did make savedefconfig, I'm not sure why, given that
+dependency.
+
+Reviewed-by: Ethan Nelson-Moore <enelsonmoore@gmail.com> (assuming
+these issues are fixed)
+
+Ethan
