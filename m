@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8602D3DD51C;
-	Wed,  1 Jul 2026 21:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C4B36C9E4;
+	Wed,  1 Jul 2026 21:25:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782941136; cv=none; b=LM/ufjAImCib+M1p+0xja5y1G61vmtQAY70YQafHC9QD67Qb5pa1fx1o+ZeYJmtRQG4cYgU2J+V9qMWXIBJX2XCpVvzdjj/id11/+n0JsEPQqCf9/OV5dwEEkNd0uZbu2Y2y0sv4fdCnjX9x4HVWXGb1+ZMD2UipWklz3zW50Wo=
+	t=1782941143; cv=none; b=YrDB9FrtjBjNwipAKRyDpBMtIIO8csbOm6EVBcdQ6zOVjkfAKGtgZzgrEJOTObjTsiNuIX8iFcDHkk68g6qjMIqJ9GU1Z3DVfBYI2vZC5DvQkMR7AsXZg8FSFdYoCfxbiW5loNYAa7+3yOYxGdxdz+z1TtftGbYx/2LY+nq+8+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782941136; c=relaxed/simple;
-	bh=LTEiYIxl7G0yr1rZMK/MbCkPvesEZcJzWj5HONJfzGs=;
+	s=arc-20240116; t=1782941143; c=relaxed/simple;
+	bh=JvPRJ2sOlQjQTnVS8jmUjlWmh8btfgjiDxlS+BDBRcM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=A89icVCSW2haYNzQWY9vKYcbnPKGwJEbliaXOitRQP3zlTDhbXfzp92mEyOaYy2z/KztnHFyP6RIO1X1BgsXcAM8gEGj7eZiERP1Xg8ae2gglQF1HkmYk96+cBasazK0HheT/b2NhmJEfGqlOsjrWa8+MlPotjYgQPbL0YBuE8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grs2EkX0; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=SValUMc7R+B1Abgi2oQNS+3xPj6f2fDF2JJojvEhXX3Oica6Hepx9AgOl/V23gEpHyVgOChEJWrwXgrabyWcYUq+Zjfho1TtNwXz0ok26EGuqkWOTYbg9L5q0ejaalMOFTVpN0MBCtWlPUwiuv+XdKnwHSeb/suziyuYxh+kWUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=drMX/zVM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grs2EkX0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E2D1F000E9;
-	Wed,  1 Jul 2026 21:25:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="drMX/zVM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 691811F00A3A;
+	Wed,  1 Jul 2026 21:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782941131;
-	bh=wlayQOEl2KZTkzmBCwJs/YLxYkgF9FY4O+U8iZIcOt8=;
+	s=k20260515; t=1782941139;
+	bh=99rTkGtMEhY28UmP5cIJYBXAGUjxeodjcs2HZAq97+I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=grs2EkX0EEzX86/S44iVTmiUw/jk2hbNJMEGEJCJVKoaHyA+Iu0aR/4yv7eDkUg5a
-	 nIVTHUgGUwgZGrjh5by8y2+zc7Cw3b6kDfiDeyh1GNtvW85cGAYEEYbyXIIsHzl3qK
-	 /130aRuLFvtszDMkblUqumfJbzSQ9UU6+r8KRdN7sJpNQr7lF80PJtk3M9/qqsfLCj
-	 FPKucqqkU3xftK3SgRunQtOjNkf/J4oTPBwvvI2UUV/KUPAt3fvKzybK0+EMJgHBcQ
-	 Q3Af7Be2XVscl5KLq56Y6gULJjv9lcRMuAvjx1DMqG8gOXXZp8uVP2laIpXu5WijXp
-	 nJ68BXcB1bX6w==
+	b=drMX/zVMUi6s614tuhfwQRqRrQHr6+zq4Y5CybzpIA2njdUcZR+VYgbQICRIUsuVW
+	 vtqQsl310YGSy/QMtESwwJkMisKBLCpbg/FSD5DHIVy8NA73wp7EqpgYCMK0/MSi55
+	 7zSzytbdEkCy+FheLAH3R/jru4JEgnlpV9Fi56BjSLVoKxD5HxBd4PSZzOlvtacIaS
+	 QF6VorAoIbPH2jD72LBHyFDyp6vtothOeXCYxk+1hPiPGvbrGfT8wd6pRvR0YtEvyS
+	 QWtQ4qGgmJepkhuR8ecSWbPT3fYTFUNVwawVD70Uf0rYQl7FdHpPPftXks3ZD53T7Y
+	 qIQGzxzdGrf8Q==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-arm-kernel@lists.infradead.org,
 	soc@lists.linux.dev
@@ -62,9 +62,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Tony Lindgren <tony@atomide.com>,
 	Vladimir Zapolskiy <vz@mleia.com>,
 	Will Deacon <will@kernel.org>
-Subject: [PATCH v2 10/19] ARM: mark IWMMXT as deprecated
-Date: Wed,  1 Jul 2026 23:23:44 +0200
-Message-Id: <20260701212353.2196041-11-arnd@kernel.org>
+Subject: [PATCH v2 11/19] ARM: mark ARCH_DOVE as deprecated
+Date: Wed,  1 Jul 2026 23:23:45 +0200
+Message-Id: <20260701212353.2196041-12-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260701212353.2196041-1-arnd@kernel.org>
 References: <20260701212353.2196041-1-arnd@kernel.org>
@@ -78,48 +78,44 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-With no remaining users and support getting removed from future compilers,
-there seems little point in keeping iwmmxt around much longer.
+The Marvell Armada 510 (Dove) platform is supported both as devicetree
+and atags/boardfile variants, with varying degrees of hardware support.
 
-On the other hand, the iwmmxt support in the kernel rarely gets in the
-way, so there is little cost, so set a removal date of early 2027 for
-the moment. If anyone is still using this, it can be extended as long
-there is binutils support.
+Russell was the last known user of the board file version, and there
+are very few users overall. Unless Russell still needs this variant,
+let's remove after the next LTS kernel, leaving the CONFIG_MACH_DOVE
+variant with devicetree.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/Kconfig | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ arch/arm/mach-dove/Kconfig | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 1f02183cff13..e2bdf2591c10 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -513,13 +513,21 @@ config PLAT_VERSATILE
- source "arch/arm/mm/Kconfig"
- 
- config IWMMXT
--	bool "Enable iWMMXt support"
--	depends on CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK
--	default y if PXA27x || PXA3xx || ARCH_MMP
-+	bool "Enable iWMMXt support (DEPRECATED)"
-+	depends on PXA27x || PXA3xx || ARCH_MMP
+diff --git a/arch/arm/mach-dove/Kconfig b/arch/arm/mach-dove/Kconfig
+index 996888ffcfe7..f547120e223e 100644
+--- a/arch/arm/mach-dove/Kconfig
++++ b/arch/arm/mach-dove/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ menuconfig ARCH_DOVE
+-	bool "Marvell Dove" if ARCH_MULTI_V7
++	bool "Marvell Dove (DEPRECATED)" if ARCH_MULTI_V7
+ 	depends on ATAGS
+ 	select CPU_PJ4
+ 	select GPIOLIB
+@@ -11,7 +11,11 @@ menuconfig ARCH_DOVE
+ 	select PM_GENERIC_DOMAINS if PM
+ 	select PCI_QUIRKS if PCI
  	help
- 	  Enable support for iWMMXt context switching at run time if
- 	  running on a CPU that supports it.
+-	  Support for the Marvell Dove SoC 88AP510
++	  Support for the Marvell Dove SoC 88AP510 using board files.
++
++	  Support for this machine will be removed in early 2027, unless
++	  there is a strong reason to keep it. Users should migrate to
++	  the devicetree-enabled version (CONFIG_MACH_DOVE) instead.
  
-+	  Machines that actually support this feature are very rare,
-+	  and support is deprecated in new gcc-14.  While there were a
-+	  few applications that used this in the past, none are known
-+	  to still do so.
-+
-+	  If you use this, please send a patch to remove the
-+	  deprecation, otherwise this will be removed in early
-+	  2027.
-+
- if !MMU
- source "arch/arm/Kconfig-nommu"
- endif
+ if ARCH_DOVE
+ 
 -- 
 2.39.5
 
