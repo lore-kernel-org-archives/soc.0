@@ -1,93 +1,93 @@
-Received: from mail-qk2-f3.google.com (unknown [74.125.230.195])
+Received: from mail-qv2-f1.google.com (mail-qv2-f1.google.com [74.125.230.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F37939E9AD
-	for <soc@lists.linux.dev>; Wed,  1 Jul 2026 22:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FC73C3C09
+	for <soc@lists.linux.dev>; Wed,  1 Jul 2026 22:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.129
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782944550; cv=pass; b=X0Xj76eCLQCdlZjFI+AibDgW12KvDDFFQiSB7JexfIeYga2BTGQ6JqNGIj2Gt/HpFrfvHJQaW9rr8K8M+Zqi/fLYR1RDioZO9v+hs4B+x+zLweOSAViQ6WnB3dkXCpTP6uF4HkyhQPQglDPshVFRLrtRfKoOMGxYaTRcINSFQYg=
+	t=1782945680; cv=pass; b=cFe3o6Tlb2/HrlgYVhHiJ9Wvd62DiAz3Swlqf44/9SVfwFJBk8V1xR8ETJ8nRg8hU6a/2y7ZEESHJWK4MBfElJuEj2f93hV6IcW905AmtRf5lw6bOvtMs/8aRB/HpH4JmTasV+7Nnz08Bul1GCfCTQNZNI8pq9vfEN+L+a9y+GY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782944550; c=relaxed/simple;
-	bh=Jda+gAYXbk7PHfgm1C0E/dvQ9lFBrVT/hvWOqrR70io=;
+	s=arc-20240116; t=1782945680; c=relaxed/simple;
+	bh=fZ+AorSnmsjgid/jhFjS1KD0WdKo2def6qdAbBx50JM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U8rv3Dr6HHVOW/5yGxr7LX4ohfqfzWwBPO37zV2YMsJjYQmOGVlpu/UH+JB3586/YPmXpe2vGqu5YY6clHZKSo9n4yNiWEbEtDEhMMrmxGSWkeNT5bNEXI+jqTEL+qh5jnvgf4et/M/RE7fPFZW0pgHpGLJLxlwf/B9ulWzwj6I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PpHdWB4e; arc=pass smtp.client-ip=74.125.230.195
+	 To:Cc:Content-Type; b=aWh1s7iDIm8VYPOZ+n74fB1tK5KR7bWBZrqirMwP4PtnsDxMjPb/+T3D2iKM2zWzcq/AcoOulqPgfNQBpgKh2ayH8zkIeiInwGyziury5xsHSIkQeLVa9Hc5jvHzQ9TqO3ouhrrw9NwKB8hybpmwQnQh26D/6gyPp1fSODrD7nA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m04ST9S7; arc=pass smtp.client-ip=74.125.230.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PpHdWB4e"
-Received: by mail-qk2-f3.google.com with SMTP id d75a77b69052e-51c0f88ca6aso2045221cf.0
-        for <soc@lists.linux.dev>; Wed, 01 Jul 2026 15:22:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782944548; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m04ST9S7"
+Received: by mail-qv2-f1.google.com with SMTP id 6a1803df08f44-8f3f86931afso1980296d6.1
+        for <soc@lists.linux.dev>; Wed, 01 Jul 2026 15:41:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782945678; cv=none;
         d=google.com; s=arc-20260327;
-        b=FbUl0hrqBuytSjNca7irjI8D6QtnIzf/pWeK/E4YZiBsTIMrAWFp+ndXReadVL0//z
-         8tlUViLMMo+c/taQaJ29hTNSd2chX32C9Jh85bxgSEKXutJ5gG2A5C7w3NQX0EzLho/f
-         zC3AuC5CRWkyQ6Wk7mEXM4M7bZi3II/sDXkSLzLq6oxMjusUdap6qwUxWa6p13Ara0Cn
-         Fe+0S4e7o6qHOtppZTNbyHkjI+RfHKnjXIIwqnUIIOAuBvf5YcPGJi7jog0PrN/doGf9
-         gYZHafd4t0IaK0MpMWq6VRNsqVcYCd5G2T9r9Hi7JgYFYFOcBogZWmybpxvUtY1sHuLO
-         pQrg==
+        b=mMJty4wsh++mrsXy1PBUhU6fseVzKwrI/YbjfgBAoAw2paYdtlTsyFeFXI/Omu7Pd9
+         7QQZENDyq8o1SKIZCqpxUPPkf7tmOSBU/QbzeTPdww1P1dp9utcUPVYqgVmAdC0m7M7g
+         Cocv5MMl8bDVsByGDaxr1BX4VgvqAknWB6jaeonEMDM7gmy7SA1Xf2Bo+SJCL8r+4CP0
+         PcRF13iQTvsK5wfsRTdf/Np7sb5zLLxw+2SUMYZLzvI8kJs59N7SHcXFmBiz+CH8MUUN
+         7KGMhqd5d0S9qa2kOowHd9a/xajTPbovf2jkxqeQV8F0rIHZh6noXxatEvoyJ2TWBneK
+         1VIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=MVhzVy40B70l/jqexwyJaSJ3X5bFGEqAL47A5U/79HE=;
-        fh=qkm4T+QLFfJiDC5VSAEYom1OeVzeoSjYbCB/qeNAhEg=;
-        b=WC0cT7fPKRhT5PAK4fD6YZkqcEaiBB0lw2qLGYUSepjHSsXzUu1qzqUqxlorrSyteu
-         XRmQsQpfkof9+FTV3LTk8MtWVq2q/cLxadl+hxsjpJJQ2bPnA5hLMqhH4nWApfbON9XT
-         3Yea38NqlScnZzWZQH8vIBACK5C0Ig22atrDWwXdY7sdvH+salelt0iOHAusf4lnrPWP
-         cXDwSxFk0tmlQ+lHcT+2yFYucLjDvF5hjaFSzf6pZG/0s8EYr8kC4htZjmZ8MVUnjhph
-         1c/nxpuvgMOSJRZDzrq0iuA2Mxf6NvBcnustr2O9bOhIxsQwoFPcGD6KUZLk2wv10Tme
-         Z4Vw==;
+        bh=/zEs8V4lWPcL649keJ+/5ibHEH9EE+ydATPB+tEzuWA=;
+        fh=fAsP9dGClLEV8Dg+BGO8dLmGI4qh/iaKpBlSERezGR0=;
+        b=izlh4AQA7l7DnYVFhy3uhIAthZGqwrtasT6WqgP/qjKaBZULbtPUmQqAzCRiYoXeDb
+         7hRcdq29a49z/zUkuGF5M6kn2Gg6Av9Wn+WlhtkF1py2TviqIyMifnN40F3gLvv6vQxd
+         9NIpkjTCnOPEv8x1bP/nHjAbugporEfslHl4TRfYedhFYAWh70zqqGrGw9OyV+1Sbg3e
+         S/Wq1c5IUo6heN6jXUrxsP9NbOVfDd97mtThMqBdXfeAzIO0pVcg8rALqcfo0yDaOQUl
+         611mfqZxKlIloCsXLfiXPv84XRGIIsL2cz/cpXiSkUtszpkGgegBRxHdDxX6AFRdqGgF
+         5png==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782944548; x=1783549348; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1782945678; x=1783550478; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MVhzVy40B70l/jqexwyJaSJ3X5bFGEqAL47A5U/79HE=;
-        b=PpHdWB4eMQer/tu9HGPPiEfbLn2sMEjlXHkq3Zemiq3uXZvn6j549BSDhmO05HKerK
-         bOCaqlOVpzlQzmAMhf+c9fGCzK8JoTXlpwanP7Pe4+IWrbswR/2H85XMUtjFFmtikui6
-         AYdmInKguS63HzLVV9s1VRCYXpl0p74OKrhdFihGDK4WRV/S024FUN+C/LO8RLa65raA
-         HkpC8XlR1Rj+WcynwFviEO8BENtx+Z2oPvJlcqIQU8G1u1Dp6CJ/rwD2beBqaguo0kMj
-         SOEU/3cR2Hb54WxzB8eoYrobqfr1wm5C/aMsJxyV1Fda7J0a1Lm6juU4yjxJQIVUsggZ
-         z5aQ==
+        bh=/zEs8V4lWPcL649keJ+/5ibHEH9EE+ydATPB+tEzuWA=;
+        b=m04ST9S7nlcegB4LBTPgEOOlVUFNIKe5N0dQ4vrTbX1iXGvdIBT5WYA8b3sqoAPl27
+         /MSRxb0yyquuGdiFrir/3SyKd/LccefXRdg76oyQWqD3feE0OLNG27JDEPhWUNXwiUaz
+         eEhWdmB3G5fp8C0ecM8Bl59zSKRD1x/lHGY65iTksYnbIi/Gqxeg/J2MAhb4TiW46OIE
+         MZIo8UkvvSvSX91M4qaSbTgCvTFpS74ucKl8yPwB6QBNz3DXJGtKaSalT9C9e9w3ToY1
+         jsV4il7b5mJj1RKT18Zr53o/O/7O4BSM1zeJwMcx50pDpqAkNH2OwGL2s21mkG0E3qWi
+         y/nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782944548; x=1783549348;
+        d=1e100.net; s=20251104; t=1782945678; x=1783550478;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=MVhzVy40B70l/jqexwyJaSJ3X5bFGEqAL47A5U/79HE=;
-        b=Svkp2FsQ0V91bcLKzprY1K0zkltLq0Ti2prrjP/q43c4fwUux6dQY0QjMg46aVxn1Y
-         3GQ6CV+CncS+F8WsMpFYFlD9YwoLSyLZTH8lI5li0FUuNGFsDTnkpdL3ENCO14qmsrZN
-         Tn+/gEXQUreNg51tRYhch/sUkFMmSevouUNxdCC59NdvMvdYMtsYQ3lTzco1S+gWnCJm
-         wp709IETz8Dz3EsUizZO6XWHRfDy6ijfI+b842GYvnijM9RpSbDPPLCCxAbx635usv8g
-         pTxFs6zx30+KDTRsP00uB/Ok6HOeipxAIQqOo7wgUwC8B5v/2X6icUvK+sZM7yCBr84R
-         t7WA==
-X-Forwarded-Encrypted: i=1; AFNElJ8+lYN1OAIFvpRIFTL+ooyRiBUkvaL1upVcotqHCsYB8E0EKqQWZWEa2q0QmBsmU6hu0Gs=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx9zzrQjeEGzvA7WTfZsaBkp8PKvIzq0ERTgM93u8j6/lbu3X/K
-	yv2Af1y+7s8NUAxAEGz0XYA2wBN7Qk2RqqQJFbuHQfoRx/E/OqT+pPHquDZ+afN2uoBOh1bSbL/
-	szFmM/iHbWxlT950jeLvOh3YXYA2Q5OYNB6o9
-X-Gm-Gg: AfdE7cmApgqQnc5tZj8SEjPTyXtQROh9HkC/iHWKsQUunaHy1WKij6jF3+nKnzLWheo
-	sVDjN0ShQRepzMOmokR9r7LmhJoZzxNkuBTfabM9YbkvHWxo1gX7u69F3L17gKvQtSeQD4hJYwC
-	gCJVHdb/XUv5d30ySbFkCttsIItH+iK8+ktGdllEpCEqs2KZsfItwJWV2vrzukQDG1GPiQWyAUJ
-	ysuj16rjWZ38GVvJeNxXjiwxvJe0WHkAiZ5OsPFU1lUqiPNOQrcm6GEnIz6EbY1ckAC7NruXzvt
-	iCs9cKh2AE/jV/WxB7VdVhoN6IffYDQTJqEiEAvTzh/3A/wGXIC/ZaisK3HnW4bF/6Zj
-X-Received: by 2002:ac8:5981:0:b0:51b:fca2:af71 with SMTP id
- d75a77b69052e-51c26b14753mr45380561cf.42.1782944548094; Wed, 01 Jul 2026
- 15:22:28 -0700 (PDT)
+        bh=/zEs8V4lWPcL649keJ+/5ibHEH9EE+ydATPB+tEzuWA=;
+        b=R5o7XheXHMIuqDd1hn4AEYpkp9yTKeNvs3+u7ntJR0kFQpdavXye1vBsTjCSlGIf2k
+         qZs8hEnpA93Ovl3UEflhjGGN4vXuK6d5OxYHLQp3Zdf8LK0HTt9axn83+6o4PWvJzekD
+         NIJ/HhQXXsnhpDzuscS1+PvbfENkR2jo1rZ9oEgO13BTnYANrDItPZ9TQzNYYM9TM41v
+         Mu6DwhCa8RtKhekV1na3R7bSNMriTQ8TaddihQzJ8XtluvgGB3XJUyDcGU4fdxToNwqQ
+         OLnlzaPXRxIPrjkljIixQmShrH81f0xuqBx5fpDXqzvI61kOUDfY0sSa58OxTggHmhcj
+         xsRQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rrma8vMeThEbkUpE1HFFN/BR2IXAx5Q38npR7dyRGHwHwBVOGT33JQiCu2APP8gBWytSt4=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwwnN071KtoXi6OqCuB0WwDwII5OSmtdHF4w0lCh5W1vk2nnnYF
+	ipdQfHFNdcugUdD+lpL+MSIwCuxN9q7d1YPi9y7IfAiglGXW1p65iOq2ROrPKG0ad4+RpqXgpwN
+	dFAmpMj83wF0rhRH9UYQspMeDQAMCak0=
+X-Gm-Gg: AfdE7ckMVQu+zvsn9IFauN1Z0XxUadUp0DW3a7WgATkS8c992DDnqM0Rg8bMYgemt9N
+	AL7BBMqhqFV+KZAS6qE23vPpuG8UfIvqzErkIa4dyJVVAM/L8DtqKoR4uLhBW3yK3j73Yqm1/uV
+	WevkdmKjHqfNs+FU6Z2UFDaTY//P3wIuy5dGUVWKTFhUxjbZvvR6B8ClsBPLOpk1HFk6rU5TvGg
+	GQz5bfaH04ggiISeHvetqZXxh5FaYxSXz92VolMbmDEHmqOm8aXxkKPKcohS4Kkrs+O+irHL4HC
+	Sblm0ZZTz4B9qT+msRxAlazOjJ2AeuDxVeilYGFe8odFKmO+fYpv/BNWng==
+X-Received: by 2002:a05:6214:21cc:b0:8f2:940e:2417 with SMTP id
+ 6a1803df08f44-8f3c9dabf76mr54875016d6.55.1782945677686; Wed, 01 Jul 2026
+ 15:41:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260701212353.2196041-1-arnd@kernel.org> <20260701212353.2196041-6-arnd@kernel.org>
-In-Reply-To: <20260701212353.2196041-6-arnd@kernel.org>
+References: <20260701212353.2196041-1-arnd@kernel.org> <20260701212353.2196041-19-arnd@kernel.org>
+In-Reply-To: <20260701212353.2196041-19-arnd@kernel.org>
 From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Date: Wed, 1 Jul 2026 15:22:17 -0700
-X-Gm-Features: AVVi8CdgN18Vc-unGLPG99aYWmbh8Lx3HkejzODRi3mFEu8urukn9hQEI-DKk2E
-Message-ID: <CADkSEUhif4s5sSHe-bMapxEiM4bksaNkS+R5EtWOV2kgsk-29w@mail.gmail.com>
-Subject: Re: [PATCH v2 05/19] ARM: turn CONFIG_ATAGS off by default
+Date: Wed, 1 Jul 2026 15:41:06 -0700
+X-Gm-Features: AVVi8CfF9d6l7tqaBnW0ymwju7u7UMwSlLnAFDbskHiVs27X0kHxLxxNHiLf_kc
+Message-ID: <CADkSEUhWe9aLuM7AURDKjMkrpEKOog9X59fWuZXvUVjkT9BuBw@mail.gmail.com>
+Subject: Re: [PATCH v2 18/19] ARM: mark axxia platform as deprecated
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
 	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
@@ -105,58 +105,53 @@ Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
 	Russell King <linux@armlinux.org.uk>, Sascha Hauer <s.hauer@pengutronix.de>, 
 	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Stefan Agner <stefan@agner.ch>, 
 	Stefan Wiehler <stefan.wiehler@nokia.com>, Tony Lindgren <tony@atomide.com>, 
-	Vladimir Zapolskiy <vz@mleia.com>, Will Deacon <will@kernel.org>, Linus Walleij <linus.walleij@linaro.org>
+	Vladimir Zapolskiy <vz@mleia.com>, Will Deacon <will@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Hi, Arnd,
 
-Looks good to me, though I noticed a few small issues.
-
-On Wed, Jul 1, 2026 at 2:24=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
+On Wed, Jul 1, 2026 at 2:26=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
 e:
->
 > From: Arnd Bergmann <arnd@arndb.de>
+
+All of these patches have this line at the beginning but were sent
+from your kernel.org email - did something go wrong with git
+send-email?
+
+> The Axxia platform was initially upstream by Anders Berg for LSI and
+> later Avago, but this included only support for I2C and reset drivers,
+> while most of the interesting bits (network, pci, rapidio, usb, ...) or
+> the arm64 platform support were never merged.
+
+Given the incomplete state of this platform, removing it makes
+complete sense to me.
+
+>  config ARCH_AXXIA
+> -       bool "LSI Axxia platforms"
+> +       bool "LSI Axxia platforms (DEPRECATED)"
+>         depends on ARCH_MULTI_V7 && ARM_LPAE
+
+The dependency on LPAE reminded me of two other 32-bit ARM platforms
+with lots of memory: Calxeda Midway and Highbank. Is anyone still
+using those? Maybe they could be removed, since people seem to want to
+remove highmem:
+https://lwn.net/Articles/813201/
+https://static.linaro.org/connect/lvc20/presentations/LVC20-106-0.pdf
+
+>         select ARM_AMBA
+>         select ARM_GIC
+> @@ -13,3 +13,5 @@ config ARCH_AXXIA
 >
-> Only a very small number of machines remain that rely on
-> traditional board files with the ATAGS boot data instead
-> of devicetree, and we have not accepted new ones for
-> a decade.
->
-> Most of the remaining ones are on their way out of the
-> kernel, but the Kconfig option that controls ATAGS
-> is still enabled by default.
->
-> To reflect the actual status of ATAGS support and alert
-> the remaining users of upstream and out-of-tree platforms
-> with this, chanyge it to being default-disabled and
-nit: change*
+>           The LSI Axxia platforms require a Flattened Device Tree to be p=
+assed
+>           to the kernel.
+> +
+> +         This platform is scheduled for removal in early 2027
+microscopic nit: missing period
 
-> add a dependency on CONFIG_EXPERT.
->
-> The board specific defconfig files that rely on ATAGS
-> are changed to turn on both EXPERT and ATAGS if they
-> were not doing thath already, and the ones that explicitly
-nit: that*
+Reviewed-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 
-> turned it off before no longer need to.
 
-> --- a/arch/arm/configs/stm32_defconfig
-> +++ b/arch/arm/configs/stm32_defconfig
-> @@ -20,7 +20,8 @@ CONFIG_ARCH_STM32=3Dy
->  CONFIG_CPU_V7M_NUM_IRQ=3D240
->  CONFIG_SET_MEM_PARAM=3Dy
->  CONFIG_DRAM_BASE=3D0x90000000
-> -# CONFIG_ATAGS is not set
-> +CONFIG_FLASH_MEM_BASE=3D0x08000000
-> +CONFIG_FLASH_SIZE=3D0x00200000
-
-^ These shouldn't be here - they depend on CPU_ARM740T || CPU_ARM946E
-|| CPU_ARM940T, and they were manually removed previously. If they got
-added when you did make savedefconfig, I'm not sure why, given that
-dependency.
-
-Reviewed-by: Ethan Nelson-Moore <enelsonmoore@gmail.com> (assuming
-these issues are fixed)
 
 Ethan
