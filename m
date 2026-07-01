@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC4B3148D3;
-	Wed,  1 Jul 2026 21:26:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BD7349CC1;
+	Wed,  1 Jul 2026 21:26:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782941194; cv=none; b=EnUWV+ioHE4P5vTLeSjf63YmvmnCOuQIAB3o4wSQlmrB+MP7RNaQLjc9KdeVYZmVLPj9PC4RjDHjYqMtRPEauxgiTjKqcHdCsVMSi9+WnESxmlkQTcim5VxHuFtMFEHQoChnjkbPgMkU+jTrUr6t4haY4fIaCbhtGfRkk+t7HuE=
+	t=1782941202; cv=none; b=SCh/sJz5qTMec2ccDw/Vl06hVY3XElzl9YhPtdvU9HsBP4+9hMioXQykHjOc1nSjmxK1CG1QmKjsiLnjMkeEAHkfOkvki8O9cWYAcK0BTiFYrLonRhl8CHJZXi1Nj4gYNR9TzyoFmbXwXxAKtB58iE2aQKYj8gfWi7Lq3fSRz/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782941194; c=relaxed/simple;
-	bh=DcBMXA5vwlIVZdXu/vwQiAGtIUjwJXeKS0kMPjLHut4=;
+	s=arc-20240116; t=1782941202; c=relaxed/simple;
+	bh=rbsNGQvEt1aIXgxwBO6x6RmMrs79fMIgpwZp4DF0RSg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=E/HMaMHsdK+90qPbJx/lk4EJyemuqJkFN/Pq+HK8OBxLCmPOmWaQB3e9jtphpQhrC3aLQY4LTKlu2NB0qOYU8HrWa2H2KsSm1jxRBcNYUAHF6CsdlpChCt6XPidjk8p6GgzxskQRnzZPdDqK0KPHobjfvdSyfr1/05zgbhenYLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h/my/gat; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=CAsMI/eM5s455QfUND2IZI1dUslGWNgS98li4G/2frx+XsALRVluflcvRYU7hF44753LOP/ainv9PZRQaSbLFxBa9A3cnRxqMR+93jEkEzrsFKBgbejkdLTLKTMi108Jier9CN0cm4GVjkL/v9tLGKBVCHDt5rx/GJPe/WPnSTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X6vr5np3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/my/gat"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 405661F00A3D;
-	Wed,  1 Jul 2026 21:26:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X6vr5np3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF91F1F000E9;
+	Wed,  1 Jul 2026 21:26:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782941193;
-	bh=OOOlnTfLdeQJz5KZc0pbvMZ9NKjblGZAbxQxn1igGQk=;
+	s=k20260515; t=1782941201;
+	bh=yCSDE72yLPeEDTveWDb74YPcIUXppRyDd4Tf1rTkN7o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=h/my/gat2xn2CRrztx6PRB9yjkMYCfyxNjTyBjRywG7bYRe/eAv0ahiLxFo+QtexN
-	 2ToOm/W3a1EEeYV0faDPG0IF2kw/x5skroJDF94g4j7C/L+ANULKfr7/hn5Jl8u323
-	 LtDHlhJvkDUB7krcMu4KTur12NHllyDR6L69BW3+1kqHI9B4QDZy/zTqaZcgtgPFLC
-	 J8g57gm1+/SEkdgHZRegzrCxdCCdUkWb7aRjexnfPtEHnUYW0hTO4VD8Czg9jbti+8
-	 dY4TQUzCEWaGtA6xzzOW06qEoLGkBbnJbC/8T/3ZCEFsDNdyoP1ywbji7oTY4soUCQ
-	 +rek29d+FeB9g==
+	b=X6vr5np3/3sRkzW1xoLd+eMNasUx0mupu4uXGWt/s5ij5+cpM7oavnL9k3KQ3k4mA
+	 mOn8Yg59W01pG11OKaIOL2eqwbYnPi7cH+NvdJi5XcOcOiO5RX76DuWwR/sLPypDN0
+	 b1DnZLMSdfPM5LkpfqyLWFoqpUo3HprhkO/pqzSw+c9G+mUskkJEfvsozZHUeHvBsI
+	 xZZygZp/b7R5LgRDZOJ6HyHKxE0Hdl+RfjE4JfcUAyy10s2ieg0qPBDWv/6zbMOhn3
+	 zrQBKRgkjv9bdf1n+Q9oy/399aka+hSgaGNXMUmKwCsFDKtuny1NJgeWQA0Fqubkt8
+	 iCtZ5457Vov2A==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-arm-kernel@lists.infradead.org,
 	soc@lists.linux.dev
@@ -62,9 +62,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Tony Lindgren <tony@atomide.com>,
 	Vladimir Zapolskiy <vz@mleia.com>,
 	Will Deacon <will@kernel.org>
-Subject: [PATCH v2 18/19] ARM: mark axxia platform as deprecated
-Date: Wed,  1 Jul 2026 23:23:52 +0200
-Message-Id: <20260701212353.2196041-19-arnd@kernel.org>
+Subject: [PATCH v2 19/19] ARM: mark mv78xx0 support as deprecated
+Date: Wed,  1 Jul 2026 23:23:53 +0200
+Message-Id: <20260701212353.2196041-20-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260701212353.2196041-1-arnd@kernel.org>
 References: <20260701212353.2196041-1-arnd@kernel.org>
@@ -78,45 +78,44 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The Axxia platform was initially upstream by Anders Berg for LSI and
-later Avago, but this included only support for I2C and reset drivers,
-while most of the interesting bits (network, pci, rapidio, usb, ...) or
-the arm64 platform support were never merged.
+Only one machine remains supported and was kept in 2022 for the
+Debian_on_Buffalo project that was still using this, with plans to
+convert it to devicetree.
 
-The downstream kernel was maintained by Intel up to linux-5.15 when
-the product line was discontinued. Known users include Nokia and
-Ericsson, but both of them use kernels derived from the out-of-tree
-drivers rather than the upstream version, and will be able to continue
-doing that even when the rudimentary mainline support is gone.
+The conversion never happened, and Debian_on_Buffalo does not provide
+kernels later than linux-6.1, so it is unlikely to still be useful
+for a DT conversion in the future.
 
-Mark it as deprecated for removal after the next LTS kernel.
+Mark the platform for deprecation after the next LTS kernel, which
+should give any remaining users a few more years of bugfixes.
 
-Link: https://github.com/axxia/linux-yocto
-Cc: Stefan Wiehler <stefan.wiehler@nokia.com>
-Cc: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Link: https://lore.kernel.org/all/20221019150410.3851944-6-arnd@kernel.org/
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-axxia/Kconfig | 4 +++-
+ arch/arm/mach-mv78xx0/Kconfig | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-axxia/Kconfig b/arch/arm/mach-axxia/Kconfig
-index d3eae6037913..f773a66c1402 100644
---- a/arch/arm/mach-axxia/Kconfig
-+++ b/arch/arm/mach-axxia/Kconfig
+diff --git a/arch/arm/mach-mv78xx0/Kconfig b/arch/arm/mach-mv78xx0/Kconfig
+index 670e6587827e..98b35f5d05ba 100644
+--- a/arch/arm/mach-mv78xx0/Kconfig
++++ b/arch/arm/mach-mv78xx0/Kconfig
 @@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- config ARCH_AXXIA
--	bool "LSI Axxia platforms"
-+	bool "LSI Axxia platforms (DEPRECATED)"
- 	depends on ARCH_MULTI_V7 && ARM_LPAE
- 	select ARM_AMBA
- 	select ARM_GIC
-@@ -13,3 +13,5 @@ config ARCH_AXXIA
+ # SPDX-License-Identifier: GPL-2.0-only
+ menuconfig ARCH_MV78XX0
+-	bool "Marvell MV78xx0"
++	bool "Marvell MV78xx0 (DEPRECATED)"
+ 	depends on ARCH_MULTI_V5
+ 	depends on CPU_LITTLE_ENDIAN
+ 	depends on ATAGS
+@@ -14,6 +14,8 @@ menuconfig ARCH_MV78XX0
+ 	  Support for the following Marvell MV78xx0 series SoCs:
+ 	  MV781x0, MV782x0.
  
- 	  The LSI Axxia platforms require a Flattened Device Tree to be passed
- 	  to the kernel.
++	  This platform is scheduled for removal in early 2027.
 +
-+	  This platform is scheduled for removal in early 2027
+ if ARCH_MV78XX0
+ 
+ config MACH_TERASTATION_WXL
 -- 
 2.39.5
 
