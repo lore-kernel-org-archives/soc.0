@@ -1,143 +1,143 @@
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A16423603E9
-	for <soc@lists.linux.dev>; Thu,  2 Jul 2026 06:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1C13AA4F6
+	for <soc@lists.linux.dev>; Thu,  2 Jul 2026 07:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782973939; cv=none; b=R0wpkWcZrlnVeXkbnSIxgXAEaDELE/VL0zDkvCoTSndREy5mjE0lBvrIvDFv+M3WLq79pDTqdMXWU6A9CZfhl2LmDexoOGqC9nQg6AS6nzqX5DBf3wvHnvaG0pjWg/6t5NEeQ+DskRqEAke2fhm0BqRDyS4Ou4KhuXD7rUZY4tM=
+	t=1782977958; cv=none; b=u+wAi6LBYD5dZtKv01J7ZblKRqvjIB7GbCAYVyj6PRak6+BkLwlWPFez2Wop1eZe9Ziszu7URhPswuWysKbUpT2H7kmuGX+m0eWjaFbpIrKLVa6CJKiEJnCMyLEzNA+mlqdPFZjFtoR+wnK4lMJszlQlX40I6JBNwfrrpOjUIf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782973939; c=relaxed/simple;
-	bh=wlUphZUwKyoGmN3GZaUodKc2QmyXIAHA50tgH4YqmdI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ollc1RZXOFWNkxIKjnOLFHoZCapodvZoqGLzk4L1lEV+nfSTvUckAuCayGeLwdPrMm2oD9xGcMZu5hAzHXM6pM/uHQ1ojSwF+sR9SSRgCjGdgHkP2DRriUYU6cKjnRHxLQswB+TuWApHBn7TAVsbbxwJFLpv6FoIrdH9ExK8bqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=KwsvHa4U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ExI8ygPx; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1782977958; c=relaxed/simple;
+	bh=/hiYXX+Tl9Oi9Ll1odfLmRU1+IL7JIxTnj5Jgck2HxQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=erUrX63xPKugucldvurnttu442WePgwBa9LeUW8Z2BMxdvhux3UJ+bocUKFobVJM/Rv+6Ri+n2GG1jCMngqHQJg4HlzEaG+eTxZtu1zKr6NwPv8P3VfFKPHcHmYLxOMU+deFIUsltWBwH8cpo9MKUK6wQnDWtM8Wl+8Yx9PipUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=gDtkatht; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="KwsvHa4U";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ExI8ygPx"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id C4B87EC006E;
-	Thu,  2 Jul 2026 02:32:16 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Thu, 02 Jul 2026 02:32:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1782973936;
-	 x=1783060336; bh=SR66zcQVEHB+6IoMmH/7EWLtnBM8ziGmZQt7pgZ3b6I=; b=
-	KwsvHa4U46RIHYQ3B9l9ns6UH/VKELBi6Tt6ezSvm2CUeilJ1GT/Pgba1v2gkZKd
-	JG7A85eS6+LDjS1/50de7jLBfGdtGexqcJyunOKGjsU6rWrqO0QjlhiOChG3TOX5
-	XXMEy7oSuy3MZHoe7W3Avnl6RdMVJaz6s7QsRVt/uMeCin3bvN9BYDgonmk3qgOG
-	JkRSBsX38fquZprck/cge1jCazHlGVFQcduIJpa70tkp7EPpMXpb6/VevOiqBHsP
-	TtQ5xMGD+WdNGiQngUaYR4xlDAviGSgxZw9HFvxpyZoMRfkwhHyE3N2U6w8FRCwk
-	YSP+ENx0Sb6YK7q2lsxWIA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1782973936; x=
-	1783060336; bh=SR66zcQVEHB+6IoMmH/7EWLtnBM8ziGmZQt7pgZ3b6I=; b=E
-	xI8ygPxZpByjAP2rnKuoicG12u29Byy1s9v0qM6IKGNrzAp0XaD5EfbW23PnLAbj
-	MV8afn+fEOR0KA2Rw/7vlg0cfbJNkUDC9Cxnh5ccII1brMphqt28VRp18iLV+/6p
-	RWdIh9lAWni/wUZcXZQyl13+Ra+Q/JsoZ1FDojhNGCeFSLbebdAcvurwEuWavVdY
-	a5m5ANGnmXUjamPwdh5RXAd/7BJtkz8kvvX9OmFLfBQGx46GVDcs8iptgYkkR1Vy
-	oyYFDQxMqlR5eKytx1WaCpt2GOvG3br+zBe3l/rnl1klyu2Sa0IoAGTOI1qoWtFr
-	+p5Qz5htZ0zAGecLPjJLg==
-X-ME-Sender: <xms:7wVGat1xG2veW9TVVmAx797IYLEis7WZ2Gglsg7E6ZMP5cINiBpo2Q>
-    <xme:7wVGau7cRrx5KcGEN6pvjORLrtVtCbL5-Q5Dryyjg65FmJAoXpHiSNJmxeHOoW-r-
-    8dGQr098AI_eZqpXTRp7oAUacmvLZWKxbIeKhiOd1yALWn4xHFPtwg>
-X-ME-Proxy-Cause: dmFkZTFGWkwDnqqlU4OwiA3V6EOPV/SV1NFT8TaRAvGxP7wxL2DUUXDfDJidwjSCqTESqR
-    BFQcNTLdfTHPIW2znFhyWHzbaHgh3DwWIN4hRvUU7wnV1IF6WNf07V1lppW4HlQXd6SlcY
-    7TtffyOMHdkrKR0YzIAicb6EhN44nRhhe44rTHq39IrDquzweJiEL16vwQ7JdYgzi9e5EF
-    AqQJRxE7y/ob8ymIKNBuFH2QV7r8DaGlO14VUX9HujmiNevPUX4ccW5XomWJx3uTF8R3Ur
-    pxpzgg/3rJ/lM5sSEoYJVhBwomD8dIxH0MIcFj8lkECsaKqaTdSkL1HUrQde53DnwEKgc2
-    7UrNIF4MXUDoy6ujAHJQniTb0IptuEBClQYk5PJAEHtKI5Vb3yTjjvrCpx+iYmFupOJKr0
-    PNEp96ewq3UcSQIE1fg9+knBkZ8N5Q8Hb9FJwD0HpYWO8zKHUbieEvse4BL7+v+VR8Tz28
-    MA90EAD+KZ9EFZf255+NjDeGLFlN3+5RQYfbcZ+HzLZLoKBY3BMs0oPcgvXFpmNcLOzU0t
-    lBdD9cAsiCXN7I+P+bMmeEccAsSEKURx6wHh38hZ23DPZR+QwtCWJ93ZjYx5hTvkv+mAWb
-    e5B+8mVNsGdr/5/BljAi5yLuNVZ3S/7aLJUUZUUlIQYq9psATKGU/vvF3svA
-X-ME-Proxy: <xmx:7wVGakwdat4gDDUU2VX2YipB7R6zwHX0dHRJUNBowLL078rJ_aMZEw>
-    <xmx:7wVGauw2HeV5CXd4t-ZXXN_sDPBzVvzvflkTZ1dII31HeWkXjRo-tA>
-    <xmx:7wVGapgLVXVbuQ5N2PTxw0qZuYu0IRXI7T_idOgCxDDA81jUK8vizQ>
-    <xmx:7wVGasgUIRxG1AfiJh8stPtLhJYYUigJqwd68mfYk87t5U5kwVokJw>
-    <xmx:8AVGarm8sT1IfDr8Bta35nwj2OGx2QUB_NDh00WCJxc_DxNQR4XjhM_M>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 78108182007E; Thu,  2 Jul 2026 02:32:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="gDtkatht"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1782977958; x=1814513958;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/hiYXX+Tl9Oi9Ll1odfLmRU1+IL7JIxTnj5Jgck2HxQ=;
+  b=gDtkathtUtotk0gYXF9hjNYulENJbFTMOtJVSrk0ruVlegEJovFVeKGn
+   8zBO7VqYcD3i4KFrc+L9ghCQ0jX48+qRKGIsjCRvhbe95menaaD1Ke1Mf
+   OnfPh/mOsscPMW3WAyTJC6aq+9MYqA7qWQyoAjws7H9Qz0n8VEH2+w/kE
+   29gifjI1pi+zW53Mhr7RQnADebWytr5QKU0zD1e1BJKRCL/f/20N5YtUg
+   bMWzIdAZMVV0tyYHLHPduqq+qkqTr/+i5CCGe2Jcn8hY+Z4TXsQb8NupY
+   sICduP1eLoaVDAu8EBu8Z5iATgzAwXQYKQw+ZoyIBnLg+Si+p0F0P4I/q
+   g==;
+X-CSE-ConnectionGUID: Kzlc3EJsT/a0PYNYbFcCFg==
+X-CSE-MsgGUID: Q2pi1i4kRfO/I5PSg+70xQ==
+X-IronPort-AV: E=Sophos;i="6.25,143,1779174000"; 
+   d="scan'208";a="60352475"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Jul 2026 00:39:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Thu, 2 Jul 2026 00:39:14 -0700
+Received: from [10.171.248.30] (10.10.85.11) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Thu, 2 Jul 2026 00:39:06 -0700
+Message-ID: <54e742dd-aced-40f0-b4be-df160c8cbe3d@microchip.com>
+Date: Thu, 2 Jul 2026 09:39:05 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: A1tGRektYJZw
-Date: Thu, 02 Jul 2026 08:31:55 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ethan Nelson-Moore" <enelsonmoore@gmail.com>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
- linux-kernel@vger.kernel.org, "Aaro Koskinen" <aaro.koskinen@iki.fi>,
- "A. Sverdlin" <alexander.sverdlin@siemens.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
- "Andrew Lunn" <andrew@lunn.ch>, "Ard Biesheuvel" <ardb@kernel.org>,
- "Claudiu Beznea" <claudiu.beznea@tuxon.dev>,
- "Daniel Mack" <daniel@zonque.org>, "Frank Li" <Frank.Li@nxp.com>,
- "Gregory Clement" <gregory.clement@bootlin.com>,
- "Haojian Zhuang" <haojian.zhuang@gmail.com>,
- "Jeremy J. Peper" <jeremy@jeremypeper.com>,
- "Kristoffer Ericson" <kristoffer.ericson@gmail.com>,
- "Krzysztof Kozlowski" <krzk@kernel.org>,
- "Linus Walleij" <linusw@kernel.org>, "Mark Brown" <broonie@kernel.org>,
- "Marc Zyngier" <maz@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
- "Nicolas Ferre" <nicolas.ferre@microchip.com>,
- "Patrice Chotard" <patrice.chotard@foss.st.com>,
- "Ralph Siemsen" <ralph.siemsen@linaro.org>,
- "Robert Jarzmik" <robert.jarzmik@free.fr>,
- "Russell King" <linux@armlinux.org.uk>,
- "Sascha Hauer" <s.hauer@pengutronix.de>,
- "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
- "Stefan Agner" <stefan@agner.ch>,
- "Stefan Wiehler" <stefan.wiehler@nokia.com>,
- "Tony Lindgren" <tony@atomide.com>, "Vladimir Zapolskiy" <vz@mleia.com>,
- "Will Deacon" <will@kernel.org>,
- "Linus Walleij" <linus.walleij@linaro.org>
-Message-Id: <e654a239-6239-49ea-8ce0-0521ab7f9ac8@app.fastmail.com>
-In-Reply-To: 
- <CADkSEUhif4s5sSHe-bMapxEiM4bksaNkS+R5EtWOV2kgsk-29w@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 17/19] ARM: mark Cortex-M3/M4/M7 based boards as
+ deprecated
+To: Arnd Bergmann <arnd@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<soc@lists.linux.dev>
+CC: <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, Aaro
+ Koskinen <aaro.koskinen@iki.fi>, Alexander Sverdlin
+	<alexander.sverdlin@siemens.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Alexandre Torgue
+	<alexandre.torgue@foss.st.com>, Andrew Lunn <andrew@lunn.ch>, Ard Biesheuvel
+	<ardb@kernel.org>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Daniel Mack
+	<daniel@zonque.org>, Ethan Nelson-Moore <enelsonmoore@gmail.com>, Frank Li
+	<Frank.Li@nxp.com>, Gregory Clement <gregory.clement@bootlin.com>, Haojian
+ Zhuang <haojian.zhuang@gmail.com>, "Jeremy J. Peper"
+	<jeremy@jeremypeper.com>, Kristoffer Ericson <kristoffer.ericson@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>, Mike Rapoport
+	<rppt@kernel.org>, Patrice Chotard <patrice.chotard@foss.st.com>, Ralph
+ Siemsen <ralph.siemsen@linaro.org>, Robert Jarzmik <robert.jarzmik@free.fr>,
+	Russell King <linux@armlinux.org.uk>, Sascha Hauer <s.hauer@pengutronix.de>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Stefan Agner
+	<stefan@agner.ch>, Stefan Wiehler <stefan.wiehler@nokia.com>, Tony Lindgren
+	<tony@atomide.com>, Vladimir Zapolskiy <vz@mleia.com>, Will Deacon
+	<will@kernel.org>
 References: <20260701212353.2196041-1-arnd@kernel.org>
- <20260701212353.2196041-6-arnd@kernel.org>
- <CADkSEUhif4s5sSHe-bMapxEiM4bksaNkS+R5EtWOV2kgsk-29w@mail.gmail.com>
-Subject: Re: [PATCH v2 05/19] ARM: turn CONFIG_ATAGS off by default
-Content-Type: text/plain
+ <20260701212353.2196041-18-arnd@kernel.org>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Content-Language: en-US, fr
+Organization: microchip
+In-Reply-To: <20260701212353.2196041-18-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 2, 2026, at 00:22, Ethan Nelson-Moore wrote:
+On 01/07/2026 at 23:23, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The Cortex-M3/M4/M7 cores were designed as a replacement for the earlier
+> ARM7TDMI and ARM9TDMI microarchitectures used in older microcontrollers.
+> 
+> At the moment, Linux can run these cores either when they are integrated
+> into a larger SoC, or as standalone microcontrollers. While there was
+> a lot of development work going into Cortex-M support from 2011 to 2016,
+> this largely stopped when it became clear that Zephyr and other RTOS
+> had taken over that market. To date, the only Cortex-M based based
+> microcontroller boards supported upstream are reference implementations.
+> 
+> Schedule these for removal after the next LTS kernel, so if any users
+> remain that want to update their kernels, they can stay on that
+> version for a few years before having to maintain the platform support
+> out of tree.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   arch/arm/Kconfig            |  8 ++++++--
+>   arch/arm/mach-at91/Kconfig  |  4 +++-
+>   arch/arm/mach-imx/Kconfig   |  4 +++-
+>   arch/arm/mach-stm32/Kconfig | 14 ++++++++------
+>   4 files changed, 20 insertions(+), 10 deletions(-)
 
->> --- a/arch/arm/configs/stm32_defconfig
->> +++ b/arch/arm/configs/stm32_defconfig
->> @@ -20,7 +20,8 @@ CONFIG_ARCH_STM32=y
->>  CONFIG_CPU_V7M_NUM_IRQ=240
->>  CONFIG_SET_MEM_PARAM=y
->>  CONFIG_DRAM_BASE=0x90000000
->> -# CONFIG_ATAGS is not set
->> +CONFIG_FLASH_MEM_BASE=0x08000000
->> +CONFIG_FLASH_SIZE=0x00200000
->
-> ^ These shouldn't be here - they depend on CPU_ARM740T || CPU_ARM946E
-> || CPU_ARM940T, and they were manually removed previously. If they got
-> added when you did make savedefconfig, I'm not sure why, given that
-> dependency.
+[..]
 
-This likely happened during a rebase
+> diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
+> index c5ef27e3cd8f..cb0e3ff8e0ca 100644
+> --- a/arch/arm/mach-at91/Kconfig
+> +++ b/arch/arm/mach-at91/Kconfig
+> @@ -15,13 +15,15 @@ menuconfig ARCH_AT91
+> 
+>   if ARCH_AT91
+>   config SOC_SAMV7
+> -       bool "SAM Cortex-M7 family" if ARM_SINGLE_ARMV7M
+> +       bool "SAM Cortex-M7 family (DEPRECATED)" if ARM_SINGLE_ARMV7M
+>          select COMMON_CLK_AT91
+>          select PINCTRL_AT91
+>          help
+>            Select this if you are using an SoC from Microchip's SAME7, SAMS7 or SAMV7
+>            families.
+> 
+> +         This platform is scheduled for removal in early 2027
 
-> Reviewed-by: Ethan Nelson-Moore <enelsonmoore@gmail.com> (assuming
-> these issues are fixed)
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Thanks, fixed all now for v3
+> +
+>   config SOC_SAMA5D2
+>          bool "SAMA5D2 family"
+>          depends on ARCH_MULTI_V7
 
-      Arnd
+[..]
+
+Thanks, regards,
+   Nicolas
