@@ -1,60 +1,54 @@
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685D7318EDA
-	for <soc@lists.linux.dev>; Thu,  2 Jul 2026 16:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDF63264EF
+	for <soc@lists.linux.dev>; Thu,  2 Jul 2026 16:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.140.195.201
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783008654; cv=pass; b=qyOWEWjHijSP7/xjnEdUSnNDAfhNeQzFK+Fp2lBZCdCWkz07VH/PQJ+PQFhQBC4XkKW0i7ULWoToDRPD9cnOUQjfQN4OAQuFURlZP52HH/AgsSRpSnlYIU10eTyPbmjbJH5torDyWOTryRnDSey+hZUv5iIDDkl+4sPDSsNLPHI=
+	t=1783008910; cv=pass; b=jt2JXVotuxBdx8Ake9znzAI3bexyKgyvJbhQZD5gUuhgzuIJNQHsySUvP+eAjyJyyAbcIsTPDQdqjiDh4p/pGYHywt+OTXYkvY5HOpHd5QvIWiEbPn4wJ29J/Rx6RXXJIky8ZG+XcialNJcswR3kmJ5SBnhdZXf/Ie1Bj3v2H+k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783008654; c=relaxed/simple;
-	bh=GJq/2b19+6jFjYaQFNP6iHox8MEJnhq5pYxyWoWUqZg=;
+	s=arc-20240116; t=1783008910; c=relaxed/simple;
+	bh=mM2Oy6IK0Xv4oXzTuNeEiV/NuNAsB6HipO0urDX+DCo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ha+LpAKd7UmLkvCXYkt8Z6JgknjlVDMKqTbNRIsrTJrPe5Orav93RcRZVqdfO8u955vUJfwukkJAe6bWLNumF+s7nGLyrE9ptw/DKn5KgBCNF6JTlHZcccxQt65PNCda9hgiWc0AlmlnyJPKoQMx4uGXxa8ZhH5qc8CjkTx6SBI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=BmR2ZOGq; arc=pass smtp.client-ip=185.185.170.37
+	 Content-Type:Content-Disposition:In-Reply-To; b=LmETXFKspObfrLz1a5l9aMyRweqLhR9X7sodNvpaTo5d+FnlEt/8FJRDCyvdu0ZqCHI3btHjYtB1IqcxoV3HCbANsdrRFL7SDiri4rsgPm8W5OsYxVAC53atMo7THB0ZxIA57IrAQjkiJE7Wr3KwnDhTIexfP6QTt0z6Btorg0w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b=Yvk0nudl; arc=pass smtp.client-ip=195.140.195.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="BmR2ZOGq"
+	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="Yvk0nudl"
 Received: from roadster.musicnaut.iki.fi (85-76-33-40-nat.elisa-mobile.fi [85.76.33.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: aaro.koskinen)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4grhgX070kz49PsJ;
-	Thu, 02 Jul 2026 19:10:31 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1783008638;
+	by meesny.iki.fi (Postfix) with ESMTPSA id 4grhmY5zzmzyPv;
+	Thu, 02 Jul 2026 19:14:53 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+	t=1783008900;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8jmZgztIIly2FUdl37Dv57x8nlSrD2AEgsf/lT8MqIo=;
-	b=BmR2ZOGq0zLpNVmcqR5zpnMDhTuEs+AqMjK8nRypye1kcRcOBFfI9g3Vr7x1RCQb4wC4Zi
-	H6lEpGi8J4l0VYs8+LKj4sWQIHL2qT6e2INXatvWge0WR9Tg/njNwn+O9SbvU0wQNanV/S
-	NHI8lTXTUbFXQ3izU6CUMdqdOqaDbFo7Gn8XBq3w0XFujsELPinEDGCGHcD3JZhuP5rPpm
-	1psGxN3+NBfybXLGoXj6KBBU4XhVCOllBq0m+NlLcLtebfTNIVozccVh9PUiMOk+a+0sMR
-	CBENneNoPTWofKBdNRZPGwUkp/Ty59uPZ1PB+Cf9tJNmgrNUbIBwsQlpWCnWaQ==
-ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=lahtoruutu; cv=none; t=1783008638;
-	b=lWez1SUD0tdkslnGi2ll3DVes9+u4nS+QhqhSKmfv6REpb1eb76dIcLiV6qZKtA7jqLcXW
-	ukMb/ATykhxr/mvydjrb0XAIXBgApCFALNiS/8Pw6HYtA5dAaBM2lWFhd+8yBfgI1yfaJU
-	H81fdR5+CGw3R/kzNJZmsf1DvKAsGQdQV9lalPLvAoFdsqI94MCT+A9K3lzCyiF799BCn9
-	og4RIOcnEfTK++eYay3AejDRmERTbKTcUmdkPeQTQ/D4mwy44yV6y6q/2Adone4RksuDu7
-	rWxMu547xIfH0MV9bQsP7KWTkF56A5GaDxj8EHU+88FOVGdL5p4tCPZJgC7+1A==
+	bh=lXdo5/aahv4y37zZlNB/IfEwUv0GT4AThr4Fpd6s7JI=;
+	b=Yvk0nudlf/4pq3Au1Uks0V+9tcCN/GI+dSgUijChIgoDgMOaPnOL/XMF36O32QGXRD1QGr
+	GKRya//cfZuycTMNb3zjQfUoK2Msl4cdYq/iuahrgx3oYdUNZn9wLGS4qTQvat9M5y1cel
+	Mne/c18kqwv9jM5WRXZFB0ARJ2F6mmU=
+ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=meesny; cv=none; t=1783008900;
+	b=tQgfVBlCUVAE3oRixcWlGPb9npGhAnJfJjr2NT9mwmBZHQQiOi6hAfJ6D/yG4/wSKFg9Ny
+	GcsJpz5AlZydwxoyJSemflTB0HVUB0bs6M97rKKdXGRXthqML4r5zs999GoO/QDTWomDmn
+	jZOJp1JBG3q0jWk+iYzvvsfW8KUWHfg=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1783008638;
+	s=meesny; t=1783008900;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8jmZgztIIly2FUdl37Dv57x8nlSrD2AEgsf/lT8MqIo=;
-	b=KvmvzpvYQsoklaoNQ3hPx7CbqrTDPsWGTxNrqZLwCwy+p2uZAfhWB0cFCXKeRaToERiqb/
-	l5tP567fWl+QyQJy/Mu3U07kJWlY0uISvTJ5awCkpeHmoahu5pYor2LDiuDO1RSgPUohLI
-	LDr3EJ9mo52Dr8qyC6hyd3xpwG9U0jEWuH3E2hsty7fURQRei4CNh7FKYekBwaTHuh21FY
-	wX3Iia545IKz3eCch+TWUijnr1xfAg2eA0CQbf4yrWy/gQaEQZxYnTmqVEB/gmepmrQn+H
-	OFC3aTg1AM+6hu6+CySHOXcgbqgotYpucD6AJMfheZV65+K+8Y3ogNs9EZBuog==
+	bh=lXdo5/aahv4y37zZlNB/IfEwUv0GT4AThr4Fpd6s7JI=;
+	b=ScD9E2eIwHcftb3jnTP9LYPe0rS9dNpgP5CpiqJdCAzJsoYMFBTsWz2VQqgznRGdYHOevi
+	WJ6kShnTFLQGkdkfMPJRHKP7t3oh6V18YjTILovTXJdRa7SdRYWJCi+cjMCNvgKVU0789h
+	O1B/P0HxT0pXmah+56ZVgOh4k8+n6qU=
 ARC-Authentication-Results: i=1;
 	ORIGINATING;
 	auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-Date: Thu, 2 Jul 2026 19:10:28 +0300
+Date: Thu, 2 Jul 2026 19:14:51 +0300
 From: Aaro Koskinen <aaro.koskinen@iki.fi>
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
@@ -86,10 +80,10 @@ Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
 	Tony Lindgren <tony@atomide.com>, Vladimir Zapolskiy <vz@mleia.com>,
 	Will Deacon <will@kernel.org>,
 	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 01/19] ARM: use CONFIG_AEABI by default everywhere
-Message-ID: <akaNdDa1U0da7kfI@roadster.musicnaut.iki.fi>
+Subject: Re: [PATCH v2 03/19] ARM: rework ARM11 CPU selection logic
+Message-ID: <akaOe1waglVC5ZQT@roadster.musicnaut.iki.fi>
 References: <20260701212353.2196041-1-arnd@kernel.org>
- <20260701212353.2196041-2-arnd@kernel.org>
+ <20260701212353.2196041-4-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -98,640 +92,212 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260701212353.2196041-2-arnd@kernel.org>
+In-Reply-To: <20260701212353.2196041-4-arnd@kernel.org>
 
-Hi,
-
-On Wed, Jul 01, 2026 at 11:23:35PM +0200, Arnd Bergmann wrote:
+On Wed, Jul 01, 2026 at 11:23:37PM +0200, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> On ARMv4 and ARMv5, the default is still to build for OABI, with
-> CONFIG_AEABI disabled, even though distros and toolchains no longer
-> support OABI as a target.
+> Support for SMP on ARM1136r0 has been broken for a while, and nobody
+> is working on fixing it. I had a plan to change ARMv6 support to no
+> longer coexist in a common kernel with ARMv7 CPUs but instead ARMv5 and
+> below. This would have addressed the problem, but after a recent mailing
+> list discussion, we concluded that an easier approach is to just forbid
+> ARM1136r0 CPU support on SMP-enabled kernels.
 > 
-> Change the default to EABI for all architecture levels and change
-> the defconfig entries as follows:
+> This mainly affects users of the Nokia N800/N810 tablets using an
+> OMAP2420 SoC, which is the only commercial product with an ARM1136r0
+> that is still supported by the kernel.
 > 
->  - All machines that used to explicitly enable EABI can drop that line now
->  - Machines that are likely to actually use old distros and had NWFPE
->    enabled in combination with OABI (rpc, footrbridge, netwinder,
->    assabet, neponset) explicitly turn it on now.
->  - Machines that already had both EABI and NWFPE disabled in defconfig
->    (at91_dt, collie, ep93xx, gemini, h3600, imx_v4_v5, integrator, jornada,
->    moxart, multi_v4t, omap1) were likely not usable with either OABI or
->    EABI and now use EABI instead implicitly, making it more likely that
->    they could work.
+> The other machines that are still in the same hardware catogory are:
 > 
+>  - TI OMAP2420 H4 reference board
+>  - TI OMAP2430 SDP software development platform
+>  - Freescale/NXP i.MX31 Lite Development Kit
+>  - Buglabs i.MX31 Bug 1.x prototype
+>  - Arm Integrator/AP with CM1136JF-S core module
+> 
+> To my knowledge, none of these have any actual users aside from
+> reference boards being used more easily test the platforms.
+> 
+> There are also a few ARM1136r1 machines, which implement the
+> ARMv6K SMP support (barriers, atomics and TLS):
+> 
+>  - Eukrea CPUIMX35 reference platform
+>  - Freescale/NXP i.MX35 Product Development Kit
+>  - ARM Integrator/CP/IM-LT3 with ARM1136J Core Tile
+>  - ARM Realview/EB with ARM1136J Core Tile
+> 
+> Again, these are mainly reference implementations rather than
+> actual products, but since they support ARMv6K, they should
+> continue to work correctly in SMP-enabled kernels. For the
+> ARM Core Tile, I have not found a datasheet but instead use
+> the revision based on what the respective virtual models
+> report.
+> 
+> All the other ARMv6 platforms use an ARM1176 with ARMv6K,
+> VMSAv7 and Trustzone support.
+> 
+> To avoid the broken configuration, annotate the ARM1136 based
+> machines with specific CPU_ARM1136R0 or CPU_ARM1136R2 symbols
+> in Kconfig and make the r0 variants depend on !SMP.
+> 
+> Link: https://lore.kernel.org/linux-arm-kernel/2831c5a6-cfbf-4fe0-b51c-0396e5b0aeb7@app.fastmail.com/T/
 > Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Acked-by: Aaro Koskinen <aaro.koskinen@iki.fi> # OMAP
 
 > ---
->  arch/arm/Kconfig                        | 15 ++++++---------
->  arch/arm/configs/am200epdkit_defconfig  |  1 -
->  arch/arm/configs/aspeed_g4_defconfig    |  1 -
->  arch/arm/configs/assabet_defconfig      |  1 +
->  arch/arm/configs/at91_dt_defconfig      |  1 -
->  arch/arm/configs/axm55xx_defconfig      |  1 -
->  arch/arm/configs/bcm2835_defconfig      |  1 -
->  arch/arm/configs/clps711x_defconfig     |  1 -
->  arch/arm/configs/collie_defconfig       |  1 -
->  arch/arm/configs/davinci_all_defconfig  |  1 -
->  arch/arm/configs/dove_defconfig         |  1 -
->  arch/arm/configs/ep93xx_defconfig       |  1 -
->  arch/arm/configs/footbridge_defconfig   |  1 +
->  arch/arm/configs/gemini_defconfig       |  1 -
->  arch/arm/configs/h3600_defconfig        |  1 -
->  arch/arm/configs/hisi_defconfig         |  1 -
->  arch/arm/configs/imx_v4_v5_defconfig    |  1 -
->  arch/arm/configs/integrator_defconfig   |  1 -
->  arch/arm/configs/ixp4xx_defconfig       |  1 -
->  arch/arm/configs/jornada720_defconfig   |  1 -
->  arch/arm/configs/keystone_defconfig     |  1 -
->  arch/arm/configs/lpc32xx_defconfig      |  1 -
->  arch/arm/configs/mmp2_defconfig         |  1 -
->  arch/arm/configs/moxart_defconfig       |  1 -
->  arch/arm/configs/multi_v4t_defconfig    |  1 -
->  arch/arm/configs/multi_v5_defconfig     |  1 -
->  arch/arm/configs/mv78xx0_defconfig      |  2 --
->  arch/arm/configs/mvebu_v5_defconfig     |  1 -
->  arch/arm/configs/mxs_defconfig          |  1 -
->  arch/arm/configs/neponset_defconfig     |  1 +
->  arch/arm/configs/netwinder_defconfig    |  1 +
->  arch/arm/configs/nhk8815_defconfig      |  1 -
->  arch/arm/configs/omap1_defconfig        |  2 --
->  arch/arm/configs/orion5x_defconfig      |  2 --
->  arch/arm/configs/pxa168_defconfig       |  2 --
->  arch/arm/configs/pxa3xx_defconfig       |  2 --
->  arch/arm/configs/pxa910_defconfig       |  2 --
->  arch/arm/configs/pxa_defconfig          |  1 -
->  arch/arm/configs/rpc_defconfig          |  1 +
->  arch/arm/configs/spear13xx_defconfig    |  1 -
->  arch/arm/configs/spitz_defconfig        |  1 -
->  arch/arm/configs/versatile_defconfig    |  1 -
->  arch/arm/configs/vt8500_v6_v7_defconfig |  1 -
->  arch/arm/configs/wpcm450_defconfig      |  1 -
->  44 files changed, 11 insertions(+), 53 deletions(-)
+>  arch/arm/Kconfig.platforms      |  2 +-
+>  arch/arm/mach-imx/Kconfig       |  4 +++-
+>  arch/arm/mach-omap2/Kconfig     |  3 ++-
+>  arch/arm/mach-versatile/Kconfig | 10 +++++-----
+>  arch/arm/mm/Kconfig             | 24 +++++++++++++++++++++++-
+>  5 files changed, 34 insertions(+), 9 deletions(-)
 > 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 9187240a02db..ccc0114d30de 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -1153,17 +1153,14 @@ config ARM_PATCH_IDIV
->  config AEABI
->  	bool "Use the ARM EABI to compile the kernel" if !CPU_V7 && \
->  		!CPU_V7M && !CPU_V6 && !CPU_V6K && !CC_IS_CLANG
-> -	default CPU_V7 || CPU_V7M || CPU_V6 || CPU_V6K || CC_IS_CLANG
-> +	default y
+> diff --git a/arch/arm/Kconfig.platforms b/arch/arm/Kconfig.platforms
+> index 386eccc81868..2e118b65f93b 100644
+> --- a/arch/arm/Kconfig.platforms
+> +++ b/arch/arm/Kconfig.platforms
+> @@ -33,7 +33,7 @@ config ARCH_MULTI_V4_V5
+>  config ARCH_MULTI_V6
+>  	bool "ARMv6 based platforms (ARM11)"
+>  	select ARCH_MULTI_V6_V7
+> -	select CPU_V6K
+> +	select CPU_ARM1176
+>  
+>  config ARCH_MULTI_V7
+>  	bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
+> diff --git a/arch/arm/mach-imx/Kconfig b/arch/arm/mach-imx/Kconfig
+> index a361840d7a04..041e73ad203a 100644
+> --- a/arch/arm/mach-imx/Kconfig
+> +++ b/arch/arm/mach-imx/Kconfig
+> @@ -41,13 +41,15 @@ comment "ARM1136 platforms"
+>  
+>  config SOC_IMX31
+>  	bool "i.MX31 support"
+> -	select CPU_V6
+> +	depends on !SMP
+> +	select CPU_ARM1136R0
+>  	select MXC_AVIC
 >  	help
-> -	  This option allows for the kernel to be compiled using the latest
-> -	  ARM ABI (aka EABI).  This is only useful if you are using a user
-> -	  space environment that is also compiled with EABI.
-> +	  The Arm EABI is the default ABI on all modern Linux
-> +	  distributions, replacing the obsolete and "OABI" that was
-> +	  commonly used on ARMv4 distributions before ca. 2013.
+>  	  This enables support for Freescale i.MX31 processor
 >  
-> -	  Since there are major incompatibilities between the legacy ABI and
-> -	  EABI, especially with regard to structure member alignment, this
-> -	  option also changes the kernel syscall calling convention to
-> -	  disambiguate both ABIs and allow for backward compatibility support
-> -	  (selected with CONFIG_OABI_COMPAT).
-> +	  Everyone should enable this, as support for OABI user space
-> +	  was dropped in gcc-4.8 and most distributions after ca. 2013.
+>  config SOC_IMX35
+>  	bool "i.MX35 support"
+> +	select CPU_ARM1136R1
+>  	select MXC_AVIC
+>  	help
+>  	  This enables support for Freescale i.MX35 processor
+> diff --git a/arch/arm/mach-omap2/Kconfig b/arch/arm/mach-omap2/Kconfig
+> index f3f19bcfca2c..13987ffbba00 100644
+> --- a/arch/arm/mach-omap2/Kconfig
+> +++ b/arch/arm/mach-omap2/Kconfig
+> @@ -8,8 +8,9 @@ config OMAP_HWMOD
+>  config ARCH_OMAP2
+>  	bool "TI OMAP2"
+>  	depends on ARCH_MULTI_V6
+> +	depends on !SMP
+>  	select ARCH_OMAP2PLUS
+> -	select CPU_V6
+> +	select CPU_ARM1136R0
+>  	select OMAP_HWMOD
+>  	select SOC_HAS_OMAP2_SDRC
 >  
->  config OABI_COMPAT
->  	bool "Allow old ABI binaries to run with this kernel (EXPERIMENTAL)"
-> diff --git a/arch/arm/configs/am200epdkit_defconfig b/arch/arm/configs/am200epdkit_defconfig
-> index d8198592fe1b..b3f81237c6e1 100644
-> --- a/arch/arm/configs/am200epdkit_defconfig
-> +++ b/arch/arm/configs/am200epdkit_defconfig
-> @@ -7,7 +7,6 @@ CONFIG_EXPERT=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_PXA=y
->  CONFIG_ARCH_GUMSTIX=y
-> -CONFIG_AEABI=y
->  # CONFIG_OABI_COMPAT is not set
->  CONFIG_CMDLINE="console=ttyS0,115200n8 root=1f01 rootfstype=jffs2"
->  CONFIG_MODULES=y
-> diff --git a/arch/arm/configs/aspeed_g4_defconfig b/arch/arm/configs/aspeed_g4_defconfig
-> index 45d8738abb75..3dcb80157f77 100644
-> --- a/arch/arm/configs/aspeed_g4_defconfig
-> +++ b/arch/arm/configs/aspeed_g4_defconfig
-> @@ -22,7 +22,6 @@ CONFIG_KEXEC=y
->  CONFIG_ARCH_ASPEED=y
->  CONFIG_MACH_ASPEED_G4=y
->  CONFIG_VMSPLIT_2G=y
-> -CONFIG_AEABI=y
->  CONFIG_UACCESS_WITH_MEMCPY=y
->  # CONFIG_ATAGS is not set
->  CONFIG_JUMP_LABEL=y
-> diff --git a/arch/arm/configs/assabet_defconfig b/arch/arm/configs/assabet_defconfig
-> index 07ab9eaac4af..df63889b0c4c 100644
-> --- a/arch/arm/configs/assabet_defconfig
-> +++ b/arch/arm/configs/assabet_defconfig
-> @@ -5,6 +5,7 @@ CONFIG_ARCH_MULTI_V4=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_SA1100=y
->  CONFIG_SA1100_ASSABET=y
-> +# CONFIG_AEABI is not set
->  CONFIG_CMDLINE="mem=32M console=ttySA0,38400n8 initrd=0xc0800000,3M root=/dev/ram"
->  CONFIG_FPE_NWFPE=y
->  CONFIG_PM=y
-> diff --git a/arch/arm/configs/at91_dt_defconfig b/arch/arm/configs/at91_dt_defconfig
-> index e331242dece7..320eb27a6a2e 100644
-> --- a/arch/arm/configs/at91_dt_defconfig
-> +++ b/arch/arm/configs/at91_dt_defconfig
-> @@ -18,7 +18,6 @@ CONFIG_SOC_AT91SAM9=y
->  CONFIG_SOC_SAM9X60=y
->  CONFIG_SOC_SAM9X7=y
->  # CONFIG_ATMEL_CLOCKSOURCE_PIT is not set
-> -CONFIG_AEABI=y
->  CONFIG_UACCESS_WITH_MEMCPY=y
->  # CONFIG_ATAGS is not set
->  CONFIG_ARM_APPENDED_DTB=y
-> diff --git a/arch/arm/configs/axm55xx_defconfig b/arch/arm/configs/axm55xx_defconfig
-> index 0952e5e94c5e..12c59a4ee504 100644
-> --- a/arch/arm/configs/axm55xx_defconfig
-> +++ b/arch/arm/configs/axm55xx_defconfig
-> @@ -38,7 +38,6 @@ CONFIG_PCIE_AXXIA=y
->  CONFIG_SMP=y
->  CONFIG_NR_CPUS=16
->  CONFIG_HOTPLUG_CPU=y
-> -CONFIG_AEABI=y
->  CONFIG_OABI_COMPAT=y
->  CONFIG_HIGHMEM=y
->  CONFIG_ARM_APPENDED_DTB=y
-> diff --git a/arch/arm/configs/bcm2835_defconfig b/arch/arm/configs/bcm2835_defconfig
-> index 4a8ac09843d7..b469ecc36cf5 100644
-> --- a/arch/arm/configs/bcm2835_defconfig
-> +++ b/arch/arm/configs/bcm2835_defconfig
-> @@ -25,7 +25,6 @@ CONFIG_CRASH_DUMP=y
->  CONFIG_ARCH_MULTI_V6=y
->  CONFIG_ARCH_BCM=y
->  CONFIG_ARCH_BCM2835=y
-> -CONFIG_AEABI=y
->  CONFIG_SECCOMP=y
->  CONFIG_KEXEC=y
->  CONFIG_CPU_FREQ=y
-> diff --git a/arch/arm/configs/clps711x_defconfig b/arch/arm/configs/clps711x_defconfig
-> index f66d502ce2ef..7ba344e84c62 100644
-> --- a/arch/arm/configs/clps711x_defconfig
-> +++ b/arch/arm/configs/clps711x_defconfig
-> @@ -6,7 +6,6 @@ CONFIG_RD_LZMA=y
->  CONFIG_EXPERT=y
->  CONFIG_JUMP_LABEL=y
->  CONFIG_PARTITION_ADVANCED=y
-> -CONFIG_AEABI=y
->  # CONFIG_COREDUMP is not set
->  CONFIG_SLUB_TINY=y
->  CONFIG_NET=y
-> diff --git a/arch/arm/configs/collie_defconfig b/arch/arm/configs/collie_defconfig
-> index 578c6a4af620..165202960438 100644
-> --- a/arch/arm/configs/collie_defconfig
-> +++ b/arch/arm/configs/collie_defconfig
-> @@ -10,7 +10,6 @@ CONFIG_ARCH_MULTI_V4=y
->  CONFIG_ARCH_SA1100=y
->  CONFIG_SA1100_COLLIE=y
->  CONFIG_CMDLINE="noinitrd root=/dev/mtdblock2 rootfstype=jffs2 fbcon=rotate:1"
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_PM=y
->  # CONFIG_SWAP is not set
->  CONFIG_SLUB_TINY=y
-> diff --git a/arch/arm/configs/davinci_all_defconfig b/arch/arm/configs/davinci_all_defconfig
-> index 72703ef0c51c..e6fbe1f03920 100644
-> --- a/arch/arm/configs/davinci_all_defconfig
-> +++ b/arch/arm/configs/davinci_all_defconfig
-> @@ -17,7 +17,6 @@ CONFIG_ARCH_DAVINCI=y
->  CONFIG_ARCH_DAVINCI_DA850=y
->  CONFIG_DAVINCI_MUX_DEBUG=y
->  CONFIG_DAVINCI_MUX_WARNINGS=y
-> -CONFIG_AEABI=y
->  CONFIG_SECCOMP=y
->  CONFIG_ARM_APPENDED_DTB=y
->  CONFIG_ARM_ATAG_DTB_COMPAT=y
-> diff --git a/arch/arm/configs/dove_defconfig b/arch/arm/configs/dove_defconfig
-> index b6ed01216a62..08271e6719d7 100644
-> --- a/arch/arm/configs/dove_defconfig
-> +++ b/arch/arm/configs/dove_defconfig
-> @@ -7,7 +7,6 @@ CONFIG_EXPERT=y
->  CONFIG_ARCH_MULTI_V7=y
->  CONFIG_ARCH_DOVE=y
->  CONFIG_MACH_CM_A510=y
-> -CONFIG_AEABI=y
->  CONFIG_HIGHMEM=y
->  CONFIG_ARM_APPENDED_DTB=y
->  CONFIG_ARM_ATAG_DTB_COMPAT=y
-> diff --git a/arch/arm/configs/ep93xx_defconfig b/arch/arm/configs/ep93xx_defconfig
-> index ce41dc8c435c..6863d8fd7713 100644
-> --- a/arch/arm/configs/ep93xx_defconfig
-> +++ b/arch/arm/configs/ep93xx_defconfig
-> @@ -18,7 +18,6 @@ CONFIG_MACH_EDB9315=y
->  CONFIG_MACH_EDB9315A=y
->  CONFIG_MACH_TS72XX=y
->  CONFIG_MACH_VISION_EP9307=y
-> -CONFIG_AEABI=y
->  CONFIG_CMDLINE="console=ttyAM0,115200 root=/dev/nfs ip=bootp"
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
-> diff --git a/arch/arm/configs/footbridge_defconfig b/arch/arm/configs/footbridge_defconfig
-> index 5f6963687ee4..589b7b1df8c6 100644
-> --- a/arch/arm/configs/footbridge_defconfig
-> +++ b/arch/arm/configs/footbridge_defconfig
-> @@ -11,6 +11,7 @@ CONFIG_ARCH_EBSA285_HOST=y
->  CONFIG_ARCH_NETWINDER=y
->  CONFIG_FPE_NWFPE=y
->  CONFIG_FPE_NWFPE_XP=y
-> +# CONFIG_AEABI is not set
->  CONFIG_MODULES=y
->  CONFIG_PARTITION_ADVANCED=y
->  CONFIG_ACORN_PARTITION=y
-> diff --git a/arch/arm/configs/gemini_defconfig b/arch/arm/configs/gemini_defconfig
-> index 7b1daec630cb..5860b2fe7d1f 100644
-> --- a/arch/arm/configs/gemini_defconfig
-> +++ b/arch/arm/configs/gemini_defconfig
-> @@ -11,7 +11,6 @@ CONFIG_KEXEC=y
->  CONFIG_ARCH_MULTI_V4=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_GEMINI=y
-> -CONFIG_AEABI=y
->  CONFIG_HIGHMEM=y
->  CONFIG_CMDLINE="console=ttyS0,115200n8"
->  CONFIG_PM=y
-> diff --git a/arch/arm/configs/h3600_defconfig b/arch/arm/configs/h3600_defconfig
-> index 4e272875c797..0923d331190a 100644
-> --- a/arch/arm/configs/h3600_defconfig
-> +++ b/arch/arm/configs/h3600_defconfig
-> @@ -9,7 +9,6 @@ CONFIG_ARCH_MULTI_V4=y
->  CONFIG_ARCH_SA1100=y
->  CONFIG_SA1100_H3600=y
->  # CONFIG_CPU_FREQ_STAT is not set
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_MODULES=y
->  CONFIG_NET=y
->  CONFIG_UNIX=y
-> diff --git a/arch/arm/configs/hisi_defconfig b/arch/arm/configs/hisi_defconfig
-> index dde9cff951d4..c89b743784ca 100644
-> --- a/arch/arm/configs/hisi_defconfig
-> +++ b/arch/arm/configs/hisi_defconfig
-> @@ -10,7 +10,6 @@ CONFIG_ARCH_HIP04=y
->  CONFIG_ARCH_HIX5HD2=y
->  CONFIG_SMP=y
->  CONFIG_NR_CPUS=16
-> -CONFIG_AEABI=y
->  CONFIG_HIGHMEM=y
->  CONFIG_ARM_APPENDED_DTB=y
->  CONFIG_ARM_ATAG_DTB_COMPAT=y
-> diff --git a/arch/arm/configs/imx_v4_v5_defconfig b/arch/arm/configs/imx_v4_v5_defconfig
-> index 9139d1784c70..871e93dd65b5 100644
-> --- a/arch/arm/configs/imx_v4_v5_defconfig
-> +++ b/arch/arm/configs/imx_v4_v5_defconfig
-> @@ -15,7 +15,6 @@ CONFIG_ARCH_MXC=y
->  CONFIG_SOC_IMX1=y
->  CONFIG_SOC_IMX25=y
->  CONFIG_SOC_IMX27=y
-> -CONFIG_AEABI=y
->  CONFIG_PM_DEBUG=y
->  CONFIG_KPROBES=y
->  CONFIG_MODULES=y
-> diff --git a/arch/arm/configs/integrator_defconfig b/arch/arm/configs/integrator_defconfig
-> index 61711d4bbf74..ba38ec810a61 100644
-> --- a/arch/arm/configs/integrator_defconfig
-> +++ b/arch/arm/configs/integrator_defconfig
-> @@ -13,7 +13,6 @@ CONFIG_ARCH_INTEGRATOR=y
->  CONFIG_ARCH_INTEGRATOR_AP=y
->  CONFIG_INTEGRATOR_IMPD1=y
->  CONFIG_ARCH_INTEGRATOR_CP=y
-> -CONFIG_AEABI=y
->  # CONFIG_ATAGS is not set
->  CONFIG_CMDLINE="console=ttyAM0,38400n8 root=/dev/nfs ip=bootp"
->  CONFIG_CPU_FREQ=y
-> diff --git a/arch/arm/configs/ixp4xx_defconfig b/arch/arm/configs/ixp4xx_defconfig
-> index 418ef909572b..122ca7354986 100644
-> --- a/arch/arm/configs/ixp4xx_defconfig
-> +++ b/arch/arm/configs/ixp4xx_defconfig
-> @@ -9,7 +9,6 @@ CONFIG_EXPERT=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_IXP4XX=y
->  CONFIG_CPU_BIG_ENDIAN=y
-> -CONFIG_AEABI=y
->  CONFIG_CMDLINE="console=ttyS0,115200"
->  CONFIG_STRICT_KERNEL_RWX=y
->  CONFIG_STRICT_MODULE_RWX=y
-> diff --git a/arch/arm/configs/jornada720_defconfig b/arch/arm/configs/jornada720_defconfig
-> index d57285cfefb2..0ebddd083b36 100644
-> --- a/arch/arm/configs/jornada720_defconfig
-> +++ b/arch/arm/configs/jornada720_defconfig
-> @@ -5,7 +5,6 @@ CONFIG_ARCH_MULTI_V4=y
->  CONFIG_ARCH_SA1100=y
->  CONFIG_SA1100_JORNADA720=y
->  CONFIG_SA1100_JORNADA720_SSP=y
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_PM=y
->  CONFIG_MODULES=y
->  CONFIG_NET=y
-> diff --git a/arch/arm/configs/keystone_defconfig b/arch/arm/configs/keystone_defconfig
-> index b0cadd878152..af91b9a420c9 100644
-> --- a/arch/arm/configs/keystone_defconfig
-> +++ b/arch/arm/configs/keystone_defconfig
-> @@ -22,7 +22,6 @@ CONFIG_PCI_KEYSTONE=y
->  CONFIG_SMP=y
->  CONFIG_HOTPLUG_CPU=y
->  CONFIG_ARM_PSCI=y
-> -CONFIG_AEABI=y
->  CONFIG_HIGHMEM=y
->  CONFIG_VFP=y
->  CONFIG_NEON=y
-> diff --git a/arch/arm/configs/lpc32xx_defconfig b/arch/arm/configs/lpc32xx_defconfig
-> index b9e2e603cd95..c0b45eea1b0f 100644
-> --- a/arch/arm/configs/lpc32xx_defconfig
-> +++ b/arch/arm/configs/lpc32xx_defconfig
-> @@ -10,7 +10,6 @@ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
->  CONFIG_EXPERT=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_LPC32XX=y
-> -CONFIG_AEABI=y
->  CONFIG_ARM_APPENDED_DTB=y
->  CONFIG_ARM_ATAG_DTB_COMPAT=y
->  CONFIG_CMDLINE="console=ttyS0,115200n81 root=/dev/ram0"
-> diff --git a/arch/arm/configs/mmp2_defconfig b/arch/arm/configs/mmp2_defconfig
-> index 0ea608c75f22..2ca166d4e78f 100644
-> --- a/arch/arm/configs/mmp2_defconfig
-> +++ b/arch/arm/configs/mmp2_defconfig
-> @@ -4,7 +4,6 @@ CONFIG_PREEMPT=y
->  CONFIG_LOG_BUF_SHIFT=14
->  # CONFIG_BLK_DEV_BSG is not set
->  CONFIG_ARCH_MMP=y
-> -CONFIG_AEABI=y
->  CONFIG_MACH_MMP2_DT=y
->  CONFIG_CMDLINE="root=/dev/nfs rootfstype=nfs nfsroot=192.168.1.100:/nfsroot/ ip=192.168.1.101:192.168.1.100::255.255.255.0::eth0:on console=ttyS2,38400 mem=128M user_debug=255 earlyprintk"
->  CONFIG_VFP=y
-> diff --git a/arch/arm/configs/moxart_defconfig b/arch/arm/configs/moxart_defconfig
-> index e2d9f3610063..d97d9ea5c34d 100644
-> --- a/arch/arm/configs/moxart_defconfig
-> +++ b/arch/arm/configs/moxart_defconfig
-> @@ -16,7 +16,6 @@ CONFIG_ARCH_MULTI_V4=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_MOXART=y
->  CONFIG_MACH_UC7112LX=y
-> -CONFIG_AEABI=y
->  # CONFIG_ATAGS is not set
->  CONFIG_ARM_APPENDED_DTB=y
->  # CONFIG_SWAP is not set
-> diff --git a/arch/arm/configs/multi_v4t_defconfig b/arch/arm/configs/multi_v4t_defconfig
-> index 1a86dc305523..14c93bb59ad6 100644
-> --- a/arch/arm/configs/multi_v4t_defconfig
-> +++ b/arch/arm/configs/multi_v4t_defconfig
-> @@ -17,7 +17,6 @@ CONFIG_INTEGRATOR_IMPD1=y
->  CONFIG_INTEGRATOR_CM720T=y
->  CONFIG_INTEGRATOR_CM920T=y
->  CONFIG_INTEGRATOR_CM922T_XA10=y
-> -CONFIG_AEABI=y
->  # CONFIG_ATAGS is not set
->  CONFIG_CPU_IDLE=y
->  CONFIG_ARM_CPUIDLE=y
-> diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
-> index d237ea8ea327..7eab9fb9ffc4 100644
-> --- a/arch/arm/configs/multi_v5_defconfig
-> +++ b/arch/arm/configs/multi_v5_defconfig
-> @@ -36,7 +36,6 @@ CONFIG_MACH_NET2BIG=y
->  CONFIG_MACH_MSS2_DT=y
->  CONFIG_ARCH_SUNXI=y
->  CONFIG_ARCH_VERSATILE=y
-> -CONFIG_AEABI=y
->  CONFIG_HIGHMEM=y
->  CONFIG_ARM_APPENDED_DTB=y
->  CONFIG_ARM_ATAG_DTB_COMPAT=y
-> diff --git a/arch/arm/configs/mv78xx0_defconfig b/arch/arm/configs/mv78xx0_defconfig
-> index 1174893102bd..823f7963b8b3 100644
-> --- a/arch/arm/configs/mv78xx0_defconfig
-> +++ b/arch/arm/configs/mv78xx0_defconfig
-> @@ -11,9 +11,7 @@ CONFIG_ARCH_MULTI_V5=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_MV78XX0=y
->  CONFIG_MACH_TERASTATION_WXL=y
-> -CONFIG_AEABI=y
->  CONFIG_HIGHMEM=y
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_VFP=y
->  CONFIG_KPROBES=y
->  CONFIG_MODULES=y
-> diff --git a/arch/arm/configs/mvebu_v5_defconfig b/arch/arm/configs/mvebu_v5_defconfig
-> index 781f8f72df5f..0709a5e66bb5 100644
-> --- a/arch/arm/configs/mvebu_v5_defconfig
-> +++ b/arch/arm/configs/mvebu_v5_defconfig
-> @@ -22,7 +22,6 @@ CONFIG_MACH_MV2120=y
->  CONFIG_MACH_D2NET_DT=y
->  CONFIG_MACH_NET2BIG=y
->  CONFIG_MACH_MSS2_DT=y
-> -CONFIG_AEABI=y
->  CONFIG_HIGHMEM=y
->  CONFIG_ARM_APPENDED_DTB=y
->  CONFIG_ARM_ATAG_DTB_COMPAT=y
-> diff --git a/arch/arm/configs/mxs_defconfig b/arch/arm/configs/mxs_defconfig
-> index 603fb003b223..b0b5eb33d01e 100644
-> --- a/arch/arm/configs/mxs_defconfig
-> +++ b/arch/arm/configs/mxs_defconfig
-> @@ -17,7 +17,6 @@ CONFIG_BLK_DEV_INITRD=y
->  CONFIG_PERF_EVENTS=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_MXS=y
-> -CONFIG_AEABI=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_FORCE_LOAD=y
->  CONFIG_MODULE_UNLOAD=y
-> diff --git a/arch/arm/configs/neponset_defconfig b/arch/arm/configs/neponset_defconfig
-> index 8a5dcca743fc..c3010a4d93a8 100644
-> --- a/arch/arm/configs/neponset_defconfig
-> +++ b/arch/arm/configs/neponset_defconfig
-> @@ -11,6 +11,7 @@ CONFIG_ZBOOT_ROM_BSS=0xc1000000
->  CONFIG_ZBOOT_ROM=y
->  CONFIG_CMDLINE="console=ttySA0,38400n8 cpufreq=221200 rw root=/dev/mtdblock2 mtdparts=sa1100:512K(boot),1M(kernel),2560K(initrd),4M(root) mem=32M noinitrd initrd=0xc0800000,3M"
->  CONFIG_FPE_NWFPE=y
-> +# CONFIG_AEABI is not set
->  CONFIG_PM=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
-> diff --git a/arch/arm/configs/netwinder_defconfig b/arch/arm/configs/netwinder_defconfig
-> index e639e6ad02cb..7ff70439458d 100644
-> --- a/arch/arm/configs/netwinder_defconfig
-> +++ b/arch/arm/configs/netwinder_defconfig
-> @@ -4,6 +4,7 @@ CONFIG_ARCH_MULTI_V4=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_FOOTBRIDGE=y
->  CONFIG_ARCH_NETWINDER=y
-> +# CONFIG_AEABI is not set
->  CONFIG_DEPRECATED_PARAM_STRUCT=y
->  CONFIG_CMDLINE="root=0x801"
->  CONFIG_FPE_NWFPE=y
-> diff --git a/arch/arm/configs/nhk8815_defconfig b/arch/arm/configs/nhk8815_defconfig
-> index 696b4fbc2412..7a307bd93730 100644
-> --- a/arch/arm/configs/nhk8815_defconfig
-> +++ b/arch/arm/configs/nhk8815_defconfig
-> @@ -12,7 +12,6 @@ CONFIG_KALLSYMS_ALL=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_NOMADIK=y
->  CONFIG_MACH_NOMADIK_8815NHK=y
-> -CONFIG_AEABI=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
->  # CONFIG_SWAP is not set
-> diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
-> index 7bf58e8a5ab5..8d11ba724204 100644
-> --- a/arch/arm/configs/omap1_defconfig
-> +++ b/arch/arm/configs/omap1_defconfig
-> @@ -28,9 +28,7 @@ CONFIG_MACH_OMAP_PALMTE=y
->  CONFIG_MACH_SX1=y
->  CONFIG_MACH_NOKIA770=y
->  CONFIG_MACH_AMS_DELTA=y
-> -CONFIG_AEABI=y
->  CONFIG_CMDLINE="root=1f03 rootfstype=jffs2"
-> -CONFIG_FPE_NWFPE=y
->  # CONFIG_SUSPEND is not set
->  CONFIG_PM=y
->  CONFIG_MODULES=y
-> diff --git a/arch/arm/configs/orion5x_defconfig b/arch/arm/configs/orion5x_defconfig
-> index f5be2e26d9ae..d658d5e04e2d 100644
-> --- a/arch/arm/configs/orion5x_defconfig
-> +++ b/arch/arm/configs/orion5x_defconfig
-> @@ -20,10 +20,8 @@ CONFIG_MACH_TS409=y
->  CONFIG_MACH_TS78XX=y
->  CONFIG_MACH_MV2120=y
->  CONFIG_MACH_NET2BIG=y
-> -CONFIG_AEABI=y
->  CONFIG_ARM_APPENDED_DTB=y
->  CONFIG_ARM_ATAG_DTB_COMPAT=y
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_VFP=y
->  CONFIG_KPROBES=y
->  CONFIG_MODULES=y
-> diff --git a/arch/arm/configs/pxa168_defconfig b/arch/arm/configs/pxa168_defconfig
-> index 8cbca84fe33a..d6af01434f04 100644
-> --- a/arch/arm/configs/pxa168_defconfig
-> +++ b/arch/arm/configs/pxa168_defconfig
-> @@ -3,11 +3,9 @@ CONFIG_SYSVIPC=y
->  CONFIG_NO_HZ_IDLE=y
->  CONFIG_HIGH_RES_TIMERS=y
->  CONFIG_PREEMPT=y
-> -CONFIG_AEABI=y
->  CONFIG_LOG_BUF_SHIFT=14
->  CONFIG_ARCH_MMP=y
->  CONFIG_CMDLINE="root=/dev/nfs rootfstype=nfs nfsroot=192.168.2.100:/nfsroot/ ip=192.168.2.101:192.168.2.100::255.255.255.0::eth0:on console=ttyS0,115200 mem=128M"
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
->  CONFIG_MODULE_FORCE_UNLOAD=y
-> diff --git a/arch/arm/configs/pxa3xx_defconfig b/arch/arm/configs/pxa3xx_defconfig
-> index fb272e3a2337..2a777698d06f 100644
-> --- a/arch/arm/configs/pxa3xx_defconfig
-> +++ b/arch/arm/configs/pxa3xx_defconfig
-> @@ -7,9 +7,7 @@ CONFIG_KALLSYMS_ALL=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_PXA=y
->  CONFIG_MACH_PXA3XX_DT=y
-> -CONFIG_AEABI=y
->  CONFIG_CMDLINE="root=/dev/nfs rootfstype=nfs nfsroot=192.168.1.100:/nfsroot/ ip=192.168.1.101:192.168.1.100::255.255.255.0::eth0:on console=ttyS0,115200 mem=64M debug"
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_MODULES=y
->  CONFIG_NET=y
->  CONFIG_PACKET=y
-> diff --git a/arch/arm/configs/pxa910_defconfig b/arch/arm/configs/pxa910_defconfig
-> index 71ed0d73f8a9..9e7b11d1e723 100644
-> --- a/arch/arm/configs/pxa910_defconfig
-> +++ b/arch/arm/configs/pxa910_defconfig
-> @@ -10,8 +10,6 @@ CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
->  CONFIG_MODULE_FORCE_UNLOAD=y
->  # CONFIG_BLK_DEV_BSG is not set
-> -CONFIG_AEABI=y
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_NET=y
->  CONFIG_PACKET=y
->  CONFIG_UNIX=y
-> diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
-> index 66cc149c5ca4..396680975506 100644
-> --- a/arch/arm/configs/pxa_defconfig
-> +++ b/arch/arm/configs/pxa_defconfig
-> @@ -20,7 +20,6 @@ CONFIG_ARCH_GUMSTIX=y
->  CONFIG_PXA_SHARPSL=y
->  CONFIG_MACH_AKITA=y
->  CONFIG_MACH_BORZOI=y
-> -CONFIG_AEABI=y
->  CONFIG_ARCH_FORCE_MAX_ORDER=8
->  CONFIG_CMDLINE="root=/dev/ram0 ro"
->  CONFIG_CPU_FREQ=y
-> diff --git a/arch/arm/configs/rpc_defconfig b/arch/arm/configs/rpc_defconfig
-> index 46df453e224e..8d73ec43cb41 100644
-> --- a/arch/arm/configs/rpc_defconfig
-> +++ b/arch/arm/configs/rpc_defconfig
-> @@ -7,6 +7,7 @@ CONFIG_ARCH_MULTI_V4=y
->  CONFIG_ARCH_RPC=y
->  CONFIG_CPU_SA110=y
->  CONFIG_FPE_NWFPE=y
-> +# CONFIG_AEABI is not set
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
->  CONFIG_PARTITION_ADVANCED=y
-> diff --git a/arch/arm/configs/spear13xx_defconfig b/arch/arm/configs/spear13xx_defconfig
-> index 6712ae741c19..648260f536a1 100644
-> --- a/arch/arm/configs/spear13xx_defconfig
-> +++ b/arch/arm/configs/spear13xx_defconfig
-> @@ -9,7 +9,6 @@ CONFIG_MACH_SPEAR1340=y
->  CONFIG_SMP=y
->  # CONFIG_SMP_ON_UP is not set
->  # CONFIG_ARM_CPU_TOPOLOGY is not set
-> -CONFIG_AEABI=y
->  CONFIG_ARM_APPENDED_DTB=y
->  CONFIG_ARM_ATAG_DTB_COMPAT=y
->  CONFIG_VFP=y
-> diff --git a/arch/arm/configs/spitz_defconfig b/arch/arm/configs/spitz_defconfig
-> index 8f8a058294fb..d68a8f9cdad4 100644
-> --- a/arch/arm/configs/spitz_defconfig
-> +++ b/arch/arm/configs/spitz_defconfig
-> @@ -11,7 +11,6 @@ CONFIG_PXA_SHARPSL=y
->  CONFIG_MACH_AKITA=y
->  CONFIG_MACH_BORZOI=y
->  CONFIG_CMDLINE="console=ttyS0,115200n8 console=tty1 noinitrd root=/dev/mtdblock2 rootfstype=jffs2   debug"
-> -CONFIG_FPE_NWFPE=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
->  CONFIG_MODULE_FORCE_UNLOAD=y
-> diff --git a/arch/arm/configs/versatile_defconfig b/arch/arm/configs/versatile_defconfig
-> index 849118cbbb44..8e89debb5a5b 100644
-> --- a/arch/arm/configs/versatile_defconfig
-> +++ b/arch/arm/configs/versatile_defconfig
-> @@ -6,7 +6,6 @@ CONFIG_LOG_BUF_SHIFT=14
->  CONFIG_BLK_DEV_INITRD=y
->  # CONFIG_ARCH_MULTI_V7 is not set
->  CONFIG_ARCH_VERSATILE=y
-> -CONFIG_AEABI=y
->  CONFIG_OABI_COMPAT=y
->  CONFIG_CMDLINE="root=1f03 mem=32M"
->  CONFIG_FPE_NWFPE=y
-> diff --git a/arch/arm/configs/vt8500_v6_v7_defconfig b/arch/arm/configs/vt8500_v6_v7_defconfig
-> index 41607a84abc8..2925a1f1dbb6 100644
-> --- a/arch/arm/configs/vt8500_v6_v7_defconfig
-> +++ b/arch/arm/configs/vt8500_v6_v7_defconfig
-> @@ -8,7 +8,6 @@ CONFIG_ARM_ERRATA_720789=y
->  CONFIG_ARM_ERRATA_754322=y
->  CONFIG_ARM_ERRATA_775420=y
->  CONFIG_HAVE_ARM_ARCH_TIMER=y
-> -CONFIG_AEABI=y
->  CONFIG_HIGHMEM=y
->  CONFIG_HIGHPTE=y
->  CONFIG_ARM_APPENDED_DTB=y
-> diff --git a/arch/arm/configs/wpcm450_defconfig b/arch/arm/configs/wpcm450_defconfig
-> index 67b64a378166..9cb379077d70 100644
-> --- a/arch/arm/configs/wpcm450_defconfig
-> +++ b/arch/arm/configs/wpcm450_defconfig
-> @@ -13,7 +13,6 @@ CONFIG_PROFILING=y
->  CONFIG_ARCH_NPCM=y
->  CONFIG_ARCH_WPCM450=y
->  CONFIG_CPU_DCACHE_WRITETHROUGH=y
-> -CONFIG_AEABI=y
->  CONFIG_UACCESS_WITH_MEMCPY=y
->  # CONFIG_ATAGS is not set
->  CONFIG_ARM_APPENDED_DTB=y
+> diff --git a/arch/arm/mach-versatile/Kconfig b/arch/arm/mach-versatile/Kconfig
+> index 513618078440..de42da7de8c8 100644
+> --- a/arch/arm/mach-versatile/Kconfig
+> +++ b/arch/arm/mach-versatile/Kconfig
+> @@ -113,7 +113,8 @@ config INTEGRATOR_CM1136JFS
+>  	bool "Integrator/CM1136JF-S core module"
+>  	depends on ARCH_INTEGRATOR_AP
+>  	depends on ARCH_MULTI_V6
+> -	select CPU_V6
+> +	depends on !SMP
+> +	select CPU_ARM1136R0
+>  
+>  config ARCH_INTEGRATOR_CP
+>  	bool "Support Integrator/CP platform"
+> @@ -135,7 +136,7 @@ config INTEGRATOR_CTB36
+>  	bool "Integrator/CTB36 (ARM1136JF-S) core tile"
+>  	depends on ARCH_INTEGRATOR_CP
+>  	depends on ARCH_MULTI_V6
+> -	select CPU_V6
+> +	select CPU_ARM1136R1
+>  
+>  config ARCH_CINTEGRATOR
+>  	depends on ARCH_INTEGRATOR_CP
+> @@ -182,7 +183,7 @@ config MACH_REALVIEW_EB
+>  config REALVIEW_EB_ARM1136
+>  	bool "Support ARM1136J(F)-S Tile"
+>  	depends on MACH_REALVIEW_EB && ARCH_MULTI_V6
+> -	select CPU_V6
+> +	select CPU_ARM1136R1
+>  	help
+>  	  Enable support for the ARM1136 tile fitted to the
+>  	  Realview(R) Emulation Baseboard platform.
+> @@ -201,11 +202,10 @@ config REALVIEW_EB_A9MP
+>  	  Enable support for the Cortex-A9MPCore tile fitted to the
+>  	  Realview(R) Emulation Baseboard platform.
+>  
+> -# ARMv6 CPU without K extensions, but does have the new exclusive ops
+>  config MACH_REALVIEW_PB1176
+>  	bool "Support RealView(R) Platform Baseboard for ARM1176JZF-S"
+>  	depends on ARCH_MULTI_V6
+> -	select CPU_V6
+> +	select CPU_ARM1176
+>  	select HAVE_TCM
+>  	help
+>  	  Include support for the ARM(R) RealView(R) Platform Baseboard for
+> diff --git a/arch/arm/mm/Kconfig b/arch/arm/mm/Kconfig
+> index 871bd58d2ccc..f3d71e89a31f 100644
+> --- a/arch/arm/mm/Kconfig
+> +++ b/arch/arm/mm/Kconfig
+> @@ -376,6 +376,7 @@ config CPU_PJ4B
+>  # ARMv6
+>  config CPU_V6
+>  	bool
+> +	depends on !SMP
+>  	select CPU_32v6
+>  	select CPU_ABRT_EV6
+>  	select CPU_CACHE_V6
+> @@ -386,7 +387,6 @@ config CPU_V6
+>  	select CPU_PABRT_V6
+>  	select CPU_THUMB_CAPABLE
+>  	select CPU_TLB_V6 if MMU
+> -	select SMP_ON_UP if SMP
+>  
+>  # ARMv6k
+>  config CPU_V6K
+> @@ -403,6 +403,28 @@ config CPU_V6K
+>  	select CPU_THUMB_CAPABLE
+>  	select CPU_TLB_V6 if MMU
+>  
+> +config CPU_ARM1136R0
+> +	bool
+> +	select CPU_V6
+> +	depends on !SMP
+> +	help
+> +	  These early revisions of ARM1136 lack support for the
+> +	  ARMv6k extensions for multiprocessing.
+> +
+> +config CPU_ARM1136R1
+> +	bool
+> +	select CPU_V6K
+> +	help
+> +	  Later revisions of ARM1136 add ARMv6k (atomics, barriers
+> +	  and TLS register) in addition to the features from r0.
+> +
+> +config CPU_ARM1176
+> +	bool
+> +	select CPU_V6K
+> +	help
+> +	  ARM1176 implements ARMv6k, VMSAv7 and Trustzone in
+> +	  addition to the ARMv6 baseline.
+> +
+>  # ARMv7 and ARMv8 architectures
+>  config CPU_V7
+>  	bool
 > -- 
 > 2.39.5
 > 
