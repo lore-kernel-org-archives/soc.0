@@ -1,49 +1,48 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FB047DF98;
-	Thu,  2 Jul 2026 11:59:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0441948033B;
+	Thu,  2 Jul 2026 12:04:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782993594; cv=none; b=U3j3mAQT6aPTYOk7E/yTcGlkktu34EuajUJtQNrzrTyVOo2DpQ872IcvA/ytrBNmdgMNiL27q9FujX5HIAKHY/5WXNPgL7UGKMZyWCq+VaVsktexCsjTzfxwPr/5PZKSuTBdrSjlykYeNXV3NOC/YW2201A5gCZZdHgNvBFp0WU=
+	t=1782993865; cv=none; b=eLtOYos8blE75akMUucCLjQldND5QhS0QzcMqGE+o5Tf4mg9H/FTplh+A78600d/al+tZ0Y5VVnQKVpWVWL6+5tJ0uZYMHORqyh/9Udp8UpQhH+ac5IdkWb/yIkfWXKsGSYME1g2nozcbow5dvBrC83NJ3vkRcr40XVP/Rv2KOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782993594; c=relaxed/simple;
-	bh=q86oBJBMyt3Jflct1VzZWG2SIOHA8zzh+VLlvkOLNrk=;
+	s=arc-20240116; t=1782993865; c=relaxed/simple;
+	bh=Pd6yPROIcqgQQb5NBDN3gjv5kzMa5kXpEnZ2tXaWdss=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SXdNG/gUhZrDfEJhvd3vzSR/odioq3u9ONXQo5rf/r7FUm9bH3clnmu+KP13tmvoMTSmXlngK1SzVaGfx7Qo4BiUfXtadqvHQS1OJLjeapeBXGl8Sx5Qp9Ul1PvCpzgSwQ/a4bVj1BVVt+Tj5ylesfT+RewnEc7ncrk+sivlBLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netwinder.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OutkGWzx; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=SiLbOW5qUIZI2xnIo9ZAXjE/U68FgwKtXkbR/IloFySfTm0In47p/ACUiHEq0Ay5cR/jv8j5cIcTgYdPkv6WKGcic3fV2RRkc2XsIJYAcOIfJkQNxYKSSLGt1rVvOODVhaHTZ1WC6IpqgD0olOkAcwSCsnEnt1ig6lG0LHjpiJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netwinder.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=PVhVq355; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netwinder.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OutkGWzx"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="PVhVq355"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=V59F5LeFLLk0hiR6HVyBNdzVUev2yIANYpC8FeFlguU=; b=OutkGWzxXx7M8LQMhloU9ATZyR
-	Iye5/XEP+f1z6Ye/tHyHi5lEF/ahNeLVw90RxSDKUf/V4zXneTqBq4a/TpdchvDuT6OWw63K9JQl5
-	UC88leaNfUs/KCVMbpVo4JA5DvSldIrc55gfU99M8mUvCk/0/h2B91LAk1o8voXmHC0FQi3gh5t3V
-	reX40qWgzBSv1VnN5vPRtMp+Hdg0ETCOZX0tzJEjC6oV0FAYn617MBep2vePX8DfgLsdSCMNDi5w9
-	00vYAaj0iTlks2rTV3PKWpvxw9SF+4f4KxJ5ZjdS27MEUAPBiEp4DPY/I16G6UlXewWTytCCD2ZPi
-	bEtbk3Jg==;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=BgzVAKieF0iuF8m7CPEO5R6wFSEw4erbN+1y1QD9JfI=; b=PVhVq355kL01t7KbPUAo7JVQNS
+	T1R/S5qTGeOQXF41vW1jgbea/TV2hzPne/L0OFCMAKDU7uiR9W1uBVApuMkC9szw7GbFuV8IKFMzf
+	SbVzJkxb2yNOwx7RNLGisl6v7ORxIWD0nre6Pf40rDbcU0he+0h/2T+/YlREPvrYL9aMSmxV/hTln
+	eIFQ5E9eX9kFBONRRhjZQk4xK+K79+mlwjTKmwOlTOlDkkWSFTLnMICVIkVeudmDZVimcve7FnNfA
+	spJ2orvtiHDcAzPNvg/khlWSW7sOcUAUJNawYNrhZRAn6rcoqAEMVDtm3pnNifTLnOQ8eVfZg49Gu
+	aGMKQMiA==;
 Received: from [72.10.137.214] (helo=rfs.netwinder.org)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wfG4z-00000008Tfh-24bT;
-	Thu, 02 Jul 2026 11:59:42 +0000
-Date: Thu, 2 Jul 2026 07:59:40 -0400
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1wfG9K-00000003mN5-2Lu3;
+	Thu, 02 Jul 2026 12:04:10 +0000
+Date: Thu, 2 Jul 2026 08:04:05 -0400
 From: Ralph Siemsen <ralphs@netwinder.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>,
+	"A. Sverdlin" <alexander.sverdlin@siemens.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Andrew Lunn <andrew@lunn.ch>, Ard Biesheuvel <ardb@kernel.org>,
 	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Daniel Mack <daniel@zonque.org>,
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Frank Li <Frank.Li@nxp.com>,
+	Daniel Mack <daniel@zonque.org>, Frank Li <Frank.Li@nxp.com>,
 	Gregory Clement <gregory.clement@bootlin.com>,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
 	"Jeremy J. Peper" <jeremy@jeremypeper.com>,
@@ -61,44 +60,50 @@ Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
 	Stefan Agner <stefan@agner.ch>,
 	Stefan Wiehler <stefan.wiehler@nokia.com>,
 	Tony Lindgren <tony@atomide.com>, Vladimir Zapolskiy <vz@mleia.com>,
-	Will Deacon <will@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 09/19] ARM: update FPE_NWFPE help text
-Message-ID: <akZSrFc_8ra8sysq@rfs.lan>
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 07/19] ARM: update DEPRECATED_PARAM_STRUCT removal
+ timeline
+Message-ID: <akZTtfOqEftfT3ZS@rfs.lan>
 References: <20260701212353.2196041-1-arnd@kernel.org>
- <20260701212353.2196041-10-arnd@kernel.org>
+ <20260701212353.2196041-8-arnd@kernel.org>
+ <CADkSEUhO9nhzQZCS7ZziCtMna+ibfj9_PbSH5R+c0pyi5viCvg@mail.gmail.com>
+ <46f76624-ba35-427d-8a60-ec0fe39e5b8c@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20260701212353.2196041-10-arnd@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <ralphs@netwinder.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <46f76624-ba35-427d-8a60-ec0fe39e5b8c@app.fastmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <ralphs@netwinder.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-On Wed, Jul 01, 2026 at 11:23:43PM +0200, Arnd Bergmann wrote:
->
->The help text is seriously outdated and predates the introduction of
->VFP floating point units that were available as early as some ARM926
->based systems.
->
->Change the help text to reflect that this is now a legacy feature
->and that it will go away along with OABI support in the future.
+On Thu, Jul 02, 2026 at 07:36:02AM +0200, Arnd Bergmann wrote:
+>On Thu, Jul 2, 2026, at 02:54, Ethan Nelson-Moore wrote:
+>> Hi, Arnd,
+>>
+>> On Wed, Jul 1, 2026 at 2:25 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>>> This configuration option is for the older boot method that preceeded
+>>> ATAGS. This was scheduled for removal back in 2001, but the removal
+>>> never happened, presumably because nobody cared enough to actually do it,
+>>> not because there are any users left.
+>>
+>> Only netwinder_defconfig selects this option. Do the most recent
+>> NetWinder firmware versions actually need it? (LinusW, do you know
+>> this?) If not, can't we just drop it entirely?
 
-Indeed NWFPE was initially added in order to be able to execute 
-pre-existing binaries from even earlier systems.
+Support for ATAG was added in firmware v2.0.6 in roughly Jan 1999, 
+meanwhile the most recent firmware is v2.3.3 (still 20+ years old).
 
-Once soft-float became available in the toolchain, the netwinder
-userspace was rebuilt, and NWFPE became largely unnecessary.
+It is quite safe to disable support for the older parameter method.
 
-All of this happened in the early 2000's.
+>If all StrongARM platforms are on the way out after the LTS kernel,
+>I don't see a need to remove this any earlier, even if the chance
+>that it's still needed is low.
 
->Acked-by: Linus Walleij <linus.walleij@linaro.org>
->Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Acked-by: Ralph Siemsen <ralphs@netwinder.org>
+Also agree with this, might as well remove it all in one go.
 
 Regards,
 Ralph
