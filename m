@@ -1,43 +1,44 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47FA2DA76A;
-	Thu,  2 Jul 2026 13:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1060E494A00
+	for <soc@lists.linux.dev>; Thu,  2 Jul 2026 13:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782997749; cv=none; b=g8Dd1hAafRktsRQ0KECQxusi4MKUiGqYb+oUMTUiH8eGqlwMARU71H9pBGSxdMiONLYKvC4ryPss44e8kc8sB3xpprY9LHkF1cnjmMwxJBu9Ey4e8RF4VtLRqm9qyed0Sq6d3szT8tgYbThH24noqFy76Z2is678d4ytR93C1WA=
+	t=1782999400; cv=none; b=lsTNllKfrkS+ELJbxPFV6RvaeiTmBFU9U3X+LhvBN4QApKDxWbDVw0w1bjb1YuylnumGw7/qS++AKP0wHlAb6C3ormWbXPObrYwNYbWmNEta6KcIcqCw2BTKh++ulsG6LYPJgdOvb7XwCpH6AMVmGilwH8swttuhGmYckuW5Qn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782997749; c=relaxed/simple;
-	bh=YK/mBmUcEAg2EJ8C96n6if9d/idURjXdr+tTtd1QD+o=;
+	s=arc-20240116; t=1782999400; c=relaxed/simple;
+	bh=G0r1gSpNzYCC5w4KPjyWFDxoxMt6SYoTl6sDMjiexOQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=olaQVSilXCEzkw6JedxtZP8QT/K7fKBIynWRhE6nOiTdArgCT5X1YQ5E5c0IkEBuVzp+iBRzSKcCAhJQPKr0NrVSWBVFjtpBvFVkRcIvIaZRk55P5vFgoTOq4TRu34z+3Zlg/33Nveq42+Gsm1mHTRq0V4XfKJ0bc3GP+R0mL28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netwinder.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CFgaahyD; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netwinder.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=F5NI7Wmtv5hhKR56m7S+6kMU07TJZbCPXfLluL3bgxN2JG6fpOJn1m19E8dopwidKOkwi3fCgAIXJGf6vIyxUMOVut0mXz/MYR2x2tqzISCSXEunhgVkomP/69Ja2eUNcAfskfX/T0j5cfCgK6I7+1G4Tx6F+9CgCsAe3oAQwo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fdnvvopW; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CFgaahyD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=+vYmA9TUhXqQi+P/KHutU0J8y5jxe8n/jqKbfp/W04A=; b=CFgaahyDr92q2pMIzyy2szdZDW
-	FAEaMniUxNoCmqkGUlz5yEeBo5Xj4Vu0/6l03ElmA8QmMeKY3OMUAgSeZ2tgamd/ccqDXMDE2UBDZ
-	7jBqF7EJcbwXofEDcMFeOph0pQBMoIkItaNHafrgV4KFhfyI3MdnxqMPqbdrAVrASPOV+9NsBZRyx
-	h5PlWcFvaz/6mIZbePG4xhheF0vRWR7U9LQiRXYnMpzUWLTrLFbgp+U3Ss32OG+fxmEHDVxVuPms7
-	DFxEIJOngxtWwoYCT+W4jcXXSmKjYEwxoQzI4yPHpCC8cNjOeQbS20BJJpE5565+uLFbf3Q5mDHd1
-	jzgG47pg==;
-Received: from [72.10.137.214] (helo=rfs.netwinder.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1wfHA0-00000003qf1-0h0Z;
-	Thu, 02 Jul 2026 13:08:56 +0000
-Date: Thu, 2 Jul 2026 09:08:51 -0400
-From: Ralph Siemsen <ralphs@netwinder.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fdnvvopW"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 17D67C4FEDD;
+	Thu,  2 Jul 2026 13:36:49 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A291A5FF03;
+	Thu,  2 Jul 2026 13:36:37 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 39A7B104C956E;
+	Thu,  2 Jul 2026 15:36:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1782999396; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=a16tm2NhiTne+1lXjXJlhQ7Tf5Powst6myZXNs7qA7E=;
+	b=fdnvvopWgqbtWtEz8WhUMnX3zY5v2cAFM43T83AQuwA64vNtGODqt4NZPDIvSsuUlkeSme
+	SanI3IYyxCzw0kC/TyM5ohh6qYWQYiQUN0BAI+0nURDJRIjbvmSzh75so1xY2pjXim31jP
+	vgEOZmHmT2RaRs9rDytbXenO1xnkwu/Y8VQxufMEN+XwzWBnlXwwv2hux2sdU1BRBwK6DY
+	KzSOF9729sQLYwBw4kLGd2kA0md4BbmxEmFtYf2vnXaYpfwKdWhTbGIFezLqW6MCMjBRKz
+	caA8LVxvEO1adRsqqEsV6ChzIkz6/9As0UGIEOzAIGEAtePElPtFH8Uz7inO3w==
+Date: Thu, 2 Jul 2026 15:36:26 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
 	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
 	Aaro Koskinen <aaro.koskinen@iki.fi>,
 	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Andrew Lunn <andrew@lunn.ch>, Ard Biesheuvel <ardb@kernel.org>,
 	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
@@ -63,78 +64,174 @@ Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
 	Tony Lindgren <tony@atomide.com>, Vladimir Zapolskiy <vz@mleia.com>,
 	Will Deacon <will@kernel.org>,
 	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 16/19] ARM: mark footbridge as deprecated
-Message-ID: <akZi2QajWgg6qgGB@rfs.lan>
+Subject: Re: [PATCH v2 02/19] ARM: limit OABI support to StrongARM CPUs
+Message-ID: <20260702133626d12c29ad@mail.local>
 References: <20260701212353.2196041-1-arnd@kernel.org>
- <20260701212353.2196041-17-arnd@kernel.org>
+ <20260701212353.2196041-3-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260701212353.2196041-17-arnd@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <ralphs@netwinder.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20260701212353.2196041-3-arnd@kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Jul 01, 2026 at 11:23:50PM +0200, Arnd Bergmann wrote:
->
->Along with RiscPC and SA1100, these are the last remaining Intel StrongARM
->machines. The Corel NetWinder used to be particular popular in the late
->1990s, but was discontinued during the bankruptcy of rebel.com in 2001.
->The other machine is the DEC (later Intel) EBSA285 evaluation board that
->was made in small numbers in 1997 for software developers.
->
->The footbridge/netwinder platform was the main target for the first Debian
->2.0 "Hamm" release on the Arm architecture back in 1998, but was dropped
->in Debian 6.0 "Squeeze" in 2011, which only supported ARMv4T and higher
->with the EABI based ports as ARMv4 hardware had fallen already out of
->use by that time.
->
->Link: http://netwinder.org/
->Cc: Linus Walleij <linus.walleij@linaro.org>
->Cc: Russell King <linux@armlinux.org.uk>
->Cc: Ralph Siemsen <ralph.siemsen@linaro.org>
->Acked-by: Linus Walleij <linus.walleij@linaro.org>
->Acked-by: Marc Zyngier <maz@kernel.org>
->Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->---
-> arch/arm/mach-footbridge/Kconfig | 7 +++++--
-> 1 file changed, 5 insertions(+), 2 deletions(-)
->
->diff --git a/arch/arm/mach-footbridge/Kconfig b/arch/arm/mach-footbridge/Kconfig
->index 78189997caa1..96a74d447028 100644
->--- a/arch/arm/mach-footbridge/Kconfig
->+++ b/arch/arm/mach-footbridge/Kconfig
->@@ -1,6 +1,6 @@
-> # SPDX-License-Identifier: GPL-2.0-only
-> menuconfig ARCH_FOOTBRIDGE
->-	bool "FootBridge Implementations"
->+	bool "FootBridge Implementations (DEPRECATED)"
-> 	depends on ARCH_MULTI_V4 && !(ARCH_MULTI_V4T || ARCH_MULTI_V5)
-> 	depends on !(ARCH_MOXART || ARCH_GEMINI || ARCH_SA1100)
-> 	depends on ATAGS
->@@ -12,7 +12,10 @@ menuconfig ARCH_FOOTBRIDGE
-> 	select NEED_MACH_MEMORY_H
-> 	help
-> 	  Support for systems based on the DC21285 companion chip
->-	  ("FootBridge"), such as the Simtec CATS and the Rebel NetWinder.
->+	  ("FootBridge"), used in the EBSA285 and the Rebel NetWinder.
->+
->+	  Support for these machines will go away in 2027,
->+	  unless there are any remaining users that speak up.
->
-> if ARCH_FOOTBRIDGE
->
+On 01/07/2026 23:23:36+0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> As discussed on the mailing lists, there is no way to build OABI userspace
+> binaries any more since gcc-4.8, and now support is also getting dropped in
+> binutils, which will make it impossible to build pure OABI kernels at some
+> point in the future.
+> 
+> I found no evidence of anyone still sing OABI userspace on embedded systems
+> that keep getting kernel updates, but there are a few desktop-class machines
+> that date back to the 1990s using Intel StrongARM processors that were
+> supported by old versions of Debian, Red Hat or the official Corel
+> Netwinder distribution.
+> 
+> Add a much stricter Kconfig dependency for both native OABI and OABI_COMPAT
+> enabled kernels, only allowing either of them to be selected when building
+> a kernel that targets a StrongARM based machine.
+> 
+> Link: https://lore.kernel.org/lkml/2831c5a6-cfbf-4fe0-b51c-0396e5b0aeb7@app.fastmail.com/
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/Kconfig                       | 14 +++++++-------
+>  arch/arm/configs/am200epdkit_defconfig |  1 -
+>  arch/arm/configs/axm55xx_defconfig     |  1 -
+>  arch/arm/configs/footbridge_defconfig  |  2 +-
+>  arch/arm/configs/neponset_defconfig    |  2 +-
+>  arch/arm/configs/versatile_defconfig   |  1 -
+>  6 files changed, 9 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index ccc0114d30de..3b2316dc9d13 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -1151,8 +1151,7 @@ config ARM_PATCH_IDIV
+>  	  code to do integer division.
+>  
+>  config AEABI
+> -	bool "Use the ARM EABI to compile the kernel" if !CPU_V7 && \
+> -		!CPU_V7M && !CPU_V6 && !CPU_V6K && !CC_IS_CLANG
+> +	bool "Use the ARM EABI to compile the kernel" if CPU_SA110 || CPU_SA1100
+>  	default y
+>  	help
+>  	  The Arm EABI is the default ABI on all modern Linux
+> @@ -1162,9 +1161,13 @@ config AEABI
+>  	  Everyone should enable this, as support for OABI user space
+>  	  was dropped in gcc-4.8 and most distributions after ca. 2013.
+>  
+> +	  Support for OABI mode will be removed from the kernel
+> +	  once Intel StrongARM CPUs are phased out.
+> +
+>  config OABI_COMPAT
+>  	bool "Allow old ABI binaries to run with this kernel (EXPERIMENTAL)"
+>  	depends on AEABI && !THUMB2_KERNEL
+> +	depends on CPU_SA110 || CPU_SA1100
+>  	help
+>  	  This option preserves the old syscall interface along with the
+>  	  new (ARM EABI) one. It also provides a compatibility layer to
+> @@ -1177,11 +1180,8 @@ config OABI_COMPAT
+>  	  selected, since there is no way yet to sensibly distinguish
+>  	  between calling conventions during filtering.
+>  
+> -	  If you know you'll be using only pure EABI user space then you
+> -	  can say N here. If this option is not selected and you attempt
+> -	  to execute a legacy ABI binary then the result will be
+> -	  UNPREDICTABLE (in fact it can be predicted that it won't work
+> -	  at all). If in doubt say N.
+> +	  Support for OABI_COMPAT will be removed from the kernel
+> +	  once Intel StrongARM CPUs are phased out.
+>  
+>  config ARCH_SELECT_MEMORY_MODEL
+>  	def_bool y
+> diff --git a/arch/arm/configs/am200epdkit_defconfig b/arch/arm/configs/am200epdkit_defconfig
+> index b3f81237c6e1..d4745b0f3dcb 100644
+> --- a/arch/arm/configs/am200epdkit_defconfig
+> +++ b/arch/arm/configs/am200epdkit_defconfig
+> @@ -7,7 +7,6 @@ CONFIG_EXPERT=y
+>  # CONFIG_ARCH_MULTI_V7 is not set
+>  CONFIG_ARCH_PXA=y
+>  CONFIG_ARCH_GUMSTIX=y
+> -# CONFIG_OABI_COMPAT is not set
+>  CONFIG_CMDLINE="console=ttyS0,115200n8 root=1f01 rootfstype=jffs2"
+>  CONFIG_MODULES=y
+>  CONFIG_MODULE_UNLOAD=y
+> diff --git a/arch/arm/configs/axm55xx_defconfig b/arch/arm/configs/axm55xx_defconfig
+> index 12c59a4ee504..541e38e2205b 100644
+> --- a/arch/arm/configs/axm55xx_defconfig
+> +++ b/arch/arm/configs/axm55xx_defconfig
+> @@ -38,7 +38,6 @@ CONFIG_PCIE_AXXIA=y
+>  CONFIG_SMP=y
+>  CONFIG_NR_CPUS=16
+>  CONFIG_HOTPLUG_CPU=y
+> -CONFIG_OABI_COMPAT=y
+>  CONFIG_HIGHMEM=y
+>  CONFIG_ARM_APPENDED_DTB=y
+>  CONFIG_ARM_ATAG_DTB_COMPAT=y
+> diff --git a/arch/arm/configs/footbridge_defconfig b/arch/arm/configs/footbridge_defconfig
+> index 589b7b1df8c6..e8bf9847d35d 100644
+> --- a/arch/arm/configs/footbridge_defconfig
+> +++ b/arch/arm/configs/footbridge_defconfig
+> @@ -9,9 +9,9 @@ CONFIG_ARCH_MULTI_V4=y
+>  CONFIG_ARCH_FOOTBRIDGE=y
+>  CONFIG_ARCH_EBSA285_HOST=y
+>  CONFIG_ARCH_NETWINDER=y
+> +# CONFIG_AEABI is not set
+>  CONFIG_FPE_NWFPE=y
+>  CONFIG_FPE_NWFPE_XP=y
+> -# CONFIG_AEABI is not set
 
-Speaking for NetWinder, although it is sad to let it go, the reality is 
-there have been no active users in years. This is based on the mailing 
-list being silent (other than spam). And the trickle of emails I used to 
-get about netwinder has also ended for many years. So with that:
+I'm not objecting to the change this reordering is not directly related
+to the current patch, maybe this should be squashed in 1/19
 
-Acked-by: Ralph Siemsen <ralphs@netwinder.org>
+>  CONFIG_MODULES=y
+>  CONFIG_PARTITION_ADVANCED=y
+>  CONFIG_ACORN_PARTITION=y
+> diff --git a/arch/arm/configs/neponset_defconfig b/arch/arm/configs/neponset_defconfig
+> index c3010a4d93a8..16f0afd770c1 100644
+> --- a/arch/arm/configs/neponset_defconfig
+> +++ b/arch/arm/configs/neponset_defconfig
+> @@ -6,12 +6,12 @@ CONFIG_ARCH_MULTI_V4=y
+>  CONFIG_ARCH_SA1100=y
+>  CONFIG_SA1100_ASSABET=y
+>  CONFIG_ASSABET_NEPONSET=y
+> +# CONFIG_AEABI is not set
+>  CONFIG_ZBOOT_ROM_TEXT=0x80000
+>  CONFIG_ZBOOT_ROM_BSS=0xc1000000
+>  CONFIG_ZBOOT_ROM=y
+>  CONFIG_CMDLINE="console=ttySA0,38400n8 cpufreq=221200 rw root=/dev/mtdblock2 mtdparts=sa1100:512K(boot),1M(kernel),2560K(initrd),4M(root) mem=32M noinitrd initrd=0xc0800000,3M"
+>  CONFIG_FPE_NWFPE=y
+> -# CONFIG_AEABI is not set
 
-Regards,
-Ralph
+Ditto
 
+>  CONFIG_PM=y
+>  CONFIG_MODULES=y
+>  CONFIG_MODULE_UNLOAD=y
+> diff --git a/arch/arm/configs/versatile_defconfig b/arch/arm/configs/versatile_defconfig
+> index 8e89debb5a5b..bb9eb9ccbbde 100644
+> --- a/arch/arm/configs/versatile_defconfig
+> +++ b/arch/arm/configs/versatile_defconfig
+> @@ -6,7 +6,6 @@ CONFIG_LOG_BUF_SHIFT=14
+>  CONFIG_BLK_DEV_INITRD=y
+>  # CONFIG_ARCH_MULTI_V7 is not set
+>  CONFIG_ARCH_VERSATILE=y
+> -CONFIG_OABI_COMPAT=y
+>  CONFIG_CMDLINE="root=1f03 mem=32M"
+>  CONFIG_FPE_NWFPE=y
+>  CONFIG_VFP=y
+> -- 
+> 2.39.5
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
