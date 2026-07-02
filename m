@@ -1,94 +1,93 @@
 Received: from mail-qv2-f0.google.com (mail-qv2-f0.google.com [74.125.230.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052BB3612E2
-	for <soc@lists.linux.dev>; Wed,  1 Jul 2026 22:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F52431E7F
+	for <soc@lists.linux.dev>; Thu,  2 Jul 2026 00:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.128
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782946119; cv=pass; b=XLMH09NdSe2hH3ey1Bo0kHZ/9GEut0nFBxrg4gCmJFQjFfepOWXBboFSjOFyKroziZhk/njsVjNiRYxky043JvNE4z/LUPSjRZVm/yteEQd76OYqpsVCCod3NKoq339pUe7KT79oAB4RhVUFGQ/a7iom3IpsimYD78SPaPgIq40=
+	t=1782953710; cv=pass; b=gcqMsPx8Zly1m4q+7og086aTjhdsVhIGEcgJqpCOFYGkTndGJMiuSmb//oVXGwaa7k7bDLaC07hHYbTy4fFpxQEtVafimAqi5WvbxDO6sjERxNlHfrz4HsLJNMopc8oafPsRLSNUYCnpWTb+JsUF9pNWUqV4b23ZHtsjBmB8+Ak=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782946119; c=relaxed/simple;
-	bh=jkCRklCQuAsBvwsoZlQdi2TEoYlQ2dZsK+Lt9OHCya8=;
+	s=arc-20240116; t=1782953710; c=relaxed/simple;
+	bh=fYYg+pEkCTZu2/BFkr8J5mfv2eARpE2SiRa74Iaa9Jo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bwBMpKF25xwJn4lU5874U82OJjLB9kJmqU4PHk+vF5u/zCwixY+NcIvgbJIV0Y6IMFtq8BbgBU3tDrN1rKkOy0BXA8WC85exODDGgJ297Xxba6IIQ/zDVqh4aiD4C2eohgCuyE2jVhcanxvqQ8TSbT2qpA8FadJn55v2cEJpsmU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DvxX0dSc; arc=pass smtp.client-ip=74.125.230.128
+	 To:Cc:Content-Type; b=oUmmo6mV0R6xFgTDlQTz/rDc7aSM//ZjUpSXnbD4ok0uvWF8t7DBeK4oVSivXUtcGlvwOUzvO39AOvJzVo80iXU2uvmJlCyv+xI/p7MhhU8fwWonVxrowtTiCnz50j4wYswereIb7/pM+lD1dax69E5POx08dOMzAnCnvzxqyqY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJOAtCWE; arc=pass smtp.client-ip=74.125.230.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DvxX0dSc"
-Received: by mail-qv2-f0.google.com with SMTP id 6a1803df08f44-8ef118ead8eso6705196d6.0
-        for <soc@lists.linux.dev>; Wed, 01 Jul 2026 15:48:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782946117; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJOAtCWE"
+Received: by mail-qv2-f0.google.com with SMTP id 6a1803df08f44-8ef30ad36daso2716136d6.1
+        for <soc@lists.linux.dev>; Wed, 01 Jul 2026 17:55:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782953708; cv=none;
         d=google.com; s=arc-20260327;
-        b=Chi2RMtNj+Eh9InX06DpZhaU47kYL8RsiVLpX9tWW3372LnC44dFQceqXrjj6FjwRw
-         6GNdg/Pvh7uLPWtsj5n8CUl/jqbr7X/040UL5kM9YIJdFysWnH/EPrEahfCLhalBoP8s
-         XDBh4Ezp9CqzorNSL6MGjxFkFD5rE8ZMFfgRjwxY29UJmd7n5TlGaPwbKX7siXAxJmtV
-         C9dywFw5WKj0mvtN9ahdGmGcHa4dT5Dcg31q3uR4HZz5rNCJP9lkKuDgAbQtciiziTjN
-         PN2Cjq7YPXONhdxhRDAW/KGfd4jRSiRrN/lOy9TPTReGX31F0Z2K4HVmvOSE2pcKc0eL
-         Hh7w==
+        b=eYEM3hLHjpDW58LOjBwFX3tICRNqRfUAbhtp4Y4NbaEQ/iO/zZ3Sh20PYrAsfPhGx2
+         j81Jlc5IXpKNKSzfMK7h7lPKWyFPF8J8mMn5+U5BTmYBjNZoXw5SAxJC1Delrc4ZiBEC
+         x+nYHR4p/9WDk6VCbRc/PEiqIf0MEXDjPaUe+WMC308bqE1hahjA7fDhEQQ8k4N2C5S5
+         VwgZiss8x1vuolOJxW9lOr00UIts6FC3aXVK40K6pLfUhE6g8ObMcifCYvOj9uQwtje9
+         DrIUaMqmp414Z2WYXzdpb78CGotLA+T/P6sVH55rqqHXRdY4BXcP2Sm3CnH6wvOcXorP
+         3ZaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=AYFlxrwBFYPoq90kn+JK7G1o1/XM41yRTcPx7DGMUZM=;
-        fh=NfAvbleYTff44mXklaNcj8qXdWkiOAsoR3N5gmRnUHA=;
-        b=V0fLuUmUVqNecrubK9Lx8Brgd/MdMkeNx0TCZunBdRBJBsh7iLFaEUVUfur+TC0U8X
-         R6shtm4X2pfVr2hU5K3EOMAsZS2gKCA7ACFFr3oRTwfumLzeHTcbkqF8xjbxmcLljs46
-         CfhR4SosxWfj5F/ik3JjfVXHAKBkcikxL/5FzI2bZEwj2PMLiJtytqA/bSw6GrR0abeg
-         txX134JveYObL4bcx6pq7VeRM4Tvz0OdV9shxTWRahd4EdlMxptMWdBIdk9w7lw/6lXq
-         4u6Fn8ABEAgx3STn7GlpdgwXmo8QvgNZ44em4gQDAfj4GzDd2TUnqBCbBYIyJgGyDufW
-         gZ7g==;
+        bh=fYYg+pEkCTZu2/BFkr8J5mfv2eARpE2SiRa74Iaa9Jo=;
+        fh=E5dLtkYfzn1Bf1FVlcEcKrdNaaWZbklew7n7cT17sLM=;
+        b=gug+4Fme5Ru7GZpKMihMA1bNaMvLHjRrJD5qaU+jcFs434VPEyOTeftABI45F89OJ8
+         sC4lcT6zAne4HxgV5nmYzPlKAumGX3fUz1eDzhdMXqTqLP+YQAbwwQuKLiHhxlUyZWMN
+         /MHoP+p9bLd+s8qqC+Al4oUdi0fvqFmQ9OCfnT9wUL1oroxveCiJxJcd2MOAFDwwL/Lu
+         gwF4wnrVN2z9Dbbfjf8w2iRkx24tD42jInfKwu/Q7j/gfriUgwdZ52wJ7FBw9DLpAYEq
+         O4msmdri2o28Auy7bGPMTsFv2PRD4qSrRp2jVoDa+idrEq8qa495HnlM5QCtjcU8OX7S
+         1psw==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782946117; x=1783550917; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=AYFlxrwBFYPoq90kn+JK7G1o1/XM41yRTcPx7DGMUZM=;
-        b=DvxX0dSc/JYvccNUVR8RUknL01UtYg0glRWeX06oVL+94pwiBwMHFYV8MhlJ40Ft0O
-         w5yiNYBSlY/K4UcsJb12Fiq7tPRLGx6hb/HKkEM2yvY1UvtkaH42Ti5mrgwhWolQuft1
-         gh80Stv9hngFdcrBbo7BihPknXGqgwlM/6rUpd8vQ/MWzgNTtb9ZHGfv6uZfcXXrMJqo
-         6mSSXWYqG/8P8plPby7/6hZ2tQWuX7QYmGb9MKY77wQoofZ7fnOjaGGjdSOnht2DMOMr
-         bLTslUCR63c1uqukToWLplKjoouZi0ckTiJx66qbp1xjkfGVUIXa4dC9zLkt8wl1R87H
-         KTrA==
+        d=gmail.com; s=20251104; t=1782953708; x=1783558508; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fYYg+pEkCTZu2/BFkr8J5mfv2eARpE2SiRa74Iaa9Jo=;
+        b=BJOAtCWEsNzYYSQIcqwRY2YAkeDrNroZ46vqVJdhVNUhPIUpoTg6Tm7TlxkTiyXxZ/
+         XaRLJSPJ1jVEJd/X5JxWR0V7s614Sp4agUL5Iv3Hm7Zi3iWiZ52sPD8JSmlT47rl4jJC
+         56IEEMecb1eMmSb9zvRJvfzmKbNfsuoYvgXS6PaBTuabw9qyHfwtP/vhFAz4/JWEOxEq
+         HaqdXKMxhdIK6dw8FSiUjXYx5gcRBNGssymwr+9QoGqqS0FnoIDRCmMBVlUhLYboOLw4
+         XAh5BJ37mlRP2b0m8E71LAR2GhRFDk+vN/0tvb1AKAV4eiA2hqQFCU5MtZne8g7mDQhn
+         nn5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782946117; x=1783550917;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=AYFlxrwBFYPoq90kn+JK7G1o1/XM41yRTcPx7DGMUZM=;
-        b=W/VFisQRXZ0/0vSq/U2OZkYCgnyCqYL4mSqiddKEnnN6OCole2Cq7h3nOROFyVSCqE
-         Pp2Z8QBlUOZAMpROYI/ruJMg7NczkY/FU1iKhW7JwJDRloHuwXFwMeWCtj7RAPsFxLgZ
-         QPOw1ZkgwyVSh+hxXGskymZ227s2XaWq8Ptc1TaHED5Royfbw4A/s4rhFjVcX7sjncWe
-         fbBn2NB1245ajzYwbYRkPfPfV+HyHbRDaM72Kp49lVf/UQeDasIoLqjKwOTcyFjIxeQt
-         hDtiLWVDN620VPDb1wwyPLmeuLZYK8TNvOiNOcAOip/rGG2p1S/D8qTQOHEd5wnpRv/P
-         18Ng==
-X-Forwarded-Encrypted: i=1; AHgh+RrTPh/u+Hl0Be4mzhEvFrXSLNhIew1tiLTuEEPQgEOmmeP3f1k6FF3RkeuElTraQO66RQI=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxACyy9RFL+ZK4Kh3MtbndnOTrFywuRR2zRdwkC2J0a28Q+IP+X
-	WVAsq8djJYjcfMMWJs00OVi7Iq2YLIBpN5Mcze/lPW+TBFtvGksXRrSRpvn82Tm3vUEfOy5Gstm
-	VVhhpmEL0tatvR/vBiX28WXltE0OspNtFq78Oh7Q=
-X-Gm-Gg: AfdE7cmLJQfYF5SkntNgK+bt2jTeMCv1E3A9yTwFWj6FyDimK2FJQy7QD0Z6L8AR/BF
-	62i1oWDPZX+1hfauih5uKwkyF6MJAJSUitZaUf4fblSz3hb7mecndOT3f4h4CkKSdaQD5EZCcMO
-	hfXldPPfW1IuM6G5FHLxM8UyshgQqKglf54uXqqANynlXQRphcpkyafq3v6KCNQKUGemHZtAMQV
-	VBOQJmVL8YRbwTi323QAKTHLHl8j/xi3SE7VdCbjGzxXuqT/BsKx9LdxoNkOsAGwY3bqu4Qed2i
-	e5s0DgYpN/aGQCi79uBYV/xBxz7H9Br/3ysqYaGnltSEOSIPDFYsTB6qfA==
-X-Received: by 2002:a05:6214:3d0f:b0:8dd:d13a:8c84 with SMTP id
- 6a1803df08f44-8f4214a1f72mr39935196d6.8.1782946117029; Wed, 01 Jul 2026
- 15:48:37 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782953708; x=1783558508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=fYYg+pEkCTZu2/BFkr8J5mfv2eARpE2SiRa74Iaa9Jo=;
+        b=Jm/VNp5eZrPBOi3yD0Iy1g9T/TNazkH/9GlcPizjT+xRf8enPfYaQRSLnSpe7ubQvr
+         9wncknxvrxLfXUu7mHxZW+/g8OChOhL7ky0alT1JVYebVvLkUhyMgdb0mfjfvk7+YYvb
+         ArKricjNCYaRr7EBwFBw2ZeYqC8UMZd6T+jXEMDp3u2bB88xuL6OKHijDwN+xSJiQJ6A
+         Dfnl5nSo0upYTI8ZsAeAxUoAm9w0lXLLQyvJsLtQywGR4bQLA7nmfhlr7SsHqQfzunE5
+         lb+2HIbfmYSXzvcp9Ezii2oqIIU2O9CoiR56iTEZfs8G1LluU0JO35TUOuvQ1cWlJmKk
+         JaBw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro5Atx1Wt+58NGoV6xRUTRUlUJ9caZ5Kn1MNZYL0jcxUua2XRwx+bFomr4+6KUjrer47DQ=@lists.linux.dev
+X-Gm-Message-State: AOJu0YyLXN1zCAQ4x/jRA+2Ty78ulZiDlEh8SjEjI7QJTY8/jDS/amfy
+	o1FAuIQMAHejzM0WJRUrMmaCz/fWrtx9VkRN7douirsbIauo9kCrfrUseaXq5WpXZQLwi+dbr/n
+	GdeIDu9kXtkVCHvPBzO1u80rsjjTZOC4=
+X-Gm-Gg: AfdE7ckRFZ/m7ikNx9osHQi+s82yTwDOL3wMTzgLYxpkBQ8hHoVfj14RjGcopkuPmb/
+	N7myMC65cX3Yd4cW59G92hX+jheRdqJMs1sXqsHYS471n3drTpyyuaUeQMvc101CMHhWU1h+Btz
+	sB7IvfeyGBR4Cim22PI7HC7Wc98RHOrTLit2lHUpdZEFyNUBgFKAy3/9CzPZd/1OAhTaInNBkQm
+	5ADChsE9VVP9x4svP9H5gyfdDSve9XGbM+sWPH1E3kPNPMLCJygKhoana+GTWwxXHrDJ+n3w3Uk
+	YA0/PDTF9qXCR6bAepjku3gREAqNyD1p1qUuo74Lk/WGsHYrULXF+jRKrw==
+X-Received: by 2002:a05:6214:45:b0:8ef:1dc9:27e8 with SMTP id
+ 6a1803df08f44-8f3c99bfbb0mr36043326d6.49.1782953708551; Wed, 01 Jul 2026
+ 17:55:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260701212353.2196041-1-arnd@kernel.org> <20260701212353.2196041-12-arnd@kernel.org>
-In-Reply-To: <20260701212353.2196041-12-arnd@kernel.org>
+References: <20260701212353.2196041-1-arnd@kernel.org> <20260701212353.2196041-8-arnd@kernel.org>
+In-Reply-To: <20260701212353.2196041-8-arnd@kernel.org>
 From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Date: Wed, 1 Jul 2026 15:48:26 -0700
-X-Gm-Features: AVVi8Cepw8-jeERBXP5uzrp7v2GBj31ta-VoNMboVTSNdDufrAM_yNfN295JHb0
-Message-ID: <CADkSEUgm4Bse0x0K355iuLVJJM-mgeZAxg4xywgH1nYxnU-d4A@mail.gmail.com>
-Subject: Re: [PATCH v2 11/19] ARM: mark ARCH_DOVE as deprecated
+Date: Wed, 1 Jul 2026 17:54:57 -0700
+X-Gm-Features: AVVi8CcSOzhFzPsWUOEG7lSD3yFIyfxu2K16jG_kbQtZEf0p-TG6IrXn3i7gVuw
+Message-ID: <CADkSEUhO9nhzQZCS7ZziCtMna+ibfj9_PbSH5R+c0pyi5viCvg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/19] ARM: update DEPRECATED_PARAM_STRUCT removal timeline
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
 	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
@@ -110,51 +109,17 @@ Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+Hi, Arnd,
+
 On Wed, Jul 1, 2026 at 2:25=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
 e:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The Marvell Armada 510 (Dove) platform is supported both as devicetree
-> and atags/boardfile variants, with varying degrees of hardware support.
->
-> Russell was the last known user of the board file version, and there
-> are very few users overall. Unless Russell still needs this variant,
-> let's remove after the next LTS kernel, leaving the CONFIG_MACH_DOVE
-> variant with devicetree.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/mach-dove/Kconfig | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm/mach-dove/Kconfig b/arch/arm/mach-dove/Kconfig
-> index 996888ffcfe7..f547120e223e 100644
-> --- a/arch/arm/mach-dove/Kconfig
-> +++ b/arch/arm/mach-dove/Kconfig
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  menuconfig ARCH_DOVE
-> -       bool "Marvell Dove" if ARCH_MULTI_V7
-> +       bool "Marvell Dove (DEPRECATED)" if ARCH_MULTI_V7
->         depends on ATAGS
->         select CPU_PJ4
->         select GPIOLIB
-> @@ -11,7 +11,11 @@ menuconfig ARCH_DOVE
->         select PM_GENERIC_DOMAINS if PM
->         select PCI_QUIRKS if PCI
->         help
-> -         Support for the Marvell Dove SoC 88AP510
-> +         Support for the Marvell Dove SoC 88AP510 using board files.
-> +
-> +         Support for this machine will be removed in early 2027, unless
-> +         there is a strong reason to keep it. Users should migrate to
-> +         the devicetree-enabled version (CONFIG_MACH_DOVE) instead.
->
->  if ARCH_DOVE
->
-> --
-> 2.39.5
->
+> This configuration option is for the older boot method that preceeded
+> ATAGS. This was scheduled for removal back in 2001, but the removal
+> never happened, presumably because nobody cared enough to actually do it,
+> not because there are any users left.
 
-Reviewed-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Only netwinder_defconfig selects this option. Do the most recent
+NetWinder firmware versions actually need it? (LinusW, do you know
+this?) If not, can't we just drop it entirely?
+
+Ethan
