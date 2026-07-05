@@ -1,149 +1,125 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2FF2D877A
-	for <soc@lists.linux.dev>; Sun,  5 Jul 2026 08:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DA6352002
+	for <soc@lists.linux.dev>; Sun,  5 Jul 2026 09:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783241419; cv=none; b=MMz+GOKEcH+8bNp/mUvsHWger2jNHQBE05rbDmuYP2VasxUM7YUsNuApqzfwaJF/zV+pC5g1NcEfYtg5ldU/k8jb1c8OnBIh9UUbXcAinXot01+J1GPvdyUNLeXVofgU0+MPFxWD+eVJkr07OhHC5YcoC1562Bo8oXMUGd2EgLk=
+	t=1783244118; cv=none; b=U/MK5GOnHrHcTRdDsIrWeMSlMwkvjkQiqA2Ot/DgSN0NVR9tFMuJ2XVbWenSHvKmBNjUF0W9r7stnS/OsMKrRlRyfiMLivBqP594j1nugLWplEPG1COHYhWQ3VDnzkp+qEMxrgctoAZUbTp2oRRyE1pzU1UmDIUFbWGM1KVAVgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783241419; c=relaxed/simple;
-	bh=UACOGRi5zwKM/GlH3MUrcVH7NTPYPiS/pta0KBrGtsQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FWSI1kx3+pnd1LfWaoIeseDPk/QeHlr0EzoocUZGLfhwidyGYucVpFLaG4nlqhkhu/zsIjIUH36MT9Hp2AXkaWYnwnbbWSNsBnTPIlJUvdJiJEO9MKr5vIXOsEzlXjLU1xKYqvHsCYajqZWg1XNHkR1I59+I01vJM5f3pMNDpWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=akKcMfnG; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1783244118; c=relaxed/simple;
+	bh=gdqUHQnR7XIG4b+MDJDzBsIPr1r8YsRaWdrKPKoZfko=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=RVTBvJhkWXzgwY/wqIAfFZwR8XKCgNig9tEaKjQrprnMINvLPKZWrCta7OKIZoKNBSOSLebfry8w1PY5TbNw9K7Qo/yGfeNGHE2PqQMGrRB+c3BIhVghEjNlphxYpx++PLZECTzsK84CHW/ZPWrmrHEGrUEeUPOwbmBLCqLPeSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=AE5jLDrw; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LFw15hzs; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="akKcMfnG"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-493d3135f62so3814735e9.2
-        for <soc@lists.linux.dev>; Sun, 05 Jul 2026 01:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1783241412; x=1783846212; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dTixSXqM1M3nFZ6wcRAermlWHzTw0peN+qhtvG6hqcg=;
-        b=akKcMfnGsRxuyYXCsfcsk7cTpeE/UtUlCTOnf2gGYTg3QHb4FUIx4H48DcSZs+cyrm
-         KE6AnRpXmDd2LKzyDUvOcopBLqjnWErhIhMZqUFCq6cwNA7uCLtzghSmdBuMoq5AG0bH
-         npdN0WWi2aea/dfPkUndVvoquWnDeUzGsziM0MN41gC2T4Yi2uny1XKMxNRC52jBSF5Y
-         GzCc0TZykFQbvegHjTrbWs/vKZr/3QTiQXXZ00NcbqYLc793FDD4NGVyaPAfYablk95/
-         xzypfMBo/O+EDHxkO5QVkDm//eZhShN4z7rnz753FitjctFtY/yXIHsj5Ovd6ToFJW6j
-         3/5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783241412; x=1783846212;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dTixSXqM1M3nFZ6wcRAermlWHzTw0peN+qhtvG6hqcg=;
-        b=c2XuTJYQMzysvpnOwUxDKNhnP3JsMPXITww7lFOebokSx3d71ObzSCzPuDWQZ5Nz7K
-         YYOo4BBcTnL2SL/bQaWjoMX8Ei6TuEz1yBuCBIxHmlpyUOUVqL8ZC/bLyE9V4Duvmd28
-         MydnbES21u/gHtpSnS3ST6otrhP4DAblP8XEVlBcLx2+nYwMOObgqGxjN2ARKMwUq+o/
-         dEdWt9AQVyAy3KGKGxeAzEmJRpwfKMZxRiTMHAgHLNzsk1OLmWc8OOwTknsPcxDjqcBT
-         FJFgZEs9UVfCRa5XnL3WKdaAIsbOb2huNNiN5VaG6dt/QjKQb1vIsh/H9eJFRiurS2Kx
-         H5zA==
-X-Forwarded-Encrypted: i=1; AFNElJ/5xP0+FX36JKsNbRvFoDYgbh1Q8rVcz+lvPZthbsDkFdVLiloQ2fibtnkQB481Awj8o8o=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxtrEi6LdrGL0edyoOcZWzCSpjW6ukQ41omoAst+OPqK9PMTmnB
-	NaReA/k+RDtNTBE7abWsmNi5QYt3y1zwZP7RAXbeAAbQnS7etKWMsv27vGkxCIjV1s0=
-X-Gm-Gg: AfdE7ckzclm0/GlNMxtnKbdb1Po3TQrjAkawcjanVPJm1m5j9HHsdlTlyN8f5PqCsRB
-	QIZHfOWC1eZH/3IEtLteqAKA0bixFbnjCFWWzJV0dKY2FPa6WO86NcOcxRP5Dqdme8gSK/V5dqm
-	FKRpSdpMfamVhs81lVGhDxNN9GFiokqibBIHl26tJ2dpjIyTj93hJ6k0bP9liCpoS523Luj11Zd
-	Z7cjESTpPNTBKOp/dqoavTj7p7jxUlMNWBYoOEScZAQhClGwvjZoHqBiLvIjinGSCMnHl8qfzv8
-	Q0mAftCkCi1M58TXas5ODmzwcTHyz7rhrJr4E/l06VMBB9nPLBIflrnZZdpJZF3RtTYmqMwRUfg
-	o49em6F9vqmizjQ4RkqQruAODU7J6BJuRo6nL+atgbKyLsxJsYcCzYRP11+YLi8UQkXzi82ZLpP
-	DkEzhJI03nbOmINanwAQ==
-X-Received: by 2002:a05:600c:8b17:b0:493:bdaf:83a7 with SMTP id 5b1f17b1804b1-493d11f8c55mr65567935e9.28.1783241412156;
-        Sun, 05 Jul 2026 01:50:12 -0700 (PDT)
-Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-47aa0960b06sm13667826f8f.28.2026.07.05.01.50.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2026 01:50:11 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linusw@kernel.org>
-Cc: Drew Fustini <fustini@kernel.org>,
-	soc@lists.linux.dev,
-	Imre Kaloz <kaloz@openwrt.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] ARM: Don't let ARMv5 platforms select USE_OF
-Date: Sun,  5 Jul 2026 10:50:00 +0200
-Message-ID: <20260705085000.3510576-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.55.0.11.g153666a7d9bb
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="AE5jLDrw";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LFw15hzs"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A8EC214000E2;
+	Sun,  5 Jul 2026 05:35:15 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Sun, 05 Jul 2026 05:35:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1783244115;
+	 x=1783330515; bh=LSMTXVruDIRjjnXmceDngK0jOBafJI+Ml0R1gPtkUcI=; b=
+	AE5jLDrwbHf+vRixt4gAnNacgHEDARWAOZnsZ1ybgvxkGM5HwMd3u6pOFDScyrQ6
+	SDvx5ef/5/XjVz1aR/gzt7lZz3UpXmbdkHt1Fivj1Mc58ni+y4jELUcQI8i8pXJY
+	qyVDFffKv+KnVRvyhdwGDnB3qO+2WrOv2GFsi768gCaJcvtKGBM1H4CHE+yDN+76
+	MdC5nBPbr6wLjTrAM8iFYbULVwavCs/b92bfWM9uJXlcsHI2Bk8R9bD3k1DSX7af
+	oKIFQpZJVTW5fa7z7R9Nb0ZdYp/ReouxShD/8N8G/ZYX3y5K3By2vTke+xVqaczu
+	hs+vzucaa7qgQbVDjrExRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1783244115; x=
+	1783330515; bh=LSMTXVruDIRjjnXmceDngK0jOBafJI+Ml0R1gPtkUcI=; b=L
+	Fw15hzssiDDgxmbJwsv1SZzPFmqFSTUJukSFOGvIKx/YB79hixV+qt/9uawmgJRA
+	tAWCTDjWd9VW9P9eP0UKy/8OmVmgTEqz14PMNBDZSBxyXoqiFgLw17dzlwTWQXuq
+	VlIfUn1DqNdapJAX47T7q8QpFZOBMNNHZ7DqqDoRYtT8kSLkN5LrYgNMIuFIvfA8
+	kHl9W/zCRCBGcESMfcVdaHh3JzwxO7xO2CwfVqiATQk+DAd08kvyF3etuXmaPtCo
+	Iy8TNH4R2IT8zXuySunpmQhvU2pNM1Fs3u2dbMUCVltitbgPqnfeDn+p5fdCHwNX
+	M1lv+OIGrmVsVLBuw19Ig==
+X-ME-Sender: <xms:UiVKahnHnDInyNSB3OZZRYqhQoouplTV3MSja4rXzb6TJC4Jd1UvFA>
+    <xme:UiVKanoPPHweIZfqqLy2IB1geEPY27qCaVwo5m_uoMkocpmJoaMaCsRGu1dHFdjsx
+    Z_2I6pQuJkwuh9qusNPP8zK_9iAHaXl0ChL53oXmGITAXgMg6OD4TqW>
+X-ME-Proxy-Cause: dmFkZTF3pnwFZPirFYTFt8PAub3hCi9T3P7hmDxFcXyeP15oLDFgTlcs9QGPjThyW6zZga
+    tVI9vbe6pbo0MOCfo2i/53HFVfSJ0e2NweFXqtPTlAoyPQ3mvF+tliJ6/XLoRO+24qpPxA
+    GEDwzgYX5UKBJSxg3f0XB8wb3A/ptnESl1EkF4/5jRBKtAQR1Jjk/+bIlPvzTH1/hMfJa+
+    TSK6OCibcG4ScnCREQppL5oFfDT09wB++iTu5oR37hBNo+u7gNLfmKl63M1dGobJIdOQWE
+    QHbFohEssvH+oL63OFT3mvliLOiae2cc0hYm+w7nvNZgFOkXeofSg72M8GDeZDiTSNn/Qi
+    DfhxTM/wCzid4wa+faTSZBjx1KT9W7UWJZ+AeqmvGVKt/gVaOnPVdKoebtlFZyIhfqKbcl
+    AQ+lFBsM93dvn1Fnogl/kELNts5Xnls29tOr2BJS2Z8qJfhL/j+mtgwL/Beb8le52cMwdr
+    zSyjCaDGdGcVW27YAfEB4D+Qhfpf6yR+poCPEXiHHqhG13ormKRzyMK4h5NUT/rNg/O4XK
+    c9OCguadSE0IZvJ+R1g5MqjZSphTXnqs5hBd1cDpxRn03KDdfZs/WrMq/bTaNFCzjsI3MO
+    D0vW0+qSJaXs0tHEdKhrr04UTxl3Fi/VXzb6c8lF1BpwjovRvofM2oiByStw
+X-ME-Proxy: <xmx:UiVKapgx8ntcP7YeJwT7bRQMnuIcMuQCG3FK2ZTqlx6-5BaZ9jY5tA>
+    <xmx:UiVKakYsODm2R4KRU697r2dI-kJvLWxQdH8Eccymr-F_j17MrhxnJg>
+    <xmx:UiVKalXfKdamc6WoRWk3US8en4yflN2lG7VeIjiaIkXPzXUgbqkgYA>
+    <xmx:UiVKasEURMyjItbiVhTuFnBuBC99alvkAmLlQNCtR2WAhjWktotZbQ>
+    <xmx:UyVKarGhdiznsWF-IMVqWaTxDMsqK3bDhCcoyVjTBxMLTjbVxYiZQEpk>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 1453F1820086; Sun,  5 Jul 2026 05:35:14 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2014; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=UACOGRi5zwKM/GlH3MUrcVH7NTPYPiS/pta0KBrGtsQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqShq4ZQaUz2sgd5mn3XqmqSu5yqtJWJAFqNvOW 1EMngDN2a+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCakoauAAKCRCPgPtYfRL+ TtF6CACsq3oN9xBSWZAYF+udT8In3FGzcI9+Kw+Z3Vn2Z1skdF5IJvOLCcP1jCbNLc8YbiimQNY ZvhF7mbdQh8XIIHBlPjLdf/UpxTcTzTUv8KioedjFEfcCyA1ZKGtCUel4HvdfS2WDAX/6XtCu+8 4y44kavClHYDRVKgm0jVdd236wmzgwS87b8XWELqHeMmTcS9kxr8g9fPVMVlbtZ5lWfSB4OSy7j Ha4Pmv/3X5PYZY5yJCmdP/AwKlv57EICLpwEpIuaP7bsAnRnQgJ0mxjJXVROSjhiRLhmuTni5D6 IhCOcjT3ukfqUSw122Aj5K6lNeFvaAa3qLU7wCslL3lF1dWP
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+X-ThreadId: ARgniXuJ1PtZ
+Date: Sun, 05 Jul 2026 11:34:53 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Linus Walleij" <linusw@kernel.org>
+Cc: "Drew Fustini" <fustini@kernel.org>, soc@lists.linux.dev,
+ "Imre Kaloz" <kaloz@openwrt.org>, "Russell King" <linux@armlinux.org.uk>,
+ "Daniel Mack" <daniel@zonque.org>,
+ "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+ "Robert Jarzmik" <robert.jarzmik@free.fr>,
+ linux-arm-kernel@lists.infradead.org
+Message-Id: <d5ded362-abe4-4e6b-9585-a2a75dba27a7@app.fastmail.com>
+In-Reply-To: <20260705085000.3510576-2-u.kleine-koenig@baylibre.com>
+References: <20260705085000.3510576-2-u.kleine-koenig@baylibre.com>
+Subject: Re: [PATCH] ARM: Don't let ARMv5 platforms select USE_OF
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-USE_OF is already selected by ARM (unless ARCH_FOOTBRIDGE || ARCH_RPC ||
-ARCH_SA1100; these all conflict with ARCH_MULTI_V5). So there is no need
-for an explicit select and it can be dropped.
+On Sun, Jul 5, 2026, at 10:50, Uwe Kleine-K=C3=B6nig (The Capable Hub) w=
+rote:
+> USE_OF is already selected by ARM (unless ARCH_FOOTBRIDGE || ARCH_RPC =
+||
+> ARCH_SA1100; these all conflict with ARCH_MULTI_V5). So there is no ne=
+ed
+> for an explicit select and it can be dropped.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig (The Capable Hub) <u.kleine-koeni=
+g@baylibre.com>
 
-Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
----
-Hello,
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-If I should split this patch by mach-*, tell me, but I think it's simple
-enough and these architectures don't move much, so getting this in via
-armsoc should be fine?!
+> ---
+> Hello,
+>
+> If I should split this patch by mach-*, tell me, but I think it's simp=
+le
+> enough and these architectures don't move much, so getting this in via
+> armsoc should be fine?!
 
-Best regards
-Uwe
+Hi Uwe,
 
- arch/arm/mach-ixp4xx/Kconfig | 1 -
- arch/arm/mach-pxa/Kconfig    | 3 ---
- 2 files changed, 4 deletions(-)
+I'd prefer it as a combined patch, but either way is fine with me.
 
-diff --git a/arch/arm/mach-ixp4xx/Kconfig b/arch/arm/mach-ixp4xx/Kconfig
-index cb46802f5ce5..7f812020e082 100644
---- a/arch/arm/mach-ixp4xx/Kconfig
-+++ b/arch/arm/mach-ixp4xx/Kconfig
-@@ -14,6 +14,5 @@ menuconfig ARCH_IXP4XX
- 	select IXP4XX_TIMER
- 	select USB_EHCI_BIG_ENDIAN_DESC
- 	select USB_EHCI_BIG_ENDIAN_MMIO
--	select USE_OF
- 	help
- 	  Support for Intel's IXP4XX (XScale) family of processors.
-diff --git a/arch/arm/mach-pxa/Kconfig b/arch/arm/mach-pxa/Kconfig
-index 66e26990e2c8..c478fb8a6f78 100644
---- a/arch/arm/mach-pxa/Kconfig
-+++ b/arch/arm/mach-pxa/Kconfig
-@@ -22,7 +22,6 @@ config MACH_PXA25X_DT
- 	select PINCTRL
- 	select POWER_SUPPLY
- 	select PXA25x
--	select USE_OF
- 	help
- 	  Include support for Marvell PXA25x based platforms using
- 	  the device tree. Needn't select any other machine while
-@@ -33,7 +32,6 @@ config MACH_PXA27X_DT
- 	select PINCTRL
- 	select POWER_SUPPLY
- 	select PXA27x
--	select USE_OF
- 	help
- 	  Include support for Marvell PXA27x based platforms using
- 	  the device tree. Needn't select any other machine while
-@@ -47,7 +45,6 @@ config MACH_PXA3XX_DT
- 	select PINCTRL
- 	select POWER_SUPPLY
- 	select PXA3xx
--	select USE_OF
- 	help
- 	  Include support for Marvell PXA3xx based platforms using
- 	  the device tree. Needn't select any other machine while
+Please send this to soc@lists.linux.dev in a few days with any
+Acks you have received by then.
 
-base-commit: 2b763db0c2763d6bf73d7d3e69665222d1f377cf
--- 
-2.55.0.11.g153666a7d9bb
-
+     Arnd
