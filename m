@@ -1,123 +1,103 @@
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F5430E0E4
-	for <soc@lists.linux.dev>; Tue,  7 Jul 2026 08:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF3D3F44D0
+	for <soc@lists.linux.dev>; Tue,  7 Jul 2026 12:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783412117; cv=none; b=YZj/Fkr3ZeasyqgqYTzdm/oY8lEpCm/3B6F6/eiNFNBlRQbotcU5SVWlX7bbUi/7YWkFD8wNvSstV+/vHDIsuvpnXRgM3FYQE1QNCuFkVc0nn0U5V4fXMu7P8C8fEG8J2gnNpiQleLaL/83hCRjsBs1JACwRrvhhoIckYnHeuZQ=
+	t=1783426462; cv=none; b=IaxeeU3Xqxwtk3fqTOJIRp78O018s+23EQx6OBBVE01iOeZAGraQj9h3WzFDxQY6aIRusNnDwty4OJErhQ1pP/OuZR0pnbcEuDgEBKoh2UT/hpN00eOye8LInjdHjwG7KOLQGfCvtzx66vTfjHJrUHI+YxMKDN1O4zQgWRyK1gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783412117; c=relaxed/simple;
-	bh=V/famXhnFdJPvG7m+YRcRj/upoYmTRYMNHqshosi2BU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=TdX4FrFEtM7BxNooGp9B/7ibck7XsOXCudrXIv0TjwUJC+iFJHR0ALhq+z54uBny6LaQK0B5n0WRfA7aXfxKqmu8JtON5DwJhoWr7hNaKjcuVD9ZSu4vvvQl29GE80WSkKTeL6sMwTDlttrKtpIl3ARW0wM8fU5tM9tmxGAY8gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=xpvw0O67; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=li3FHACE; arc=none smtp.client-ip=202.12.124.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1783426462; c=relaxed/simple;
+	bh=0fMo0Ai5b6OPM4a+oWovyOu7xp467x/HRKSIL6CZA84=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sygb+1bfy7I29dd3LBO5D1Um4TzYsOSk8cs5ORIPAqKrCvLQTK++9CCKI93GZiB4HYema/Sr6ACCsrlHgtdqPFzobNzi5Q3WflgKMo3HeMwhcoBKoF/5bF9e1fvAj+dzdXdCw9H6vzVqPR8iPf0a8GCCu/Zg0nGHbUec5T3v/Zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMdnufIX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="xpvw0O67";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="li3FHACE"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id B41967A0144;
-	Tue,  7 Jul 2026 04:15:13 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Tue, 07 Jul 2026 04:15:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1783412113;
-	 x=1783498513; bh=ksJfUuprun+MhATLDi0LER8gCeLSodgatS7pFZp+C0k=; b=
-	xpvw0O67yy5FBKU6rOXtWOrtWspRY7P6BVM/obWyN3sERt8ykH4V9veFkIVlYAVk
-	jyGIg2Z+FwpRv4MPZ/khFehaMiusfCX/sspcqbfqbyzrE3FLoNW8HIyhFfdVY38K
-	1/roiqwuVUPC7Z1gWOf0cOKayXhHG3p1SrRg7HQIj6fBucbqxvKoyedU5GMoWlPd
-	55aBTtQbVryQIAE4Esgzu39XNacL/L6oiNJ3PLLpYeWyesBBQLhLJBxtJZDXVK4h
-	ez1QYwJrbThAkL0AfaJBg/Ho0CbPvYyRFQDkUw3VobjngZVdPIEvHFZm6Rl6PSj/
-	nXjPLDNGfve1gOVvZwmPOQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1783412113; x=
-	1783498513; bh=ksJfUuprun+MhATLDi0LER8gCeLSodgatS7pFZp+C0k=; b=l
-	i3FHACEhOUORRioWZk0bAsZIUwd61EqaAwtJjl1nwJDlF9iqp5flel5T2flTDLkT
-	COa/wRbQSoNZze6DzitWefsIKUs+A640L5l/PNzeCB6gUxS/j1q/K9YN1wf6HyGd
-	aaAFCbo2aKWsfWHA2VTI62x7J5XzMo0z7UsfkALhy3k5lCW8itl6CKIBLycDnx5+
-	NWyhQ9FAjMo8huYc8+j0GzGO4Tws54MsBuwid1EqADHUR5eDEinTtTjfgmC8e/dm
-	ZvHCOibHm9hquHLsoqtMy1k8IBVT6kxKatFBpNyQnF4HSseghq+Fu1aELu6+DqVE
-	lEGe3YpnzMB9fXk4D5HZg==
-X-ME-Sender: <xms:kLVMat593qrpDI2j9Id5XiMvpmEv_vp_HFU52-1H1dRTI0m20fruew>
-    <xme:kLVMalvfBw4caDNKyoWxSmuo1VJJXV84rP-my4YdDpWoucr9sVJySpl7Lqw20LM_Z
-    7Au8B2IbThteDnXXzXW0KgAq2os6rO4EE9hXlhDIIuoElwho4ZdIA>
-X-ME-Proxy-Cause: dmFkZTGmDHHJeVxwC3PNVwH9WBFHWFauttB5daISxm+xlRx9GY+UQqKoNlbj9PfeQY+pGf
-    HP++0AgB3cUYgY75wzCwa2iZ6HNfDwO5g/XzBWjVGfOYqkiI5k9n2imT1G7LN2XJyFWLwn
-    voKiqNjUigloECOJAk/DYPtO2WxxGtuT8awPZCThuizoUwsp65wngOCKUdE0yXeNXRXQax
-    htuNPfLOQcPMLZ5Ib7Kp8h3RbTIPN8ng3Iz3BD04Yf4tjyzOSPXIDWgvi5k67dsWJkcbXr
-    KorK7n13sCthqzXSzVsBb0Ljjt7jaDJApmib+6v3kvStB8zBScrKyZL6RwBj4QlNr7ltG1
-    eDLhTKHl5xUUehs5lVlsNezLtupqtzL5Bgc/1ActDuIIbAhezWiO9cueth/u3jj6+uZUdP
-    Ja/GqS4GFOHFpsJZQF9BovNxDccSBxBCaTzcXs5qehbAYB4aD6qQuLilrDgpX2PhSjf61N
-    VRymSULBAxBbPMeBC4l9fOVv5kaRLfZ+ROLktLwpBYOVZ+LhRl5BKYp9R5ZgM9PU6cj/Bl
-    99yOczeWYSXyKvWxmW75IYsJRL/JKmA34ryZUjoiPXD5GbTWH7HPtpTRxHIuqM+pfVGLY0
-    7gQBH24P8t9ctcvzM7LH3VIkDF0kRWGLmtkL055FFL11UygUjaDkxSEpw1WA
-X-ME-Proxy: <xmx:kbVMahIROndA0W6gg4nPmlihoo8ISGUnMR2bd0M6zq4qQcsKbcAaxw>
-    <xmx:kbVMatkmSVmQOoCmFqH1T7AaAYuOVfA3W6P8bpEQ8zeds4_jrpG8uw>
-    <xmx:kbVMaqZ8H4SldcilE0xndpdvLO4FKPMp_gTpOPutNGb08i6CdoYJxw>
-    <xmx:kbVMap8dOeD0pDh6YMIEwZQSmUfRg6tpnQLQzU3P001qIIU7XcKS-w>
-    <xmx:kbVMarrASjHC69LJ0Y7c6fEUk-luVa3zeNjtLZKamQPDR28w3oqz-uQP>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E57831820082; Tue,  7 Jul 2026 04:15:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMdnufIX"
+Received: by smtp.kernel.org (Postfix)
+	id 51F901F00A3A; Tue,  7 Jul 2026 12:14:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF07C1F000E9;
+	Tue,  7 Jul 2026 12:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783426461;
+	bh=FLZItHyiaMaW57bwLBmHqpv4/AV1bxfodu1YkXciPTg=;
+	h=From:Date:Subject:To:Cc;
+	b=bMdnufIXFQ5ocViqnfxvhbZXDlEoy1MZIMpTs7n1ak0ik3AOXWCDy47lr+tvkE7YV
+	 OC7so3z4TmkPtzfme4nQ17178GHB8HwvduMj40PjO+H6PvEADwNDA4nyy9xQeG9Kuf
+	 VK62pYxyKH7yugqRjoSLVA0u+S/ttfuVoLJXwOK2Ho7b8qu00LwXzmrseYIOqsZ1pq
+	 2pNI8EkoSX+NxCxg+U7AjAfqyjHBONoTJeRRn1AqdPNGKEqvBDdU5LGAqEKURCjQYa
+	 qP0AyH2lmJj15G2S3TlBlB7AzEDEkYqeUX2LMp7NM+NjryJnYY9N86vGU9FKaQCeJV
+	 g7JmWSc6GJtKw==
+From: Yixun Lan <dlan@kernel.org>
+Date: Tue, 07 Jul 2026 12:14:14 +0000
+Subject: [PATCH] MAINTAINERS: Update SpacemiT SoC git tree repository
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: A29kydqouFdV
-Date: Tue, 07 Jul 2026 10:14:52 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Bartosz Golaszewski" <brgl@kernel.org>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- "Russell King" <linux@armlinux.org.uk>, "Linus Walleij" <linusw@kernel.org>,
- soc@lists.linux.dev
-Message-Id: <1cb45fa8-df33-4e6b-be0a-63abdaf9d0a8@app.fastmail.com>
-In-Reply-To: 
- <CAMRc=MdfRs13TAqRqwff+=v3SrTXynyhCb75udG46hmwTRwuKw@mail.gmail.com>
-References: <20260706-sa1100-swnode-v1-0-332759bbd930@gmail.com>
- <CAMRc=MdfRs13TAqRqwff+=v3SrTXynyhCb75udG46hmwTRwuKw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] ARM: sa1100: convert gpio-keys to software nodes
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260707-07-spacemit-git-repo-url-v1-1-137697316a4c@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJXtTGoC/yWMQQrCQAxFr1KyNhAHcUavIi7GaVoj2g5JK0Lp3
+ RsV/l+8xXsLGKuwwblZQPktJuPgsN81UO556BmldYZA4UiRIvqs5sIvmbD3K9cRZ31i6g4pB6I
+ TpQiuV+VOPr/05fpnm28PLtO3B+u6AcS3aqN8AAAA
+X-Change-ID: 20260707-07-spacemit-git-repo-url-8f48a2009087
+To: soc@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ spacemit@lists.linux.dev, Yixun Lan <dlan@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1064; i=dlan@kernel.org;
+ h=from:subject:message-id; bh=0fMo0Ai5b6OPM4a+oWovyOu7xp467x/HRKSIL6CZA84=;
+ b=owEB6QIW/ZANAwAKATGq6kdZTbvtAcsmYgBqTO2YHOfT2CDVqOSeRNJn1VpcYMih4bVaKMYjA
+ Nab9w+s1AOJAq8EAAEKAJkWIQS1urjJwxtxFWcCI9wxqupHWU277QUCakztmBsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDJfFIAAAAAALgAoaXNzdWVyLWZwckBub3RhdGlvbnMub3BlbnBncC5
+ maWZ0aGhvcnNlbWFuLm5ldEI1QkFCOEM5QzMxQjcxMTU2NzAyMjNEQzMxQUFFQTQ3NTk0REJCRU
+ QACgkQMarqR1lNu+0FJRAAgzgj3q+JVVDUOWL/QynAmeMkQbF1LTITJ0bH+iw1aGAiuIyGLWss4
+ kkejHVfGlGMWje+wfmHLHZHOjk9+c9T+CUFljcPgyQuyBe4SgtKBWd0DT28C5ZODXBpsRnlSOxK
+ O1TpXezkzDUq2OeUytwwkNE0mZE0LN4gT714BAdK2NeZKxEC3gE6DNoGj9ajbxqqiBor4CjRBzN
+ THwFC5C8pn6azyHUbAdFTkRKzjolXH8RO6EWEnHbUf8EfsX9sSXt9U0yXsQYPYKeduGOwWlWiwU
+ SoQaColvaG+B6/BapwZRaIbf4wRcQ0oSSbar6ajw7Lx7cStOthD8Co7R1FMex3QozNsLpZKy40i
+ BhPrVI6dKR13yTjmuVfeKlPGRmjCVfsW7hs+KYngS/cLhPnuKrYdYVBWOEUoK6wsY9kTUzF3d/w
+ 6D8nD/9oEFWWUtftfTkXDpy+TBQR8jZ2N3xr1i5Y3+EfkXsdFIQoWIbZnMBLf4eBjRxm+w7vqla
+ 8RRrYwyWIj9phgd53k/GwEaYm/rRvlgKUCBKM/jU3SrKg0eOeZ+b3G2Oblf0VwWP6Cel3f8BA9S
+ M9UJw5HctXvhXpgJBDNsB0ZCnjc6OIPMoKnCB0cIZrBX69UX5xVwqp+4lmdiXrFqanYsFBFVi8w
+ dBi7WlfYz5FeU7f9/awc7rHgAj7MQw=
+X-Developer-Key: i=dlan@kernel.org; a=openpgp;
+ fpr=50B03A1A5CBCD33576EF8CD7920C0DBCAABEFD55
 
-On Tue, Jul 7, 2026, at 10:08, Bartosz Golaszewski wrote:
-> On Tue, 7 Jul 2026 05:13:59 +0200, Dmitry Torokhov
-> <dmitry.torokhov@gmail.com> said:
->> This patch series converts StrongARM SA-1100 evaluation and handheld
->> boards (Assabet, Collie, and HP iPAQ H3xxx) from legacy platform data
->> (struct gpio_keys_platform_data) to static software nodes and device
->> properties.
->>
->> The first patch registers a shared software node for the SA-1100 SoC
->> GPIO controller in drivers/gpio/gpio-sa1100.c, attaching its firmware
->> node directly to the GPIO chip prior to registration. The subsequent
->> patches convert the board setup files to define static software nodes
->> referencing the SoC GPIO controller directly, allowing pin bindings to
->> be resolved via the attached firmware node without relying on name
->> matching.
->>
->> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Due to security concern, switch SpacemiT kernel SoC tree's repository
+from github.com to kernel.org
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Yixun Lan <dlan@kernel.org>
+---
+Hi SoC maintainers,
+  Could you just pick this patch? otherwise I could queue it in
+SpacemiT's SoC kernel tree, and send it along for v7.3 cycle, let
+me know what's the best way to deal with this, Thanks
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Will this board not die?
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 15011f5752a9..a97f48464e19 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23312,7 +23312,7 @@ L:	spacemit@lists.linux.dev
+ S:	Maintained
+ W:	https://github.com/spacemit-com/linux/wiki
+ C:	irc://irc.libera.chat/spacemit
+-T:	git https://github.com/spacemit-com/linux
++T:	https://git.kernel.org/pub/scm/linux/kernel/git/spacemit/linux.git
+ F:	arch/riscv/boot/dts/spacemit/
+ N:	spacemit
+ K:	spacemit
 
-I have proposed removing almost all remaining non-DT board files
-including this one after the next LTS kernel, i.e. in the
-7.4 merge window, see
+---
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+change-id: 20260707-07-spacemit-git-repo-url-8f48a2009087
 
-https://lore.kernel.org/all/20260701212353.2196041-15-arnd@kernel.org/
+Best regards,
+--  
+Yixun Lan <dlan@kernel.org>
 
-       Arnd
