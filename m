@@ -1,210 +1,83 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F6639EF0C
-	for <soc@lists.linux.dev>; Tue,  7 Jul 2026 03:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CAA288C2D
+	for <soc@lists.linux.dev>; Tue,  7 Jul 2026 08:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783394054; cv=none; b=LTbvOOBZzT0mBi3RsO+HKolVDSuKzulfwMQb5r6ayA3oYOEDGn99D3ZZnhDVe2KCY+5rK5w8YTQ39SfLy3nwc14puzaMGZ+EjMybakYp7whemPRGLEpNcVGVr1eyhvg3Gn63UrCZM5wGYPKi73V2yNPvDVmRDxmmyQXFtH0ZG/8=
+	t=1783411685; cv=none; b=kytUJVdlUt2d3cL8AjsYOvRIkV3kYdhcVRhUa+K7Oc467zELTtcjjTQIVozyKrio3y4+OT5AR39xb+NQQvIyfrgga/LKZm1+Zdu1+w20rJI9OFLSQiRDU114cTXa/oaAtoA/vzuX+RhosFR4usHJniPWlpwWRCKw0w5NexlT5us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783394054; c=relaxed/simple;
-	bh=5Jp8jeF+SrREW3hN60FmP3Iai5PVrGN+vsevf9e3tvA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LrII5jse0Kiv6s8SCzNVm0RWufYOqXZvDClR7cG/YqOppQD4TEYHXIvELGCmBcS34uDvSS/fxnKQNfzRcrrQiOMV68qVt2kBs7rU6ZGadowYzvJK7G/G1Fm63C3JgaK0ZK8BrUs3eqPUxHk7sEAnZHiZZa0DjCqjLh615+5YEfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q5yj6+ir; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783411685; c=relaxed/simple;
+	bh=ZFqJenKHf79crL8FtIJ8E7FQoJ2ItmaH9orqP1Mmhj8=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lD2QjYBadB7dRdeqp6LP3+7asEl7FiGgasrcfpWUgR438IlRWmyZLUBChJEKn3aQAbNlldEG4itIOijQA6wxTSsgBj/y55+/xbg8KToj0u1ZCAADKQnm3oW7q6cWdFOURLlU9uwoo2Z7y9Y8/1wFs7TTwVFTpqEFAbf35FkK2PE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lubf3GRN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q5yj6+ir"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c85b73ffb52so1903002a12.3
-        for <soc@lists.linux.dev>; Mon, 06 Jul 2026 20:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783394051; x=1783998851; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MMrqUfMvT5vpakCL5ikkaGZV0QE+15QhOUc7fLT1f/Q=;
-        b=Q5yj6+irQyP9haK62EAiom9M7giHwykQwIj0D0PT5mAZKdxorir8KeAOopI43B3N7q
-         rce5PjuCcOPgqNuY+3gPYQWzGyId8ffSuNkRvXo40TV20iob+D2kth9AM+PiPLL89e5r
-         Bab2mdLKMpNlb0KvUZzM4kcTNAOcfZepHn3fBZgRaEYiqx7yILqRpd8Ir15TQ5UtNQEc
-         LcAKxQ6EO8imWoQ7bo46mstDgDnNAcL8HdiNA/MlrH9WyzAN8YyBHdgvphLnYLcZhqS+
-         KGR/teKsfmU6dpT00cLp3WX/fFPhmkul0SwktVPpAiJuyE8/Sd4hcmeqtqQG86xPtE+d
-         lcVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783394051; x=1783998851;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MMrqUfMvT5vpakCL5ikkaGZV0QE+15QhOUc7fLT1f/Q=;
-        b=E05vv8a1gMnL7rV74cnfXRw5w8qNEIe2eOLjHsmYu1PLLU4sds2NRLSFfIHCoNT5Wz
-         rqhrSTqu/qJKpaUEeuMJMw1PPtbjiG0cyxgWEouGUbpjf37Q7zxrFUXiGYW8WcRYKmdD
-         nHBQgPl2ccE0ooCOeSAFxi/R78FSRMOLH3Kl5Jew+ECOrORyNVL62q5rA+CiGN1DOz5C
-         /hM2XO/z69oWHj5JXPWse4C+XiMM0Qw3qbYigycfznXVIuHYU6+fNjzHr3q4V88PJRrg
-         3lZFIki6HiWR9xjqp0hTlCbGrVWLDuNzjS/h9E64Hdfzi1FZfAgOSMdKbPCYCWBO/jH9
-         l9Zw==
-X-Forwarded-Encrypted: i=1; AHgh+RpT2cE6BwElvhfQmSZ47LF4BYuF5zDqbSQgKFtg61tz9Rt1T+ncx+FPeezNiTQIVw8Xm/Y=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx4PNHhE+6AqE1JghmLNISBONlJEiLGb55MjvBxAeIG5WlyOC0b
-	P9r6vD4JuNQQDUBPwRWdrFuUYJzmprns1T3sZnxVQhk9fQvnAs7xPIe/
-X-Gm-Gg: AfdE7cmaYUgvEiRFtkM44cUf1UfDoh1BtzFttjCuoLrHfdXnsP80e+PaSlaL1xYA+KY
-	aI5VTjOLbRBvL3Lmz2dMW2LSgRn1+/TCd2lVQJjHKdfItphJSpmJud5Gu0WK7U7EvN2g/IzGdO1
-	F2tcIbNe7Ohk9kT0EAMy96rtWRpCufbPlK5aIV1rgWyRWy+xcltN98F9dchcVU1pQ/emfeppdyy
-	faR8llzFvWOwfRx9yOhStBzKSj6YnwRWdmikjbzNGuifoaeSJE/u0LfzS7vw83ICjy6tacdVqzt
-	j6e9k4JvT9X8liV5liqclMDS+LPoG647ePQ3P2+WQtS+uCVuvwctlLPmczGcyo6IfSOgY7iUGAJ
-	hgRTbcqPBk/hrKpfu7qv9rr8AmnOH+I3Tv00vMg0ZqiughkfsqPoyatpqyfzn3JMLuFu7p47meN
-	IM8bcsP3Hs9q7EIZSgvSj+9fbTkGtcsc4Gw5emVU4JGdCfbOrwICwjV+Dg0I42gqqsu+tYoi5Gx
-	V2O
-X-Received: by 2002:a05:6a21:6b05:b0:38d:fad1:cf2a with SMTP id adf61e73a8af0-3c08ed0adfcmr3907819637.13.1783394051311;
-        Mon, 06 Jul 2026 20:14:11 -0700 (PDT)
-Received: from dtor-ws.sjc.corp.google.com ([2a00:79e0:2ebe:8:d89b:1fdd:a8f2:dbeb])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b659666e7sm3339905c88.7.2026.07.06.20.14.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 20:14:10 -0700 (PDT)
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date: Mon, 06 Jul 2026 20:14:03 -0700
-Subject: [PATCH 4/4] ARM: sa1100: h3xxx: convert gpio-keys to use software
- nodes
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lubf3GRN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF23C1F00A3D
+	for <soc@lists.linux.dev>; Tue,  7 Jul 2026 08:08:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783411683;
+	bh=ZFqJenKHf79crL8FtIJ8E7FQoJ2ItmaH9orqP1Mmhj8=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc;
+	b=lubf3GRN11yRP6pd3XtD9CF11ay8H0xWcijybnNwc7z/zgJGFwiA9v49GBdDJR4rJ
+	 ZaUXrmc8fi+RcbawHc0XdafcLMy7Ne9Oh4Rmf3daWSPmcgDkxcEzVzw58z51lKGTbX
+	 LbfdEslLiW9k7O5LmKtKdKGpPIYcRfT0v7OfH5lOJ4dpPxpw7mHkeKNXLglno8Aroy
+	 xtQOlbf/E/z8EPgv3iuwElMi22LJ8OaESFnyzk01ih6p9XQdVPsUQ7bjCQV5wp+Vq8
+	 D7g/+5b6lEvT7WqtG810HEZhLbyF/OBlOH1RAOLKRxCf5+aC2mjf82HvXH+wQR723n
+	 sXZoMrB+zi3pA==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-39b237fb695so34093941fa.2
+        for <soc@lists.linux.dev>; Tue, 07 Jul 2026 01:08:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RpMlNUEdvKt81wzTCJSBMF70RdwlYB8LVUjR5/x6Yg3NjlnYumZoD7E5n8mYsW9n3ldbSI=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy14ZpIAMEPbzw5XjfenjPLj7XPAPPIthdYWjcYospjTYgcX6TV
+	DS6IA74pLd/KYruElnFDzhgBGLWEbR+Ec9jXwq2DZsX0PmsgNasQB/Ttntvne3qK7uTd5XjEfrl
+	12396mPfEshoFIGyPtedBkxu2oYLV7EF3Bu2PaWPXDQ==
+X-Received: by 2002:a05:651c:551:b0:39c:6927:5c0e with SMTP id
+ 38308e7fff4ca-39c69275c6emr4674581fa.18.1783411682550; Tue, 07 Jul 2026
+ 01:08:02 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 7 Jul 2026 01:08:01 -0700
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 7 Jul 2026 01:08:01 -0700
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <20260706-sa1100-swnode-v1-0-332759bbd930@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260706-sa1100-swnode-v1-4-332759bbd930@gmail.com>
 References: <20260706-sa1100-swnode-v1-0-332759bbd930@gmail.com>
-In-Reply-To: <20260706-sa1100-swnode-v1-0-332759bbd930@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>, 
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
- soc@lists.linux.dev
+Date: Tue, 7 Jul 2026 01:08:01 -0700
+X-Gmail-Original-Message-ID: <CAMRc=MdfRs13TAqRqwff+=v3SrTXynyhCb75udG46hmwTRwuKw@mail.gmail.com>
+X-Gm-Features: AVVi8CdXMJVBF0F-w40gf2-4DxP-Pr9ZrnyQOzWnxVH-2OB9v_JiQsUD63iUHTg
+Message-ID: <CAMRc=MdfRs13TAqRqwff+=v3SrTXynyhCb75udG46hmwTRwuKw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] ARM: sa1100: convert gpio-keys to software nodes
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org
-X-Mailer: b4 0.16-dev-b242f
+	linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Russell King <linux@armlinux.org.uk>, Linus Walleij <linusw@kernel.org>, 
+	Bartosz Golaszewski <brgl@kernel.org>, soc@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Convert the legacy gpio-keys platform device on the StrongARM SA-1100
-HP iPAQ H3xxx series boards to use software nodes and device properties.
-This helps progress the removal of platform data support from the
-gpio-keys driver.
+On Tue, 7 Jul 2026 05:13:59 +0200, Dmitry Torokhov
+<dmitry.torokhov@gmail.com> said:
+> This patch series converts StrongARM SA-1100 evaluation and handheld
+> boards (Assabet, Collie, and HP iPAQ H3xxx) from legacy platform data
+> (struct gpio_keys_platform_data) to static software nodes and device
+> properties.
+>
+> The first patch registers a shared software node for the SA-1100 SoC
+> GPIO controller in drivers/gpio/gpio-sa1100.c, attaching its firmware
+> node directly to the GPIO chip prior to registration. The subsequent
+> patches convert the board setup files to define static software nodes
+> referencing the SoC GPIO controller directly, allowing pin bindings to
+> be resolved via the attached firmware node without relying on name
+> matching.
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
 
-Define static software nodes for the gpio-keys device and the power and
-action button child nodes at file scope, referencing the SA-1100 GPIO
-controller node directly. In h3xxx_mach_init(), register the software node
-group and use platform_device_register_full() to register the device.
+Will this board not die? Anyway:
 
-Assisted-by: Antigravity:gemini-3.5-flash
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- arch/arm/mach-sa1100/h3xxx.c | 69 +++++++++++++++++++++++++++-----------------
- 1 file changed, 42 insertions(+), 27 deletions(-)
-
-diff --git a/arch/arm/mach-sa1100/h3xxx.c b/arch/arm/mach-sa1100/h3xxx.c
-index d685f03f51f3..13c0aa4c0bfa 100644
---- a/arch/arm/mach-sa1100/h3xxx.c
-+++ b/arch/arm/mach-sa1100/h3xxx.c
-@@ -8,9 +8,10 @@
- 
- #include <linux/kernel.h>
- #include <linux/gpio/machine.h>
-+#include <linux/gpio/property.h>
- #include <linux/gpio.h>
--#include <linux/gpio_keys.h>
- #include <linux/input.h>
-+#include <linux/property.h>
- #include <linux/mtd/mtd.h>
- #include <linux/mtd/partitions.h>
- #include <linux/platform_data/gpio-htc-egpio.h>
-@@ -168,35 +169,48 @@ static struct platform_device h3xxx_egpio = {
-  * GPIO keys
-  */
- 
--static struct gpio_keys_button h3xxx_button_table[] = {
--	{
--		.code		= KEY_POWER,
--		.gpio		= H3XXX_GPIO_PWR_BUTTON,
--		.desc		= "Power Button",
--		.active_low	= 1,
--		.type		= EV_KEY,
--		.wakeup		= 1,
--	}, {
--		.code		= KEY_ENTER,
--		.gpio		= H3XXX_GPIO_ACTION_BUTTON,
--		.active_low	= 1,
--		.desc		= "Action button",
--		.type		= EV_KEY,
--		.wakeup		= 0,
--	},
-+static const struct software_node h3xxx_gpio_keys_node = {
-+	.name = "h3xxx-gpio-keys",
- };
- 
--static struct gpio_keys_platform_data h3xxx_keys_data = {
--	.buttons  = h3xxx_button_table,
--	.nbuttons = ARRAY_SIZE(h3xxx_button_table),
-+static const struct property_entry h3xxx_power_key_props[] = {
-+	PROPERTY_ENTRY_U32("linux,code", KEY_POWER),
-+	PROPERTY_ENTRY_GPIO("gpios", &sa1100_gpiochip_node,
-+			    H3XXX_GPIO_PWR_BUTTON, GPIO_ACTIVE_LOW),
-+	PROPERTY_ENTRY_STRING("label", "Power Button"),
-+	PROPERTY_ENTRY_BOOL("wakeup-source"),
-+	{ }
- };
- 
--static struct platform_device h3xxx_keys = {
--	.name	= "gpio-keys",
--	.id	= -1,
--	.dev	= {
--		.platform_data = &h3xxx_keys_data,
--	},
-+static const struct software_node h3xxx_power_key_node = {
-+	.parent = &h3xxx_gpio_keys_node,
-+	.properties = h3xxx_power_key_props,
-+};
-+
-+static const struct property_entry h3xxx_action_key_props[] = {
-+	PROPERTY_ENTRY_U32("linux,code", KEY_ENTER),
-+	PROPERTY_ENTRY_GPIO("gpios", &sa1100_gpiochip_node,
-+			    H3XXX_GPIO_ACTION_BUTTON, GPIO_ACTIVE_LOW),
-+	PROPERTY_ENTRY_STRING("label", "Action button"),
-+	{ }
-+};
-+
-+static const struct software_node h3xxx_action_key_node = {
-+	.parent = &h3xxx_gpio_keys_node,
-+	.properties = h3xxx_action_key_props,
-+};
-+
-+static const struct software_node * const h3xxx_gpio_keys_swnodes[] __initconst = {
-+	&h3xxx_gpio_keys_node,
-+	&h3xxx_power_key_node,
-+	&h3xxx_action_key_node,
-+	NULL
-+};
-+
-+static const struct platform_device_info h3xxx_gpio_keys_dev_info __initconst = {
-+	.name = "gpio-keys",
-+	.id = PLATFORM_DEVID_NONE,
-+	.swnode = &h3xxx_gpio_keys_node,
- };
- 
- static struct resource h3xxx_micro_resources[] = {
-@@ -214,7 +228,6 @@ struct platform_device h3xxx_micro_asic = {
- 
- static struct platform_device *h3xxx_devices[] = {
- 	&h3xxx_egpio,
--	&h3xxx_keys,
- 	&h3xxx_micro_asic,
- };
- 
-@@ -240,6 +253,8 @@ void __init h3xxx_mach_init(void)
- 	sa1100_register_uart_fns(&h3xxx_port_fns);
- 	sa11x0_register_mtd(&h3xxx_flash_data, &h3xxx_flash_resource, 1);
- 	platform_add_devices(h3xxx_devices, ARRAY_SIZE(h3xxx_devices));
-+	software_node_register_node_group(h3xxx_gpio_keys_swnodes);
-+	platform_device_register_full(&h3xxx_gpio_keys_dev_info);
- }
- 
- static struct map_desc h3600_io_desc[] __initdata = {
-
--- 
-2.55.0.rc2.803.g1fd1e6609c-goog
-
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
