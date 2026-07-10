@@ -1,705 +1,268 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C695F3B14C2;
-	Fri, 10 Jul 2026 21:20:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2978C3BFAD1
+	for <soc@lists.linux.dev>; Fri, 10 Jul 2026 21:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783718415; cv=none; b=pvlEIdP6Su5PBTDBdQOoNEinykuP8Z+wbYNDGo2w26vdQ4EfzuxOM1oyo5A9afoQXyF4SLWjY0cFIMJYA9uSjVW41mbjCvif4Y8zG6YsegH1FqHRh6vWjjelCiyOi/elQrqFjQW2tahvYnsGKCSLL5P1hTscE/e7hAa9wi3dsE4=
+	t=1783719246; cv=none; b=PYVsVTWI3E0O+4XKbPbzQPHWHFXu9PU5xbNdhh+ia4e/PTJLz47mgQ/l5unA4ANeWm0cOEJr1qLPEwflLY3M5nD1orjE3dQPw3Fb0Jg+fNSi93NKXSrHNuQffnq7WP5/cR4U7kfwuKhNry312StGtYfy4xU2iRly7lFfBCEfejY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783718415; c=relaxed/simple;
-	bh=P0o6CHjt2lvU/xlum6f9tVkSpLW+Tp+bhsZMgLmGLYM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GLBNnd4ZahX5wlFOLFn4ukEKEdrRwZ+ojZ7FQ5r7538XO7OwJg49Zr+4jgecozsj8qR9r9nPWuYZukaYcKbk+kLK3eyS0IxWsz+ACUyW4QnMq0efczVABoIWrX1ajehvM4kode9lpMDQ0ZtAT76pjbbqDVNKciWQe1Vm8+SGsAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9ds6k7l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783719246; c=relaxed/simple;
+	bh=HKXjnBOJj12GiX6kZkkmwQmyWF9uv3JRofz6E6dyHJM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=g97pIbnJrPhaWLtK6eTR/QjcxTN9MCTT9wtS5QkIcEnRQoChjrb+hYmSztu67ruiQcjK8OJ7gJdQxBUQf/aQQokDn3zGFlcDjfkI6xdZjHuJdTR8DlWvmJSkQNYv0SGVjlSO6Dt63fGZDujEQihR/iALrqQRhVmxhQRSfu3jHNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=QPS/Nz5y; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dLfVojXr; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9ds6k7l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941571F00A3A;
-	Fri, 10 Jul 2026 21:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783718413;
-	bh=Nddv6YM6jCHAHMHX/xS7byg0Cl808gRkq4H81yJyXEU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=n9ds6k7leufPky9YIUoMQKcTAYHTvazHLFYqtSIHsYMtfs5VnNJ/aRcgnVlkkuS6E
-	 tFbN97uAoJ838nEGxeSrfBLSJH+BvoAg84kYquJicHw66lLoioRPDhRxaGfPW/kp9c
-	 f7bfXzkJEZ+9QY8aktaNZIkzqLapcULMU7ZPna3R9VrVy5avonz2HzSkTPeyg+sfP+
-	 vjWxCNgArzuJmoEgi2V7WaqMH77JfFdZ7WQwjt2Xy71+25PU2yqT1v83o0hbIS1Bm6
-	 zbGDxaRZKI/046jZmSTMkPQqfP3nAZ8YLMG4BLVtwpBy68+xi2Awynn+CIPPNJH9XE
-	 u2cxi8KsT0ZmA==
-From: Arnd Bergmann <arnd@kernel.org>
-To: linux-gpio@vger.kernel.org,
-	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Frank Li <Frank.Li@nxp.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Greg Ungerer <gerg@linux-m68k.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Dominik Brodowski <linux@dominikbrodowski.net>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	patches@opensource.cirrus.com,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-sunxi@lists.linux.dev,
-	linux-phy@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-sound@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	soc@lists.linux.dev
-Subject: [PATCH v2 01/10] ARM: replace linux/gpio.h inclusions
-Date: Fri, 10 Jul 2026 23:19:46 +0200
-Message-Id: <20260710211954.1373336-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260710211954.1373336-1-arnd@kernel.org>
-References: <20260710211954.1373336-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QPS/Nz5y";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dLfVojXr"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 953441D000C0;
+	Fri, 10 Jul 2026 17:34:02 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Fri, 10 Jul 2026 17:34:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1783719242; x=1783805642; bh=j8
+	VNDpb1bJMZLFW82qLI/e4xSQf3HKQRtP70vunhlNI=; b=QPS/Nz5y4mx01TFFxy
+	fP63BlXkXVHP9VvqgUy3V4/p+t/9adxU1G7zhefoWtHvfPhTNkm6BVNmfrKZV5/K
+	odbq4K+3QTN9L0LBhIwMzvN3kQgdFCQyUcZyggSUgJn6f0Y+zU2M5adyANtB7pgn
+	PpcVmyvgPyLUeJK9ep7t31JtHMKiFLX+AtHbogWgf4Ap8sRalSQWFQeLY9/LUcvX
+	nQWtXaANuDrnG180QV0yqaOAMTlW/kpJ6JjvLyJZVz1ZAT4zaI39oFEueHzZYlHV
+	dqfYjhSlBh0+JDbigZqrWQiEOYF3gtyaEELW4ZTJg7QeB1L8hzbBPhqDYWGXGsdv
+	bBKA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1783719242; x=1783805642; bh=j8VNDpb1bJMZLFW82qLI/e4xSQf3
+	HKQRtP70vunhlNI=; b=dLfVojXrqg3M09eNUUnd29e5SDSEWv0lHU7/43QiXDmv
+	TrG4BxPfBz10kX+XlnlvSMFHR6alZGE7ZrO2kj+/yVeGBSt0DVaeT0JuDhqjIQHd
+	C3FKszmMRMUjC+0nCpLtEWp+I1/QPJ8+hN9dTvSQ02V3smB075B8wQCpSQISaIz1
+	OFHDjp8Bug8mRNpMQHl4eTvOGYA39e7e5UawHytd/XhGr9cgj4N3vmm2/jHYcY4D
+	GAIx1THNetGHMqXAx+bmOKQyZAjy+AubLpRgBaB8a3dcb3fQrpsPj+wrPCaWmrJ+
+	QYQPOJKDviie/E/ve2CMMDv95K23+CP3xTwu84ewjQ==
+X-ME-Sender: <xms:SGVRamd5fboQAUrBeKtuQW0QdqVrR-0lvcSKIzZyam-hE7VPwDPhOQ>
+    <xme:SGVRarAOAjuY3n1fRosUNLkR1hPhj3rH9yt8tr8L2gMk5FObyieYgZ3FaL9UVBJAt
+    l7bZ488uhhHiwK9W0uOGEjOWAb4yhztP4eyGCJuRrB1AcvLARxsDGv6>
+X-ME-Proxy-Cause: dmFkZTEwV5K604c0nz6qlDzmIx+dxC8k7DkU1ALEyj1myIvPuPUcD1yqypWYSbF3z8aroh
+    59ac9KxQIxFwN1taF4bOwuk3akOARh3W26AcjWenhbEIeELPLzK6HqINGGtMU32oYkjk8N
+    3E7CzDqoEJuDJv3oSDFveYAla17nR5NPUDcjXpRHBWsYVXlQMpjmj065eTXfW6f2qhe+sJ
+    YvaBEWIAjBKNeJkFHeEZTdAC24vUW/tMSSqJzCaFhTFki45sliOJcNiUWjnDewdKDdqIYy
+    8HCUx/tJK1Gf+t1AFwRFwS6qvk9Er5sKDsY2woRcO9d6HYAh8SoZtdLoaD668Th6olpdsG
+    aSOSZXAcCsv884opgypGg4z+HDworoOoXDeznCxrIZyzdHF1Cb09MMqc55clBDqa+fClCi
+    ab+k4J5weDkHRwiJe60F+6bRFqMspcKP1+fSNxLYJgxCFlTstduccdXWQ3YAZHrKxFIQ5I
+    jBXmi6OXq91Wig4J5Oph1sBwBJoC/5+kfSJV2jFDyqaVVu0DMvdkIBVUOkCpfm8f23N2ul
+    SCPhiHQT1xizlpMPv00ysJbwSwHbID3A9XiaszeCVU/l079+kyWthYWCq7XgmrGh9jQI7O
+    dfG1AUtMta0u52tXOmc8HrSr8M+WlR0qziqrg0HOGiJat8C2g/HRG/SAqAvQ
+X-ME-Proxy: <xmx:SGVRagoo7g1ySKKk_rE9wQbHYHO9SOLQZaAR4Gy3P0r_mweLwtJkew>
+    <xmx:SGVRatdtuB9sxOgqW8mqmMX1V251IhEndVmQpPKd-XirzfED2vyFxw>
+    <xmx:SGVRauKE98ULyvJORCXgVTU35oxYJiyU435cYTemC95r9gQ0qSWH_Q>
+    <xmx:SGVRaqtrIEAQfgxBfFl95zwJvAdraEJGLivCKzuof9V4r8eLXiL6Qw>
+    <xmx:SmVRagb8vUY4y9k8BHzqvDtWlP6WS5bTMYiKjIxWFq4PD3IC7x1wqZWx>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4F1281820082; Fri, 10 Jul 2026 17:34:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AAVDWq93qhKc
+Date: Fri, 10 Jul 2026 23:33:39 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: soc@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, "Arnd Bergmann" <arnd@arndb.de>,
+ "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+ "Alexander Sverdlin" <alexander.sverdlin@siemens.com>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+ "Andrew Lunn" <andrew@lunn.ch>, "Ard Biesheuvel" <ardb@kernel.org>,
+ "Claudiu Beznea" <claudiu.beznea@tuxon.dev>,
+ "Daniel Mack" <daniel@zonque.org>,
+ "Ethan Nelson-Moore" <enelsonmoore@gmail.com>,
+ "Frank Li" <Frank.Li@nxp.com>,
+ "Gregory Clement" <gregory.clement@bootlin.com>,
+ "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+ "Jeremy J. Peper" <jeremy@jeremypeper.com>,
+ "Kristoffer Ericson" <kristoffer.ericson@gmail.com>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Linus Walleij" <linusw@kernel.org>, "Mark Brown" <broonie@kernel.org>,
+ "Marc Zyngier" <maz@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+ "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+ "Patrice Chotard" <patrice.chotard@foss.st.com>,
+ "Ralph Siemsen" <ralph.siemsen@linaro.org>,
+ "Robert Jarzmik" <robert.jarzmik@free.fr>,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Sascha Hauer" <s.hauer@pengutronix.de>,
+ "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
+ "Stefan Agner" <stefan@agner.ch>,
+ "Stefan Wiehler" <stefan.wiehler@nokia.com>,
+ "Tony Lindgren" <tony@atomide.com>, "Vladimir Zapolskiy" <vz@mleia.com>,
+ "Will Deacon" <will@kernel.org>, linux-arm-kernel@lists.infradead.org
+Message-Id: <a45f46bd-047f-4ca4-820e-fa92678bbf3f@app.fastmail.com>
+Subject: [GIT PULL] ARM: platform and feature deprecation for 7.3
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
-linux/gpio.h should no longer be used, convert these instead to
-either linux/gpio/consumer.h or linux/gpio/legacy.h as needed.
+  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: soc@lists.linux.dev
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/mach-davinci/da850.c                  | 2 +-
- arch/arm/mach-dove/mpp.c                       | 2 +-
- arch/arm/mach-mv78xx0/buffalo-wxl-setup.c      | 2 +-
- arch/arm/mach-mv78xx0/irq.c                    | 2 +-
- arch/arm/mach-mv78xx0/mpp.c                    | 2 +-
- arch/arm/mach-mvebu/pm.c                       | 2 +-
- arch/arm/mach-mxs/mach-mxs.c                   | 2 +-
- arch/arm/mach-orion5x/board-d2net.c            | 2 +-
- arch/arm/mach-orion5x/board-rd88f5182.c        | 2 +-
- arch/arm/mach-orion5x/dns323-setup.c           | 2 +-
- arch/arm/mach-orion5x/irq.c                    | 2 +-
- arch/arm/mach-orion5x/kurobox_pro-setup.c      | 2 +-
- arch/arm/mach-orion5x/mv2120-setup.c           | 2 +-
- arch/arm/mach-orion5x/net2big-setup.c          | 2 +-
- arch/arm/mach-orion5x/terastation_pro2-setup.c | 2 +-
- arch/arm/mach-orion5x/ts209-setup.c            | 2 +-
- arch/arm/mach-orion5x/ts409-setup.c            | 2 +-
- arch/arm/mach-pxa/am200epd.c                   | 2 +-
- arch/arm/mach-pxa/am300epd.c                   | 2 +-
- arch/arm/mach-pxa/generic.c                    | 2 +-
- arch/arm/mach-pxa/gumstix.c                    | 2 +-
- arch/arm/mach-pxa/mfp-pxa2xx.c                 | 2 +-
- arch/arm/mach-pxa/pxa25x.c                     | 2 +-
- arch/arm/mach-pxa/pxa27x.c                     | 2 +-
- arch/arm/mach-pxa/reset.c                      | 2 +-
- arch/arm/mach-pxa/sharpsl_pm.c                 | 2 +-
- arch/arm/mach-pxa/spitz.c                      | 2 +-
- arch/arm/mach-pxa/spitz_pm.c                   | 2 +-
- arch/arm/mach-s3c/dev-audio-s3c64xx.c          | 2 +-
- arch/arm/mach-s3c/devs.c                       | 2 +-
- arch/arm/mach-s3c/mach-crag6410.c              | 2 +-
- arch/arm/mach-s3c/pm-gpio.c                    | 2 +-
- arch/arm/mach-s3c/pm-s3c64xx.c                 | 2 +-
- arch/arm/mach-s3c/setup-fb-24bpp-s3c64xx.c     | 2 +-
- arch/arm/mach-s3c/setup-i2c0-s3c64xx.c         | 2 +-
- arch/arm/mach-s3c/setup-i2c1-s3c64xx.c         | 2 +-
- arch/arm/mach-s3c/setup-keypad-s3c64xx.c       | 2 +-
- arch/arm/mach-s3c/setup-sdhci-gpio-s3c64xx.c   | 2 +-
- arch/arm/mach-s3c/setup-spi-s3c64xx.c          | 2 +-
- arch/arm/mach-sa1100/collie.c                  | 2 +-
- arch/arm/mach-sa1100/generic.c                 | 2 +-
- arch/arm/mach-sa1100/h3600.c                   | 2 +-
- arch/arm/mach-sa1100/h3xxx.c                   | 2 +-
- arch/arm/plat-orion/mpp.c                      | 2 +-
- 44 files changed, 44 insertions(+), 44 deletions(-)
+are available in the Git repository at:
 
-diff --git a/arch/arm/mach-davinci/da850.c b/arch/arm/mach-davinci/da850.c
-index 706f8241b5e7..611cce70c5bb 100644
---- a/arch/arm/mach-davinci/da850.c
-+++ b/arch/arm/mach-davinci/da850.c
-@@ -9,7 +9,7 @@
-  * 2009 (c) MontaVista Software, Inc.
-  */
- 
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/init.h>
- #include <linux/io.h>
- #include <linux/mfd/da8xx-cfgchip.h>
-diff --git a/arch/arm/mach-dove/mpp.c b/arch/arm/mach-dove/mpp.c
-index 93cb137da5f8..e41bd473abe9 100644
---- a/arch/arm/mach-dove/mpp.c
-+++ b/arch/arm/mach-dove/mpp.c
-@@ -6,7 +6,7 @@
-  */
- 
- #include <linux/kernel.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/io.h>
- #include <plat/mpp.h>
- #include <plat/orion-gpio.h>
-diff --git a/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c b/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-index 62e982f74bc2..3b2e381b7383 100644
---- a/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-+++ b/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-@@ -14,7 +14,7 @@
- #include <linux/mv643xx_eth.h>
- #include <linux/ethtool.h>
- #include <linux/i2c.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio_keys.h>
- #include <linux/input.h>
- #include <asm/mach-types.h>
-diff --git a/arch/arm/mach-mv78xx0/irq.c b/arch/arm/mach-mv78xx0/irq.c
-index a34b6855fb19..6e42f6446637 100644
---- a/arch/arm/mach-mv78xx0/irq.c
-+++ b/arch/arm/mach-mv78xx0/irq.c
-@@ -4,7 +4,7 @@
-  *
-  * MV78xx0 IRQ handling.
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/kernel.h>
- #include <linux/irq.h>
- #include <linux/io.h>
-diff --git a/arch/arm/mach-mv78xx0/mpp.c b/arch/arm/mach-mv78xx0/mpp.c
-index aff0e612cbba..32bf590d79fe 100644
---- a/arch/arm/mach-mv78xx0/mpp.c
-+++ b/arch/arm/mach-mv78xx0/mpp.c
-@@ -4,7 +4,7 @@
-  *
-  * MPP functions for Marvell MV78x00 SoCs
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
- #include <linux/io.h>
-diff --git a/arch/arm/mach-mvebu/pm.c b/arch/arm/mach-mvebu/pm.c
-index b149d9b77505..616a7fb22d86 100644
---- a/arch/arm/mach-mvebu/pm.c
-+++ b/arch/arm/mach-mvebu/pm.c
-@@ -9,7 +9,7 @@
- 
- #include <linux/cpu_pm.h>
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
- #include <linux/mbus.h>
-diff --git a/arch/arm/mach-mxs/mach-mxs.c b/arch/arm/mach-mxs/mach-mxs.c
-index f639d5004351..c8231a480052 100644
---- a/arch/arm/mach-mxs/mach-mxs.c
-+++ b/arch/arm/mach-mxs/mach-mxs.c
-@@ -9,7 +9,7 @@
- #include <linux/clkdev.h>
- #include <linux/delay.h>
- #include <linux/err.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/init.h>
- #include <linux/reboot.h>
- #include <linux/micrel_phy.h>
-diff --git a/arch/arm/mach-orion5x/board-d2net.c b/arch/arm/mach-orion5x/board-d2net.c
-index 09bf366d05ff..7cf09da9d9e7 100644
---- a/arch/arm/mach-orion5x/board-d2net.c
-+++ b/arch/arm/mach-orion5x/board-d2net.c
-@@ -13,7 +13,7 @@
- #include <linux/pci.h>
- #include <linux/irq.h>
- #include <linux/leds.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <asm/mach-types.h>
- #include <asm/mach/arch.h>
-diff --git a/arch/arm/mach-orion5x/board-rd88f5182.c b/arch/arm/mach-orion5x/board-rd88f5182.c
-index 1c14e49a90a6..9e2fe74ec68a 100644
---- a/arch/arm/mach-orion5x/board-rd88f5182.c
-+++ b/arch/arm/mach-orion5x/board-rd88f5182.c
-@@ -6,7 +6,7 @@
-  *
-  * Maintainer: Ronen Shitrit <rshitrit@marvell.com>
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
- #include <linux/of.h>
-diff --git a/arch/arm/mach-orion5x/dns323-setup.c b/arch/arm/mach-orion5x/dns323-setup.c
-index fcd38ff7ca45..7b81b08b0dda 100644
---- a/arch/arm/mach-orion5x/dns323-setup.c
-+++ b/arch/arm/mach-orion5x/dns323-setup.c
-@@ -13,7 +13,7 @@
-  * License, or (at your option) any later version.
-  *
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-orion5x/irq.c b/arch/arm/mach-orion5x/irq.c
-index e17727e53cb4..689bec1ebe89 100644
---- a/arch/arm/mach-orion5x/irq.c
-+++ b/arch/arm/mach-orion5x/irq.c
-@@ -6,7 +6,7 @@
-  *
-  * Maintainer: Tzachi Perelstein <tzachi@marvell.com>
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/kernel.h>
- #include <linux/irq.h>
- #include <linux/io.h>
-diff --git a/arch/arm/mach-orion5x/kurobox_pro-setup.c b/arch/arm/mach-orion5x/kurobox_pro-setup.c
-index 339b10891808..e61b9ab06943 100644
---- a/arch/arm/mach-orion5x/kurobox_pro-setup.c
-+++ b/arch/arm/mach-orion5x/kurobox_pro-setup.c
-@@ -4,7 +4,7 @@
-  *
-  * Maintainer: Ronen Shitrit <rshitrit@marvell.com>
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
- #include <linux/platform_device.h>
-diff --git a/arch/arm/mach-orion5x/mv2120-setup.c b/arch/arm/mach-orion5x/mv2120-setup.c
-index 5b0249f109cd..b15fe5b7a0f9 100644
---- a/arch/arm/mach-orion5x/mv2120-setup.c
-+++ b/arch/arm/mach-orion5x/mv2120-setup.c
-@@ -7,7 +7,7 @@
-  * published by the Free Software Foundation; either version 2 of the
-  * License, or (at your option) any later version.
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-orion5x/net2big-setup.c b/arch/arm/mach-orion5x/net2big-setup.c
-index 4afd9b4c71a9..f04571e79805 100644
---- a/arch/arm/mach-orion5x/net2big-setup.c
-+++ b/arch/arm/mach-orion5x/net2big-setup.c
-@@ -17,7 +17,7 @@
- #include <linux/input.h>
- #include <linux/i2c.h>
- #include <linux/ata_platform.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/delay.h>
- #include <asm/mach-types.h>
-diff --git a/arch/arm/mach-orion5x/terastation_pro2-setup.c b/arch/arm/mach-orion5x/terastation_pro2-setup.c
-index a9f01859d101..c3db3376950a 100644
---- a/arch/arm/mach-orion5x/terastation_pro2-setup.c
-+++ b/arch/arm/mach-orion5x/terastation_pro2-setup.c
-@@ -4,7 +4,7 @@
-  *
-  * Maintainer: Sylver Bruneau <sylver.bruneau@googlemail.com>
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
- #include <linux/platform_device.h>
-diff --git a/arch/arm/mach-orion5x/ts209-setup.c b/arch/arm/mach-orion5x/ts209-setup.c
-index de9092e992c5..25cd50306c65 100644
---- a/arch/arm/mach-orion5x/ts209-setup.c
-+++ b/arch/arm/mach-orion5x/ts209-setup.c
-@@ -4,7 +4,7 @@
-  *
-  * Maintainer: Byron Bradley <byron.bbradley@gmail.com>
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
- #include <linux/platform_device.h>
-diff --git a/arch/arm/mach-orion5x/ts409-setup.c b/arch/arm/mach-orion5x/ts409-setup.c
-index 725688aa5cba..f92acef0b45f 100644
---- a/arch/arm/mach-orion5x/ts409-setup.c
-+++ b/arch/arm/mach-orion5x/ts409-setup.c
-@@ -7,7 +7,7 @@
-  * Copyright (C) 2008  Sylver Bruneau <sylver.bruneau@gmail.com>
-  * Copyright (C) 2008  Martin Michlmayr <tbm@cyrius.com>
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-pxa/am200epd.c b/arch/arm/mach-pxa/am200epd.c
-index cac0bb09db14..4814f3cfe775 100644
---- a/arch/arm/mach-pxa/am200epd.c
-+++ b/arch/arm/mach-pxa/am200epd.c
-@@ -28,7 +28,7 @@
- #include <linux/init.h>
- #include <linux/platform_device.h>
- #include <linux/irq.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- 
- #include "pxa25x.h"
- #include "gumstix.h"
-diff --git a/arch/arm/mach-pxa/am300epd.c b/arch/arm/mach-pxa/am300epd.c
-index 4b55bc89db8f..435fb72da7de 100644
---- a/arch/arm/mach-pxa/am300epd.c
-+++ b/arch/arm/mach-pxa/am300epd.c
-@@ -26,7 +26,7 @@
- #include <linux/init.h>
- #include <linux/platform_device.h>
- #include <linux/irq.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- 
- #include "gumstix.h"
- #include "mfp-pxa25x.h"
-diff --git a/arch/arm/mach-pxa/generic.c b/arch/arm/mach-pxa/generic.c
-index 02fdde7e3e34..f181e7b7c6be 100644
---- a/arch/arm/mach-pxa/generic.c
-+++ b/arch/arm/mach-pxa/generic.c
-@@ -13,7 +13,7 @@
-  * initialization stuff for PXA machines which can be overridden later if
-  * need be.
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-pxa/gumstix.c b/arch/arm/mach-pxa/gumstix.c
-index 6074815a4bca..7ab0cb015d1b 100644
---- a/arch/arm/mach-pxa/gumstix.c
-+++ b/arch/arm/mach-pxa/gumstix.c
-@@ -22,7 +22,7 @@
- #include <linux/mtd/partitions.h>
- #include <linux/gpio/machine.h>
- #include <linux/gpio/property.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/err.h>
- #include <linux/clk.h>
- 
-diff --git a/arch/arm/mach-pxa/mfp-pxa2xx.c b/arch/arm/mach-pxa/mfp-pxa2xx.c
-index d1347055fbe4..566fb4e2adba 100644
---- a/arch/arm/mach-pxa/mfp-pxa2xx.c
-+++ b/arch/arm/mach-pxa/mfp-pxa2xx.c
-@@ -9,7 +9,7 @@
-  *  on PXA3xx,  what's more important, the low power pin state and
-  *  wakeup detection are also supported by the same framework.
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/gpio-pxa.h>
- #include <linux/module.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-pxa/pxa25x.c b/arch/arm/mach-pxa/pxa25x.c
-index a4e878be004a..a273f0af095e 100644
---- a/arch/arm/mach-pxa/pxa25x.c
-+++ b/arch/arm/mach-pxa/pxa25x.c
-@@ -15,7 +15,7 @@
-  */
- #include <linux/dmaengine.h>
- #include <linux/dma/pxa-dma.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/gpio-pxa.h>
- #include <linux/module.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-pxa/pxa27x.c b/arch/arm/mach-pxa/pxa27x.c
-index 1d34de7e5fbe..814e0a12f38a 100644
---- a/arch/arm/mach-pxa/pxa27x.c
-+++ b/arch/arm/mach-pxa/pxa27x.c
-@@ -10,7 +10,7 @@
-  */
- #include <linux/dmaengine.h>
- #include <linux/dma/pxa-dma.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/gpio-pxa.h>
- #include <linux/module.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-pxa/reset.c b/arch/arm/mach-pxa/reset.c
-index 27293549f8ad..49d2e46a1fae 100644
---- a/arch/arm/mach-pxa/reset.c
-+++ b/arch/arm/mach-pxa/reset.c
-@@ -2,7 +2,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/io.h>
- #include <asm/proc-fns.h>
- #include <asm/system_misc.h>
-diff --git a/arch/arm/mach-pxa/sharpsl_pm.c b/arch/arm/mach-pxa/sharpsl_pm.c
-index 71b282b146d0..a611eea70e5a 100644
---- a/arch/arm/mach-pxa/sharpsl_pm.c
-+++ b/arch/arm/mach-pxa/sharpsl_pm.c
-@@ -19,7 +19,7 @@
- #include <linux/delay.h>
- #include <linux/leds.h>
- #include <linux/suspend.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/io.h>
- 
- #include <asm/mach-types.h>
-diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
-index 5091b601c4e1..5eaf38243b9e 100644
---- a/arch/arm/mach-pxa/spitz.c
-+++ b/arch/arm/mach-pxa/spitz.c
-@@ -12,7 +12,7 @@
- #include <linux/platform_device.h>
- #include <linux/delay.h>
- #include <linux/gpio_keys.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/gpio/property.h>
- #include <linux/leds.h>
-diff --git a/arch/arm/mach-pxa/spitz_pm.c b/arch/arm/mach-pxa/spitz_pm.c
-index 03b4b347f11a..806847c36549 100644
---- a/arch/arm/mach-pxa/spitz_pm.c
-+++ b/arch/arm/mach-pxa/spitz_pm.c
-@@ -10,7 +10,7 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio-pxa.h>
- #include <linux/interrupt.h>
- #include <linux/platform_device.h>
-diff --git a/arch/arm/mach-s3c/dev-audio-s3c64xx.c b/arch/arm/mach-s3c/dev-audio-s3c64xx.c
-index 7ce119dc3a72..8884374dbcdc 100644
---- a/arch/arm/mach-s3c/dev-audio-s3c64xx.c
-+++ b/arch/arm/mach-s3c/dev-audio-s3c64xx.c
-@@ -7,7 +7,7 @@
- #include <linux/string.h>
- #include <linux/platform_device.h>
- #include <linux/dma-mapping.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/export.h>
- 
- #include "irqs.h"
-diff --git a/arch/arm/mach-s3c/devs.c b/arch/arm/mach-s3c/devs.c
-index bab2abd8a34a..572b156644bd 100644
---- a/arch/arm/mach-s3c/devs.c
-+++ b/arch/arm/mach-s3c/devs.c
-@@ -5,7 +5,7 @@
- //
- // Base Samsung platform device definitions
- 
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/interrupt.h>
-diff --git a/arch/arm/mach-s3c/mach-crag6410.c b/arch/arm/mach-s3c/mach-crag6410.c
-index c4040aad1ed3..57176719d8a6 100644
---- a/arch/arm/mach-s3c/mach-crag6410.c
-+++ b/arch/arm/mach-s3c/mach-crag6410.c
-@@ -15,7 +15,7 @@
- #include <linux/io.h>
- #include <linux/init.h>
- #include <linux/input-event-codes.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/leds.h>
- #include <linux/delay.h>
-diff --git a/arch/arm/mach-s3c/pm-gpio.c b/arch/arm/mach-s3c/pm-gpio.c
-index cfdbc2337998..fd5897cc26c7 100644
---- a/arch/arm/mach-s3c/pm-gpio.c
-+++ b/arch/arm/mach-s3c/pm-gpio.c
-@@ -11,7 +11,7 @@
- #include <linux/device.h>
- #include <linux/init.h>
- #include <linux/io.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- 
- #include "gpio-samsung.h"
- 
-diff --git a/arch/arm/mach-s3c/pm-s3c64xx.c b/arch/arm/mach-s3c/pm-s3c64xx.c
-index 284d5f462513..a73b8bd12949 100644
---- a/arch/arm/mach-s3c/pm-s3c64xx.c
-+++ b/arch/arm/mach-s3c/pm-s3c64xx.c
-@@ -11,7 +11,7 @@
- #include <linux/suspend.h>
- #include <linux/serial_core.h>
- #include <linux/io.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/pm_domain.h>
- 
- #include "map.h"
-diff --git a/arch/arm/mach-s3c/setup-fb-24bpp-s3c64xx.c b/arch/arm/mach-s3c/setup-fb-24bpp-s3c64xx.c
-index c3269cd6a848..20ae926e12db 100644
---- a/arch/arm/mach-s3c/setup-fb-24bpp-s3c64xx.c
-+++ b/arch/arm/mach-s3c/setup-fb-24bpp-s3c64xx.c
-@@ -9,7 +9,7 @@
- 
- #include <linux/kernel.h>
- #include <linux/types.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- 
- #include "fb.h"
- #include "gpio-cfg.h"
-diff --git a/arch/arm/mach-s3c/setup-i2c0-s3c64xx.c b/arch/arm/mach-s3c/setup-i2c0-s3c64xx.c
-index a6ef8d2bc995..520e97dc8754 100644
---- a/arch/arm/mach-s3c/setup-i2c0-s3c64xx.c
-+++ b/arch/arm/mach-s3c/setup-i2c0-s3c64xx.c
-@@ -9,7 +9,7 @@
- 
- #include <linux/kernel.h>
- #include <linux/types.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- 
- struct platform_device; /* don't need the contents */
- 
-diff --git a/arch/arm/mach-s3c/setup-i2c1-s3c64xx.c b/arch/arm/mach-s3c/setup-i2c1-s3c64xx.c
-index 0fe37363d26e..26f7ae455328 100644
---- a/arch/arm/mach-s3c/setup-i2c1-s3c64xx.c
-+++ b/arch/arm/mach-s3c/setup-i2c1-s3c64xx.c
-@@ -9,7 +9,7 @@
- 
- #include <linux/kernel.h>
- #include <linux/types.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- 
- struct platform_device; /* don't need the contents */
- 
-diff --git a/arch/arm/mach-s3c/setup-keypad-s3c64xx.c b/arch/arm/mach-s3c/setup-keypad-s3c64xx.c
-index 8463ad37c6ab..2e1367878fb1 100644
---- a/arch/arm/mach-s3c/setup-keypad-s3c64xx.c
-+++ b/arch/arm/mach-s3c/setup-keypad-s3c64xx.c
-@@ -5,7 +5,7 @@
- //
- // GPIO configuration for S3C64XX KeyPad device
- 
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include "gpio-cfg.h"
- #include "keypad.h"
- #include "gpio-samsung.h"
-diff --git a/arch/arm/mach-s3c/setup-sdhci-gpio-s3c64xx.c b/arch/arm/mach-s3c/setup-sdhci-gpio-s3c64xx.c
-index 646ff949acd5..728b66f80493 100644
---- a/arch/arm/mach-s3c/setup-sdhci-gpio-s3c64xx.c
-+++ b/arch/arm/mach-s3c/setup-sdhci-gpio-s3c64xx.c
-@@ -11,7 +11,7 @@
- #include <linux/interrupt.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- 
- #include "gpio-cfg.h"
- #include "sdhci.h"
-diff --git a/arch/arm/mach-s3c/setup-spi-s3c64xx.c b/arch/arm/mach-s3c/setup-spi-s3c64xx.c
-index 497aff71c29c..8d15b13ed7d5 100644
---- a/arch/arm/mach-s3c/setup-spi-s3c64xx.c
-+++ b/arch/arm/mach-s3c/setup-spi-s3c64xx.c
-@@ -3,7 +3,7 @@
- // Copyright (C) 2011 Samsung Electronics Ltd.
- //		http://www.samsung.com/
- 
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/platform_data/spi-s3c64xx.h>
- #include "gpio-cfg.h"
- #include "gpio-samsung.h"
-diff --git a/arch/arm/mach-sa1100/collie.c b/arch/arm/mach-sa1100/collie.c
-index 466d755d5702..af9c68b2093e 100644
---- a/arch/arm/mach-sa1100/collie.c
-+++ b/arch/arm/mach-sa1100/collie.c
-@@ -29,7 +29,7 @@
- #include <linux/timer.h>
- #include <linux/gpio_keys.h>
- #include <linux/input.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/power/gpio-charger.h>
- 
-diff --git a/arch/arm/mach-sa1100/generic.c b/arch/arm/mach-sa1100/generic.c
-index 99ff55e8131d..a995625ab1a0 100644
---- a/arch/arm/mach-sa1100/generic.c
-+++ b/arch/arm/mach-sa1100/generic.c
-@@ -6,7 +6,7 @@
-  *
-  * Code common to all SA11x0 machines.
-  */
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/gpio/machine.h>
- #include <linux/module.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-sa1100/h3600.c b/arch/arm/mach-sa1100/h3600.c
-index 1cfc0b1fa41c..59e9251a138e 100644
---- a/arch/arm/mach-sa1100/h3600.c
-+++ b/arch/arm/mach-sa1100/h3600.c
-@@ -8,7 +8,7 @@
- 
- #include <linux/init.h>
- #include <linux/kernel.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- 
- #include <video/sa1100fb.h>
- 
-diff --git a/arch/arm/mach-sa1100/h3xxx.c b/arch/arm/mach-sa1100/h3xxx.c
-index d685f03f51f3..b8fc1953db9f 100644
---- a/arch/arm/mach-sa1100/h3xxx.c
-+++ b/arch/arm/mach-sa1100/h3xxx.c
-@@ -8,7 +8,7 @@
- 
- #include <linux/kernel.h>
- #include <linux/gpio/machine.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio_keys.h>
- #include <linux/input.h>
- #include <linux/mtd/mtd.h>
-diff --git a/arch/arm/plat-orion/mpp.c b/arch/arm/plat-orion/mpp.c
-index 8a6880d528b6..673ecedc721d 100644
---- a/arch/arm/plat-orion/mpp.c
-+++ b/arch/arm/plat-orion/mpp.c
-@@ -12,7 +12,7 @@
- #include <linux/init.h>
- #include <linux/mbus.h>
- #include <linux/io.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <plat/orion-gpio.h>
- #include <plat/mpp.h>
- 
--- 
-2.39.5
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-feature-deprecation-for-7.3
 
+for you to fetch changes up to 6cb7a10ef7488720f4379e27575d723a85790b30:
+
+  ARM: mark mv78xx0 support as deprecated (2026-07-10 23:22:10 +0200)
+
+----------------------------------------------------------------
+ARM: platform and feature deprecation for 7.3
+
+This is attempt to bring the source code to the state that we discussed
+back in 2024, regarding a timeline for deprecating and removing features,
+in particular platforms and ABIs that are basically unused and are
+also getting in the way of maintenance.
+
+The earlier consensus was to remove these features in 2025 or 2026
+after the corresponding LTS kernel release. I would suggest pushing
+these to early 2027 now, see the patch description for details on
+each one:
+
+ - all board files that are still not converted to DT
+   (except for OMAP1 and S3C)
+
+ - iWMMXt FPU support
+
+ - ARMv6/ARM1136r0 (not ARMv6K/ARM1136r1/ARM1176) along with the
+   OMAP24xx and i.MX31 SoCs using it
+
+ - Cortex-M3/M4/M7 based microcontroller support
+   (stm32, imxrt, lpc18xx, samv7)
+
+ - LSI Axxia platform
+
+ - OABI, OABI-compat and NWFPE are confined to StrongARM based
+   builds and scheduled for removal once StrongARM is gone.
+
+ - DEPRECATED_PARAM_STRUCT, which was originally scheduled for
+   removal in 2006 (!)
+
+The ARCH_S3C64XX platform was scheduled for removal in 2024, but is
+still actively used and will get removed once Mark Brown stops using
+it. The OMAP1 platform has some remaining boardfiles and is expected to
+get converted to DT.
+
+Big-endian ARMv7 CPU support is not scheduled for removal but marked
+as broken the same way as ARM64 has, to reduce the need for testing
+unused configurations. This may be removed in the future if arm64 does
+it as well. Note that big-endian ARMv5 support is can still be
+enabled since the patches to revive little-endianm mode are still
+fresh.
+
+Regarding actually removing the code, I would suggest linux-7.4 (January
+2027), removing both the board files and any drivers that have either
+become newly unused or were missed in a previous machine removal series,
+followed by removing support for then unused CPUs a release later.
+
+Links to previous discussion:
+
+  https://lore.kernel.org/linux-arm-kernel/20210109174357.GB1551@shell.armlinux.org.uk/
+  https://lore.kernel.org/linux-arm-kernel/2831c5a6-cfbf-4fe0-b51c-0396e5b0aeb7@app.fastmail.com/
+  https://lore.kernel.org/all/20241204102904.1863796-1-arnd@kernel.org/
+  https://lore.kernel.org/all/20260701212353.2196041-1-arnd@kernel.org/
+
+----------------------------------------------------------------
+Arnd Bergmann (19):
+      ARM: use CONFIG_AEABI by default everywhere
+      ARM: limit OABI support to StrongARM CPUs
+      ARM: rework ARM11 CPU selection logic
+      ARM: deprecate support for ARM1136r0
+      ARM: turn CONFIG_ATAGS off by default
+      ARM: mark CPU_ENDIAN_BE8 as deprecated
+      ARM: update DEPRECATED_PARAM_STRUCT removal timeline
+      ARM: s3c64xx: extend deprecation schedule
+      ARM: update FPE_NWFPE help text
+      ARM: mark IWMMXT as deprecated
+      ARM: mark ARCH_DOVE as deprecated
+      ARM: PXA: mark remaining board files as deprecated
+      ARM: orion5x: mark all board files as deprecated
+      ARM: mark mach-sa1100 as deprecated
+      ARM: mark RiscPC as deprecated
+      ARM: mark footbridge as deprecated
+      ARM: mark Cortex-M3/M4/M7 based boards as deprecated
+      ARM: mark axxia platform as deprecated
+      ARM: mark mv78xx0 support as deprecated
+
+ arch/arm/Kconfig                        | 80 +++++++++++++++++++--------------
+ arch/arm/Kconfig.platforms              |  2 +-
+ arch/arm/configs/am200epdkit_defconfig  |  3 +-
+ arch/arm/configs/aspeed_g4_defconfig    |  2 -
+ arch/arm/configs/aspeed_g5_defconfig    |  1 -
+ arch/arm/configs/assabet_defconfig      |  3 ++
+ arch/arm/configs/at91_dt_defconfig      |  2 -
+ arch/arm/configs/axm55xx_defconfig      |  2 -
+ arch/arm/configs/bcm2835_defconfig      |  1 -
+ arch/arm/configs/clps711x_defconfig     |  1 -
+ arch/arm/configs/collie_defconfig       |  2 +-
+ arch/arm/configs/davinci_all_defconfig  |  1 -
+ arch/arm/configs/dove_defconfig         |  2 +-
+ arch/arm/configs/ep93xx_defconfig       |  1 -
+ arch/arm/configs/footbridge_defconfig   |  2 +
+ arch/arm/configs/gemini_defconfig       |  1 -
+ arch/arm/configs/h3600_defconfig        |  3 +-
+ arch/arm/configs/hisi_defconfig         |  1 -
+ arch/arm/configs/imx_v4_v5_defconfig    |  1 -
+ arch/arm/configs/integrator_defconfig   |  2 -
+ arch/arm/configs/ixp4xx_defconfig       |  1 -
+ arch/arm/configs/jornada720_defconfig   |  3 +-
+ arch/arm/configs/keystone_defconfig     |  1 -
+ arch/arm/configs/lpc32xx_defconfig      |  1 -
+ arch/arm/configs/mmp2_defconfig         |  1 -
+ arch/arm/configs/moxart_defconfig       |  2 -
+ arch/arm/configs/mps2_defconfig         |  1 -
+ arch/arm/configs/multi_v4t_defconfig    |  2 -
+ arch/arm/configs/multi_v5_defconfig     | 10 -----
+ arch/arm/configs/mv78xx0_defconfig      |  3 +-
+ arch/arm/configs/mvebu_v5_defconfig     | 10 -----
+ arch/arm/configs/mxs_defconfig          |  1 -
+ arch/arm/configs/neponset_defconfig     |  3 ++
+ arch/arm/configs/netwinder_defconfig    |  3 ++
+ arch/arm/configs/nhk8815_defconfig      |  1 -
+ arch/arm/configs/omap1_defconfig        |  3 +-
+ arch/arm/configs/orion5x_defconfig      | 11 -----
+ arch/arm/configs/pxa168_defconfig       |  2 -
+ arch/arm/configs/pxa3xx_defconfig       |  2 -
+ arch/arm/configs/pxa910_defconfig       |  2 -
+ arch/arm/configs/pxa_defconfig          |  5 ---
+ arch/arm/configs/rpc_defconfig          |  3 ++
+ arch/arm/configs/s3c6400_defconfig      |  2 +
+ arch/arm/configs/sama5_defconfig        |  1 -
+ arch/arm/configs/sama7_defconfig        |  1 -
+ arch/arm/configs/spear13xx_defconfig    |  1 -
+ arch/arm/configs/spitz_defconfig        |  2 +-
+ arch/arm/configs/stm32_defconfig        |  1 -
+ arch/arm/configs/versatile_defconfig    |  2 -
+ arch/arm/configs/vt8500_v6_v7_defconfig |  1 -
+ arch/arm/configs/wpcm450_defconfig      |  2 -
+ arch/arm/mach-at91/Kconfig              |  4 +-
+ arch/arm/mach-axxia/Kconfig             |  4 +-
+ arch/arm/mach-dove/Kconfig              |  8 +++-
+ arch/arm/mach-footbridge/Kconfig        |  7 ++-
+ arch/arm/mach-imx/Kconfig               | 13 ++++--
+ arch/arm/mach-mv78xx0/Kconfig           |  4 +-
+ arch/arm/mach-omap2/Kconfig             | 18 ++++++--
+ arch/arm/mach-orion5x/Kconfig           | 47 ++++++++++++++-----
+ arch/arm/mach-pxa/Kconfig               | 10 ++++-
+ arch/arm/mach-rpc/Kconfig               |  5 ++-
+ arch/arm/mach-s3c/Kconfig.s3c64xx       | 15 +++++--
+ arch/arm/mach-sa1100/Kconfig            |  5 ++-
+ arch/arm/mach-stm32/Kconfig             | 14 +++---
+ arch/arm/mach-versatile/Kconfig         | 15 ++++---
+ arch/arm/mm/Kconfig                     | 29 +++++++++++-
+ 66 files changed, 225 insertions(+), 170 deletions(-)
