@@ -1,72 +1,109 @@
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDEC3403E4
-	for <soc@lists.linux.dev>; Fri, 10 Jul 2026 14:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783693040; cv=none; b=FEBKkuets88CictQ9gciaP5KV8ozLIpn5fIx4+bK1NTrPdGD4vXw0CHLQpqkwjGEhGtkXkZGDKpC914eDHoA0kf1FfgT0cRrxtco12UIUJSKy6IDHBIsjlBB8deI1GxGz46++CUSPsnA/M6nBLcoVD4YHNlIz0zj8mkR5oGrkK0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783693040; c=relaxed/simple;
-	bh=sa98XhkxWSb0LeqJWkHTtyOw8q0+ZKKpwNSalj4TTkE=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FE9348886
+	for <soc@lists.linux.dev>; Fri, 10 Jul 2026 14:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783693458; cv=pass; b=u2L7agvk70nHf5UrUEmTt7m0EhLqw7O4ThZDeJJYJLmGWwMqsqyBZUSZIeY7mV/wEG4TEuqlejm0AMddjOENkGoRzapWIdJL320vRZGJfqoSEfkWOZAEbcYkynWz8/Sy7sWPXm7yPLmjvXpRca6v/XWxf5o+GQrvaowHQUnYH7U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783693458; c=relaxed/simple;
+	bh=TGcMIc0m/3V9AIzfvV0pJ4TO18aZccjqdyW2jeK7bSo=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=JUElMEw9W3KbDnhFIsPFSJZtIinterrN0tH6YJn7gLKk4/8c06afPFaTX7E4GKkmanMZzn/ZDAaltXIS1jc8gTZ56+kqcyfYb1cuBbHkl3fbDPP1PC0M3SUFNQE+hgG76aEvC7Z6SNU4ERg3luA5NtKHfVlpS5hkhFnGahzHXls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ZGXnd8Pi; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LPfOkad6; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	 Subject:Content-Type; b=IdX42F4Xjb3rWQDafOfteHSHsYqxIsAUneqQrw5u1HooJFMiitDwvnVL3sHetEf68GR1ru76TY2dF+xUtZwBu5pTcA3xnQUrWDmx35pelBZVHAPBO5TkIV5bhiTjC2j6/L10hxd4/m24ra4u8uLGbvgHmuIwlWsdNioNBUHooMk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=KcReVP/f; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=T7SxRJj1; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ZGXnd8Pi";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LPfOkad6"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="KcReVP/f";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="T7SxRJj1"
+Received: by smtp.kernel.org (Postfix)
+	id 4A5B41F00A3A; Fri, 10 Jul 2026 14:24:17 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=103.168.172.153
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1783693457;
+	b=oyuuhNJEzm3YjUZwywGjXLO82uiHkz/+4CsxzGgTiOpFm2COt6fJWQUBZcXj9LOPnJky
+	 3KHu00DhMjmmAxSgLG4mBaC4KideVx1Lebkvdn6OUDwNiC5zYCqOOAVZp1zlWVSMwARU8
+	 BjKxMVqprzDfWFIaQWs8pOQvNUZnkCO706zTrXdB/qqbuV8W9+Z9uvZskEhDbiI4qlFbs
+	 dJGzCtjtQ+ooYxbEoGo7K7Bc01r+pvg2YfGrVnAjdUQ+umn2rR/7RNOsRNKBDPKpbPA0L
+	 ffUH/cUxvGFZRIt3zdVwerOOS44INn+6aN322wSD7jShju5RX7CaftH5Ml1rILXxApQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1783693457;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=I0M6LfptZTcKLS8CnN8AzILITWzUURi8rWY5mGa7zRw=;
+	b=nG22mR1yl03ovDU1xmniggHbkt4USqcyxolS2eHg5EBp1kVyfh8tphIZAPKyLBfp75e0
+	 PfqwJkUf1OUIp/KkPpEHhuCfKCZg5wvtEr1rDxSLVyq3xrQZUrRy5PsmyJ+Ovxp8fu+3N
+	 AvQP9EClrrLVl4yqnA33omyeHmM6fEH1xpyA3Ep/tQSQ/vu/ScbR89e0wUaoVllXH4zOl
+	 +fJ7Et4QgFroiPJN8RZBs5ye0cmXes5C5Cp8VA5oHBUQSyxGiNNcOfIqxQA62MrJqJznH
+	 M4LGslw4ZrP4qI9gqIOev//xu9Rq+AAn+pshFrtmrLvS+C+feD5o9NYcJkmayOgLHGg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b="KcReVP/f";
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=T7SxRJj1;
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	arc=none smtp.remote-ip=103.168.172.153
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 97B631F000E9;
+	Fri, 10 Jul 2026 14:24:16 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=KcReVP/f;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=T7SxRJj1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 97B631F000E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id C0F5BEC01AE;
-	Fri, 10 Jul 2026 10:17:16 -0400 (EDT)
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 7BDCA1400124;
+	Fri, 10 Jul 2026 10:24:15 -0400 (EDT)
 Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Fri, 10 Jul 2026 10:17:16 -0400
+  by phl-compute-04.internal (MEProxy); Fri, 10 Jul 2026 10:24:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1783693036;
-	 x=1783779436; bh=/Pm6YjVPTn66E175rLBZQYOV6tuo0Tyec/7ISEHA5r0=; b=
-	ZGXnd8Pi59/LlTc2LG27zo/SicfS0oRRwDSZyIPFtp7dN6Q9U5zTEdJU4yxFJDF7
-	Ygl6dDAlye/yAMOSkV2cc18oGcfgsHz4g2ev/LjPNKwGtYHbpxRByVssBM1z7Xz8
-	ye+E03ywUv73k9viTgIbiB4+gb64r53+RYne1SpK+YbjuT+gflEfjBOeIklNRfDb
-	0ju+ulq0LzpdVGzCi3h4jDOVflhIbF9NKeLqaf8xOj/sZRXtudB3GF0fBqLz2fsU
-	LSNHaiycaPS0QgMdC/0BVAwSpge1JXCrwf0twMshFwPYhM4jaFUOPhfk++X9JZ4U
-	9wA1OXR4FYvmHhSKraQPYg==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1783693455;
+	 x=1783779855; bh=I0M6LfptZTcKLS8CnN8AzILITWzUURi8rWY5mGa7zRw=; b=
+	KcReVP/f6VGxxEIacCb8OFhB4GYSkKqDgVHxGA0/9fZfSt58u9ktFncWKxSZ9jM/
+	TV86CeRr5l5qH8OXQ91S1vmO70iO6D9qwBC3fSnBGT+77L4XENyM8UpHcL8AE23B
+	KaGqvFJ4gaPPIJU6IV6ne0AzuLgjzdcfnhTaREaoiInC8VWYpv7dKl2xce0AmFu4
+	lAQbDHLvebeqyiGkReJYVMJ20MPA+cpMt1jEeyVORfVp4iEiAYBk2yEcmMzo5vhH
+	6SCpkvGHCSbnm9xXp16Q/GeiC/Is1O5tYdnD2LzARfdrgZ3s8HJ9WBTs+OFln9be
+	Wx2ChZwNrYWh4Nauw6I59g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1783693036; x=
-	1783779436; bh=/Pm6YjVPTn66E175rLBZQYOV6tuo0Tyec/7ISEHA5r0=; b=L
-	PfOkad6DKsgoqekGgh5N8vib0ODDalz/2FiPfQdkBOyWYns6AhM9BiqtWTXd9JzS
-	0J9ztURUmaLRHTAj9Zra+qq6yxkAjqehvX6kFsSRjh7BkxDkpTPpxuv2Q7c0QiXE
-	9worAagS5gDre1SL7zckgPd1qnK9gUg0RI+cIwE6NU2/9PZzJzNaUxoLUv9ci4jb
-	hNljeyWtG+jpgzj+fsaoGIW7zVxV8BbvliDAnzugDUXCVW3oWputWH87v5QddNfo
-	SD9w0x5u54dVugzc20v75jJI32SKHpT3UVT6pYrPKVJHeYk+jnA0y5S5Qfk02wLK
-	fylKd7qY+TwOCmR2UBfNw==
-X-ME-Sender: <xms:6_5Qar4QGDvj3vQzFs_WDJTKmQbqznB91egj8n6tMznBxpJALetoGw>
-    <xme:6_5QaruoANe28olDeO-rLPdBh5N7gVXube6tnPiF6NnBP3x-OdB80a8ZUnCuMs7Fn
-    y3regZxu8j5FUu49oTiDEa-DBaIQg2QDAlJqeCZBCr-72F7cWx4R4Q>
-X-ME-Proxy-Cause: dmFkZTEtICzMuIfiBuDNE7cd8mZ+0Rq9QDzaIvGcbw6GT5FEBB6x3ZrMUbqJCGQTT0mK9M
-    OGw1i2dN09a8qyFf7tgrfim9F+r99hNqMGCm/hNe52E+Ouidfu77eaHT74/+cyOMjZZxsS
-    UeXObk1CSaJEg8CnUGxh8aWtqoqMoJZSc40nW/l/Z8RGBYMDWe+azDRFCoq2TtlMYX/I+f
-    JdhL7gX+oD37ISvAWda2aKnXUAuyrer/H0v0dh7Di8E3/ZmIyEewctv6qJRny6nkb0PBb4
-    /rQzXilfz7bs2NPC8FHmlrUdV2Rjk7kzEN28Eyr8v4ciTOx4bzUcpJgo8Tn82DJ6QWVfoG
-    n/WvbYshFr9AN5V5rbfiIgFtXCFfV2d6vtjfVy9BdJRp4EzM1I8IFIAL7mj4b0iG5rL0mu
-    pjSC+CJbYBlH8Bg04UM3BAKQDh3RB0BTrweCkk8XwJ7DWOmNJ99mgeQXRfLUVQzNWE1K+s
-    0E506931Llr/MJBa5mBIHwwlWeJG337aBNyVpLmXyI/m8ZijyNBytQBEVyR5FFgMPomuZI
-    3sNtuu8mbZ80uMeYV5YPORgDSsJxmyl6zUoHEqWAlPmzuRO1h1FUTKaNhQxAE7Pfz3BHKm
-    UjG/S2veFn3D1qYWKuZS5GULleHsagQnmcQY/OBxHoeTAvUxFtN+W1oicZPg
-X-ME-Proxy: <xmx:6_5QaivKAzR7v5lsVARuzembA89SKAntJpZaB0-Y7nyFmOI7hSd-Qw>
-    <xmx:6_5QakICjkQ88MEOvR87A8TzQ01cWfJphkBb5E4U3P51kk5TYNUhEA>
-    <xmx:6_5QaholRJF7W8-3fS8DDAxOoIN88AZKg0l7yB-mr_AoiECY7H75HA>
-    <xmx:6_5QanUbF3HCrthZaVQG8JS3Rn2I-9YZD8yhMVCuaBOLp59Kpv-dXA>
-    <xmx:7P5Qai-HNID-NT-yBw_ZZYdUMyB1-OOpErNqL09Oh0gZHfHsyZYP4HsA>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1783693455; x=
+	1783779855; bh=I0M6LfptZTcKLS8CnN8AzILITWzUURi8rWY5mGa7zRw=; b=T
+	7SxRJj1fgLftd66sohkydUSSFIuSmektkKdTqnJRNeUPBrK7FSr/6vipN0VPzloA
+	u4Lcbnd8QJ9069u6efMsQrFPNtwayf6ptYZ1cBtjCzP2TtQuFK1iaQIEIFQCROm5
+	FkADWgL02TE42Ced8eAQ4LGRJVmK/qJ5xzm1w/7P0vSswIzvbyHeHv/25d0n3Co7
+	ANQgAVu165mOGJ5sgJairjsBWnMK464iTeVQdLbpiJ9naGnQrvsrUS/eCzeF4VTm
+	NE/BR0aatcuFunvsxo9zY0hO/g0dB7czu93YBhpxFLry3o0NVFomKZPGUNojvjWK
+	YgcRnP6lGosuUFkVGoJsw==
+X-ME-Sender: <xms:jwBRaloDsOFgRXIyTHG9D9x4P7s9WilGdcrHV5cxtbziZDb-ULSzPw>
+    <xme:jwBRaicdezlQmo5b4crAMn9ysZGMg1Jk1nODTkJFjS2ZHFSSS5odhe5Yv_KmZOcrf
+    JblLALtXYJtHrd4mt5F7T2n5GfkSjMFjBetgjV676Jgzazuhj-CIUw>
+X-ME-Proxy-Cause: dmFkZTGYxMZDU4x6fQf/RciM8257I9FixCyODKFI/alj9C/tuXfmRgoPcc6CQi7yWJZqRD
+    B0yjY/cmTp2AaGCEDIlqCmIw9JCXn/jhmSIzMVPaKD7sAiXPbaLUqkvUI/gdywvDgEEml/
+    O277Yi/m5c28v8+KreEOrpsHEfUYLyz4fds6MmCJbfzXQ6MOQrQjSfvmKKCmmtYwe4Nz76
+    mKM2ozlgg2qCTYuxVFi3FFAgfe3HxGwrk6AwwIP7kZUgwSlgYP47uQ997CCsHIB/0C9Tbq
+    o5St2lclqrCRK3VbLZV/NnxZOdSkZarQvMUjeR1vLJt5CAI0L38+gt2g69PPlxDSxAFyHo
+    im0NBLt2IiSP4F8g+gntGaNX2kgx4Hwv2zik2j71GQs807BbARqKa1Q0AghtaC3YgG2hVj
+    Yp5cCQhAmR9DO0Fz43U0l11kBS4MV12h43aeQN2p0jvlHbnBpU8oLAaFH3nZQu2jpkJB2p
+    yZdsZxmRstat3qfe5PbAOQi2kPVIBdnd0QVwJDLyDUvdIQUJ16vLyy1LRXngG9GQ9JeLA7
+    Bp3iPHR9yLXOKd3Bdstm/qGl4ajLK0jXTLD0iC+vkIaWj+DAi4reiLHgqqzh/cRfJ5+JBN
+    /8c4uw9c2pL9V36A9vFDA+0uBmXiOkVDkEE/ssHX3srWOvfUZPZ0hqr9u0Zg
+X-ME-Proxy: <xmx:jwBRas6Slia7Ma8gBNhkWarE1znVd4BSwEPuxUvCHSyNaF1SyvvMGA>
+    <xmx:jwBRauVLi8GM64Yt-Unv4li3jTjZ3LElSD0tXwCoMP_VbDNK1RpZ3w>
+    <xmx:jwBRasIKouSZa6WWTmHIvTSZfLc-6Ra9KgM7PnpC0oFrfXtL0WL_lg>
+    <xmx:jwBRaovHTI3VLR7a12dQcbXDtGHm36FiORab0O_KkR5RIgwiaASzvA>
+    <xmx:jwBRan7dmmRxVylRXPQ7w12Uhx_c6kI09f0_9g5IsxYxhE8_k3gm8lgm>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 8FFA91820082; Fri, 10 Jul 2026 10:17:15 -0400 (EDT)
+	id F24291820082; Fri, 10 Jul 2026 10:24:14 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -74,72 +111,49 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AdFLe7-IZaaF
-Date: Fri, 10 Jul 2026 16:16:35 +0200
+X-ThreadId: AxFSti9e2Kpo
+Date: Fri, 10 Jul 2026 16:23:54 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Zi-Yu Chen" <zychennvt@gmail.com>, "Olof Johansson" <olof@lixom.net>
-Cc: soc@lists.linux.dev, "Jacky Huang" <ychuang3@nuvoton.com>,
- schung@nuvoton.com, "Rob Herring" <robh@kernel.org>, krzk+dt@kernel.org,
- "Conor Dooley" <conor+dt@kernel.org>, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- "Andrew Jeffery" <andrew@codeconstruct.com.au>
-Message-Id: <5f2954e4-2e0c-40d0-b67f-933446c83cc1@app.fastmail.com>
-In-Reply-To: <20260708082457.460710-1-zychennvt@gmail.com>
-References: <20260708082457.460710-1-zychennvt@gmail.com>
-Subject: Re: [PATCH v2 RESEND] arm64: dts: nuvoton: ma35d1: add CAN nodes
+To: "Drew Fustini" <fustini@kernel.org>, soc@kernel.org
+Cc: "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Linus Walleij" <linusw@kernel.org>, "Conor Dooley" <conor@kernel.org>,
+ "Paul Walmsley" <pjw@kernel.org>,
+ "Marek Szyprowski" <m.szyprowski@samsung.com>, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+Message-Id: <f0f61421-5db5-474b-b904-b5764352671b@app.fastmail.com>
+In-Reply-To: <ajAt3ml9pMIMTLTq@x1>
+References: <ajAt3ml9pMIMTLTq@x1>
+Subject: Re: [GIT PULL] RISC-V defconfig changes for v7.2
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 8, 2026, at 10:24, Zi-Yu Chen wrote:
-> Add controller nodes for the four Bosch M_CAN blocks found on the
-> Nuvoton MA35D1 SoC.
+On Mon, Jun 15, 2026, at 18:52, Drew Fustini wrote:
+> Hi, this is a late pull request so no problem if it misses this window.
+> It is just a single patch for the WiFi driver on the TH1520-based LPi4a.
 >
-> Additionally, configure pinctrl and enable CAN1 and CAN3 on the
-> MA35D1 SOM board. Also, update the APLL frequency to 200MHz to ensure
-> the CAN controllers receive the required input clock for 50MHz operation.
+> I recently setup new branches for riscv defconfig patches and they have
+> been added to linux-next. I talked with Conor and this seemed like a
+> good way to pull in defconfig patches that RISC-V SoCs need without
+> adding more to the plate of the arch maintainer (Paul).
 >
-> Signed-off-by: Zi-Yu Chen <zychennvt@gmail.com>
-> ---
-> Resend note:
->  - resend with the complete Cc list; no patch changes
+> Thanks,
+> Drew
+>
+> The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+>
+>   Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+>
+> are available in the Git repository at:
+>
+>   git@github.com:tenstorrent/linux.git riscv-config-for-v7.2
+>
 
-Hi,
+Hi Drew,
 
-I don't see anything wrong with the patch contents, but I think you still
-have the wrong Cc list. You have sent the patch Cc: soc@lists.linux.dev,
-which is where maintainers should send the patch when it is ready for
-inclusion in the SoC tree, and you have sent it To Olof and me.
-Olof retired as SoC tree maintainer a while ago, and I'm not going to
-apply this because it should go through the Nuvoton tree maintained
-by Jacky Huang and Shan-Chun Hung.
+I assume you saw that this didn't make it into v7.2 and you
+already plan to send it again for 7.3. If not, note that
+the URL above is invalid and the tag is no longer there.
 
-Please send future patches to the maintainers that are in charge of
-applying the patches, without adding soc@lists.linux.dev yourself.
-The maintainers will then forward it when they are happy with the
-changes.
+When resending, please use an https:// type URL.
 
-I just noticed that we have two conflicting maintainers entries
-for ma35:
-
- - Jacky and Shan-Chun are listed for the ma35 SoC, but have
-   not sent any updates after the initial merge in 2024 and
-   don't currently have a git tree in linux-next
-
- - Andrew Jeffery and his team are listed for npcm with
-   arch/arm64/boot/dts/nuvoton/ listed as one of the file
-   locations, though that contains both ma35 and npcm.
-   Andrew has the bmc tree in linux-next and has recently
-   picked up patches for both npcm and ma35.
-
-I see there is a lot of activity at the moment working on
-ma35 drivers, so it would be good if the maintainers could
-figure this out together and provide better guidance to
-individual developers. I don't mind pulling from one
-team or the other, but I would definitely prefer the MAINTAINERS
-file to reflect the actual state here.
-
-If Jacky and Shan-Chun are planning to do the merges going
-forward, they should add their git tree to linux-next and
-update the MAINTAINERS file to list the git URL.
-
-      Arnd
+    Arnd
