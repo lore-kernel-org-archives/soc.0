@@ -1,110 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588D27E0FF
-	for <soc@lists.linux.dev>; Mon, 13 Jul 2026 11:05:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091A8233927;
+	Mon, 13 Jul 2026 17:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783940749; cv=none; b=sEOjY664vG7xfminAWuXsykRMIhDfpHMwsnxl5nbtbSpacfhEzCIrgcv4JAO9JiApoWy6jq/IvDFTCOza0nBryr7RfQJ/F97LBxe5Y9KXREtmSmKHE6QOjsSrd9ptdQ2ufQNjBNDnnPX5/UlmeNv+/8dkhS9OxAythzVcPPlGe8=
+	t=1783964160; cv=none; b=LWNUej1GpaG+KJwV1Rr561Fx4QV3mU1dtf9RaBT/btI+c+cs5NRm+2tDqR0LeYA+lB7uE2dwQ0ht3nhgRsYCbQoKD838dIY7VoEPetPuYVraoJU5ow475cVZLj1+mlEhR76rB8pwxziwq+i2WqRHfvXbbbPFrTIvEYsoWpvfkgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783940749; c=relaxed/simple;
-	bh=ymBgWBjmHpx0+UjuFhXmSUZCxzlsEq1CULQENpgwDbc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JR1CJt6jRAzp0m+DfORjNPye/7AAE8SPflyb0I8aztm6IkA5J8JSm3RBb9NVDjzVaqPRuShcriSvG84H+CHdcFxzSC3wlP5yfAndICV/6SW7axjyBmWY8u/gI/0sexTVYfb3bVN+y7zDjtJFGbSbu40YgZReOM2plDJQ4LmbQcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZG9EXzsa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783964160; c=relaxed/simple;
+	bh=RWYgeB5KHd3Zfe0VCHDCOtsmZ1848gwCHPeYEeiUftU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oZi0Y2C42N3v4jbDzArtMZmOHBK4ZcTY0yNSPlbDxNvFVoqaL1bIPaseRCgUSEd71XLbNpOu4MajxOmgH/HoHZifuF/SOyF6ZlPHG68nnvFqXfEyp7Qr+L+OpokEuAt0Q5BUG4iIK53WmPxoPCuXY4aAcJf/W82IdsTc9aIYeX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0zOCaNG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZG9EXzsa"
-Received: by smtp.kernel.org (Postfix)
-	id 4ECDC1F00A3A; Mon, 13 Jul 2026 11:05:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2801F000E9;
-	Mon, 13 Jul 2026 11:05:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0zOCaNG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D922B1F000E9;
+	Mon, 13 Jul 2026 17:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783940748;
-	bh=uvSiy5im8+ukroQ2/8CIqL5c1HixXr0B5I98YK9SCBM=;
-	h=From:To:Cc:Subject:Date;
-	b=ZG9EXzsawu1YTuCCmQLhbPsoCKUx9xWbltM2GIcVVEYM54JcE6IqtLd+d05o/5B6N
-	 hmHusz7UqMfzvZXFYJvUbjqQlrhOI5tri+hQRri0PrpGPMsBU3Yp1tHWZ2BImHjCSu
-	 IfwemKJmkcZrWnfJB4kTxKmd7Vr0cICsJX4u2YemIY7RlQ5y1s1BXHjpwj2pf2qTz3
-	 eyk5vrBt19RvZccLvT1C/nkmq/j0sdRB7HQwuruS+wrcjMqmx87Sbaic/zpkvEzfJc
-	 Yj9Bb8zpXnn7wkzXyhPVmpbIDVT++LfgA8XTAaWc5CgVpfRVTrk3JwcR87MtiXSyqb
-	 QmD+a02DjSHaA==
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	arm-scmi@vger.kernel.org,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm_scmi/arm_ffa: Fixes for v7.2
-Date: Mon, 13 Jul 2026 12:05:36 +0100
-Message-ID: <20260713110538.1819713-1-sudeep.holla@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=k20260515; t=1783964158;
+	bh=zRUyF1ctnKeaVshS9LdnIzYsBUOroWoyFeu5IMK8cd4=;
+	h=Date:From:To:Cc:Subject;
+	b=S0zOCaNG0IdAm1Ig3jPdJ3FzCCgTE5VBJvIkdvU13DpV4iG99Mbtgcfa/mj1dNAYF
+	 nBfEb8p9uHBz3yvCfmy0qesj6GivWuPd9J/mu/CWIRPhfmCC9jOW/Oao8D+a9Lr7iF
+	 nTF+KDyVWLZnXQ56IKDQF4VnWyMH+q6lnqOK3gJrbfjKLpt8VgU0WlydCK/U8Gg/yT
+	 t+dv5QEZbtEhbq1s5gl/tfFwRxSEtoVL86X1kyvRVHJlIQnl6AnkATWKxzNKfiEqPk
+	 iSHiQLniY+EKb/DrU6pGEzBW7xHYspFCmjgCtViIz5UOwllk50+pUmGrvf8pl+4bsP
+	 ycD+cj26/eYyA==
+Date: Mon, 13 Jul 2026 18:35:55 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, soc@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Missing signoff in the arm-soc tree
+Message-ID: <alUh--gXbJNcbmuV@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6EpeWvc7BdVyk+nq"
+Content-Disposition: inline
 
-Hi ARM SoC Team,
 
-Please pull !
+--6EpeWvc7BdVyk+nq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Regards,
-Sudeep
+Commits
 
--->8
-The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
+  923588dd861ba ("ARM: mark mv78xx0 support as deprecated")
+  3a09d8c6b3688 ("ARM: mark axxia platform as deprecated")
+  fa431f73cc18a ("ARM: mark Cortex-M3/M4/M7 based boards as deprecated")
+  fd0148ccd1d8f ("ARM: mark footbridge as deprecated")
+  faae50ff70799 ("ARM: mark RiscPC as deprecated")
+  25592ecf80a17 ("ARM: mark mach-sa1100 as deprecated")
+  7a9d2a5cb68f4 ("ARM: orion5x: mark all board files as deprecated")
+  a28d72f93f209 ("ARM: PXA: mark remaining board files as deprecated")
+  bb09fdba36e19 ("ARM: mark ARCH_DOVE as deprecated")
+  337de957c1166 ("ARM: mark IWMMXT as deprecated")
+  09b6757da5976 ("ARM: update FPE_NWFPE help text")
+  8b0e28c2792ec ("ARM: s3c64xx: extend deprecation schedule")
+  ef53a06103114 ("ARM: update DEPRECATED_PARAM_STRUCT removal timeline")
+  ed1dab5e08938 ("ARM: mark CPU_ENDIAN_BE8 as deprecated")
+  4d9226b820c16 ("ARM: turn CONFIG_ATAGS off by default")
+  e61f27ee54497 ("ARM: deprecate support for ARM1136r0")
+  07c06fe4622bb ("ARM: rework ARM11 CPU selection logic")
+  a82f541ab97f0 ("ARM: limit OABI support to StrongARM CPUs")
+  4122589d5488c ("ARM: use CONFIG_AEABI by default everywhere")
 
-  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+are missing a Signed-off-by from their committers
 
-are available in the Git repository at:
+--6EpeWvc7BdVyk+nq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-ffa-fixes-7.2
+-----BEGIN PGP SIGNATURE-----
 
-for you to fetch changes up to 980a8bfe7baec9b9ee0d5443b0b204552e41c407:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpVIfoACgkQJNaLcl1U
+h9BX4Af/TgspL4pbH4R1jngAbgMQXyywyssLayIswa5p//GU9xhdvlNsH5g1dbMM
+b6CXh7GnUulLCbMR7EtSS4X5RwySntuVCbt637BnBtAU2UfS21/jRvyq/zwnN1hE
+QZyWIiFsckVNo1l00F8Vb1Yeaaxp3nsKxcVParvwa5PapvauKokzhH7yo0BudsK5
+DhSefKguR+wGSCnos5bsdYkZJIVADv8E/AZEOPXfYvK39s+zSnT4d5K20BRLiTEN
+zJ9JTRHXSls8KFJF7Yp8HT0lFteR+LL46x8CRIPgkCyyPyYNsAL7/PcSG26sq7lr
+KY+QLf5IrWPWv5NBKKwsox24ikJCag==
+=Ayta
+-----END PGP SIGNATURE-----
 
-  Merge branches 'for-next/scmi/fixes' and 'for-next/ffa/fixes' (2026-07-13 11:38:34 +0100)
-
-----------------------------------------------------------------
-Arm SCMI/FF-A fixes for v7.2
-
-Fix two runtime issues in the SCMI framework. Use full 64-bit division
-when rounding range-based clock rates, avoiding divisor truncation and
-a possible divide-by-zero on 32-bit systems. Rate-limit notification
-queue-full warnings emitted from interrupt context to prevent printk
-floods and prolonged system stalls during notification bursts. Also
-correct a grammar error in the ARM_SCMI_POWER_CONTROL Kconfig help
-text.
-
-Fix the FF-A driver RX/TX buffer sizing logic to respect the maximum
-buffer size advertised by firmware, while retaining compatibility with
-older implementations that may reject PAGE_SIZE-rounded buffers.
-Also fix a NULL pointer dereference in ffa_partition_info_get() by
-rejecting NULL UUID strings before passing them to uuid_parse().
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      firmware: arm_scmi: Grammar s/may needed/may be needed/
-
-Pushpendra Singh (1):
-      firmware: arm_scmi: Rate-limit queue-full warnings in IRQ context
-
-Seth Forshee (1):
-      firmware: arm_ffa: Respect firmware advertised RX/TX buffer size limits
-
-Steve Dunnagan (1):
-      firmware: arm_scmi: Use 64-bit division for clock rate rounding
-
-Sudeep Holla (1):
-      Merge branches 'for-next/scmi/fixes' and 'for-next/ffa/fixes'
-
-Unnathi Chalicheemala (1):
-      firmware: arm_ffa: Fix NULL dereference in ffa_partition_info_get()
-
- drivers/firmware/arm_ffa/driver.c  | 29 +++++++++++++++++++++--------
- drivers/firmware/arm_scmi/Kconfig  |  4 ++--
- drivers/firmware/arm_scmi/clock.c  | 11 +++++++----
- drivers/firmware/arm_scmi/notify.c |  6 +++---
- 4 files changed, 33 insertions(+), 17 deletions(-)
+--6EpeWvc7BdVyk+nq--
