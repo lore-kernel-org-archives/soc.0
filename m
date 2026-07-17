@@ -1,34 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BB63CF205
-	for <soc@lists.linux.dev>; Thu, 16 Jul 2026 10:03:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8153429825
+	for <soc@lists.linux.dev>; Fri, 17 Jul 2026 14:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784196236; cv=none; b=OC4Tb/Z01d7JNGfUzBele6jhQbROCfELptOO8G0gnfpQmhO96pAvLRKX5r13ryF2gRFVkPOwSjIgM4KEjwf9lEXZFrVlJ0o7s19SOuulez/pCs7jeKFtpf1a2HYmYyH5kT2Ii8LSh829EEb0ZcDoPeguTMRYT855osXvqD0XN0g=
+	t=1784298035; cv=none; b=E2BdPXrAvxd+2fRVFQbF67w060WDmwJDCmRCoZXJ3JN5irsRiTVrwCcEdXteISoKV2gr9cI7/5iiBEmO6Ge95LGjpmC4CptB1+aMYDRQnyDVFdEIwfnyD0rB46vgOkYWtE3cISWO5FktMGeWASGC1zTbOeY/QtaCT6vjf0NV3No=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784196236; c=relaxed/simple;
-	bh=eDM1Bys+i+Eqimvxb8Tdec20C7wxLXU5KD1/ptliuKM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YtycxClMjIpVKFCeXB3EXotrJZFCWVZb8aHJgz7BXEyzWqfBkFmakBGAJOfG834T4UOkOqcCJYN0dR9iPc2P6QcsvgGBtjcQI6NQsnLNFOvi/mN+Nw+Dm150A/ZZnMdGsn8sfZIBSogp4uIR9yVipEGEVR2rK6kK0IwgHMRxxq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784298035; c=relaxed/simple;
+	bh=CaG+pOLxKA6vdyh0s7cbR23Y/yScu+fU/Sznxr+t9wc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=diFtFz1NxsLXLaBqZ56D3q3WnCLcD04R+Inv1D+dtjkV+miN80vyKoEp9Es89se+eVQZKUOzQAqJXFV2VZBDaCrvbsDJTEuXwTeZ8TbS2h13ilL0e9aJYbEUZYg6F18+BP4U3Gk3exBJdukNCBB1rmKKC5p29j+JsmdPTOoUNmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lx4kK8YT; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lx4kK8YT"
 Received: by smtp.kernel.org (Postfix)
-	id 66F7B1F00A3A; Thu, 16 Jul 2026 10:03:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05BBA1F00AC4;
-	Thu, 16 Jul 2026 10:03:53 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/3] Renesas DTS updates for v7.3
-Date: Thu, 16 Jul 2026 12:03:43 +0200
-Message-ID: <cover.1784194406.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1784194401.git.geert+renesas@glider.be>
-References: <cover.1784194401.git.geert+renesas@glider.be>
+	id 8F29F1F00A3A; Fri, 17 Jul 2026 14:20:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79CDF1F000E9
+	for <soc@kernel.org>; Fri, 17 Jul 2026 14:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784298030;
+	bh=+wYTyQv2e1iugnnTE3eW7kDgt/kSDF5GKpEIipUm8x4=;
+	h=Subject:From:Date:To:Cc;
+	b=lx4kK8YTivA2Wrq+DVJEL5uQhxS2CtJ+gK2BW6YrRXBku5MREOi9ZN4O/W6eJd4V9
+	 3F3TFOtBVfV5BhTtuKQQ+/5A4VEKyM3pSh5OybSI2wiF9O3AoYzryhfuud0ngTLQrZ
+	 0qiAR7/6pp9kBcxaorzwvtaLeBcLvZLtYF3Hm//VWLMeSuq5Z3AiyXe9JGs6j1lInj
+	 woP37h3MNIwfp/9GqKlMw+LrErDTpWcuqz6PfXSB3fNRbSkYBCe9pINN28zzgvdTjw
+	 /dO1jqSSiXZhYO/KRKHSYpxkH8q9Zg5Bc/BkJfGxdxKFe8uu86AMllqxVdW1PbyU9i
+	 Yb/vWaellHp+A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1C457380CEE7;
+	Fri, 17 Jul 2026 14:20:04 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -36,107 +38,30 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <178429800270.1738088.294118902677900607.git-patchwork-summary@kernel.org>
+Date: Fri, 17 Jul 2026 14:20:02 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-The following changes since commit 6fa6ee724d8dadf392139e242ac936b5da730c4b:
+Hello:
 
-  arm64: dts: renesas: ironhide: Describe inline ECC carveouts (2026-07-14 10:34:32 +0200)
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-are available in the Git repository at:
+Patch: [GIT,PULL] Renesas SoC fixes for v7.2
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1128688
+  Lore link: https://lore.kernel.org/r/cover.1784193843.git.geert+renesas@glider.be
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git renesas-dts-for-v7.3-tag1
 
-for you to fetch changes up to 24afcb87e6aca1ff3face276223eeea0012f8e2b:
+Total patches: 1
 
-  arm64: dts: renesas: r9a09g047: Fix PCIe dma-ranges memory space code (2026-07-14 10:36:37 +0200)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-----------------------------------------------------------------
-Renesas DTS updates for v7.3
 
-  - Add sound support for the RZ/G3E SoC and the RZ/G3E SMARC EVK board,
-  - Add more serial and SPI support for the RZ/G3L SoC and the RZ/G3L
-    SMARC EVK board,
-  - Add SMP support (32x Cortex-A720AE) for the R-Car X5H SoC,
-  - Add hwspinlock and mailbox (MFIS) support for the R-Car V4H SoC,
-  - Add GPU support for R-Car M3-N-based Salvator-X(S) and ULCB
-    development boards,
-  - Add SPI and FRAM support for the RZ/N1D SoC and the RZN1D Expansion
-    Board,
-  - Add PCIe support for the RZ/V2H SoC and the RZ/V2H EVK development
-    board,
-  - Miscellaneous fixes and improvements.
-
-Note that this PR is based on renesas-fixes-for-v7.2-tag1, for which I
-have just sent a PR.
-
-Thanks for pulling!
-
-----------------------------------------------------------------
-Biju Das (5):
-      arm64: dts: renesas: r9a08g046l48-smarc: Enable rsci{1,2,3} nodes
-      arm64: dts: renesas: r9a08g046: Add RSPI{0..2} nodes
-      arm64: dts: renesas: r9a08g046l48-smarc: Enable RSPI2
-      arm64: dts: renesas: r9a09g047e57-smarc: Drop SW_SER0_PMOD condition for rsci4
-      arm64: dts: renesas: r9a09g047: Add max-frequency to SDHI nodes
-
-John Madieu (6):
-      arm64: dts: renesas: rzv2h: Add audio clock inputs
-      arm64: dts: renesas: rzg3e-smarc-som: Add I2C1 support
-      arm64: dts: renesas: r9a09g047: Add RZ/G3E Sound support
-      arm64: dts: renesas: rzg3e-smarc-som: Add Versa3 clock generator
-      arm64: dts: renesas: rzg3e-smarc-som: Add audio pinmux definitions
-      arm64: dts: renesas: r9a09g047e57-smarc: Add DA7212 audio codec support
-
-Lad Prabhakar (8):
-      arm64: dts: renesas: rzt2h-n2h-evk: Remove unused MII/GMII pins
-      arm64: dts: renesas: rzt2h-n2h-evk: Configure ETH pins
-      arm64: dts: renesas: rzt2h-n2h-evk: Configure SCI0 pins
-      arm64: dts: renesas: rzt2h-n2h-evk-common: Add memory nodes
-      arm64: dts: renesas: r9a09g057: Add PCIe nodes
-      arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Enable PCIe
-      arm64: dts: renesas: r9a09g056: Fix PCIe dma-ranges memory space code
-      arm64: dts: renesas: r9a09g047: Fix PCIe dma-ranges memory space code
-
-Marek Vasut (5):
-      arm64: dts: renesas: r8a78000: Enable application CPU cores via PSCI
-      arm64: dts: renesas: r8a77965-salvator-x: Enable GPU support
-      arm64: dts: renesas: r8a77965-salvator-xs: Enable GPU support
-      arm64: dts: renesas: r8a77965-ulcb: Enable GPU support
-      arm64: dts: renesas: Add soc: labels to soc nodes
-
-Wolfram Sang (3):
-      arm64: dts: renesas: r8a779g0: Add MFIS node
-      ARM: dts: renesas: r9a06g032: Describe SPI controllers
-      ARM: dts: renesas: r9a06g032-rzn1d400-eb: Enable SPI-FRAM
-
-bui duc phuc (1):
-      ARM: dts: renesas: r8a7740: Add FSI clocks
-
- arch/arm/boot/dts/renesas/r8a7740.dtsi             |  12 +-
- .../arm/boot/dts/renesas/r9a06g032-rzn1d400-eb.dts |  25 +
- arch/arm/boot/dts/renesas/r9a06g032.dtsi           |  84 ++++
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77960.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |   2 +-
- .../arm64/boot/dts/renesas/r8a77965-salvator-x.dts |   4 +
- .../boot/dts/renesas/r8a77965-salvator-xs.dts      |   4 +
- arch/arm64/boot/dts/renesas/r8a77965-ulcb.dts      |   4 +
- arch/arm64/boot/dts/renesas/r8a77965.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77970.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77980.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77995.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          |  17 +
- arch/arm64/boot/dts/renesas/r8a78000.dtsi          |  32 ++
- arch/arm64/boot/dts/renesas/r9a08g046.dtsi         |  69 +++
- arch/arm64/boot/dts/renesas/r9a08g046l48-smarc.dts |  78 +++
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi         | 525 ++++++++++++++++++++-
- arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts | 114 ++++-
- arch/arm64/boot/dts/renesas/r9a09g056.dtsi         |  22 +-
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi         | 160 ++++++-
- .../boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts    |  18 +
- .../boot/dts/renesas/r9a09g077m44-rzt2h-evk.dts    | 144 ++++--
- .../boot/dts/renesas/r9a09g087m44-rzn2h-evk.dts    | 144 ++++--
- arch/arm64/boot/dts/renesas/rzg3e-smarc-som.dtsi   |  44 ++
- .../boot/dts/renesas/rzt2h-n2h-evk-common.dtsi     |  14 +
- 28 files changed, 1420 insertions(+), 112 deletions(-)
