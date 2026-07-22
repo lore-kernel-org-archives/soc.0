@@ -1,114 +1,250 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB35397E9A
-	for <soc@lists.linux.dev>; Tue, 21 Jul 2026 17:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784653743; cv=pass; b=n0l7rjzdTsFUKsgKakkMK0/HPbdYr1VlWkCHG408Faja/syjg0BBHIAKv8z6xpTa98GgyC4HlEUeJ69YtXOKBkBNBP7zxkiM5l3EUJ3OQbHA3krOeiOhdU9GEMNNZqjV+CSL9VZLhT23XF8Q47D/ThG1Njk55vl9v6LFIpAYIzw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784653743; c=relaxed/simple;
-	bh=2GNkgOjfx7RIocLM0CmhReELD/lA/lYDcSHiga2Rdp8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mtPZcMfLdt+VK33LFgz42z4dQLHgY7OC4j2mGSWgUe1oblVyeiWUw5ghI3p5VjmvcPNnqPjsnFHH1jev4wJY8kDdiJe+o5UpoxDYr2Js6rK+d2Ku1vCHWh0o/V0PlYkBvADl8yTywMF21plc/xuwdRT9C0+yBoM0ZoJpGX2iqhc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=po02jqgc; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738D83546F4
+	for <soc@lists.linux.dev>; Wed, 22 Jul 2026 09:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784714176; cv=none; b=JOQXdaWwmiVlQpE7cQWPkYgLR6pVnAAdYSSHrnePCzSp1YwfmpR1Tsvv25Mis4ecfkAYsWpaQE37YTFf543YcKziVdYFPKGfHSBVbOPPLQHV36/Q0v4QzRdkQecLz2/C028XRYdpCt6EXVu9YLK3Sh0IHoikciwmSp1iFPWv1MY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784714176; c=relaxed/simple;
+	bh=9LvGxvNSc04gEvH05YcEvZdgJ9Kd3n1dE0XAfkXYM4E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bwnKfVt3AbTeQh3QKQ/GZdVDRgVmTRCFfVmLRFIOPa3WGO1HFHvolEeCi9n/uNtoUGGm+A2qnBaZ65jR5ZEcQN3U/Lsk/4JIwSg90p+m7gsQ0ogvL0gWMHI62YjZQ5QWH5Xdpj8pOm9qyAG9rjxWIZ+8oDYRap1Haa2rmo9WHTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OEhEVOPp; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="po02jqgc"
-Received: by smtp.kernel.org (Postfix)
-	id CC1981F00AC4; Tue, 21 Jul 2026 17:09:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=192.19.166.228
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1784653741;
-	b=d2fx/ShRWIb6On07DTiMldeBRXZlR5msy3epl+PLeSoeOnlVjiURQluHLIUAKyRcThZb
-	 PyBnfUUOI2gRYctRy0oM8j++77ftpivygqn/wnlFp7s7h7ygqASCmXjLaP1c1VL39Jn1E
-	 7qMbERYIexcM1Qn5rkrTsUeRFulhP5utQqv245BHUbp1qG1NP8+ypBxpQbKG+U9QRQIZs
-	 hp/IDpn7L9UJ3BbZqBeJpWx8+7I6uH/Xa0cOWgUc6PtmsqhLHrZNcghaE+Tml0vIiclwZ
-	 XBN7k2LBj8Grd8POkKiRANeVDsGFae4RNaOlJK7rI5B3GDopxC6fCAAvS/JxuAYtJqQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1784653741;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=dXrNvzFEwTnXTRDjKuPyJdSsIoFSJx6o/cMMTvBChdE=;
-	b=XLZLVxMqcJN+PQtytzV1Ic2DfnmudUuGNudlFPDy1ofhtZrFerms5DFtfE432RFQZCjZ
-	 efJSmGVtgrRQLIh9AZlAcqwRcTktyb+WaH3w9RZpzYiboAfKkH4VlKdSMLo9I3YSiFRWW
-	 nqGN7o0OXoeN9YrO6fHbaeBkP0owT8GTx8ay36ouZBe+7S0XNN9xBGy2kol5jcmts8FWH
-	 qsTgHrvmRBKGTVciylbuv2kbNdsHXF42gw9wSTPq6K/DRfvev6EFJXblpuPVDMvj1UZ27
-	 ZUouwkbHE/+olwU8K/DT+bB11V0U8+l5WRW0SHue5pftllCL3tenUZPR4xsGFLoq7vA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=dkimrelay header.b=po02jqgc;
-	dmarc=fail header.from=broadcom.com;
-	spf=fail smtp.mailfrom=broadcom.com;
-	arc=none smtp.remote-ip=192.19.166.228
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.228])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A4A551F00A3E;
-	Tue, 21 Jul 2026 17:09:00 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=dkimrelay header.b=po02jqgc
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org A4A551F00A3E
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 08BC8C0000E0;
-	Tue, 21 Jul 2026 10:08:54 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 08BC8C0000E0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1784653734;
-	bh=2GNkgOjfx7RIocLM0CmhReELD/lA/lYDcSHiga2Rdp8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=po02jqgcIfrK+K48mLSGiPKp2iYCKXyiED35eKji+hMQrfafE+O8i3hs0bRThpYJ1
-	 AUo8IBBuUg3/Z50iIpVDGAIb4pZSljINfW9QCuU919Y0vOjZWCexxuHBOZXdBh1WAY
-	 0rDtWfchYhsGA/pw2tkmdmrdaeurKcXHYQtRChjc=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id E04BFACC;
-	Tue, 21 Jul 2026 10:08:53 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: soc@kernel.org
-Cc: Daniel Drake <dan@reactivated.net>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/1] Broadcom devicetree-arm64 fixes for 7.2
-Date: Tue, 21 Jul 2026 10:08:51 -0700
-Message-ID: <20260721170851.3581392-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OEhEVOPp"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-47c6e9a694bso6995169f8f.1
+        for <soc@lists.linux.dev>; Wed, 22 Jul 2026 02:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1784714169; x=1785318969; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=czz2pXk/RoUWqIRbuJa5XveWzwRZGqxPRQFLkTx/vUM=;
+        b=OEhEVOPpbb48NEXs21/V6WRHmSawclG8rn5yTVqCg/ES0uGySRUl7VA3tRsMMMyNge
+         yzJUqi4WRBtz5o4/uAfsCBLUmn2ccwh93qNx058xQaBS+SjdwqodlJfn5vKa/Pb2BuFJ
+         AWu7sGaRHq8HV8Q9FrFF4fz2kPiDDcxHfkgf7ao8XipQIbv9xBwLz5j0EoHk+bRG4Zkq
+         4Uf1eSOtokwZkCg3GwUTEKcu6L7fCNiL/UFnREPcmmu9T9TVHf3aLZMim7yhr+5i2qkS
+         E1gftYMmwBJ3CTqJrRLdlYreNlwZSz8Ap21CDU8QWQXdfaQy56YpmXnJbB3s+E3h4Jzm
+         heoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784714169; x=1785318969;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=czz2pXk/RoUWqIRbuJa5XveWzwRZGqxPRQFLkTx/vUM=;
+        b=IMeq4mL5B8NHOBe9/fvGaLbRymBsp14voZxcSNkrlX87jbHF28ezgAht1mfkRA4Q9F
+         Jbjpx1Cj0KUyWwCF4XKM74zTcBo+CpfnFjsQmB7CwrhVCFQPjSi2tFQG96L+4OV/HnUZ
+         ym+83/02AEby2zqsTwKI6SBFBi1MvD2Ux1TycGMRAhnPMBlM3USWflSc8AqwBnHwPFdX
+         SaZHw3KSgAr+soyVZy0GCTnBJVArLcHwMu/otkwPSA3WvZ7DAGdu4d0SiAYXx13UKkrK
+         wnTn/alHweDbam029HNaUY5F2T8u5rZqnK0XCR1jRQOrkrZm/S26uvmJUixVvU5yl5Ud
+         Kh8Q==
+X-Forwarded-Encrypted: i=1; AHgh+RrLZ2mbJrE3YC7IScw6vZYsqO+dgGDYXaBeKK7vjjAbtkEfNf5MA1wqIlwpoUOhKM1rpV8=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz2z0WyIfYyNY4vwnuR2R/ea6x0b1PVSMC7fIcSUNdVnWfpsaHe
+	QDqQpV/Xs8ThvfhbXwd0WmQTdlTQ8dhb17plUhWqGdG6npyTlO2796T8jb6Vsdx1m/BbhR5OabV
+	0HOqp
+X-Gm-Gg: AR+sD10cizsLKNT8/YLHkYL/2/MmG2Lhp42w30RABF9xdsiN/PStDl6XfP0pn425OcW
+	E3vPR4WIBYexsQKsMFqX0zuXKs7uy4tDqrjtPBT2ByH0p3vF0fdkGv9wVSo8qGMwrj3gYCJa94z
+	K6nyYbLKNDHWtUUCGVyrXAY08hK+SPz1wuiqKbfxyradu1LJzxpjZGMo1ILu2q7wxddNf4iH5kF
+	vQf+G6/yOmztHmtvYyll1XYA/duIa+qv90Ugx+gv0i2lzls/NjVgQy2AhAtWTWfWj5++oCgFXDt
+	ra5nfCZaGIwkUOVlEvsU6+T4LmF3CF0COZjW4TP5XoXNXkIeJlNNtH0b4ZD41f4RvMz5EUfg/oP
+	/frJ8Tj4nLjms4qEGdLxgX0k+K7sENZMz9LM0XaLlvUQbOKBbm8p3QLYCMwstqo1SVukNTq9Glx
+	baHwy8oECMU+HYeaftoLmvETwEuFIYvaTVDA==
+X-Received: by 2002:a05:6000:4211:b0:47f:778a:6587 with SMTP id ffacd0b85a97d-47f778a6775mr15011918f8f.40.1784714168736;
+        Wed, 22 Jul 2026 02:56:08 -0700 (PDT)
+Received: from gpeter-l.roam.corp.google.com ([2a00:23c7:314c:4601:ea7:d5d4:79db:6d52])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85c532d4sm4414533f8f.22.2026.07.22.02.56.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 02:56:08 -0700 (PDT)
+From: Peter Griffin <peter.griffin@linaro.org>
+Subject: [PATCH v2 0/5] Add Laguna/Tensor G5 SoC and Frankel, Blazer &
+ Mustang boards
+Date: Wed, 22 Jul 2026 10:55:51 +0100
+Message-Id: <20260722-contrib-pg-pixel10-initial-dts-v2-0-3abae9717feb@linaro.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKeTYGoC/xWNQQqEMBAEvyJzdiCGNbL7FfGgcdQGiSEJIoh/3
+ /FYTdF1U5YEyfSrbkpyIuMICrauyG9jWIUxK5M11pmuMeyPUBImjitHXLLrhICCcee5ZP58l1a
+ 8a7vJOdKTmGRR7Q30w/P8AeIvXNlwAAAA
+X-Change-ID: 20260710-contrib-pg-pixel10-initial-dts-49f5ec657b66
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>, 
+ Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+ "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ linux-serial@vger.kernel.org, soc@lists.linux.dev, 
+ Douglas Anderson <dianders@chromium.org>, Juan Yescas <jyescas@google.com>, 
+ RD Babiera <rdbabiera@google.com>, Brian Norris <briannorris@google.com>, 
+ William McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5682;
+ i=peter.griffin@linaro.org; h=from:subject:message-id;
+ bh=9LvGxvNSc04gEvH05YcEvZdgJ9Kd3n1dE0XAfkXYM4E=;
+ b=owEBbQKS/ZANAwAKAc7ouNYCNHK6AcsmYgBqYJO1FTOQh2Xnhd1R6kiN2IChC7cxVMZrCc8kU
+ SjI5BBvxR6JAjMEAAEKAB0WIQQO/I5vVXh1DVa1SfzO6LjWAjRyugUCamCTtQAKCRDO6LjWAjRy
+ utZ/D/4wrBAifd5y+luQ/441+vTlMrCYREjybtztCUiD/tsCMVGvmJX6JsWuKzD3N1w8sWe0eJ2
+ lwslJS3RMayKq1WFUSKEdEz1Bq0HJyUNCElAfCPMOol9NbTj7L8J7ub+/Mo3yDSUEEZVvNBnqC3
+ G19HjiPTb4oap+VioP5/pMyera50ImWZHgxqcQs52Y/6oxtkgrLVqpZlIdabE4ps7pWsw/oFP3L
+ ANjgO3r3qtoQ6vY7FBqbvOLWC6c24ev8UUcrMpVFwqG67+sgJOLe7D2TAHJB+2ypN+/eTvbZfhe
+ BfXceBHhitrTXlxeD1oSokjOgM9J02u8u59fGmCVGkoxj+abuQ2PLBfh+lnQjbQXpC31Ssc8WFi
+ 1E+FckfGMU1squp+92je+rF1O3bnhIuuOqZu1xvtlKRSMBDKCL3Q1QlDHnfPuO4Jmp6IwbbAoUJ
+ dEijNChKVMegNUqTJYmkmAyDLhcZxFhe4Ix+CkIdYzTa28X8BSsFihdeaA41uAtRLDpjwRtAM3n
+ DCB3cDtkEANg/D9Wu0/e9hzHN02sh/JE4cysKEYDE1W1CMzbgGUUCf+2hEnsG1OVLdXpL3FrUsx
+ AaUDrBu6C9OeCou7ENSW5Dq8wwNvSWo8/cyPZgFE9PlWLZ3h8PR3DodkVNHBWQ364yw8U1pI08D
+ u6yPrY8rMaW1phw==
+X-Developer-Key: i=peter.griffin@linaro.org; a=openpgp;
+ fpr=0EFC8E6F5578750D56B549FCCEE8B8D6023472BA
 
-The following changes since commit 1590cf0329716306e948a8fc29f1d3ee87d3989f:
+Hi folks,
 
-  Linux 7.2-rc4 (2026-07-19 13:54:41 -0700)
+This series adds initial basic support for Laguna (Tensor G5 SoC)
+found in Frankel (Pixel 10), Blazer (Pixel 10 Pro) and Mustang (Pixel
+10 Pro XL) phones.
 
-are available in the Git repository at:
+Whilst Tensor G1 to G4 SoCs (found in Pixel 6 to Pixel 9 and Pixel
+10a) were offshoots from the Samsung Exynos family. Laguna is an
+entirely in-house Google designed SoC.
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-7.2/devicetree-arm64-fixes
+Currently this series adds very basic DT capable of booting to a
+initramfs busybox shell and is a v2 of Dougs original submission with
+the contentious DT overlay parts removed.
 
-for you to fetch changes up to 75952cfc7752c52a2b692b59d34ce160d3edabb2:
+Whilst there is still interest in resolving the DT overlay topic (as
+I believe many vendors use this approach). I would like to decouple
+merging initial Laguna / Pixel 10  support from resolving that
+particular issue. I believe Doug intends to revisit the topic again at
+Linux Plumbers in Prague later this year.
 
-  arm64: dts: broadcom: bcm2712: Remove non-functional EL2 virtual timer (2026-07-21 10:04:56 -0700)
+In v2 I've updated to use the usual upstream approach of having
+individual board files e.g. lga-frankel.dtb, lga-blazer.dtb,
+lga-mustang.dtb  the same as gs101-oriole.dtb and gs101-raven.dtb.
 
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64-based SoCs Device Tree fixes
-for 7.2, please pull the following:
+It is worth noting, that with what is currently supported upstream there
+aren't any known differences versus pre mass production boards yet. So
+lga-blazer.dtb boots fine on my EVT 1.1 board with A0 silicon.
 
-- Daniel removes the non-functional EL2 timer interrupt which is not
-  connected on 2712
+At the point where differences do arise, we may need to either add A0
+silicon cut and other board variants upstream, or keep upstream as
+purely MP/B0 silicon and maintain a separate out of tree DT that uses
+overlays for Googlers needing to use pre MP devices. So far at least
+with Pixel 6 that wasn't necessary.
 
-----------------------------------------------------------------
-Daniel Drake (1):
-      arm64: dts: broadcom: bcm2712: Remove non-functional EL2 virtual timer
+Folks interested in trying this out and booting a pure upstream kernel
+on their own Pixel 10 device may wish to use the build system and docs
+found here:
 
- arch/arm64/boot/dts/broadcom/bcm2712.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+https://gitlab.com/LinaroLtd/googlelt/pixelscripts
+
+Example commands:
+
+make RUNTARGET=frankel flash
+make RUNTARGET=blazer flash
+
+Also in v2 I've added support for ramoops reserved-memory carveout and
+tested with `console=pstore` kernel argument. Additionally carveouts
+for the ABL bootloader are added (which is used when doing a debug
+boot (e.g. after a watchdog timeout). This allows for the extraction
+of various logs via fastboot oem commands (bootloader / kernel
+logs). The bootloader log can also be quite useful as it contains some
+amount of on device debug parsing which can provide some hints after a
+crash.
+
+regards,
+
+Peter
+
+Changes in v2:
+ * Enable CONFIG_ARCH_GOOGLE in arm64 defconfig
+ * Remove all the pre-production dt binding support (EVT, DVT, a0)
+ * Remove dtbo overlays and add individual board dts
+ * Update to lga-pixel-common naming like gs101-pixel-common
+ * Reorder nodes alpha-numerically by the node name
+ * Add ramoops reserved-memory (tested with console=pstore)
+ * Add reserved-memory for bootloader & gsa logs
+ * Add reserved-memory for Android BootLoader ABL (used on Watchdog
+   reset to extract boolotader logs / parse breadcrumbs / ramdump etc).
+ * Add osc 38.4Mhz fixed-clock
+
+v1: https://lore.kernel.org/lkml/20251111192422.4180216-1-dianders@chromium.org/
+
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: André Draszik <andre.draszik@linaro.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jiri Slaby <jirislaby@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Linus Walleij <linusw@kernel.org>
+To: Drew Fustini <fustini@kernel.org>
+To: Kees Cook <kees@kernel.org>
+To: Tony Luck <tony.luck@intel.com>
+To: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Juan Yescas <jyescas@google.com>
+Cc: RD Babiera <rdbabiera@google.com>
+Cc: Brian Norris <briannorris@google.com>
+Cc: William McVicker <willmcvicker@google.com>
+Cc: devicetree@vger.kernel.org
+Cc: kernel-team@android.com
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-serial@vger.kernel.org
+Cc: soc@lists.linux.dev
+
+Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+---
+Douglas Anderson (3):
+      dt-bindings: serial: snps-dw-apb-uart: Add "google,lga-uart"
+      arm64: dts: google: Add dts directory for Google-designed silicon
+      arm64: dts: google: Add initial dts for frankel/blazer/mustang
+
+Peter Griffin (2):
+      dt-bindings: arm: google: Add dt bindings for frankel/blazer/mustang
+      arm64: defconfig: enable Tensor G5 SoC family
+
+ Documentation/devicetree/bindings/arm/google.yaml  |  48 ++-
+ .../bindings/serial/snps-dw-apb-uart.yaml          |   1 +
+ MAINTAINERS                                        |   1 +
+ arch/arm64/Kconfig.platforms                       |   8 +
+ arch/arm64/boot/dts/Makefile                       |   1 +
+ arch/arm64/boot/dts/google/Makefile                |   6 +
+ arch/arm64/boot/dts/google/lga-blazer.dts          |  15 +
+ arch/arm64/boot/dts/google/lga-frankel.dts         |  16 +
+ arch/arm64/boot/dts/google/lga-mustang.dts         |  15 +
+ arch/arm64/boot/dts/google/lga-pixel-common.dtsi   |  23 ++
+ arch/arm64/boot/dts/google/lga.dtsi                | 423 +++++++++++++++++++++
+ arch/arm64/configs/defconfig                       |   1 +
+ 12 files changed, 539 insertions(+), 19 deletions(-)
+---
+base-commit: 17c7841d09ee7d33557fd075562d9289b6018c90
+change-id: 20260710-contrib-pg-pixel10-initial-dts-49f5ec657b66
+
+Best regards,
+-- 
+Peter Griffin <peter.griffin@linaro.org>
+
