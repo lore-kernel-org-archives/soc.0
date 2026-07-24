@@ -1,37 +1,55 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE01644C51F
-	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 17:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B958345EAA
+	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 21:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.79.152.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784913642; cv=none; b=VojUTlChZWn6PA/xgfSXVyOUjeXHBCyLO7eX4PpT9FUXHyunln9Gso0Tm40x32b+IsodIsqJweKgMNndiYcaYxQDN/jm+NGybavLoTuFDiD4sxDeI17oQivobi5CUyz+/BGbkLiZJ8lZrrlm7wGyXisCWgm6ZyoBX5VXcPoYL5g=
+	t=1784928710; cv=none; b=nFje8rGlIZC+YcnYgl6ZRI17ABtrELKt7EoLUh9jwDxxOxZ0HJkbLeZ0E6qvu0t/eRhUHZeJGauZcCo0zp04ywko1MXTc4DJTx75MTCEjMSRYwKFEO+NIWImoBEmolxcjzfxhwmm9jHRXWneBr4WXwA0D0P4gRZN0SFGS6XJ9LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784913642; c=relaxed/simple;
-	bh=YsVuH7dt75wbwA9vN8Al+eLXVNAlsO2FqykgL+KYM3Q=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Vy4/kX2J09TVl19nvln4lKxguI66+Mxj8Mi7oySEJTPYMiC0wUt39iXoDoqPvtXIPlCGUCcO6PPRsrQYyUkB9pjnuodsO1Y/4k3aC1bYt7T+msb6X4zJxwVVYhyeWKkTDfSrCop7p/qQhsL37S5hga0Eg5wBM9ECTPcovCxWgyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XnfWbQ+P; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784928710; c=relaxed/simple;
+	bh=DZWGC6QIL8eLuoB5lCnVl42W74flK/sDT7akFfjhw84=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IWxPKbBJJTihSUfYjY75dlGGnurGLeCUqOa9/8+IlM2Dg7P7rY9i462Tx+KvFDsRdf72fVNgJTAGlRPmQxXPrmcyy/mS/NQ1fB1shWpyrjqjFi1F7YFI4cN/OQ8muh9fXcYcTBJ2PP7qJx+B0oysJGErp3S/emsTxz8cnKub7Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com; spf=none smtp.mailfrom=mleia.com; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=LZ02Trna; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=LZ02Trna; arc=none smtp.client-ip=178.79.152.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mleia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XnfWbQ+P"
-Received: by smtp.kernel.org (Postfix)
-	id 290BD1F00A3D; Fri, 24 Jul 2026 17:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F321F000E9;
-	Fri, 24 Jul 2026 17:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784913638;
-	bh=6L3iAUxnwpC0Co+f8/8yvSJRKFgAl5/7PtQ9i62qLsY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=XnfWbQ+PvdzNtz40OS77rFPUGD7XjNklxyxTDxN2nOwU7hKTjgUvxNf46EVddyumy
-	 LttssIY+vo68cjPEv+XlkOdZ8Wesa55UIks+WMuncVjkMtl0SkyQBn62xd9YfdWlFX
-	 PRSEuJ5BsJ7R03xfPwtXq8E79Ex6IJKWEzhZJh3PK8mXy3afY4zR45kjI20baOY3GH
-	 iqx3HT2r+qq3QacWfabVEgrBeNTh3Sf4VPdUCYtas+6FonSB6hxbEpX8XXlIM+yspL
-	 TDjfeACKpEcWKbaglTzcTno2lKadtEePN2N/0Eg7kUaahY/PM4Faix2q6x1k3LPlkc
-	 Sp/SBCpIGmK+Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93AA039263AC;
-	Fri, 24 Jul 2026 17:20:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="LZ02Trna";
+	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="LZ02Trna"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1784928285; bh=DZWGC6QIL8eLuoB5lCnVl42W74flK/sDT7akFfjhw84=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LZ02TrnaJOrOyhlaYxKp+BkV+EPH4jmIWGspfo3rJedVoc2CaDqzCmH/Z1ttL9WMi
+	 jPKAapK2fd561QGtWUwXBGlcWkWtWm6PAAXJGo8IhSYiSRwP8mwmpFt7v2HAo5ss+1
+	 Ibb06JAoBRiVn3A+AIpVSSdWfskdXMrD5GhNsxIpzFUYza/Ak7rXVVqLc0kdErRdMM
+	 /a8AJ3O8bvPTnkF915OuKVRw19P7qhL9h1W9qe0BiK4q57FdDYmpEWoOfB1rW69qww
+	 UgDvyIeLfoXX53+eXufLRdfOY9GHRyHOVxPRQWj/aQuqV9iChl4IdWyUDRgvcAasnQ
+	 iXleoEcdgwqeA==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+	by mail.mleia.com (Postfix) with ESMTP id 753803FAC9F;
+	Fri, 24 Jul 2026 21:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1784928285; bh=DZWGC6QIL8eLuoB5lCnVl42W74flK/sDT7akFfjhw84=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LZ02TrnaJOrOyhlaYxKp+BkV+EPH4jmIWGspfo3rJedVoc2CaDqzCmH/Z1ttL9WMi
+	 jPKAapK2fd561QGtWUwXBGlcWkWtWm6PAAXJGo8IhSYiSRwP8mwmpFt7v2HAo5ss+1
+	 Ibb06JAoBRiVn3A+AIpVSSdWfskdXMrD5GhNsxIpzFUYza/Ak7rXVVqLc0kdErRdMM
+	 /a8AJ3O8bvPTnkF915OuKVRw19P7qhL9h1W9qe0BiK4q57FdDYmpEWoOfB1rW69qww
+	 UgDvyIeLfoXX53+eXufLRdfOY9GHRyHOVxPRQWj/aQuqV9iChl4IdWyUDRgvcAasnQ
+	 iXleoEcdgwqeA==
+From: Vladimir Zapolskiy <vz@mleia.com>
+To: soc@lists.linux.dev
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Drew Fustini <fustini@kernel.org>,
+	Karl Mehltretter <kmehltretter@gmail.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] NXP LPC32xx ARM changes for v7.3
+Date: Sat, 25 Jul 2026 00:24:26 +0300
+Message-ID: <20260724212426.414433-1-vz@mleia.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -39,50 +57,46 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/4] ARM: sa1100: convert gpio-keys to software nodes
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <178491360514.3243435.9931961747631032671.git-patchwork-notify@kernel.org>
-Date: Fri, 24 Jul 2026 17:20:05 +0000
-References: <20260706-sa1100-swnode-v1-0-332759bbd930@gmail.com>
-In-Reply-To: <20260706-sa1100-swnode-v1-0-332759bbd930@gmail.com>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: soc@kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20260724_212445_497333_E53D7C22 
+X-CRM114-Status: UNSURE (   7.42  )
+X-CRM114-Notice: Please train this message. 
 
-Hello:
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
-This series was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
-On Mon, 06 Jul 2026 20:13:59 -0700 you wrote:
-> This patch series converts StrongARM SA-1100 evaluation and handheld
-> boards (Assabet, Collie, and HP iPAQ H3xxx) from legacy platform data
-> (struct gpio_keys_platform_data) to static software nodes and device
-> properties.
-> 
-> The first patch registers a shared software node for the SA-1100 SoC
-> GPIO controller in drivers/gpio/gpio-sa1100.c, attaching its firmware
-> node directly to the GPIO chip prior to registration. The subsequent
-> patches convert the board setup files to define static software nodes
-> referencing the SoC GPIO controller directly, allowing pin bindings to
-> be resolved via the attached firmware node without relying on name
-> matching.
-> 
-> [...]
+are available in the Git repository at:
 
-Here is the summary with links:
-  - [1/4] gpio: sa1100: register software node for GPIO controller
-    https://git.kernel.org/soc/soc/c/e4671f292ebb
-  - [2/4] ARM: sa1100: assabet: convert gpio-keys to use software nodes
-    https://git.kernel.org/soc/soc/c/ea07a154791e
-  - [3/4] ARM: sa1100: collie: convert gpio-keys to use software nodes
-    (no matching commit)
-  - [4/4] ARM: sa1100: h3xxx: convert gpio-keys to use software nodes
-    (no matching commit)
+  https://github.com/vzapolskiy/linux-lpc32xx tags/lpc32xx-arm-for-7.3
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+for you to fetch changes up to d6ef4391897d8957f26397f381e78677c1277260:
 
+  ARM: lpc32xx: remove a few manually populated OF devices (2026-07-24 23:29:08 +0300)
 
+----------------------------------------------------------------
+ARM: nxp: lpc32xx: ARM changes for v7.3
+
+NXP LPC32xx ARM changes for v7.3 contain:
+
+- Karl Mehltretter fixes a multiplatform kernel runtime execution by
+  limiting LPC32xx SoC specific init functions to be run on this
+  platform only,
+- a stale method of populating DMA, SLC and MLC NAND controllers is
+  removed from platform code, this change was announced to happen by
+  the end of this year, all touched by the change controllers are
+  properly described in the platform device tree for years, and very
+  old board dtbs are recommended to be updated.
+
+----------------------------------------------------------------
+Karl Mehltretter (1):
+      ARM: lpc32xx: only run SoC init on LPC32xx hardware
+
+Vladimir Zapolskiy (1):
+      ARM: lpc32xx: remove a few manually populated OF devices
+
+ arch/arm/mach-lpc32xx/common.c  |  5 +---
+ arch/arm/mach-lpc32xx/common.h  |  2 ++
+ arch/arm/mach-lpc32xx/phy3250.c | 62 ++---------------------------------------
+ arch/arm/mach-lpc32xx/pm.c      |  5 +---
+ 4 files changed, 6 insertions(+), 68 deletions(-)
