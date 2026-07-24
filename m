@@ -1,102 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D353B42D7
-	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 07:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507183446DE
+	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 08:07:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784879413; cv=none; b=NLd1mBiQx3fLctl7BbqZxwp2jyRsns3kt5lC9U2twWWbuPB0fGYYu7QYCvElfrfQUEC9UDYcLRz/KiX6BEC7D/QtZBVVjEeFrzB9Ggs53yMWxFiTyop7R4mscmqU+pcQO0aw9pbXRV3aV91DckxNTD8XCWS8621IrSy6yTTm2J8=
+	t=1784880437; cv=none; b=ReQLITAi4VOaVIYMJJ/C8yulrC+UuQLLXawMSV/jy2BbuuKg0TLn5JRWZyTQRBorjxyPoV3H5TcOOI6pjoM3+jn87G2K6UrhAfy0+oe/FH6FfqL8RicOYqkf4e+x9CQWsshxUzvSGcjPf+EPiLqKqkFAMm9A2HXKmpUe/Pqvwts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784879413; c=relaxed/simple;
-	bh=gv/QytketXBb6vNuESGC5VlG5U2r8qCFWZxmG9oFFkg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UFaYFQBIxF4LSY7FVR2RzB8kInNQv2cRSmbVw1HdrnItBcUo3Ve38yNHWYPsFY0EiH0bUEF0fgmu635U5Cn10oDtrgt513J4rLJHOGT3pFL29sux0VeHt6EKKSmPLPXDN26OXBurip+m09/ayouVD5KHWWX/aoR2TzznSmuxxUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CIXpiX5q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784880437; c=relaxed/simple;
+	bh=AFzvJt9mwZQNdYlf/8Tj9+sk/Wv6dgaLh4lukFDbdwA=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=sGBBN+ULUWorl0OG+Yk/68jG7yRkchf0IsVxdHydafC/7ZXEboYMc9fLE5ataGosDORv6Z6F40Vea1lzaa5URDO48yHNDodSwT9vdzVdssIRLSoZ24MrgSYsZQ7uvW37QOR/52P8+1JexFn24F7dKpC8Tb5vVh9LAjRf43AsxKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERvVDYEZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CIXpiX5q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51AE41F000E9;
-	Fri, 24 Jul 2026 07:50:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERvVDYEZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DBA1F00A3D
+	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 08:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784879408;
-	bh=Bp9rvWmCD3DpzkOE6WbKOB/ALQZQiEicFGw7rcyEDOk=;
+	s=k20260515; t=1784880435;
+	bh=HZuc3S8NKvEFqAPnoOjRFSMEIzvtAOjkPfseQxs6Dh0=;
 	h=From:Date:Subject:To:Cc;
-	b=CIXpiX5qGkFIrYv4JGByVCLQKqqHgJGJQl68Fe9l9rdR6StuePglw4jML1HM47S6I
-	 Ej/AC+Z8YBkQVeMMyXfd2kGLW2qcO2faWXrcjl2Ujv3qyYSLKLibgoF8MhIjVlF33s
-	 QxT2pDEBTv2Re0n8+1L+hXvZB1ScfVY+GjQffW3lhELtNpDmLjlpsSQZBPICU3TTY+
-	 keAA6GEJEhKiyEchNvp080XYL2BdNmv6CrlJjrML3qI8DxP6NI//L76Gb5yq0fXtHl
-	 6QbmrZwGw6M7e3m7/8gnwhs7MxKKXKqeGOQjQUzKwEdFc+eYNYmCNlbkJQZVNlhryz
-	 0CWTH2REaiiug==
-From: Linus Walleij <linusw@kernel.org>
-Date: Fri, 24 Jul 2026 09:50:04 +0200
-Subject: [PATCH] ARM: dts: ixp4xx: Drop the reg-offset hack
+	b=ERvVDYEZtsO54xTTMW1oT6IpCqsd2AQvAQv0v2ETUtP3vKbRP6JJsK7/r4lWg3qEK
+	 KaPJHd9GW8P0ESZD0gYIOjeCU/rPb6hiNHvNenTa9cKM5RAkAWWrGjtAjihisrABYH
+	 qvEd31E3wyu04kNhjd0JiUh1Nvy/tJELw90fxdUKo/G8pYlzjxMosY8OkFpd52yQjp
+	 yCPT3f5EOoL5oYYjEllplNMU009CrvAoVD15wpS1/sQdRMDvif5uTEQIOhxl0R68LR
+	 7c+v9+Tux1kBmuNFRfEm8ADTartbpVlVh+2GM8LWm9tP+jds9wVDRegZU/JLZrqP6L
+	 1tYQxOvHXL8Cg==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-39c62764c7cso10650071fa.0
+        for <soc@lists.linux.dev>; Fri, 24 Jul 2026 01:07:15 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyAS3vRgFTSQQbqAiNVJcNlxmIjKeMjAamDKbshdpzdOoVa9NHU
+	Iw01xnPsqfpL+wMhxcf9XlmjciXyX/uYyZfs0APFqIaM+WnvT3OlgAgniDBgiVQiN/OHaZrjvj/
+	wAP7Aqj8mgN/+QgPM2xglW+94LRJs9Aw=
+X-Received: by 2002:a05:6512:6193:b0:5ae:bf5d:5c54 with SMTP id
+ 2adb3069b0e04-5b2b339da76mr1250712e87.27.1784880434621; Fri, 24 Jul 2026
+ 01:07:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260724-ixp4xx-dts-fix-v1-1-09bf7111e94e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDcyMT3cyKApOKCt2UkmLdtMwKXYvUpCRDQ0uL5LS0FCWgpoKiVKAw2MD
- oWAi/uDQpKzW5BGSKUm0tAATLvKVyAAAA
-X-Change-ID: 20260724-ixp4xx-dts-fix-8ebb1198cffd
-To: soc@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Drew Fustini <fustini@kernel.org>, linux-arm-kernel@lists.infradead.org
-Cc: Linus Walleij <linusw@kernel.org>
-X-Mailer: b4 0.15.2
+From: Linus Walleij <linusw@kernel.org>
+Date: Fri, 24 Jul 2026 10:07:01 +0200
+X-Gmail-Original-Message-ID: <CAD++jLkXOA=u4UxwEDa3WJbFEyTeMPj_U5BiqYsrahxdoKM+2w@mail.gmail.com>
+X-Gm-Features: AUfX_mwopg3eEdaNe52uAWb7vkzYQ2MfkVezpYU8xidl14VByB6teDIoClUL0ak
+Message-ID: <CAD++jLkXOA=u4UxwEDa3WJbFEyTeMPj_U5BiqYsrahxdoKM+2w@mail.gmail.com>
+Subject: [GIT PULL] IXP4xx ARM changes for v7.3
+To: soc@lists.linux.dev
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Drew Fustini <fustini@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-The reg-offset hack only works when the IXP4xx platform is
-running in big endian mode, and it is there to byte-offset
-the byte where the serial registers appear in the BE config.
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
-This is clearly wrong, workarounds need to be in the
-drivers. Drop the reg-offset.
+  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
-Signed-off-by: Linus Walleij <linusw@kernel.org>
----
-SoC folks: please apply this directly for DTS for v7.3.
-The prerequisite patch to serial is already merged by Greg.
----
- arch/arm/boot/dts/intel/ixp/intel-ixp4xx.dtsi | 10 ----------
- 1 file changed, 10 deletions(-)
+are available in the Git repository at:
 
-diff --git a/arch/arm/boot/dts/intel/ixp/intel-ixp4xx.dtsi b/arch/arm/boot/dts/intel/ixp/intel-ixp4xx.dtsi
-index 0adeccabd4fe..b0f98da8def4 100644
---- a/arch/arm/boot/dts/intel/ixp/intel-ixp4xx.dtsi
-+++ b/arch/arm/boot/dts/intel/ixp/intel-ixp4xx.dtsi
-@@ -84,11 +84,6 @@ pci@c0000000 {
- 		uart0: serial@c8000000 {
- 			compatible = "intel,xscale-uart";
- 			reg = <0xc8000000 0x1000>;
--			/*
--			 * The reg-offset and reg-shift is a side effect
--			 * of running the platform in big endian mode.
--			 */
--			reg-offset = <3>;
- 			reg-shift = <2>;
- 			interrupts = <15 IRQ_TYPE_LEVEL_HIGH>;
- 			clock-frequency = <14745600>;
-@@ -98,11 +93,6 @@ uart0: serial@c8000000 {
- 		uart1: serial@c8001000 {
- 			compatible = "intel,xscale-uart";
- 			reg = <0xc8001000 0x1000>;
--			/*
--			 * The reg-offset and reg-shift is a side effect
--			 * of running the platform in big endian mode.
--			 */
--			reg-offset = <3>;
- 			reg-shift = <2>;
- 			interrupts = <13 IRQ_TYPE_LEVEL_HIGH>;
- 			clock-frequency = <14745600>;
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+tags/ixp4xx-arm-v7.3
 
----
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
-change-id: 20260724-ixp4xx-dts-fix-8ebb1198cffd
+for you to fetch changes up to 2262f02ac2aa545560a7f182c8e6b5c98e72763c:
 
-Best regards,
---  
-Linus Walleij <linusw@kernel.org>
+  ARM: ixp4xx: Relax endianness (2026-07-24 09:52:10 +0200)
 
+----------------------------------------------------------------
+IXP4xx ARM changes for v7.3:
+
+Make it possible to boot IXP4xx in little endian mode. This is
+dependent on the patch for the xscale decompress header
+submitted through Russell's patch tracker.
+
+----------------------------------------------------------------
+Linus Walleij (1):
+      ARM: ixp4xx: Relax endianness
+
+ arch/arm/mach-ixp4xx/Kconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
