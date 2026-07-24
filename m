@@ -1,127 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442A033D4E8
-	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 13:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1485B3C3F4A
+	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 16:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784900823; cv=none; b=HLdfp4ba5Xtp8eW2i5alO9K7RiasD93oYGDiShva/K6WdaqWAk6y3KGqzN1zKgMaSpZhbb+nwH8mi93O1yI+5kynGPaDOeDFNutZWu9XqMIKSvYEhp1jNXtgBYpeuZTxCycI44QAP+K2B+rNmAxNmFYvEcSwE+WqWgXpoqJcPw4=
+	t=1784911239; cv=none; b=mlWxPXNuqUslt3hxicXj3nSpOwvKPdxWKeRq+dkmbebPOOcTSUvhPrqEG7StKE4oIYqJHao6psQ1lh+Ak3Sjx8MV4Q4Yf+Xbezo052gGzf3NVG9R3jyovLiGCNcU8S/3P8JOu2SkBHEcupFu2gfpB0N/nCwQ2jjpFcxa2Rz2E6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784900823; c=relaxed/simple;
-	bh=mLICr51qUhSXGEneDYU1voqEfPhn7pnSVcmO2Ru4VDk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NrCiM+9KXjSmur9HGSczrgmjz873CXil1Z5DBx580MKQQiZVCdWxterbMBW+VBlCI98mXnDHZHyuyEtfnV8wWS1cXbVdu3evK3HU5K0hx7TGQNAkMqzhMJuJlyY3+KEgey5U2YXfQx+Qc1AQjT6g81H5SFIpSWAfyilAp02t+f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=er0CHM2Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784911239; c=relaxed/simple;
+	bh=Z7FxWPZX/Gjc/uq8+t6pbevw8gabeckNXiKJrBPRzFY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=PackF3f53X8NuwFSfqaH0uwRH2g6N9fgynqxaZ28jK4UY5814RGUd6hAN1XEFlY1a7S2iofYnL3Sebs/eaNgyzJsKl3Fp2u4l21X2YK2Lc423qL/FsmD7bTXRZYsptJCl/aqgAQuZ5/6HeZTuQ8T8x2LHBesnyC9MtyA+9IDHe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WBuK92Id; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="er0CHM2Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WBuK92Id"
 Received: by smtp.kernel.org (Postfix)
-	id 04CC71F00A3A; Fri, 24 Jul 2026 13:47:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457FD1F000E9;
-	Fri, 24 Jul 2026 13:46:59 +0000 (UTC)
+	id AF3011F00A3D; Fri, 24 Jul 2026 16:40:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994BB1F000E9
+	for <soc@kernel.org>; Fri, 24 Jul 2026 16:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784900820;
-	bh=cbysenA+ym7Lo52Js4E8GSW7rIIJ486XykrgB905yDY=;
-	h=From:To:Cc:Subject:Date;
-	b=er0CHM2ZQRV9xe1kDZW9gQkS3ZsboFu/zHjR5KAMfWCU5q6X8YXDikQiiBRSnxaoA
-	 Io1yU8akXky9wBwETLfdXy96As7pcwenpDV3VwPkxkWBoTWlBrO6EkmgQxG2bYdYHb
-	 lJxOOnERMOBkWuTdIYWUgVYcIhfQRdu5E8T9Xv7ACTL2/rTZwn6tr8kYxMkMw1RG3r
-	 Y4O26SC6BiX1FZI5J/ogP8Qs+p5VY9bMu5O5TU7oDhmCblPKVm23z7Ch058zYLaJD0
-	 Z9DWFZH+vq0rWzmVPROj9HCkTNr5u9SOLlj0M6ieSJkK1w5ZtwzVx5h8tFkp0opKgr
-	 ir3I9K2vutFmA==
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	arm-scmi@vger.kernel.org,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v7.3
-Date: Fri, 24 Jul 2026 14:46:48 +0100
-Message-ID: <20260724134651.2930500-1-sudeep.holla@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=k20260515; t=1784911237;
+	bh=r4GPYBawhXCzPrPezZ5MQjxWqYYfL0QyBfKvjZsghSA=;
+	h=Subject:From:Date:To:Cc;
+	b=WBuK92Id7a6AD1pvkjU9huE61lM53/JO4K7L+KKGGryhI+huAirueUP5InnX6IFLF
+	 k7GLW9Neq/VrPd2wayLS3ZwHLURLhcp7Jr1+e57hEk056wLapVq0ytq9hs9N+vVoXJ
+	 5V0KQi5gCCqPmjHLAQh0E23jzCFArxhIJYSzed5YFtFBCMcFrGvAkOwlX/CWaPbctk
+	 bj5G/n5pH/uMhbm4RFH7e0dpssR9qrcNOSeac/ffgk6mnRTDvieq52rv8RvJf3P3bo
+	 WknQj0BAFFTl3bG7+BunAPmZ0QW2JTcgYYNOpEtafgH/JsYjc28HHBSTdHjzdJg+7C
+	 vjnYcsh2eQGHQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1C0D639263A5;
+	Fri, 24 Jul 2026 16:40:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <178491120469.3229915.6202579326725862008.git-patchwork-summary@kernel.org>
+Date: Fri, 24 Jul 2026 16:40:04 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-Hi ARM SoC Team,
+Hello:
 
-Please pull !
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-I am keeping these as updates for v7.3 rather than fixes for v7.2,
-allowing them to remain in -next for additional reviewi/testing time.
-Aside from Sashiko’s review, there has been limited feedback on these
-fixes, which address issues identified by Sashiko.
+Patch: [GIT,PULL,1/1] Broadcom devicetree-arm64 fixes for 7.2
+  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1131830
+  Lore link: https://lore.kernel.org/r/20260721170851.3581392-1-florian.fainelli@broadcom.com
 
-Regards,
-Sudeep
 
--->8
-The following changes since commit 980a8bfe7baec9b9ee0d5443b0b204552e41c407:
+Total patches: 1
 
-  Merge branches 'for-next/scmi/fixes' and 'for-next/ffa/fixes' (2026-07-13 11:38:34 +0100)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-7.3
-
-for you to fetch changes up to 9f7cd6a62aa754ed6b48cbd5d50de40add1bcc86:
-
-  firmware: arm_scmi: Unrequest devices if driver registration fails (2026-07-22 20:33:43 +0100)
-
-----------------------------------------------------------------
-Arm SCMI updates/fixes for v7.3
-
-A collection of SCMI core and transport fixes addressing resource
-lifetimes, teardown races and error handling. Most of these issues
-are reported by Sashiko as existing issues while reviewing new feature
-additions to SCMI.
-
-The changes:
-- publish channel state before mailbox and SMC callbacks can run,
-- quiesce notification work before tearing down transport channels,
-- fix partial channel setup and mailbox allocation cleanup,
-- make IDR iteration and shared-channel teardown safe,
-- correct SCMI device, OF node, handle, bus ID and SystemPower lifetimes;,
-- harden requested-device registration and removal against races and
-  partial failures,
-- reject out-of-range DT protocol IDs, and
-- simplify notification allocations using flexible arrays.
-
-----------------------------------------------------------------
-Rosen Penev (1):
-      firmware: arm_scmi: Simplify notification allocations
-
-Sudeep Holla (19):
-      firmware: arm_scmi: Publish channel state before callbacks
-      firmware: arm_scmi: Unregister device notifier before IDR teardown
-      firmware: arm_scmi: Quiesce notifications before teardown
-      firmware: arm_scmi: Clean up channels on setup failure
-      firmware: arm_scmi: Free transport channel on IDR failure
-      firmware: arm_scmi: Avoid IDR updates while cleaning channels
-      firmware: arm_scmi: Reject out of range DT protocol IDs
-      firmware: arm_scmi: Use channel ID for transport teardown
-      firmware: arm_scmi: Protect device request lookup with RCU
-      firmware: arm_scmi: Drop handle on protocol bind failures
-      firmware: arm_scmi: Clear SystemPower flag on create failure
-      firmware: arm_scmi: Fix OF node reference handling
-      firmware: arm_scmi: Unwind TX receiver mailbox setup failure
-      firmware: arm_scmi: Unwind P2A receiver mailbox setup failure
-      firmware: arm_scmi: Fix SCMI device destroy lifetimes
-      firmware: arm_scmi: Fix transport device teardown lookup
-      firmware: arm_scmi: Fix requested device removal race
-      firmware: arm_scmi: Roll back partial protocol table registration
-      firmware: arm_scmi: Unrequest devices if driver registration fails
-
- drivers/firmware/arm_scmi/bus.c                | 182 +++++++++++++++----------
- drivers/firmware/arm_scmi/common.h             |   2 +
- drivers/firmware/arm_scmi/driver.c             |  81 +++++++----
- drivers/firmware/arm_scmi/notify.c             |  64 +++++----
- drivers/firmware/arm_scmi/notify.h             |   1 +
- drivers/firmware/arm_scmi/transports/mailbox.c |  26 +++-
- drivers/firmware/arm_scmi/transports/smc.c     |  15 +-
- 7 files changed, 230 insertions(+), 141 deletions(-)
