@@ -1,84 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6809D3CAE9B
-	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 08:11:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442A033D4E8
+	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 13:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784880669; cv=none; b=OexGWLp2W2gxJ7wm3tf+ux78i+QaXKBZM3yk1r0vOMRG9OZlJRXXHs+Z8ztFAnbKcTV7siuv/Rs/MYt+7GecqGGSbUGh/IuOqWNQPmNgCHfrFb/HujPLHw3p5ALt4sC1WOcZXRGEEu15OJ6EEugW0b1n10SZJlLHmPoHQoIjklI=
+	t=1784900823; cv=none; b=HLdfp4ba5Xtp8eW2i5alO9K7RiasD93oYGDiShva/K6WdaqWAk6y3KGqzN1zKgMaSpZhbb+nwH8mi93O1yI+5kynGPaDOeDFNutZWu9XqMIKSvYEhp1jNXtgBYpeuZTxCycI44QAP+K2B+rNmAxNmFYvEcSwE+WqWgXpoqJcPw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784880669; c=relaxed/simple;
-	bh=dZw9DUfOKULDNZwRU8PNCol6iJBQLTI2y9SwLQzu4kI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=DmUmt5oJi0jK8p8EQEqDWQ2M+PHs14fIXPUGHGK6WA2/PGmKOOzb90dMs7wRAcwnpubq+euIKPDS2OxGBNMVVwXX70TgCzlfmVJs21jVYQZDqH/TyvjyrIoHQ3JQyAYwYmR0SaI/QdiYzRLxhOul8uEm/hrC5dAniaYLpxRIlSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T8kNZXqN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784900823; c=relaxed/simple;
+	bh=mLICr51qUhSXGEneDYU1voqEfPhn7pnSVcmO2Ru4VDk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NrCiM+9KXjSmur9HGSczrgmjz873CXil1Z5DBx580MKQQiZVCdWxterbMBW+VBlCI98mXnDHZHyuyEtfnV8wWS1cXbVdu3evK3HU5K0hx7TGQNAkMqzhMJuJlyY3+KEgey5U2YXfQx+Qc1AQjT6g81H5SFIpSWAfyilAp02t+f4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=er0CHM2Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T8kNZXqN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4201F00A3E
-	for <soc@lists.linux.dev>; Fri, 24 Jul 2026 08:11:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="er0CHM2Z"
+Received: by smtp.kernel.org (Postfix)
+	id 04CC71F00A3A; Fri, 24 Jul 2026 13:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457FD1F000E9;
+	Fri, 24 Jul 2026 13:46:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784880665;
-	bh=A9k2GiWAU4a33+EzJ6hCarjcE5xLYndFdiv3B5hwrBA=;
-	h=From:Date:Subject:To:Cc;
-	b=T8kNZXqN3OzXF+xPH9+xgYjpnGhcgs4M1hCsF//4cvEI8Op1m2SRgUI8qhb04NQAR
-	 PgJbXg8sVLi0oLcUX5bHgsOzJDnB6dVojiPGtLaUUil8hdWlGCt1hOshcExOln0qDj
-	 Ncr/0xmVC4H/eF+F8dO8iufdgMgI4xOfxM4rUUcQ8MJ3cCeDZlidN6zP3tB+BXfoWV
-	 PUr63BA0nu15sG5AcBgpicb+31jjl6hfDfQg1OAEonwwsDPaRYqxloY/wqCCTcs05Q
-	 8/l3B/74tGKrLslPu77bMvdGE25SljjVk/BYgwpW2OFl31StBDDT/Ei5MI5zmtV9Or
-	 nBCHS7//fJojA==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5b0148201fbso143522e87.3
-        for <soc@lists.linux.dev>; Fri, 24 Jul 2026 01:11:05 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yzeng7ZBXU7OJNgLpgQUlN3VmaY9L1NwDJymnUy3612Ik2Awl05
-	T/2vOxTA2mgS279fyzm0cS3cCGh2Elqfj7EpDXbj5WwcTcq0N2FvxFLbPxXqQtSTWbEY60S9ANZ
-	xxIAZd3Tj4uQdNn0dZO7f72jkE6lfhkU=
-X-Received: by 2002:a05:6512:838b:b0:5b1:5d7f:84d8 with SMTP id
- 2adb3069b0e04-5b2b2f8db28mr842076e87.46.1784880664049; Fri, 24 Jul 2026
- 01:11:04 -0700 (PDT)
+	s=k20260515; t=1784900820;
+	bh=cbysenA+ym7Lo52Js4E8GSW7rIIJ486XykrgB905yDY=;
+	h=From:To:Cc:Subject:Date;
+	b=er0CHM2ZQRV9xe1kDZW9gQkS3ZsboFu/zHjR5KAMfWCU5q6X8YXDikQiiBRSnxaoA
+	 Io1yU8akXky9wBwETLfdXy96As7pcwenpDV3VwPkxkWBoTWlBrO6EkmgQxG2bYdYHb
+	 lJxOOnERMOBkWuTdIYWUgVYcIhfQRdu5E8T9Xv7ACTL2/rTZwn6tr8kYxMkMw1RG3r
+	 Y4O26SC6BiX1FZI5J/ogP8Qs+p5VY9bMu5O5TU7oDhmCblPKVm23z7Ch058zYLaJD0
+	 Z9DWFZH+vq0rWzmVPROj9HCkTNr5u9SOLlj0M6ieSJkK1w5ZtwzVx5h8tFkp0opKgr
+	 ir3I9K2vutFmA==
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	arm-scmi@vger.kernel.org,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@kernel.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>
+Subject: [GIT PULL] firmware: arm_scmi: Updates for v7.3
+Date: Fri, 24 Jul 2026 14:46:48 +0100
+Message-ID: <20260724134651.2930500-1-sudeep.holla@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Linus Walleij <linusw@kernel.org>
-Date: Fri, 24 Jul 2026 10:10:51 +0200
-X-Gmail-Original-Message-ID: <CAD++jLn3UOROn4oK9D306WaJFx+8TQHehSugtLq7zhO0DwhHzQ@mail.gmail.com>
-X-Gm-Features: AUfX_mz-C4N8UzKZ7Tyc8d-wftrIc7dtdIzb8jJ265dnROboevalR6jsrMvtWJQ
-Message-ID: <CAD++jLn3UOROn4oK9D306WaJFx+8TQHehSugtLq7zhO0DwhHzQ@mail.gmail.com>
-Subject: [GIT PULL] IXP4xx SoC driver updates for v7.3
-To: soc@lists.linux.dev
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Drew Fustini <fustini@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
+Hi ARM SoC Team,
 
-  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+Please pull !
+
+I am keeping these as updates for v7.3 rather than fixes for v7.2,
+allowing them to remain in -next for additional reviewi/testing time.
+Aside from Sashiko’s review, there has been limited feedback on these
+fixes, which address issues identified by Sashiko.
+
+Regards,
+Sudeep
+
+-->8
+The following changes since commit 980a8bfe7baec9b9ee0d5443b0b204552e41c407:
+
+  Merge branches 'for-next/scmi/fixes' and 'for-next/ffa/fixes' (2026-07-13 11:38:34 +0100)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-tags/ixp4xx-soc-v7.3
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-7.3
 
-for you to fetch changes up to 48e54749c1b6446f53f7419c50ebe7c84f81cb0b:
+for you to fetch changes up to 9f7cd6a62aa754ed6b48cbd5d50de40add1bcc86:
 
-  soc: ixp4xx: Remove redundant dev_err() (2026-07-24 10:08:05 +0200)
-
-----------------------------------------------------------------
-IXP4xx SoC changes for v7.3:
-
-- Add some MODULE_DEVICE_TABLE():s to the ixp4xx SoC drivers.
-
-- Drop redundant dev_err() calls in the ixp4xx SoC drivers.
+  firmware: arm_scmi: Unrequest devices if driver registration fails (2026-07-22 20:33:43 +0100)
 
 ----------------------------------------------------------------
-Pan Chuang (1):
-      soc: ixp4xx: Remove redundant dev_err()
+Arm SCMI updates/fixes for v7.3
 
-Pengpeng Hou (2):
-      soc: ixp4xx: qmgr: add missing MODULE_DEVICE_TABLE()
-      soc: ixp4xx: npe: add missing MODULE_DEVICE_TABLE()
+A collection of SCMI core and transport fixes addressing resource
+lifetimes, teardown races and error handling. Most of these issues
+are reported by Sashiko as existing issues while reviewing new feature
+additions to SCMI.
 
- drivers/soc/ixp4xx/ixp4xx-npe.c  |  1 +
- drivers/soc/ixp4xx/ixp4xx-qmgr.c | 11 +++--------
- 2 files changed, 4 insertions(+), 8 deletions(-)
+The changes:
+- publish channel state before mailbox and SMC callbacks can run,
+- quiesce notification work before tearing down transport channels,
+- fix partial channel setup and mailbox allocation cleanup,
+- make IDR iteration and shared-channel teardown safe,
+- correct SCMI device, OF node, handle, bus ID and SystemPower lifetimes;,
+- harden requested-device registration and removal against races and
+  partial failures,
+- reject out-of-range DT protocol IDs, and
+- simplify notification allocations using flexible arrays.
+
+----------------------------------------------------------------
+Rosen Penev (1):
+      firmware: arm_scmi: Simplify notification allocations
+
+Sudeep Holla (19):
+      firmware: arm_scmi: Publish channel state before callbacks
+      firmware: arm_scmi: Unregister device notifier before IDR teardown
+      firmware: arm_scmi: Quiesce notifications before teardown
+      firmware: arm_scmi: Clean up channels on setup failure
+      firmware: arm_scmi: Free transport channel on IDR failure
+      firmware: arm_scmi: Avoid IDR updates while cleaning channels
+      firmware: arm_scmi: Reject out of range DT protocol IDs
+      firmware: arm_scmi: Use channel ID for transport teardown
+      firmware: arm_scmi: Protect device request lookup with RCU
+      firmware: arm_scmi: Drop handle on protocol bind failures
+      firmware: arm_scmi: Clear SystemPower flag on create failure
+      firmware: arm_scmi: Fix OF node reference handling
+      firmware: arm_scmi: Unwind TX receiver mailbox setup failure
+      firmware: arm_scmi: Unwind P2A receiver mailbox setup failure
+      firmware: arm_scmi: Fix SCMI device destroy lifetimes
+      firmware: arm_scmi: Fix transport device teardown lookup
+      firmware: arm_scmi: Fix requested device removal race
+      firmware: arm_scmi: Roll back partial protocol table registration
+      firmware: arm_scmi: Unrequest devices if driver registration fails
+
+ drivers/firmware/arm_scmi/bus.c                | 182 +++++++++++++++----------
+ drivers/firmware/arm_scmi/common.h             |   2 +
+ drivers/firmware/arm_scmi/driver.c             |  81 +++++++----
+ drivers/firmware/arm_scmi/notify.c             |  64 +++++----
+ drivers/firmware/arm_scmi/notify.h             |   1 +
+ drivers/firmware/arm_scmi/transports/mailbox.c |  26 +++-
+ drivers/firmware/arm_scmi/transports/smc.c     |  15 +-
+ 7 files changed, 230 insertions(+), 141 deletions(-)
