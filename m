@@ -1,90 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C83427FB5
-	for <soc@lists.linux.dev>; Mon, 27 Jul 2026 20:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785183125; cv=pass; b=fH1tMMOatDwfs1THPYyTUnWuqX26KKmg/skTXGf7CxUnpCMOX10qYA9PhpM3/ARL0NXJyeFBx1M1uXY0YVGJ32KfDSQpnX5Q3GEj/BaD9z6yI0gSnWDzp3/8P7c+h0+tBclcUsuJlMQ0HzDGlqbT/Jcef5Ad2kHrTjz1oOaYyTQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785183125; c=relaxed/simple;
-	bh=295z87T5W5iAPJSlT45FNq0uBFxv0oR5n5BJAPMJMOY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qTJgJPQ3hlk/YLfi7MAI9fbU10X2eb1xtLp8IYQ67cjtdBAu1cWwarSgz+SthAhp2YTIgZyxAjsEkMmuSPTh36Xe60cnNPw4Pz7pYMiHQd0FaTU25K8k07thRC4C1BX7neCqlTC3kjNhqIM8VbisuD4MJpxhdiFNMcqJyN/8Cv4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=vUIzpQv1; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0E93CBE84
+	for <soc@lists.linux.dev>; Mon, 27 Jul 2026 23:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785194559; cv=none; b=onbphxtoIBQrOq+txMfqdXdgxNaF+DImfJpT5n4JrnN59fbTkBoy+fxfGaXPNW8CgLq6yu5HckM32a4XfVOuLKj1orscUwXvgobYwdZ3GpCuwX4iVHIXn3A/KVVmkE9CRqYL26v1JhkX04njykX7JbG0LWtA8buVj7BffLVwWN0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785194559; c=relaxed/simple;
+	bh=GkvysQoi7lAGbiNcz1xE4ExI0Rzu2/hM0vGrEmC6/8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Jhy1L5RWW9YoPPt8eFFYR4s5FWLaKQ0WyvaJPU6UcgHVM5fwwQ9Y5QBS92km6l9dx7oZDnPrYrjEsCim5SQAQCcztY8rJEZs4sKnTaLfSEBN0wtzbTYR9RR0XWAohl3bUt35xrXJnYZRdQCY5+WXtZdvfZO2nPhz6Gxt1ZxHsSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WTx9qPTT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="vUIzpQv1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WTx9qPTT"
 Received: by smtp.kernel.org (Postfix)
-	id C05DF1F00A3D; Mon, 27 Jul 2026 20:12:03 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=192.19.166.228
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1785183123;
-	b=fcMybv4Cc3TZ3TB6TdB1rXlu3addIg/r3fYCTPrPFbsSh7VRniZB321IuQM+vYrTfHnZ
-	 UuPvHvTjP3H0vUWFPiU2j1H2VKm5l1HeppkF8XZzUAhmEofM+ZDwmXPvKb8lO9RjD+e+t
-	 WT7TuF8g4/wGHXwAnJqKWpTVs3IOZnwBChtxpZ96fkrYxmT7Rj4enrqUMaI1pUMJcRaAq
-	 5QrBs7PVwWn6bzw+R0lEzSccaG3WUuZtvo4dZaI7kTVWyhM2r2MLXAO/sbBVejNGdg+gQ
-	 vD9lcOiqo8ab95TWk3iV0G5MSaxvJS8HQnZTktku1hN6iP+zTPiDD//4BUyRDW+emDQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1785183123;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=9lLf0y959h2WWLbHfr5C24AnRQHGQvqNzJlvXw42mcQ=;
-	b=uIizvMjAGwkyWIPOUoQpMwHGcIoexiUHhFWe3ussqC9FFhC7334RFakDyLBMg1vxEI6S
-	 z2KS2Cz8j58TafbAMsEZqvwG1IwlghnmHDFm9/lzUkxTPLCnc8kn9MJw3fSRAVXqbDz+H
-	 9HQ5LBst5K0CLO7Wc0orVgf3xv15cVjAhVSgRIB2AJL3nsAsEewQ2alfw1ZsBW4uKClG1
-	 fjcGzpouk4Y4sfcUOnAiai8YrWXI6uha68pRaRIHI+Bh4zxhlr6aI8PsP/WiiChoMRJ3k
-	 aepHd/4R1m/lwaOI8HUSPIOUWJWzYqn/cknW2vHWt7GZ8Gr7Rye+ztT89xr75lV/9IQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=dkimrelay header.b=vUIzpQv1;
-	dmarc=fail header.from=broadcom.com;
-	spf=fail smtp.mailfrom=broadcom.com;
-	arc=none smtp.remote-ip=192.19.166.228
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.228])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E406E1F00A3A;
-	Mon, 27 Jul 2026 20:12:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=dkimrelay header.b=vUIzpQv1
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org E406E1F00A3A
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 07599C0000DE;
-	Mon, 27 Jul 2026 13:12:02 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 07599C0000DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1785183122;
-	bh=295z87T5W5iAPJSlT45FNq0uBFxv0oR5n5BJAPMJMOY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=vUIzpQv1gLqMOnse3MjN+JcyiXKyLQIEqvn1TRxYOWbJwinpnqfSSPiUjkDP2rx20
-	 HuDZp3/SKX+s1lCKsjILLhUbH+CpsXABwtNB3FZS7NBwkYv+wRTDhosEE+4dXI/oBf
-	 ZOG84YIWbxrSMv5g50Qe05U8oKDHAOCKXdHh+Y84=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id E1567ACC;
-	Mon, 27 Jul 2026 13:12:01 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
+	id 268571F00A3F; Mon, 27 Jul 2026 23:22:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBBCA1F000E9;
+	Mon, 27 Jul 2026 23:22:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785194558;
+	bh=CpSwG5Ys9tkgTGeHbMtpzIYROuVRaYNK2EhvdQM5134=;
+	h=Date:From:To:Cc:Subject;
+	b=WTx9qPTT/ELd7WXtd8K0yP1Q+3b0YJL3RZsSW1IrpPi+LFd43DEFEtXC8uvOdN+BV
+	 qtciR0uxYEk99zliLwJMu94YInfkzfl410YFRFCqJcb7azM2Tvj/0ulUeUf3f4TwDp
+	 oWtWMzrkx2t8u8Ksl7GLtdBEq+haXc0ZT+wmpbbs/PqVr2trbJj12Bj1I2RC7ARJfp
+	 6oQGgHb5QQ8S0bkzoYiBywP4LiKQhr/VMU/F3H7dn2C1cBDf01hpsKt3UyqWgzNt/3
+	 NM/ljAQzGuKGqLqDuVMNSaqfo5FU/zMOyJ75DuhCGoQbR0zCemczjQlOYx1jubZxgo
+	 A2WYvdB3yhlzg==
+Date: Mon, 27 Jul 2026 16:22:36 -0700
+From: Drew Fustini <fustini@kernel.org>
 To: soc@kernel.org
-Cc: Rosen Penev <rosenp@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL] Broadcom devicetree fixes for 7.2
-Date: Mon, 27 Jul 2026 13:12:00 -0700
-Message-ID: <20260727201200.2441827-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Icenowy Zheng <zhengxingda@iscas.ac.cn>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [GIT PULL] RISC-V T-HEAD devicetree changes for v7.3
+Message-ID: <amfoPMED/cB4zinU@x1>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
@@ -92,26 +54,30 @@ The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-7.2/devicetree-fixes
+  https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/thead-dt-for-v7.3
 
-for you to fetch changes up to 5916638dab4de7dd062234eef2ed66447224fc67:
+for you to fetch changes up to 15d32aaf6300b832814a9930fdbd20efdbc9adcf:
 
-  ARM: dts: BCM5301X: EA9200: fix NVRAM size (2026-07-27 09:58:55 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs Device Tree fixes for
-7.2, please pull the following:
-
-- Rosen fixes the Linksys EA9200 NVRAM DT size, the 2nd PCIe controller
-  interrupt that was duplicated, and finally removes incorrect PCIe DT
-  nodes 'ranges' properties breaking PCIe
+  riscv: dts: thead: Add remaining Lichee Pi 4A IO expansions (2026-07-22 16:09:00 -0700)
 
 ----------------------------------------------------------------
-Rosen Penev (3):
-      ARM: dts: BCM5301X: drop extra AXI bus ranges that break PCIe
-      ARM: dts: BCM5301X: fix PCIe controller 2 second interrupt
-      ARM: dts: BCM5301X: EA9200: fix NVRAM size
+T-HEAD device tree changes for v7.3
 
- arch/arm/boot/dts/broadcom/bcm-ns.dtsi                | 7 ++-----
- arch/arm/boot/dts/broadcom/bcm4709-linksys-ea9200.dts | 2 +-
- 2 files changed, 3 insertions(+), 6 deletions(-)
+There is just one set of changes that adds the remaining IO expansion
+chips on the TH1520-based LicheePi 4a board.
+
+----------------------------------------------------------------
+Emil Renner Berthing (2):
+      riscv: dts: thead: Add IO labels for the IO expansion on I2C1
+      riscv: dts: thead: Add remaining Lichee Pi 4A IO expansions
+
+Icenowy Zheng (2):
+      riscv: dts: thead: th1520: remove pclk for I2C1
+      riscv: dts: thead: lpi4a: sort nodes
+
+Thomas Bonnefille (1):
+      riscv: dts: thead: Add TH1520 I2C nodes
+
+ arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts | 141 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------
+ arch/riscv/boot/dts/thead/th1520.dtsi             |  53 +++++++++++++++++++++++++++++--
+ 2 files changed, 157 insertions(+), 37 deletions(-)
