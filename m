@@ -1,52 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0E93CBE84
-	for <soc@lists.linux.dev>; Mon, 27 Jul 2026 23:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785194559; cv=none; b=onbphxtoIBQrOq+txMfqdXdgxNaF+DImfJpT5n4JrnN59fbTkBoy+fxfGaXPNW8CgLq6yu5HckM32a4XfVOuLKj1orscUwXvgobYwdZ3GpCuwX4iVHIXn3A/KVVmkE9CRqYL26v1JhkX04njykX7JbG0LWtA8buVj7BffLVwWN0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785194559; c=relaxed/simple;
-	bh=GkvysQoi7lAGbiNcz1xE4ExI0Rzu2/hM0vGrEmC6/8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Jhy1L5RWW9YoPPt8eFFYR4s5FWLaKQ0WyvaJPU6UcgHVM5fwwQ9Y5QBS92km6l9dx7oZDnPrYrjEsCim5SQAQCcztY8rJEZs4sKnTaLfSEBN0wtzbTYR9RR0XWAohl3bUt35xrXJnYZRdQCY5+WXtZdvfZO2nPhz6Gxt1ZxHsSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WTx9qPTT; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81663377000
+	for <soc@lists.linux.dev>; Tue, 28 Jul 2026 15:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785252130; cv=pass; b=mor7qWT5kiD1++0LuhlgjIf7ih/GOYpNu4l1L2r+4Z7yDcdfuBKAxKW3O4YCQvTwkfRFpz8+zBlm99najtSNc7o/+KY9EyaEzS+xUPp+x7zrb9oN3RrdH8ZHolrDTwIv6sMRJOnJBGRySWreES7j+zQhrE+p/HFzVZitOxF+FRU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785252130; c=relaxed/simple;
+	bh=xv/lfj27D8nWH8/h1B+Y2FJ+da5WA/DsLr9PRBN/t6A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PNAnwJYcED3ZHrQtK3g4x3HYNOpqFq9PX+9XB5KGhjMHdv01WCIitgSn658xWTbTuiXwS0bvXbKQ3fszHzsDgRdgCWRjqYjp2JeX5eWRz6QPV1+dbAxaD8UkQnKgBfOuEeImAxJQ0xP1btGj9ibXyaYtnDvvGZt3+N3Pjdg2jxs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=AtlQ7Vj5; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WTx9qPTT"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="AtlQ7Vj5"
 Received: by smtp.kernel.org (Postfix)
-	id 268571F00A3F; Mon, 27 Jul 2026 23:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBBCA1F000E9;
-	Mon, 27 Jul 2026 23:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785194558;
-	bh=CpSwG5Ys9tkgTGeHbMtpzIYROuVRaYNK2EhvdQM5134=;
-	h=Date:From:To:Cc:Subject;
-	b=WTx9qPTT/ELd7WXtd8K0yP1Q+3b0YJL3RZsSW1IrpPi+LFd43DEFEtXC8uvOdN+BV
-	 qtciR0uxYEk99zliLwJMu94YInfkzfl410YFRFCqJcb7azM2Tvj/0ulUeUf3f4TwDp
-	 oWtWMzrkx2t8u8Ksl7GLtdBEq+haXc0ZT+wmpbbs/PqVr2trbJj12Bj1I2RC7ARJfp
-	 6oQGgHb5QQ8S0bkzoYiBywP4LiKQhr/VMU/F3H7dn2C1cBDf01hpsKt3UyqWgzNt/3
-	 NM/ljAQzGuKGqLqDuVMNSaqfo5FU/zMOyJ75DuhCGoQbR0zCemczjQlOYx1jubZxgo
-	 A2WYvdB3yhlzg==
-Date: Mon, 27 Jul 2026 16:22:36 -0700
-From: Drew Fustini <fustini@kernel.org>
-To: soc@kernel.org
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Icenowy Zheng <zhengxingda@iscas.ac.cn>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V T-HEAD devicetree changes for v7.3
-Message-ID: <amfoPMED/cB4zinU@x1>
+	id 6EA7B1F000E9; Tue, 28 Jul 2026 15:22:07 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1785252127;
+	b=CCl/bpPHzPZiWGaYcnQObxiNALT4kHBswTVNfIXV8vokHE0QmdRCHqPt08TEPM6WdlCg
+	 BTMBQzo7zw6XZkyd1OIYDRQWm8hX5Vc89Af3FgqcYDhSO8n5SbbntsWsqlMS05lizzTIE
+	 g5GRfjF5jpw46L8mibTRSz6P7Dy2YqdtFhAG2LN2wI91Lo7xR/fWVgkVBi8NuRIjVE/+4
+	 QcbZ8SRuuKDIRKLVsC3CkUqBCFj6fHFnm/e8UY69tLhdhDhC2e+LhdfNTFkeLfg3IsmhA
+	 rZF1NdLdUzJiEHz05oXntGmUK4ylYZwcDWOd747PuJ1HNRvJQhfMxmVZSIO+p+VGfiA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1785252127;
+	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type;
+	bh=GYgWCp7NGaAFjYa0ok9PVd0tJSm0v/Qnvp18IDoxXVA=;
+	b=KkKnpB4VwkWIvE9ifvnDylmbqPvSTFsRuFYaBIxwqET4rF79SOsFxD3NDEY0UUrwdiIZ
+	 r9TWWNRR1XnQnImAFSS6/kHKUmB2aETWeSvV6/cMgI5tnfJw6nmXwp1EXHZLmrVlkTRF6
+	 yNk/2TYLZVFqTIHwFw5iJJsYOmUti61QvxrWaVQt6MK6HTshzdIZVfGyp2Kjh7x6q4zbw
+	 LovosqY+PBtaDSdhJAYRA3qCz+WeExbdC1oyk/FoEc217zmBUMXRox0406han6KMnlmZc
+	 /jrAG6Kz1jtcC0p0r+uWmFXN+lgOXsP10q/qj/ABEbZyty7N6/rgjTpJFuAIp828qbA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=AtlQ7Vj5;
+	dmarc=pass header.from=sntech.de;
+	spf=pass smtp.mailfrom=sntech.de;
+	arc=none smtp.remote-ip=185.11.138.130
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A3A5B1F00A3E;
+	Tue, 28 Jul 2026 15:22:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=AtlQ7Vj5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org A3A5B1F00A3E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=GYgWCp7NGaAFjYa0ok9PVd0tJSm0v/Qnvp18IDoxXVA=; b=AtlQ7Vj5pbnebPXyB1yaKo2SxS
+	+MeQSqwHHhvlqwnhRyIPPE07iGve4TzfOVFPBoU8JHOt63VZOhHUKUBFTADxbLQXtRr1XmPUhjmQ/
+	YY0TGQw9IYItUJr0RrecBGWSgwI0mFacjGRT5n0BRLp97EhtM/XKaIg5RZb0jxxzhK2S/BVk9A12X
+	sDnyrYp5RYa7JhzgUxknUD/+MTBw1vh/8RbFEpg+jOWYaRyDTqeGo9CgsRGnwDVY9Lvg3NtFkP+Pj
+	WBP3/YUppfPQcSbeTDxl93WPd0/4JdCp5fTOa7mFCOi1xkgxL1WQFqHSFlXo7yYTXW/Dj0F9QQKdA
+	oV0mTF6A==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts32 changes for 7.3 #1
+Date: Tue, 28 Jul 2026 17:21:57 +0200
+Message-ID: <2102545.PIDvDuAF1L@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+
+Hi soc maintainers,
+
+please find below Rockchip ARM32 DT changes for the merge-window for 7.3 .
+
+
+Please pull.
+Thanks
+Heiko
+
 
 The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
@@ -54,30 +89,37 @@ The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/thead-dt-for-v7.3
+  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.3-rockchip-dts32-1
 
-for you to fetch changes up to 15d32aaf6300b832814a9930fdbd20efdbc9adcf:
+for you to fetch changes up to 44045aa7a9a9e6484617f44f77a3efb2d8e78565:
 
-  riscv: dts: thead: Add remaining Lichee Pi 4A IO expansions (2026-07-22 16:09:00 -0700)
-
-----------------------------------------------------------------
-T-HEAD device tree changes for v7.3
-
-There is just one set of changes that adds the remaining IO expansion
-chips on the TH1520-based LicheePi 4a board.
+  ARM: dts: rockchip: Add Alientek DLRV1126 (2026-07-12 22:03:41 +0200)
 
 ----------------------------------------------------------------
-Emil Renner Berthing (2):
-      riscv: dts: thead: Add IO labels for the IO expansion on I2C1
-      riscv: dts: thead: Add remaining Lichee Pi 4A IO expansions
+New board: Alientek DLRV1126
+Eeprom for RK3288-Tinker-board
 
-Icenowy Zheng (2):
-      riscv: dts: thead: th1520: remove pclk for I2C1
-      riscv: dts: thead: lpi4a: sort nodes
+----------------------------------------------------------------
+Marius Dinu (1):
+      ARM: dts: rockchip: add eeprom node to rk3288-tinker
 
-Thomas Bonnefille (1):
-      riscv: dts: thead: Add TH1520 I2C nodes
+Yanan He (4):
+      dt-bindings: vendor-prefixes: add alientek
+      dt-bindings: arm: rockchip: Add Alientek DLRV1126
+      ARM: dts: rockchip: Add RV1126 I2C5
+      ARM: dts: rockchip: Add Alientek DLRV1126
 
- arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts | 141 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------
- arch/riscv/boot/dts/thead/th1520.dtsi             |  53 +++++++++++++++++++++++++++++--
- 2 files changed, 157 insertions(+), 37 deletions(-)
+ .../devicetree/bindings/arm/rockchip.yaml          |   7 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/arm/boot/dts/rockchip/Makefile                |   1 +
+ arch/arm/boot/dts/rockchip/rk3288-tinker.dtsi      |   5 +
+ .../dts/rockchip/rv1126-alientek-clrv1126f.dtsi    | 291 +++++++++++++++++++++
+ .../boot/dts/rockchip/rv1126-alientek-dlrv1126.dts | 256 ++++++++++++++++++
+ arch/arm/boot/dts/rockchip/rv1126-pinctrl.dtsi     |  10 +
+ arch/arm/boot/dts/rockchip/rv1126.dtsi             |  15 ++
+ 8 files changed, 587 insertions(+)
+ create mode 100644 arch/arm/boot/dts/rockchip/rv1126-alientek-clrv1126f.dtsi
+ create mode 100644 arch/arm/boot/dts/rockchip/rv1126-alientek-dlrv1126.dts
+
+
+
