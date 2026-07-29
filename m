@@ -1,78 +1,256 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A67455173
-	for <soc@lists.linux.dev>; Wed, 29 Jul 2026 16:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785340855; cv=none; b=PVeA++uVvNnxKLcABqcEK0S4OAz7jqIFzUD6D5VGTBDoVuAKRpWMO8RoBNAzIQM0GQTSKiWdc4Od+uP3qkSSML87210s6nHwe3sA9mNIKKa6xGLRl0KrXvEbb4NlDeY3sqxUFLENR8l3ZReA78GL70H+O86CjYMTfpmKZ7Bimxo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785340855; c=relaxed/simple;
-	bh=Asu7iYy8EFPIKa+jEO8men8KWq1q54W2cQRqFEghMQc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=HDdbFola+kQU1T/vNo93lWeV+lHE2SJrUk6ZcShJ8SqzMYzjoCKQ8SDwIKikOh0c7G5vstm67Ob8WlPFAcf85yr1nFDudEbzp71gEItj/m/XLaCbW3ozdQ1UQMMFSnuyCg/zPRLeDv4YO4rykzL5rcKIhIcWNYd65dL3jKTfLWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TAq6ulUT; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292563B7777
+	for <soc@lists.linux.dev>; Wed, 29 Jul 2026 19:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=100.103.45.18
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785352844; cv=fail; b=TJaK7SO0GBuEwtLLzTevxzGkBJ6dsVwIrxEnpUgvHuo1pwHPosaZlsSj/MPJouSZW3t7XUbj9+9QPZQdpjV2QKjXe5OICtp4SwbZvlezz1ZOfUKCT9le4botNrN8EavkgpQBsJ3cc6eAb+mW0Wxd9QrVTUm/egfoZDDnzESw1DA=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785352844; c=relaxed/simple;
+	bh=3kfWc1zMCnF8nvKxbLRpazYWgUbYXej92hrlkHU5eYA=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=KoIlEeKMJ7IHi5SxuHGvlolKhCp/y0sgzeXLvVHwy0cX6MgodrKRy8Nym/RSfxP5QLXJSNbeHXn/LGJsCxwY+GIjhQ0q1dE3miOg5sfAdq4bHkuVY1cOyXhaL/VSj4WcZK19IFyEQvEMxQ99FJTrQQrx5Z0o88j0UMoeOGR0AEI=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=kakNgmDo; arc=fail smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TAq6ulUT"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="kakNgmDo"
 Received: by smtp.kernel.org (Postfix)
-	id 03EB41F00A3D; Wed, 29 Jul 2026 16:00:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E22AE1F00A3A;
-	Wed, 29 Jul 2026 16:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785340853;
-	bh=ozMbpAMT8BjIEyn/Lxcv14FLfyzXPXM23OavtV0Dk6U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=TAq6ulUTQYpv7quSh43v+SFshlZC2IaDp4HTrUgU/SMq2SF0UQw8fqq639bXBt0NL
-	 DWMc8jG7hoP3EbN4CKFZdya1CjEnChjGuhEBNQ1rrCVY93uviySaQlSeVzeFq4AnWR
-	 YiLq8oKzhq/LuiGyiLtYUiRCUTVg45hsU832DcNWd2ZZw8Qz2H3D5kyy8LxVxv+Abz
-	 v6oDJbdJbCU0ZmWg/I99wIBEbPKZFbflrxAHtrIq+WtFAiMi7S7lXdXJEME17+yzjf
-	 39MdfvNAsfwoeaqPIvD98wsXwrq4xjcSGxI/vKawe5dlxyxow2HIXM11esGKK7NFUB
-	 leLZrk1nUytJg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5693A39253CF;
-	Wed, 29 Jul 2026 16:00:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 887901F00A3A; Wed, 29 Jul 2026 19:20:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.69.71
+ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
+	t=1785352834;
+	b=fmTBq3/8ox00X9l+8UiovP1BNRpEkOhe3ohL6cvcyu6xG+3/cs2cPG2S4TmOA0YShwmC
+	 c1TlPSOJopCoFxEG2wmmZz5haJOwOIvEvUP4LPTR3Wsf7P4aqdAMD3zVTsR0eeXNHEZR+
+	 bd5H3xwOwGYkrlOBd+xoaw01wWW1e7UjboyeXgDjpx2bw3UDgIlxP4xDwgO+OippDgLYX
+	 rYJRn7sHoHErZRQNPBrhhPtNsoDkg7/wzUcM4+7aonPFWShHsA9rOBEcMFhkWyzgxIzBN
+	 xFJIZ/3zHF/+XgTcjJoE/TtC3/P2ZXL6l6v5ZO2SGBlIon+oq5mrDuf65GyNmhvU7mg==
+ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1785352834;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:Content-Transfer-Encoding:Content-Type:
+	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=MWF0TqDK6M8CvlCqxinOE+Ni+PgaeU7TOG2bdcnA8zs=;
+	b=rFk6nv1kR1YmPvh+7EXCfAxHxG93FDq/AcjX9q2BH+6Y484K0mNZxAZbhVgK+QFuNK9m
+	 HlgmUi3e+kP0X3Gn/n8geMlR6DMLE8B67BMxbIGTEeAllHnkO49+icZOZuuTMk6cmn2JH
+	 OgBcTkwJZ3BeJWuS9gTpIE6MaRBBmT0iytq4B/3RuiM1jm2Mmm85ytoKSGIXfBGV6HWIS
+	 5fPvTOBgdyv+uWynTNyhg5NpZgqXm+9Y4OPFmSe1Lzlv3CEhOCU+EDOXbqvEZCrMun2xc
+	 PskUN/+nL83+ktE+L3EmTaoUJhnCFZfT7YW4oaLt7DjxD6fQ3eMhG2CJFUwFqRB82lw==
+ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=kakNgmDo;
+	dmarc=pass header.from=oss.nxp.com;
+	spf=pass smtp.mailfrom=oss.nxp.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.69.71
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010071.outbound.protection.outlook.com [52.101.69.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 955DC1F000E9;
+	Wed, 29 Jul 2026 19:20:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=kakNgmDo
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 955DC1F000E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NUOAMJQBVC5BE/5mjtjwQ/Tz4ncsxKnvrJj7b4e/f8dRNQGUPOyXEZilWhTpRuw0Bi9difQu8ftuGNKAbWlUWQzwFQp6/mylmjy1Jka0p/NKjebwtNu8l/gpdvRFQDoKbyoOoOfsVjsUI/uFtxu8fF20gPbSQxkRDW93BU6O8y4xaqONIoNoHr1AVH7MOE8IHbchXYPzZc3Y4NUUm5IjTNZrEE9md92+BUvpGd42DKubFdSx0h8k3YdnLI3D1NqY1luO1nbZbxEZZh01jvM7ByBzoBeAh0B0WZaumq9wmmZnlbT4YMvRq1wuuuepnl7yShF8dxr0NfQp+sikdNtMVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MWF0TqDK6M8CvlCqxinOE+Ni+PgaeU7TOG2bdcnA8zs=;
+ b=wLuhc0ZkQgDiZVJOUxwcL4fOfPRmIZSQ6BP669+krvOYLJu1owGC1q6SFKqCEzlnaktBOfa8krPhydm8A8GhCRFx5X+NHiKwIgPVSvYqywGOohdnhOyKH7U2lEEVH3V275NCKkIQxZlVuAraotcpvDvv2S993NEPELFo8Z7GxMAfUG3WUF9uJDp3/+A3bgPFblgsWstNTs0DyRkcXo5g7eMZwLjgD7t7ASTOYkgxf2NOMWvGNuvutDCNWD3dwqyuwQTjAQ1BYSsP4CidpprmaQFzkkU1VKGUh7LZkcgBdKCw3HWKq4YJ+z9Cisuu8V+Vo+kJC2o4WMeQRFKoytejnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MWF0TqDK6M8CvlCqxinOE+Ni+PgaeU7TOG2bdcnA8zs=;
+ b=kakNgmDoUWd5uGpyWYe2Y5BrcFHZV+a9rOQiJmvIn4KgheBa2C7g7rHrwzQovwmtTIFmpSAyDFT4BFtgKdpmgTrY/1oyFdPpCfftM+VZREve3cWA9ypFGC1a8NNPulLgwkL0B4t+3PIYbRUE08IMAApOMbiKLF6FbKnzeu3LtTM79XVUSvveuRfW5j2WoUx4XrGL7ChkJwuF95S7iMOUofE00mnv6v3oEnVY3zffzcGrw93coKCi3PmuLlaTKPWAtSeWdJHJvNejWTR9G/wRBlZAbT6zrGNJPzlpAUFqcL2VE9V6liCpGaC3l54AA9G7ggjU6czhn9iShsBWBXCOMQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from GV2PR04MB11799.eurprd04.prod.outlook.com (2603:10a6:150:2cf::9)
+ by PA4PR04MB7775.eurprd04.prod.outlook.com (2603:10a6:102:c3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Wed, 29 Jul
+ 2026 19:20:30 +0000
+Received: from GV2PR04MB11799.eurprd04.prod.outlook.com
+ ([fe80::2146:83a2:5329:b7c]) by GV2PR04MB11799.eurprd04.prod.outlook.com
+ ([fe80::2146:83a2:5329:b7c%7]) with mapi id 15.21.0270.009; Wed, 29 Jul 2026
+ 19:20:29 +0000
+From: Frank.Li@oss.nxp.com
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Frank.Li@nxp.com,
+	kernel@pengutronix.de,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	krzysztof.kozlowski@oss.qualcomm.com,
+	lech.perczak@gmail.com,
+	Max.Merchel@ew.tq-group.com,
+	sherry.sun@nxp.com
+Subject: ARM: dts: imx device tree updates for v7.3
+Date: Wed, 29 Jul 2026 15:20:18 -0400
+Message-ID: <20260729192020.523281-1-Frank.Li@oss.nxp.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SA9P223CA0024.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:806:26::29) To GV2PR04MB11799.eurprd04.prod.outlook.com
+ (2603:10a6:150:2cf::9)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 7.3 #1
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <178534081789.3143403.4218278176449055644.git-patchwork-notify@kernel.org>
-Date: Wed, 29 Jul 2026 16:00:17 +0000
-References: <2102545.PIDvDuAF1L@phil>
-In-Reply-To: <2102545.PIDvDuAF1L@phil>
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: soc@kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV2PR04MB11799:EE_|PA4PR04MB7775:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98cdd5c9-17a5-485a-42a5-08deeda67391
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|376014|366016|1800799024|23010399003|56012099006|11063799006|18002099003|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	cmO+N4+bl85Hpvg7PQrGDbNPjp3PF140KtlZlU2lYtrLsOJA4biv/tJ7ENEqcKgLjmagP4cRJeUu0d/fxYYS609cwE+lZVbFuG2crGF4saBFIr1fmxSrQ4a+3UQF2vcmL+Op7RPZK/z1GipQ51SNfC2Rfd3ulMoBBUrhOEyUJU51U0TGwajs8B+UpzdaFo4s0D+p+INGjDnu5VqG+8kciCKyD8gLzK55b14Z1a4D7FAkya/2lny6QG4GJLy17v5ipzRSQe/ihIDnbp2eTF2H/V4eBAg139Ia14Lz+PIX0IKAmoSLwA+x7fNkUqaLMEqyKSE2n+JKtMhL1siDX7ujCJhJ8LRN759HnXouUxVqyBe6d4vxwWb5TwqfX8F0XID7usuvAw7e5IfRa1n2ksBxUM7u4wFxACJ8lFt/ZybXGrPuAg6BHAbkxH8tFyWioEy9zyHQ2TLbxVAJZn6qBRdTmTXrFp5IGQSrie7SymQBFPSuDEFOoVr6gbIa14O9PbdpKpUfKYd3ImSHfnvsA+gX8+k/wmNHXcGYI56o0JGaBK6mZSTmHy0D4N/maok5hQnfg5U/1Iq8dljs6/2uxhanMV+0lrTfDy/MbfxNRqh69xR01LeRhTedYwFI6aP2qxIcFGKjtMScgkZkm93I7b4q5WSwFIJqBeZm5vgpu4UUSsQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11799.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(376014)(366016)(1800799024)(23010399003)(56012099006)(11063799006)(18002099003)(10067099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?nLnlohyxE1Kto2rZ8REqCKZttpVvVPx2oFUr9KGmph2OT08mqu2Lp+YQhoHf?=
+ =?us-ascii?Q?RkDyhVaiuvgbV/848+lSRpKeuT4WTi40gpNCZzDN+BVKENzu9gpiBODAyeZW?=
+ =?us-ascii?Q?f/G3wB7MQAWOvxGJPzCmQgkeRyptS8TBNKMd37PZ/dwg6vrvFddpp7j+hHHJ?=
+ =?us-ascii?Q?v1HJffE0nAX194kwGGHWpp8Z5e5alYQ2IrgnQkPvseLJLwEhngiVCFHSwtcM?=
+ =?us-ascii?Q?wFC9UthucCPQF75mpqAEui/acpQydFf829C6Fq18qzVHQ1OP+v54w6taWyvH?=
+ =?us-ascii?Q?RXN5XkQ/k7E2bvgIlHvBFKZROunuP8OGWMEGXzsYMlfChhBLzj+QLWCeQLJe?=
+ =?us-ascii?Q?/QUFqmhBT9lDcm1CSssM9u+zsrArgbxx2rWN/4Va5q6zobaADWlIi6n65/e4?=
+ =?us-ascii?Q?Bs18lpQuqBlp9misKdbp8/K9ACZvZq6TOpPOnIP5NsizOOv6h2Zf9jslKn10?=
+ =?us-ascii?Q?Sr46paTB5KuoWiEa3sC+UugEbYxDei5tRO+rTt/09IHUyyFWW15xOUnMrZpy?=
+ =?us-ascii?Q?ukvKjzhGBe1MNWvkwpdDZx2UvS9ZDfdnri2qJbUlRYv7FlFw+UzADFG41UPo?=
+ =?us-ascii?Q?HjQDjvcH1ufpRMtf/0OcnjKucFlo0ExE3uioITpNxyf2dEZYxGt5XHmvc/iN?=
+ =?us-ascii?Q?7wjzDDxs4NjjoOVOiNK3IL12k8g8KxHrk8/KCjw0wENXG3A98OoU6TeYIiXe?=
+ =?us-ascii?Q?6HnMIE17eXXvoKCTdIcBukmPG1eAWVoJRgPL0EXdejpwndGXU9WmFFjbSxV4?=
+ =?us-ascii?Q?VWOUt+bxKG+xan99y109Y1bl27grNdAEgvhpvHxE6q7PagYLir5IqvGY5sJB?=
+ =?us-ascii?Q?4qAFNJRTiJo2F1zm+4LMVJIAD1DKyBNnF3MSCGHEm+HV0oLU7f4YVA44tAe2?=
+ =?us-ascii?Q?2GTfzWwxolRjP3/ucWXo9GfCs6x+Q7T6ryNOIsuygnX2HDodPpTnvBWNjUUO?=
+ =?us-ascii?Q?feKEmO4L4QvqCyHvmuTd+ZkWM4Ya7OXD58FYKxEOS10S20eYFVSsw8szlUdJ?=
+ =?us-ascii?Q?gs4IpuY1edpCX2HZ2PD/AWHR3PYVDFYxqHMBe9HXUTgonhP+NeV2kP8bQj+X?=
+ =?us-ascii?Q?1uU3xsJx1MthDZWCsTuL5xk8agntUvr92qtj3j57HQNOo0Yyn4nYX6nGz6Gv?=
+ =?us-ascii?Q?eGF9fsD72JUcVmRwqqc1Qqpw5UuFpK9fFO+ZxxlMx9C8AY+UjtfTDlojnqIw?=
+ =?us-ascii?Q?9KtBq5SNHiF4sJXR4nP+btHZIi3FtQC3oFZrWO1++XgaELA4Ow+d8g2Ub9+H?=
+ =?us-ascii?Q?5W+usI77ARN8SMMFSvuSY52N8ILpv8AvyXZ50vNy0oV+v/oozsju5+dU9QUU?=
+ =?us-ascii?Q?XdCAp9xl5x1xPoHJLDOr24DuuI60/4JJBq9qeY/t8bjMUMrrqjsuPHwNku9Z?=
+ =?us-ascii?Q?l7UzyS+D4t5N/uG3Sz5QaSG2x8zuyMYbNALJhF7c693i5Onrt1z13fVe5m9i?=
+ =?us-ascii?Q?VFXiNZfbTJNG/W9qgO++6aN1P6NruRYCXI2OpnoSa5NB0mQ+cNpBIOioAVy0?=
+ =?us-ascii?Q?wxGSXYA4fg2zuPHbFasX6ipFwm9hHAc0jvDbrdKwEgY7IBGa5TmKjLclVk7v?=
+ =?us-ascii?Q?tSckh9+5mtRmUGSBJjmJHIfCppR1ZFElnc4J6DLsgsMZibzbin6bEc24js3e?=
+ =?us-ascii?Q?Ot0K/X7MGEHPd/THrXG59pQxcd3xQ4PlQYDwGcqb3MCKmxKuZIBR7VAmjS0w?=
+ =?us-ascii?Q?JDEybtKk9zvOBgwk94zmV3KKojMRbwptk6kPTIhWbauYg8D3YVap9LMrzQX7?=
+ =?us-ascii?Q?m6wINFD0ECXVakCj1cLheFGIImzRWslENT8VQkCwNz0k9jDAj7lU?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98cdd5c9-17a5-485a-42a5-08deeda67391
+X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11799.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2026 19:20:29.5048
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 38Rgth0pLginjPsl2PoQ5KDLvsLHW11AXJI/2PItF9AEMHmUjJh+CQFdkDlC73Nfc9y/xZp1cRDMajh0EvlNaCTkh206Ss6tl2+VfXQz5j/Oss1ABVJdNvlSEmrH38pc
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7775
 
-Hello:
+From: Frank.Li@nxp.com
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
-On Tue, 28 Jul 2026 17:21:57 +0200 you wrote:
-> Hi soc maintainers,
-> 
-> please find below Rockchip ARM32 DT changes for the merge-window for 7.3 .
-> 
-> 
-> Please pull.
-> Thanks
-> Heiko
-> 
-> [...]
+  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
-Here is the summary with links:
-  - [GIT,PULL] Rockchip dts32 changes for 7.3 #1
-    https://git.kernel.org/soc/soc/c/d2ccddbbcc70
+are available in the Git repository at:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  git://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux.git tags/imx-dt-7.3
 
+for you to fetch changes up to 6db9b23f3c0ebda050a4d38fda2b59db146ca161:
 
+  ARM: dts: ls1021a-iot: rename display@0 to display0 (2026-07-24 16:43:00 -0400)
+
+----------------------------------------------------------------
+ARM: dts: imx device tree updates for v7.3
+
+Cleanup CHECK_DTBS warnings:
+- Remove undocumented properties (nand-ecc-*, clock-names, default-state)
+- Rename display@0 to display0 (ls1021a-iot)
+- Add led suffix to node names (ls1021a-moxa-uc-8410a)
+- Replace spansion,s25fl164k with jedec,spi-nor (ls1021a-moxa-uc-8410a)
+- Use ethernet-phy-ieee802.3-c22 compatible string (ls1021a-moxa-uc-8410a)
+- Rename eim-cs1 node to eim-cs1-bus (imx53-ard)
+- Add power-supply for LCD panel (ls1021a-twr)
+- Add fsl,ls1021aqds-fpga compatible string (ls1021a-qds)
+
+Fixes:
+- Change #io-channel-cells to 1 for voltage divider (imx6dl-plym2m)
+
+New features:
+- Describe Bluetooth controller (imx7d-pico)
+- Add power-supply to PCIe Root Port (imx6sx-sdb, imx6qdl-sabresd)
+
+----------------------------------------------------------------
+Frank Li (15):
+      dt-bindings: fsl,fpga-qixis: Add fsl,ls1021aqds-fpga compatible string
+      ARM: dts: ls1021a-qds: add compatible string "fsl,ls1021aqds-fpga" for on boards FPGA chip
+      dt-bindings: soc: imx: Add fsl,eim-bus
+      ARM: dts: imx53-ard: change node name eim-cs1 to eim-cs1-bus
+      ARM: dts: ls1021a-moxa-uc-8410a: add led suffix to fix CHECK_DTBS warnings
+      ARM: dts: ls1021a-twr: add power-supply for lcd panel
+      ARM: dts: ls1021a-moxa-uc-8410a: use compatible string ethernet-phy-ieee802.3-c22
+      ARM: dts: ls1021a-moxa-uc-8410a: replace spansion,s25fl164k with jedec,spi-nor
+      ARM: dts: ls1021a-moxa-uc-8410a: remove undocument property default-state of gpio-keys
+      ARM: dts: imx6dl-plym2m: change #io-channel-cells to 1 of voltage divider
+      ARM: dts: imx53-smd: remove undocument property clock-names of ovti,ov5642
+      ARM: dts: imx6ul-isiot: remove undocument property clock-names of fsl,sgtl5000
+      ARM: dts: imx6ull-engicam-microgea: remove nand-ecc-strength and nand-ecc-step-size
+      dt-bindings: display: imx: Add deprecated property display and display0
+      ARM: dts: ls1021a-iot: rename display@0 to display0
+
+Krzysztof Kozlowski (1):
+      ARM: dts: nxp: ls: Correct indentation
+
+Lech Perczak (1):
+      ARM: dts: imx7d-pico: describe Bluetooth controller
+
+Max Merchel (2):
+      ARM: dts: imx6ul-tqma6ul: add nvmem-layout
+      ARM: dts: imx6qdl-tqma6: add nvmem-layout
+
+Sherry Sun (2):
+      ARM: dts: imx6qdl-sabresd: Add power supply property to Root Port node
+      ARM: dts: imx6sx-sdb: Add power supply property to Root Port node
+
+ .../devicetree/bindings/board/fsl,fpga-qixis.yaml  |  1 +
+ .../devicetree/bindings/bus/fsl,spba-bus.yaml      |  4 ++-
+ .../bindings/display/fsl,ls1021a-dcu.yaml          | 22 ++++++++++++++++
+ arch/arm/boot/dts/nxp/imx/imx53-ard.dts            |  2 +-
+ arch/arm/boot/dts/nxp/imx/imx53-smd.dts            |  1 -
+ arch/arm/boot/dts/nxp/imx/imx6dl-plym2m.dts        |  4 +--
+ arch/arm/boot/dts/nxp/imx/imx6qdl-sabresd.dtsi     |  2 ++
+ arch/arm/boot/dts/nxp/imx/imx6qdl-tqma6a.dtsi      | 10 ++++++++
+ arch/arm/boot/dts/nxp/imx/imx6qdl-tqma6b.dtsi      | 10 ++++++++
+ arch/arm/boot/dts/nxp/imx/imx6sx-sdb.dtsi          |  2 ++
+ arch/arm/boot/dts/nxp/imx/imx6ul-isiot.dtsi        |  1 -
+ .../boot/dts/nxp/imx/imx6ul-tqma6ul-common.dtsi    | 10 ++++++++
+ .../boot/dts/nxp/imx/imx6ull-engicam-microgea.dtsi |  2 --
+ arch/arm/boot/dts/nxp/imx/imx7d-pico.dtsi          | 23 +++++++++++++++++
+ arch/arm/boot/dts/nxp/ls/ls1021a-iot.dts           |  4 +--
+ arch/arm/boot/dts/nxp/ls/ls1021a-moxa-uc-8410a.dts | 29 +++++++++++-----------
+ arch/arm/boot/dts/nxp/ls/ls1021a-qds.dts           |  4 +--
+ arch/arm/boot/dts/nxp/ls/ls1021a-twr.dts           |  3 ++-
+ 18 files changed, 105 insertions(+), 29 deletions(-)
