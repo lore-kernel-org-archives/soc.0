@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F533EC832
-	for <soc@lists.linux.dev>; Wed, 29 Jul 2026 16:00:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DFE93E762A
+	for <soc@lists.linux.dev>; Wed, 29 Jul 2026 16:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785340846; cv=none; b=VHCKzGvPdcuVxQ3ELRhLrKeODejGS6i/rQix1svb7eaV5mFj3j6KwU3Sqhe1z8sV5bqwU4sry/lhpL8DQohpFgwS9XhHP//QrgGOzU/HVcea/ZfTK14BHQY5eGZ9zpRp5DZno4N9y2x/qx1rj9E/ilPqqjmkH9L9tTIE1A5lQGc=
+	t=1785340847; cv=none; b=XIWomFaQKlXFSHAqyd3QkVTCvBFmlalJUlwtnsPJ3i9X9HS7mQjQfF4rvV3RIARRbp2Mr+Hu9zlJUPh8wUfZfIWbJnHg6qjKjdVi4EmNUZ3IdpfGn7pCYe1Vs0vvpR0DWrilXDhQcUURMw33K4Qcd4EPojaH/jS15+XzgYm1gx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785340846; c=relaxed/simple;
-	bh=OqhB8YXgQM7a8s1a7UEKkr8nTMHKK0IkcX0bh/lKN5g=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=Fn7BqqZwm81ac1fRQZXVVSSk8wmf4VFNdSiH8dQuDPkCdyb1BovcHZcrcg7nz9BaVDz1xsZC1Pnt8UySFNSsuQBEriQ781+Mk1/3KXC7/mxzw67cbXEmV8hiX+2stb8UBwsrgg4ecjlpzJdeCHlsa0GqMmtbjs4wc6f27u1q0jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CyZ+INp/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785340847; c=relaxed/simple;
+	bh=TgBsRUqrKtA8RV00uc5s6NCrY0+/GHv5LQ1STrwuj0o=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=psUirj/ZSD0ENe/ExDS67te0pkSFY1DFU0sU8eGhdU5jNqHnxEULYrbvBvB5GkDLL3sR7tySKuemaqFocN2xly5VTb3ntbkI+DAgUdmD/N2B87b1TR/zeEiI2DVa7reC6iie/b7M3m5esFOCbjygw4nCbS/Oxmr8wH45Xh0KfRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i01uCl35; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CyZ+INp/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i01uCl35"
 Received: by smtp.kernel.org (Postfix)
-	id C08AC1F00A3A; Wed, 29 Jul 2026 16:00:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0281F000E9
-	for <soc@kernel.org>; Wed, 29 Jul 2026 16:00:44 +0000 (UTC)
+	id 26FE71F00A3E; Wed, 29 Jul 2026 16:00:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDDE1F00A3D;
+	Wed, 29 Jul 2026 16:00:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785340844;
-	bh=bk0lA88qC/vs8gJJLHZziDOCpOVnrvQq/5Kqsvvgw+I=;
-	h=Subject:From:Date:To:Cc;
-	b=CyZ+INp/WlgwzznF7yly9X+gDqmThMZIFHvOJtNUxMY+itGlYVqkzua6eMQ09Ct7Z
-	 4uwx+Wsahi8XJLg8EG19ePav5oJ2N57TJ+bnX/snUlzKnAnAfYaecfviy696y6wb0M
-	 V0JK91P0GW/vGXv+SJ/SHaTbcQCsugwIRIRBblkf0GFL/yHMYEYqBawsyvg5p+XyL1
-	 npJnHrsLQMjdvC0HBcKUFjR0kA4uK1awb5KjuGjjhaV6ikNDmss4sNLgw6c8ts8Nox
-	 huAlZn+KN8HOQMy7o3D5U4HYbKDPsBouvFnh3vW9MVcvnZrBrrHiJcPvnZ28Pydwbw
-	 X8ILo0CBIEJiA==
+	s=k20260515; t=1785340846;
+	bh=COgfMwRAbKcZW5bz9MtVXjAjSfzy2xbK9VyB+7/j77E=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=i01uCl35GpY5yAmGlOUD9hM0+d6iC9xKrQFvwZY0r36WFrxOaeMGdJ2/8CfarhK38
+	 UQYwqW0V2PZqOFctthjeLhzR5yqRWcPED09al1nLObBXXf2Fr2R/6ds4AtsjDrPEto
+	 1+4NgNPK4WzY2cHyftbf7vCUj/HkRzER7b0raY9euIMP1FZZwjxvtsPYyxj1A0ADo7
+	 ApUvsUpPRep0deNbUoo3wyhQ+6dkF82CdIagy5Q3s/LxBajzVpdUtDSL0FZg4XGMpM
+	 Rvp5QzNHv21wqMXSvjdJmiOOrrnH8AcT51kfxP2aJzXcyAn+VnlglY0wlJCOTSdePa
+	 IpAsmcFDfP1OQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1C95939253CF;
-	Wed, 29 Jul 2026 16:00:10 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 6F00339253CF;
+	Wed, 29 Jul 2026 16:00:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,66 +39,39 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL 1/2] samsung: drivers for v7.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178534080883.3143403.14124482681774563291.git-patchwork-summary@kernel.org>
-Date: Wed, 29 Jul 2026 16:00:08 +0000
-To: soc@kernel.org
+ <178534081014.3143403.10931592525244935701.git-patchwork-notify@kernel.org>
+Date: Wed, 29 Jul 2026 16:00:10 +0000
+References: <20260727190010.404981-3-krzk@kernel.org>
+In-Reply-To: <20260727190010.404981-3-krzk@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Series: [GIT,PULL,1/2] samsung: drivers for v7.3
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1135380
-  Lore link: https://lore.kernel.org/r/20260727190010.404981-3-krzk@kernel.org
-    Patches: [GIT,PULL,1/2] samsung: drivers for v7.3
-             [GIT,PULL,2/2] arm64: dts: samsung: for v7.3
+On Mon, 27 Jul 2026 21:00:09 +0200 you wrote:
+> The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
+> 
+>   Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-7.3
+> 
+> [...]
 
-Patch: [GIT,PULL] memory: drivers for v7.3
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1135383
-  Lore link: https://lore.kernel.org/r/20260727190758.406132-2-krzk@kernel.org
+Here is the summary with links:
+  - [GIT,PULL,1/2] samsung: drivers for v7.3
+    https://git.kernel.org/soc/soc/c/ce9af94e6d07
+  - [GIT,PULL,2/2] arm64: dts: samsung: for v7.3
+    https://git.kernel.org/soc/soc/c/fcf7dd6d6ce4
 
-Patch: [GIT,PULL] RISC-V T-HEAD devicetree changes for v7.3
-  Submitter: Drew Fustini <fustini@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1135481
-  Lore link: https://lore.kernel.org/r/amfoPMED/cB4zinU@x1
-
-Patch: [GIT,PULL] CIX dts changes for v7.3-rc1
-  Submitter: Gary Yang <gary.yang@cixtech.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1136620
-  Lore link: https://lore.kernel.org/r/amnryOEOpK4PMmxS@gary-System-Product-Name
-
-Patch: [GIT,PULL] arm64: dts: socfpga: updates for v7.3
-  Submitter: Dinh Nguyen <dinguyen@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1136332
-  Lore link: https://lore.kernel.org/r/20260729032308.1359743-1-dinguyen@kernel.org
-
-Patch: [GIT,PULL,1/1] arm64: realtek: Device tree updates for v7.3
-  Submitter: Yu-Chun Lin <eleanor.lin@realtek.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1134989
-  Lore link: https://lore.kernel.org/r/20260727090933.908156-1-eleanor.lin@realtek.com
-
-Patch: [GIT,PULL] Rockchip dts32 changes for 7.3 #1
-  Submitter: Heiko Stuebner <heiko@sntech.de>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1136032
-  Lore link: https://lore.kernel.org/r/2102545.PIDvDuAF1L@phil
-
-
-Total patches: 8
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
