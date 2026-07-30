@@ -1,168 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9EB3F8257
-	for <soc@lists.linux.dev>; Thu, 30 Jul 2026 10:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785407361; cv=pass; b=m3fjRYWV4SR7SjFGq6y9BKr6nc+lpBX6avSlZypI3eEAuvjbTe+9C45LBtrWEsuUzKvHw6Hj5NFRCHY+jLXopLTTCPr/qsBG/ke/N64EOkjWpgd0+oD2LRcBeFW+kkvIC3FqWyCHcS3FfHv+zuu8wUSP8FMTwH3gQwdkunB5kb4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785407361; c=relaxed/simple;
-	bh=Pssg7KNJUVYttiyVbquUpJgAxNBEhb6U/giluJc7NXE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=jngEst5Vd26klZF2TRGWh1BYm2szstYXMq4W3OF/UFNCahEzvKSH6K7p+GRYk7v8iQZgHNarNoRAWH3G7SW2lvlNCx9Jmh3gWTmkbd0qtz4Qy0YH5+4D4I1Jdxt3XVMMwOB8hNxPzYrHKR4pMjRehSAirB1xGTWcAMkhPFIOAEQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fT7HidSj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nuqxy/+R; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C1C3F86E6;
+	Thu, 30 Jul 2026 10:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785408503; cv=none; b=jRi56ULVpC5iZTNFz0WCSjVb9ZH6hIw2d/imb9OJ0HBNh+5FG56zq3xFd8FBh6JZITt5RTRqOPCGxAVf1fpEYgB6rrTK/nE8t5sex8bglUZBvnYOUkGEo8ZPuRTbmoSeuJp4iQ/Bixsf5TnoLndu4PWQoQq9F79r7O6++9bds1s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785408503; c=relaxed/simple;
+	bh=+gJKbKNn43Fk0RGDwq3n3eHs4VPbGyQ9iZkC0dGnIF8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X/k7KVJX/rY+fFnYJW2F4nwcOMOW0pUHCTLGqNEPhdcrz0t2X/h6+4ZwZa65FQOYQC4qx2W8qLWLMAQIde185uhxFtgKy2fh0rUTESR+n7EcyzBtYd6K5QhVfKWtq/lEuPcyXpPTtgTqSEgs4IQrYAmYvhXNyT5nVSketR1hGek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xu6/QUX/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fT7HidSj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nuqxy/+R"
-Received: by smtp.kernel.org (Postfix)
-	id 15A351F00A3A; Thu, 30 Jul 2026 10:29:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=103.168.172.144
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1785407359;
-	b=OqrLj86fDN1o7LtvzENxp92xo9AlWQTBorgAthlvUN3BMCMqYrXP7nra7N3U47OCKesd
-	 Mu+W2DLPORUgig+5jiFjRNDcas/Vrehhzxw8VHwY5bn4w6qmEEqwitj2m791t02/wimMb
-	 FVc4SXKOGDw2IGUP4xrD4J/rij8rcufhgVWKaZDvmm54brtCcTuLuR8lb+IomJqwZOgqa
-	 V9TJcJbXA8Flf/ENC+5Je+D0F2GaqrkZnnVxEcDSI055hcf/nNKGyaA5SiswgMlHEisF0
-	 3xgil7h3MySSB2jUelnYvFj2tVf5WWhD32neZHdMSFj66AP9fYCnmUyss0rRz2bfrQQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1785407359;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=+MoKTv+gUm/9yZeD/+so0VapxSVD6JHLChmPeFz93WM=;
-	b=cdSkFyYykS170xEoQ4S3362fQSxseU7Phzb81mzZjopFioB9q2DHRUwTOpZ4TaGtrhSE
-	 UAPwVyJRSxeFZXCzzD8vPOwpGHnuA2wifrZkLezsjvltQRLDMrmNEDfoNGnd1lblogniq
-	 JwKnTPn1ozOQizznlQ5JBzAOBRJRxvr8h/GWPlvm1sgM/urSB/lf2YgLwTLx5wqDRyLin
-	 qJ+2F75oHc2LadOwoAouU12nXEbd2oPWLrPOrBRUkVWKo63G2bBZyGmqclVdoNUOP1k90
-	 OtGaKjt3qQJtlhXLSEbS0peC9xg/V1X8z2GIidDzFqHWLk8CVe6lj3KdVNede/2gwjw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=fT7HidSj;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b="nuqxy/+R";
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	arc=none smtp.remote-ip=103.168.172.144
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DF49E1F000E9;
-	Thu, 30 Jul 2026 10:29:17 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=fT7HidSj;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=nuqxy/+R
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org DF49E1F000E9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id EDA13EC0484;
-	Thu, 30 Jul 2026 06:29:16 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Thu, 30 Jul 2026 06:29:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1785407356;
-	 x=1785493756; bh=+MoKTv+gUm/9yZeD/+so0VapxSVD6JHLChmPeFz93WM=; b=
-	fT7HidSjoJ/EpfsNuNwe2CLt7DhSST9veKDdVKFRAAPdC+zxl3KuKwfY6F6XGWo7
-	lunzH8dsOPj5Ezh377EVMbF2fRqthWAwqicWSrUU5E2p96m7zBDwIwyWM/aIYj8J
-	xwkTDejZhyaBGNZ9ralqc27AhOxdHnvl3t46OknDUK+6zwOBrzdl5CJZa9QlxuOB
-	6E6BnlF2eH8I7Eve1whSWV2czsUV9Yx/iH8DmX+1xYwyl0pS0viIMWdphYjDPItd
-	6SspqyWpnQ6jfXKuhPldHY6pKwU/4F0QSAPQEFGO7rFbBkRmMokU0NVakrK1chNj
-	nsIx4hZ5kD8bX0OAxV8kEQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785407356; x=
-	1785493756; bh=+MoKTv+gUm/9yZeD/+so0VapxSVD6JHLChmPeFz93WM=; b=n
-	uqxy/+R0Jr4jyOAPS7HMVTXgkPft9oTYiRlij2iThhZq3HqKF39f8j8PRDNd2ZgA
-	IajNXLNkT8ycbc5hrlYjIFOpTadfxzH5pCGXYi1hSe4jkh5qAbFpAcyY4CU7Kl34
-	g0kVMWWtPAHWC0ayQZxnYhCoXGfaFs+RvNjrtY0bQANbybOb8cHX1rF3VHlXy+Ng
-	pkxyXT7xVNwvikNbPjHt91gW7TXUfcbi+MrNwhHt0HXaOn/UwJ07sBvMSfnAE/ig
-	rL6uqZZQTFdUrBUomGu3Gppk3TH8uNzRJe212+2nraJPyScua89ZcvNgoa42q4Py
-	gG7bch9JowaAPAQnHXL7w==
-X-ME-Sender: <xms:eydralgiA9GsFxxyoHPzmaHAkUq3STjgpUhVFS38BWDgvWkabhtG8w>
-    <xme:eydrak2D36NfFNvMMi7qZi7BcZMkGl0R8OzRsoHw-FZZzZv1OH9FrnGhG-jf58Hjv
-    -R2vpXBMRJkDpK-rEmqCI3yTjeAmjiwaV5knWKlfgaqKrxs2oWWHw>
-X-ME-Proxy-Cause: dmFkZTF451LBXYI4j6NEK9hCZOBaU5/6KEaQvCWRqHjTDYA3asyt5srekK924m/jgNEzcd
-    DBCwpbHCzUBssNqYXBKMJFEqmpiLsH7zRrbcxGoCFxRPdI+RsUKHuNHa/qEzlb2dodiB9C
-    Npd5ZHi4Voz0QXZbBSxiFETt/M6/KAxtjlb46Kj2jV3Ya8DUQGUZPeFrFeZwtwetbRHgmF
-    T4vbQ3ZYfqfBZrz1GzJrlaB20ua/dVprjrDCsfRPCfartNb5LLCYIPBAWwBuhq1F2hXG5z
-    /rcOnwHkao85KrqB9t4Hc6t2/yJKVnotdAOhUEi/ODTZkzGc8M/IEG51M0Bxp7eqegktSS
-    QcLZHCSI8NeeFFCxprPA1EHtfLW+ThT1BMJ79USraBpMdPSUY4ek3lqteZMmtvaw0Dzk3b
-    J3pmfx7t7Cbw0YKFlZgndT7nYIDNTkITfjAM8GRC/r1dQhNG/7F2KzbVRzdUBBpy0MHuqn
-    GRiL+ol8elyEiAoOpLIhuWks/ccAUgl08fwn3qBCUfIxKkQLH8qJJWZyYn3d/z4c+dKZhe
-    4mkxq+OfiLQAO+LPcKArty5CUMT5rSmbfB4NmLkW7t3MNP0BSL28+LsRkSOZVTj+AeGa9a
-    EkhrYwO7Uy+G3nyS50P72huHR8b3OYnAhFfqn1LJGElfgFFAhTFVgrC1YnKg
-X-ME-Proxy: <xmx:eydrasdbuSR2A2KuSjdJQHRXsNpw6WCeif7BrGE-Tg13YSZ4-QruSQ>
-    <xmx:eydrajYlVYnV1qaLrgP_3A2HkslLTrE0-bBg3_UGEAhNgn-DxcrdSA>
-    <xmx:eydrag7k4TliYOQwWYYoSWOWURthM_MN-ejq0-uLIK2YnCUQGB74Rg>
-    <xmx:eydrahftGJcFx_lW6vl4qXGeIWQfFoz8jywdVI8Pu7Nk7tJS2oV0_g>
-    <xmx:fCdrauOd974YnS-3anIrLWrF-bnRn5fFIYf1SUK6EDARgIuWaONJUFFr>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E16A71820082; Thu, 30 Jul 2026 06:29:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xu6/QUX/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F4851F000E9;
+	Thu, 30 Jul 2026 10:48:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785408502;
+	bh=LQIam8Lk/rhF6Lm0HgQ3emsXNkYF4X/I9Zk8Ot6vu/0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Xu6/QUX/oYydCHTvPQ/A3cSkpBcfjLGjdI8g/Y+41jhXN40Gg0UAiujEcIvC1ehJl
+	 lYz7cWerr2Dtpftv15hLuy17PRMWhBuQk1kbePC8HNjxmRfELyavcoIPB0wtUy+CHz
+	 bDW4kxs9sQDdVAoxyfeC8Uz/mgtUicj/OlVCpADHH0SuDsPEHNqiVL4b944ysfC/ND
+	 nbKehVfpQ+PQsSuUQCFzXRVAhbZjpvDLqlN8z/MeMqComHi5ppUvJJZi7E3POkEW8E
+	 uqDdvwDmpd0f/aHhJPPXPnJccb/awCQ2ILSZqmlxfjo9C7sEGpOLc7HHThmOu40FYt
+	 bDX6DGX6cF4ZQ==
+Message-ID: <0fce6943-0d4b-4f3f-ae5f-277633577774@kernel.org>
+Date: Thu, 30 Jul 2026 12:48:12 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AoDbeUyM7k0c
-Date: Thu, 30 Jul 2026 12:28:53 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Frank Li" <Frank.Li@oss.nxp.com>, soc@kernel.org, arm <arm@kernel.org>
-Cc: "Frank Li" <Frank.Li@nxp.com>,
- "Pengutronix Kernel Team" <kernel@pengutronix.de>, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, dbgh9129@gmail.com,
- geoffreyhe2@gmail.com, griffin@kroah.com, lijun01@kylinos.cn,
- "Pengpeng Hou" <pengpeng@iscas.ac.cn>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Message-Id: <8723f44e-fb43-49ef-b7eb-64267216f53e@app.fastmail.com>
-In-Reply-To: <20260729193402.533533-1-Frank.Li@oss.nxp.com>
-References: <20260729193402.533533-1-Frank.Li@oss.nxp.com>
-Subject: Re: i.MX SoC Changes for v7.3
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/10] Ambarella CV75 SoC minimal bring-up
+To: Long Zhao <longzhao@ambarella.com>, Arnd Bergmann <arnd@arndb.de>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+ Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ linux-kernel@vger.kernel.org
+References: <20260730104330.81367-1-longzhao@ambarella.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGPBBMBCgA5AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJp2mE8AAoJEBuTQ307QWKbeaIP
+ /ihHTkTW4KsN/DQ945JJbyu5tI0J80Wue7QyyLPglyKfhgb5cLLNPpOC8cCIJsc7+W3i2P38
+ s2c1cOH6CYGE7E9ur3Vfme8NW2S2I/Z8VC7bZnzyS23wT17LrsdS/qCpx4o8U+pt/xdXDKph
+ EGRYrIEmMpUWvyYzyYKGIe25FtaayIIKpq8eZYyFcp2f/sG5IkOW5uZzHPMPdcm87jU7fyuQ
+ rAU2vx9r+ulUfQ/q9Z2roC/ode3l7t2pN7BCBCsUDp6JCrUyZrtT1e7EbA0ZRP3aOBNk2P2E
+ DQOgJGjGdO5Yx2Y9LFtltu6JbsBJHi1syGRX3AtQYOMc4Y1WGoeZJmMlvKj2ZqqXNkcWi2DS
+ IQEWB0uW6CqFsBBIMGDa+6OzdaVO/uAVXWDWml02Men3CILdI1MbVjoh8ECqYUY7OQ+JJvNN
+ vnliuq5WM3Ghd3jg/LZZrxXjdIginRHFQCjIJYLKpLZWm1/iDFedcfzqRNYmTtqscdCNHW41
+ oT3Z7BmO9xwdjuwBS6nmS6JJwkbf5Ot2QR4pB/DRU7ZwjT1qHe+9r9gF32wXVQatHNGK/VVu
+ sfwOnkdxCWkp/qb2gdQRmZh+SedStWshigH6sNfuHBloF/q+hjMRc8b2m326OZdrbSHwY1Sz
+ vti8Hn7n8NjdHO9LKB7BIdjkA9DA5WsqOuVCzsFNBFVDXDQBEADNkrQYSREUL4D3Gws46JEo
+ Z9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLueMNsWLJBv
+ BaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6eiOMheesVS
+ 5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wAGldWsRxb
+ f3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA6z6lBZn0
+ WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9YegxWKvX
+ XHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt91pFzBSO
+ IpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gUBLHFTg2h
+ YnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/JoFzZ4B0
+ p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu4vXVFBYI
+ GmpyNPYzRm0QPwARAQABwsF2BBgBCgAgAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtBYpsFAmna
+ YUkACgkQG5NDfTtBYptX+BAApg32CkxwNucNEi8WfWA8oKkW0y8YDuY6ORMo9FWNGiT/OTy0
+ vyJrLocrpn86zwfjVp+eCrssPYh8eqJfnWqmYv6ACQtHPYzPZQ3mSo8H97Z01oUxITzCxpXm
+ ZkLgPIqtDPcC2E3dPM/fVxcyowM8XsaMA9wcsaUYrta8toOq2b9tKcjleKMfMrm0gQ9u7wUc
+ QbLkwj6TCLOwucb07GXzLTNF9PZmaDUpKAZjMjmrW+le+SFvQbhamx0rxLWPR0NWntXpbCn+
+ +ACch03p/JyTBVktxFsFyCt7pTPE1kEaeuXBTe/a2D9iQvRxRW19LvuO2e59/u1wYUiH/orz
+ wbIC2S4dBsPAPihL3ztOU1yE86GPyQtSE0kU+/7snnLt4QGi6PChf3t5gnNjAzjUUovO8rgI
+ c+5yN5heq5loYHgK6OQ9OlHzsPHO9e9MOQcKlFycs1pyijFGzDwdNUm/SchK8iWT2QApTx4A
+ K9bCVaboTA2T77QYkRcRJYSsO1alGX0ome/hMLD1daXlkrNUp1HWa3K4iytLRXjCSIorWiGs
+ n+q3krnpXu3TFkA8qtOFZMdnIiFuiq1yLT8hptsV5xh1TA2nsVvSYiaCr3q4s4BKjS/KrLDb
+ qoxzw8ISjdUp4pA85vb6YLCmb39NgidD+7PmAr65lBNveIFynTgsja1rRQ4=
+In-Reply-To: <20260730104330.81367-1-longzhao@ambarella.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 29, 2026, at 21:33, Frank.Li@oss.nxp.com wrote:
->
-> ----------------------------------------------------------------
-> i.MX SoC Changes for v7.3
->
-> - Fix OF/device_node reference count leaks in imx_src_init(),
->   imx7_src_init(), and the AVIC interrupt controller driver
-> - Drop obsolete/unused declarations from `arch/arm/mach-imx/common.h`
-> - firmware: imx: scu: Refactor mailbox channel management to use a
->   per-instance handle instead of a global one
-> - firmware: imx: sm-misc: Add NULL check for `kmalloc` return value in
->   syslog_show
-> - soc: imx9: Add error handling for `devm_kasprintf` return value
->
+On 30/07/2026 12:43, Long Zhao wrote:
+> 
+> NOTE: This email (including attachments) contain Ambarella Proprietary and/or Confidential Information and is intended solely for the use of the individual(s) to whom it is addressed. Any unauthorized review, use, disclosure, distribute, copy, or print is prohibited. If you are not an intended recipient, please contact the sender by reply email and destroy all copies of the original message. Thank you.
 
-Hi Frank,
+Maybe I am the intended recipient of your message, maybe not. I don't
+want to have any legal questions regarding upstream, public
+collaboration, thus probably I should just remove your messages.
 
-I pulled this and the other two branches you sent yesterday,
-the contents all look good. A few minor points:
+Please talk with your IT that such disclaimers in open-source are not
+desired (and maybe even harmful).
+If you do not understand why, please also see:
+https://www.youtube.com/live/fMeH7wqOwXA?si=GY7igfbda6vnjXlJ&t=835
 
-- The soc@kernel.org and arm@kernel.org addresses both forward
-  to soc@lists.linux.dev these days, so just use that one
-  directly.
+If you need to go around company SMTP server, then consider using b4
+web-relay: https://b4.docs.kernel.org/en/latest/contributor/send.html
 
-- please split the arch/arm/ code changes from the drivers/*
-  branches, since we have separate branches for upstream as well.
-  The changes here were fairly small, so I'm not asking you
-  to resend them for that here.
+Please be informed that by responding to this email you agree that all
+communications from you and/or your company is made public. In other
+words, all messages originating from you and/or your company will be
+made public.
 
-- It looks like the automated patchwork bot messages again did
-  not work here. The git://git.kernel.org URLs failed to work
-  recently and I added a .gitconfig insteadOf rule for it, which
-  I think makes the pwbot fail to match the URL and not run
-  its maintenance scripts that update patchwork and send the
-  email. I've removed the rule again as both now work, but
-  you might want to send https:// URLs instead of git://
-
-     Arnd
+Best regards,
+Krzysztof
