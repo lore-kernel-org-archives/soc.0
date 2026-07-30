@@ -1,233 +1,214 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BC54398F4;
-	Thu, 30 Jul 2026 14:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785421288; cv=none; b=OXtk/RcPHNk6BwHhjQ7q9LZ8z2nWpv/aXcLwNJzKdZLJAsFp6X481Yu5f1EfC7HTDjgynxhM1/aRmJND/MlUAfepdEwrNNwlyS0w7n6bKrxJi+rYTxRY2G5RbpgIzvf0X1IhGhQ4tmYcjVhV/QNSNTMFr6zNRku0nWBVKIe47Tw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785421288; c=relaxed/simple;
-	bh=wSl8E8+vk6XB4jnkCW92nqsV2NUMcYbUpPs0SG6KQfE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CGfAt7+KRQucD2drso5Yu333kdYMOWOd8rRP8xOOWvz2qzAi1ZLwhX8Z3Og+8+qFmXxMqmrA5SPsDPg+tux1PPwy32A4SZFvm8tPY7ZbNdiV2xXCM4ikXUzx8NB9nT22mn3m9AFqPM8xh7P0hJe7lQnEPqzNMK97M8xdfvtnjMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMf7bEHk; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEF6441638
+	for <soc@lists.linux.dev>; Thu, 30 Jul 2026 14:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=100.103.45.18
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785422632; cv=fail; b=XlGFdWgvLQ/afAgxoEl7KgJRv3uTybU54yT9KxIm+NrMtsBi/QUneyPEW+Ak2SIbtJiYi61W3FEre6/G7zSRbWLJmCirOlT4c5avLQd6LpzbabvOM82dPQxJ97W9+UVUmUZU+w6VNW2ZXddTI67ca+5px1FeYGsj882RTsI7RI8=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785422632; c=relaxed/simple;
+	bh=9YI6zK7d25BjqGEuCBBw0tYas/CDuopH5qJ+tLKK43w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=EV6t0qHusuVjvYewt6eyLSsC5p5s0STUCh+KzcHp8phfnxAxQkXP3iT8MjCN949OMeu6PZwqME05yXgaaltFOyvO8hesuDtjK3zJvOGZHpEjsm2rZcMdx/ICpuUrcpYr0gp6DmNxZJt80lxiyD6bTJ7Gf/pMfB/DbW5JMpKSrQE=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=mZKhXz0k; arc=fail smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMf7bEHk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A0A21F00A3D;
-	Thu, 30 Jul 2026 14:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785421283;
-	bh=qr2zNnHjplGtyB5hdoOxSOD8DyZRyErx54DxXFIYXP0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZMf7bEHkIttfkrZA+Z/z8PuF/NtQrck8+3kHY4qGEVwV5CosLsrrRQg4HpSvZWDyK
-	 y1Zs9iY631bZsBPI7v7dbmuFTaMPvY60BQjlRn6rMbtE5gI8hsBpOOV4zk6ULOTfME
-	 c+xGxVNwDBJhmbfB1uPaWShyUwQsUEj7af0i9N4H3SXEm35nDHJSO6akpN+3ctvwCD
-	 f3d8E78VyO8KHLEhQua0/ZkwSQqqdIBaPSDtK+SZWq2pff9ZmrANjT1qnfOhzkfq3W
-	 iTwcPV3QhO2EaBXaEwTaDv+/eb+y7DRC+m6y0A6jp5NGF1Rv15As9mH5boHgG0m+oE
-	 GpRIBdk6pIguQ==
-Date: Thu, 30 Jul 2026 09:21:22 -0500
-From: Rob Herring <robh@kernel.org>
-To: Long Zhao <longzhao@ambarella.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-	Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/10] dt-bindings: pinctrl: add Ambarella CV75 pinctrl
-Message-ID: <20260730142122.GA2952224-robh@kernel.org>
-References: <20260730104330.81367-1-longzhao@ambarella.com>
- <20260730104330.81367-5-longzhao@ambarella.com>
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="mZKhXz0k"
+Received: by smtp.kernel.org (Postfix)
+	id 22F751F00A3D; Thu, 30 Jul 2026 14:43:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.130.8
+ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
+	t=1785422631;
+	b=EJuyrpM2wd8VI7suxJERCkLU1lsCLd3e9kEVHicDBbxDy0O3Lku1uCEJcZTx7xhwCD6d
+	 qw/e5YpeoNZ9VCXsNjcYuOYGHHep+PTemWyrWoVzdF27tIvfnc9aM+g+Wz8JlvdVeNLaX
+	 A1ceesexLk5YEJv7RlU3HYLViPZtjMu/aiGtFqDQ1BiwY17m4tBvdcOGqUHih7i4SY7ZL
+	 Hqd9QRYGBK9G4cBaHX4bFj7kFm4UXstbRir/rmY0nzLRLf98zahGNE+zXoscjNKsOH6Mg
+	 sQJj9TrbJ56f271L/bhLHRhmv0pyHUqYv/P1an4iIxf0Loa++ufFAbS47pIuo1eXgbw==
+ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1785422631;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:Content-Type:Content-Disposition:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=zjWELmHh2pOC8c61+gjgituRO6wV/gzwHDn1xr5BjfY=;
+	b=M64ZymepxYbMzFPDgi+hh6iL6WJQ9mxz6wDHdWp7RWkPAk59quUMjS2m2faTxLlQcnGZ
+	 B425aW/m0Y+iBLwLwSR+LZJHTyoqExaiwuLpqQVB+zYE4JrSd47eHa+4YFwsnAB7INAea
+	 fU+rAi0x+yV/xjNjkmBbaoOTFRcSwnhP1SNYtIYTUh2n52Q03jo1KY8l6tBmWvzfIdlSw
+	 fFgYF24q2sGfLSheNX4LTan4EFBqDaAuYXyJ2y7inLNpBYDobxDmYxwDKSB6zpCYZCw7j
+	 d0VBVRDmR/ONvBtv97qD9/mPtt3kGhctbXAIxOwm/TEcc+UEsxHDa5q0XghmxYq+Kcw==
+ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=mZKhXz0k;
+	dmarc=pass header.from=oss.nxp.com;
+	spf=pass smtp.mailfrom=oss.nxp.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.130.8
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011008.outbound.protection.outlook.com [40.107.130.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 510301F00A3A;
+	Thu, 30 Jul 2026 14:43:50 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=mZKhXz0k
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 510301F00A3A
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Q4GUVG4H8trSivl607VSNFNjHHPCPDJqt/nt1C9bm/uF5Q1dtJdkGMsKFHA8IqHxhJlCpgpqe+uPU7KX8DybVb9mGrLKUNtAYmssnWBjectVZhYYQLIeyc4vQkfbpPX+5ArF5NKyS12w7kX5QGGg5n2SqmaNRHKhd5hzqy0+ndJzWwTGqhZ98GcrNgn70axCExLWC/7REm8bMOlz+ff8zdKoVLNay6ez5VNktCdIZX+neVrU5l0n8gE3aSgpC1fqxsmzZvKRQdx9OZHxz/mtS6bqx3Mb1wRDf+8Xv4UC/IdaIVE+Kbbo6UW/vT1UgP7zbru03cAugVYs4LHWyFSorQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zjWELmHh2pOC8c61+gjgituRO6wV/gzwHDn1xr5BjfY=;
+ b=Wux14klIlWjk6KDCEGeuvj/Eee9nO0LHCH+KnOqt+Ph4TRzTqNTrXGf3VbI+b96O/mdYtxjSJWFukLq1WtQNTUZmLZ85ZHnut5ypU0eBc9cwhel0PrxTanZ/CVT8wtnQ3C9+qTu52MflfHXFRbfPMfGQAKms1weVV3l0GLHIJQFmMTpn9FcwAoj33gmPykVJ0DglepSsybSr9+yimnfB3Y2ZotNCXumxtfXnKhp0FF9ktY3QzkoRleMRKRkpBCanBYB91AbDJQnbYT2eV93yqHrjEhAYEP/hZ4o3YR9nUvuK0O21BUAZZG4ms4w7Vt0mOyG0t7PB1F4E9jJ9RCZkiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zjWELmHh2pOC8c61+gjgituRO6wV/gzwHDn1xr5BjfY=;
+ b=mZKhXz0ksfHfqECK64s70CptalLFNPwV8etu0bHTxT2OXhuqTVN7EZ4cSeswU1jy9Q+967kp3tuJEXpoavmc8Ty0oTO3H4TIbnEAI8BLmzR+pbxFQ26JMqVaTbxVu/wy1yCZ+y9UAuLDX6yH/QmRpb0ptQpRp2x9z7J8LQog9hBJ58M++KeB8ngohdO4Ny+wIwbyjUk03UMdlJ74tRMzXQCFDHf/SPzGDFkwT1K1Z8LZYOmmJgzs+aL7/QmayFtzeSy5TwrDC7L+qg83plMBKljsTx8lp1HX0wA/HgvsjaBjdKw94YOjN57AQcj1ND3Cl51U26dEK6Gf6PzOqymVPg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from GV2PR04MB11799.eurprd04.prod.outlook.com (2603:10a6:150:2cf::9)
+ by AS8PR04MB9141.eurprd04.prod.outlook.com (2603:10a6:20b:448::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.14; Thu, 30 Jul
+ 2026 14:43:46 +0000
+Received: from GV2PR04MB11799.eurprd04.prod.outlook.com
+ ([fe80::2146:83a2:5329:b7c]) by GV2PR04MB11799.eurprd04.prod.outlook.com
+ ([fe80::2146:83a2:5329:b7c%7]) with mapi id 15.21.0270.012; Thu, 30 Jul 2026
+ 14:43:46 +0000
+Date: Thu, 30 Jul 2026 09:43:37 -0500
+From: Frank Li <Frank.li@oss.nxp.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: soc@kernel.org, arm <arm@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	dbgh9129@gmail.com, geoffreyhe2@gmail.com, griffin@kroah.com,
+	lijun01@kylinos.cn, Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Subject: Re: i.MX SoC Changes for v7.3
+Message-ID: <amtjGe75KC1RoEvZ@SMW015318>
+References: <20260729193402.533533-1-Frank.Li@oss.nxp.com>
+ <8723f44e-fb43-49ef-b7eb-64267216f53e@app.fastmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8723f44e-fb43-49ef-b7eb-64267216f53e@app.fastmail.com>
+X-ClientProxiedBy: SA1PR02CA0009.namprd02.prod.outlook.com
+ (2603:10b6:806:2cf::14) To GV2PR04MB11799.eurprd04.prod.outlook.com
+ (2603:10a6:150:2cf::9)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260730104330.81367-5-longzhao@ambarella.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV2PR04MB11799:EE_|AS8PR04MB9141:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1bfd29da-b8b8-4c57-ad72-08deee48f5e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|19092799006|366016|376014|7416014|23010399003|10067099003|4143699003|11063799006|6133799003|56012099006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	Sopw8wOs951HqVCbAnOEds0xLbkVI6ytyLgzFRKQnSua2j/udTwm+XKuTWgyr05SWWr/8XVYmV/y0LTi2uIkSPsJlyErZZNW5RHO2fHt1Co5VaVzIH0ljWGO4sRTDDx7sswwD13GH7bcJ0t6phSi3MhkThJ6okXCgLrZEVqFEdCD40RpoLquKdOS1Ed44DMorwKVBI1fnhXc9zhf/DDZNvx6ZmmWEaSPXanbXeNfiN4YtBg7mZLWfH9IOOowdqSBPqrFflGlTMaWWNKE9xYlK8e4PcNS18ftuXs23d3KFp+0xlEvZlVm6VD0V2KcWcjqOSpnpduziE+gX/O65XE4qRLae1Rm+I7Fuhtr7aJDUIC+PUAy5ctBvJdEBo7vJObZmK/ue3mQo5+6/llL8+OCcYeZIRE7jxBC28uNT9jzK2ItbLK1Aa0ElzI/QRu2hOafV3pe/qGYve/Tap++4FFqMNCZehSEzbuJCR+FhS1VGoFTKRXU7Hz3oUmiZ0ECO18Z3Fub1VeTkpGZff15oUdpp2+5aL9dKxC8nZjPZPbpYoTBydGqkBM8prLjwDPPH9imwk1tM9AJIzuVCpbL2u3gA1MRhqj6md4FGSaSi0SQ5aGcDs+Ui1LE924xoeJOcgvG0Ix+SK84dmxCGU3plCHHqjoIqtIe5AekQTMZC/qU14A=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11799.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(366016)(376014)(7416014)(23010399003)(10067099003)(4143699003)(11063799006)(6133799003)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Isqo7S71BvJUHo3WDAEsmNuIlRDUF/MVcg1LMwB1WGSVKOsX96+M/4SfGJhK?=
+ =?us-ascii?Q?vusgkkbdWlCJUqQa5H+w73t52lqsVBriDN17NGlHJTfyC9d2i/GmnhvlWsRv?=
+ =?us-ascii?Q?Qkd53k1ewHulafXGw5wtp7zVGISaZCWB4s4DcfRfXOGBqAIqdu3nFBqm9xnm?=
+ =?us-ascii?Q?zkY2HvfTZufEBwKkH2zTMMYw1whJvbZBHrpSfYJRFSOW6R022ZvSlCLOb1KK?=
+ =?us-ascii?Q?n3WCevp1TpSvMJNdEaUBdhbxAdWIH1JR854wughPIvfFJFPsmhTRPex+XLXm?=
+ =?us-ascii?Q?gyXoRONvHrqiLLf+Jhqg6V45QQtDv+lCsmu5nyDW7Dt3/S+R/MsDo/IJn/Bz?=
+ =?us-ascii?Q?hJKnm3VWActCQfkw9wHQ8fnrBXbHMVuoJmZ5lUXV0LhkSe3vSQRA3aOG14OQ?=
+ =?us-ascii?Q?vIdwxEgiouph40L5p3I7rQt9LuoML+VezeXZD7fgKUSgrWRzD/GSmmiHWNym?=
+ =?us-ascii?Q?XRIzmXjJ4ygoTEzYicMewpeBJRw1lwsiZuB7KRHRlFB9QqWSf31whfpGIxrl?=
+ =?us-ascii?Q?Brp+iN72P5QxskXCqD6g72nHyNBqhpjKOq19AOybJWv5MC8MnB2xmNBzYz69?=
+ =?us-ascii?Q?YcGpBSFhH7I3RcmLEP3yrMwCCXXZQhSkDTfw7nHfkqGo5igSH7gSE07GUUuA?=
+ =?us-ascii?Q?Owjj92gv0eE4GP1sBgn1/MZLT0mz+7t6ztb0htFDmqssy/SEw+UdZ8b7bGFx?=
+ =?us-ascii?Q?UAm58HBuJUgGeyiyznOeE9VIx6QGSJhxFZE8zQyAl0yZ7DKC8C6EXxWLYn0x?=
+ =?us-ascii?Q?CiER66yUhb7t+USEaW6vqoaFvZ6pUY0DuD4kxVybnhNFzc0gul39Q08fFr8F?=
+ =?us-ascii?Q?sqpMAG+5tSD8ek1zs/bYgwqiRF0ylIITFDgkEuzBPhCHlITg0rxAIdDMBfGn?=
+ =?us-ascii?Q?nEL3WGyT1Vm3a1MzzFuKXVsA1YXpaoGjTqzI9QtO7+FChKVHXYMw5Bi8lggs?=
+ =?us-ascii?Q?EMCz1fiInvFrfzaTXcJHpiC+j+1nRW6i3VGOw9CmzJ6e4Mt7RRtW0XecBT/i?=
+ =?us-ascii?Q?Vj1J08BAzJGKpwDhjbjbU5AFxxXaUq11g6fMbbESojJ8gCtENgb/MgIUNcCU?=
+ =?us-ascii?Q?bkuH83d7H4BrkLS8W3/IX1RbGOIvCX659MvXuOojPNrl/AvEiTzdVExElvdA?=
+ =?us-ascii?Q?1o2ZCd9Z54Zo9cHR6+OvSkqOjAw15JlA8d0ZmwJOUkcWupOtKvIZI+Hp+aLS?=
+ =?us-ascii?Q?gDoSfyax8+SRS25o+uNN84elN67yAMZlxC8pHM7zfm4RFMSlnSnMTI0YdlJz?=
+ =?us-ascii?Q?gLKlqHCa2k3FOb5Y/miyOKUiuBNXQUReb9YIn+W7VDHJwAS5FGxWmtoPO8o+?=
+ =?us-ascii?Q?WB1ZdivcPfgsqdEBVk5vOMLzI9wUPDWVgjPtXXHGNkTPUrHlewOljA3+Nelq?=
+ =?us-ascii?Q?2TD/HR2w1Aqs/NzaPZRCmliWALPLNe8gBVQUe02n/FW7/qV0jOW2cL072yxD?=
+ =?us-ascii?Q?GvVTdUu0DCBZl+VRtO4DD3YFhy/BG/eJ7TqPZEjWOcer8wOLhotF/mh5i3H/?=
+ =?us-ascii?Q?TwW5OPqmqH1y5MvZn+wZrUjL3WO6GCmGhS9KTtyIhpLfh3ZEl7MlvhMgdYod?=
+ =?us-ascii?Q?fM3j3ppmCKqSX+IBmxazOPCt9lMyU0WHu+qnE9hwffIpqEWfBb6bIMPCm636?=
+ =?us-ascii?Q?VdoMauLE8ZOWg9stlKse7FqzcHZL7T/dQmN7jW6uPt/hC4lp6NlPQgk97lrZ?=
+ =?us-ascii?Q?VIdGPy6Kn28x8H+puUvBB8p38jrhW9y/ChFTU7TJO97E1Rm0LUITJRSVyhQ9?=
+ =?us-ascii?Q?SVncg2A8lWdY0Aub4BSUqbTTn3Q4z1Z6j0b8z5ObJsXk8Q/daWhw?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1bfd29da-b8b8-4c57-ad72-08deee48f5e8
+X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11799.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2026 14:43:46.6706
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XEVqPLO54Dn8gD7ha9QgsPYAGuXIXbiUZtKaCf8i8GssH+UhY/AiaNK3kaYOidRA/TWBpTwuvOax6ud5FYyQxM5ukJk3/NQ2rLref5b0N3sbBmVwulRPi/FuDwZZRbkZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9141
 
-On Thu, Jul 30, 2026 at 06:43:24PM +0800, Long Zhao wrote:
-> Add the CV75 pin controller binding and pinmux ID header.
-> 
-> Signed-off-by: Long Zhao <longzhao@ambarella.com>
-> ---
->  .../pinctrl/ambarella,cv75-pinctrl.yaml       | 167 ++++++++++++++++++
->  .../dt-bindings/pinctrl/ambarella,pinctrl.h   |  11 ++
->  2 files changed, 178 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/ambarella,cv75-pinctrl.yaml
->  create mode 100644 include/dt-bindings/pinctrl/ambarella,pinctrl.h
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/ambarella,cv75-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ambarella,cv75-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..8a331c642fad
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/ambarella,cv75-pinctrl.yaml
-> @@ -0,0 +1,167 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/ambarella,cv75-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ambarella CV75 Pin Controller
-> +
-> +maintainers:
-> +  - Long Zhao <longzhao@ambarella.com>
-> +
-> +description:
-> +  The Ambarella CV75 pin controller configures pin multiplexing, bias and
-> +  drive strength for the main GPIO banks. Pin multiplexing entries encode
-> +  the pin number and alternate function with the AMBA_PINMUX() macro from
-> +  dt-bindings/pinctrl/ambarella,pinctrl.h.
-> +
-> +allOf:
-> +  - $ref: pinctrl.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ambarella,cv75-pinctrl
-> +
-> +  reg:
-> +    items:
-> +      - description: GPIO bank 0 registers
-> +      - description: GPIO bank 1 registers
-> +      - description: GPIO bank 2 registers
-> +      - description: IOMUX registers
+On Thu, Jul 30, 2026 at 12:28:53PM +0200, Arnd Bergmann wrote:
+> On Wed, Jul 29, 2026, at 21:33, Frank.Li@oss.nxp.com wrote:
+> >
+> > ----------------------------------------------------------------
+> > i.MX SoC Changes for v7.3
+> >
+> > - Fix OF/device_node reference count leaks in imx_src_init(),
+> >   imx7_src_init(), and the AVIC interrupt controller driver
+> > - Drop obsolete/unused declarations from `arch/arm/mach-imx/common.h`
+> > - firmware: imx: scu: Refactor mailbox channel management to use a
+> >   per-instance handle instead of a global one
+> > - firmware: imx: sm-misc: Add NULL check for `kmalloc` return value in
+> >   syslog_show
+> > - soc: imx9: Add error handling for `devm_kasprintf` return value
+> >
+>
+> Hi Frank,
+>
+> I pulled this and the other two branches you sent yesterday,
+> the contents all look good. A few minor points:
+>
+> - The soc@kernel.org and arm@kernel.org addresses both forward
+>   to soc@lists.linux.dev these days, so just use that one
+>   directly.
+>
+> - please split the arch/arm/ code changes from the drivers/*
+>   branches, since we have separate branches for upstream as well.
+>   The changes here were fairly small, so I'm not asking you
+>   to resend them for that here.
+>
+> - It looks like the automated patchwork bot messages again did
+>   not work here. The git://git.kernel.org URLs failed to work
+>   recently and I added a .gitconfig insteadOf rule for it, which
+>   I think makes the pwbot fail to match the URL and not run
+>   its maintenance scripts that update patchwork and send the
+>   email. I've removed the rule again as both now work, but
+>   you might want to send https:// URLs instead of git://
 
-I'm not really convinced this is 1 h/w block. Looks more like 4 to me.
+I will update my script to fix these.
 
-> +
-> +  reg-names:
-> +    items:
-> +      - const: gpio0
-> +      - const: gpio1
-> +      - const: gpio2
-> +      - const: iomux
-> +
-> +  interrupts:
-> +    items:
-> +      - description: GPIO bank 0 interrupt
-> +      - description: GPIO bank 1 interrupt
-> +      - description: GPIO bank 2 interrupt
-
-These go in the child nodes or your really should have 3 instances of 
-your GPIO h/w.
-
-> +
-> +  ambarella,drive-strength-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: RCT syscon containing the drive-strength registers.
-> +
-> +  ambarella,pull-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Secure scratchpad syscon containing the pull registers.
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^gpio@[0-9a-f]+$":
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-
-If the child nodes stay, this should be the MMIO GPIO bank address, not 
-a made up bank number.
-
-> +
-> +      gpio-controller: true
-> +
-> +      "#gpio-cells":
-> +        const: 2
-> +
-> +      gpio-ranges:
-> +        maxItems: 1
-> +
-> +      interrupt-controller: true
-> +
-> +      "#interrupt-cells":
-> +        const: 2
-> +
-> +    required:
-> +      - reg
-> +      - gpio-controller
-> +      - "#gpio-cells"
-> +      - gpio-ranges
-> +      - interrupt-controller
-> +      - "#interrupt-cells"
-> +
-> +  "^[a-z0-9-]+-pins$":
-> +    type: object
-> +    allOf:
-> +      - $ref: pinmux-node.yaml#
-> +      - $ref: pincfg-node.yaml#
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      function: true
-> +
-> +      pinmux:
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +        minItems: 1
-> +        maxItems: 96
-> +
-> +      bias-disable: true
-> +      bias-pull-down: true
-> +      bias-pull-up: true
-> +
-> +      drive-strength:
-> +        enum: [3, 4, 5, 6, 7, 8, 9, 12]
-> +
-> +    required:
-> +      - function
-> +      - pinmux
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - ambarella,drive-strength-syscon
-> +  - ambarella,pull-syscon
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/pinctrl/ambarella,pinctrl.h>
-> +
-> +    rct: rct {
-> +    };
-> +
-> +    scratchpad: scratchpad {
-> +    };
-> +
-> +    pinctrl: pinctrl@e4013000 {
-> +        compatible = "ambarella,cv75-pinctrl";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        reg = <0xe4013000 0x1000>, <0xe4014000 0x1000>,
-> +              <0xe4015000 0x1000>, <0xe4010000 0x1000>;
-
-The alignment and size of these blocks is what tells me these are 
-separate blocks, not 1 block.
-
-Rob
+Frank
+>
+>      Arnd
