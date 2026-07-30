@@ -1,115 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FC73D9035
-	for <soc@lists.linux.dev>; Thu, 30 Jul 2026 23:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785453932; cv=pass; b=gz32PbS1axQ0M5yEglvCjtF16J853pDvPQu/kdXz9ZKPGjzePR0UWzCe8XUTP9AxFG6bxGeumddQ1FLAqfKcDP1d3OXT7lgAEohYNwJJMwOiyKyNQtoxc9IdW5uXwJMfp6GIzDX8m3zhCbMhRxNVS72dBZdZTBG5YeU/Vn/jAzM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785453932; c=relaxed/simple;
-	bh=Uc+eyvzGbvvd3Oto45mr6JOPfvyYJt25U56/YBpbzmY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IlUkdmdL5v3IXBv6fPoSOIDKBhL/ZHdQD92VI3p2RmbWsWyONz0YMvEqru88OeA8CFoc9X5Ywwid281nkST43xW9sWbb/Ig8GKhfXQv1pj19OGpVXZ6Ws9Bt0LmIp5wdQyPR6V32cdwqOsJ6aVIAcjSVFUCE+yL7J35Ess8k9N4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=TQQ03YQF; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A68247A886
+	for <soc@lists.linux.dev>; Thu, 30 Jul 2026 23:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785454496; cv=none; b=qq0rZIV1ShQQZBGqNRjvfoPnWYnfYllgxMMFPMbVMJ1BP522K+Oo2XYrUKXuV9BZIIUVEi5CeoQ711WVsX/C2rgUpGUGkJApDNu2DUZpabrDWT0YbUbtILueVdk6ZSbwRwvX2aqXT/4yBpCdIfXAW3g+hShX0AzUzkw09B2kRb0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785454496; c=relaxed/simple;
+	bh=utT5GH8JwJmVzB+0txH3Mifzm/70gcqs7ugOLa5BO/c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I4jelYFU6TR2LuBhL8lx70vWd2poEVnzRPzE2J/Yhi9Cw0G2DRUkPTDNvnqYwUb8a6rzH1tcb7qAhjndrm8KZu8FOvQOrClubJtZEY0jf/ZzlhlyZgHDEjs53z7VGq5t81/ixZZdMISLxYh6rXHizKkAlUZOe9hcqjN2lW/mu+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Oeo7N3dF; arc=none smtp.client-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="TQQ03YQF"
-Received: by smtp.kernel.org (Postfix)
-	id 0BF1D1F00A3A; Thu, 30 Jul 2026 23:25:31 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=192.19.144.207
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1785453930;
-	b=VbNQyHxKh+6SjNYuYuOtOVsI549iDAUcNedih2VcsrjlxXXjxgKra+/5cTa14Dy2acrs
-	 jzc9ZkzgAxOcV4qaTtNIRsN8N2bDIMFXtLznvwgtSQFAkgHRCo48ZKzV9TW+mc7ced/e8
-	 PQfF4qE7s8esb7/D5mv4Xq1hbliSfY9VepRMAxlgkIwUvlhZXMPzGLt6faRhS9HBaXQve
-	 8QOtqYSnpN6kmyZMVhBxBRXllMuORjF+Gaa3I6O2YuYa9FIvdYGSFmgZOIWLMSDQVNswI
-	 ef9vIDWDg6DkCJatfWSLGB4QPMwEC2DtZXiEhm4eiPAZGbWlZrcRoSLUsI03cWP7CPw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1785453930;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=ug2PFfl1kVCa/AMMLBmAuQNsYDTChSLFPxolpp21vS0=;
-	b=jLXCJL2nyrZ0JEK0him+ld5DUJ0kxofWfhSr9E/lCfATHpuOTax3kunaxzULjnohmUw4
-	 dyArzjDj44tBkpqsizknMLFSLeGoTWIgdHU6iNzZbHOygUSncTLZO2kOWueww+Y+ND5Y3
-	 1iVnF3S+5qNQOpCPUnZ+ugn282ecb+0gqv6IY6B5qHUMmKDIW5r1dmgj/I+V1hD+i4UL/
-	 dbDuwn63ClT1aHnPEy2O6QEmw68XUNPob6B6ZWeO6RSAN0IQk6PrjgYD61V7UTw68EkOa
-	 gqZUuTyeHrHHO8sp2Ps/PorxJbx8sStpgDR7sYVxv8mIjwPrAu4GGvdrP7Ak6Tt3qDg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=dkimrelay header.b=TQQ03YQF;
-	dmarc=fail header.from=broadcom.com;
-	spf=fail smtp.mailfrom=broadcom.com;
-	arc=none smtp.remote-ip=192.19.144.207
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4918E1F000E9;
-	Thu, 30 Jul 2026 23:25:30 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=dkimrelay header.b=TQQ03YQF
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 4918E1F000E9
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 9C40DC0003EC;
-	Thu, 30 Jul 2026 16:25:22 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 9C40DC0003EC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1785453922;
-	bh=Uc+eyvzGbvvd3Oto45mr6JOPfvyYJt25U56/YBpbzmY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=TQQ03YQFsvFtaxSNFTx2n6vyK2N+vyQYNXXQDzHA7mEzd7GjCNXWCpt07hiyFcDd0
-	 qhmDqPOdSC9xNAaGMm7JIpP7YCwAz+hq9uhyfX7YrhiGOg8kIkgNnDZ4cBQnXb/j9c
-	 qf1Y5beAPqzKwMpbU/a61fB2j0ubW5w0Xp2KKKsg=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 520ADAD9;
-	Thu, 30 Jul 2026 16:25:22 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: soc@kernel.org
-Cc: Rosen Penev <rosenp@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL v2] Broadcom devicetree fixes for 7.2
-Date: Thu, 30 Jul 2026 16:25:19 -0700
-Message-ID: <20260730232519.2706487-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Oeo7N3dF"
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-5bf83925ddaso179743e0c.1
+        for <soc@lists.linux.dev>; Thu, 30 Jul 2026 16:34:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1785454494; x=1786059294; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=N7GFN5YpwDEZAtAP3vleYwkuNsvwAGPeTkmkPSkEkzs=;
+        b=Oeo7N3dFol8bJywDJ0YKJ9uOKodSoI3wYuALnarDyoVXVExpBCNtB8dS2BCOlPKbVO
+         IcGqHrj6eZ3wjEiFySYadIEXx45ztUvN+f+Do4ZXyFPN7QJfkJ4ubNBxJ85PDKt3N9Fc
+         18zBCGUcrtgAhJFjvvMVgBlAHzZEAe47+aMyk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785454494; x=1786059294;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=N7GFN5YpwDEZAtAP3vleYwkuNsvwAGPeTkmkPSkEkzs=;
+        b=YHWeuNryKpdRXxsGwI38DX2BQ5XyB/Fflo2gF4nt4s3VLd+6ZSMiA3i9EM7vxfO/MA
+         d2prBZARC7aZng88iDmDzyMKHF8stpn8Ewvq8lkHYHaI1sDvhUHUgH7aGMRRyehd5q+4
+         fXhf9WUGYoa2vThYyQ8n/LDy/FiYbsvalqz/YQVjPF+bcPf4WmfVZ9NJRCANiN1A3Tju
+         3P57QSEiBQ+6jnmo6bEoV6AN5TuKof8oy46/zadVzgVTYKQykTcfbxqRBRSlfLQ6s455
+         yshRWnT2PFUMbv1f2+4bopJ9QtGAy6p5iuf2Dpvzg8pqX2s81e6GmIt2y1CntcMVgzkl
+         4PNA==
+X-Forwarded-Encrypted: i=1; AHgh+RpxCyPTaZkmsydVHLydk2BRF1w4AvEHUWwf41IShTnG1N3bEJUJk7jujF6AQeYLgl1v7jg=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxwcjxdPRCGovAcm5UutLb/J81vKw7ayHvoZ9/rd6iid3YkAV8b
+	l+5bOHqF20RPq+Xj26d3VXKPYfkIVmzqUFsI3CQZj9UApVWtKGgYgNDzI1VZYAbvXmNaKubg6Qb
+	yeBo=
+X-Gm-Gg: AR+sD10YQEh9/JDRtvawNsoh3gVBfUHgQXQ8r8aTBbQ/lZzpNaspGYXp0Qjp9Uc678n
+	3kXMTYJ6ZZipAs5+rbPzS/I4ifZt1psotTLMGxwHQyuHMcZrI/RnbXmOPTi10bWwCPbscOZ3urr
+	diVkUshU7fFAc141gAF94lR9m/4/KFYlNchSsH3feN0ZhOIyGEEv23Zv1fpJCLB/xM7hvZcWC/s
+	BWch0mICPDr+ym2vxl0P8w7kUO/hqd0YO+pL67sok0FIR9E7LcNRpnxAlXc+ZQYZihMOHYklPan
+	/6q5McaMlewRNZzJkhlVkbrwhvm7KDFJgtx1kLkhrxZGg0tW8yHw5LhZpJnKGD5o6iBgjshi0TP
+	hIHkmf243qghY4f8mC5USsVW0KTuO1lzbqJv2RZQtz4SW5kMx/BqDk/OAGKBY3fr7b60KPoutTh
+	CkVQX9zx19zIXOYuU5U60PXmUDhH6LMfjS1U7PmQqdIwg4DyE6jGhGHUfxKgJIkecbbwtPwa3/p
+	niqRX5ShL/j+eYPsp0ELbKfMW4=
+X-Received: by 2002:a05:6122:378b:b0:59e:372f:6db9 with SMTP id 71dfb90a1353d-5c36621a22bmr1486189e0c.12.1785454494116;
+        Thu, 30 Jul 2026 16:34:54 -0700 (PDT)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5c366743c81sm2614056e0c.15.2026.07.30.16.34.53
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2026 16:34:53 -0700 (PDT)
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-96944741eaeso93479241.1
+        for <soc@lists.linux.dev>; Thu, 30 Jul 2026 16:34:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RpZXVb8DPwhoQGPqENXybrUvA6gCMfDJy9yZrgeSdb+duYBSike7MHuGuWs7tZpCfgGNus=@lists.linux.dev
+X-Received: by 2002:a05:6102:511f:b0:745:78d4:4856 with SMTP id
+ ada2fe7eead31-7574e1d5298mr1438306137.7.1785454492526; Thu, 30 Jul 2026
+ 16:34:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260722-contrib-pg-pixel10-initial-dts-v2-0-3abae9717feb@linaro.org>
+ <20260722-contrib-pg-pixel10-initial-dts-v2-5-3abae9717feb@linaro.org>
+In-Reply-To: <20260722-contrib-pg-pixel10-initial-dts-v2-5-3abae9717feb@linaro.org>
+From: Doug Anderson <dianders@chromium.org>
+Date: Thu, 30 Jul 2026 16:34:40 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WWpswZ0LbZzpj6RcyRxYps1Ht8+w2TYTviTw4bo80KZg@mail.gmail.com>
+X-Gm-Features: AUfX_mxnuq3KCnn0XeSL1ZB4QNLigMdFRjElx75voPzjUsE6soU8Kl1B5ccPok8
+Message-ID: <CAD=FV=WWpswZ0LbZzpj6RcyRxYps1Ht8+w2TYTviTw4bo80KZg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] arm64: defconfig: enable Tensor G5 SoC family
+To: Peter Griffin <peter.griffin@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Linus Walleij <linusw@kernel.org>, 
+	Drew Fustini <fustini@kernel.org>, Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org, 
+	soc@lists.linux.dev, Juan Yescas <jyescas@google.com>, RD Babiera <rdbabiera@google.com>, 
+	Brian Norris <briannorris@google.com>, William McVicker <willmcvicker@google.com>, 
+	kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
+Hi,
 
-  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+On Wed, Jul 22, 2026 at 2:56=E2=80=AFAM Peter Griffin <peter.griffin@linaro=
+.org> wrote:
+>
+> Enable the Google Tensor G5 (Laguna) SoC family in the arm64
+> defconfig. This SoC family is found in Pixel 10 and later phones.
+>
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-are available in the Git repository at:
+In case having a tag helps:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-7.2/devicetree-fixes-v2
-
-for you to fetch changes up to 6de6732c4c784ce64e2457630ca800dfe5efb774:
-
-  ARM: dts: BCM5301X: EA9200: fix NVRAM size (2026-07-29 15:42:57 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs Device Tree fixes for
-7.2, please pull the following:
-
-- Rosen fixes the Linksys EA9200 NVRAM DT size, the 2nd PCIe controller
-  interrupt that was duplicated
-
-----------------------------------------------------------------
-Rosen Penev (2):
-      ARM: dts: BCM5301X: fix PCIe controller 2 second interrupt
-      ARM: dts: BCM5301X: EA9200: fix NVRAM size
-
- arch/arm/boot/dts/broadcom/bcm-ns.dtsi                | 2 +-
- arch/arm/boot/dts/broadcom/bcm4709-linksys-ea9200.dts | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
