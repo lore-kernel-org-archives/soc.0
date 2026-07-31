@@ -1,132 +1,195 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E7A3C9888
-	for <soc@lists.linux.dev>; Fri, 31 Jul 2026 08:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBCB3CC324
+	for <soc@lists.linux.dev>; Fri, 31 Jul 2026 15:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785485747; cv=pass; b=nD3+yfZRcXCz+TfLLTbibmUKkM6/OLskQyrJfwx/OaUC3Hq6jK/jmCUnaFJB003R7ozIbwNyDoyAdXyasJnoT8BYmQwc+C2YbUDLOg4jU44GS+Mx6jXmKMatXaIPo0ufoM21pGJyV2YhBi2AFfxXW2t4G9TJIbE6QCc0PWFmKdA=
+	t=1785513588; cv=pass; b=fSnaJcHonLIYVCeZUQZuntX5P8Im7sGRXAdjtxvEuMW0d4YkPjrs7W+NKswT7YsgWrhUxCvI1r0nRdm1lad0L3lCSC0teZLvwLd/iKyk7gBoMnqp3KjEYrbBWFXuZRUSz3RjoZj5D62mx+tfiDTtVTRkmMTF62+IKG8lp1iYexs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785485747; c=relaxed/simple;
-	bh=eEloiSXgCbSzn+8eB9Hi1bIXN5vK1UhRnzGJovkszYc=;
-	h=Message-ID:Date:From:MIME-Version:To:CC:Subject:Content-Type; b=ATWYQhJNdNX/SW3ATgUwBTTX8IDOzFlQVvjEQrb7PFu7rBof75tOTBIt2x8ZbZGpDTlH3BJuz6H1Vp0IxtithIzsaLxsgs1krZxXYMMc1TgP95+nGQQtXWdsAEH1pnPFRZOB+pLp/kf1MGJZM+B1Cda7RYgXoZ0cNqlJba4lNWU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=6NkYvgWi; arc=pass smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785513588; c=relaxed/simple;
+	bh=KaA4Q1bLFSKWT+/HrBpyeYqgswK4jBZuODwjdQeAV3A=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=KCtP/lNjf2zk46gn76La6zJNtfoDb5E9qPk24YROaoJSfIG0zLRulXZZe9lWuV7bE4pMUMPDVHE391mqWw3lLH5gp1kxuBJnH3dgHMPWuF8Rmkc6iRJuEfppYJfMSl19+JADrq5zXZFfWx1d0anVrRq45pcSWTeqTzppWSUSOlc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZtqW3EVs; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="6NkYvgWi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZtqW3EVs"
 Received: by smtp.kernel.org (Postfix)
-	id 9EC0E1F00A3F; Fri, 31 Jul 2026 08:15:36 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=113.46.200.222
+	id 3B0021F00AC4; Fri, 31 Jul 2026 15:59:47 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.221.49
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1785485736;
-	b=VDHoQgSqueCdwXLqdPYE1T15NE6lKkKEj3Svm5DHZkKDS2uAbkIyNjPVd3Ry9GaVN4Aa
-	 HyDMVdwhLFFvpaxAEsfT1cDHSQLLow65Pf8qI2fMMlJo0uM09H3YC52EIDIAyRcbXHFdC
-	 HRNRcACoTMEpnprPKZr3qOXbKdlxT0FxgtixtYQ4wwwPQokuhLqAANxVF/F01DdCfW+Mi
-	 1iO6sNMrGNuvdGk+qfJIkEhCo/6zR6LOHOALCYo+98x9755H47cA+ePIdxmBcZjkcPy9p
-	 8OGzyrI2Ptl1xe3UCUDiUc9mXmkWASgAamOAVFRxkOEgiDenflmK2tS2KHMN8rKiUgg==
+	t=1785513587;
+	b=3tDtw8B1lYVG+WOsyTS+CbWer+Dx+9ZoMS1wbIT+ovf7kqusgHCjOq6sjr0zpojieA5N
+	 IvVcapdMn1yIoy8CL1D4N0PYBdX9QvMUKYXU+toJ6n3btd8dkHiKcc9JKqmTqaTzuojfr
+	 SpCyxrA9b+JfsIRGK8niU+FqekSwynZL6zkCuqOhnSRlKo44g7thNrco5Qw+gajkOyPV/
+	 akwk8HgfTMXIjyZNqZS3XAKNktErJKQQa0TGJOhEqndsIfSjgwAbQl6eSGmSXxbjvUKVn
+	 oYPt8EaxLBNI4mylidoWUWoj/+xIN8i6P/wrBjUIUc3Pr3ukavpSykcge9bsYqOIqHQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1785485736;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Received:
-	 Message-ID:Date:From:User-Agent:MIME-Version:To:CC:Subject:
-	 Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=OWyILn+Pp++L/PxP5JfzjsB6Yv2M6go0TZoxaEbhatE=;
-	b=Xe1Zd3c+ksyAuzns3Yq5aufppbXNx4Pdd4wmo/N/lHot46u5vrNyLF04Ab64yTRlU89n
-	 /AKAOwZlHWtMf7NB5iSAU5g3jRBZOM760h/i1/BgQzf0k0/NIaL0fRvPLoUNlnvIahMtH
-	 n8Ls4SCc2T3xn8jvRA5zKYHJj/wk+SOO+DZ+MJmaJ6qsvBdQ69Po78h6I04VPpvKy9rMZ
-	 r/LQua4homp2O49D4YnvJslvYazGatRO78oKfeIR5ONfT1HMUBiQjwJvsocjXwAPBzMC+
-	 WgwTsC1dXOni5YcIr1+ySeMuWmejje+W0NprpzEBMQb9P8K/nYkzqUNkJkIs3RwFgQg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=6NkYvgWi;
-	dmarc=fail header.from=hisilicon.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	arc=none smtp.remote-ip=113.46.200.222
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	c=relaxed/relaxed; t=1785513587;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:From:Subject:Reply-To:To:Cc:Content-Language:
+	 Autocrypt:Organization:Content-Type:Content-Transfer-Encoding;
+	bh=a87j8swmEQc4k8uOXUNzJXiAtCjtnQaei+ph1mC40T8=;
+	b=i3CjpEKr31jV8ZSoa/DbSe827h7qAHpAh0t4VFb3isfvJLTIU6wbOxnhP8qFw7M6L0eV
+	 eDWPuR8H18UWgh42sus/mu4qRMnABerH96UV1KEbk5HVAUVskliyFGyXaXEAxJOUKNcvz
+	 2S/f/fJyWXfobB3oyHMRNkkWmYkDgfuNiCHdaH2wJDHsXm8b3V0HafDeDsbOuOA89oplK
+	 8hesLAOY8vCusB6O+pFXNCmsXnOWaxwyUgmjKiMy6lOrBy7C11u2spyZQrgUDid4H05nl
+	 myR/KzlW1l+Q65PEhlY94ydR882JkeAIxCXBf4KQmYiRNf8YfHDzRG30slffJW8lVmg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=ZtqW3EVs;
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	arc=none smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1F7F31F000E9;
-	Fri, 31 Jul 2026 08:15:32 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id F04A91F00ADB
+	for <soc@kernel.org>; Fri, 31 Jul 2026 15:59:45 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=6NkYvgWi
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 1F7F31F000E9
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=OWyILn+Pp++L/PxP5JfzjsB6Yv2M6go0TZoxaEbhatE=;
-	b=6NkYvgWiBBt3oOaTaDoB/5YnfR/8KwrUlWxvdEylYHdxKszq2LxGaTuYie88GWrMd1H25YOia
-	AZpY4qPjj0fAA5pMdae7ubmFK/ZkSgQ2K9BJlA72Xp/MnKCSjrBwBYfr2C4/U41ZwT2FiygN9xU
-	REontTjBql3AnczEnsApklA=
-Received: from mail.maildlp.com (unknown [172.19.163.214])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hBJY53wkbzLlXZ;
-	Fri, 31 Jul 2026 16:06:01 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id C22854057C;
-	Fri, 31 Jul 2026 16:15:29 +0800 (CST)
-Received: from kwepemq100003.china.huawei.com (7.202.195.72) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 31 Jul 2026 16:15:29 +0800
-Received: from [10.67.113.213] (10.67.113.213) by
- kwepemq100003.china.huawei.com (7.202.195.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 31 Jul 2026 16:15:28 +0800
-Message-ID: <6A6C59A0.4070501@hisilicon.com>
-Date: Fri, 31 Jul 2026 16:15:28 +0800
-From: Wei Xu <xuwei5@hisilicon.com>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=ZtqW3EVs
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org F04A91F00ADB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-47f633e6058so1189029f8f.0
+        for <soc@kernel.org>; Fri, 31 Jul 2026 08:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1785513584; x=1786118384; darn=kernel.org;
+        h=content-transfer-encoding:content-type:organization:autocrypt
+         :content-language:cc:to:reply-to:subject:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=a87j8swmEQc4k8uOXUNzJXiAtCjtnQaei+ph1mC40T8=;
+        b=ZtqW3EVsxeR/QwDjKcRbDNBIWs4AhMZj9wQy5ILwMP5i62WQ+vb9Xcw9jZ4eeVLk2u
+         edVBwntlbg6qkqvFuOyOkGRskIjdkPJ7m7VwzOvd4h4aepH7l0KFEg5dMZLAMDvv75XM
+         7bCe/CG5ZxFj1vdp1pZ87PqJNYRTqr66Ilb4sTLzO8x3BD1/zbM+66mam+BGnW1bUqGn
+         Gdynk0GA4NEIAd/0CPHvd/RNy4QC9+8Ww40DKjMgcUmGd1iBUPfHwiqAn0t1PONPm+vf
+         lehWSsEGwkoyNLtnbg/VfGWxc0YipEwskNEIYG9gfJWaEVUU/gqtw3GdvVzyxIccRdYf
+         /ixw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785513584; x=1786118384;
+        h=content-transfer-encoding:content-type:organization:autocrypt
+         :content-language:cc:to:reply-to:subject:from:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=a87j8swmEQc4k8uOXUNzJXiAtCjtnQaei+ph1mC40T8=;
+        b=jnq4sBEm9g8L7EtloVMyA3CBaWuYVpItTOxhtUM1+jBL3mGnwnRbQLozx+BWt3OQAw
+         igTZAb5Bm/NSOz3fSiNmZjx0Uh85SStemGZJHYOemJc5eHLCmlAHv/vAB9WK0lw6yo2H
+         JGQwrcy3cqA0TX6M44sz758OYO9YmTZJLFMyjQ0TLwfSC7/RHmD1ADy+EoCs9RV170/I
+         SLcslXHWIcbYldi80DnDHLipHlaZ+omtwdD0HfvDdxkiL35p2FlELR/pBcIHeWRtFeAB
+         PVzlE61ln+3lExmZv9+X5NhRuWgiFgP20UghNOc+mDX6pII4rBpdoM6vS+ScA2/HtqVo
+         DFNA==
+X-Gm-Message-State: AOJu0Yzse18UqocDBOnBz2Ux06lP6c8IpeILtRwWIcf5Xiss/DCuMS+C
+	s2iZ5dXlwY054t24RPQ98VUlNyIuNQCO0zbRKzEsZUz/463yoW7/IojwiWlMwCbvkOh4n6kiuYM
+	db3Rs
+X-Gm-Gg: AR+sD121lvpxJzbKKOoVdz/NQN22avO6NNp1WIrj1gFO0tNMEKAa3RX8QmbkVDekjje
+	WSmnk/bd1W16ON/YQPoc3tdZ7LCosLu3FR9crliX22TqOjB36DNtVTLtW89rk8vgTEcrwECTEVg
+	Y4bXwap5hl2bz3yU71uOfeRsbLn4qfC69I4/fjA3vBZu8AgKpoCEtZ+HhVr2q47raSXrR6CWJ2r
+	jOJ9sppr8DYj9UX4Lu+9VVjKemyE3ZIB/k6NmEy4M3eiBfUzj7Jgq4YFiae203xq/gNAh6fsY4P
+	S3bElCmzn0JcxRQ0XSYdHIMTJRwXHGTb+E46kb+J94nsRQgvmUqjMfBVZsPrSZ4Xog8U7piQdZ3
+	l/rHgY6L5JAk3xkFWlVQLmQONrmU5ZsmvzCppx+uNG7wdCfiib0xS7WT6Q7MSTnBZeXxZ2hBSnQ
+	kfRgF0k/YDpLsox3TLOaoEp7F/xiCIUdNDgBVRh7keox5SxFXQ0kCMdqfZGUMqpf60Xhz+c2VYw
+	5WTyEoCeIswrNvuUAhhYKDL46numvlrSymCYFblVA==
+X-Received: by 2002:a05:6000:240a:b0:47f:8558:8ff4 with SMTP id ffacd0b85a97d-47fd72ffa87mr374052f8f.54.1785513584059;
+        Fri, 31 Jul 2026 08:59:44 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:106d:1080:6c49:d2f1:f94:1fb2? ([2a01:e0a:106d:1080:6c49:d2f1:f94:1fb2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41e2cf1sm6118853f8f.10.2026.07.31.08.59.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Jul 2026 08:59:43 -0700 (PDT)
+Message-ID: <7db3a138-facb-4132-aed8-8e8dcd3bdf60@linaro.org>
+Date: Fri, 31 Jul 2026 17:59:43 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-To: <soc@kernel.org>, <arm@kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-	<xuwei5@hisilicon.com>, <zhangyi.ac@huawei.com>, "Wuliebao (Joab, Turing
- Solution)" <wuliebao@huawei.com>, "Shenqingchun(DanielShen)"
-	<daniel.shen@huawei.com>, <huangdaode@huawei.com>, <liguozhu@hisilicon.com>,
-	"Zengtao (B)" <prime.zeng@hisilicon.com>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [GIT,PULL] arm64: dts: hisilicon dts updates for v7.3
-Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic ARM64 DT updates for v7.3
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemq100003.china.huawei.com (7.202.195.72)
 
-Hi ARM SoC maintainers,
+Hi,
 
-Please consider to pull the following changes.
-Thanks!
+Here's the Amlogic ARM64 DT changes for v7.3, contains some overall
+indentation cleanups for the Amlogic DTS, some new features support
+for Amlogic A7 & A1 (clk measure), A9 (pinctrl, gpio-irq) and some
+fixups for AXG to only enable PCIe on the S400 board.
 
-Best Regards,
-Wei
-
----
+Thanks,
+Neil
 
 The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
-  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+   Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
 are available in the Git repository at:
 
-  https://github.com/hisilicon/linux-hisi.git tags/hisi-arm64-dt-for-7.3
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v7.3
 
-for you to fetch changes up to 73ff3f98b8ab7630977ab6de2ce672918da8e774:
+for you to fetch changes up to 7f1d0cc86cb70fa550163b6f70fd1d484c03218e:
 
-  arm64: dts: hisilicon: Correct indentation (2026-07-07 17:00:14 +0800)
-
-----------------------------------------------------------------
-ARM64: DT: HiSilicon ARM64 DT updates for v7.3
-
-- Correct indentation
-- Drop unused clock-names and reset-names to fix warnings
+   arm64: dts: amlogic: meson-axg-s400: enable mipi_pcie_analog_dphy for PCIe (2026-07-20 14:31:02 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      arm64: dts: hisilicon: hi3798cv200: Drop unused clock-names and reset-names
-      arm64: dts: hisilicon: Correct indentation
+Amlogic ARM64 DT for v7.3:
+- Amlogic AXG fixups for PCIe and NAND
+- Overall indentation and whitespace fixups
+- Amlogic A9 Pinctrl & GPIO IRQ nodes
+- Clock measure nodes for Amlogic T7 & A1
 
- arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi |  4 ----
- arch/arm64/boot/dts/hisilicon/hip05.dtsi       | 14 +++++++-------
- 2 files changed, 7 insertions(+), 11 deletions(-)
+----------------------------------------------------------------
+Jian Hu (2):
+       arm64: dts: meson: a1: Add clk measure support
+       arm64: dts: amlogic: t7: Add clk measure support
+
+Jun Yan (4):
+       arm64: dts: amlogic: meson-axg: Disable nfc node by default
+       arm64: dts: amlogic: meson-axg: Add missing nand_rb0 pin to nand_all_pins
+       arm64: dts: amlogic: meson-axg: Disable pcie_phy node by default
+       arm64: dts: amlogic: meson-axg-s400: enable mipi_pcie_analog_dphy for PCIe
+
+Krzysztof Kozlowski (1):
+       arm64: dts: amlogic: Correct indentation and whitespace
+
+Xianwei Zhao (1):
+       arm64: dts: amlogic: add some device nodes for A9
+
+  arch/arm64/boot/dts/amlogic/amlogic-a9.dtsi        | 140 +++++++++++++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        |   5 +
+  arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |   5 +
+  arch/arm64/boot/dts/amlogic/meson-axg-s400.dts     |   8 ++
+  arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |   5 +-
+  arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi  |  38 +++---
+  .../boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dts |   2 +-
+  arch/arm64/boot/dts/amlogic/meson-gxl.dtsi         |   2 +-
+  8 files changed, 183 insertions(+), 22 deletions(-)
