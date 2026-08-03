@@ -1,41 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609C737DAD0
-	for <soc@lists.linux.dev>; Mon,  3 Aug 2026 16:17:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0669B40DB5A;
+	Mon,  3 Aug 2026 17:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785773867; cv=none; b=mKS3zektoBXZhUreRSpvhviezDu4gSKT8iOp5t4giknUUZF+l9w5yTdUdvo4PdwW/xf9gqh82pCqEUg8hABp9JdYo+is1cAIG5kwBXD/MQ74F9L2OcIK0eeLwQ9EZQNVzegFuezJP1KBqb6QfflnyY4oM29LeFpJx7bEG8rRr4k=
+	t=1785777962; cv=none; b=bmoGO3n80eMnL09pJw6z0jlt70MCxAxekmQenMQJrajxkjT9xFP/qgHB2eKreBARHpvtjIkfxH7MJEnVQycsQXilxIcpDvBrh7hS+pEGuNUuzvUnDzW4dgZP/V37Xdg0gjdvuxAuoCOCnKzGi+YWfNxE8mQST1Eowg5mle2NMYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785773867; c=relaxed/simple;
-	bh=BmWWOCdnDaLmpE539bT1u+ipnSHVCbX3QF4I1GcCi/I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ahRY9dgbQME2NKWalEC5ZpuaJnYYNnD21bsSE/cGkgziYGHIAveUnjcmzWOWmOYDzuWL91TXd6VpTy7l2IXpnNKA/tgQlajK9NJZdS4o7+llcs3dtwwH4xIoZI7WE9SXjKgwmt3lOiiAEIXBXZwh8t4acDC5xDDcjqBDDZx9CXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UOyKTfG4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785777962; c=relaxed/simple;
+	bh=d2hGcTcHsu+OuR1fDXz1oPiEChcDx832vWiS8P4b7Pw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QUmbIQX2KLHwZL6gYJTEAYbdAGWO8E9ouUqKgXFdsBoHOeLBOTeozQrZl71ic1klZPQShRD/yNwn7RhEutm/9vDMUJyC/W7kFb350w+Bzt2/f/kgPJdLY2H91eyB2cTZQzZcLElKPmIOhAUxi2mPLGz/4zFQZrCi6EDod93PfYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IEnI9HfK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UOyKTfG4"
-Received: by smtp.kernel.org (Postfix)
-	id A3C091F000E9; Mon,  3 Aug 2026 16:17:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE081F00A3A;
-	Mon,  3 Aug 2026 16:17:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IEnI9HfK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04A01F000E9;
+	Mon,  3 Aug 2026 17:25:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785773860;
-	bh=A+cBZhhBZSCKE4IdtwhAxDZSjkPHDuynJdWQOz9V520=;
-	h=Date:From:To:Cc:Subject;
-	b=UOyKTfG45IPjNnMKWv7vUMmDrJgsSLTrKCOAKvNBZ/KTPg4iqP3acA4sjyy7Q8984
-	 uWIEQq/WxVMq999fB3M+Ps4JyMgddDPIgBwWBxUhkbRCsGFlPEF9fDez7ofD2USmYt
-	 +lH5k4ReJhNQTNaYhNc1hS4wJni5SoLM2couTke2CTJLwZad4ZjEVXO1TLwW4lUP65
-	 tWqZY4dEwQy5VMm7YTyzlv/PYMbRr8AV4cmTzehTsHxoowaAK92oE/b9wH7C1f9uXI
-	 4fHHVzs0TgBRqoRpDC+mwP9q89o0kJi71wTLf9H6I/2YMT38Qx2pIRez9Oriskyl66
-	 Mgs8+MTBRx/kA==
-Date: Tue, 4 Aug 2026 00:17:36 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Allwinner Defconfig Changes for 7.3
-Message-ID: <anC_IPRrMwKHzc0e@home.wens.tw>
+	s=k20260515; t=1785777960;
+	bh=h3SpdjXPKUCNLo24kjga6L/Ssi5ZLwKbFa4rjRscvJ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=IEnI9HfKkpjRQ7FBonhaeSHLJEYZsajgJz8C1uwVhzD6d0+pEAa7W8E7by5vsffQZ
+	 qi7V19ChFrCm7tXWfBwP1dBvOANwdyVrOmwN7g5p9d8H8FH4ShYvSsH0krFsewPb25
+	 Rj8QCRt3yVf9nRlQ+T9vZazbHxM+jfeFyzAk405rAJJ+X7yH0PeWsdPdSGGmR8zMc0
+	 8yDJPywqui2WXmlpR1DePA2Ax6oVhD5xp9MCZLq6M+fF6fgb11MKhEbefGIAxXFQKt
+	 7C+LUoyQ4vc1TD2NXey7+dm4GnexUwotcutt2orbs5udEIyiT8i9p9svUneCHrJpYN
+	 OV7dw43rc2dAQ==
+Date: Mon, 3 Aug 2026 18:25:57 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, soc@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: Missing signoff in the arm-soc tree
+Message-ID: <fd352f58-8100-4b0f-ac8c-25b08d0e2886@sirena.org.uk>
+References: <amY1zEUOGFe4Op6W@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -43,56 +40,40 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="N6IGr/i5M61X8Dyu"
+	protocol="application/pgp-signature"; boundary="a/qBI8WET/XRgLSw"
 Content-Disposition: inline
+In-Reply-To: <amY1zEUOGFe4Op6W@sirena.org.uk>
+X-Cookie: We have DIFFERENT amounts of HAIR --
 
 
---N6IGr/i5M61X8Dyu
+--a/qBI8WET/XRgLSw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
+On Sun, Jul 26, 2026 at 05:29:00PM +0100, Mark Brown wrote:
+> Commit
+>=20
+>   3edcea7f0413e ("Merge branch 'arm/fixes' into for-next")
+>=20
+> is missing a Signed-off-by from its committer (and also isn't showing up
+> as a merge).
 
-  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+This issue (and the matching author signoff) is still present today.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-config-for-7.3
-
-for you to fetch changes up to b4158103c45386ab30ba7624bee17ebf33940baa:
-
-  arm64: defconfig: Enable Allwinner LRADC input driver (2026-06-29 23:45:57 +0800)
-
-----------------------------------------------------------------
-Allwinner defconfig changes for 7.3
-
-Enable the LRADC for arm64_defconfig.
-
-----------------------------------------------------------------
-Alexander Sverdlin (1):
-      arm64: defconfig: Enable Allwinner LRADC input driver
-
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
---N6IGr/i5M61X8Dyu
+--a/qBI8WET/XRgLSw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmpwvyAACgkQOJpUIZwP
-JDDWfg/+O6qUdq8k2l9tLd/v48ARXPwuUAiWsOYAAHyjp5dkPycUHAJJu24BCISB
-hmJCm4BKCcuh8oc3qwzXcMACY4gLRSXwNOdyX9eiCVNbPbwZ9GTyt4fMc3Tn4FTY
-5iAxxTKd72/9g0Q0cfjUffzBR2Ldk3SrLdu+UXQ/LnnCd9ihwbax9oerSvcapnuv
-ixv8PW4QXXODUV4M4dfkgNLlCSL5d0USPI8eZdeyUoWzH5w2C/JiEA8UzGSLQfw+
-pEZO0GHSYPq6X24spMcK1XjOf7hwxcPTh8LewV57cRm93Wl8NUMiTKMi/C3npkqm
-l9GVRoCLn9WNad1DQ7OhssBpWf8shpV4cHyH4bBq23Gw06xaMrx1d2LmuqJYcxa3
-NYj3TCrl0Uqxl3zRCVj3VRNZOlc3a9DE6cw2Y1vpzBGamLWfeQ+zrzhWK4bCUufO
-J5LUwbpqv02xccbKkltyTQYrwmgeF0KfSPieSBugct1NVXzXGYcotsXJ3+BXiFUw
-6YkPrWiaFyl7AxR3oT/sDsGgPLJzDdXskvKepSB07DOjIOZGX2HW8kL2jh4j1ryP
-HJStaiEBUPB+Ztx14hvlHdSAVDkyGE1VWu+deuDcGD2oBtEECrRO8B4YyG/CP63g
-w/N5izI4vmdMAp9EWHkmtC5BWO0Q40mN5DVtIM8W8cMteuyF9y8=
-=b3X3
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpwzyQACgkQJNaLcl1U
+h9C/NQf+M8AGrbnIjoyWKgUSJoElsJ59EzhP0JeCdjKMzuk2oiDSIy6AuPzPgYmF
+kDUpMexgaDv88CTjfmAsJhOR8J2gJWCyLFE3dHRQD8caSHKq5Q8jSHyh6U9CG8b+
+eWuQ9CizHP7O3Ixr9a32FHYTgZ6i5vr3eXR6MQzf+FnlyKyn2BewsQjs2vVaEjuz
+31MkhwLeNg1FZSVn/gF4QA5cvASyxDMgUCwMLRbJ5sLXLOHg/rdoqOxlH8JSYA7w
+VFXLtwEN1syUiDwGvepsh8E4F2c+DhyBdk7sVCP7cZ3jG429NXATb6YcWzC4GPEw
+bPtPFoarDccExGJa2jf9FamfkQ8tmw==
+=NNSU
 -----END PGP SIGNATURE-----
 
---N6IGr/i5M61X8Dyu--
+--a/qBI8WET/XRgLSw--
