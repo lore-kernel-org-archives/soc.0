@@ -1,67 +1,67 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4DA3368B7
-	for <soc@lists.linux.dev>; Mon,  3 Aug 2026 15:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBEF257824
+	for <soc@lists.linux.dev>; Mon,  3 Aug 2026 15:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785772329; cv=none; b=A2qlKVoOAZlaVq8DTzs8/TMUPEkz4PZxiE0hckS19b/8K1Us8qzgvnNMTYCSx/0qxZJQtzzx8rpPYjDKM+GGOgKy4ufsE2pgvuUVX6wP3Jzk59tYiHtbVDP3OqataqGcxBPJUtoRR8zrL6qcDR1y5t44LfxtzoE7DeQDQTD54Us=
+	t=1785772352; cv=none; b=F8hF6bTLMonUd/EfYCIYckTNMErNZpsJlyBrbJkHXfCVXP43aNc1o/PnaTDOSnQvqmiFYDsrLSr20rJbF3UfcKscybh+PEDwvYt2g4N48+PGedtQhSj50TtaVAKafcFtmanxRN0oLqdGy4qUWQRiPalVCcntX5sVZcBy6zjJIPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785772329; c=relaxed/simple;
-	bh=mmQYKq0BtbnhjGj+y3pRQrqUdvpr5FKLB4mQEb4XQEs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Jd8cggGTDn+Nww5ZDwCX88E26IGIByMvNrE+Mhv2uzWkxRWX9+7288YJKSBweiKJbg9gLZ6IO91z4OU1Wlk5wYwHvpGeJxLDglq2E50bmQbITHjTg1G+JDZOtXis3Vc8rk5Dim4Xoh8EZME29o7AIlVWxvOo3kXQ+YJNNBjApTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=KEjFmcXH; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1785772352; c=relaxed/simple;
+	bh=NbziU21Uwf9tsF4qhJ7ycQZNrgAbD6aLFtsogDvDgwY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kZcbXG6FIF9LE34XxZIYi3MKcBWH7wdWG8jIUHJbMZaL8qQwZPi8NsruFJfgtcFcMRjzRYlyvJtx7Q7XRTvGQqJLutvXLMi/2rjDQvCySnpEzKLZc8ecuflyHM70rXpLArcT7fv/lZpCR/mf+QVRF0eIWmcCepgjRje2OBid6qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=We9KXPSV; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="KEjFmcXH"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38e071ed6aeso2706388a91.0
-        for <soc@lists.linux.dev>; Mon, 03 Aug 2026 08:52:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="We9KXPSV"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38101f85591so24801a91.1
+        for <soc@lists.linux.dev>; Mon, 03 Aug 2026 08:52:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1785772328; x=1786377128; darn=lists.linux.dev;
+        d=baylibre.com; s=google; t=1785772350; x=1786377150; darn=lists.linux.dev;
         h=content-type:mime-version:message-id:date:subject:cc:to:from:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=C2QcaSW8eE8D7RoBuOICkCFr3KzY/Y5G0pSnKbTuZfY=;
-        b=KEjFmcXHBHkcxNe+Hfb3XTDja0P23yoGxhlV5QcFoBeUQfD4IsoDGIFj4z54Jlh08H
-         2RHN9NSLNbanjslxOWWaNQJY9nGKt3lEtmrp4cmrpmw7a0VSfUT/Mf2u3656YNTmigab
-         xmB7rQvbjkt6Rc4mvW+VFSJLZ/0Arr1WuEoXBDOOUa5byIdADRNPx6zTjzqVcZYkrnCJ
-         47E7vtKVrCuI1EBbGLJAHDOQ94y7YrSfMiZ0XC/F66oKPGI2dYd8zUycENXfQ8FVaaNj
-         CVrfCmh4fs57No3hYvWisu7+oSyyXl5NzXsmp6XH3woKL/dHXP7pdOxYDbdUCMl+v0xr
-         xhYQ==
+        bh=oMGav3xJdmmSRTKaIqplO9a5WTwQJq0xRLfaVlj7k/k=;
+        b=We9KXPSVqFKGS90JhGr9RMSWoAtb3yRjNstLHzE8V9imAdcykXDC7T8S3uVFQaJ+iQ
+         d/Wx/OvDBlbjZ4T8GySRH+/vFfgw7FvRh3ZjFQIV8Y8jqcMwHK333Le5iMsHDm6YuDSi
+         78tYoUHRFl4NkJafw7k1hduQPoCqmvzzfRtLn13H1RcnseHNW+1euJUW7vdFgoZh0HR8
+         1OysPwQpk7ngjGlJsj7RHRo3dVagqxWD7yaE5ye8ElsVROmXoH+JR12rdDVPyD49U23o
+         VXZjt85J3452ldSEtvqTBiXw4KRNvJuRPJWr3NGZ4eJbOJtIa82Iumg8aJydf+06E55x
+         4yZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785772328; x=1786377128;
+        d=1e100.net; s=20251104; t=1785772350; x=1786377150;
         h=content-type:mime-version:message-id:date:subject:cc:to:from
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=C2QcaSW8eE8D7RoBuOICkCFr3KzY/Y5G0pSnKbTuZfY=;
-        b=hxh7ta4bCTqBbqPnX65cApvPoNodeAxVaUOKrGqC60bu3RXiSg29Poub99JrXwWitv
-         Yx3unB/3/k5ZU6CtL7c9hF/+hU8NhyGk9jWQLk9EiWG8TozWLlazfdZV/NSCGPKPOi9G
-         io1NWSzTJvKCktiAyW4StRZLAw/TE+V7pE3GrBj24ozBwQrdRkhh0VcIrkCaSQCaUSxs
-         VTAC5eo1RBmGeBxKo1eWbZPwFCSjR9vn5Lhjs4V/YL1lvIf4ZUqahkYAOOcPue1A19CP
-         m31HrLmX4p3zPlQPG4p2AsGPgNYPlKLYfeQe+P9qKmiNV29TtkG+xxV4BSYxIy2YfOA2
-         iWZw==
-X-Gm-Message-State: AOJu0YweBUMv8gmWhK6d1AiCj4kfMP9Sq+Mmx76CwQQ4GhStQJC/rUBS
-	v47sfR4f377nXC6Hh7unyxyY9y8WhqT7//A6pSK+mlhfig49Mb19Ih0BfRAZ2l2Fr2K3OdwrZjA
-	reJICVtbyHw==
-X-Gm-Gg: AR+sD11QTdgGF1Lkfr837t/zSc3OaoVxCMi62PK6ezRhHxjbuf27FGVVI5rRPqlVXWh
-	hmu7neTfQGjhxFMKRA1BxkJmFA7lt6fRd0jWAdx9sGXJRGybE4f0rDSaopl3XM8/tWruDlZEHrH
-	sNparaz9JYXtDG9RMGEROzBh4i41Lo31auzM8Ls9o9JZ2WynOHI5aby/riTOVtUe4pdwMyyd0iD
-	/PB3RWRgqKXaDxkDfWjjEtSraEDeFwSWDj9vugr8YUrUMRFo56p6hF3h7G3hNEhwdp46D6+Byd2
-	nqNBj6p8mdiYDTKxOkhkg4rC5CrY/m4fimYth9CGWk1iJDLXyq1FM81yMdrWn/IX0hHWct4Mz+d
-	DgJh915ETETo8Mio27+k+1ApwTBOL5mz8v8lyBdMGSr+gs3bGHJ315i4z3V2bsoLos+C7oP2luR
-	eHPff+3576zMiw2U0H0MKObLCpvGmKLbR0X8lbJ5hj6uDigzRz2tEqDLvhWw==
-X-Received: by 2002:a17:90b:4b85:b0:381:5bd6:eb19 with SMTP id 98e67ed59e1d1-38fbc4a1328mr9585476a91.18.1785772314020;
-        Mon, 03 Aug 2026 08:51:54 -0700 (PDT)
+        bh=oMGav3xJdmmSRTKaIqplO9a5WTwQJq0xRLfaVlj7k/k=;
+        b=ovUvtajqu6Ua95Q8EBkfjn4KmI86RwHjKe4GyQq+w+eVU1Qf2ZvbZbMbSVWl7wjs0j
+         T7zCOCs5qyWQzetHGIRTpGxtMcRz4SjwxhiUCMDd6elOGsywIs2a+a4J7AwTpnWeOIwf
+         bLbjDhj9e+uaFJOozJby55IPM7whrrQWlKUCXs/q+BvUYABKXsWGMDlkeoFHO95g+OrB
+         1IZonjIIa7TpQ9FUUDojcvY18sBGHjiG8PgCs1kHmbR7hb9Of7W3RWLV5N4qNMcRktg/
+         kgzXRTfHM3bE3dYXb1TaGk6uMOfJUfe8wJ4JfKKq7XYN9fYXnmZeawTQLnYbDe3fx7Jh
+         eHYw==
+X-Gm-Message-State: AOJu0YwieY5tnLH9PK19BaNJbWKx6ulEiIYA9CzD/9PB9PhiSw606HO6
+	VeV0/2A7iaA1Fkx2R5Pr+FzH+TdStPS7tU6hDQFzBxGKVV81N5skTEJ5bgeXkZPktDA6bjxYqsk
+	B+asgVFWoSA==
+X-Gm-Gg: AR+sD12Slf1rboTgGY26XhE0unHM6MpARj7UfXdR+e4nNSN2psDyq5GYbyzO6aRvxqS
+	UYE1WZ+hVBMW+/YPp2+gbdonVwMJzMD9/xEt0tNhfG7dYrrjt6NFXFrw5WFHIMQwDsnGHHsrFeT
+	8fTjakc+iJpDuS3ETapkfvP2TbgCdF/7vZQCo+RLMHveE+lanEtpuosKrJ38k0/3XeW0m8/+qsi
+	EXAj5AS+us1S09rYbamlNFZDVGxhTIBBP5x32IngqCkD9b3qGf3ktbevu9lpv2WHmuLg3xJVvTF
+	jfqXT24dXpHuP0GG5+3lzFqobzpuTVxU+gHhIcTtWBjocvhRARYI4sXkZtp8yGIFxPDkWFToBZA
+	iU3Za3ZxYK1vZWWB/7kowApdhBSVZe6aBfig9D3Oq3KuJ5aJnHF5PRehCoHSFmBiMSqdvh1Ep+X
+	W+djWDidwPl41yYnPC5ZjYVsmv8cmboGpoWPfs4J+HISjMAC5MaB6fv08CZg==
+X-Received: by 2002:a17:90b:4cd1:b0:387:d5bd:622e with SMTP id 98e67ed59e1d1-38fece84676mr12015a91.17.1785772350215;
+        Mon, 03 Aug 2026 08:52:30 -0700 (PDT)
 Received: from localhost ([71.212.202.210])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-38febe2daeesm42905a91.0.2026.08.03.08.51.53
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-38fb2b8c5c5sm3038440a91.4.2026.08.03.08.52.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 08:51:53 -0700 (PDT)
+        Mon, 03 Aug 2026 08:52:29 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 To: soc@lists.linux.dev
 Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] soc: OMAP2 updates for v7.3
-Date: Mon, 03 Aug 2026 08:51:53 -0700
-Message-ID: <7h5x1rjj6u.fsf@baylibre.com>
+Subject: [GIT PULL] soc: drivers: omap updates for v7.3
+Date: Mon, 03 Aug 2026 08:52:29 -0700
+Message-ID: <7hzez3i4le.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -76,23 +76,19 @@ The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.3/soc-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.3/drivers-signed
 
-for you to fetch changes up to 76103814279724e5c98b1c16a730f56ebede9f74:
+for you to fetch changes up to 6342de0aed216b6df460b492ddb532b3e0ed16f1:
 
-  ARM: OMAP2+: Fix OF node reference leaks in omap_hwmod (2026-06-29 13:13:52 -0700)
-
-----------------------------------------------------------------
-soc: OMAP2 updates for v7.3
-- minor fixes
+  bus: ti-sysc: Fix /chosen node reference leak (2026-07-06 11:42:48 -0700)
 
 ----------------------------------------------------------------
-Mithil Bavishi (1):
-      ARM: OMAP2+: Add CFI type for omap4_finish_suspend
+drivers: omap updates for v7.3
+- bus: ti-sysc: Fix /chosen node reference leak
 
+----------------------------------------------------------------
 Yuho Choi (1):
-      ARM: OMAP2+: Fix OF node reference leaks in omap_hwmod
+      bus: ti-sysc: Fix /chosen node reference leak
 
- arch/arm/mach-omap2/omap_hwmod.c | 26 ++++++++++++++++++--------
- arch/arm/mach-omap2/sleep44xx.S  |  5 +++--
- 2 files changed, 21 insertions(+), 10 deletions(-)
+ drivers/bus/ti-sysc.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
