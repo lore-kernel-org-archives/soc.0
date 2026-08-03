@@ -1,74 +1,56 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBEF257824
-	for <soc@lists.linux.dev>; Mon,  3 Aug 2026 15:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2C726D4C3
+	for <soc@lists.linux.dev>; Mon,  3 Aug 2026 16:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785772352; cv=none; b=F8hF6bTLMonUd/EfYCIYckTNMErNZpsJlyBrbJkHXfCVXP43aNc1o/PnaTDOSnQvqmiFYDsrLSr20rJbF3UfcKscybh+PEDwvYt2g4N48+PGedtQhSj50TtaVAKafcFtmanxRN0oLqdGy4qUWQRiPalVCcntX5sVZcBy6zjJIPg=
+	t=1785773825; cv=none; b=FgS5JQpeu5o9OsgZjMtrOJ9AzgMmRo/1LHl2KoJl3Wbcj8GTO5vGI9zV7J3RF2cBjRn6YFnhtlgRt/3pIJGrXbA3g/vayKHPEyJ4x/W5Z0p3WNjvw1pYGF0oOv1R8LX8eFWTPr5+Xfuh0HO9+ZsD2qFvfA7wSckHeyo9iU4zzWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785772352; c=relaxed/simple;
-	bh=NbziU21Uwf9tsF4qhJ7ycQZNrgAbD6aLFtsogDvDgwY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kZcbXG6FIF9LE34XxZIYi3MKcBWH7wdWG8jIUHJbMZaL8qQwZPi8NsruFJfgtcFcMRjzRYlyvJtx7Q7XRTvGQqJLutvXLMi/2rjDQvCySnpEzKLZc8ecuflyHM70rXpLArcT7fv/lZpCR/mf+QVRF0eIWmcCepgjRje2OBid6qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=We9KXPSV; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1785773825; c=relaxed/simple;
+	bh=E2Wx0GwCStNxmO8wm7EoKnhIxSfDmBxToNsmWCxbSpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dEBQTEi+1y3s6w8m/UFyWkrxrukC0TLiK1/t1h6WAiQc61cZMwZ766rZrmVqn6bxm6ieLxM2jEPfu74vl/3Xcar0ujOn3H6Sdi6Oc5BiduqLpIbdY7TMuX/VvnLUpnEDflfZdwl4e/yuPC3X1a6ooi7wig4JhypVXx7Y8jpBQdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F92EOKaN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="We9KXPSV"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38101f85591so24801a91.1
-        for <soc@lists.linux.dev>; Mon, 03 Aug 2026 08:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1785772350; x=1786377150; darn=lists.linux.dev;
-        h=content-type:mime-version:message-id:date:subject:cc:to:from:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oMGav3xJdmmSRTKaIqplO9a5WTwQJq0xRLfaVlj7k/k=;
-        b=We9KXPSVqFKGS90JhGr9RMSWoAtb3yRjNstLHzE8V9imAdcykXDC7T8S3uVFQaJ+iQ
-         d/Wx/OvDBlbjZ4T8GySRH+/vFfgw7FvRh3ZjFQIV8Y8jqcMwHK333Le5iMsHDm6YuDSi
-         78tYoUHRFl4NkJafw7k1hduQPoCqmvzzfRtLn13H1RcnseHNW+1euJUW7vdFgoZh0HR8
-         1OysPwQpk7ngjGlJsj7RHRo3dVagqxWD7yaE5ye8ElsVROmXoH+JR12rdDVPyD49U23o
-         VXZjt85J3452ldSEtvqTBiXw4KRNvJuRPJWr3NGZ4eJbOJtIa82Iumg8aJydf+06E55x
-         4yZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785772350; x=1786377150;
-        h=content-type:mime-version:message-id:date:subject:cc:to:from
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=oMGav3xJdmmSRTKaIqplO9a5WTwQJq0xRLfaVlj7k/k=;
-        b=ovUvtajqu6Ua95Q8EBkfjn4KmI86RwHjKe4GyQq+w+eVU1Qf2ZvbZbMbSVWl7wjs0j
-         T7zCOCs5qyWQzetHGIRTpGxtMcRz4SjwxhiUCMDd6elOGsywIs2a+a4J7AwTpnWeOIwf
-         bLbjDhj9e+uaFJOozJby55IPM7whrrQWlKUCXs/q+BvUYABKXsWGMDlkeoFHO95g+OrB
-         1IZonjIIa7TpQ9FUUDojcvY18sBGHjiG8PgCs1kHmbR7hb9Of7W3RWLV5N4qNMcRktg/
-         kgzXRTfHM3bE3dYXb1TaGk6uMOfJUfe8wJ4JfKKq7XYN9fYXnmZeawTQLnYbDe3fx7Jh
-         eHYw==
-X-Gm-Message-State: AOJu0YwieY5tnLH9PK19BaNJbWKx6ulEiIYA9CzD/9PB9PhiSw606HO6
-	VeV0/2A7iaA1Fkx2R5Pr+FzH+TdStPS7tU6hDQFzBxGKVV81N5skTEJ5bgeXkZPktDA6bjxYqsk
-	B+asgVFWoSA==
-X-Gm-Gg: AR+sD12Slf1rboTgGY26XhE0unHM6MpARj7UfXdR+e4nNSN2psDyq5GYbyzO6aRvxqS
-	UYE1WZ+hVBMW+/YPp2+gbdonVwMJzMD9/xEt0tNhfG7dYrrjt6NFXFrw5WFHIMQwDsnGHHsrFeT
-	8fTjakc+iJpDuS3ETapkfvP2TbgCdF/7vZQCo+RLMHveE+lanEtpuosKrJ38k0/3XeW0m8/+qsi
-	EXAj5AS+us1S09rYbamlNFZDVGxhTIBBP5x32IngqCkD9b3qGf3ktbevu9lpv2WHmuLg3xJVvTF
-	jfqXT24dXpHuP0GG5+3lzFqobzpuTVxU+gHhIcTtWBjocvhRARYI4sXkZtp8yGIFxPDkWFToBZA
-	iU3Za3ZxYK1vZWWB/7kowApdhBSVZe6aBfig9D3Oq3KuJ5aJnHF5PRehCoHSFmBiMSqdvh1Ep+X
-	W+djWDidwPl41yYnPC5ZjYVsmv8cmboGpoWPfs4J+HISjMAC5MaB6fv08CZg==
-X-Received: by 2002:a17:90b:4cd1:b0:387:d5bd:622e with SMTP id 98e67ed59e1d1-38fece84676mr12015a91.17.1785772350215;
-        Mon, 03 Aug 2026 08:52:30 -0700 (PDT)
-Received: from localhost ([71.212.202.210])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-38fb2b8c5c5sm3038440a91.4.2026.08.03.08.52.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 08:52:29 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
-To: soc@lists.linux.dev
-Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] soc: drivers: omap updates for v7.3
-Date: Mon, 03 Aug 2026 08:52:29 -0700
-Message-ID: <7hzez3i4le.fsf@baylibre.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F92EOKaN"
+Received: by smtp.kernel.org (Postfix)
+	id 272191F000E9; Mon,  3 Aug 2026 16:17:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C145D1F00A3D;
+	Mon,  3 Aug 2026 16:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785773820;
+	bh=fz/yhgramPyqO11h3jGH/apBj+buGxJvV8oh1IsOZuw=;
+	h=Date:From:To:Cc:Subject;
+	b=F92EOKaNAqy4yd36v4eHUzQ4wojTze8kPEQfkjQJDB1N+R1AY+KoFCrZubtsafb7w
+	 /JRuiZxMDXRAo3lpJXE8axmD3KDlYBMIIeQjaXnOy0lymPp8XzVo3TjDVrWW7ImtvN
+	 8cXUzc6HO3H/AR7wb1CqRY+fmC/I98Qgcv1MUwG1vAdvxRBIZOivPbklQYLkCajSTn
+	 IqKbtejx/171WxG+Mohx8wvsOvfumYpdyAzMJaOxRilMTlfJLsFnrwRMB0MZjxGllK
+	 q4/7ou4vGhnfyd8C0nuKLgM7NTZIBy9rxzfo+wX1zOZ2V94sABg/s2ttdrsNwxvnT8
+	 qO6u35bs7GuQw==
+Date: Tue, 4 Aug 2026 00:16:55 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner DT Changes for 7.3
+Message-ID: <anC-91INc6lOHrg1@home.wens.tw>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="RAz7QJWQMC7QD/S6"
+Content-Disposition: inline
+
+
+--RAz7QJWQMC7QD/S6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
@@ -76,19 +58,129 @@ The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.3/drivers-signed
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunx=
+i-dt-for-7.3
 
-for you to fetch changes up to 6342de0aed216b6df460b492ddb532b3e0ed16f1:
+for you to fetch changes up to be145483f8eee440d335ed794a2294fd55ff2a35:
 
-  bus: ti-sysc: Fix /chosen node reference leak (2026-07-06 11:42:48 -0700)
+  arm64: dts: allwinner: Correct white-space style (2026-08-03 23:37:01 +08=
+00)
+
+The top two patches were just merged, but they are pure whitespace fixes
+=66rom the DT maintainer, and they compile correctly. So I just sent them
+together.
 
 ----------------------------------------------------------------
-drivers: omap updates for v7.3
-- bus: ti-sysc: Fix /chosen node reference leak
+Allwinner device tree changes for 7.3
+
+Some changes for old chips/devices and some for recent ones.
+
+- A10 PMU interrupt number fixed
+- A100/A133 gained LRADC
+- enabled overlay support for sun8i-h2-plus pi boards
+- A523 family gained consumer IR receiver
+- H728-based X96QPRO+ gained SPDIF audio output
+- PinePhone's mpu6050 mount orientation fixed
+- style fixes
+
+New board added:
+- Baijie Helper A133
+- NetCube Systems OpenNMC (dobermann)
 
 ----------------------------------------------------------------
-Yuho Choi (1):
-      bus: ti-sysc: Fix /chosen node reference leak
+Alexander Sverdlin (5):
+      dt-bindings: vendor-prefixes: Add Shenzhen Baijie Technology Co., Ltd.
+      dt-bindings: arm: sunxi: Add Baijie HelperBoard A133 compatible
+      dt-bindings: input: sun4i-lradc-keys: Add A100/A133 compatible
+      arm64: dts: allwinner: a100: Add LRADC node
+      arm64: dts: allwinner: A133: add support for Baijie Helper A133 board
 
- drivers/bus/ti-sysc.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Andre Przywara (2):
+      ARM: dts: allwinner: a10: Fix PMU interrupt
+      arm64: dts: allwinner: a523: enable IR on the Avaota A1
+
+Justin Suess (3):
+      media: dt-bindings: allwinner,sun4i-a10-ir: add A523 compatible
+      arm64: dts: allwinner: a523: add IR receiver nodes
+      arm64: dts: allwinner: a523: enable IR receiver on the X96Q Pro+
+
+Krzysztof Kozlowski (3):
+      ARM: dts: allwinner: sun8i-h3: Correct indentation
+      ARM: dts: allwinner: Correct white-space style
+      arm64: dts: allwinner: Correct white-space style
+
+Lukas Schmid (3):
+      dt-bindings: arm: sunxi: Add NetCube Systems OpenNMC (dobermann)
+      riscv: dts: allwinner: d1s-t113: Add uart4 pinctrl required by NetCub=
+e Systems OpenNMC
+      ARM: dts: allwinner: add support for NetCube Systems OpenNMC (doberma=
+nn)
+
+Nisarg Rajput (1):
+      ARM: dts: allwinner: enable overlay support for sun8i-h2-plus pi boar=
+ds
+
+Ondrej Jirman (1):
+      arm64: dts: allwinner: sun50i-a64-pinephone: Fix mpu6050 mount matrix
+
+Per Larsson (2):
+      arm64: dts: allwinner: a523: Add SPDIF output PH pin mux option
+      arm64: dts: allwinner: a523: Enable SPDIF on X96QPRO+
+
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |   7 +
+ .../input/allwinner,sun4i-a10-lradc-keys.yaml      |   1 +
+ .../bindings/media/allwinner,sun4i-a10-ir.yaml     |   8 +-
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/arm/boot/dts/allwinner/Makefile               |   5 +
+ arch/arm/boot/dts/allwinner/sun4i-a10-gemei-g9.dts |   2 +-
+ arch/arm/boot/dts/allwinner/sun4i-a10-inet1.dts    |   4 +-
+ arch/arm/boot/dts/allwinner/sun4i-a10.dtsi         |   2 +-
+ .../boot/dts/allwinner/sun8i-h3-nanopi-duo2.dts    |   4 +-
+ .../allwinner/sun8i-t113s-netcube-dobermann.dts    | 149 ++++++++++++++++
+ .../dts/allwinner/sun8i-t113s-netcube-nagami.dtsi  |   2 +-
+ arch/arm64/boot/dts/allwinner/Makefile             |   1 +
+ arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi     |  10 ++
+ .../allwinner/sun50i-a133-helperboard-core.dtsi    | 197 +++++++++++++++++=
+++++
+ .../boot/dts/allwinner/sun50i-a133-helperboard.dts | 148 ++++++++++++++++
+ .../boot/dts/allwinner/sun50i-a64-pinephone.dtsi   |   4 +-
+ .../boot/dts/allwinner/sun50i-a64-sopine.dtsi      |   2 +-
+ .../allwinner/sun50i-h5-libretech-all-h5-cc.dts    |   2 +-
+ .../boot/dts/allwinner/sun50i-h5-orangepi-pc2.dts  |   2 +-
+ .../dts/allwinner/sun50i-h5-orangepi-zero-plus.dts |   2 +-
+ .../dts/allwinner/sun50i-h616-orangepi-zero.dtsi   |   2 +-
+ .../dts/allwinner/sun50i-h618-orangepi-zero2w.dts  |   2 +-
+ arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi     |  43 +++++
+ .../boot/dts/allwinner/sun55i-h728-x96qpro+.dts    |  30 ++++
+ .../boot/dts/allwinner/sun55i-t527-avaota-a1.dts   |   8 +-
+ .../boot/dts/allwinner/sun55i-t527-orangepi-4a.dts |   2 +-
+ arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  |   6 +
+ 27 files changed, 627 insertions(+), 20 deletions(-)
+ create mode 100644 arch/arm/boot/dts/allwinner/sun8i-t113s-netcube-doberma=
+nn.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a133-helperboard-c=
+ore.dtsi
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a133-helperboard.d=
+ts
+
+--RAz7QJWQMC7QD/S6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmpwvvcACgkQOJpUIZwP
+JDCfDxAAuv0e7TK4s9DBsBe2bzD+oC230jbqF07LjH5l05/fy8bGNoYwWS8S4nkz
+si/vkNMT3xFqJgnVr3XHPkel08a9eDPML6sSi13MqHG+EqGEXBx3zm+gr7pFV3Na
+8F5mUuCIRJ8gembiARkMf+F5YLZIq9L762rgzbFs4KHmFoH5r6q4JX4MGqKTQbaV
+k41vcbNf7k4n3+Sjt29Ck49nvPsnDLqdvqdEHus8Dn81BxGuLAY3YkM2m10Z5rYO
+p3KBsftI2sACzwMQCgLVPNNaoFZtCK5usb2mlC7D0S6uq55LDRas/qfoacvkIxsy
+AVmrIbTqGXNE/LQVb4Ct7jP9WcfZI1d70ZgRoSYawLu/uxVjOdcD6XfK9rg0CodB
+vzcBQbwU1exg5p0O3qtoH7d24Ru2+Px3qmC7xHQSwNOCOOHqmJlRUSeaQnqmbP7b
+paV0kULrJlUBYfRPbl0ZJb1uejocx4eQ945jPSaDNEInWujqEzpG/05uNRNaGaP9
+bm4JymygUvWykNn1d3JpNWqCjSnJDHX2ce+OCC9J6zHovECTrNin7jQU7kDliBJw
+pO8r3F/lEvc10ySQKX62SFYwlOj+YgD+QYfvF2XNLsuGVNkxQlyPlFAN+uuFRDVa
+jI1EuA6U+zgcQOxfRkBz4gYbEYSoQCX6ukKTkqF/b9mduxFh2BI=
+=dy0/
+-----END PGP SIGNATURE-----
+
+--RAz7QJWQMC7QD/S6--
