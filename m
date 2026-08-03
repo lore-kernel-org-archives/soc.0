@@ -1,67 +1,67 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C4C33937F
-	for <soc@lists.linux.dev>; Mon,  3 Aug 2026 15:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4DA3368B7
+	for <soc@lists.linux.dev>; Mon,  3 Aug 2026 15:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785772290; cv=none; b=jcq8Xp3/eLl8uf5V46aSET/wNLf2S1V7bR4baHolu5rEnkhCHAz6WKAAlHyVA6dbFAKAJneLmPcAR6zMuysDL+GFuyRsnQaRN3W0bDRy3NL9luGwLDxmqDQvwLDjUnu8cRm8KksxR+ORb4d7rs7V6OuK9eV9SFyI+1O8tm4Hamo=
+	t=1785772329; cv=none; b=A2qlKVoOAZlaVq8DTzs8/TMUPEkz4PZxiE0hckS19b/8K1Us8qzgvnNMTYCSx/0qxZJQtzzx8rpPYjDKM+GGOgKy4ufsE2pgvuUVX6wP3Jzk59tYiHtbVDP3OqataqGcxBPJUtoRR8zrL6qcDR1y5t44LfxtzoE7DeQDQTD54Us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785772290; c=relaxed/simple;
-	bh=ejXH5qcZOvvG6iZ5Sfwx1s3pa6RHFrtsgRq250OohG8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P1mRKNhjSwPF2/cb2DJBQ4s473BEr7bLjzPNvMI+KEnjGLxt+YggC+dhSbU7rg3cthm8UgYqjcS06oce6D9S4UpClLFZOmXA4a5IsTV07HUheJSfJ0n0thhwHM8qnLyTfRVhIRaU70RTGgqx5+sqYirk8ej+tZd3GgBrC0qd94k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=IBzVnYOi; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1785772329; c=relaxed/simple;
+	bh=mmQYKq0BtbnhjGj+y3pRQrqUdvpr5FKLB4mQEb4XQEs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Jd8cggGTDn+Nww5ZDwCX88E26IGIByMvNrE+Mhv2uzWkxRWX9+7288YJKSBweiKJbg9gLZ6IO91z4OU1Wlk5wYwHvpGeJxLDglq2E50bmQbITHjTg1G+JDZOtXis3Vc8rk5Dim4Xoh8EZME29o7AIlVWxvOo3kXQ+YJNNBjApTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=KEjFmcXH; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="IBzVnYOi"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2caced6038eso624465ad.0
-        for <soc@lists.linux.dev>; Mon, 03 Aug 2026 08:51:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="KEjFmcXH"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38e071ed6aeso2706388a91.0
+        for <soc@lists.linux.dev>; Mon, 03 Aug 2026 08:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1785772288; x=1786377088; darn=lists.linux.dev;
+        d=baylibre.com; s=google; t=1785772328; x=1786377128; darn=lists.linux.dev;
         h=content-type:mime-version:message-id:date:subject:cc:to:from:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ocbZUo7zpFmSLPbwfUgNYrUI1VbSx+D5BmbZxXmpAkw=;
-        b=IBzVnYOiVUSbdzvC9UPi/MS1QYNPvDFDg/L9wr54AcK7AvV8GEnLb2QrMo3g3ZQnNZ
-         7h2ku3e39N+BpDpedQ/ZsRE+kIR08ESOvovTSvkI1l5Q0d2tpczMI9Vt4GfFVk6bATk1
-         2qAGwwjYgU6PZvseSEOI9bd4wW8ltFqfdK7vV+gqMQC6D7PkmCVvY9M7+RvYYaxTi0Cv
-         66cIX253dQnLuNDxTud+i4UkpK7AlAyJX+Ch8rw/Jot+hJRZf2wcdgtLtGAYqVfrgcIa
-         V+C1fZ17uAA4e3+iYCL5MUYEKtHHoY60ZclLLD2gSeL4Ra6lGdPjwiGjd++pFmqqSyaY
-         4XUA==
+        bh=C2QcaSW8eE8D7RoBuOICkCFr3KzY/Y5G0pSnKbTuZfY=;
+        b=KEjFmcXHBHkcxNe+Hfb3XTDja0P23yoGxhlV5QcFoBeUQfD4IsoDGIFj4z54Jlh08H
+         2RHN9NSLNbanjslxOWWaNQJY9nGKt3lEtmrp4cmrpmw7a0VSfUT/Mf2u3656YNTmigab
+         xmB7rQvbjkt6Rc4mvW+VFSJLZ/0Arr1WuEoXBDOOUa5byIdADRNPx6zTjzqVcZYkrnCJ
+         47E7vtKVrCuI1EBbGLJAHDOQ94y7YrSfMiZ0XC/F66oKPGI2dYd8zUycENXfQ8FVaaNj
+         CVrfCmh4fs57No3hYvWisu7+oSyyXl5NzXsmp6XH3woKL/dHXP7pdOxYDbdUCMl+v0xr
+         xhYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785772288; x=1786377088;
+        d=1e100.net; s=20251104; t=1785772328; x=1786377128;
         h=content-type:mime-version:message-id:date:subject:cc:to:from
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=ocbZUo7zpFmSLPbwfUgNYrUI1VbSx+D5BmbZxXmpAkw=;
-        b=TZzD0T7oa8n+2AT6MYz6ZC2g4lo5GTDJadd7qi8VuuTOyRFArQIbhM6x8MlAMBXiet
-         qg7iuNQUiU3XneROJ8RjhRSt5Eu2wqMfpVaz9PB1AGeinDJwgM/nkPUxJ5AlLXVtUwXZ
-         mYFimhHRi4h9qsHd4VDZyi8acVto5lv0pZSQPVMrJfpGTIisFnQ0feCjRFTOhRqXH2TM
-         oZ7B1yVKkpjLTQZLZnWvYXh4rJKOY8kSXHe70pVyJ/DYre2AcDZFZlClleINPmfiEkAS
-         Yskl45KgwxRR48p4O+GbQQEpjfeYrV65icWzyQVmMgArJJPDdrn3KL7aIY3qQ4m7SArt
-         mi/A==
-X-Gm-Message-State: AOJu0YxhvWwmUDD5grZ80ffKwbkzZnZezKjJE9VMnrnX8EeqYkctkgSM
-	J68XBd2Q5KnzA2QxOzPawnJPiWvXSLv6ubDtdyPbaDfb9tuDPRn+BC9bGo+gKWl7iLwno8RHQ+F
-	+eDzp2sgKVQ==
-X-Gm-Gg: AR+sD13hGJbjF6t1pyQwlmL5H5dZYcuAI0zkmmT0188B3tVaDxrV3UbzwGjTBbO4dOs
-	w2lqGreEy2rZYA5Q5Q27sHXUrkk7XjCm53LlvVBIk+9BNmdDzcEJ7vAia9azlZkl6qlwf0bcbk9
-	eKF11ewSIK94to+HQhDN8Hnzy5ql7qMtFpC2mqVYnQZ3+X0zyGYmIL28wG1Zzj4dpFY89GsS6JJ
-	fnABjhHKoDaOY1MWAI7s3XY1zVZWBAiJwXk9APZmJBl3j0N8t1vApkhh1Zm96n48RXgtQzIjOiU
-	Jqsb8EcAG9mL2MQuKlrbr9ww8qOKEOCLbE/x0R5bL76yqBEuonjnwcdLCd+GCJ6x5s2yxoFgN97
-	rY1yc6FQBxKgNkzMkLp5YFqB+xFHqJ7CndriPKWYPatpOTHTpy5hU9qXV3/gX3+okNjk5+JlmAL
-	wtgC85XgmdQwe4O2EAxA4144FTlF6Hw0w+BT93nIdo5D7N/+1bIxHL7+SBxg==
-X-Received: by 2002:a17:902:c40d:b0:2cf:8aa7:7810 with SMTP id d9443c01a7336-2d08aa1b175mr521585ad.2.1785772287919;
-        Mon, 03 Aug 2026 08:51:27 -0700 (PDT)
+        bh=C2QcaSW8eE8D7RoBuOICkCFr3KzY/Y5G0pSnKbTuZfY=;
+        b=hxh7ta4bCTqBbqPnX65cApvPoNodeAxVaUOKrGqC60bu3RXiSg29Poub99JrXwWitv
+         Yx3unB/3/k5ZU6CtL7c9hF/+hU8NhyGk9jWQLk9EiWG8TozWLlazfdZV/NSCGPKPOi9G
+         io1NWSzTJvKCktiAyW4StRZLAw/TE+V7pE3GrBj24ozBwQrdRkhh0VcIrkCaSQCaUSxs
+         VTAC5eo1RBmGeBxKo1eWbZPwFCSjR9vn5Lhjs4V/YL1lvIf4ZUqahkYAOOcPue1A19CP
+         m31HrLmX4p3zPlQPG4p2AsGPgNYPlKLYfeQe+P9qKmiNV29TtkG+xxV4BSYxIy2YfOA2
+         iWZw==
+X-Gm-Message-State: AOJu0YweBUMv8gmWhK6d1AiCj4kfMP9Sq+Mmx76CwQQ4GhStQJC/rUBS
+	v47sfR4f377nXC6Hh7unyxyY9y8WhqT7//A6pSK+mlhfig49Mb19Ih0BfRAZ2l2Fr2K3OdwrZjA
+	reJICVtbyHw==
+X-Gm-Gg: AR+sD11QTdgGF1Lkfr837t/zSc3OaoVxCMi62PK6ezRhHxjbuf27FGVVI5rRPqlVXWh
+	hmu7neTfQGjhxFMKRA1BxkJmFA7lt6fRd0jWAdx9sGXJRGybE4f0rDSaopl3XM8/tWruDlZEHrH
+	sNparaz9JYXtDG9RMGEROzBh4i41Lo31auzM8Ls9o9JZ2WynOHI5aby/riTOVtUe4pdwMyyd0iD
+	/PB3RWRgqKXaDxkDfWjjEtSraEDeFwSWDj9vugr8YUrUMRFo56p6hF3h7G3hNEhwdp46D6+Byd2
+	nqNBj6p8mdiYDTKxOkhkg4rC5CrY/m4fimYth9CGWk1iJDLXyq1FM81yMdrWn/IX0hHWct4Mz+d
+	DgJh915ETETo8Mio27+k+1ApwTBOL5mz8v8lyBdMGSr+gs3bGHJ315i4z3V2bsoLos+C7oP2luR
+	eHPff+3576zMiw2U0H0MKObLCpvGmKLbR0X8lbJ5hj6uDigzRz2tEqDLvhWw==
+X-Received: by 2002:a17:90b:4b85:b0:381:5bd6:eb19 with SMTP id 98e67ed59e1d1-38fbc4a1328mr9585476a91.18.1785772314020;
+        Mon, 03 Aug 2026 08:51:54 -0700 (PDT)
 Received: from localhost ([71.212.202.210])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2d04b15d27asm39967845ad.78.2026.08.03.08.51.27
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-38febe2daeesm42905a91.0.2026.08.03.08.51.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 08:51:27 -0700 (PDT)
+        Mon, 03 Aug 2026 08:51:53 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 To: soc@lists.linux.dev
 Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: dts: OMAP updates for v7.3
-Date: Mon, 03 Aug 2026 08:51:27 -0700
-Message-ID: <7hbjbjjj7k.fsf@baylibre.com>
+Subject: [GIT PULL] soc: OMAP2 updates for v7.3
+Date: Mon, 03 Aug 2026 08:51:53 -0700
+Message-ID: <7h5x1rjj6u.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -76,66 +76,23 @@ The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.3/dt-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.3/soc-signed
 
-for you to fetch changes up to 36d3d0f740d75dc0274b72720c044f476ff0e242:
+for you to fetch changes up to 76103814279724e5c98b1c16a730f56ebede9f74:
 
-  ARM: dts: ti/omap: embt2ws: use mulit-led for RGB LED (2026-07-06 11:40:17 -0700)
-
-----------------------------------------------------------------
-ARM: dts: OMAP updates for v7.3
-- DT support for PRU-ICSS on AM3/4/5
-- minor fixes & cleanups
+  ARM: OMAP2+: Fix OF node reference leaks in omap_hwmod (2026-06-29 13:13:52 -0700)
 
 ----------------------------------------------------------------
-Andreas Kemnade (1):
-      ARM: dts: ti/omap: embt2ws: use mulit-led for RGB LED
+soc: OMAP2 updates for v7.3
+- minor fixes
 
-Krzysztof Kozlowski (2):
-      ARM: dts: ti: Add specific compatibles for SCM conf nodes
-      ARM: dts: ti: omap: Correct indentation
+----------------------------------------------------------------
+Mithil Bavishi (1):
+      ARM: OMAP2+: Add CFI type for omap4_finish_suspend
 
-Roger Quadros (3):
-      arm: dts: ti: Add device tree support for PRU-ICSS on AM57xx
-      arm: dts: ti: Add device tree support for PRU-ICSS on AM437x
-      arm: dts: ti: Add device tree support for PRU-ICSS on AM335x
+Yuho Choi (1):
+      ARM: OMAP2+: Fix OF node reference leaks in omap_hwmod
 
-Thomas Richard (1):
-      ARM: dts: ti: var-som-om44: Add USB Ethernet controller node
-
-Vidhu Sarwal (1):
-      ARM: dts: ti: Fix typos in comments
-
- arch/arm/boot/dts/ti/davinci/da850-lcdk.dts                |   2 +-
- arch/arm/boot/dts/ti/omap/Makefile                         |   4 +++
- arch/arm/boot/dts/ti/omap/am335x-icev2-prueth-overlay.dtso | 156 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/ti/omap/am33xx-l4.dtsi                   |  15 ++++++++--
- arch/arm/boot/dts/ti/omap/am3517-evm.dts                   |   2 +-
- arch/arm/boot/dts/ti/omap/am4372.dtsi                      |  11 +++++++
- arch/arm/boot/dts/ti/omap/am437x-idk-evm.dts               | 103 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- arch/arm/boot/dts/ti/omap/am437x-l4.dtsi                   |   2 +-
- arch/arm/boot/dts/ti/omap/am57-pruss.dtsi                  |  11 +++++++
- arch/arm/boot/dts/ti/omap/am571x-idk.dts                   |   8 ++++-
- arch/arm/boot/dts/ti/omap/am5729-beagleboneai.dts          |   2 +-
- arch/arm/boot/dts/ti/omap/am572x-idk.dts                   |  10 ++++---
- arch/arm/boot/dts/ti/omap/am574x-idk.dts                   |  10 ++++---
- arch/arm/boot/dts/ti/omap/am57xx-idk-common.dtsi           |  61 ++++++++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/ti/omap/dm8148-evm.dts                   |   4 +--
- arch/arm/boot/dts/ti/omap/dm814x.dtsi                      |   2 +-
- arch/arm/boot/dts/ti/omap/dm816x-clocks.dtsi               |   2 +-
- arch/arm/boot/dts/ti/omap/dm816x.dtsi                      |   2 +-
- arch/arm/boot/dts/ti/omap/dra7-l4.dtsi                     |   4 +--
- arch/arm/boot/dts/ti/omap/motorola-mapphone-common.dtsi    |  10 +++----
- arch/arm/boot/dts/ti/omap/omap2430.dtsi                    |   2 +-
- arch/arm/boot/dts/ti/omap/omap3-cm-t3x30.dtsi              |   2 +-
- arch/arm/boot/dts/ti/omap/omap3-n950-n9.dtsi               |   2 +-
- arch/arm/boot/dts/ti/omap/omap3-overo-common-lcd35.dtsi    |   2 +-
- arch/arm/boot/dts/ti/omap/omap3-overo-common-lcd43.dtsi    |   2 +-
- arch/arm/boot/dts/ti/omap/omap3.dtsi                       |   2 +-
- arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts          |  13 +++++++--
- arch/arm/boot/dts/ti/omap/omap4-l4.dtsi                    |   2 +-
- arch/arm/boot/dts/ti/omap/omap4-panda-es.dts               |   2 +-
- arch/arm/boot/dts/ti/omap/omap4-var-som-om44.dtsi          |  14 +++++++++
- arch/arm/boot/dts/ti/omap/omap5-l4.dtsi                    |   6 ++--
- 31 files changed, 428 insertions(+), 42 deletions(-)
- create mode 100644 arch/arm/boot/dts/ti/omap/am335x-icev2-prueth-overlay.dtso
+ arch/arm/mach-omap2/omap_hwmod.c | 26 ++++++++++++++++++--------
+ arch/arm/mach-omap2/sleep44xx.S  |  5 +++--
+ 2 files changed, 21 insertions(+), 10 deletions(-)
