@@ -1,130 +1,144 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93A932E143
-	for <soc@lists.linux.dev>; Tue,  4 Aug 2026 21:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785880748; cv=none; b=h/Y5ypJiFHKXA+CB0e2J8s7yPIBQRtXo3BjoG1k6X/k6Ma8mLuzIZDt3mA3nqEC42UmOAYMpQ3S/I+Mu2nRkAXfEUCKjCGuzZCz0v+FNxtMLZswFIMIG37YwNmWoI4iN+93f4jBOAlEBEEL1yPMhRtLruPcA/g/88bBe2wjbnSA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785880748; c=relaxed/simple;
-	bh=skXIFXrK5QAg8HwWhJ76Ww55zUM59/bL5VLK/NwCCKg=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=JMki3dBPdXzlbj9kvqdXpnJ0zQY/Y0CZKjE9X7sVcOxfS2SXdZDXreX8tKUrqN9VSD7d0RLse9NPu8edJoAJZEyeLd3LVtPp+UJA7xqosAzBBNIG0XNUvyOFZeCECv5+V8JJFAc/2aKwDZlsoJZ5XOw2FU2CNxlGnfgMpqnzdrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kernelci.org; spf=pass smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci.org header.i=@kernelci.org header.b=f4jlGx/h; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernelci.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA55117A305
+	for <soc@lists.linux.dev>; Wed,  5 Aug 2026 00:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785891159; cv=pass; b=XLaHKGXoVVB04bHO9mBfYUtLvSEGL+kEpP9i44BXMG5qtECOdkqwFivXsoG2EbNL+5MKqE/WKtJuuDDgIIrMvXt7P4/8yadewAggUo+7cHSOqtLifPCOicsYhZwt6q+J5Ei4eaSOtTIITwJzQs5CLN//+DMCVFbCS44Mgrz3Wlg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785891159; c=relaxed/simple;
+	bh=56hiyne624apknvimi7u0LpTLpDZsS3yZLYmu7BAF6M=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=WW4wDVqRczkRxWSnsbK3B5is6H5eJqK4R/uLVhZjkNqtPbs7ZFbK6OIwBJnZpwv8QOs8RVc5tI0K5Uy8/9xdcIUce9ju8PMv3P++Tk/7O9RJdVblqRuCGWB4/eva5fDczFLzyDL5HaWuKSH5XrWfe0ndVnVst/udL4+5GcgRk7w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b6bG/mXC; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci.org header.i=@kernelci.org header.b="f4jlGx/h"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-848761b5897so215223b3a.3
-        for <soc@lists.linux.dev>; Tue, 04 Aug 2026 14:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci.org; s=google; t=1785880746; x=1786485546; darn=lists.linux.dev;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:content-type:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=jRXOKxfbYJ++E8k1q0YLh0Sn1iYe7cmNKDLkbVbCA7A=;
-        b=f4jlGx/h3gfLVvPbX36ZNPbOJEoy0SLJEWxzmFo1x+2udwGT1Uvzk7P5HYb9B2agEx
-         6i09zJUdzX+eMOGBJno9LIutU2lkPydpx6aTTvyRIcQQeIJJvUcoik2glMALitTWoFgb
-         OJjfWZhhoCBL8+3NRgHl7ajHIhlFMKd7bsqD34qflHEAPhV9uymDShn93R72eg87nGVV
-         oeU3PnrU40rHZSEoPtaZYgR+yroZ93e9n6wAw743WDwwXUDGcxei7DZMjclX7iJukgBp
-         pxjPshNFFmBNmN9Qz/p1e58cpeIYc3mQ8cATNAxSbASDSfeaPQuODgMsq4w86scfMGm8
-         m9rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785880746; x=1786485546;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jRXOKxfbYJ++E8k1q0YLh0Sn1iYe7cmNKDLkbVbCA7A=;
-        b=tFurt9E2EZ2l9EWBMkzbnlYhd/9D/ShjfTfhPZEFpz4iIyjRpK1/x7OVb4rkBrhao+
-         SIaLMTaD0lgDObd/iIfBccXNGOhMOh4RrfOdaIJYUGv9Tc3OhHLU8AI0g1gX0T9JFN+b
-         XDa4avKbuau3J/j5Kz5TBKfFg0ssrd1dtn9flGdrnhQEXdUJTrRTBsR9Ux+H9Ao0fQpm
-         MRgLe1vGe1F+PgUomG0/eikUJRWuzq9qEw2dzcbyHc1zsgqkFycZ1w896RQu8Yhm7e+n
-         VZ8kCp4lGBCIr+PluPOCTFSRohSMfh181Rl/pcbFKT/VMSDIhE2yKwcEx5T4BIizTT4f
-         Gcvw==
-X-Gm-Message-State: AOJu0YwJOiYMDUomCCkWgGfTtoplxVI47JRpSpylIw/0AhioTz2CN71v
-	d1lN4HtNHqb/QmvHHM9KI+gYYeFtJDmsE8/qe6oJX1XzW1fbXC2giHzfg/4X/e+bnm7sS4nFwYf
-	sKidk
-X-Gm-Gg: AR+sD13cpn1aS1oeKvCE/nOn3uD27sZ6LGusvPd4EPzymiNbwZa7Ged0hpNC6yDcdd/
-	cp4OotgxJLqxXB5lUbOcVg6i1f1vTImYX0nltGg3/T9gtpaxVMxXvJZ/osXFT7fHJteYJmjOJ+d
-	/6yOQnNWM6EEAc8qc5Yzn4n8pNoMT4XcuOZrPDpX1ua7PZUDvyQkjOFitLP9zaCfaEuLpXksKL0
-	stkM2C8hhIrWhc6s2Ejd+n67PJelgq7edqVG3gynaxBbd+PScVW2T94LhaahNef2k5bjl8Dhvwb
-	ueeaDbwaOkZ+0DXxst9DfXUBI/Jnzb8jqqM8+gf2MvCD3g7biikpeng2wB7bVCGlPioky8H1HXL
-	+VS8+ri0lUJPVFpAkUFklatGl2GddKDOUcIloISy3kJ5/KU9nzl4VBin70XuhnuLZoygaQRDFVJ
-	VbJpnA49O1v1dThOLnvHX7fISnOcPPfZJKiOI4SDRSnlZ9YUpAO+UNgsTLeLvkjE5v
-X-Received: by 2002:a05:6a20:6a05:b0:3c4:3112:3b with SMTP id adf61e73a8af0-3cb85e771acmr1942200637.18.1785880746119;
-        Tue, 04 Aug 2026 14:59:06 -0700 (PDT)
-Received: from 92650adf53de ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315863b0bfesm8590429eec.3.2026.08.04.14.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 14:59:05 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b6bG/mXC"
+Received: by smtp.kernel.org (Postfix)
+	id 9948B1F00A3D; Wed,  5 Aug 2026 00:52:37 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=95.215.58.180
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1785891157;
+	b=0VQHaH2eurmIY4TCRypRjXfBMBX+oCT6NT+P3/hZlXuAUHhZEYiMnT8Xa5+w5I0PTkAW
+	 HEzHUqwdQ7AlTA1zyBLJ/mgPcdDHNP+I+rJs/apaL11rd7aGIH2jxxfEm0YVfIiqQFiVa
+	 KCToBz3Wae9V1unm0DTlo8Ocmx1cL13dQLj/YA5fu9YIKtXRXnTXAWIds7gMoPnvnDrLk
+	 Ej1wrPaMW1IvDTsjhV26TP82ZGrIJj4Q6JDTy4Q8EZ8NBRfHpHcAZHtuqn5B1c9H8I2HR
+	 ZX9c4+o5ihIoHCi3MyuICV4+f/1JTbUPqXD1Snx47CfJFa5sTHS6rOLuuJfxe1H2EaQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1785891157;
+	h=DMARC-Filter:Message-ID:DKIM-Signature:Date:MIME-Version:To:Cc:
+	 X-Report-Abuse:From:Subject:Content-Type:Content-Transfer-Encoding:
+	 X-Migadu-Flow;
+	bh=EuNoCf79ahJ9OpOUeOKUANKNhV5ApwmxWIkMZqLTnDw=;
+	b=OtJh4Zh3maJnYIvUNXvvVgewAWrawA7fnJKHaxHwni7RmvwvKwTg/6lzAQVvcBd4IxoL
+	 oiRBfgNylAh9MyuZX/cwdh/KOFYa37/Q+4Nrgz5qLJb9+RlPKtSFteYeuPuP4BxFFui1F
+	 FcfHMpaR+xZaps+c3UzkDS5yxwhXzkYuvAfIyNpBaMf0rVit4NeKMGYQjALW86YwV1H0N
+	 nf52EohithwdPjLg84vB7Vr3M8wH0sL8+uon14RCSt0FWgi9Tfqz0ghSZ3U5J4CNsSIhl
+	 +1KQCvk/RjfcROV3HN1K7cuD5jvYPjyk+NJgRgmspWi3aIuC1hgyhoJf3xRup+Yi9Gw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="b6bG/mXC";
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=95.215.58.180
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 828041F00A3A
+	for <soc@kernel.org>; Wed,  5 Aug 2026 00:52:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=b6bG/mXC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 828041F00A3A
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <1333a916-da71-432d-99ae-69cdb6061add@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785891154;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EuNoCf79ahJ9OpOUeOKUANKNhV5ApwmxWIkMZqLTnDw=;
+	b=b6bG/mXCmHH/vT7Bls4RNpXm0eXbBS5Xn+I0G/MVu9L/S2x82DLCeAtxFKD1RB0xayM5Jv
+	el4LHBhVEH1vpuCiICmNsuqGPtFF+dNyw3fRPQnJxlZ9mMtj6gGKdBXPXl/ZoGxy8ayU4Q
+	609HS7ZWo1LeHw+kZcOAmNPoM+okok4=
+Date: Wed, 5 Aug 2026 08:52:02 +0800
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: [REGRESSION] soc/for-next: (build) use of undeclared identifier
- 'QCOM_ID_SDM850' in drivers/soc/qcom/...
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: soc@lists.linux.dev
-Reply-To: kernelci@lists.linux.dev
-Date: Tue, 04 Aug 2026 21:59:05 -0000
-Message-ID: <178588074443.6433.18101951458881957743@kernelci.org>
+To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
+ "sophgo@lists.linux.dev" <sophgo@lists.linux.dev>,
+ linux-riscv <linux-riscv@lists.infradead.org>,
+ Chen Wang <chen.wang@linux.dev>, Joshua Milas <josh.milas@gmail.com>,
+ Chen-Yu Yeh <chenyou910331@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Chen Wang <chen.wang@linux.dev>
+Subject: [GIT PULL] RISC-V Sophgo Devicetrees for v7.3
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-New build issue found on soc/for-next:
+Hey Arnd,
 
----
- use of undeclared identifier 'QCOM_ID_SDM850' in drivers/soc/qcom/socinfo.o (drivers/soc/qcom/socinfo.c) [logspec:kbuild,kbuild.compiler.error]
----
+Please pull this dt changes for RISC-V/Sophgo.
 
-Log excerpt:
-=====================================================
-/tmp/kci/linux/drivers/soc/qcom/socinfo.c:428:4: error: use of undeclared identifier 'QCOM_ID_SDM850'
-  428 |         { qcom_board_id(SDM850) },
-      |           ^~~~~~~~~~~~~~~~~~~~~
-/tmp/kci/linux/drivers/soc/qcom/socinfo.c:25:27: note: expanded from macro 'qcom_board_id'
-   25 | #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
-      |                           ^~~~~~~~~~~~~~
-<scratch space>:154:1: note: expanded from here
-  154 | QCOM_ID_SDM850
-      | ^~~~~~~~~~~~~~
-/tmp/kci/linux/drivers/soc/qcom/socinfo.c:566:22: error: invalid application of 'sizeof' to an incomplete type 'const struct soc_id[]'
-  566 |         for (idx = 0; idx < ARRAY_SIZE(soc_id); idx++) {
-      |                             ^~~~~~~~~~~~~~~~~~
-/tmp/kci/linux/include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-   11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-      |                                ^~~~~
-2 errors generated.
+Thanks,
 
-=====================================================
+Chen
 
-When fixing this issue, please attribute this report according to the
-patch submission rules:
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
-Reported-by: kernelci.org bot <bot@kernelci.org>
+   Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
-For complete logs and details about the environment used, see the issue
-on the KernelCI dashboard:
+are available in the Git repository at:
 
-- dashboard: https://d.kernelci.org/i/maestro:e68e98fe54e609d3bb87f71e48896fb8322e8cb0
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-- commit HEAD:  81aa917982c10b9f2cd0dd767d7af5af6057d93d
+   https://github.com/sophgo/linux.git tags/riscv-sophgo-dt-for-v7.3
 
-# Builds where the incident occurred:
+for you to fetch changes up to 59c682ffc76ebda27ecbbbd1423e23ec482d61b9:
 
-## multi_v7_defconfig on (arm):
-- compiler: clang-21
-- config: None
-- dashboard: https://d.kernelci.org/build/maestro:6a724edc54179f15da9e5450
+   riscv: dts: sophgo: Add Milk-V Duo 256M board support (2026-08-04 
+18:04:32 +0800)
 
-#kernelci issue maestro:e68e98fe54e609d3bb87f71e48896fb8322e8cb0
+----------------------------------------------------------------
+RISC-V Devicetrees for v7.3
 
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
+Sophgo:
 
-Made with love by the KernelCI team - https://kernelci.org
+The changes of this PR are all for CV18xx serials.
+There are three major changes. The first is to allow
+DMA multiplexer setting channel number for DMA controller;
+the second is to add initial RISC-V support for "Duo S"
+board, which uses SG2000, a dual-arch SoC (RISC-V and
+ARM64); the third is to add support for "Duo 256M"
+board, another dev-board based on SG2002 SoC.
+
+Signed-off-by: Chen Wang <chen.wang@linux.dev>
+
+----------------------------------------------------------------
+Chen-Yu Yeh (3):
+       dt-bindings: soc: sophgo: add Milk-V Duo 256M board
+       riscv: dts: sophgo: cv180x: Add PWR_GPIO controller
+       riscv: dts: sophgo: Add Milk-V Duo 256M board support
+
+Inochi Amaoto (1):
+       riscv: dts: sophgo: cv180x: Allow the DMA multiplexer to set 
+channel number for DMA controller
+
+Joshua Milas (2):
+       riscv64: dts: sophgo: add SG2000 dtsi
+       riscv64: dts: sophgo: add initial Milk-V Duo S board support
+
+  .../devicetree/bindings/soc/sophgo/sophgo.yaml     |   4 +
+  arch/riscv/boot/dts/sophgo/Makefile                |   2 +
+  arch/riscv/boot/dts/sophgo/cv180x.dtsi             |  20 +-
+  arch/riscv/boot/dts/sophgo/sg2000-milkv-duo-s.dts  | 244 
++++++++++++++++++++++
+  arch/riscv/boot/dts/sophgo/sg2000.dtsi             |  53 +++++
+  .../riscv/boot/dts/sophgo/sg2002-milkv-duo256m.dts | 121 ++++++++++
+  6 files changed, 443 insertions(+), 1 deletion(-)
+  create mode 100644 arch/riscv/boot/dts/sophgo/sg2000-milkv-duo-s.dts
+  create mode 100644 arch/riscv/boot/dts/sophgo/sg2000.dtsi
+  create mode 100644 arch/riscv/boot/dts/sophgo/sg2002-milkv-duo256m.dts
+
+
