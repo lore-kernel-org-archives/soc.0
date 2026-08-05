@@ -1,63 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D17481A8C;
-	Wed,  5 Aug 2026 16:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785945849; cv=none; b=XiVPsnMQVvvgsNPsy9QL1WWeHs2sDPMFpjqzH5sAuxQ2ZEg0mSd0wJer4/b+fOy4Hi545EYTGflRio4pP4ojjjWR3biF1Gqfewy1ivkqbtN4clYI7TMPjdQJPUN6zf0j1C2TPlUbwMuJue8wLUyqs7z+XsFumD0cpdc+ldpetnE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785945849; c=relaxed/simple;
-	bh=bkUp1QYPFFElD5+2cliMAle99KvE7EP0PC25YzMOjZ8=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Nj98eYSe7dA5jQGSKzDksV7ncTJNg53EKXiM3/TsaZobV1NcBNVrb4Rmcx7hk1bK+AUmTt0UT4l5iC/wxuru4JcJ2N+OL03KBLbwM9gEW9B3/mzxPp7jUx6Omv0xy3cixOlqm/LavuK+/kYxS2DETAnwW0X1laOTtoN+EdhSI2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lT0Nl+by; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB4A3D3D1D
+	for <soc@lists.linux.dev>; Wed,  5 Aug 2026 17:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785951815; cv=pass; b=iS4iM8uAJOa+dTIxG4wdWFRc5yg9XW4BRr2zFM95PwUslgcbR9Pj028Q/VaHxE1+gBYoc2C1hB23fVlkZrU6bSBp9Da//91E5usbGChtyHh4vn8wuWrYy7pMw/gPsg3hQJr8B8I+H0YDswHAHcWzDXhN+u17BMaaZwlP53TLLZU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785951815; c=relaxed/simple;
+	bh=0yk0R1AuW4LISGAjbnj1tBKDHfdHJlcYGWAtDblh9ZE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bMI7cX8tpjuUF2jmIGSPaV9PQ34INTn6lU9TsGtDNRfx4s1ix7vXHx1PhSALBFuEd6872ljWHmkCqN/ZZ3FI/oNNpfc+ednn8D91lV5lDAI3FECLQAkLCI6J/dIq0swmojeNPhbfJ0DjL2D/x0WJJGQwf3LDr6OL02MaABRLAHU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=O1doOVf/; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lT0Nl+by"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C79E1F0155A;
-	Wed,  5 Aug 2026 16:03:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785945831;
-	bh=wrhxc0H/XGoYlJh8SlFmw2T34wZcGT9x+brFdbw5dOs=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=lT0Nl+by0YF29eQaK40raQuWlFYb9Cv2ovcAfhZQp2OUVNy72nxUu6ynhyHs4Jn+O
-	 U8HakinMBYjKeBtfhXojQ4tnQA0oc3SvEZ1FGKnMOgtk7yDw7NAwXMBPG5zhTcIBND
-	 ajJIMjohIeGPLD7PxEPuwNgZJrHmD6MZex8381k3QiAQg7WR+jQCxVoDxiaKMrtZRg
-	 NqxgUzFTLbR2G2qH5lrQ9bXGqF4Z2dWehXhzm3cKhK8IMD5ihfxh/tbpMKZtWTzeJN
-	 IdWG9HDCP4e9yWQAn/9+RE8UeJ3zN1ajF6K8mxuja7rULI2gsVL/BDwMc3PubAVBPK
-	 Kow/TBd9zPvrQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93B81392EE0D;
-	Wed,  5 Aug 2026 16:03:12 +0000 (UTC)
-Subject: Re: [GIT PULL] SoC fixes for 7.2, part 2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <8dac10a8-ed0c-4ee6-8e72-3e6a71b01c9a@app.fastmail.com>
-References: <8dac10a8-ed0c-4ee6-8e72-3e6a71b01c9a@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <8dac10a8-ed0c-4ee6-8e72-3e6a71b01c9a@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.2-2
-X-PR-Tracked-Commit-Id: c7a127371ce5dc3d073cc69ba70145c2c420d8e2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0d839570765118029aa8bf4a95444c6a11aacf85
-Message-Id: <178594579126.427447.3027242150664486307.pr-tracker-bot@kernel.org>
-Date: Wed, 05 Aug 2026 16:03:11 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="O1doOVf/"
+Received: by smtp.kernel.org (Postfix)
+	id 568CB1F00A3E; Wed,  5 Aug 2026 17:43:31 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1785951811;
+	b=ii44KfG/Ibu0tqlBDNxGtaMfkDvnwj2ssdhsbQRPUIl0Dkq7wO3hZkQKNmaGFVofA8rU
+	 dK0umKAEJRrUTmq6jR+t0L8o/ubUB5OiW+u9sBYKfQXBf2JrghDPduMaHmP1MhJuF1k3X
+	 SZ1ssRwV6jDWlCOmAwakGVGnn4fu6PO0KEEjDysPBDChQPGQ7AbxrewTTjtFwsJG69lUC
+	 yIV4EtYYrOu6b1K+Bt8h+gyHB1TxLxz18TIpZqudmn/EtJtYecaDrLpcPlXQQsEReKZYK
+	 akyrcBjSAXii3tJRhMVXXOoS5jOJYTQn5LkwKKtBxzqn4lr7NLjJFGW5dQQlpM3shAw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1785951811;
+	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type;
+	bh=ig4HxOQjnpmoynEQayIeEsifMuFOLWzyqUkLO0olbbc=;
+	b=ASQ4eVTtAUKuAtsDb81Q8S2fhrMEUKeRJXN6AlAMZcQhZnJlTORVaXx46TF59yo8tIiQ
+	 QYxE3csC5udV3fiKmniTT/Iegq2M8gu860e9I32npY56A+kFOSK9M6QKsQngn81CCA47s
+	 s92bQGphXuudSuIn5scV96s1p2UE3zAM3GxuL9SgK85n0a3GxlBf93Lxyd/IE/9M7MswV
+	 Eut7WDZGGt0LLTtjmNDKYSk6AJMi63X5STmzNQ/cJ3HXjmUYfQlnkl/vghg6wtHY93UJN
+	 FVEOgFnEz32rASAxe8dq4WTn1mQCvk9VGWSCJwsYr098O44CR7WQRAQd6yld4zEvH4Q==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b="O1doOVf/";
+	dmarc=pass header.from=sntech.de;
+	spf=pass smtp.mailfrom=sntech.de;
+	arc=none smtp.remote-ip=185.11.138.130
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7E7D51F00A3A;
+	Wed,  5 Aug 2026 17:43:29 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=O1doOVf/
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 7E7D51F00A3A
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=ig4HxOQjnpmoynEQayIeEsifMuFOLWzyqUkLO0olbbc=; b=O1doOVf/XA7nC1K1o+6KDQQwQC
+	VAHI5m6Sb6Av7G3Q4Ah0sLDemgPfsD+CVZAeFwOGN2sVazwKU03TUHHqe8adWZztVlT/70F1RDnSo
+	nMvkrdT2s4sNye184r1qc/GeM/OcwU/XJ+yu28FG9LHFG4Y6RguDUilQ9gGscEa/fSI4afhzh8Amy
+	wrwCBL6Ph2nREed/kgfmnWGHXK9uzAE7e7/OaKk1mJF37wu3FVXPrIVp7cXCwckRCZJ0w60DRBOYX
+	624mSnt3ikmWSsVf+ni/zQtmWRGeboTbd1BBQUYOATa1GHF4i/rksPuhikMrH7GjtTnUIbsQYznR9
+	rXD5WuQA==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts32 changes for 7.3 #2
+Date: Wed, 05 Aug 2026 19:43:26 +0200
+Message-ID: <6604532.5fSG56mABF@diego>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-The pull request you sent on Wed, 05 Aug 2026 10:03:52 +0200:
+Hi soc maintainers,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.2-2
+One lonely patch with whitespace fixes below, and there is nothing
+more for the arm32 side pending for 7.3. So that should be end for
+this part.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0d839570765118029aa8bf4a95444c6a11aacf85
 
-Thank you!
+Please pull.
+Thanks
+Heiko
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+The following changes since commit 44045aa7a9a9e6484617f44f77a3efb2d8e78565:
+
+  ARM: dts: rockchip: Add Alientek DLRV1126 (2026-07-12 22:03:41 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.3-rockchip-dts32-2
+
+for you to fetch changes up to 1a17f391c139567e2fac6894c6b43f5978e915c8:
+
+  ARM: dts: rockchip: Correct white-space style (2026-08-02 20:26:21 +0200)
+
+----------------------------------------------------------------
+Whitespace fixes
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      ARM: dts: rockchip: Correct white-space style
+
+ arch/arm/boot/dts/rockchip/rk3188-radxarock.dts            | 2 +-
+ arch/arm/boot/dts/rockchip/rk3288-evb-act8846.dts          | 2 +-
+ arch/arm/boot/dts/rockchip/rk3288-evb.dtsi                 | 2 +-
+ arch/arm/boot/dts/rockchip/rk3288-firefly-reload-core.dtsi | 2 +-
+ arch/arm/boot/dts/rockchip/rk3288-firefly.dtsi             | 2 +-
+ arch/arm/boot/dts/rockchip/rv1103b-omega4-evb.dts          | 2 +-
+ arch/arm/boot/dts/rockchip/rv1126.dtsi                     | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+
+
+
