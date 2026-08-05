@@ -1,63 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E632A3A1E67
-	for <soc@lists.linux.dev>; Wed,  5 Aug 2026 14:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D17481A8C;
+	Wed,  5 Aug 2026 16:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785940970; cv=none; b=M+vRmcxdNVLxqzjwR+z/QPRHQRoPTghZIOOUfv1uQOrkRuhZHNHRHr6ORgopnZkcetQTZ9/uvJsQWxyZlKDYShl4xGRbzwpzSyoJrTIsEmtiw96+31Aa8wKxTxO8DJ4lNtIo4WDuSxHp/vSBgP5HJ3NOoAXfeYxhvXaRZm6oTp0=
+	t=1785945849; cv=none; b=XiVPsnMQVvvgsNPsy9QL1WWeHs2sDPMFpjqzH5sAuxQ2ZEg0mSd0wJer4/b+fOy4Hi545EYTGflRio4pP4ojjjWR3biF1Gqfewy1ivkqbtN4clYI7TMPjdQJPUN6zf0j1C2TPlUbwMuJue8wLUyqs7z+XsFumD0cpdc+ldpetnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785940970; c=relaxed/simple;
-	bh=wsZo+ZMiN/bwtJFhcGz4OAPLnsyPz482KG/riiywTSQ=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=uIBdBgFL7l7GcJbUI6FMTmhL1PF6/WPdB+2Hbd6C1IG+OP+Pd/McgAx2Ch2ndHXCBZ1yzsie5283Vv04+NxSSwHbE0ktHwCBTjnEIuyY0rtjsY8Nj+o4bUDfa5reOYDueK0K+D6JO33Sa+TnnmCKCvJeDvkBk5O58R68mH/cyV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UeVV5QWC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785945849; c=relaxed/simple;
+	bh=bkUp1QYPFFElD5+2cliMAle99KvE7EP0PC25YzMOjZ8=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Nj98eYSe7dA5jQGSKzDksV7ncTJNg53EKXiM3/TsaZobV1NcBNVrb4Rmcx7hk1bK+AUmTt0UT4l5iC/wxuru4JcJ2N+OL03KBLbwM9gEW9B3/mzxPp7jUx6Omv0xy3cixOlqm/LavuK+/kYxS2DETAnwW0X1laOTtoN+EdhSI2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lT0Nl+by; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UeVV5QWC"
-Received: by smtp.kernel.org (Postfix)
-	id 7F9B01F00A3D; Wed,  5 Aug 2026 14:42:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C82981F000E9;
-	Wed,  5 Aug 2026 14:42:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lT0Nl+by"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C79E1F0155A;
+	Wed,  5 Aug 2026 16:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785940963;
-	bh=PPxR34jY6D9VQ7CMGLhqEjpb1OBmeanD7WDc/7omm54=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References;
-	b=UeVV5QWClFvjWxB5PxrHgdGKCQJoVNalA99EYF79GCsfnLKaTa8AxKiXaypJsCBor
-	 UrZx64ETpgDXvmGae4rr6mX54oEH4JnNbCPQXFLB2bkrohG4Qimeez54hgEo4bFL1a
-	 duq3ktIjuwNbXXJHid+a6HZw8v7EzmUTwgJls9HfIRDjE2iA9VgB+mv6YMFUJxcZFD
-	 saHyei6AhqT1+T1Vgfe7cHSDGY/LsGZEZwSwf2ELUaTWMzO5VoVFWnU8ua+CcGPQbM
-	 cp+csBFESQotDQnQEA34dIDq6u47p90jLqukmAlhQB52/ToMCyDcpZ9s+dReWfyVad
-	 zAvb9nQdfNF1Q==
-Date: Wed, 5 Aug 2026 08:42:39 -0600 (MDT)
-From: Paul Walmsley <pjw@kernel.org>
-To: Drew Fustini <fustini@kernel.org>
-cc: Paul Walmsley <pjw@kernel.org>, soc@kernel.org, 
-    Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-    Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>, 
-    Conor Dooley <conor@kernel.org>, 
-    Marek Szyprowski <m.szyprowski@samsung.com>, linux-kernel@vger.kernel.org, 
-    linux-riscv@lists.infradead.org
-Subject: Re: [GIT PULL] RISC-V defconfig changes for v7.3
-In-Reply-To: <anKwl/5re7CMFTXF@x1>
-Message-ID: <42f428e2-8bb8-b14d-7ed3-e618bb467356@kernel.org>
-References: <al+cTw/+z7xoJXxp@x1> <55196187-178b-1f88-0947-1612410372e0@kernel.org> <anKwl/5re7CMFTXF@x1>
+	s=k20260515; t=1785945831;
+	bh=wrhxc0H/XGoYlJh8SlFmw2T34wZcGT9x+brFdbw5dOs=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=lT0Nl+by0YF29eQaK40raQuWlFYb9Cv2ovcAfhZQp2OUVNy72nxUu6ynhyHs4Jn+O
+	 U8HakinMBYjKeBtfhXojQ4tnQA0oc3SvEZ1FGKnMOgtk7yDw7NAwXMBPG5zhTcIBND
+	 ajJIMjohIeGPLD7PxEPuwNgZJrHmD6MZex8381k3QiAQg7WR+jQCxVoDxiaKMrtZRg
+	 NqxgUzFTLbR2G2qH5lrQ9bXGqF4Z2dWehXhzm3cKhK8IMD5ihfxh/tbpMKZtWTzeJN
+	 IdWG9HDCP4e9yWQAn/9+RE8UeJ3zN1ajF6K8mxuja7rULI2gsVL/BDwMc3PubAVBPK
+	 Kow/TBd9zPvrQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93B81392EE0D;
+	Wed,  5 Aug 2026 16:03:12 +0000 (UTC)
+Subject: Re: [GIT PULL] SoC fixes for 7.2, part 2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <8dac10a8-ed0c-4ee6-8e72-3e6a71b01c9a@app.fastmail.com>
+References: <8dac10a8-ed0c-4ee6-8e72-3e6a71b01c9a@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <8dac10a8-ed0c-4ee6-8e72-3e6a71b01c9a@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.2-2
+X-PR-Tracked-Commit-Id: c7a127371ce5dc3d073cc69ba70145c2c420d8e2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0d839570765118029aa8bf4a95444c6a11aacf85
+Message-Id: <178594579126.427447.3027242150664486307.pr-tracker-bot@kernel.org>
+Date: Wed, 05 Aug 2026 16:03:11 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 
-On Tue, 4 Aug 2026, Drew Fustini wrote:
+The pull request you sent on Wed, 05 Aug 2026 10:03:52 +0200:
 
-> Thank you for checking but this was already pulled by Arnd:
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=6495ae297ceb
-> 
-> It seems the patchwork reply had a narrow scope compared to my post:
-> https://lore.kernel.org/all/178491121788.3229915.9040423834090729571.git-patchwork-notify@kernel.org/
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.2-2
 
-Oh, okay, thanks.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0d839570765118029aa8bf4a95444c6a11aacf85
 
+Thank you!
 
-- Paul
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
