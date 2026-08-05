@@ -1,176 +1,125 @@
-Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E7D3E5A36
-	for <soc@lists.linux.dev>; Wed,  5 Aug 2026 08:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDE6472F72;
+	Wed,  5 Aug 2026 13:51:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785917040; cv=none; b=MeAvw8+xsGxflCLJG/MczkuJG+Xwy4eii2aMVBAJnBLzImpajMbbaAO8V85GTsAZWbCskiOjg1s5CmSfJPV3fooGvvm8lJRngTVgxebD2ZcFM/9cYqrvMMMPXKa52D5r6VCrImUy9Sohh2bbK/AUuhtKqsCcRff0Lt7mmatryjA=
+	t=1785937878; cv=none; b=V2USrvSh6hUyswYlL0syY+8JBUpLF/xaiikTheYgyxf7tuGokuxquzEFYJ44ujBq/sbawRrafexbINraDLrTX6SMWKc8PPJXGjglWOSZnTgRpgxvek0u6NbixOMQzfQuM+xCFLziJUn3oDI6OFcdW01swRGo8SwiJsOE5VnH3vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785917040; c=relaxed/simple;
-	bh=NwSsc8V7bmLyNrOss1c1QBuKq5o0tRn8QVcpKy56+G0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=TEHFb7qjtf1W4++s6ClHbnKyZACtCvXS8hBCnfkncKoBFHamP3oYHipbP3ViBotWxORdAR5CHVH3c1nKZTdDj5AyIO3GfyWC31yikOsOhqt6/TQxw+/wWSfAYVUIBpKQSj6GbNwVYaZj/DISO6nTpq+OhdYeXOUkrYgaAvjUpMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=LusLO7St; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BpVQJEoH; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1785937878; c=relaxed/simple;
+	bh=ceIbF42oNdQwzPSSxFo3YbtBZPWCQY/evaQJGq20oYI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GW7EQCed+9OAfubw3qsJtsv1MZpu/WvXpeyUDy4OBnUamFL2Yo4nH1NWL+QXjs0XIiR2WSAHGlK4rALL0haBCbQ64Obtf9E/UHUNdvwGPGOyE8IEuTo8/aquJbk/8yUYy49gLDkGoYwzifVNK57wpmSdDBibC7qIaBw6MkaouNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpV6z1wb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="LusLO7St";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BpVQJEoH"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 94FC914000F5;
-	Wed,  5 Aug 2026 04:03:57 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Wed, 05 Aug 2026 04:03:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1785917037; x=1786003437; bh=bp
-	GQewfH/5VOP1dpK7c+IdYYcLTd/PBzSyvsSInl2bw=; b=LusLO7StkFnnzLjR51
-	anaj07O4ert3vCbVSDtj5iun17rLwIfKIbS4XGE2T6mZy1RCPsQU5PGit4ES+7Rd
-	ctS6QH5Du6EdOx2zINNnmGzPqiXTLeK69Qy8yh4WE7Ou36IAoMsRY7+aRrrQgDmy
-	YryzqX5afX4YuegEEURwgsPJOIW8JEpqjYq4Lbvk6ZNYqiS+1aqdz5eY+LO3KpL4
-	LRomDXtmYLw3k1RsFhmwMglqyyJLe0rQyka3i8U3Th5QoAzdYuvaGduHdIMsLrgJ
-	+Mz18rn2qeLQ2EKeL1v+SqjXEMEKzLsDWqgovZldrUz8MWDWCrxhczLVqSIaOa7T
-	YA4Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1785917037; x=1786003437; bh=bpGQewfH/5VOP1dpK7c+IdYYcLTd
-	/PBzSyvsSInl2bw=; b=BpVQJEoHu+jIP1+IG6TpuQui+gIWxEL2sRumL7/nhtlo
-	ucVFZOURuKLzE4XdmOEuR08UUtXxoMzNW/bZJHIsI9FneiLW4IvTJFtugxzhg1Mc
-	LUl0xtpER4ydsx1DAPjE+Dt+pgd8AnYtBjyYrGm6lRFy98GwKs9F1CQ2etjI5bRH
-	vTgWJZuR2OQ1rcehcJBv/McVbOORe3Yu0VHTZVYAKaIPI/II5QjEwHawLPJmOA3I
-	GBQdmI2lhLOMmzQ+G8y+9DxluCcBKlarfyTwT9rkJYjkhMZ2lIIGvzoWUQHLOvFS
-	McvZxPj1HvKd2rchCGZlEmwK/MenJ4lf/oEm73rFDg==
-X-ME-Sender: <xms:aO5yavqclWvCrE2nKnSyed2jAaiRps_IZtEpEUziYCD-K0jQP0siBw>
-    <xme:aO5yakdGw5fHMObhVoUHQ--yYY1YFUAEQ2HgocpRdZ6EF-gmAnNoJXkJUOj7IoG3B
-    gPQNKLLDJVBuayVCV1aifFgEpxHsSGeyF-zBSr4Zpgxb0DCLRmZwv5H>
-X-ME-Proxy-Cause: dmFkZTGYK4GnyneiBCL6i9hymEFydjng/DNZGud69kzFMp76Xa96qLIiZCH1KX1t5Y1/XJ
-    9b9zWQiXOL3C4s/kFfOsmzRCZiX5bn+Vd6J1r5QxkT8hc0zzEmRm32qr8SwG/PGEAW1jSq
-    605FODjbZDsrRqHRZYx12CMZMVjYpYAzSQNsOuuEYc3BVfvRc+vziKSmZ6YW9zeyWeXqEd
-    /JZmyHTDrALAteDuusBscg7Gp5JWDwxv26wUnLZSJKpmRm4Rg8XrQsMiuBKPXYKEJbWS+x
-    f+QRrqIA00VTWqUcKe1liJ7ov8FjVAAGiPeVPvUe3BqFMsmHsiOKjUo/m/V67JseySnjM4
-    St9AlDJfrDDSBzXpmncL3KPPU2wH+SBKnsNWk3NjpHNk5GzCuVxGAmbyyouf1qk5lugWSf
-    hvBYNx0He8kkU2Fpkpmvqt3mu7IlaOOYWyHVv7jchedOpB5bqO0rrTIDRsvmEFVIPnDEY0
-    qxbjcqv+VqfLWUvnnWb7TJnHsnHozHX5VZCUPJrzbJ9H5fi9klUftA3PIEcKUfMag4qshM
-    KKE4uUJdxZ3R2vDOu3DN/TLzOKMOlzQay3I4F+sGvzBLW7y1NJRhTzHqkM8o5w3dOh146T
-    ehKt11/zkFXSvb39AMwDDfA12/vRurtl4zE26Qfl01fifIZiyeDziKmNaZcQ
-X-ME-Proxy: <xmx:au5yapW8YX1cYBW2fx6UN_Xc0ktnff2bYdXI4mj_JId9XsjmvYE9sQ>
-    <xmx:au5yagcQlFwzv4zp4hyS8h8uoLGJC8qCy36k4H-gO9aI_hOblFshFQ>
-    <xmx:au5yatuv9-yeGq7GsbhuaiVBMkbN4Hx9cr-qNcUfDUvQSZu1skIfgQ>
-    <xmx:au5yan_M-fqw5MT1Kf8QRLczozP5MOHCB9CZbKgm9mHQvP6pIox-9w>
-    <xmx:be5yarsMQijWfvWZhbqpgiEJGkExk8ohnE427ZSEGTcldx6Dy8XRFdcD>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id A561232A0066; Wed,  5 Aug 2026 04:03:52 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpV6z1wb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208E21F000E9;
+	Wed,  5 Aug 2026 13:51:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785937875;
+	bh=JqjxxO4fDD1iHB5x1Pn0acBHYOIrEajxZbUI45Qm1OA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=MpV6z1wbWtHinshvMxKwDF8LEqlsoykRnWh52rWyUpf1T/2za9wn+BIMlayPtufeU
+	 o9UkpZznR6faIh4M8w8CCHBL6yB67zABy5wbxMD5JBpW0DvNksVeEOlRZRCmHr4zhX
+	 5cG5Dtmuxai+siJM3Vg5DoZEoTjJUE7IrXKSA5VpXcRMhKY+KCA+Y0sZietaV4IhHm
+	 h72LoyhBjQcy63Zn3dAim2/Si32N7CNkMfHzv5cBh1sIm6D82tPbuT3Kfis17bHWfB
+	 JC1GHW2N73WbmixD1GbqLFTGjvcnxL9XKzFR9YJq9/SqrhDSN40wtMZCut2NDKsE6l
+	 OuWgGo2BK9BLw==
+Message-ID: <c7976ee6-0b04-4d65-a57b-335a7d307231@kernel.org>
+Date: Wed, 5 Aug 2026 15:51:11 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Wed, 05 Aug 2026 10:03:52 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Message-Id: <8dac10a8-ed0c-4ee6-8e72-3e6a71b01c9a@app.fastmail.com>
-Subject: [GIT PULL] SoC fixes for 7.2, part 2
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] soc/for-next: (build) use of undeclared identifier
+ 'QCOM_ID_SDM850' in drivers/soc/qcom/...
+To: kernelci@lists.linux.dev, kernelci-results@groups.io,
+ Arnd Bergmann <arnd@kernel.org>
+Cc: soc@lists.linux.dev, Bjorn Andersson <andersson@kernel.org>
+References: <178588074443.6433.18101951458881957743@kernelci.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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
+In-Reply-To: <178588074443.6433.18101951458881957743@kernelci.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-The following changes since commit 1590cf0329716306e948a8fc29f1d3ee87d3989f:
+On 04/08/2026 23:59, KernelCI bot wrote:
+> New build issue found on soc/for-next:
+> 
+> ---
+>  use of undeclared identifier 'QCOM_ID_SDM850' in drivers/soc/qcom/socinfo.o (drivers/soc/qcom/socinfo.c) [logspec:kbuild,kbuild.compiler.error]
+> ---
+> 
 
-  Linux 7.2-rc4 (2026-07-19 13:54:41 -0700)
+This was reported a month ago to Bjorn:
+https://lore.kernel.org/all/202607061318.4kbb1336-lkp@intel.com/
 
-are available in the Git repository at:
+so it seems was never fixed and branch sent to soc@ was unbuildable.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.2-2
 
-for you to fetch changes up to c7a127371ce5dc3d073cc69ba70145c2c420d8e2:
-
-  Merge tag 'aspeed-7.3-maintainers-0' of https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux into arm/fixes (2026-08-04 21:33:56 +0200)
-
-----------------------------------------------------------------
-SoC fixes for 7.2, part 2
-
-The majority of the fixes this time is for Qualcomm devicetree files,
-addressing various incorrect settings in chip specific dtsi files that
-prevent some feature from working correctly.
-
-Another three such issues are addressed on the Broadcom bcm5301x and
-bcm2712 SoC platforms.
-
-Two minor issues are addressed in nuvoton and aspeed specific SoC drivers,
-and the MAINTAINERS file is updated to add Billy Tsai and Ryan Chen as
-aspeed reviewers as well as clarify the NXP/Freescale entries.
-
-----------------------------------------------------------------
-Akhil P Oommen (1):
-      arm64: dts: qcom: purwa: Fix GPU IOMMU property
-
-Alexander Koskovich (1):
-      arm64: dts: qcom: sm8650: Fix IPA IMEM slice
-
-Arnd Bergmann (7):
-      Merge tag 'arm-soc/for-7.2/devicetree-arm64-fixes' of https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'imx-maintainers-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux into arm/fixes
-      Merge tag 'qcom-arm64-fixes-for-7.2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
-      Merge tag 'arm-soc/for-7.2/devicetree-fixes-v2' of https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'aspeed-7.2-driver-fixes-0' of https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux into arm/fixes
-      Merge tag 'nuvoton-7.2-arm-fixes-0' of https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux into arm/fixes
-      Merge tag 'aspeed-7.3-maintainers-0' of https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux into arm/fixes
-
-Billy Tsai (1):
-      MAINTAINERS: add Ryan Chen and Billy Tsai as reviewer for ARM/ASPEED
-
-Bjorn Andersson (2):
-      arm64: dts: qcom: glymur: fix PCIe SMMU interrupts
-      arm64: dts: qcom: glymur: fix QUP serial engine IRQs
-
-Daniel Drake (1):
-      arm64: dts: broadcom: bcm2712: Remove non-functional EL2 virtual timer
-
-Dmitry Baryshkov (1):
-      arm64: dts: qcom: sdm850-lenovo-yoga-c630: lower PSCI cluster idle
-
-Frank Li (1):
-      MAINTAINERS: ARM/FREESCALE: merge Layerscape entry into i.MX entry
-
-Karthikeyan KS (1):
-      soc: aspeed: lpc-snoop: Fix usercopy overflow in snoop_file_read
-
-Krzysztof Kozlowski (2):
-      arm64: dts: qcom: monaco: Add default GIC address cells
-      arm64: dts: qcom: eliza: Fix DSI1 phy reference clock rate
-
-Pengyu Luo (2):
-      arm64: dts: qcom: sc8280xp: add several missing pdc map entries
-      arm64: dts: qcom: sc8280xp: gaokun3: correct EC interrupt pin
-
-Rosen Penev (2):
-      ARM: dts: BCM5301X: fix PCIe controller 2 second interrupt
-      ARM: dts: BCM5301X: EA9200: fix NVRAM size
-
-Yuho Choi (1):
-      ARM: npcm: Fix OF node refcount leaks in SMP setup
-
- MAINTAINERS                                        | 15 ++-------
- arch/arm/boot/dts/broadcom/bcm-ns.dtsi             |  2 +-
- .../boot/dts/broadcom/bcm4709-linksys-ea9200.dts   |  2 +-
- arch/arm/mach-npcm/platsmp.c                       |  2 ++
- arch/arm64/boot/dts/broadcom/bcm2712.dtsi          |  2 --
- arch/arm64/boot/dts/qcom/eliza.dtsi                |  2 +-
- arch/arm64/boot/dts/qcom/glymur.dtsi               | 32 +++++++++---------
- arch/arm64/boot/dts/qcom/monaco.dtsi               |  1 +
- arch/arm64/boot/dts/qcom/purwa.dtsi                |  2 ++
- .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts      |  2 +-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |  4 +--
- .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |  4 +++
- arch/arm64/boot/dts/qcom/sm8650.dtsi               |  4 +--
- drivers/soc/aspeed/Makefile                        |  1 +
- drivers/soc/aspeed/aspeed-lpc-snoop.c              | 38 +++++++++++++++-------
- 15 files changed, 63 insertions(+), 50 deletions(-)
+> Log excerpt:
+> =====================================================
+> /tmp/kci/linux/drivers/soc/qcom/socinfo.c:428:4: error: use of undeclared identifier 'QCOM_ID_SDM850'
+>   428 |         { qcom_board_id(SDM850) },
+>       |           ^~~~~~~~~~~~~~~~~~~~~
+> /tmp/kci/linux/drivers/soc/qcom/socinfo.c:25:27: note: expanded from macro 'qcom_board_id'
+>    25 | #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
+>       |                           ^~~~~~~~~~~~~~
+> <scratch space>:154:1: note: expanded from here
+>   154 | QCOM_ID_SDM850
+>       | ^~~~~~~~~~~~~~
+> /tmp/kci/linux/drivers/soc/qcom/socinfo.c:566:22: error: invalid application of 'sizeof' to an incomplete type 'const struct soc_id[]'
+>   566 |         for (idx = 0; idx < ARRAY_SIZE(soc_id); idx++) {
+>       |                             ^~~~~~~~~~~~~~~~~~
+> /tmp/kci/linux/include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+>    11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>       |                            
+Best regards,
+Krzysztof
