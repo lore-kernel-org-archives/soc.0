@@ -1,84 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB082F30
-	for <soc@lists.linux.dev>; Thu,  6 Aug 2026 21:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C638742BC30
+	for <soc@lists.linux.dev>; Thu,  6 Aug 2026 22:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786052500; cv=none; b=Livd8XKoGXDM6cVw6nHtYBV0/hM6rlSGwFhG7EHhSzd25FsxRvqkTGXK9tv1/CFiB4jYmb3ttQU8h92jyDS+hs3XsitfhisreCCYKwOOo4bVETDvkKxLN/AoUVxOjTtaqRy8W4DmS0bplFirCuJsHWXQuuNbReno9VdS3m+N7Qs=
+	t=1786054090; cv=none; b=pjtKCZG+gn7gQiHOHzUHS++DPMKkJemvNj/ZAB3M719DHtaj6OIhUM2cxh7qs2Hz9JynUWmg0A1jyKdliBIPpWSiX7ZAH0uQvTGtXUtGrsExQbZcQ1IRN3l3q6cgzgMCTq3p6JROpOG0l/brLYhJFTvFF3eYdZTcHkOp7b/rpkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786052500; c=relaxed/simple;
-	bh=emwhs/R12V88FksqW/fCHLiEZt+g/eeVJZV7F/tinJU=;
+	s=arc-20240116; t=1786054090; c=relaxed/simple;
+	bh=Q7N4xLlBIWxo81ItawG5CepKXwZzHPZ98raJQApwEes=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EhfpPgWBGR45cLf4MsqXUdU7meaNLE5AFGFaoOdxwxss9eOfm9loIoohg2P6XkInSJj3j9sMEIEA1aaMd2lSmDNU2NGCuYNN9L1vOXIw04+3G6VYcjr6X50OxSH43hkixhpWN8jIrPfwJVS2tLxpS80lZe/+/gNmykxAupJid6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hFjhKrHP; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=Rkpe94cyIlP1qsf5bKK4UYu+cFa9AL/VaZpfavlUDFsmf8f0KY52Y+8emwzNjfYrweU4dUf80CifcQKSp7sMa4xqNRLnR0wm0Rl/p1ri1J5IvqVGZgWFziMw0DgRpiiZLvQFJkD2AMG+Bnpy9mXtrB7i4wu611lHZP7qjRG4eu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KcKv+8od; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hFjhKrHP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066611F00A3E
-	for <soc@lists.linux.dev>; Thu,  6 Aug 2026 21:41:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KcKv+8od"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8256C1F00A3A
+	for <soc@lists.linux.dev>; Thu,  6 Aug 2026 22:08:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786052499;
-	bh=emwhs/R12V88FksqW/fCHLiEZt+g/eeVJZV7F/tinJU=;
+	s=k20260515; t=1786054088;
+	bh=Q7N4xLlBIWxo81ItawG5CepKXwZzHPZ98raJQApwEes=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=hFjhKrHPrnTV9AX10vJFnzua6fH29RdjhXZxDjVAXlDA9J+sh6DZabN9flRgi4shl
-	 d0JOIBkGrW2l6GrRxVp20xoUJoyE9KzvkvlUAUrMAp0t4sendDUS2MqPbZ7QNxq2AD
-	 BvuCcqRkuRKjq6vS+/UFihOeOZJdMx92IC1CAwn/jyMZc/2BGDmDXHx7mtpFjDI7xg
-	 IjpfTNW90JyxD6PFRbamS+r3NIbqIw5+It7nwLeSFzEouuWhtM4Y85eBAiw9DQD/t3
-	 1ph+Qpgb/QOrp74+XR5M+nXH9kZ5F9x9pCsszMCDtQUJ5VlSCX8KkPGlIWH2G8Iq+b
-	 eFhfsMc9TZjbg==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5b0148201fbso2432681e87.3
-        for <soc@lists.linux.dev>; Thu, 06 Aug 2026 14:41:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RqVGgUQZrDwD2cDTkim/voRbdUrmNvf32z0uAqrbDqto3DB2Vo2HjnPXoqA7XN3xY4Xx4o=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzz4/N1MSULxXF8/K+WlXjLlaSqPyYAgKBnMPhwjikcynsFE4Wh
-	inW2Kwqnbd8Ffh1b35/LBMViwc3Gz1c0cPI9uE/znnJOPLgTR0xWQiNpNMsGvf6pH4bAaxLvFbt
-	mv2bx3F0VLS3iOCXkvoXpkPwjNt0fKMo=
-X-Received: by 2002:a05:6512:10cf:b0:5b1:da61:a13f with SMTP id
- 2adb3069b0e04-5b2f4cd3e1emr2391855e87.43.1786052497832; Thu, 06 Aug 2026
- 14:41:37 -0700 (PDT)
+	b=KcKv+8odgHShJ6+IAS80kIFlyDUrtN9j0njxElbmeCbO9xzZ6eaElKjXhoMz/fu9p
+	 pF1eHN4DVmoTeJ+ypwjPIrQqJvrPWvcKTz9E3tyZINV6GqNslh0DhqEPKdXsHDHYgR
+	 uPrWi845D2nnNFIyfy1LLVXOJb24HMRNEvI1Qt9oxugEF62wz6kQBRECcTJ9+Nd+gu
+	 RucfsEV+usXt/FPndR6yHDheq0/G4l8HSY7rGYnl+WNp4LekBncPVsI/9e4d9EgOnd
+	 UtNibRIPgm/wwoF5n9Pwu8MImaVLBMHztrFAZF8PfDLEwkTkmW0p7t1gTzHtjn5i5D
+	 tkKuMuTjyPhUA==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5b01cb18515so2640386e87.2
+        for <soc@lists.linux.dev>; Thu, 06 Aug 2026 15:08:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RrHqr+vqfLKV/DUsgWHnR+DEeIGI81YkRA7fqFntU6Jl36Cyxm9q40XyrmsZCqrYLNskuc=@lists.linux.dev
+X-Gm-Message-State: AOJu0YyM4ir0w534oElFrsmdP7SG7eLayHvFvI+WlUrQU7URcpP9J3fg
+	4Dq1dQiQIt3KphH3b/smer4et4PviKRYYNmMbOqlpoar1ICHxtS6skA+S4gM4nt4IFs5kO0c+nX
+	dna9R7MCo5qm36L6SsOPr4ROEY8bgOUQ=
+X-Received: by 2002:a05:6512:3e1f:b0:5ae:c5f0:ef1a with SMTP id
+ 2adb3069b0e04-5b2f4cdc18dmr2664985e87.50.1786054087347; Thu, 06 Aug 2026
+ 15:08:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260802-b4b4-irq-trigger-mask-pinctrl-v1-1-1c398ab53d28@oss.qualcomm.com>
-In-Reply-To: <20260802-b4b4-irq-trigger-mask-pinctrl-v1-1-1c398ab53d28@oss.qualcomm.com>
+References: <20260803091740.232536-2-krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <20260803091740.232536-2-krzysztof.kozlowski@oss.qualcomm.com>
 From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 6 Aug 2026 23:41:24 +0200
-X-Gmail-Original-Message-ID: <CAD++jLm+sfo2pB=cM3v2-ewwdkaomRvTdKh9VVKNU8mJS3wPyA@mail.gmail.com>
-X-Gm-Features: AUfX_mxUELB5EjLZQ8CDlb5p0mqmJmh3sKO6rvUX7_wSkyifvS8Bgv83X4i36kE
-Message-ID: <CAD++jLm+sfo2pB=cM3v2-ewwdkaomRvTdKh9VVKNU8mJS3wPyA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: Use IRQ trigger mask helpers
-To: Maulik Shah <maulik.shah@oss.qualcomm.com>
-Cc: =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Sean Wang <sean.wang@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Avi Fishman <avifishman70@gmail.com>, 
-	Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Viresh Kumar <vireshk@kernel.org>, linux-gpio@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-actions@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	openbmc@lists.ozlabs.org, linux-arm-msm@vger.kernel.org, soc@lists.linux.dev
+Date: Fri, 7 Aug 2026 00:07:55 +0200
+X-Gmail-Original-Message-ID: <CAD++jL=i5LW-EcbWYqAN65KEKZQsCi6NgcKwiLGm04trfXL9zw@mail.gmail.com>
+X-Gm-Features: AUfX_mw8VVtdH_lZi-qOKtX4NutJWCkxj4cbQuE8TCFpBmYysjfroCHFXaMc5U4
+Message-ID: <CAD++jL=i5LW-EcbWYqAN65KEKZQsCi6NgcKwiLGm04trfXL9zw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation/process: maintainer-soc: Mention
+ expectation about dt-check-style
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Drew Fustini <fustini@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 2, 2026 at 4:06=E2=80=AFPM Maulik Shah <maulik.shah@oss.qualcom=
-m.com> wrote:
+On Mon, Aug 3, 2026 at 11:17=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@oss.qualcomm.com> wrote:
 
-> Use IRQ_TYPE_LEVEL_MASK and IRQ_TYPE_EDGE_BOTH instead of open-coded
-> trigger type combinations in irqchip callbacks.
+> Any new DTS code should pass dt-check-style 'relaxed' mode without
+> warnings and should have addressed most of applicable 'strict' mode
+> ones.
 >
-> No functional change intended.
->
-> Assisted-by: Claude:claude-sonnet-5
-> Signed-off-by: Maulik Shah <maulik.shah@oss.qualcomm.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-Nice cleanup, patch applied!
+Makes sense!
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
 Yours,
 Linus Walleij
