@@ -1,48 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EDA4772AE
-	for <soc@lists.linux.dev>; Fri,  7 Aug 2026 15:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A1830E0F2
+	for <soc@lists.linux.dev>; Fri,  7 Aug 2026 15:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786117313; cv=none; b=jGXOWoyNjkuafuTKFTtoNLwY5rFcPU/YxS62C4hFdP+V2b/dDEE5aAFS98/lSfyg8lRYsA4DrNMPRrYCgLWWGC+HYVlyioAgV8XGa59puv0ZpzeYCEPWSge9B8YdB4U4A4P0cuz58/6yRp7gts7dvWevB1F3NUlOvIGm7tkqI1g=
+	t=1786117839; cv=none; b=sCsQiFmqEZpe7XaP4/GUpphhMe+TswxBuNHp7iCB3cmkCCeSBhpt7pin65VnMLX7GIG5nFKf3aWU73i7lrtjqjvjk0MQ2/aWoZn5nYP9zFylKDCFCVhEZ/9nW01DkcoqGZi62eAikm+tPJSeP70hSIWKyhQARdCrJyKWpR0+ZS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786117313; c=relaxed/simple;
-	bh=7xi7tanOIJar5os2QkVD+N9olORrO3FJp4BJe01rDSo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OK5EENxrlOASIIcBH2MxnHakAnKZjwlvWJ/I1ADjGPMG55BjvvgX7RQ9I2rh227hyJyLCq1XFNhfYniFe+TQovUMdFjjEQ/nnhX6Tg8a2KLlWXTirQHMx1D6D275vKnELuGG5RrLajhJNQkAq8r6yZ+StT5pX2+ivTUJMleuK90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GnJqXTDP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786117839; c=relaxed/simple;
+	bh=O9I7U9+l0+X/hkgohmgxXLRhwWWdjQ4TTE3VgHkshbQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IupXa7cEFfoD/aSHavy3vcYh1zEjL0xRmQ4JgYp6iJ42CfM8eS6SKnjSVxk4WKuKIXriHYvQFD7188EiNsqJKYnOz5sRyYxmMnJCFMVvuK1r4u6j3O5O2lcEQng9I4HP3TAXdU07LfHZLJtJLZbrGQ/WhjhsYohpVf+FtZAfrVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/KitA0f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GnJqXTDP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/KitA0f"
 Received: by smtp.kernel.org (Postfix)
-	id AA26F1F00A3D; Fri,  7 Aug 2026 15:41:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09291F00A3A;
-	Fri,  7 Aug 2026 15:41:50 +0000 (UTC)
+	id 5609D1F00A3A; Fri,  7 Aug 2026 15:50:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5241F000E9;
+	Fri,  7 Aug 2026 15:50:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786117311;
-	bh=rA49zl9sY0e+xDBXbaY5286T7pTnj1IO0yTCmjFA2II=;
+	s=k20260515; t=1786117838;
+	bh=p2nGN5ZXRiqoTtzpZL872g3TGzGSNiIhzVCcBASG2ew=;
 	h=From:To:Cc:Subject:Date;
-	b=GnJqXTDPnaUxDgRuW7bToK5Bo8Rw0cSkaTBSGdxSoPRpQ9974R9lu/zNyyIT3Uxnz
-	 oYhlH1jJhD8M+KemVq21kevKIvy2u4TVLTUzRDEsS1e8cBIXNY35RVvXFTIB/+/o8q
-	 ko6aN6q7IcwtLF0Mp8XBq8XBme7YTcvlNuGYrYJ6zsE1//COvHjXS293G7lS7oBF8U
-	 qrIJnt3wadwntkMhx0Ea+RaUhL0PVq9I8qTG1907QXbIpTVUESCYH7L6U0M9fcqnan
-	 8Xq3pV83u3bcqj09Tx7jziqgvohqeZCPL5oc7IOonx1hNJhYsuFEUA9Tn5DLt9t9oq
-	 Rp2O+S10SvkzQ==
+	b=V/KitA0fjocwxz1GdntzyJGUQRV/7s5428bv4zaiwbu5mlfGYe/aJHQ1XW93O/zBG
+	 cQ5hGOuSFSZvc6Iq/lncalhUBnIsUfwq1k4+AhDXQFAOvE2Q+AkmoFkAQfiia3KkKk
+	 LX94URQ+ixLinklf5ty1Pcgka/Rj84tEeHVpEPCXotxPXdLro6QMnKJE34CEwZT7hZ
+	 sTNUKbNxXK875P4BaijdP4dJovtHlC/CeaH87INIAtcT2fD5kCTFwFh5C2Ptvlmw47
+	 PgmxegjWdIZgFeRxmSfsR0Oh6u7/UXTVj38MIRK2jFDl3qmLmZj+oaAx07+xA3NFYK
+	 x2auKZc9BPj/g==
 From: Bjorn Andersson <andersson@kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: linux-arm-msm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Arnd Bergmann <arnd@arndb.de>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-	Maulik Shah <maulik.shah@oss.qualcomm.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	Shawn Guo <shengchao.guo@oss.qualcomm.com>,
-	Sumit Garg <sumit.garg@oss.qualcomm.com>,
-	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-Subject: [GIT PULL] More Qualcomm driver updates for v7.3
-Date: Fri,  7 Aug 2026 10:41:49 -0500
-Message-ID: <20260807154149.603041-1-andersson@kernel.org>
+	Alexandre Messier <alex@me.ssier.org>,
+	Antony Kurniawan Soemardi <linux@smankusors.com>,
+	David Wales <daviewales@disroot.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Erikas Bitovtas <xerikasxx@gmail.com>,
+	Rudraksha Gupta <guptarud@gmail.com>
+Subject: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v7.3
+Date: Fri,  7 Aug 2026 10:50:35 -0500
+Message-ID: <20260807155035.603563-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -53,86 +52,63 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 
-The following changes since commit 43584144a46bccbe90482cd8eede9596d8fc47dc:
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
-  soc: qcom: llcc: Skip ECC interrupt setup on Shikra, pre-configured by DSF (2026-07-17 17:22:44 -0500)
+  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-7.3-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-7.3
 
-for you to fetch changes up to 94d3305d990b055e1561e3b78275344b1f40c86e:
+for you to fetch changes up to 1c436bca83bef0f7ca8d106a878a89af17048270:
 
-  media: qcom: Switch to generic PAS TZ APIs (2026-08-04 10:26:42 -0500)
-
-----------------------------------------------------------------
-More Qualcomm driver updates for v7.3
-
-Add SMEM parsing for DDR configuration data and use its highest bank
-address bit to select the appropriate UBWC configuration.
-
-Enable generic PAS trusted-zone APIs for the Iris and Venus media drivers.
-
-Fix SCM probe retry state, reserved-memory cleanup, and an early IRQ-handler
-NULL dereference. Enable QSEECOM EFI variable access on the Asus Zenbook A16.
-
-Correct GENI firmware-size validation using the hardware CFG RAM depth and
-correct the PMIC GLINK Thunderbolt extradata layout.
-
-Document the Nord AOSS side channel and the IMEM minidump SRAM property.
-Clean up Qualcomm statistics macros and the WCNSS binding schema.
+  ARM: dts: qcom: msm8926-sony-xperia-yukon-eagle: add initial device tree (2026-07-11 13:11:35 -0500)
 
 ----------------------------------------------------------------
-Konrad Dybcio (5):
-      soc: qcom: pmic_glink_altmode: Define the TBT extradata properly
-      firmware: qcom: scm: Allow QSEECOM on Asus Zenbook A16 (UX3607OA)
-      soc: qcom: smem: Use 'unsigned int' instead of 'unsigned'
-      soc: qcom: smem: Expose DDR data from SMEM
-      soc: qcom: ubwc: Get HBB from SMEM
+Qualcomm Arm32 DeviceTree updates for v7.3
 
-Krzysztof Kozlowski (1):
-      dt-bindings: soc: qcom,wcnss: Drop redundant $ref of firmware-name property
+Add initial device tree support for the MSM8926-based Sony Xperia M2 and
+the MSM8226-based Motorola Moto G2 (2014).
 
-Maulik Shah (2):
-      soc: qcom: qcom_stats: Remove unused macro definitions
-      soc: qcom: qcom_stats: Replace CLIENT_VOTES_OFFSET macro with sizeof()
+Add touchscreen, Bluetooth pin configuration, NFC, and multicolor status LED
+support to the MSM8974-based HTC One M8 device tree.
 
-Mukesh Ojha (4):
-      firmware: qcom: scm: Fix NULL dereference in IRQ handler before __scm is published
-      firmware: qcom: scm: Fix reserved memory cleanup on probe failure
-      firmware: qcom: scm: Fix tzmem state on probe retry
-      dt-bindings: sram: qcom,imem: Add minidump-sram pattern property
+Add the coreriver,tc360-touchkey compatible touchkey node to the MSM8960
+Samsung ExpressATT device tree and label PM8921 XOADC channels.
 
-Shawn Guo (1):
-      dt-bindings: soc: qcom,aoss-qmp: Document Nord AOSS side channel
+Consolidate shared IPA properties in the SDX55 device tree.
 
-Sumit Garg (1):
-      media: qcom: Switch to generic PAS TZ APIs
+----------------------------------------------------------------
+Alexandre Messier (4):
+      ARM: dts: qcom: msm8974pro-htc-m8: add status LEDs
+      ARM: dts: qcom: msm8974pro-htc-m8: add NFC support
+      ARM: dts: qcom: msm8974pro-htc-m8: add Bluetooth pins
+      ARM: dts: qcom: msm8974pro-htc-m8: add touchscreen
 
-Viken Dadhaniya (1):
-      soc: qcom: geni-se: Use HW PROG_RAM_DEPTH to validate firmware size
+Antony Kurniawan Soemardi (1):
+      ARM: dts: qcom: pm8921: add labels for ADC channels
 
- .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |   1 +
- .../devicetree/bindings/soc/qcom/qcom,wcnss.yaml   |   4 +-
- .../devicetree/bindings/sram/qcom,imem.yaml        |  16 +
- drivers/firmware/qcom/qcom_scm-smc.c               |   2 +-
- drivers/firmware/qcom/qcom_scm.c                   |  43 ++-
- drivers/firmware/qcom/qcom_scm.h                   |   2 +-
- drivers/firmware/qcom/qcom_tzmem.c                 |  13 +-
- drivers/media/platform/qcom/iris/Kconfig           |  27 +-
- drivers/media/platform/qcom/iris/iris_firmware.c   |   9 +-
- drivers/media/platform/qcom/venus/Kconfig          |   1 +
- drivers/media/platform/qcom/venus/firmware.c       |  11 +-
- drivers/soc/qcom/Makefile                          |   3 +-
- drivers/soc/qcom/pmic_glink_altmode.c              |   3 +-
- drivers/soc/qcom/qcom-geni-se.c                    |  24 +-
- drivers/soc/qcom/qcom_stats.c                      |   9 +-
- drivers/soc/qcom/smem.c                            |  81 ++--
- drivers/soc/qcom/smem.h                            |  12 +
- drivers/soc/qcom/smem_dramc.c                      | 430 +++++++++++++++++++++
- drivers/soc/qcom/ubwc_config.c                     |  40 +-
- include/linux/soc/qcom/geni-se.h                   |   4 +
- include/linux/soc/qcom/smem.h                      |   2 +
- 21 files changed, 635 insertions(+), 102 deletions(-)
- create mode 100644 drivers/soc/qcom/smem.h
- create mode 100644 drivers/soc/qcom/smem_dramc.c
+David Wales (1):
+      ARM: dts: qcom: msm8226: Support Motorola Moto G2 (2014)
+
+Dmitry Baryshkov (1):
+      ARM: dts: qcom: sdx55: consolidate IPA properties
+
+Erikas Bitovtas (1):
+      ARM: dts: qcom: msm8926-sony-xperia-yukon-eagle: add initial device tree
+
+Rudraksha Gupta (1):
+      ARM: dts: qcom: msm8960: expressatt: Add coreriver,tc360-touchkey
+
+ arch/arm/boot/dts/qcom/Makefile                    |   2 +
+ arch/arm/boot/dts/qcom/msm8226-motorola-titan.dts  | 350 ++++++++++++++++++
+ .../dts/qcom/msm8926-sony-xperia-yukon-eagle.dts   | 407 +++++++++++++++++++++
+ arch/arm/boot/dts/qcom/pm8921.dtsi                 |  12 +
+ .../dts/qcom/qcom-msm8960-samsung-expressatt.dts   |  54 +++
+ arch/arm/boot/dts/qcom/qcom-msm8974pro-htc-m8.dts  |  94 ++++-
+ arch/arm/boot/dts/qcom/qcom-sdx55-t55.dts          |   2 -
+ .../boot/dts/qcom/qcom-sdx55-telit-fn980-tlb.dts   |   2 -
+ arch/arm/boot/dts/qcom/qcom-sdx55.dtsi             |   3 +
+ 9 files changed, 918 insertions(+), 8 deletions(-)
+ create mode 100644 arch/arm/boot/dts/qcom/msm8226-motorola-titan.dts
+ create mode 100644 arch/arm/boot/dts/qcom/msm8926-sony-xperia-yukon-eagle.dts
