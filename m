@@ -1,48 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A1830E0F2
-	for <soc@lists.linux.dev>; Fri,  7 Aug 2026 15:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B122733B6FB;
+	Fri,  7 Aug 2026 16:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786117839; cv=none; b=sCsQiFmqEZpe7XaP4/GUpphhMe+TswxBuNHp7iCB3cmkCCeSBhpt7pin65VnMLX7GIG5nFKf3aWU73i7lrtjqjvjk0MQ2/aWoZn5nYP9zFylKDCFCVhEZ/9nW01DkcoqGZi62eAikm+tPJSeP70hSIWKyhQARdCrJyKWpR0+ZS0=
+	t=1786119534; cv=none; b=HIVMuXN4VVDH8/Deu7CPAeu2B0Ohi3QQbG6chgFKH2yU6LHPlTNIf4yG+EDQpzawE3R1jxc/J8DMIKAzSB+N/N5bxgcbdoaDN6kta7/udLYxZNU+73Nm89HuG5TkAJO3aeG268cPGZgdxFfFea9A9eNicFVZynq0syMOu0XY9zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786117839; c=relaxed/simple;
-	bh=O9I7U9+l0+X/hkgohmgxXLRhwWWdjQ4TTE3VgHkshbQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IupXa7cEFfoD/aSHavy3vcYh1zEjL0xRmQ4JgYp6iJ42CfM8eS6SKnjSVxk4WKuKIXriHYvQFD7188EiNsqJKYnOz5sRyYxmMnJCFMVvuK1r4u6j3O5O2lcEQng9I4HP3TAXdU07LfHZLJtJLZbrGQ/WhjhsYohpVf+FtZAfrVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/KitA0f; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786119534; c=relaxed/simple;
+	bh=8P9tFu6IRyymLXeRwyYnFMXaE6qf29qhwLtHj5XLmMM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JIOi7QrqNTt5cDbVbNyE5y2Cwsd7M9uDR99TP8Ay//8Kijx7u+FbNFJ3DyGm5Lc4HA+dkqKxbFj7HNqfioY092HxnLkJ2G0M+dCOHHw9Au5gPcofAjFo/ao+j6CEaaMao872+3K9956Nd9hNG1XDE34q3U1ane1erNxVLMQIZcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PsX6h+Qc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/KitA0f"
-Received: by smtp.kernel.org (Postfix)
-	id 5609D1F00A3A; Fri,  7 Aug 2026 15:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5241F000E9;
-	Fri,  7 Aug 2026 15:50:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PsX6h+Qc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E37F1F000E9;
+	Fri,  7 Aug 2026 16:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786117838;
-	bh=p2nGN5ZXRiqoTtzpZL872g3TGzGSNiIhzVCcBASG2ew=;
+	s=k20260515; t=1786119533;
+	bh=zgSHsXQk29ui9Z+91QJ9ktuD4OjC/hGwUOW699BKQWQ=;
 	h=From:To:Cc:Subject:Date;
-	b=V/KitA0fjocwxz1GdntzyJGUQRV/7s5428bv4zaiwbu5mlfGYe/aJHQ1XW93O/zBG
-	 cQ5hGOuSFSZvc6Iq/lncalhUBnIsUfwq1k4+AhDXQFAOvE2Q+AkmoFkAQfiia3KkKk
-	 LX94URQ+ixLinklf5ty1Pcgka/Rj84tEeHVpEPCXotxPXdLro6QMnKJE34CEwZT7hZ
-	 sTNUKbNxXK875P4BaijdP4dJovtHlC/CeaH87INIAtcT2fD5kCTFwFh5C2Ptvlmw47
-	 PgmxegjWdIZgFeRxmSfsR0Oh6u7/UXTVj38MIRK2jFDl3qmLmZj+oaAx07+xA3NFYK
-	 x2auKZc9BPj/g==
-From: Bjorn Andersson <andersson@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
+	b=PsX6h+QcY2eV7aDOCo2ooJK+kXzqprGYPxw3vifWXV7J6m3aGX39KWv3IiG1M3ckw
+	 US6zpsXZVjowWHuwiD52v/rimYUky6440s3g/YGrIVvE4Bb4MNgdtwXx8VcSGtaVV+
+	 gqclCHeys4zIX373nZUrx2vbGOsVOinqere21yX578CnNvv8P4jnwpbJEgoPF3HQfS
+	 AEcPJew8xgyW+vuWGVmh/X6kYooaqDjyiOe08nn0yA0TkmUJNP5T56qIKtmCfLejn5
+	 VkGRcnp37T5Qw+BKzlVO46tXxhsGrZg+Y7nhFCW0yKWz9/ZhxrLOBvYxKJLlGT15ou
+	 46jKcXN9t9rQA==
+From: Sven Peter <sven@kernel.org>
+To: soc@lists.linux.dev
+Cc: asahi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Alexandre Messier <alex@me.ssier.org>,
-	Antony Kurniawan Soemardi <linux@smankusors.com>,
-	David Wales <daviewales@disroot.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Erikas Bitovtas <xerikasxx@gmail.com>,
-	Rudraksha Gupta <guptarud@gmail.com>
-Subject: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v7.3
-Date: Fri,  7 Aug 2026 10:50:35 -0500
-Message-ID: <20260807155035.603563-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	linux-kernel@vger.kernel.org,
+	Sven Peter <sven@kernel.org>
+Subject: [GIT PULL] Apple SoC driver changes for v7.3
+Date: Fri,  7 Aug 2026 18:18:34 +0200
+Message-ID: <20260807161840.6011-1-sven@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -51,64 +43,44 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-
 The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
   Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-7.3
+  https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git tags/apple-soc-drivers-7.3
 
-for you to fetch changes up to 1c436bca83bef0f7ca8d106a878a89af17048270:
+for you to fetch changes up to fef9350c314bf089a11a62858261e6576ada867b:
 
-  ARM: dts: qcom: msm8926-sony-xperia-yukon-eagle: add initial device tree (2026-07-11 13:11:35 -0500)
-
-----------------------------------------------------------------
-Qualcomm Arm32 DeviceTree updates for v7.3
-
-Add initial device tree support for the MSM8926-based Sony Xperia M2 and
-the MSM8226-based Motorola Moto G2 (2014).
-
-Add touchscreen, Bluetooth pin configuration, NFC, and multicolor status LED
-support to the MSM8974-based HTC One M8 device tree.
-
-Add the coreriver,tc360-touchkey compatible touchkey node to the MSM8960
-Samsung ExpressATT device tree and label PM8921 XOADC channels.
-
-Consolidate shared IPA properties in the SDX55 device tree.
+  soc: apple: Add driver for Apple PMGR misc controls (2026-07-14 20:28:42 +0200)
 
 ----------------------------------------------------------------
-Alexandre Messier (4):
-      ARM: dts: qcom: msm8974pro-htc-m8: add status LEDs
-      ARM: dts: qcom: msm8974pro-htc-m8: add NFC support
-      ARM: dts: qcom: msm8974pro-htc-m8: add Bluetooth pins
-      ARM: dts: qcom: msm8974pro-htc-m8: add touchscreen
+Apple Soc driver updates for 7.3
 
-Antony Kurniawan Soemardi (1):
-      ARM: dts: qcom: pm8921: add labels for ADC channels
+- New driver and dt-bindings for Apple PMGR misc controls, which tweaks
+  various global power related states and saves about 1W of power on M1
+  Pro/Max/Ultra during s2idle.
+- A small fix for device links in SART
 
-David Wales (1):
-      ARM: dts: qcom: msm8226: Support Motorola Moto G2 (2014)
+Signed-off-by: Sven Peter <sven@kernel.org>
 
-Dmitry Baryshkov (1):
-      ARM: dts: qcom: sdx55: consolidate IPA properties
+----------------------------------------------------------------
+Hector Martin (1):
+      soc: apple: Add driver for Apple PMGR misc controls
 
-Erikas Bitovtas (1):
-      ARM: dts: qcom: msm8926-sony-xperia-yukon-eagle: add initial device tree
+Pengpeng Hou (1):
+      soc: apple: sart: require device link for consumers
 
-Rudraksha Gupta (1):
-      ARM: dts: qcom: msm8960: expressatt: Add coreriver,tc360-touchkey
+Sasha Finkelstein (1):
+      dt-bindings: soc: apple: Add Apple PMGR misc controls
 
- arch/arm/boot/dts/qcom/Makefile                    |   2 +
- arch/arm/boot/dts/qcom/msm8226-motorola-titan.dts  | 350 ++++++++++++++++++
- .../dts/qcom/msm8926-sony-xperia-yukon-eagle.dts   | 407 +++++++++++++++++++++
- arch/arm/boot/dts/qcom/pm8921.dtsi                 |  12 +
- .../dts/qcom/qcom-msm8960-samsung-expressatt.dts   |  54 +++
- arch/arm/boot/dts/qcom/qcom-msm8974pro-htc-m8.dts  |  94 ++++-
- arch/arm/boot/dts/qcom/qcom-sdx55-t55.dts          |   2 -
- .../boot/dts/qcom/qcom-sdx55-telit-fn980-tlb.dts   |   2 -
- arch/arm/boot/dts/qcom/qcom-sdx55.dtsi             |   3 +
- 9 files changed, 918 insertions(+), 8 deletions(-)
- create mode 100644 arch/arm/boot/dts/qcom/msm8226-motorola-titan.dts
- create mode 100644 arch/arm/boot/dts/qcom/msm8926-sony-xperia-yukon-eagle.dts
+ .../bindings/soc/apple/apple,t6000-pmgr-misc.yaml  |  45 +++++
+ MAINTAINERS                                        |   1 +
+ drivers/soc/apple/Kconfig                          |  10 ++
+ drivers/soc/apple/Makefile                         |   2 +
+ drivers/soc/apple/apple-pmgr-misc.c                | 181 +++++++++++++++++++++
+ drivers/soc/apple/sart.c                           |   9 +-
+ 6 files changed, 246 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/apple/apple,t6000-pmgr-misc.yaml
+ create mode 100644 drivers/soc/apple/apple-pmgr-misc.c
