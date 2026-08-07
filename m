@@ -1,83 +1,149 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D1434BA24;
-	Fri,  7 Aug 2026 16:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EAA2E8DEF
+	for <soc@lists.linux.dev>; Fri,  7 Aug 2026 17:45:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786119594; cv=none; b=ogi5/RFvAitBUor/9pM6O4v3WWjG5em0Jtujxv5npHKJ5oTqWzpTv6OWgjgCYD+Jy6dK9lM8Oh00r14CYhErizxL3qDAZ/Fw5tY/pLOkiGQX0EWhLHQkSBRVGRh7k+e1tgGswQf2XQDJ2UJcNem51DM44qm30O3OuF4DxPuEspU=
+	t=1786124725; cv=none; b=QlGBPgqCQ9XAuAb3kKWFxK7PYVKL9Mggdhtn6/578bMI51quWrDLGa98pqo1AHwuydVBoOBqYjTcyQlyJiPVGiij1IV4TGSNEy7byEnu4wkdX32eM9xGkMymHe89nEAAyKL8l+DHWRcvObVKHTvDJHhVrfqwNtbnuG9M5+vYxXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786119594; c=relaxed/simple;
-	bh=vgcmA0eOBpUZrE8nf1hpZyBcMPFzJuXOy+6I4lNoyZk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jnBG58/lJAHewyKMm2L0LxES/NifMaffeEy9SSuOh9qBJiJxLraevuBPPL5zVKkfMpnK6Dpczk9iIjJVPvRbXJW5zYd17s1KVL544ubv6dxouIyBjoPMIylwbp1HzZm4p4D43UdHJmrqVAQljH3Y//A6KJ+NbF3taZiSRERnl9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MgVQxQPb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786124725; c=relaxed/simple;
+	bh=K9y7+qgOIUgusqqnv2A0lIuXRIzhe19SOiZ/1cedtZM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F4P3zyfO5KaHLy9OQDvnZGke9j0QhaEPs9vrtJIDV3LeYsxWg9qKb02stEpshIaThZtQJfdXTve9av6oJFO89DMedZEvESfmEryUbC0VPXoEAJ0kRDOONvBaGTA1ZwuF7uWoKk0mf0r5GCpUL5MwqZsVDnQJrBVuN715h44zWDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9mdM+J7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MgVQxQPb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66EE81F000E9;
-	Fri,  7 Aug 2026 16:19:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9mdM+J7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37CC51F0155B
+	for <soc@lists.linux.dev>; Fri,  7 Aug 2026 17:45:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786119592;
-	bh=jKUy6tbNyU7rIJ/Cs1K7IrSyeblfGGIQgQv6PZPPib8=;
-	h=From:To:Cc:Subject:Date;
-	b=MgVQxQPbaJjohvvWpFSWiw6Bso0yMXSIA/GbHHYlmH+ac0T38oT0YtJj2LXJuqBOW
-	 NZoRlwSHVB9I6nwIB2V7hQ6CAJPHEBKmlAlxKVI3ugll5lB+QJHunJyvp6KVN1u0Ia
-	 c40S3IASCM+5C0T1nQk/DpOxs6su9SSswLcfw33ls3KZGURvaP0ZsTcAZrDxZrSQ42
-	 iTgCUkT/eLm8eTKLglQB4UzXMkGcmtU2DrbrTK2MNDYbMx+48xEGAOPtY7Q9tbblqU
-	 EZqFrTkyTSKNJt81zoRaA0PJkooFrYbb0gbjIqZ64fDN1mSjwMIg57yU76VeZghvBS
-	 ejaF1b5v5314Q==
-From: Sven Peter <sven@kernel.org>
-To: soc@lists.linux.dev
-Cc: asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Sven Peter <sven@kernel.org>
-Subject: [GIT PULL] Apple SoC fixes for v7.2 or v7.3
-Date: Fri,  7 Aug 2026 18:19:35 +0200
-Message-ID: <20260807161937.6419-1-sven@kernel.org>
-X-Mailer: git-send-email 2.55.0
+	s=k20260515; t=1786124724;
+	bh=OyhnxF+idjJakv4GGlOu6M8jr1I7wPOlS/SALR3zs0g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=f9mdM+J7MWS3rxSYZmb8Ntb5HpemFgXBtzrgLvmiufo0fNS13aqkWAPZ/knkrIyXR
+	 VIny+XIoazS+Wtlhe/qDN6VtJgJROhVR4kWZM9DDwccMVdxHfWIuNctzbIvZIW5owQ
+	 ksjRvnBLj5RBVbW3Lxo5sPVNpuguMjCSupqMwORjLSoUzcdGMHFnlCk0W7rpY2B1IB
+	 s6YVhjxVhd+YSBeTJE+0ZYBwCHJhhM5OgfGi8tsnQGdwrcihn6zWLEwnqn0TqYP0JH
+	 3vc12AuTC3vdzXcFEKGtfsAaCxGcMlA0Yi03Tdfi1h/PLp3ezXgUtxq3Ryl+c40f77
+	 NyerY3Z8luhwA==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5aebd52488cso4160921e87.2
+        for <soc@lists.linux.dev>; Fri, 07 Aug 2026 10:45:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RoCOQKr5d5Nk2PJ0Hlm80ESfWAyUR2GWm3Jied2JwuRuqd5e0K1styQcfM/mBLTcm5/y9o=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzvEgpE7T370rNwIKFDvPHKfEDjwBl4WxNeCjR7qJk8Lq5N2A5N
+	+nj6JRu7RFvv3fnT9qOWptO5o1FDIm14Gbef4G3fmOswSjYy6kQPQaIIK2vZUrLQlJC2jfrb0cp
+	f3sHXJ8/KWSA8GmoHSKiXqszbtepgYoY=
+X-Received: by 2002:ac2:515b:0:b0:5b2:a483:a367 with SMTP id
+ 2adb3069b0e04-5b2f4cbfd35mr2719806e87.40.1786124722892; Fri, 07 Aug 2026
+ 10:45:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260806-longzhao-upstream-cv75-v2-v2-0-6b09707c5fe9@ambarella.com>
+ <20260806-longzhao-upstream-cv75-v2-v2-7-6b09707c5fe9@ambarella.com>
+In-Reply-To: <20260806-longzhao-upstream-cv75-v2-v2-7-6b09707c5fe9@ambarella.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Fri, 7 Aug 2026 19:45:10 +0200
+X-Gmail-Original-Message-ID: <CAD++jLk0LoOJk=TXin42AL3_z_7eVVkvMnYr1S8090C6A_B+dQ@mail.gmail.com>
+X-Gm-Features: AUfX_mz4THtJsHukdTGhBJPWk-nL3TQtLhDW7VNIYAXq_FOwFa7WqkqY6sFI5Ns
+Message-ID: <CAD++jLk0LoOJk=TXin42AL3_z_7eVVkvMnYr1S8090C6A_B+dQ@mail.gmail.com>
+Subject: Re: [PATCH v2 07/10] pinctrl: ambarella: add Ambarella pin controller
+To: longzhao@ambarella.com, Bartosz Golaszewski <brgl@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-serial@vger.kernel.org, soc@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Long,
 
-Sorry for the late PR, I totally forgot about this single fix.
-Feel free to pick this up for either 7.2 or 7.3, it's not urgent.
+thanks for your patch!
+
+On Thu, Aug 6, 2026 at 11:34=E2=80=AFAM Long Zhao via B4 Relay
+<devnull+longzhao.ambarella.com@kernel.org> wrote:
+
+> +#define GPIO_DATA_OFFSET               0x00
+> +#define GPIO_DIR_OFFSET                        0x04
+> +#define GPIO_IS_OFFSET                 0x08
+> +#define GPIO_IBE_OFFSET                        0x0c
+> +#define GPIO_IEV_OFFSET                        0x10
+> +#define GPIO_IE_OFFSET                 0x14
+> +#define GPIO_AFSEL_OFFSET              0x18
+> +#define GPIO_RIS_OFFSET                        0x1c
+> +#define GPIO_MIS_OFFSET                        0x20
+> +#define GPIO_IC_OFFSET                 0x24
+> +#define GPIO_MASK_OFFSET               0x28
+> +#define GPIO_ENABLE_OFFSET             0x2c
+
+As everyone can see from a mile away this is a modified ARM PL061
+primecell, see drivers/gpio/gpio-pl061.c.
+
+I'm not very interested in having two drivers for pretty much the same
+hardware in the kernel. Odds are that there will be new quirks and fixed
+to one of the drivers that the other one doesn't get :/
+Also the PL061 driver is pretty complex and specialized as GPIO
+drivers go already. I certainly don't want to have a second copy
+of that.
+
+We need to find a way to re-use the PL061 driver with this pin
+controller.
+
+1. Modify the existing PL061 driver to use a dynamic register
+  layout, i.e. make the different register locations part of some
+  per-variant data:
+
+struct vendor_data {
+    u32 data_offset;
+    u32 dir_offset;
+...
+};
+
+Add:
+
+struct pl061 {
+    struct vendor_data *variant;
+...
+};
+
+Add vendor data to the PL061 variant:
+
+static struct vendor_data vendor_arm =3D {...};
+
+static struct vendor_data vendor_ambarella =3D {...};
+
+static const struct amba_id pl061_ids[] =3D {
+        {
+                .id     =3D 0x00041061,
+                .mask   =3D 0x000fffff,
+                . data =3D &vendor_arm;
+        },
+        {
+               .id =3D /* make something up, see include/linux/amba/bus.h *=
+/
+               .mask =3D ....
+               .data =3D &vendor_ambarella;
+        },
 
 
-Best,
+Essentially follow the pattern from drivers/spi/spi-pl022.c.
 
+2. Contemplate if the GPIO should be a separate entity in the
+ device tree or not. If not, Linux needs to spawn the new AMBA
+ device with this pin control driver using e.g.
+ amba_device_alloc() and amba_device_register() etc,
+ see drivers/of/platform.c
 
-Sven
+3. select GPIO_PL061 in Kconfig for this pin controller...
 
+This is not a simple solution but it is the right one.
 
-The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
-
-  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git apple-soc-fixes-7.2
-
-for you to fetch changes up to 09780b4b4bdcc7848249dfc8e44b4d55aa388024:
-
-  arm64: dts: apple: t8122: Fix I2C resources (2026-07-05 16:26:23 +0200)
-
-----------------------------------------------------------------
-Apple SoC fixes for 7.2
-
-Just a single commit that fixes the i2c IRQ and MMIO ranges for the M3
-SoC.
-
-Signed-off-by: Sven Peter <sven@kernel.org>
-
-----------------------------------------------------------------
-Michael Reeves (1):
-      arm64: dts: apple: t8122: Fix I2C resources
-
- arch/arm64/boot/dts/apple/t8122.dtsi | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+Yours,
+Linus Walleij
