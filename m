@@ -1,171 +1,118 @@
-Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88D53F0A96;
-	Fri,  7 Aug 2026 22:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786142633; cv=none; b=VqDQZy9mpZKTcgqDOs6y6atEpkEgH6NU3r3rNhye2Ix408qQ/SZfez1CCuEg1fvTnaRZoV6MJ50uKmrAknz/qZKUsbZdXgKY1XaZwqnHVc55ydIH+Fkmjfxt21GsF4InKnczeHfBruZyaQDWzXKMFPkGL2JmFLx/cnt3UAERwsM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786142633; c=relaxed/simple;
-	bh=D8lIgPrgG6rAOPYKb8wrRvxHfHpo/BpToTVnvfTt6j0=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=RL8mkwblqNBjA1v9tRZou2yG99j51W/XAdtqmMrpTGvWOmkrvdszIyF4rdL36AWBNq2PoUwPlyVx02cf0EDMqBldf0ZBWQ4DqO+qTzFuh8gauQO49OoeOibQzeamfFKtb6z2CZsoulLQCxoa9ff8YNyoadI4r8o5c9QaBbU6Z2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org; spf=pass smtp.mailfrom=flapping.org; dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b=fXBdQgAn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PIYAonVj; arc=none smtp.client-ip=202.12.124.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28CF2D2397
+	for <soc@lists.linux.dev>; Fri,  7 Aug 2026 23:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786144898; cv=pass; b=Xn/I8Zx7SaEq8KDsGRMvSh3LLxLGqeLCy3IaMLC3JgjF76OtHiJ+umdSw52vfKC0h5HDBmC0bMXSUnlIJ6oCmF/mZQGdxSPepr8VdITPMytghvB9il8rSFFRwNn6a5D2DyVCSYZ0jgexhBey4t/xf5ziZjv0U+7UI2d8oSolemQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786144898; c=relaxed/simple;
+	bh=epJUB5gTvpGGdpSohqeoBRjyUtDyaQ2iclsISq4UJxw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PtnAIzJKWHHq2s+5tkY5yNeZ/Qobr1i32XD+OSyk3Z6hq6Equu6FA31oTHKk3nQf7Di1BWQ1iMUFTX0GA7RLtIfKIXcqRyQITV3UTo/s1Q8ELnBA1O72fnQtPLB8aq0WQ5rLe0sdppNcB0AIRyQk98FwY0xqgqMsaUPR1HRpeug=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B+8YrfCw; arc=pass smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b="fXBdQgAn";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PIYAonVj"
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailflow.stl.internal (Postfix) with ESMTP id 5D31313001C2;
-	Fri,  7 Aug 2026 18:43:50 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-10.internal (MEProxy); Fri, 07 Aug 2026 18:43:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1786142630;
-	 x=1786146230; bh=h/f00Z6KUstIES9yiLYFI4NCrcR5SeGiu9K0nWr0j3E=; b=
-	fXBdQgAn+cpQG053rYeUyH9GrqcIinWLYXH3tdhyhI4K0HR3cUw7wVBOYGjyZdej
-	qNdEyE1TOAFXfVEQN6ItCWLgXD8uASakQceqsLvEf7I9mNMxemUFWT5gWsSkwjzv
-	z+5fkUK73RYSsb9K0tEcZmc1SoNcEAGESYfKDn+TzSF0GJG61VfcQ/moosOkwdzz
-	UakzQQo4XYl25lTkcUXPF+KNK7b76fC3LugXHA0ekhyFzw8cW/OYnGOe46oFdLSb
-	as9DbCCZJwAT6CpkZ52pSUhreP5cfRhgVB+rQ2UY4Z6I5Kd/7HkW/50RX2QcDar6
-	XDbNzFVmmiFBH/8qUl5G9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1786142630; x=
-	1786146230; bh=h/f00Z6KUstIES9yiLYFI4NCrcR5SeGiu9K0nWr0j3E=; b=P
-	IYAonVjpkOfE3Mw+VgjaAvcan5NwHoqxz0lsx7JKzNoFQZtILHvG9sbrUJPxmgI3
-	5ROxZOOwLXLXzLyb8jq5gG1Q09tFaLnWxqYcmuLvHsecbOABwscv54x9nwGBiFCB
-	U/Lq3ynwF8zXmlpYGwofGq6gPwT+UJGD+zNpMx5oaL6SeBi5qXz6gLxRcgHXZIbg
-	6nU1vKWxjAJSSliJWqGNeqqUExu5jDYzdXMs6Wc6qF/VCvcNgnPqhJBzMrKxg/Ho
-	Py8jGCyLDX2ZChXU7Kn7TixQtHtQBfeyGepzL0KGDmDvNf9CgTrqcRXFDvFVArP9
-	Xr3xE37Ck1drtzY6Q/teQ==
-X-ME-Sender: <xms:pV92ao8gIlSPqKA-P37qN2kGQ7tOuSX0NeyqhsCJ3XZE0oV0pisDSg>
-    <xme:pV92aiby-BR5ks4W5mSw8MC3zZq_H0nIKmDMR5uizRom1tgnbGWhDpPOsm_PYXQIK
-    E1PBvkrAVKFSrc2OeDI9WzCCPJS9z7jbO-SgeJdsuVEJ9P3UVWxhl0>
-X-ME-Received: <xmr:pV92ahfvk8OAW-w2y48w6L5J9EM9K4uaJuQMfu_LnR4r-pxzChswNHY0DlrueqtaYCGyNTIUDS31L5OLANVBJAmr>
-X-ME-Proxy-Cause: dmFkZTFNtd+sPmf/JeoA6PziLBAUf8s4YDDRZyJWi6VH4yI3jhHCvZda3JM9EEdCzEIeIM
-    i9KDl853i6GsTQCS94EbjdZmRf2OOb9If/5js3+Onug5r3tYqLy/a8oiAUeMJ7Bc8oq9J8
-    s4fh20cdfRN+rzuqNrpawZPCLG33R8XWJto4pZv5YIArQ6s++CwGMy1c0rxiahTgQzAfk1
-    CxBeUkm4Q914HjWbzbYkFCCZx4XfS1o/ys33cLU+fhu1n9i1DzVsgihES0Cx0pr5bUDwOo
-    qLuEFMl2oktFPU4K2zZFRKQhFIjCHbbrgcq/PLxdL0wldL4vbb52QzFCw3LqPyyDLPIqZ9
-    ekRIDicbaYMZSEfO5NfCEZuQTVt6p6Fu8kzFPru016/1qQbnWQab6Hszr3nfnOEmFBbqx6
-    RlNUTLBGvr5uTjTWy9F94+Wjds+jk1S+OkGl3qaRF/Ex1mZ8JmnbWsQq3aNIoTW9ifVlwJ
-    2PVzN/PptQx5GXOJmD6BAny9/POuD08Rix/b02kv+xyOHS7Y7PmuF+DmajbPAwdPg4Y+L6
-    ZH6fZ5Rw3Mni+66eqqpmWW9tpwpLx6SD0AXadGQOC8PysYPNVLi8GvOAPrBTl97U9Qz78d
-    a/ISG5UF7iq3NxbdQXBHc+kiGsZkotNV/hxRiUkOJNflZ96DncwN33LshLwg
-X-ME-Proxy: <xmx:pV92aoRsbuNVYA8eb1P42sDNP4FIgT27nt66SqQ_qHfClXvQvX9Q5Q>
-    <xmx:pV92ajkpn5GLLHtoLhOy6qYt6KGr4VG_ZKmZoI3wgIXygFpQiylhGA>
-    <xmx:pV92amtCPI-gL30rU3W1lnjCN1AVFDudqH7sDh5qxzq6P7Le1R5YUg>
-    <xmx:pV92am9w0HsVp-82QjLA-1lstZjDcSFwFA9yRXmcfWy67dJ_xakmZw>
-    <xmx:pV92alQXyHDVMvVThW5mTfV6oUo9wep1zrZCGPrYQRJxB_xKyeSzECpJ>
-Feedback-ID: i51fe4b43:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 7 Aug 2026 18:43:44 -0400 (EDT)
-Date: Sat, 08 Aug 2026 07:43:41 +0900 (JST)
-Message-Id: <20260808.074341.1056015191905819805.tomo@flapping.org>
-To: ojeda@kernel.org
-Cc: arnd@arndb.de, krzk@kernel.org, alexandre.belloni@bootlin.com,
- linusw@kernel.org, chenhuacai@kernel.org, boqun@kernel.org,
- gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
- a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
- dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org,
- acourbot@nvidia.com, work@onurozkan.dev, rust-for-linux@vger.kernel.org,
- fustini@kernel.org, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev, kernel@xen0n.name, loongarch@lists.linux.dev,
- stable@vger.kernel.org
-Subject: Re: [PATCH] rust: bug: fix `dead_code` warning in `warn_on!`
-From: FUJITA Tomonori <tomo@flapping.org>
-In-Reply-To: <20260807221429.155946-1-ojeda@kernel.org>
-References: <20260807221429.155946-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B+8YrfCw"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-84eb072307dso12168b3a.2
+        for <soc@lists.linux.dev>; Fri, 07 Aug 2026 16:21:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786144897; cv=none;
+        d=google.com; s=arc-20260327;
+        b=CmwhRqSYz6q8n+8hhJzVzM/OAtxxIXlrmqQxd8LzioqAyUpZRwHDUh7eviJjEIJgo4
+         vJBe9PCbeYb5qTZ/QBZgF1fQZHsFCN5FQqIydOkHu/hlI3b6AzfnjkDjhw3YgeCtPJve
+         C8mHAPtZOZWxcg3FSEcs54nXQvDsnlbLSQs6wZHjiAT6MkXhvCERyvkjBCWel49liwOt
+         IPSjw8sKuyj3BJjVcOFCmyfkcb8qALpQhSBfgnLS2Jx+xF4+MAyxqbf4GN62pH+wxd7U
+         pnRpaVebkzZLVrT2Xq/kGVBaf43DaoqkbdBr85/ThGAcpata2X7+Ln987c9aFg7ZdRmm
+         X0VA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=epJUB5gTvpGGdpSohqeoBRjyUtDyaQ2iclsISq4UJxw=;
+        fh=ZURbbnsYy3gP9SYEQGSfjXWHd8iUxMvcfsuril890tE=;
+        b=g17I8sgZU/Tt428+Cf3yotpDzb20yXjOExIt0+LczPZifUoE6crvq79VxAb4XtuOyz
+         zVurdYJIOnh9w5jfPIL2FIS5Z0DCAK2QeEpUuGWEEOkwQOlQc7wxMsmTKMTryVFAfgw/
+         Yfq08QivqIy1uKj6GA7RfL7JZpARZhOXmrKrjQ4nC6MDoJe6PiJXhmzcFnTu7mRpy5T2
+         Lut2O80TqQFYDjwHytqtMG5zaMdL0PeXPJanM3bFOP9mql0WKMw7/Q5QMFqKJA1WQq2J
+         TMSBakndBPuREGJGWcAiwqF3pnH4Ygqn/PE+Os/aSQW9Oe2+iC6RThD0hQ1njokVInkt
+         he3Q==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786144897; x=1786749697; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=epJUB5gTvpGGdpSohqeoBRjyUtDyaQ2iclsISq4UJxw=;
+        b=B+8YrfCwxCCYgxKgdVhYF4zF2ObEQLdcHQqoQaz16AjPD0ftiTh4rd18VsKK7yhqRI
+         7jjKKiOH12Dok40Hce52vGbUqnCPq37IDX5gc/44XFp6Ahld1rr9qY8r3K03wZ6eSGJl
+         4BIKTjJb7/9p0wHYclbfYe6jVxqoWZ1QdTD6MdoKtRNofttHe2aFXRotj3nnPVXqJaXp
+         xLL+IUZkAoI4OBhm9D65v0rebxTCP2/tJ4xzsafVQkO9HF3XNpsku7Lf6+aLTWJZ8mb5
+         nuKHlV707jZOQ8PEOxmVKzsB6pbKt6V9RoJtdXsNWphgou7XXrYY6Vbqzy7LzBcNQ5+L
+         tUtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786144897; x=1786749697;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=epJUB5gTvpGGdpSohqeoBRjyUtDyaQ2iclsISq4UJxw=;
+        b=W6HXJ13LCo8yeUzTUQWzvUGYtBkWpaCxgJlCoOg4HihYhBm6x5P0p8iXPPs8pCIdbX
+         P/k6O3BwD0yRRNvLqhfGaf9dJ0wkosJPNdrDTTvu0CK/IfN/r/gwf4tAI9ldhHIpDRIJ
+         9ZNE0nKnPL6GOmU7ob33WKzhHsrPD22AK5lEP7UzQohyW/UlydvcSwFakZ3QPhuCaD6C
+         PdENRZz1uxt+zviM/gm7PBLVGdl11gCrmc/PINEtLf0rkbzg8z/mSfRLdJeZdqaVEXGG
+         iYTrDqgNLgefuEu0D+6S36P0Ya+l10D48KB64x1cLZALjkesriNhEs+h+Runw6JbarIw
+         bv/A==
+X-Forwarded-Encrypted: i=1; AHgh+RokIaHB7Spf/d6mmi5A9D3u8OYkqBhaZeVDjZ/CCGti7uOlADXnkTUEJ5qsOxxcyaok4zM=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxHzdN5H2zYSd7y2HCHaaTYIaS/XRxzmqjCRYzaUYcJNEhSuy5v
+	KbHQdnK1qxKwdrZ3gjgo8kfkSvyu2ssf8TD6qPfoODQtCxp5aJSINy7srPKVcADIhOsVrXlXDY6
+	itMRq71Z8CpnHMSw8vm9YPbypPTgOOMk=
+X-Gm-Gg: AR+sD13gg9PUDtVg593fryLPiHxMCCOv+LH3FNF6w0VBHxBwE/baRlO9/gyGFZH8qin
+	nepxSMgdA02SJIt7h2lw89ERcWafQjmmzzfKGUPnrtt8TQJkLE+1sLetlKgZPj7Gl6RYeVili3Z
+	B5SvNgO1A21rgWpmOFIRLd+ggQ7bWRvP76mW3+HaNz7+1kU8NRklukFkNz5kEKPf572jJUeQZUZ
+	R7urixpdTHC+IRvPLZ7Frrfe+DFL2oZwlT/G0DTnEQNOgEW3buhOMVIdmo8bLcO6mGYjeLowWqw
+	oStuqQFVK37nXZYomn3N1V581bU8kWXuNVxMc5aWQLxsUoJHqB3c4a+hbs8H9+u5SwHQYr8W00f
+	UgWW9XY8RnOBgq1OI9W0b5J8UqqXFeRYAd5hDVSKQq56DVxDk2uGuiQD98UmU
+X-Received: by 2002:a05:6a20:2589:b0:3bf:99ea:aeb2 with SMTP id
+ adf61e73a8af0-3cb8646fe2bmr20610739637.4.1786144897090; Fri, 07 Aug 2026
+ 16:21:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20260807221429.155946-1-ojeda@kernel.org> <20260808.074341.1056015191905819805.tomo@flapping.org>
+In-Reply-To: <20260808.074341.1056015191905819805.tomo@flapping.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sat, 8 Aug 2026 01:21:23 +0200
+X-Gm-Features: AUfX_mzt6ITrqPgmG06xYNP1noGEoKAQULArIyU1uaz5hrUcXcfHz6eFuH5RVl8
+Message-ID: <CANiq72n4=fz=JNKY0Jdm8BnLa=RmHB2B7s0bO47YTJ7hygqBZg@mail.gmail.com>
+Subject: Re: [PATCH] rust: bug: fix `dead_code` warning in `warn_on!`
+To: FUJITA Tomonori <tomo@flapping.org>
+Cc: ojeda@kernel.org, arnd@arndb.de, krzk@kernel.org, 
+	alexandre.belloni@bootlin.com, linusw@kernel.org, chenhuacai@kernel.org, 
+	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, 
+	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com, 
+	tmgross@umich.edu, dakr@kernel.org, daniel.almeida@collabora.com, 
+	tamird@kernel.org, acourbot@nvidia.com, work@onurozkan.dev, 
+	rust-for-linux@vger.kernel.org, fustini@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, kernel@xen0n.name, 
+	loongarch@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat,  8 Aug 2026 00:14:29 +0200
-Miguel Ojeda <ojeda@kernel.org> wrote:
+On Sat, Aug 8, 2026 at 12:43=E2=80=AFAM FUJITA Tomonori <tomo@flapping.org>=
+ wrote:
+>
+> I sent a fix for this bug a few days ago:
+>
+> https://lore.kernel.org/all/20260801024841.786664-1-tomo@flapping.org/
 
-> On arm and loongarch64, or under `CONFIG_BUG=n`, the upcoming SRCU
-> abstractions from commit
-> 
->   59cf3a5bda61 ("rust: sync: add SRCU abstraction")
-> 
-> use `warn_on!`, which in turn warns:
-> 
->     error: constant `WARN_ON_FLAGS` is never used
->        --> rust/kernel/bug.rs:126:19
->         |
->     126 |               const WARN_ON_FLAGS: u32 = $crate::bug::bugflag_taint($crate::bindings::TAINT_WARN);
->         |                     ^^^^^^^^^^^^^
->         |
->        ::: rust/kernel/sync/srcu.rs:106:12
->         |
->     106 |           if crate::warn_on!(
->         |  ____________-
->     107 | |             // SAFETY: By the type invariants, `self` contains a valid and pinned `struct srcu_struct`
->     108 | |             // and `srcu_readers_active()` only checks the active reader count.
->     109 | |             unsafe { bindings::srcu_readers_active(ptr) }
->     110 | |         ) {
->         | |_________- in this macro invocation
->         |
->         = note: `-D dead-code` implied by `-D warnings`
->         = help: to override `-D warnings` add `#[allow(dead_code)]`
->         = note: this error originates in the macro `crate::warn_on` (in Nightly builds, run with -Z macro-backtrace for more info)
-> 
-> The reason is that `warn_flags!` discards both arguments in those cases,
-> and so the `const` becomes unused. And since it is a macro, it went
-> unnoticed so far.
-> 
-> Thus fix it by simplifying by removing the `const`.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: dff64b072708 ("rust: Add warn_on macro")
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
-> Either this or adding an underscore.
-> 
->  rust/kernel/bug.rs | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/rust/kernel/bug.rs b/rust/kernel/bug.rs
-> index ed943960f851..874adb93cdfe 100644
-> --- a/rust/kernel/bug.rs
-> +++ b/rust/kernel/bug.rs
-> @@ -123,9 +123,10 @@ macro_rules! warn_on {
->          const _COND_STR: &str = file!();
-> 
->          if cond {
-> -            const WARN_ON_FLAGS: u32 = $crate::bug::bugflag_taint($crate::bindings::TAINT_WARN);
-> -
-> -            $crate::warn_flags!(_COND_STR, WARN_ON_FLAGS);
-> +            $crate::warn_flags!(
-> +                _COND_STR,
-> +                $crate::bug::bugflag_taint($crate::bindings::TAINT_WARN)
-> +            );
->          }
->          cond
->      }};
-> 
-> base-commit: dc01dfb37b34beeefcfe1c3055364d41a4070c7e
-> --
-> 2.55.0
+Ah, right, sorry! I also saw another one with `rusttest` for arm64 and
+riscv64. Did you see that one? We probably need a `cfg(testlib)`
+split.
 
-I sent a fix for this bug a few days ago:
-
-https://lore.kernel.org/all/20260801024841.786664-1-tomo@flapping.org/
-
-
-If you prefer the simpler version, v1 might work.
-
-https://lore.kernel.org/all/20260720035510.4048145-1-tomo@flapping.org/
+Cheers,
+Miguel
