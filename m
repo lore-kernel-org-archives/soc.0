@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450F43164B4
-	for <soc@lists.linux.dev>; Sat,  8 Aug 2026 20:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA523164B4
+	for <soc@lists.linux.dev>; Sat,  8 Aug 2026 20:21:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786220501; cv=none; b=M89tV0Kll4rXHRxvsg2js2A1buSiWL5C0bjUCnoOXf4bgbYHltEqnCIiad4ie5JKkuUnswitDPWKXkaVP8t2DspjVeDB7qJRR41ilcTJU27gMuwcwXlUX02iPFe8hPBztd9K4TVEpiAVjq4Gco97hlcG9RVc7of8aL1FUYIVcpc=
+	t=1786220502; cv=none; b=t0LPw3Wq4d1ICLsNQD2eB61v15AbdT3jmMvhBuf65ML8EwiUBOKPgyWl3Cjs2TZis8c1CPctIfQ5LtZ3MgwXCPSXnryB01QlKFNEBg3uPJhXOZzqCmridaDo0DcWaFHKxrDepQSQaOc28eQ+eHArLexu2StBZSMKHw+o1LziIQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786220501; c=relaxed/simple;
-	bh=LKO1C657ffOySy+5f2UwYjApk/qraZ73Jyhrf5mTOm8=;
+	s=arc-20240116; t=1786220502; c=relaxed/simple;
+	bh=TDhW6i0/ji07BU1ThTl8cEugoB9JCg6Cv4hZ2S000nA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=L1bagxBaxi1zkF9MPGMvlhrYa4TJPU+ERtghuj+HMIgR1Cx5FiD0RJoszbbMeJn+hOuCWnwWkb2h8Lw9e3axWfyxXW3eXABgI0w2XUYNS11yTsQN8pWFa165vQIlGRxcd8Eje4ReVKoSKD41l/WoD6N9rWQrkuUKZVP8sSSO5xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajTvy8fm; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=b3SqSkxFyYxEqDOioSq7Vi6mHs4B9vKGzZAKLsjH/QU58bWufxCwnFl9cynp5EHPNenB1dQScigaj6rM9O10cfjT5b+HpVGF1rhXaP4+jxBXmnut+gXf/ziRd2r3BwXTnfB7PNXItt+j5a1uh8BkOnw0/F0zC8I+qRkuP3sxsRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HCtfvONw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajTvy8fm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HCtfvONw"
 Received: by smtp.kernel.org (Postfix)
-	id 0DC8C1F00A3A; Sat,  8 Aug 2026 20:21:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7331F000E9;
-	Sat,  8 Aug 2026 20:21:39 +0000 (UTC)
+	id 879AC1F00A3A; Sat,  8 Aug 2026 20:21:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 721251F000E9;
+	Sat,  8 Aug 2026 20:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786220500;
-	bh=iFldeerSlqeneRJzW34d4f7rqBHATHN72m1/ebCUr/4=;
+	s=k20260515; t=1786220501;
+	bh=pxez2vDamQTiYERI34JIo5831BKCyRJGqHn5ac5G6G8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ajTvy8fm0pBGrpvYo53ZxKYYhyjkXRYWwLiPAc4TxaOm5Na+an/wyoU9fYUWLVh5C
-	 IzQV82KbXvUJ9SyUahH3p8lEIZTgNQRTWboltV9i8HFhnI87bFoeO+XlmN/ydXiO06
-	 4w357Q9wW7EM8UbT9b+w+/Y1qZ8dnupMlZfPz62a3A6QC33gz+X/eatVFP+f72jMgn
-	 +c9xXLVr8/FR0Oqf6qMON8vBHfdz31A58apZO3X1UqILyL+K+dPj9wcBRGXvDbOPU4
-	 4gq9gk2BdBBuHCmFz0smocSFVyvfMmqG7awci8aJ6vutb68FXN0idP/fDFNiNqtzOD
-	 nxLENaXO/scNQ==
+	b=HCtfvONwSITCnSLDcjJtOk5RHPU2MdSdkFCtv6bqMQzL/fih8ZxqiMDglyMfU7bHW
+	 AzrD8DaRJ9MfmK16czWFE3CUCS4ZUbllhhf/Z4fS3vVQ/fDeau68Dke1PcQQ2msW8w
+	 ZZb8uytgT/1SHttUNsW7itazJ2PqTCYDpb14B0Sk8oxIRsIaH1VXI4rWN1UjQ8cy81
+	 mogN5gXAezSVyZ65xXAdJRP8AGvCWZPZQVCSptKVRkhiD00Lb+esiKM5wEkX0jquN/
+	 yzYCmNuQcmUuLhBnyIFKvr9Ah6nEMSXagYneeHA3nWFdzc6wgGt1JgNKxacSgXoXvO
+	 zk+eZLv+6zgBg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19856380CFFA;
-	Sat,  8 Aug 2026 20:20:59 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93AA6380CFFA;
+	Sat,  8 Aug 2026 20:21:00 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,16 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] aspeed: First batch of ARM devicetree changes for 7.3
+Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v7.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178622045763.2748994.14545855881362123122.git-patchwork-notify@kernel.org>
-Date: Sat, 08 Aug 2026 20:20:57 +0000
-References: 
- <a0dbb1b1642b5d30f01adb5f48c51e426414dc90.camel@codeconstruct.com.au>
-In-Reply-To: 
- <a0dbb1b1642b5d30f01adb5f48c51e426414dc90.camel@codeconstruct.com.au>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>
+ <178622045913.2748994.16639938237522540444.git-patchwork-notify@kernel.org>
+Date: Sat, 08 Aug 2026 20:20:59 +0000
+References: <7db3a138-facb-4132-aed8-8e8dcd3bdf60@linaro.org>
+In-Reply-To: <7db3a138-facb-4132-aed8-8e8dcd3bdf60@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -56,20 +54,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Alexandre Belloni <alexandre.belloni@bootlin.com>:
 
-On Tue, 04 Aug 2026 15:06:05 +0930 you wrote:
-> Hello SoC maintainers,
+On Fri, 31 Jul 2026 17:59:43 +0200 you wrote:
+> Hi,
 > 
-> The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
-> 
->   Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
-> 
-> are available in the Git repository at:
+> Here's the Amlogic ARM64 DT changes for v7.3, contains some overall
+> indentation cleanups for the Amlogic DTS, some new features support
+> for Amlogic A7 & A1 (clk measure), A9 (pinctrl, gpio-irq) and some
+> fixups for AXG to only enable PCIe on the S400 board.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] aspeed: First batch of ARM devicetree changes for 7.3
-    https://git.kernel.org/soc/soc/c/2cd4d47c7225
+  - [GIT,PULL] amlogic ARM64 DT updates for v7.3
+    https://git.kernel.org/soc/soc/c/307b9caae6e6
 
 You are awesome, thank you!
 -- 
