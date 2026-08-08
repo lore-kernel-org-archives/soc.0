@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A85033BBCC
-	for <soc@lists.linux.dev>; Sat,  8 Aug 2026 20:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2391A9F91
+	for <soc@lists.linux.dev>; Sat,  8 Aug 2026 20:21:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786220498; cv=none; b=Hf/9MmNRQMI8OttHAtKZbH8d1+dbgrKjWGP001MX9blwtPRe3qE3ki021kFHOvwPhz1mWdr/GKeBAYg1oe7seKcmm9xUMKtceFj/kbZtfM48ve/b/0NwB8sfjtC+XYMJTshVo1TY2oXEH9GDxqecmMytskiIDzB0ikzJtPA3YL4=
+	t=1786220499; cv=none; b=P6/Nlo9p3jxzoObJY62Yt8NEW98yfYD3fvk9A8CIveKS1KudToTdQVTQ0HA8AssQhbgb6QigpxH6UfllikADiALnNqyNbe91kittJqKFj8lDbrg9MKehvV++/gaFlq0esjbrsVI7g4Ii76psfPgKEpZ6OV+97G1jnFiYyLzSkvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786220498; c=relaxed/simple;
-	bh=1bzFXLDc+p0Eba5320axg5za3K1cg/J04YJeMrprsTw=;
+	s=arc-20240116; t=1786220499; c=relaxed/simple;
+	bh=H8KDDucadAiWJzVoZHoU5Aicxr2dySvetWRe41wkQLA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=d8QkHfTU1I2W/opa02H1o9BrthpRXs4wzjVvnYGNNtemHrqFp8CZQzZV63ziZCeBotCBwCj7gSkIJUyoRaKRQdHISicovl+hO4OzvLsPd16Af0yrL0AmJIPs+YcHu0HZkBDNKPNm7nP2OAHIjaT4qmYChDH7YefMmSpqPUK4kho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EEEKSrKX; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=ia8owDDaKX+NpCONvYgix2hZgee0MEhqShorfzcMnuCP+jWxrlpE8BV4vAJsEGZenT3OL9sOhAY9YAY1he6a7tRG0ogDFCx1F2/0Ud7WCFa9KctllpXDGi9x0u1VNmAjGcWzqiRPhRZJ4fnnjhZF6cxCCyn1fBWls8pZrvJCLGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GpDK60Ix; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EEEKSrKX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GpDK60Ix"
 Received: by smtp.kernel.org (Postfix)
-	id 0ECF01F00A3D; Sat,  8 Aug 2026 20:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC5F1F000E9;
-	Sat,  8 Aug 2026 20:21:36 +0000 (UTC)
+	id 8A0A41F00A3A; Sat,  8 Aug 2026 20:21:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 737D31F000E9;
+	Sat,  8 Aug 2026 20:21:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786220497;
-	bh=qRtKJs8oGt9Df04s9ZdPfDEUs2cqXG1MhgQsXAHqbsQ=;
+	s=k20260515; t=1786220498;
+	bh=iudMxvvuxk1+7WTEk+iXUq7or9P+/Pl1rT5tSOInCsQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=EEEKSrKXKBK+xCqQSsKmeigKcVVq9WP4PEz3QPB6m6cIO34Ij1bS+mvIuKZSHfZMO
-	 k0ZA0PWLntPglO4kTuvk37LuKbjyY5NsHe4HwqM+LqvbZkjOpUKuVj48wi0MAhTb4r
-	 T+xF0463qmYy8QUuuXJKrZ8r96bLgv/7z0z692L5/eYPTqIHgDrMnpOh4YJTTvB0LF
-	 V0SEdFFSLJRuhgnerJ/igbs7AKWPYzzI8Uz2mDGn2F02CHLWHwfy0mf3jrdo4rVPeP
-	 9Hdp0ddVTrFA31IxDrOT9zpDCvqwxitnQdBNtVyJwWUMmOOei3LYfGMV2XBZ13EvAH
-	 dn6VhCp0Tg0Dw==
+	b=GpDK60IxpbKEZY5Kqey2EQ8eO6JsS7OaGtgsmBv0YBRYfzCs3SGV+pVOtsgLzSQfj
+	 8yPv4u5/znUAikanejxxybbR4z0rT74NJCjDsDiU5Q/UGai+9zH2dYwWKqsh+gd4h4
+	 rOCQX36Sf9Skigq+m94bcHc2izI5ylXx7UonHx9khT8749UnXm9663HGuMU53OGcvT
+	 o2OUKz5pX0HE8EjyGsTHj5tGWNMGb0oXnn3NKTnxwwv7yKo9gBAFl84vA0dmQzx71M
+	 FWZ/BfGn9PBfEDLqa/XjJxlcwmGTiEoVcpkyxksOKIHGTwR/ByBaDkbB9r8xZCqXg5
+	 70kCvjSfoUe1Q==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1986D380CFFA;
-	Sat,  8 Aug 2026 20:20:56 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939AF380CFFA;
+	Sat,  8 Aug 2026 20:20:57 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.3
+Subject: Re: [GIT PULL] ARM: dts: OMAP updates for v7.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178622045464.2748994.15099413616518593183.git-patchwork-notify@kernel.org>
-Date: Sat, 08 Aug 2026 20:20:54 +0000
-References: <20260802024052-KYC1424545@kernel.org>
-In-Reply-To: <20260802024052-KYC1424545@kernel.org>
-To: Yixun Lan <dlan@kernel.org>
+ <178622045613.2748994.10251219104826834946.git-patchwork-notify@kernel.org>
+Date: Sat, 08 Aug 2026 20:20:56 +0000
+References: <7hbjbjjj7k.fsf@baylibre.com>
+In-Reply-To: <7hbjbjjj7k.fsf@baylibre.com>
+To: Kevin Hilman <khilman@baylibre.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Alexandre Belloni <alexandre.belloni@bootlin.com>:
 
-On Sun,  2 Aug 2026 02:42:43 +0000 you wrote:
-> Hi SoC Maintainers,
-> 
->    Please pull SpacemiT's DeviceTree changes for v7.3
-> 
-> Yixun Lan
-> 
+On Mon, 03 Aug 2026 08:51:27 -0700 you wrote:
 > The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
+> 
+>   Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.3/dt-signed
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] RISC-V SpacemiT Devicetrees for v7.3
-    https://git.kernel.org/soc/soc/c/0b02b8f94191
+  - [GIT,PULL] ARM: dts: OMAP updates for v7.3
+    https://git.kernel.org/soc/soc/c/52b1700b3004
 
 You are awesome, thank you!
 -- 
