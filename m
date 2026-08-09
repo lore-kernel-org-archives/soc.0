@@ -1,119 +1,69 @@
-Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D15054763;
-	Sun,  9 Aug 2026 00:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7FB2E737D
+	for <soc@lists.linux.dev>; Sun,  9 Aug 2026 02:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786236652; cv=none; b=ZufbEouLA/g0UZFrWK1StmmxHInUQKgDQMSQaEd43CpcOzKsJ0oFOFbQNwXA+2MBIGwvXDVT5Whm41RmV0stazyp0pz8vYwClbKbp/SlJGB71aQKqY/2Q1qB91CNEgQwj2FLyOwFBcn6SkhNQIq2Brv5yBVjsObPEIpHqfNpD6A=
+	t=1786241448; cv=none; b=UpU3T2xLJSVBWBxK1ThPxBxzYOQwgb5Gs7Lhg/xAPVloWrPCk8/ycU799KeK/q83h/xWw0q3C3NpuWfU/dJtjrXzig54yv6l/URi4aTpVMTtlAguXUp30akSyngkYatQgz5XmYGuU/Kol0b8h3u6Xw7DvhOxpX5bua9s9Zu4Ang=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786236652; c=relaxed/simple;
-	bh=UEhJ4fOnP6NvvbztpOOHCgRbwBRf2/ifUuwzgPha3lQ=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=qUTeSDWIbKZPLOEmJq6QZ5KxsRjEwQPBCYMHxFov/PicSFSDUu5ILd2D4BLUc25hiRiOgOEdYWPB3lJvj9ndOrDCdNyy5BOAXpsp+Y4Wp8bTR+qxxW/QSQ2cNIRE847i9RB9M1UnT/HIsVWTwzVZ2ehH/Tqu2uxjbc3dM2gFIyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org; spf=pass smtp.mailfrom=flapping.org; dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b=NU29sH9Z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cP0PZJUq; arc=none smtp.client-ip=202.12.124.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
+	s=arc-20240116; t=1786241448; c=relaxed/simple;
+	bh=Mf3/T7jXGVjZmSDd6K6CBdzeSJ+z5UwSqIWrpcxKG0Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=D+pREPIByqIGWGkeeGmQN2GD/27daoETwSeC0xwh2oVqrIzdioC0VeDJxMp//OEwjLC9i/v+040T7vI0/8Qw+cD5bMABFcdswhO6U54ZiG1ea8PP++Ey1VLFOpLpGoJrYVqR9HfbKg2gLbTU+V+uQBRcEUboIkW4Rgz6g6tW860=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mRy8+HJ1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b="NU29sH9Z";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cP0PZJUq"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailflow.stl.internal (Postfix) with ESMTP id A53A813003E8;
-	Sat,  8 Aug 2026 20:50:49 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Sat, 08 Aug 2026 20:50:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1786236649;
-	 x=1786240249; bh=xCkSTHTpye1HwdVm99z+AnyQrg5wWGU9aIxGyfSTlQk=; b=
-	NU29sH9ZsRImhMnP8aT4p1yQuwbjPQGMO/KabwgRq2yYxQ/ry+1Z1Vn+aKswp0jA
-	72ClGAM+RK0CQbBBeNZoFnugrY5/elsoMjjCUxL3pA5zBDlm6jLWNbqUBYL41f67
-	qgDYhH/yx+ZZwLI3zLz4969SjC3Hkzs7OCF7+t7vBCb7HqeZjNkk229mhr6p/lmY
-	ofVWspjaKMqFx4U7KFt0wkexc8lm5XJzdfsl9ynow10v4Z14sNyO3MeFVTcyLQA1
-	WjDOG7H51LRjuwr8d4UA8IhwusSfUQ1QEcwc/NJhpbWu+E0RBf6I/XzedDPtAnCR
-	ZukGehUwfRxEDr4N10drrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1786236649; x=
-	1786240249; bh=xCkSTHTpye1HwdVm99z+AnyQrg5wWGU9aIxGyfSTlQk=; b=c
-	P0PZJUq0RL8Rlvcc1fesfcEMhNL6Ow9lK6nfrSGwEflLRYBFoLkzE1Yr5WMGJPYw
-	6Ls8irExU3Ub5sFTx5NcKRAH5xucWJFNRRvkhBduzCdqecm6LWGDrXtoGpRlheXG
-	UFpcHlztpRcjsaONfnp3vPT+8vfMpXaAfrIR19+vZMdYnDXfubUU4eupOvjcIaV4
-	R95/pGjewQ23PSePQl443aNXWIfsQ3xYKTpj+NGD3gg7BeA8hkv88pef8q7vCOHc
-	uIJqmRnetmYNvbFXUd9WY00og5FNwR45IRYTuMkmtVxMmUD0Ji1P5QW5iU0wfdhs
-	WDeCMFaGEthDDbIKAxoWQ==
-X-ME-Sender: <xms:6c53arGSkqmk3IqBNnnQ2VKcHffefbAAip61EJHMKqdmHgKe49MqKA>
-    <xme:6c53ahqtvY3uC-Hfvkr5IP-xm6o0Pileb7gQNwccdKBZKzJzhBjqdpIQ4cylfo457
-    xtuy5QOh6rmIIzNQtjutLHENNBv18XYy4-EnU7K8TUJ0q73feH64Os>
-X-ME-Received: <xmr:6c53alJ5ES3-_J3P-YGMPLo--aGyaHVuglFfyg0kYfADERmZrUU2geEkMC3ojc-Ixuau59UkdNyymLQWD8k7HpOO>
-X-ME-Proxy-Cause: dmFkZTEWyeKTFTOJEnerKErAGQhxs6jY8ZIIz/VM/JukQDWudLXGVHslkG7D0P1qYkOnvC
-    p/N/lf6zobEs4R09BmnLvcyKb6KEUV8BUTXqUMer/pYJTS3yxadkjhC7zWSmUyqan7H6wr
-    iOv96fl5zT6jrqOPwMso0ETzEouIFpNVaqEmeJP6dRigdDAu+IZwRJj3PRqh95KibXDSbH
-    Of4jjPRZQoMGfXL2I60hA+xQxKCbr/Il0tBfaPmtJlZB/9gh2yaivzrZ+UEJhRUq2avrt/
-    6MNUfnrwFjZeD8nPUgpooCWsWDJWaeXgePQ7pwjcD8pNyMNO3hgiId+X/6f2GyobvqrChX
-    NgkPoQKFCUKOdPrSSKZZaMsWyrbXtBaD570Fno2K/4e5Nb5VitmSOsXELC6wzq1o+MMDWY
-    BDRwN8HUmt9AECIMyFVNpR973AKW7u6uPbtbGxU+dTKN1KX7lX/ZxmF9ahMCplvW2k9Dce
-    3Wj2yJqgmIm4lxeGRLk8czefQ+PqJVNwKyd2c5DDek8AwYdsaBtjBXoESSJCZL126CgnZw
-    rh13jAEcLls9u8D5VHKwcbJvvTqbDM+mo/Yit0Ddsv8oXXiRSOEjzRdCiYx27+csmM/vgK
-    hVPN/Z9TSjlgnoTExldLSqYJPnlu92K0CYW1f/ZUOTAU2VW0QljkT4ZNSYpg
-X-ME-Proxy: <xmx:6c53aiyzFxtDYEEDIAstGaAJXGXzDY_IQtzrTj8ejlUY2ird5uDvow>
-    <xmx:6c53asZ7ksw7NU9kx_h8FiWRleYvZnx3smz_-wtFzjvcNQJrn2sdMg>
-    <xmx:6c53au7uETwpLa9d-ku27TH1Z02VJoAkMJxEJcp0Z_5NIXILFSfXrw>
-    <xmx:6c53atClWOEO2nw6sx0n4TuPtVeL-p1G5s-AlrhTW5lZwR2IMp7Zlg>
-    <xmx:6c53agQEeP9Ahk4NyUtA6jCafbY03DdegnZvbcQlkorROei3L2sIXvzX>
-Feedback-ID: i51fe4b43:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 8 Aug 2026 20:50:43 -0400 (EDT)
-Date: Sun, 09 Aug 2026 09:50:41 +0900 (JST)
-Message-Id: <20260809.095041.602618436881623934.tomo@flapping.org>
-To: miguel.ojeda.sandonis@gmail.com
-Cc: tomo@flapping.org, ojeda@kernel.org, arnd@arndb.de, krzk@kernel.org,
- alexandre.belloni@bootlin.com, linusw@kernel.org, chenhuacai@kernel.org,
- boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com,
- lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
- tmgross@umich.edu, dakr@kernel.org, daniel.almeida@collabora.com,
- tamird@kernel.org, acourbot@nvidia.com, work@onurozkan.dev,
- rust-for-linux@vger.kernel.org, fustini@kernel.org,
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
- kernel@xen0n.name, loongarch@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] rust: bug: fix `dead_code` warning in `warn_on!`
-From: FUJITA Tomonori <tomo@flapping.org>
-In-Reply-To: <CANiq72m70uWCRFnhs3axdymSTGCirBrYAvKh2BiT0xqW2j_3jg@mail.gmail.com>
-References: <CANiq72n4=fz=JNKY0Jdm8BnLa=RmHB2B7s0bO47YTJ7hygqBZg@mail.gmail.com>
-	<20260808.143013.1251068388254615351.tomo@flapping.org>
-	<CANiq72m70uWCRFnhs3axdymSTGCirBrYAvKh2BiT0xqW2j_3jg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mRy8+HJ1"
+Received: by smtp.kernel.org (Postfix)
+	id 0F8071F00A3E; Sun,  9 Aug 2026 02:10:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAFDB1F00A3D
+	for <soc@kernel.org>; Sun,  9 Aug 2026 02:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786241447;
+	bh=vzXtV4uuWrQNIiVw1oG15U+LcwPFvM/9KwlO1Bcz1IQ=;
+	h=Subject:From:Date:To:Cc;
+	b=mRy8+HJ137WAuVjSa6Hw+12bX5X8k3KNrVRBboq1LqM8cKHNHho5Rp71/te6zKaq7
+	 2H/snOD4wZq8P0D6L7YsFyZ+WwEQ0y7cbJpD1FLJPtLv0bzV0DYWWP2QMyalIEdNkK
+	 8zUv08327t2aYuNbPtxappkc/zDWYH08dOlELB2UeClSxoRtEwvxz4IsuIBZhfrPzV
+	 /xVsAsR0Qev21c44wIoM8PBG4sO9spFJUrEYnpoohWy8LO92Fx4esexwQIU87qQqFv
+	 VkkbTOwmGW4s9B2bUCXndjctJGhymDFrFiAkLEevoNqXcC9M+NttctceIVKWjtlR+M
+	 d6P7oez924pGw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D33D4380CFFE;
+	Sun,  9 Aug 2026 02:10:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <178624140442.2813131.16579087084803948359.git-patchwork-summary@kernel.org>
+Date: Sun, 09 Aug 2026 02:10:04 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-On Sat, 8 Aug 2026 21:40:49 +0200
-Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
+Hello:
 
->> I posted a `cfg(testlib)` split for it:
->>
->> https://lore.kernel.org/all/20260808022608.1125174-1-tomo@flapping.org/
-> 
-> Thanks! It seems good to me.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-Thanks!
+Series: [GIT,PULL,1/4] dt-bindings: Changes for v7.3-rc1
+  Submitter: Thierry Reding <thierry.reding@kernel.org>
+  Committer: Alexandre Belloni <alexandre.belloni@bootlin.com>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=1138963
+  Lore link: https://lore.kernel.org/r/20260802165148.1259649-1-thierry.reding@kernel.org
+    Patches: [GIT,PULL,1/4] dt-bindings: Changes for v7.3-rc1
+             [GIT,PULL,4/4] arm64: tegra: Device tree changes for v7.3-rc1
 
->> While at it, a question: what is `rusttest` meant to cover when
->> `ARCH=` is not the host's?
-> 
-> `rusttest` is meant to run tests on the host, regardless of the target.
 
-Then `jump_label.rs` needs the same treatment?
+Total patches: 2
 
-`arch_static_branch!` embeds the generated arch asm too. It is not a
-problem today only because, like `warn_on!` until now, it has no user
-inside the `kernel` crate itself.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
