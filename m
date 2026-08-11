@@ -1,80 +1,155 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A573644CA
-	for <soc@lists.linux.dev>; Mon, 10 Aug 2026 20:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786393911; cv=none; b=pNHL6KXtmKSNbRCDUmrMVpCbxfNtme1ztBd687g5fQsi4z0aHD/fUvDguwVNAAjIuWJLygPuK5c1KNmiblxNd2L3bcJrou0xu/5vG4qlqi81A+7tUxX6v04gP0v2aBQE5aNPHQcDC3Sb6h2tJmxfild16nCxN1wfPPjtGZx4yPA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786393911; c=relaxed/simple;
-	bh=L3CvvABFL2Hy5FkX1RNkdZzqKFjmp/29TQ7zBcj9CoE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GmIDgk12SEg3WzuRxTfBDTLAW2mPZvlO9IjzKDiBVybU0wj1CbcAvluOoLHLeUkY90k/JlubXzquXAKEu8V4Igqp4sXObvAX+YtKFJS8tR1DGe6UaRs8X7uJALwYlKXSUUsuvqri6VQ/lqDbNHHwBRYTTBBf1nMsA/4lc7gi7Uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXm4B6q3; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF793BFE34
+	for <soc@lists.linux.dev>; Tue, 11 Aug 2026 02:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786416581; cv=pass; b=EouLqQtUXRj3HIjgqHrIjiIfQzBvPDt+9hgM6ue1tZ0eHFVxdADw90cwijEfvr37ugt/fzbiE0qx2aXL2jpzIL/cDzSdZpI819EmsG8teAhEZ9FzAH1+41uxB1T8TsDgspfQV0j+OiOD64FK4Dmnbi/rkJxSroQ7GRJycL+IZpM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786416581; c=relaxed/simple;
+	bh=hCaf/OZAXHZGEcmBqrCd6lS6gZKLK4GWni+sbLcvavo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=sd9XDQnELX19QFbd7IXHq3XrIMwvjnPL6nY7m85I2gIBcWO5O/2ySND6JcRae+TyeumusuDHD1JbLcRp2xGktSrJyQLEpYm3Ul4nxnDpdWr+WUY1Vpv43Eha/XvGuCGLYlQ8np0oURwmTThCccGSZLVGJMOUP/H7V/1i13pQvy4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=xdxLf8+F; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXm4B6q3"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="xdxLf8+F"
 Received: by smtp.kernel.org (Postfix)
-	id 193911F00A3A; Mon, 10 Aug 2026 20:31:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 032641F000E9;
-	Mon, 10 Aug 2026 20:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786393910;
-	bh=h2vsZP8uw2B09DjZDmNB3p8nwADbj/inocS7ztU1dEs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=mXm4B6q3pjRCmf4s2/WQDscRZamyckSe8FM8bqU7czwiwazDIHfR9Ekrw03/xVhiy
-	 ZZT72f8HdStd6pWeMoMqAfV/S6ZTUNQsUzxDFPbu6E4anlBON0a6M2p+UZx6clmnZa
-	 RnWDufHGZlGxGwJnFhxIMmROBLJjwmb3+twDwBnK1j5onyh7h+QxdnReaX3R4MR9cu
-	 q0oX1BsPky8R9hFkHk3h/h8P+6AZpkLyleYB78i7tAX2HAcbgcDS0LmP5kctMtP5fm
-	 gecXasv/sWLRiXUb1n9U4UuRcFQAaiZI0zZnAG+j+pd0wEqyZtFpFPImUb3dqvB8kN
-	 sQZcbd8GXimUQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0AD0392625A;
-	Mon, 10 Aug 2026 20:31:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 9DAC31F00A3A; Tue, 11 Aug 2026 02:49:31 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=54.204.34.130
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1786416571;
+	b=HAHuC/WIC+uXcrkDn8LFDxKzPq2gTwjeip6SLq/C9233QPnu5kKhELxaQbiGaXHgU/N1
+	 cvPRmMBwnqbAYenIxXohbAXMN20QS1zFOzae+uGnwtZnhGcwfI1CwOqEh9DHtanDn37dw
+	 hDhS28sZd7exDZnMjTxR+7XpdR8US1YMlQEsnVXZsuirTbXDiCxih/NzdwtajsMY4O4xA
+	 WogXLwa4i/OTbaOIuMcJ7TVH8CCnxhB6fqGsmp0Ch+AsiQbyYyGNorc6LZQHggx0+FRJy
+	 +aI81b7md+egy11SrQSBHkBPVALHZITB+52RgoQqebCn7Apj53ZqJdFAom7kZ6360mg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1786416571;
+	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
+	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:EX-QQ-RecipientCnt:Mime-Version:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:X-Mailer:References:
+	 In-Reply-To:X-QQ-SENDSIZE:Feedback-ID:X-QQ-XMAILINFO:X-QQ-XMRINFO:
+	 X-QQ-RECHKSPAM;
+	bh=23z7k+eAUinRpc8zLgMJ/t0gpWvJdmcP1Li0BPBYWwU=;
+	b=SKFXE3vkEeX0FJCykFhXvgaDSvb9j0s5Jd09avv+pwSF9Qd6p39xX9y47mMHc3BxOHxG
+	 ARk7XVSH6N/gPwK1jWDKOe67IesmJol0JBg8KxEm/okCOX+4rvV3GgQhmm0BXRMHybYPb
+	 iW/UDUY8AT7Nov0Lyrc/8IvXjkhbALDKk/HoGVMLu1ElakeZvgXygmqqtFL2QzysUbPYd
+	 5pTBDMCC9ZEJvYcCiR5Ak1KMeG3cKhapWIruIZXkx1r6hOBolVrvo7SClLtgrhJQZ4dgJ
+	 Y2l9kCIUMsz6fyI3AUxQnnDDrbRIEjQXaP6J52gzfjDTiwhEP1IpOIrxO4vOyfT0Pcg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linux.spacemit.com header.i=@linux.spacemit.com header.a=rsa-sha256 header.s=mxsw2412 header.b=xdxLf8+F;
+	dmarc=none header.from=linux.spacemit.com;
+	spf=none smtp.mailfrom=linux.spacemit.com;
+	arc=none smtp.remote-ip=54.204.34.130
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 9DFA21F000E9;
+	Tue, 11 Aug 2026 02:49:26 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.a=rsa-sha256 header.s=mxsw2412 header.b=xdxLf8+F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 9DFA21F000E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1786416552;
+	bh=23z7k+eAUinRpc8zLgMJ/t0gpWvJdmcP1Li0BPBYWwU=;
+	h=Mime-Version:Date:Message-Id:Subject:From:To;
+	b=xdxLf8+FH3LkSba6mwVuHMNjFhX8dSd4xAvsEOSQHBLUmNdSz0PU+w6hUNeyC1/zC
+	 NltFsudWmp0QHDKYT6oN1uKJRbdB4wM3yq8KSzoFu1VbP++R0D37BFLPMMCcfYNDlb
+	 DFf+2A0d+l2cN8Ool1cX2fxEPJak3SbCvp/uwHkg=
+X-QQ-mid: esmtpgz16t1786416545t61b05b13
+X-QQ-Originating-IP: 1Lvpn6o7ckoe/5uiobgyDQiiPwV4BQM3WsBUfeRYaQM=
+Received: from = ( [120.237.158.181])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 11 Aug 2026 10:49:04 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14630553172662809268
+EX-QQ-RecipientCnt: 8
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/3] arm64: dts: samsung: for v7.3, part two
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <178639386639.202926.7261538756984717689.git-patchwork-notify@kernel.org>
-Date: Mon, 10 Aug 2026 20:31:06 +0000
-References: <20260806081903.165005-4-krzk@kernel.org>
-In-Reply-To: <20260806081903.165005-4-krzk@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: soc@kernel.org
+Mime-Version: 1.0
+Content-Type: multipart/signed;
+ boundary=99dedeb8f6cddb1a793b7e4b254114face358367fe82cecc5177778fdd56;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Tue, 11 Aug 2026 10:49:01 +0800
+Message-Id: <DKLRT9TOCY0W.1ZZ35K3S4Y5E7@linux.spacemit.com>
+Cc: <spacemit@lists.linux.dev>, <linux-riscv@lists.infradead.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Troy
+ Mitchell" <troy.mitchell@linux.spacemit.com>
+Subject: Re: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.3
+From: "Troy Mitchell" <troy.mitchell@linux.spacemit.com>
+To: "Arnd Bergmann" <arnd@arndb.de>, "Yixun Lan" <dlan@kernel.org>,
+ <soc@kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260802024052-KYC1424545@kernel.org>
+ <93faefb2-5cd4-439c-a4a5-842ca5407975@app.fastmail.com>
+In-Reply-To: <93faefb2-5cd4-439c-a4a5-842ca5407975@app.fastmail.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: MeDrt9suTKKHaftXhxn9pWBwQ7tX3M8gVT9Cv7+4JEFaArB3V8SYl+ep
+	bMxUvvzdHG2yUy9M0cCK3rM87e4dLAquwOL/V+G1WQUXyQLK6fGE2knW3yAh0gXb9zxl/AY
+	pzJp7DVkqJn1jgyLlLP+cF7I51Dw2pEScu8GS+HZKlwy8G8oAxvdNImzi/HGB41qZX+2r2j
+	fQPV7YY53dCyTRQWokD80gteQ31mIfLX5JJkOEv0eILtY+SGh5e20JNcEUzDNRp4K5cd41M
+	W07zeDp1PdK0Jniz2yBfJCNb6JcxrVqqSgwGJrL18yGmlBLQ2l/utuEnOE/kpI2aOWeLR+I
+	Yws76Mrm7lvLXKVj1ee+jR+nxPcoROa+hh49L17hc00neud8wYjvU2LNnUHa6hONZ8neSMY
+	vMokIM+SM9X8X5W+tx0SBPew/vXcMEy7xnXcOZvv5POmmAGgonHO1n/deKCKFNr91eD1noL
+	3tq4/82e6EY5dlyN87uAAvU2j+TNP2gEm8G3VOnCu0T8GgyTmvNF9SH5TDv74NVn2i3P7N9
+	v2j62dc7xYMrHWDf2/LmUYldR7ttr9TA+3ljv5YGS3RUj9YNo85yjZTPlqpc+DYsSLaIqM8
+	ZK62ilGmADzUUrHKyhMjZf7rLD2//4Jda1rljSuZgE7UGfzH3u8eqJZKqkRSEINJRB+sWwf
+	wmEP1bnVXc2naakS0o8BJ+DUbmij3mpYne0+t8UWImVqbCCQuuN3f3y05UaUvpM0lZEVC1j
+	JZ/dynlGfV59YIodzYErv6lN0e7Sj+fRcJ5v6ZVjueDT2I66/FO8mwRWvLL8uI/aUzAzP1Z
+	DrlUqqR4ljfrrUg50VO21G4a/kCwBPHZvCzmWOG+97/kYDNhhXE+h7ndNz5eq0sVcWztQ0F
+	e20RzoS9uAf6vkpM3ch82oCHr7ARIkJk2GSGTQ8RvdxPqFQnkA4Kls8QjcQQ5YlacwUKWHH
+	8josAc/0fBmq9yeEWI43pEc0vvTIo+byvyuN5GvCu3y4pRwhs/sta+uPWiMn/OCulSt8E1F
+	KJelt2ti1nI5fsXnvNkTFMJv7b/NYPK+xTzZr0KvbRyC06rZxo7C1OHdq3f7cEet/aMP45b
+	bbtkNFUTDFLsuNw6lFvSJWpaolyKeHE1SHH3J2LC1N4PDr3Xb+dOoY=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-RECHKSPAM: 0
 
-Hello:
+--99dedeb8f6cddb1a793b7e4b254114face358367fe82cecc5177778fdd56
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+On Tue Aug 11, 2026 at 12:45 AM +08, Arnd Bergmann wrote:
+> On Sun, Aug 2, 2026, at 04:42, Yixun Lan wrote:
+>
+>> Troy Mitchell (1):
+>>       riscv: dts: spacemit: k3: add i2s0-i2s5 nodes
+>
+> This commit caused a build failure, so I reverted it for the 7.3
+> merge window:
+>
+>     Lexical error: ../arch/riscv/boot/dts/spacemit/k3.dtsi:1181.20-39 Une=
+xpected 'CLK_MPMU_I2S_SYSCLK'
+>
+> Please make sure that each pull request you send is free of
+> build failures and warnings and works on its own.
+>
+>      Arnd
+The missing macro has been merged here [1].
 
-On Thu,  6 Aug 2026 10:19:01 +0200 you wrote:
-> Hi Arnd and SoC folks,
-> 
-> On top of the previous pull request.
-> 
-> Best regards,
-> Krzysztof
-> 
-> [...]
-
-Here is the summary with links:
-  - [GIT,PULL,1/3] arm64: dts: samsung: for v7.3, part two
-    (no matching commit)
-  - [GIT,PULL,2/3] ARM: dts: samsung: dts for v7.3
-    (no matching commit)
-  - [GIT,PULL,3/3] ARM: samsung: mach for v7.3
-    https://git.kernel.org/soc/soc/c/acf1efa9485f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Link: https://lore.kernel.org/all/20260717-k3-clk-fix-i2s-v1-1-e95001a692ee=
+@linux.spacemit.com/ [1]
 
 
+--=20
+Troy Mitchell
+
+
+--99dedeb8f6cddb1a793b7e4b254114face358367fe82cecc5177778fdd56
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iIMEABYKACsWIQSL4Ay2cExaPXAQcU2YCe+A+TM0LwUCanqNnQ0caUB0cm95LXku
+b3JnAAoJEJgJ74D5MzQvShcBAInWAqeYwOl9xiKq8oMW7NOqHZFkbqohC6XK69oo
+j4B9AQCdV5AqZTECQxaBbRClQbUxQQC8iWgBu7Jjg/HpAqnWBQ==
+=1L3B
+-----END PGP SIGNATURE-----
+
+--99dedeb8f6cddb1a793b7e4b254114face358367fe82cecc5177778fdd56--
