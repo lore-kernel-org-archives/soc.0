@@ -1,102 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94F64302F8
-	for <soc@lists.linux.dev>; Tue, 11 Aug 2026 10:03:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2D73C5857
+	for <soc@lists.linux.dev>; Tue, 11 Aug 2026 16:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786442616; cv=none; b=EJqnhqqPeSXlfZNUgbeFWwtpZn4ezHWrXaBzpA2J1TYYLBOTisPkNc3yh9lmU4RegOmgkX3j2fDSRgBe2aj3Tc7caaf/EksKtk+H67O/bFkJEb/UDxqyMiC/n7IqRB8hzg0xy+XDWdRpxrzyrMrVeyEZ2cjEcGVsumNTSzGHOiU=
+	t=1786464662; cv=none; b=VUKiUoUDsAN4a11glJQvFadILG5KBPQQVIGBLrTWQMJbcq5lw2IF+c+RW51ptxgkB6lvp12decHB0LdpfW+9WHOGDbrBvSd2dzqkFghvSsJMvB9QMGS18rgLQYLQj9LbJsGTNkOby6mpRhdH3Fyksx4bERhDeM6T43KsXntecNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786442616; c=relaxed/simple;
-	bh=KuQKWxoV/XqAzzIt2eOByfa0yezRtUnVGXz4aWT8Qlc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d6a0G/1Dg50qcrV/4lMzWTvRxiKBKn8ZoeKp8aLzvZ6WraF10582CcDWv/SYagVTI44fq2HBID8G3udcqyFRyzQL08nULkmFpS0BkuRsn4qA6lG4bAfRmzprjh0H+RoDWnbmma0KnPgG7h1VgYZGTqmyfHKoFjIA7qJFWLktUYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SUKu6Pdd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786464662; c=relaxed/simple;
+	bh=s5aYQFH5/TsJrfgH3Hmm3Z5/dP+xYZg4aYmTqt5N98Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PBB2xBs9S76NniATDZAt+MqZg65zapQt6HDijxB6gnQcE8CoR40CvnM88cZe7rEMgljwNvDeiAO5zWtvdqZylGmzzL/aSOYzVpu+C1Hg67vQWoo5Lg3W+VfYC/4w44qmkxHjl1FVaq+h0Dyxn2WsL/Llxz+/uTMd27tcz1phkag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OTxVVdhZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SUKu6Pdd"
-Received: by smtp.kernel.org (Postfix)
-	id 0C7651F00A3A; Tue, 11 Aug 2026 10:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A4871F000E9;
-	Tue, 11 Aug 2026 10:03:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OTxVVdhZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C07E1F00ADB
+	for <soc@lists.linux.dev>; Tue, 11 Aug 2026 16:11:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786442609;
-	bh=u/IzL0ZgCIvODGVKGV0oRzG71HOWOlAnML9MbCNUtjM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=SUKu6PddNdSmymN3z3JFDIpGFuh7jtkV92p8UZddrFXDiftC6Dwp9rKe0H42YqlBh
-	 84CmCk4XzwbrsqAOqOKOTLW/rrJMefc7WtZvqs3sIZmThIY5CoiS04++D8MzUdd8iD
-	 6vIAybKXgtRWRw8hisxWbbz3eQFLhVMORHRQntC2h5rs9gfT96u2uk4Bd+tDPiUWGl
-	 Zt5qj3ugNuNhVKjbGQJtqHsLwGyTLZsIy9MUznTClr2WJaSYD7waVEM5QKQJUbwNbN
-	 BAdIPGRiTKn7Byh5W9byyzdomibM3qftZgYuVE16QgnoDHIDcrdIdUH0dkY3T9icja
-	 jao7MZMMUDsAg==
-Date: Tue, 11 Aug 2026 10:03:27 +0000
-From: Yixun Lan <dlan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Troy Mitchell <troy.mitchell@linux.spacemit.com>, soc@kernel.org,
-	spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.3
-Message-ID: <20260811100327-GKA277506@kernel.org>
-References: <20260802024052-KYC1424545@kernel.org>
- <93faefb2-5cd4-439c-a4a5-842ca5407975@app.fastmail.com>
- <DKLRT9TOCY0W.1ZZ35K3S4Y5E7@linux.spacemit.com>
- <cec87950-f0e1-49f8-9a2c-f8b87b460da2@app.fastmail.com>
+	s=k20260515; t=1786464661;
+	bh=s5aYQFH5/TsJrfgH3Hmm3Z5/dP+xYZg4aYmTqt5N98Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=OTxVVdhZRmaj9tkDRGlrzrtpdSexA49s47RLI8Twy4X2WCBf/g6bn8k/1d9JPgFpL
+	 y2GfduWi+ZR2W8AtNJ9UUWy0Jzlt8uVWTADljZX6LKKQGowZ1O0DA1++7yUSUqYfDz
+	 xnWwwtP0KKRTajZsIx3bFfJDthsQ422gzilaNI+jKfGTXv9zd8+5AgQY0/dKRdhXYS
+	 QwboSbp6U+VhfW9Nbv3/bE8sNBu3eyksQBNDp2KxA2kffHOk6uRtwaHx0uhnzVPfAW
+	 8PqlY/j+Yxvhi2iP6MxW+SkT2z0UT56qMQcg+PDuGgNUoQpsPbwr0W8foY1KZST59P
+	 GMhX9Wv+0tTEA==
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c16794450aeso136181066b.2
+        for <soc@lists.linux.dev>; Tue, 11 Aug 2026 09:11:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RrUOzfam0VUPFs4enZhX19wM90DmZWo2Qy3JqKspBvS+w5FuNo6yD9fRuFUxPv1lL2XmVY=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzg7MdNf0zhE0P5y5ya/8ayKFyFYzOcPtdQcr3QBAo4dodkZY7B
+	Rcew32OYKeEvNue2i0Mo5mxAjhxsVgPneKTL29eEAJAt8feCaUOu561WhNNgh/gKfTXQdYRu47m
+	reWzihWfTqUB9n4F7pLh7j0w9ALjhTA==
+X-Received: by 2002:a17:907:9344:b0:c19:49ee:19b9 with SMTP id
+ a640c23a62f3a-c20ecb40d59mr83318066b.15.1786464659836; Tue, 11 Aug 2026
+ 09:10:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cec87950-f0e1-49f8-9a2c-f8b87b460da2@app.fastmail.com>
+References: <20260806-longzhao-upstream-cv75-v2-v2-0-6b09707c5fe9@ambarella.com>
+ <20260806-longzhao-upstream-cv75-v2-v2-7-6b09707c5fe9@ambarella.com>
+ <CAD++jLk0LoOJk=TXin42AL3_z_7eVVkvMnYr1S8090C6A_B+dQ@mail.gmail.com>
+ <DS0PR19MB7925690FD29D578D8AC5D10EDADE2@DS0PR19MB7925.namprd19.prod.outlook.com>
+ <CAD++jLkUPU0eujvWc5Hn1tEu4n451LvkuGGT=j6OfirJENpRgg@mail.gmail.com>
+In-Reply-To: <CAD++jLkUPU0eujvWc5Hn1tEu4n451LvkuGGT=j6OfirJENpRgg@mail.gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 11 Aug 2026 11:10:48 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJprX0oC3Gdj=RNNYtPiQ-0NkEPvn-MyQ9ZtFakKcj1ew@mail.gmail.com>
+X-Gm-Features: AUfX_mzXtvkrshAlkiMteNJj8gvRU9rIYBk-lG0usv9XUDyxXzzHJorja6k1J7w
+Message-ID: <CAL_JsqJprX0oC3Gdj=RNNYtPiQ-0NkEPvn-MyQ9ZtFakKcj1ew@mail.gmail.com>
+Subject: Re: Re: [PATCH v2 07/10] pinctrl: ambarella: add Ambarella pin controller
+To: Linus Walleij <linusw@kernel.org>
+Cc: Long Zhao <longzhao@ambarella.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, 
+	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>, 
+	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, "soc@lists.linux.dev" <soc@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-hi Arnd,
+On Mon, Aug 10, 2026 at 2:42=E2=80=AFPM Linus Walleij <linusw@kernel.org> w=
+rote:
+>
+> On Mon, Aug 10, 2026 at 6:02=E2=80=AFAM Long Zhao <longzhao@ambarella.com=
+> wrote:
+>
+> > Thanks for the review. I will rework this to reuse the PL061 driver wit=
+h
+> > per-variant register offsets, and evaluate modeling each GPIO bank as a
+> > separate DT entity. The duplicated GPIO implementation will be removed.
+>
+> Thanks Long, I think it will be easier if you break out the pin control
+> bindings and driver from the patch series and work on it separately,
+> the same with the serial driver at least.
+>
+> I understand this can be hard to test on the hardware, I usually
+> put a few patches "underneath" the b4 cover letter, and then the
+> b4 send-email will only send the cover letter and the patches
+> on top.
 
-On 09:22 Tue 11 Aug     , Arnd Bergmann wrote:
-> On Tue, Aug 11, 2026, at 04:49, Troy Mitchell wrote:
-> > On Tue Aug 11, 2026 at 12:45 AM +08, Arnd Bergmann wrote:
-> >> On Sun, Aug 2, 2026, at 04:42, Yixun Lan wrote:
-> >>
-> >>> Troy Mitchell (1):
-> >>>       riscv: dts: spacemit: k3: add i2s0-i2s5 nodes
-> >>
-> >> This commit caused a build failure, so I reverted it for the 7.3
-> >> merge window:
-> >>
-> >>     Lexical error: ../arch/riscv/boot/dts/spacemit/k3.dtsi:1181.20-39 Unexpected 'CLK_MPMU_I2S_SYSCLK'
-> >>
-> >> Please make sure that each pull request you send is free of
-> >> build failures and warnings and works on its own.
-> >>
-Ok, Learned
+The problem with that advice is then 'base-commit' is useless.
 
-> >
-> > The missing macro has been merged here [1].
-> >
-> > Link: 
-> > https://lore.kernel.org/all/20260717-k3-clk-fix-i2s-v1-1-e95001a692ee@linux.spacemit.com/ 
-> > [1]
-> 
-> Right, the problem was that your patch to use the macro was
-> applied on a different branch that caused the build to
-> fail. Yixun Lan should have caught this problem and rejected
-> your patch before sending the pull request when doing
-> a 'make dtbs_check'.
-> 
+Maybe b4 could learn an 'ignore the top N commits" or "only track the
+first N commits".
 
-Sorry, I didn't catch this problem due to test DT together with the 
-clock patches.. I'll be more careful next time to send a PR without
-unmerged cross-tree dependency, thanks for taking care of this..
-
-> This is a common problem with unstructured SoC devices:
-> If you can't just use the number from a datasheet, you
-> have to wait until the binding has been agreed and merged.
-> 
-> Earlier in the cycle this could have been resolved by
-> ensuring the binding change is used as the base for both
-> the clk driver and the dts branch, but now you'll have
-> to wait until after -rc1 is out to resend.
-> 
-
--- 
-Yixun Lan (dlan)
+Rob
