@@ -1,121 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950E139AD51
-	for <soc@lists.linux.dev>; Wed, 12 Aug 2026 07:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2BA470EA3;
+	Wed, 12 Aug 2026 17:38:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786520439; cv=none; b=XS+QmIc2864AY8QbUZIbnBxGu3ziG1GhScfOnYxMB84nuZhccuxJ9zHhknPGUYm/BBxUmBrB0bZyBnhtCdjxUlTUGWzHwBpuMEClCp5veQF4wTlN+KqtnnpotHEFMTeaauhrKl+5WWxGAz9d/j3ngDozZDc2sTT1UO7DU0Lpuow=
+	t=1786556338; cv=none; b=P/XE/8wedriIXSzv5jtVJ9o+OGp7CzPsncFfJZzpPHm0yGxSJ3Et5E+98rynX8M4ArDnp29NsA6+P2Tn6bRAadazcNIPLBtoW7CLjGu8DKgqS0tb8CKu/qkj1yH6bIormJrSINfvhn/tJ3oSSQzNeztspkZsL9ukl4AtzopAqPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786520439; c=relaxed/simple;
-	bh=8NIMyonBTLl7p5TcLVhooTgWqOCx0uqDr6kFmRrrkQc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TjJJo7BjLrfef7T9e3wH4adOBTX3FTh8RbYW5b0j6QS6D6sk4DcaLKeJE2I5aPzrBDtT2N93x12DeGu+0UdVNjg5/TnwNQEqliSjNyucGbroZnFFxpGkR9WPwlXovo3GMzJMlfcc8amKgv96/DaxJHjfT4mu/aonV/FQbfmqtLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpkEHvKv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786556338; c=relaxed/simple;
+	bh=BdUMFNJCzMTJ9yhgxSUMIomgDrolOO5XsRQnbpuBLYY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cBHydaEaGuUjSr4bgOUCobIen6s4a5nztUXtTf0bFZSQ5BXMd+Gf2fN4RHq34RFLFdbcaQx46o+4Idg4t93d4uZRKX2kNXBwVZuwOkQlaG0LYm/EHO5YVZisk3ivWBdQ7WbGxuY8StfzdIqnt0D/0ikCThyuzpF88hAEmmq6yuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=OxgkpZiX; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpkEHvKv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E021F00AC4
-	for <soc@lists.linux.dev>; Wed, 12 Aug 2026 07:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786520434;
-	bh=8NIMyonBTLl7p5TcLVhooTgWqOCx0uqDr6kFmRrrkQc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=LpkEHvKv4i+JqSzorjwyomLUtI+GEumeJLV0rdgKKmtQ85BFQ4kA6SXsMMTUPTkYM
-	 P5VlIYfTJD8u8o9jB51KRa+12FOpN+SKPS4+tNM8GMzfUNJSbIRcgdpYkx25sxug+V
-	 +I9sgt6S/W1KiWEi3UuSSJ03TyY8PsqKv6ueN71q6X9aZJrWvDn4++VMHD9b1IH/5M
-	 H3tto67xi6IzkmbvZRuTptMR8ce7jI274fUs6UCKpsqbzrke7fcMpu2fkZCAJE95yB
-	 rOGdyS2IekQ2j9nQQu4PgXNKeupPwadWriiRHn3LOMpJiH3A0QH6RT+aHzQcHKW9mf
-	 FxLq9kWjawaXw==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5aea0fff535so729751e87.3
-        for <soc@lists.linux.dev>; Wed, 12 Aug 2026 00:40:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rpl0gzgtqRAUYC+E5EgG0mrOHJ9fz5quVFWb5cKLTeJxLHtgfPc1bdOCPCOXrfGIPQTZio=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxZU3v/Ll7/wmpDRSXfRK6luElK3BwP+McvmL+0MYY185hD9sWR
-	yxvQQbop3P7dm2t44BPbF0VMBANqLocEUMOlFakwG36o8hAGi859kN0//WVVwgeY4wCoG5iYo11
-	Hy7I7rvu726HLT6M57UPJdjboZktAZX8=
-X-Received: by 2002:a05:6512:668e:10b0:5b0:1dd0:f20b with SMTP id
- 2adb3069b0e04-5b44e2db43emr269927e87.6.1786520432729; Wed, 12 Aug 2026
- 00:40:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="OxgkpZiX"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:From:Reply-To;
+	bh=6EzYPaGuuMIoxmiqca3tHSV0ntTQ4/JK20Xi8w7N9+U=; b=OxgkpZiXhDR/EcCzamW0ylPShj
+	oWHhVie6raLq6F9t/ANzDoRIteOmIH3FCvGN00E0Oy9cUopBIBUIY9nQAUMGNpz4nRT2M/0XFCtW9
+	7DUvCow2v0D0N1mjGa0W08HDnoCbK8AROYQgw6w2HbgHIn9CtBHN+JjwhHKZVGJpnzwHpDzdNdLlN
+	kZwPNGv+ogJRaw1pKSgaK+zASX0fUpIFdNov+mYqPrjgRB3hOgofcHt8n6lhtvsRyfxdQIi+oWktZ
+	kEmQfktpKszHcoTleA1LplJbnQFblmCuJr/Tn5Csi8gbjSKEW1g9+y6yQKjaFNRakv/Q87XFfWCXv
+	rKjtFCJQ==;
+Received: from [177.139.22.20] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wuCug-000FR2-Ux; Wed, 12 Aug 2026 19:38:51 +0200
+From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v5 00/13] syscalls: Add a shared table for all archs
+Date: Wed, 12 Aug 2026 14:38:31 -0300
+Message-Id: <20260812-tonyk-syscall_table-v5-0-3d383927c609@igalia.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260806-longzhao-upstream-cv75-v2-v2-0-6b09707c5fe9@ambarella.com>
- <20260806-longzhao-upstream-cv75-v2-v2-7-6b09707c5fe9@ambarella.com>
- <CAD++jLk0LoOJk=TXin42AL3_z_7eVVkvMnYr1S8090C6A_B+dQ@mail.gmail.com>
- <DS0PR19MB7925690FD29D578D8AC5D10EDADE2@DS0PR19MB7925.namprd19.prod.outlook.com>
- <CAD++jLkUPU0eujvWc5Hn1tEu4n451LvkuGGT=j6OfirJENpRgg@mail.gmail.com> <CAL_JsqJprX0oC3Gdj=RNNYtPiQ-0NkEPvn-MyQ9ZtFakKcj1ew@mail.gmail.com>
-In-Reply-To: <CAL_JsqJprX0oC3Gdj=RNNYtPiQ-0NkEPvn-MyQ9ZtFakKcj1ew@mail.gmail.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 12 Aug 2026 09:40:19 +0200
-X-Gmail-Original-Message-ID: <CAD++jLn+LNAb-VDsNz94Rj780fn1Z_SF9qxxbBAwLMNuedpccQ@mail.gmail.com>
-X-Gm-Features: AUfX_mwKiQhkB2vUPp0CB68UDRKMeWXa67ucLPOGncEJWQU6-LQSzSsOw8NITtk
-Message-ID: <CAD++jLn+LNAb-VDsNz94Rj780fn1Z_SF9qxxbBAwLMNuedpccQ@mail.gmail.com>
-Subject: Re: Re: [PATCH v2 07/10] pinctrl: ambarella: add Ambarella pin controller
-To: Rob Herring <robh@kernel.org>, Konstantin Babin <Konstantin.Babin@arm.com>
-Cc: Long Zhao <longzhao@ambarella.com>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, 
-	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>, 
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, "soc@lists.linux.dev" <soc@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33NwU7DMBAE0F+pfMbIXq8bhxP/gSrktTetIU1Qn
+ EZEVf6duBwoauE40sybs8g8JM7iaXMWA08pp75bg33YiHDw3Z5limsWoGCrKkA59t38LvOcg2/
+ b19FTy7IGR0SaYEsk1uXHwE36vKgvu++cT/TGYSxUaRxSHvthvtxOuvT+f5i0VLIO1mjnEEz0z
+ 2nv2+QfQ38U5WKCa6S6j0BBbMRGM2OlmxvE/CBO/YGYFakCWg8mWEX2BsErRMN9BAuCLiqA2kd
+ Uv5BlWb4AS3uiUZgBAAA=
+X-Change-ID: 20260724-tonyk-syscall_table-928bbb1b26bb
+To: Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmanon <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ kernel-dev@igalia.com, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ linux-alpha@vger.kernel.org, linux-s390@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+ linux-mips@vger.kernel.org, parclinux@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+X-Mailer: b4 0.15.2
 
-(Page Konstantin)
+While implementing a new syscall, we need to wire up it's number to the arch
+table. Since syscall number 403, all architectures are on sync regarding the
+number (except alpha), which make things a lot easier but more repetitive as
+well. Have a look at commit b36d4b6aa88 ("arch: hookup listns() system call"),
+with 15 lines of mostly:
 
-On Tue, Aug 11, 2026 at 6:11=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
-> On Mon, Aug 10, 2026 at 2:42=E2=80=AFPM Linus Walleij <linusw@kernel.org>=
- wrote:
-> > On Mon, Aug 10, 2026 at 6:02=E2=80=AFAM Long Zhao <longzhao@ambarella.c=
-om> wrote:
-> >
-> > > Thanks for the review. I will rework this to reuse the PL061 driver w=
-ith
-> > > per-variant register offsets, and evaluate modeling each GPIO bank as=
- a
-> > > separate DT entity. The duplicated GPIO implementation will be remove=
-d.
-> >
-> > Thanks Long, I think it will be easier if you break out the pin control
-> > bindings and driver from the patch series and work on it separately,
-> > the same with the serial driver at least.
-> >
-> > I understand this can be hard to test on the hardware, I usually
-> > put a few patches "underneath" the b4 cover letter, and then the
-> > b4 send-email will only send the cover letter and the patches
-> > on top.
->
-> The problem with that advice is then 'base-commit' is useless.
->
-> Maybe b4 could learn an 'ignore the top N commits" or "only track the
-> first N commits".
+  +470    common  listns                          sys_listns
 
-I honestly don't even know what the base-commit is for so that's
-I have blissfully ignored this problem...
+There's already a "common" table shared with a bunch of archs at
+`scripts/syscall.tbl`, but due to historical reasons some archs will never be
+able to move to this table and share all the numbers.
 
-So the summa summarum is that the current behaviour kind
-of encourages people to do large patch bombs for a new SoC
-since due to base-commit and the fact that developers tend
-to need to boot test the series (and it won't boot without some
-other SoC-enablement patches) the series must be kept
-toghether.
+The generic table starts from 403 (clock_gettime64), the first common syscall.
 
-That explains why it feels like I see *more* of those patch
-bombs these days.
+I've compile tested for arm32, arm64, s390, mips, sparc and alpha by comparing
+the syscalls_*.h and unistd_*.h files generated before and after this patchset.
+For most of cases the files are identical, for the few cases that they are not,
+there's a note in the commit explaining why they are equivalent.
 
-My initial stance would be that a useless base-commit is
-the lesser evil in cases like this.
+Thanks!
+	André
 
-Konstantin, what's your take on this dilemma?
+Changes in v5:
+- Add archs lists to Cc
+- alpha: Change custom alpha_syscall to __syscall
+- mips: Use "common" for all ABI tables
+- mips: Kept it as a single table for n32/n64
+- Fix bug introduced by mixing --offset and --compat-offset
+- v4: https://patch.msgid.link/20260812-tonyk-syscall_table-v4-0-748d0229ad40@igalia.com
 
-Yours,
-Linus Walleij
+Changes in v4:
+- Replace cln3 with clone3 in the ABIs
+- mips: Get rid of custom mips ABIs (o32, n32, n64) and use 32 and 64
+- mips: Unify n32 and n64 tables
+- Add alpha to the syscall party, along with it's adaptations
+- Remove --no-compat option and define SYSCALL_WITH_COMPAT() macro for archs
+that need it
+- v3: https://patch.msgid.link/20260807-tonyk-syscall_table-v3-0-7c45a23c50b5@igalia.com
+
+Changes in v3:
+- Removed x86 for now, let's wait till x32 is dropped
+- Added much more archs
+- v2: https://patch.msgid.link/20260727-tonyk-syscall_table-v2-0-95d4f1ee471f@igalia.com
+
+Changes in v2:
+- Managed to move to the real first common syscall: 403 (clock_gettime64)
+- Added -no-compat option to be used with x86_64
+- v1: https://patch.msgid.link/20260724-tonyk-syscall_table-v1-0-9c53188423da@igalia.com
+
+---
+André Almeida (13):
+      syscalls: Make --abis parsing more robust
+      syscalls: Create unified partial table for all archs
+      scripts/syscall.tbl: Use the common table
+      arm: Use the common syscall table
+      s390: Use the common syscall table
+      sparc: Use the common syscall table
+      mips: Remove duplicated syscallnr.sh
+      mips: Get rid of custom mips ABIs for syscall tables
+      mips: Use the common syscall table
+      syscalls: Add an option for offsetting the common table
+      alpha: Define entry point for set_mempolicy_home_node syscall
+      alpha: Remove alpha_ prefix from custom syscall entries
+      alpha: Use the common syscall table
+
+ arch/alpha/kernel/entry.S                 |   8 +-
+ arch/alpha/kernel/syscalls/Makefile       |  10 +-
+ arch/alpha/kernel/syscalls/syscall.tbl    |  54 +-
+ arch/alpha/kernel/systbls.S               |   1 +
+ arch/arm/tools/Makefile                   |  10 +-
+ arch/arm/tools/syscall.tbl                |  68 ---
+ arch/arm64/tools/syscall_32.tbl           |  68 ---
+ arch/mips/kernel/scall64-n32.S            |   1 +
+ arch/mips/kernel/scall64-n64.S            |   2 +
+ arch/mips/kernel/syscalls/Makefile        |  30 +-
+ arch/mips/kernel/syscalls/syscall_n.tbl   | 464 +++++++++++++++++
+ arch/mips/kernel/syscalls/syscall_n32.tbl | 412 ---------------
+ arch/mips/kernel/syscalls/syscall_n64.tbl | 388 --------------
+ arch/mips/kernel/syscalls/syscall_o32.tbl | 826 ++++++++++++++----------------
+ arch/mips/kernel/syscalls/syscallnr.sh    |  26 -
+ arch/s390/kernel/syscall.c                |   2 +
+ arch/s390/kernel/syscalls/Makefile        |   8 +-
+ arch/s390/kernel/syscalls/syscall.tbl     |  48 --
+ arch/sparc/kernel/syscalls/Makefile       |   8 +-
+ arch/sparc/kernel/syscalls/syscall.tbl    |  68 ---
+ scripts/Makefile.asm-headers              |   9 +-
+ scripts/syscall.tbl                       |  68 ---
+ scripts/syscall_common.tbl                |  83 +++
+ scripts/syscallhdr.sh                     |  81 ++-
+ scripts/syscalltbl.sh                     |  47 +-
+ 25 files changed, 1094 insertions(+), 1696 deletions(-)
+---
+base-commit: 075b74841bd0065a3bda3440873c747938e69b68
+change-id: 20260724-tonyk-syscall_table-928bbb1b26bb
+
+Best regards,
+--  
+André Almeida <andrealmeid@igalia.com>
+
