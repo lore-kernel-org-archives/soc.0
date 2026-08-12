@@ -1,97 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2D73C5857
-	for <soc@lists.linux.dev>; Tue, 11 Aug 2026 16:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE0537E5E9;
+	Wed, 12 Aug 2026 02:47:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786464662; cv=none; b=VUKiUoUDsAN4a11glJQvFadILG5KBPQQVIGBLrTWQMJbcq5lw2IF+c+RW51ptxgkB6lvp12decHB0LdpfW+9WHOGDbrBvSd2dzqkFghvSsJMvB9QMGS18rgLQYLQj9LbJsGTNkOby6mpRhdH3Fyksx4bERhDeM6T43KsXntecNw=
+	t=1786502868; cv=none; b=IOoDwqmOUGzgfGahKXoa7ah9EvGgc87dceoB8iKOf+iaJWXGZHaKvcsPrcOVTgltImb9S5x6mGy8T3akOgXKj96/AfKxaPCEAn8oBgFTtNtAI/lDWySH0EShK6RV9TAO8orCwXaMJFBmMkr+NDeZ6vD3IutBATJbMV8kw2gzH1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786464662; c=relaxed/simple;
-	bh=s5aYQFH5/TsJrfgH3Hmm3Z5/dP+xYZg4aYmTqt5N98Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PBB2xBs9S76NniATDZAt+MqZg65zapQt6HDijxB6gnQcE8CoR40CvnM88cZe7rEMgljwNvDeiAO5zWtvdqZylGmzzL/aSOYzVpu+C1Hg67vQWoo5Lg3W+VfYC/4w44qmkxHjl1FVaq+h0Dyxn2WsL/Llxz+/uTMd27tcz1phkag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OTxVVdhZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786502868; c=relaxed/simple;
+	bh=72URCmWOjSFx+3UxH7LUv24KROUuX0ZPDDmzk/1HvtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sAFDGsJnagxk5qbPuwdBxZt73cl/OZJIFdeeJjcOfQa8jHXqQr4iBNc9n8zoDPjky4rac1oeM9nfkJfRC5+i9hChzMhOupxzBUjOIAkyJb7LVYCFpN8oLSc4mHLQqOcsvvuSP4B4al9OBdUKQzxtI84vTgNRasQ/MEYTRUgbBgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiSsysQ7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OTxVVdhZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C07E1F00ADB
-	for <soc@lists.linux.dev>; Tue, 11 Aug 2026 16:11:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiSsysQ7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 071C81F000E9;
+	Wed, 12 Aug 2026 02:47:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786464661;
-	bh=s5aYQFH5/TsJrfgH3Hmm3Z5/dP+xYZg4aYmTqt5N98Q=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=OTxVVdhZRmaj9tkDRGlrzrtpdSexA49s47RLI8Twy4X2WCBf/g6bn8k/1d9JPgFpL
-	 y2GfduWi+ZR2W8AtNJ9UUWy0Jzlt8uVWTADljZX6LKKQGowZ1O0DA1++7yUSUqYfDz
-	 xnWwwtP0KKRTajZsIx3bFfJDthsQ422gzilaNI+jKfGTXv9zd8+5AgQY0/dKRdhXYS
-	 QwboSbp6U+VhfW9Nbv3/bE8sNBu3eyksQBNDp2KxA2kffHOk6uRtwaHx0uhnzVPfAW
-	 8PqlY/j+Yxvhi2iP6MxW+SkT2z0UT56qMQcg+PDuGgNUoQpsPbwr0W8foY1KZST59P
-	 GMhX9Wv+0tTEA==
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c16794450aeso136181066b.2
-        for <soc@lists.linux.dev>; Tue, 11 Aug 2026 09:11:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RrUOzfam0VUPFs4enZhX19wM90DmZWo2Qy3JqKspBvS+w5FuNo6yD9fRuFUxPv1lL2XmVY=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzg7MdNf0zhE0P5y5ya/8ayKFyFYzOcPtdQcr3QBAo4dodkZY7B
-	Rcew32OYKeEvNue2i0Mo5mxAjhxsVgPneKTL29eEAJAt8feCaUOu561WhNNgh/gKfTXQdYRu47m
-	reWzihWfTqUB9n4F7pLh7j0w9ALjhTA==
-X-Received: by 2002:a17:907:9344:b0:c19:49ee:19b9 with SMTP id
- a640c23a62f3a-c20ecb40d59mr83318066b.15.1786464659836; Tue, 11 Aug 2026
- 09:10:59 -0700 (PDT)
+	s=k20260515; t=1786502867;
+	bh=+ASwc2Ygv66cUz6aU4pmnpAE1p1jo1CzJkrv0lM5YYk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=PiSsysQ7qMrLsD03v8wZWLZRJPBrRPg0zQexvwmp2S282dkNa3REJo1M63fTsTV9r
+	 hPmaNjHCENc8iy69IgbO8Awu29TEaUB3TO5gEn2jq+RG2p8RfRbphQLIwlFc4HQOem
+	 Njb72/0K3gnwtGRt7feZ0pGQn1EdqZBHd6tytpxlhetXY2o8C52jASL5CUMQ33SAcZ
+	 rpvKsqUXbQS5HsjzaFCx+HWFUdIOenchXYQH5WXQYQ5I8Cg4qZJa8YuLwDp587JSlo
+	 LOQyIzSMclP5xEUXi+6hnnvnIt6TxYYw5ggB/hs14ydl0VX17be28gcFTcXQbA3toa
+	 bsBuCUTLpGs2g==
+Date: Tue, 11 Aug 2026 21:47:46 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Long Zhao <longzhao@ambarella.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, devicetree@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	Linus Walleij <linusw@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Stephen Boyd <sboyd@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	linux-clk@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-gpio@vger.kernel.org, Will Deacon <will@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] dt-bindings: serial: add Ambarella UART
+Message-ID: <178650286553.616367.17873097780629180417.robh@kernel.org>
+References: <20260806-longzhao-upstream-cv75-v2-v2-0-6b09707c5fe9@ambarella.com>
+ <20260806-longzhao-upstream-cv75-v2-v2-5-6b09707c5fe9@ambarella.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260806-longzhao-upstream-cv75-v2-v2-0-6b09707c5fe9@ambarella.com>
- <20260806-longzhao-upstream-cv75-v2-v2-7-6b09707c5fe9@ambarella.com>
- <CAD++jLk0LoOJk=TXin42AL3_z_7eVVkvMnYr1S8090C6A_B+dQ@mail.gmail.com>
- <DS0PR19MB7925690FD29D578D8AC5D10EDADE2@DS0PR19MB7925.namprd19.prod.outlook.com>
- <CAD++jLkUPU0eujvWc5Hn1tEu4n451LvkuGGT=j6OfirJENpRgg@mail.gmail.com>
-In-Reply-To: <CAD++jLkUPU0eujvWc5Hn1tEu4n451LvkuGGT=j6OfirJENpRgg@mail.gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 11 Aug 2026 11:10:48 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJprX0oC3Gdj=RNNYtPiQ-0NkEPvn-MyQ9ZtFakKcj1ew@mail.gmail.com>
-X-Gm-Features: AUfX_mzXtvkrshAlkiMteNJj8gvRU9rIYBk-lG0usv9XUDyxXzzHJorja6k1J7w
-Message-ID: <CAL_JsqJprX0oC3Gdj=RNNYtPiQ-0NkEPvn-MyQ9ZtFakKcj1ew@mail.gmail.com>
-Subject: Re: Re: [PATCH v2 07/10] pinctrl: ambarella: add Ambarella pin controller
-To: Linus Walleij <linusw@kernel.org>
-Cc: Long Zhao <longzhao@ambarella.com>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, 
-	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>, 
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, "soc@lists.linux.dev" <soc@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260806-longzhao-upstream-cv75-v2-v2-5-6b09707c5fe9@ambarella.com>
 
-On Mon, Aug 10, 2026 at 2:42=E2=80=AFPM Linus Walleij <linusw@kernel.org> w=
-rote:
->
-> On Mon, Aug 10, 2026 at 6:02=E2=80=AFAM Long Zhao <longzhao@ambarella.com=
-> wrote:
->
-> > Thanks for the review. I will rework this to reuse the PL061 driver wit=
-h
-> > per-variant register offsets, and evaluate modeling each GPIO bank as a
-> > separate DT entity. The duplicated GPIO implementation will be removed.
->
-> Thanks Long, I think it will be easier if you break out the pin control
-> bindings and driver from the patch series and work on it separately,
-> the same with the serial driver at least.
->
-> I understand this can be hard to test on the hardware, I usually
-> put a few patches "underneath" the b4 cover letter, and then the
-> b4 send-email will only send the cover letter and the patches
-> on top.
 
-The problem with that advice is then 'base-commit' is useless.
+On Thu, 06 Aug 2026 17:34:13 +0800, Long Zhao wrote:
+> Document the Ambarella UART controller.
+> 
+> Signed-off-by: Long Zhao <longzhao@ambarella.com>
+> ---
+>  .../bindings/serial/ambarella,cv75-uart.yaml       | 45 ++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+> 
 
-Maybe b4 could learn an 'ignore the top N commits" or "only track the
-first N commits".
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Rob
