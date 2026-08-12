@@ -1,69 +1,61 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE0537E5E9;
-	Wed, 12 Aug 2026 02:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510D5329C6B
+	for <soc@lists.linux.dev>; Wed, 12 Aug 2026 06:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786502868; cv=none; b=IOoDwqmOUGzgfGahKXoa7ah9EvGgc87dceoB8iKOf+iaJWXGZHaKvcsPrcOVTgltImb9S5x6mGy8T3akOgXKj96/AfKxaPCEAn8oBgFTtNtAI/lDWySH0EShK6RV9TAO8orCwXaMJFBmMkr+NDeZ6vD3IutBATJbMV8kw2gzH1g=
+	t=1786515608; cv=none; b=iogs7SebLKnD3+0itVRd/1XLC7l1dYf2+k2wA2wfPfMJW+gK/aXAuBYqB71dhfqiLF05Onp7HzwmF3jCTJWzhFWHHA7itI9fRxDOJwIJyMuuec8ve4iOedGJRtd0UTE5i9swWcnHrfB0RS2A3uAcmqn0yjrpgb8+qyEcjKys2XA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786502868; c=relaxed/simple;
-	bh=72URCmWOjSFx+3UxH7LUv24KROUuX0ZPDDmzk/1HvtI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sAFDGsJnagxk5qbPuwdBxZt73cl/OZJIFdeeJjcOfQa8jHXqQr4iBNc9n8zoDPjky4rac1oeM9nfkJfRC5+i9hChzMhOupxzBUjOIAkyJb7LVYCFpN8oLSc4mHLQqOcsvvuSP4B4al9OBdUKQzxtI84vTgNRasQ/MEYTRUgbBgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiSsysQ7; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiSsysQ7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 071C81F000E9;
-	Wed, 12 Aug 2026 02:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786502867;
-	bh=+ASwc2Ygv66cUz6aU4pmnpAE1p1jo1CzJkrv0lM5YYk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PiSsysQ7qMrLsD03v8wZWLZRJPBrRPg0zQexvwmp2S282dkNa3REJo1M63fTsTV9r
-	 hPmaNjHCENc8iy69IgbO8Awu29TEaUB3TO5gEn2jq+RG2p8RfRbphQLIwlFc4HQOem
-	 Njb72/0K3gnwtGRt7feZ0pGQn1EdqZBHd6tytpxlhetXY2o8C52jASL5CUMQ33SAcZ
-	 rpvKsqUXbQS5HsjzaFCx+HWFUdIOenchXYQH5WXQYQ5I8Cg4qZJa8YuLwDp587JSlo
-	 LOQyIzSMclP5xEUXi+6hnnvnIt6TxYYw5ggB/hs14ydl0VX17be28gcFTcXQbA3toa
-	 bsBuCUTLpGs2g==
-Date: Tue, 11 Aug 2026 21:47:46 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Long Zhao <longzhao@ambarella.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, devicetree@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	Linus Walleij <linusw@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Stephen Boyd <sboyd@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	linux-clk@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-gpio@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] dt-bindings: serial: add Ambarella UART
-Message-ID: <178650286553.616367.17873097780629180417.robh@kernel.org>
-References: <20260806-longzhao-upstream-cv75-v2-v2-0-6b09707c5fe9@ambarella.com>
- <20260806-longzhao-upstream-cv75-v2-v2-5-6b09707c5fe9@ambarella.com>
+	s=arc-20240116; t=1786515608; c=relaxed/simple;
+	bh=lB6xXBdomdQiS1b7fJ3I0FgYJo4d8F8nIQf38tVgWR8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FXbbUKDAq9SgSYvgYGvpYcvATLnm0vICZsv5msegVrkOXaEt8RITfLJ5yzzMwFrGLoI37R8pDBFIZIYvMn2qluow4/RHdlFOCz+Fnfr6YsLBFVpCFC+y0vAi8hg1i8u6pUX/OR4fpyKiflh3+WwhfM8vLPqklYyFoHx0qYqXFN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix)
+	id 0B7B21F00A3D; Wed, 12 Aug 2026 06:20:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541821F000E9;
+	Wed, 12 Aug 2026 06:20:05 +0000 (UTC)
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: claudiu.beznea@tuxon.dev,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	linux-arm-kernel@lists.infradead.org,
+	conor@kernel.org
+Subject: [GIT PULL] Microchip ARM64 device tree updates for v7.3
+Date: Wed, 12 Aug 2026 09:20:03 +0300
+Message-ID: <20260812062003.1285582-1-claudiu.beznea@tuxon.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260806-longzhao-upstream-cv75-v2-v2-5-6b09707c5fe9@ambarella.com>
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
-On Thu, 06 Aug 2026 17:34:13 +0800, Long Zhao wrote:
-> Document the Ambarella UART controller.
-> 
-> Signed-off-by: Long Zhao <longzhao@ambarella.com>
-> ---
->  .../bindings/serial/ambarella,cv75-uart.yaml       | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
-> 
+  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/microchip-dt64-7.3
+
+for you to fetch changes up to 8258a4bcfaa9ded9b19b3c230ed85df44d580935:
+
+  arm64: dts: microchip: lan969x: add QSPI nodes (2026-07-27 09:57:02 +0300)
+
+----------------------------------------------------------------
+Microchip ARM64 device tree updates for v7.3
+
+This update includes:
+- the device tree nodes for the QSPI controllers on LAN9691 SoC
+
+----------------------------------------------------------------
+Robert Marko (1):
+      arm64: dts: microchip: lan969x: add QSPI nodes
+
+ arch/arm64/boot/dts/microchip/lan9691.dtsi | 33 ++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
