@@ -1,125 +1,123 @@
-Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3758B3624D3
-	for <soc@lists.linux.dev>; Sat, 15 Aug 2026 08:15:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786781760; cv=none; b=grmo7PkFMt7ifVovPrfFyaY8UMSqdOYJ0w2jYdR10Oa7p+MMfp+N2zj7xEfEhxxRgpNuAlsDhEMJRkGmujOcibl036MtZd23rYTOcHJNoP4BsFMUF2r7rH/16+CW3nhtOEtyp+5rVx5eWOvwDd3LIAa4xdj+hBpaTLJ894zuIjI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786781760; c=relaxed/simple;
-	bh=+1IgkPjZHGkPi8vK4Nfg6sVq8MqjK/EMzr9iVLhjFr0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=s15WNhmoHDFVhZ5jNatkThdFJaM/A+rceD8zKQr+DzFKOhP3eW0U6k2LEuSidzVbPauXcR5npnEhYRCkjgs1MaqVPULMmCzmiS0dflvSr/OnJXAxocOo8doxr+pRHFhYD3LNgd1wU7vfYPnZEjwPfSCD3RnaoMFBGdkfwxwBOeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NOyELDQ7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mA8zKdcw; arc=none smtp.client-ip=202.12.124.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6930D37CD53
+	for <soc@lists.linux.dev>; Sat, 15 Aug 2026 08:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786782107; cv=pass; b=nTaYDfw5yIs8ECqnhIKxZ26x7AE41rrLxomjEdqs67t2PQy8eD7fTRsA2J49wdWtg4owzZSAQOBm0PRrJJPXsyV9GrTjSJUroNQEKhtpZEQfeoTOWfMsL8oXfYPOCwexnC4LzBQ+gOQVBQTftKV5CfgesICe48KnIBRH1OQli+k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786782107; c=relaxed/simple;
+	bh=3pfd9aLf+Vk6ELU6TxH5NL7FubcJXBOQNHsDXv+JQ8A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DSLLBkwOhZsqy5hPP2XdU8tSpH4LPruhtxvV+zSMe1fTRzOG79WKBpBnw5I9j6O6Y9ldupQ765X6r5mkP7Ahz+v13+AdMddZ4j/ee9zyPnUV4ETtD6qTqfMP/mL/857S0qIiUbNJHCy5JV5cF+/DIumpFgs/yj1sLCaCOyG0Bm8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oZlCzu7B; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NOyELDQ7";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mA8zKdcw"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id AED0E7A01A8;
-	Sat, 15 Aug 2026 04:15:55 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Sat, 15 Aug 2026 04:15:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1786781754; x=1786868154; bh=uT
-	XfL04+7M6PFf6QMhYjfaRkbYuuslMVuPfvHfO9194=; b=NOyELDQ7sV4fP2vUzc
-	bWu78TVLDS/1DX2bPr5CAwxzJgAHjy3O192dbBxhqr/tX6jrSirZt2cZ3jhHPo55
-	tSK8Deu8fJTZg0umd2UJ5gelrp/9uJFm/LzHAT3r+NyTWmjCfsHRDcMxasrY/xie
-	Vr3S6Eyupj0t532dMSctzAoXMuze+RsKkQYMDQeafqSsiGZ/rMUr+dJ2uPge4od7
-	/1e+KOFVS2RZGU+4O4MKpj28REVx6+0liZ/MKClIYmE1om/MOqLZ3IpTHQC4Vx78
-	/fUMlx4XDTaVFI4u1FefZSgCyrq9M72drOkaMO0/7JDC9SMaB0I0uGjtwIbRVue+
-	sh9A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1786781754; x=1786868154; bh=uTXfL04+7M6PFf6QMhYjfaRkbYuu
-	slMVuPfvHfO9194=; b=mA8zKdcwi6KE7MPz1ezb/wyKgl91c3AB9HbfVExl76pD
-	F5+a+RHqjnpMZSM1ZVwXvSyhKGPLfKqD2GkTGxP4PNQy0VhiNtSQdULCW8QOCbZZ
-	5DQxrm2+JKcEuK9LDeOGkGB6XjvqsFio1bLnAg4gtCmh/e4KyatxllmxUesnD3De
-	OvKPF3DibaZ2LEqZGaNKiAx7K/XVtZ3ICCytqFz8kAPGHkBYItbhbQiGZotKcv5l
-	FocKpI7aeUjYtKDOBVPIYgS7O2akijDtK/jU9wJdM3h9Vhoe9JUh9acROEuyjlSa
-	we8un8KCxRyL89H2Z1kYEXp3Cl26Jd38cuPvDwtqQg==
-X-ME-Sender: <xms:NSCAag85bDLDwXahzSMwCpI9Oy3v-vmxDJqD_kbI9TC_iiJLgmPcpQ>
-    <xme:NSCAajiZuirQN-OzFh4MC2_-IOiu1CQ_PrNLA6Cxv-TXMvIhW8k4NXI2h4sgBVpKZ
-    PNzhciKGmbxel0YlxvwlTslixEhaNZW4VrEEfACdGMOfrukbklLa6I>
-X-ME-Proxy-Cause: dmFkZTGUT+E/IH3S8Sa45nnjiVsqDd16e+pbPfxGZnjdGaokIbfIpSQJW0WNC5YwDiTrd1
-    uEBsptyMk9ouzswyZPBagl0pd8MzKTpRVMfLQDYNY7qQHbdYW7r9Vp6q3WLifz2tOZLxZX
-    m9+tspUe0zXc9H3ENZVZy2GGNjERoqCQdFwfUqk5gJ4vT66O7KeXZxnSeUk20+V0XJa44i
-    hQSnWgNAdihi2DFhAUjjt7oi2ptEU6Gmmo//+ALWiYQ6mWsfEwkynpzv1YdvOUDH7fRvyY
-    jxADPlU2Jsvoze4VyYEUsepuWSxJwhGTO5+casTMDJ5gIi1sIkM4rHsVG59h4jGz4WKnAv
-    qbRD0Uz7KifKHfKj96kZpD8oGG5oLlIpO666xgznJyZW7VpEWw5HDX9PFe68wK5b6/BFwp
-    nDrzTSZwzGJrxodiZIG4G3g3TD921wJ6CqTrColZSkxBMjFUJm0e9Wqxe45Mio5iawM2Fk
-    m0IR1aGdyTxqq1U9jcd1rnVG2aoEFe1WRI1TkhODjIrSsugQohZe9ASuX1NZfSLNdKR4vr
-    IS9VXHjUJbZ6HaGvXNzoBcWvjMfljiKw8evACQ+7aZkSYJaxEHDslF5P4po9P4GGmwJDlw
-    nmBagjVoHwMljC6iq4J1OxshHzwHTfp89xXddxByTUmQLoC2YPiPRZ1+bvwQ
-X-ME-Proxy: <xmx:NyCAaioHKYVf-h4EryngrxJj4_LUzoLbEpewTCLzvHTRUxu8YTJJ1A>
-    <xmx:NyCAanivzLBmE3aqCr77njkxDfrdFgJ5Y3k51J3h2vkx3cu8S48ZYw>
-    <xmx:NyCAavgYf6LlHD1rJfOldt9gNWY_oLS3puSxXOOHkMjFrXGotNnMRQ>
-    <xmx:NyCAatibzfrPIonDaj88miIzC5EKyAl-vjBFMppMvnXcFFPXOTivLw>
-    <xmx:OiCAanwdiPZE4sVJVvDBeiQh2k4bRlnlXZBZvu641DTXG0sk5-Upnm8g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id C21CC32A006F; Sat, 15 Aug 2026 04:15:49 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oZlCzu7B"
+Received: by smtp.kernel.org (Postfix)
+	id 533E01F00A3D; Sat, 15 Aug 2026 08:21:45 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.246.84.56
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1786782105;
+	b=qHeV5GOxySXE04+B8PUPagE/NUIpT8j2LPmvXlXdX+dIPCvohLBvKbY/dOE4azKC8HFT
+	 GK4nk4DVjVqxuoh8DK0abAdpOguDVL4kkDQ5kToXG8tFE9SsTnKuRr22hg0Rs5LwKRF+F
+	 aCPmAHhPZFjL9rYGIFsCjguH2VcJx4sIRK4rFhYP6PnrXTNhW8pTZIjI4FutPU+QB0bJz
+	 oUl7byJG91fmLLb/+7PhQ5Gl61YR+rCQ19vdmRljNjcm71SjoBHKgEZ6zXqyrlSZGsdCD
+	 nLmDjkhqpqw1NWQ5l8Goj5EfpIhdGtjNXjZDzy7MmaUOi2BL8FmXZfMtgoystix+KuQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1786782105;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:To:Cc:
+	 Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+	bh=4eGC9x1zlRVQNHV1HFiP9eA02RV5+baUhRnHBOM8Efs=;
+	b=VUzzKFh8Qqya69PWVDv5nWRXJ8DtXhc81miO9yMT2nl87W2B4A664KE4vWbDCcQVzwWT
+	 uhxT2dAoGd44uw93uvkjWyCb7Pqd16o63S11AQpqg/GeWF/i+vKEd80JA59GD/+y1kTav
+	 U4cEw94DAbiBFrFKZMxMDd+ffMDHfVwHMfaRevlEtVCsOkAAOkDwJj95J08ofCwQ+b+kc
+	 OiEOCoZ79saUMrzAv1GvPkvl2DopkST8IN2EZQ7lO3wA0uhHGD/M1/EW5fUlJjxJykBX0
+	 aWl4npEVjk3UF9zwVjkQI/Vl6AfTdcmbNYcbBp38MC/yP1qe3LnYNiM/mM+BS/rlCgQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=oZlCzu7B;
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	arc=none smtp.remote-ip=185.246.84.56
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 163F91F000E9;
+	Sat, 15 Aug 2026 08:21:41 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=oZlCzu7B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 163F91F000E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id D042D1A1660;
+	Sat, 15 Aug 2026 08:21:33 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 95BA2604AA;
+	Sat, 15 Aug 2026 08:21:33 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B5D9311C4F436;
+	Sat, 15 Aug 2026 10:21:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786782088; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=4eGC9x1zlRVQNHV1HFiP9eA02RV5+baUhRnHBOM8Efs=;
+	b=oZlCzu7BzsjAsdKlteo4OnvHrFzEEI6//eoiNjezo9wYSzqjAD0oGKf/VmKZmoqNBLb3/8
+	wwlY1FiVBs4m+Hbr0Z/ipBiF1NtRXTHTbFzB5YjZB0q07tKiZuOjkWRLPKts+6iGMAJsTq
+	bZXsxbBDA5XbXtR2clepAR9vqtag0dttID3kvhdsWf/6MbXQT0k6f77uzl+LEBU02Uvqkf
+	OWxgwwxLjk6EdkYwEKUDw252ItGD+MyzHCyxXdtb7eC1vvl5iF4GFZ3dBB6BNDxYIZWCS+
+	kfv++ChiQ1cQ266/bGcTzIqK7leX/ZnfqpmlgBwxHyFgbnmd0t3MOy9yR8xHFg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Arnd Bergmann <arnd@arndb.de>,  <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v7.3 (#1)
+Date: Sat, 15 Aug 2026 10:21:24 +0200
+Message-ID: <87lda7oku3.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Sat, 15 Aug 2026 10:15:49 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Message-Id: <308796e0-962b-4e8f-bd2a-af5be9cf15a9@app.fastmail.com>
-Subject: [GIT PULL] SoC fixes for 7.2, part 3
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
-The following changes since commit db2ddb87143519e20a95aa36c60b36107b736a58:
+Hi,
 
-  Linux 7.2-rc7 (2026-08-09 14:54:50 -0700)
+Here is the first pull request for dt64 for mvebu for v7.3.
+
+Sorry for the delay. I only managed to push my branches for linux-next
+last Sunday, so I waited a few days for them to be merged before
+creating this PR.
+
+Gregory
+
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
+
+  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.2-3
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-dt64-7.3-1
 
-for you to fetch changes up to e36c0670d5ebebd7dba493f14966051f354fbb34:
+for you to fetch changes up to 0c2a8eed95160e41b367a1fa605a2c1b24a9639a:
 
-  Merge tag 'tegra-for-7.2-arm64-dt-fixes-v2' of git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into arm/fixes (2026-08-10 09:38:36 +0200)
-
-----------------------------------------------------------------
-SoC fixes for 7.2, part 3
-
-These are three last-minute fixes for the 7.2 release,
-though nothing alarming:
-
- - one error handling fix for optee firmware
- - incorrect i2c data for the apple M3 that was added in 7.2
- - a boot time warning fix for nvidia tegra
+  arm64: dts: turris-mox: fix usb3 phys (2026-08-09 12:42:37 +0200)
 
 ----------------------------------------------------------------
-Arnd Bergmann (3):
-      Merge tag 'optee-fix-for-v7.2' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
-      Merge tag 'apple-soc-fixes-7.2' of https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux into arm/fixes
-      Merge tag 'tegra-for-7.2-arm64-dt-fixes-v2' of git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into arm/fixes
+mvebu dt64 for 7.3 (part 1)
 
-Jon Hunter (1):
-      arm64: tegra: Add EL2 virtual timer interrupt for Tegra194
+Fix usb3 phys declaration on Turris MOX an Armada 3700 based Soc
 
-Michael Reeves (1):
-      arm64: dts: apple: t8122: Fix I2C resources
+----------------------------------------------------------------
+Tom=C3=A1=C5=A1 Macholda (1):
+      arm64: dts: turris-mox: fix usb3 phys
 
-Mostafa Saleh (1):
-      optee: ffa: Add NULL check in optee_ffa_lend_protmem
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- arch/arm64/boot/dts/apple/t8122.dtsi     | 30 +++++++++++++++---------------
- arch/arm64/boot/dts/nvidia/tegra194.dtsi |  2 ++
- drivers/tee/optee/ffa_abi.c              |  3 +++
- 3 files changed, 20 insertions(+), 15 deletions(-)
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
