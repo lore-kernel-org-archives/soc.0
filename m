@@ -1,290 +1,218 @@
-Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B281F1A724C
-	for <soc@lists.linux.dev>; Tue, 18 Aug 2026 21:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328C9238C2A
+	for <soc@lists.linux.dev>; Tue, 18 Aug 2026 22:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787087834; cv=none; b=JeZ/+BFdD+zr9K74KgBCjmsv/IJ3lqQ/6v/oIk4Q5yjYTDhXf7J+xw3slM+jPDjGbbCKG/xH0NznaarNtlf1BC1rXrTjUuEF0/F3y57YTVlt+8q9bFef+1sUc+VuOgYRcUhQxzBb40AMe7jW2fLeC6bataepGS+hxivNubT2c/o=
+	t=1787091692; cv=none; b=BYf+87Od6zbtBC0KnDyuI2/gueKf1PLT+qX6Qj3zHX9vPgNOMYN7A7K2HWKBMqaAujb3BaHhHkN6IbMfspIO4DDePZyTzJqcPo+xFYmcO7UymaFMs8KkhCJyArAfcU0Cyd9AlvkVxyb6vbU6J4YJlJsUlElpf+povd2YDtQBEkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787087834; c=relaxed/simple;
-	bh=McIiOYwrBK0ExO9lysZ8N7RCfwI/rFaE2ewH3zv3Wr0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=oFM019jOpq2a1k/EQH4DvUSspRzI03KygzpZYYk0+E7UF8nusSnA5J8xzuhQAbLndMhSYQFJtIqAqFqZ0NAgwrsb4HXbRMwJzI1enknOfOiMApR+Ww24KXjXQGGXeLF24O/zbBWBeMLSozJ6Cb4eaJWkxiOxy6I/rusWyff7uVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=juiodm02; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iyZ1B/F6; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1787091692; c=relaxed/simple;
+	bh=IcRGBxPKmByruY+4O0/f4Uf9z2skvWKVFPpiGpCrHJg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GgKqFRF2zsInfIHG1kZjmKAK4biIIFQ1gccICw38WcTCsdOXpBO23kn9VJluh0M6HdjbQ0wuLf0Z90LCcLglCBj0wWRC2bHrVqIvX9jAAyOvsyJpX/1OPhtiT/yvssywX0AJseAOxEq31rbb3d05KLF2HHuSs5DTkUj10lVpmJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=n+67AeFe; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="juiodm02";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iyZ1B/F6"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 765B51400150;
-	Tue, 18 Aug 2026 17:17:11 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Tue, 18 Aug 2026 17:17:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1787087831; x=1787174231; bh=cz
-	qQj/DkLiGDm5PELPaIJngrIu9Dzte0G0O3+qijjbs=; b=juiodm02hjP1aYtQoo
-	o63/CVZIe7bO+IVRQAfkOikdf1pdZMxiMxHrfievNvD4Foh1RuTqipJ/za/HRb2E
-	PC/B+p0eOrRkU0/vX/91478g7It5fp8uG44t8+xtAV4iprliE9Jq99iBgkyEtkD5
-	bVqRF/XwwS5RFFqXMvwaZ6HViVmvUK6aU7+1BGaMFUt9H+uO9N+fkoDtTGQtQBac
-	JG8+fIa4pljNE0j8DuZyb0/t5l3dWYl3snAdb1grLFYdIHmatXtcqDyUAx9ZAPgo
-	HfkvCZOx3n/lcTVoaN7jjmGHUqD/G2AD2JpIVhP5If6EM+PHtKpcSKWSXc1FznN2
-	OcAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1787087831; x=1787174231; bh=czqQj/DkLiGDm5PELPaIJngrIu9D
-	zte0G0O3+qijjbs=; b=iyZ1B/F62IfqJq9y8fTenUfV9+GjmZ6q3k7e+TRBktF/
-	VdPOEsFN9xflYcV8fIiXpIbka0tpaweU35p3hWe0UKaJFtXpOQZK5q70ItxspMSV
-	1xC+fti72qKqXigMGcX+fzLvQdqI6WRf0X3x2DVlpBIrLIBjFkzZSFcgPRu3I+qc
-	ttk1JHFSqvIZRSkcHFcwn4xJlZd/su3OgvWi5Rvh7qhkpgTnx89zFNLea+Jzc+4x
-	NRE2x46By1APdO09NsbKEL+axH8/Xm5VtkXQCTwFxkbypTOECKcGOVKMFSfkrPrp
-	/oVj6hwVfFieg4XVpxmlC58DO0NSwX8ALz/1/7SIjA==
-X-ME-Sender: <xms:1MuEajpdviEuuef9EjONQsO1keH23JRb5Aq3GacgzQ77ivLcqBJ-ug>
-    <xme:1MuEaoeh1n60ZwCQI_gyFwbdd-vl0ctLab-8MZqGDiXcrHEErC5hWTAFoBuJjJ7eC
-    H4eD1O_GmO4zkBbSYeak5pzfNy1A1cr0aY4Gdb-z6YUrIF07KppMQ>
-X-ME-Proxy-Cause: dmFkZTEPivZYlYvamL7+G+QmhG+yYD3xbay+nzGw4hBIps2OlNLJtB64guFptI7zdZsmu9
-    4+lob1BHl5aQsuoQlTjf9eckaK8alWKGPxGaHPj3eWeOmfT8yYWt3jVNLcLjoQkosaaSsh
-    ZE7sTORLBg1TfXeDAMOMjNZcP2GVOgQ3yRTaRuZh+Vr8z7dq3dmO5qRfptjjWplW/F4bxC
-    6oC8APHtVAY7MvfXmaiu5i+NDpWLqTvtBseJXKo5sqElAv9/LFVBQyJo1BSmREFGKGGv1P
-    XQjfDcJ/EUGb1JH55RMi2Z4ThhE6zKrVCZhml3JQyG2IazBBeiiGEoCfBI72R2hcSXmpl4
-    7bZSei0LyhpppwowadYt1tSJ9AQ8gdMGTkXERL1S1gCHRBirJXqTiTkUI9JpPzrBQgULgX
-    mPgfJwacHtE0146kCuWIeHnlu6bBg9EDg80Iy7Q2kxfH2y+ZMlYAYD6TP9pLzvE+UBELZ8
-    5DEYnWDHNva+f0xCSi/UrQhOJXs5ytO1CO0c/KGAGav5czKDgwjU3Of2F57NPriTA1vMEo
-    0ZykYocxtd7W7Q6ED2IdYG4l5xp/ouPo4PxhFjP/2MTXNqDoDGAV8GMx3/Bc9SJp05R2fS
-    DS5zZhNVnKlXgs5PSe6EmchLfqoxw3TlNbvMTIJy6JJjFok7RNVxGHP4xpLg
-X-ME-Proxy: <xmx:1cuEatWcL_I7bLhLl_gQantIdnXdPLJ-IN2SR5r3-aAnZ6K63lMB-w>
-    <xmx:1cuEakcLtkrPsIaTkxBiahr_cLp21lhjIpVFA3qHF-H_SuRZ_x8Dlw>
-    <xmx:1cuEahsqK_hwiOIgCRy3CN0QueqihXS4j0KlbxI_-srbhwvOd66PDA>
-    <xmx:1cuEar9ZujKgic7VWBxEJFbVzLztU7DLoAf1Tc6-w05eEG2ASpu-tA>
-    <xmx:18uEavsLLPGyn82Kmt9wHWw-aEhnXJ-YMjVrR5DGCQuBaxwHDkRdBFns>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id D7F7232A0074; Tue, 18 Aug 2026 17:17:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="n+67AeFe"
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6b128dd0cb1so364034eaf.3
+        for <soc@lists.linux.dev>; Tue, 18 Aug 2026 15:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1787091690; x=1787696490; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=OAeyHXN0Zof9oCVlItznCba1s0MUdsF9dzRH/tkJGa4=;
+        b=n+67AeFexcLKS8xxvpIHEcvmuGAtH/1Xu9VCqsadbwin0E/bgHuiA5YlExHPNA+kyy
+         keygzPSQF7VqjYY4wDH0Ujg2L8c5ovgvU/Uv9fIkfhZtixdv+iwpwI9h5Bv6dMdePSyN
+         jV13a+/n+jusCzNyZ2lUHcTI7upymP/WjcZKM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787091690; x=1787696490;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=OAeyHXN0Zof9oCVlItznCba1s0MUdsF9dzRH/tkJGa4=;
+        b=sDD+tczNuW4keuAGTSMngIgGh9hWJkmxdegFVBjz/ikBPq5RXmAb2gVgu1WTKbO7Ab
+         ViwLrRXsDqkVJPRlmsYb8SqMeJY2R0nefyCAMqMPFTZicY73gFLHdb/QV4wlJNL6TS4L
+         NWlcPnXq0/yiov2dEDD1graF3hQRIO1yMh91CaMW3vnq6NIKMkWH/10xWsgT1KGwefV6
+         bNtyaT6nDt1iFhwf11aRkOmFJDEiVvgF4wBSYR8+tV2ziSLuwD50UmUp3cIQiGM82zDs
+         EXY3qyOUQjgj1ZzOyvIiMNnvZJIPpURMai/gGZDz0I0SAvM8YuV2yXuNuQiyMuDB9+zb
+         AzNA==
+X-Forwarded-Encrypted: i=1; AHgh+RpU1MvN+Ex6BsL2VeaM03g5CJ+FC1O5lCa/xsSa0osxtAAnw0aVifvhJR9DU3OEyuluY+c=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxJjBZMSQlFbe/vwImthTNEx443/gRalBYnUSBi8LMK6bY/6Di7
+	FpWg9P7dbMiBG1c3iZf/tzDAFwUj7fqDe0JULxQt6LI+fNA3r97HYELLBdpbLfIXsiVK1fpy93A
+	P3F4=
+X-Gm-Gg: AR+sD10FQitDmDA/zcaSMe5aIeI0fjQpZvY4yO4V8ITUi9Ts+y2rv7XzAE791WqP7RV
+	j+YhH6E1U9gzx2+G9RfrW4o7oZHg0hkKSsK61SL0usWLH1JyTlfEvfPHIu6IbbEwauCrlpY81Vi
+	LusMdxC0hL27nWFADp0NFrPruw/lEMQ/I/WrofDmLAPujB7XC3HEs+fmu+OIpBxg2us1WtHroUf
+	1N0plJ4i37x+1kqd40VpQ7Rw3QZO2fEz+ZnBP16Y+JT0SHSg1lns0VT64nP5N/OLpitgryuAdyI
+	3BHEmBmJBcPbx0ttnG1YIxb1XK/G+KbIHejOX/MTlHIBP9onxdS0qUrHlQLWefpyXHINzVpfUFV
+	J0kIkIzgrKhIfIGdbwtmSzKKzIHzb7Vgb/TZFsFMWuFGN6vGz261MUcxpuRZqiqpM4Nj3fkx/hD
+	I+GNY+CrA2ucs3cXVa4tgJ9jcPludKMuMg1jUB/Xd1yHyBAEXoLkNEvtBM1dV83HDOZV79hM8NA
+	EsHaf/S0omDEFdBFc1Xq1s6GlWNQUPGioz+tQ==
+X-Received: by 2002:a05:6820:990:b0:6b1:3496:9ab with SMTP id 006d021491bc7-6b13c2baae6mr573542eaf.2.1787091689888;
+        Tue, 18 Aug 2026 15:21:29 -0700 (PDT)
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com. [209.85.161.41])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b13cf07704sm96383eaf.14.2026.08.18.15.21.29
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Aug 2026 15:21:29 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6aaf3f54dbeso358125eaf.2
+        for <soc@lists.linux.dev>; Tue, 18 Aug 2026 15:21:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RqSrXpugArjVSCQ+IBIeYzzOO+MAX+JGfOX9r7kQM8S+bE7KPLUq2nSCE8zULBrrQYe9F0=@lists.linux.dev
+X-Received: by 2002:a05:6102:3f02:b0:772:5acc:b849 with SMTP id
+ ada2fe7eead31-777b68d3b50mr613053137.5.1787091192379; Tue, 18 Aug 2026
+ 15:13:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: ANg3mTpjYiWJ
-Date: Tue, 18 Aug 2026 23:15:19 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Message-Id: <ee98fe32-e635-413e-aeab-caf9f4b98431@app.fastmail.com>
-Subject: [GIT PULL 3/4] soc: defconfig updates for 7.3
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20260722-contrib-pg-pixel10-initial-dts-v2-0-3abae9717feb@linaro.org>
+ <20260722-contrib-pg-pixel10-initial-dts-v2-4-3abae9717feb@linaro.org>
+ <20260724-dancing-skunk-of-novelty-72c1b8@quoll> <CAD=FV=U0HUdjPcg+5Vx8_ag0zLd3CZx5w5SFr38p+YwRnC_G6w@mail.gmail.com>
+In-Reply-To: <CAD=FV=U0HUdjPcg+5Vx8_ag0zLd3CZx5w5SFr38p+YwRnC_G6w@mail.gmail.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Tue, 18 Aug 2026 15:13:01 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V2+D1m5L-0d81W3E_ih2us-SrddeBUAJtMybpQons7Ww@mail.gmail.com>
+X-Gm-Features: AcwNN1X4wWbBuO7BL4eki7ShctQouAC-d3_rSaFZoxuWUTz7v7oqnlkPyiKP63w
+Message-ID: <CAD=FV=V2+D1m5L-0d81W3E_ih2us-SrddeBUAJtMybpQons7Ww@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] arm64: dts: google: Add initial dts for frankel/blazer/mustang
+To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>
+Cc: Peter Griffin <peter.griffin@linaro.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Linus Walleij <linusw@kernel.org>, 
+	Drew Fustini <fustini@kernel.org>, Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org, 
+	soc@lists.linux.dev, Juan Yescas <jyescas@google.com>, RD Babiera <rdbabiera@google.com>, 
+	Brian Norris <briannorris@google.com>, William McVicker <willmcvicker@google.com>, 
+	kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 8cdeaa50eae8dad34885515f62559ee83e7e8dda:
+Hi,
 
-  Linux 7.2-rc2 (2026-07-05 14:44:06 -1000)
+On Thu, Jul 30, 2026 at 4:32=E2=80=AFPM Doug Anderson <dianders@chromium.or=
+g> wrote:
+>
+> > > +     /*
+> > > +      * The Pixel bootloader considers it a fatal error if it doesn'=
+t find
+> > > +      * a `ufs0` alias so it can add calibration data to the node. U=
+ntil
+> >
+> > Fake node is ok, but alias won't fly because aliases are not allowed fo=
+r
+> > ufs. Well, would work 10 years ago, but this is a device from ~2025 (so
+> > SoC maybe a bit earlier), thus Google already knew that they MUST talk
+> > with upstream open source maintainers before they ship such ABI.
+> >
+> > They did not talk, so you reap what you sow.
+> >
+> > There is no more excuse for a vendor to ignore open source and push
+> > whatever-ABI-they-wish into their product, if they ever want to upstrea=
+m
+> > that product.
+> >
+> > I know it is not your fault, obviously. And I know that not much you ca=
+n
+> > do, so that is not rant towards you nor towards Doug.
+> >
+> > You will have to keep this part of patch out of tree or fix the Pixel
+> > bootloader.
+>
+> FWIW, it actually _is_ a rant towards me, since I added the "ufs0" alias.=
+ :-P
+>
+> When I was originally bringing up Pixel 10 with upstream, the
+> bootloader had a hardcoded path to the UFS node. It looked for it at
+> "/ufs@3c400000". That certainly wasn't going to work. Downstream
+> _still_ hasn't transitioned to having a "soc@0" node to put all the
+> MMIO peripherals under, so the equivalent upstream path would be
+> "/soc@0/ufs@3c400000"
+>
+> Now, I certainly could have made the bootloader search both paths, but
+> that seemed bad to me because:
+>
+> 1. As I understand it, DT paths aren't ABI. While it feels unlikely
+> upstream would change "/soc@0/ufs@3c400000" to something else, I
+> believe upstream would feel free to and not consider it a "breaking"
+> change. This makes it feel unwise to hardcode the path in the
+> bootloader. In the past, upstream has renamed nodes to clean them up
+> and it wasn't considered a violation of the sanctity of the
+> device-tree ABI.
+>
+> 2. If #1 is untrue and we consider DT paths as ABI, it's still a bit
+> awkward. We have one bootloader base that supports multiple SoCs. The
+> unit address differs across SoCs, even though the IP block is nearly
+> the same (bootloader still adds the same type of calibration data to
+> the node). The code I started with had a bunch of #if statements for
+> the paths in various SoC variants, and that went away with the alias.
+> I suppose the bootloader needs to know the UFS base address anyway so
+> I could have probably constructed the node name based on other
+> #defines, but it still was a bit awkward.
+>
+> 3. I certainly could have searched the whole device tree for the UFS
+> node by "compatible" string, but the Pixel 10 (and future) UFS
+> controllers aren't upstream yet. We wouldn't be able to land the Pixel
+> 10 device tree without the UFS bindings landed yet and I think we're a
+> bit far away from getting the Pixel 10 UFS bindings landed...
+>
+> With all that, the "aliases" seemed like a pretty clean way for the
+> bootloader to find the UFS node. It also matched my understanding of
+> an appropriate use of an "alias".
+>
+> Any suggestions for how to resolve this? Do we go back to hardcoding a
+> path in the bootloader and cross our fingers that upstream never
+> cleans up anything that changes the path to the UFS node? Would it
+> really be terrible to allow a "ufs0" alias for this case?
+>
+> As a side note, I did "talk" to upstream shortly after adding the
+> "ufs0" node by sending the Pixel 10 patches upstream, but I guess we
+> were so focused on the overlay topic that nobody thought to comment on
+> the "ufs0" node? At the time, I'm fairly certain my resulting device
+> tree files passed schema validation at the time, too...
 
-are available in the Git repository at:
+I guess no response / silence =3D=3D my email was so dumb that it wasn't
+worth responding to? Even despite that, we still need to find a way to
+move forward, so popping back here...
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-7.3
+I did some digging. As far as I can tell:
 
-for you to fetch changes up to 373eab9eec316c315e884e9cb520c6d8c3236e0f:
+* Nothing in the DeviceTree specification 0.4 [1] mentions that
+aliases are deprecated.
 
-  Merge tag 'ti-k3-config-for-v7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into soc/defconfig (2026-08-10 09:44:40 +0200)
+* Nothing in the dt-schema repository [2] causes validation to fail
+when you use new aliases and there is no "allowlist" of old aliases
+that are allowed for historical reasons.
 
-----------------------------------------------------------------
-soc: defconfig updates for 7.3
+* There is a single reference in the kernel "Documentation/devicetree"
+about not using aliases to assign an "instance ID" [3].
 
-Just the usual updates to the main defconfig files as well as the omap2
-specific one, to enable more loadable modules for better default
-hardware support.
+Is there some other documentation saying "aliases =3D=3D evil" that I
+missed? Maybe some email thread we're all supposed to have read?
 
-----------------------------------------------------------------
-Alexander Sverdlin (1):
-      arm64: defconfig: Enable Allwinner LRADC input driver
+Is the only issue here the fact that the alias ends with a "0" and
+thus implicitly provides an "instance ID"?  Would it be OK if I
+changed my alias name to "ufs-primary" or "ufs-internal" or "ufs-boot"
+or just "ufs"? We're not using the alias to get an instance ID, but
+when I added the alias I followed the pattern of all the other aliases
+and put an number at the end.
 
-Andreas Kemnade (2):
-      ARM: omap2plus_defconfig: enable things required by iwd
-      arm: omap2plus_defconfig: Enable multi-LED
+I'm happy to attempt to fix our bootloader using whatever scheme
+upstream suggests. I'm trying to "talk to upstream" as requested, but
+for it to work I need upstream to talk back. :-)
 
-Anvesh Jain P (1):
-      arm64: defconfig: Enable Qualcomm reference device EC driver
-
-Arnd Bergmann (5):
-      Merge tag 'riscv-config-for-v7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux into soc/defconfig
-      Merge tag 'qcom-arm64-defconfig-for-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into soc/defconfig
-      Merge tag 'omap-for-v7.3/defconfig-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap into soc/defconfig
-      Merge tag 'sunxi-config-for-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into soc/defconfig
-      Merge tag 'ti-k3-config-for-v7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into soc/defconfig
-
-Judith Mendez (1):
-      arm64: defconfig: Enable drivers for BeagleBadge
-
-Marek Szyprowski (1):
-      riscv: defconfig: thead: enable PCA953X GPIO driver
-
-Parvathi Pudi (1):
-      arm: multi_v7_defconfig: Enable BRIDGE and DP83848_PHY for TI AM57xx, AM437x and AM335x
-
-Ravi Hothi (1):
-      arm64: defconfig: Enable Sound DMIC driver
-
-Vishnu Santhosh (1):
-      arm64: defconfig: Enable Qualcomm BAM-DMUX WWAN driver
-
- arch/arm/configs/multi_v7_defconfig  |  2 ++
- arch/arm/configs/omap2plus_defconfig | 13 +++++++++++++
- arch/arm64/configs/defconfig         |  9 +++++++++
- arch/riscv/configs/defconfig         |  2 ++
- 4 files changed, 26 insertions(+)
-
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 2de547c8b901..6131cec01b0c 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -149,6 +149,7 @@ CONFIG_INET6_IPCOMP=m
- CONFIG_IPV6_MIP6=m
- CONFIG_IPV6_TUNNEL=m
- CONFIG_IPV6_MULTIPLE_TABLES=y
-+CONFIG_BRIDGE=m
- CONFIG_NET_DSA=m
- CONFIG_QRTR=m
- CONFIG_QRTR_SMD=m
-@@ -288,6 +289,7 @@ CONFIG_ICPLUS_PHY=y
- CONFIG_MARVELL_PHY=y
- CONFIG_AT803X_PHY=y
- CONFIG_ROCKCHIP_PHY=y
-+CONFIG_DP83848_PHY=m
- CONFIG_DP83867_PHY=y
- CONFIG_CAN_AT91=m
- CONFIG_CAN_FLEXCAN=m
-diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-index ad5ae1636dee..f827f89567fd 100644
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@ -257,6 +257,9 @@ CONFIG_RXKAD=y
- CONFIG_CFG80211=m
- CONFIG_CFG80211_WEXT=y
- CONFIG_MAC80211=m
-+CONFIG_RFKILL=m
-+CONFIG_RFKILL_INPUT=y
-+CONFIG_RFKILL_GPIO=m
- CONFIG_PCI=y
- CONFIG_PCI_MSI=y
- CONFIG_PCI_DRA7XX_EP=y
-@@ -602,6 +605,7 @@ CONFIG_MMC_OMAP_HS=y
- CONFIG_MMC_SDHCI_OMAP=y
- CONFIG_NEW_LEDS=y
- CONFIG_LEDS_CLASS=m
-+CONFIG_LEDS_CLASS_MULTICOLOR=m
- CONFIG_LEDS_CPCAP=m
- CONFIG_LEDS_LM3532=m
- CONFIG_LEDS_GPIO=m
-@@ -611,6 +615,7 @@ CONFIG_LEDS_PCA963X=m
- CONFIG_LEDS_PWM=m
- CONFIG_LEDS_BD2606MVV=m
- CONFIG_LEDS_TCA6507=m
-+CONFIG_LEDS_GROUP_MULTICOLOR=m
- CONFIG_LEDS_TRIGGERS=y
- CONFIG_LEDS_TRIGGER_TIMER=m
- CONFIG_LEDS_TRIGGER_ONESHOT=m
-@@ -703,7 +708,15 @@ CONFIG_NFS_V4=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
-+CONFIG_KEY_DH_OPERATIONS=y
- CONFIG_SECURITY=y
-+CONFIG_CRYPTO_DH_RFC7919_GROUPS=y
-+CONFIG_CRYPTO_DES=m
-+CONFIG_CRYPTO_DEFLATE=y
-+CONFIG_CRYPTO_LZO=y
-+CONFIG_CRYPTO_ZSTD=y
-+CONFIG_CRYPTO_USER_API_HASH=m
-+CONFIG_CRYPTO_USER_API_SKCIPHER=m
- CONFIG_CRYPTO_GHASH_ARM_CE=m
- CONFIG_CRYPTO_AES=m
- CONFIG_CRYPTO_AES_ARM_BS=m
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 654a102cb5bc..7f24c9559553 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -521,12 +521,14 @@ CONFIG_WLCORE_SDIO=m
- CONFIG_WWAN=m
- CONFIG_MHI_WWAN_CTRL=m
- CONFIG_MHI_WWAN_MBIM=m
-+CONFIG_QCOM_BAM_DMUX=m
- CONFIG_INPUT_EVDEV=y
- CONFIG_KEYBOARD_ADC=m
- CONFIG_KEYBOARD_GPIO=y
- CONFIG_KEYBOARD_GPIO_POLLED=m
- CONFIG_KEYBOARD_SNVS_PWRKEY=m
- CONFIG_KEYBOARD_IMX_SC_KEY=m
-+CONFIG_KEYBOARD_SUN4I_LRADC=m
- CONFIG_KEYBOARD_CROS_EC=y
- CONFIG_KEYBOARD_MTK_PMIC=m
- CONFIG_MOUSE_ELAN_I2C=m
-@@ -683,6 +685,7 @@ CONFIG_SPMI_MTK_PMIF=m
- CONFIG_PINCTRL_APPLE_GPIO=m
- CONFIG_PINCTRL_DA9062=m
- CONFIG_PINCTRL_MAX77620=y
-+CONFIG_PINCTRL_MCP23S08=m
- CONFIG_PINCTRL_RK805=m
- CONFIG_PINCTRL_SINGLE=y
- CONFIG_PINCTRL_SX150X=m
-@@ -764,6 +767,7 @@ CONFIG_SENSORS_LM90=m
- CONFIG_SENSORS_PWM_FAN=m
- CONFIG_SENSORS_RASPBERRYPI_HWMON=m
- CONFIG_SENSORS_SL28CPLD=m
-+CONFIG_SENSORS_SHT4x=m
- CONFIG_SENSORS_AMC6821=m
- CONFIG_SENSORS_INA2XX=m
- CONFIG_SENSORS_INA3221=m
-@@ -952,6 +956,8 @@ CONFIG_VIDEO_IMX412=m
- CONFIG_VIDEO_OV5640=m
- CONFIG_VIDEO_OV5645=m
- CONFIG_VIDEO_S5KJN1=m
-+CONFIG_AUXDISPLAY=y
-+CONFIG_SEG_LED_GPIO=m
- CONFIG_DRM=m
- CONFIG_DRM_HDLCD=m
- CONFIG_DRM_MALI_DISPLAY=m
-@@ -1132,6 +1138,7 @@ CONFIG_SND_SOC_TEGRA210_AMX=m
- CONFIG_SND_SOC_TEGRA210_ADX=m
- CONFIG_SND_SOC_TEGRA210_MIXER=m
- CONFIG_SND_SOC_TEGRA_AUDIO_GRAPH_CARD=m
-+CONFIG_SND_SOC_DMIC=m
- CONFIG_SND_SOC_J721E_EVM=m
- CONFIG_SND_SOC_XILINX_I2S=m
- CONFIG_SND_SOC_XILINX_AUDIO_FORMATTER=m
-@@ -1318,6 +1325,7 @@ CONFIG_LEDS_GPIO=y
- CONFIG_LEDS_PWM=y
- CONFIG_LEDS_SYSCON=y
- CONFIG_LEDS_QCOM_FLASH=m
-+CONFIG_LEDS_PWM_MULTICOLOR=m
- CONFIG_LEDS_QCOM_LPG=m
- CONFIG_LEDS_TRIGGER_TIMER=y
- CONFIG_LEDS_TRIGGER_DISK=y
-@@ -1425,6 +1433,7 @@ CONFIG_EC_ACER_ASPIRE1=m
- CONFIG_EC_HUAWEI_GAOKUN=m
- CONFIG_EC_LENOVO_YOGA_C630=m
- CONFIG_EC_LENOVO_THINKPAD_T14S=m
-+CONFIG_EC_QCOM_HAMOA=m
- CONFIG_COMMON_CLK_APPLE_NCO=m
- CONFIG_COMMON_CLK_RK808=y
- CONFIG_COMMON_CLK_SCMI=y
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 74ba5acc12a4..472e03eaebb0 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -174,6 +174,8 @@ CONFIG_PINCTRL_SOPHGO_SG2002=y
- CONFIG_GPIO_DWAPB=y
- CONFIG_GPIO_SIFIVE=y
- CONFIG_GPIO_SPACEMIT_K1=y
-+CONFIG_GPIO_PCA953X=m
-+CONFIG_GPIO_PCA953X_IRQ=y
- CONFIG_POWER_RESET_GPIO_RESTART=y
- CONFIG_SENSORS_SFCTEMP=m
- CONFIG_CPU_THERMAL=y
+[1] https://github.com/devicetree-org/devicetree-specification/releases/tag=
+/v0.4
+[2] https://github.com/devicetree-org/dt-schema.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?id=3D6a57cf210711c068a650bd86acae4a88303dfd5d
