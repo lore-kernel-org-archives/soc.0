@@ -1,126 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA62B35C1B0;
-	Tue, 18 Aug 2026 19:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5216243964
+	for <soc@lists.linux.dev>; Tue, 18 Aug 2026 21:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787081328; cv=none; b=tEXymPE0tIZTQh3tCzAdgK7Lihy3bfE5BP5nuMPB1nND5IDQTC/k4s7aq1TELg0ORAzBfph3Tz0V9SnoEXjRvHf+aH1MBvzuU3YmNg6Dr/qT+JBFrpRqmLm29nK0z576IU3lkpFx5798JH6J6vHJ9ByCNplswF5x0saqGbszfXg=
+	t=1787087818; cv=none; b=BTiiyBSSCmzYNwNUkDPW305YdwBNNDnNmeJjWAjb7qjblmQpHaiFJMOVSFam6i+YLminNijbK4EU3dzNf6bL6QlJ48wHKQlihhuEh+7mxw0/cJGre5IrEhY4PGLfomglFysO1PmevEnemSox4kfj0SbuPZ/VRQkiyQ5ae23zV+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787081328; c=relaxed/simple;
-	bh=4Vpv5zCLi44iufKU1afO+rmUwyT2htQzjGQNmOfDyYo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Eqxhq6Aia/aDAklZxr+uVdwEVfTimxBFMLnpAhKC0VA0d2E18r/p58bbDMrsltLfp1yL5hbn10WkQ7KUeuXe/jBx40bDZalTlJiO2+BX8u+Gpaajlcrue3CZNZ15i2nf51nT50FTVHO/r98+9ktftm0xqEW38dIX30gCrh1fBaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgDRKWw0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787087818; c=relaxed/simple;
+	bh=ZzC3aRVjRDjy5Lpx4wJxKXWfECizDd+QlwG5s4h6MpQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=NxxoyPhZlh3afzlRSggUwOFzeO3gCFVl1ye1g4hDyYewNeKwJHLhOvcmKsjpoaUJSLwMs/YYTgoGi2Kulec0wOyRAaiF7cTtzvvHYJyRHMwa16hBTGc0YO+2/FKKR9fXx5U63yptRhlKQOUAK+ObF9rI+8f5Vo/fs62OuIb/hAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=S+Ii/gCS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MyB9OvZa; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgDRKWw0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D10A1F000E9;
-	Tue, 18 Aug 2026 19:28:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787081327;
-	bh=gBsZ0xwI/Le18b2qGJn/FAvpMBURVFLBFmujAbRyTkU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=KgDRKWw06PAWPw5qGCcc0iYOFW9SZXfNffM8HZ9jYIL9SqRmsBWp+KSmmduq1UYfB
-	 oxnHCtrWoW6vwSNwNhfZJruOuVVVriWKROCZzhlgkP4wcx15UBXQg3AEnghVAVqjNW
-	 4AlMGuJ1xyDdPCi7Qtswd5G5JoQBJ1NAbaNgO09PLyJjJuu13VJohA1mL0D8vlhVjI
-	 2UIzJTKs+pdaChY9kfXg7zKP8Z8xzU9Cfs/aHoOjv1P0aBP0oDFwQ1iHJU36/3Lybc
-	 8q0taZ8XHoAhj0yVTwvMF7SN9gNkGoTk0RX3O/qBZ3TSRshR27VfnEmsnXHxVRzXNx
-	 85pHh+slZSF4A==
-Message-ID: <9f97b734-b92f-425d-920b-2c7ee15a2f9e@kernel.org>
-Date: Tue, 18 Aug 2026 21:28:35 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="S+Ii/gCS";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MyB9OvZa"
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfout.phl.internal (Postfix) with ESMTP id 4E631EC0269;
+	Tue, 18 Aug 2026 17:16:55 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 18 Aug 2026 17:16:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1787087814; x=1787174214; bh=QR
+	u84utBf9RlJY/tfttpbp3GRnV9u4StYipJJvH+meY=; b=S+Ii/gCSl85x8VAveT
+	p6WHBldNiwodEEfnJ6mT0/rzZ4Ae4vpqPBy+CHlgA6gNmBEC74KIH9cqrXnFg6cJ
+	StiLD9skTWtI4bdniUmqXU2nQFEd/DpM8/poMpw8l7pwAxMZN8AO3aN3gfmycCU6
+	XK61Yy2SkP/eC1SFBIWw6zc2IKpQK3UCqKzjyFPc029KWdjVtpaKHQgE5f/ldfeh
+	K5wVWpz7PE0PLZPeN3ilzdwIg/alym5bEp/pN6IopJBAtmbmLRWeYG1rVoUc2PPl
+	tjCpxkNBY1uXdj1cFJLAyCRPkQ8lxI8HvIx6vaMlfg8vFDUmo3qVxgnNfu/LP4+u
+	AllQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1787087814; x=1787174214; bh=QRu84utBf9RlJY/tfttpbp3GRnV9
+	u4StYipJJvH+meY=; b=MyB9OvZaGVLMq0JYllhXMbL/pAs+ijZ9grYETkGnetSx
+	2TAECJ7eWRFp4Fhts1gW9H7/gZwvjN5MiRPMc4NralBS8n289+C3kWtMQRwCfvg/
+	pk9BzkoiKcYW2zCLLCWNs7LXzZnvFYj0TF1lhORK5YHaTtBH5kw38i6bZaNpfBrZ
+	Ej+Urr1fLUQWYJ9sxDYvPDcoxqjXq0j3/pXCI74jtFCGAVNcFRVa4rpLlMeJgtUg
+	X7R9LMxbY1Jj5E9UobT5B1OPZCJRCkCQgiqLwWZFLXfhiFgr4/nFMCNWM3axAVDZ
+	NRk88XzSG9xPEn8B3hDrLAXpd8Ns+dQlbkLs/kffZQ==
+X-ME-Sender: <xms:wsuEaiVMEiwt5btWgqlD21iYFzHSTu7OavJSHrWHed1CmaP7VGgVXg>
+    <xme:wsuEapZ93lc3ktDTJgPf9W-7YEQA3_RKjyleCIvWBGUZn9Ws-1jnzjoHMmZfIije5
+    IpWuVKBNmlTwCtyRlpOpHyfxUyXmh7tZha4gQEnqzxTTJcd-nUlTg>
+X-ME-Proxy-Cause: dmFkZTFmvl+Dgjtrsa4I8hy90pum+IuYwPVk9dNiWl7vAs+qDtJUiC+95qAU2aDJcW+/eh
+    Cv3lBoIjmiQjwA0ikUpl8aXxaX4PSCdmTtOsvMYGWQgY6QePwLLadN/K3Z0VWKdZKjjCaG
+    ez4pUIY2unaDHZtcFNFuApr6/15kK2/ECgUR09VYEqUL0oAxT9mGQrExAsfp+fXiAw4cL+
+    gm6KpXGjt1EkeqlLveA+0hptM0BrqcaJYrPvV5jqd2F05pCWvukEUj4XSuBTopB80tl2lq
+    zUlSpBUE0VRWeImAk0L+Hwup3KSxUAXdQWdSyeBCNafEkJ1xKqEbm6sw2bw9FZmPCDZiY6
+    w7JIDfR/y1XdT6h61ILZsKn1JD75oHTB2o8x0UEH5O83SihQp377AxHzHgOA6yiM4RHUtG
+    B5vL1e8K2aLECvP7Rx6vTXMz1RJKTVC9OV65Wi883HZ0nM5M7v1XCQGi8lDfDLCkkZ6fxd
+    tr5HOl3YUFcAPxgBMTS2lE3K9U5S089eBF0LH30c/R3NdvylcXdK2tZPNibR+bi00iGHQ7
+    5Z1O0T22Yy/mhHABP6Wm3HWGGkcEnN7kkXD6i5+eKFpl7QD/BgoOl68AXxIrxafoEQqesX
+    crmJHsff3M65pdy9FKcFcTYVGNoUA42LXkh4OVQi5QHh39oChoLt2lz5sWTg
+X-ME-Proxy: <xmx:w8uEakBdtFLlkLsccdynXONm2y01ALFImDfeJkg10YHEm9IYaH7sHA>
+    <xmx:w8uEatYawNTlfX30VLYqi0rtjVR8rMRNlHioBPyNWWFivL5GrDCehA>
+    <xmx:w8uEav5DQiLN5BeRHevbr7Bq6SOsWOxIlGn247YcIxK4QjhPMJHXkg>
+    <xmx:w8uEamZRFpdvkgOe5d8LGQz9_Wryv5FdWu2nIkZ0gGWOVQqFlXJ64A>
+    <xmx:xsuEajpaIaYhu5u88A1rWZ-w4stzZtdRlJ6m3S8sAjdJLmnLsSkG-3oh>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 1D77C32A0071; Tue, 18 Aug 2026 17:16:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 03/12] dt-bindings: clock: add Ambarella CV75 RCT
-To: longzhao@ambarella.com, Arnd Bergmann <arnd@arndb.de>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev,
+X-ThreadId: A4-L8ZROkOzV
+Date: Tue, 18 Aug 2026 23:16:29 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
- Bartosz Golaszewski <brgl@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-kernel@vger.kernel.org, Brian Masney <bmasney@redhat.com>,
- Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, Long Zhao <zl020895@163.com>
-References: <20260818-cv75-v5-v5-0-7bbb12f0360f@ambarella.com>
- <20260818-cv75-v5-v5-3-7bbb12f0360f@ambarella.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <20260818-cv75-v5-v5-3-7bbb12f0360f@ambarella.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <c6f15430-90bd-4dcf-b35c-749753fcdd1f@app.fastmail.com>
+Subject: [GIT PULL 0/4] soc changes for 7.3
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 18/08/2026 12:31, Long Zhao via B4 Relay wrote:
-> From: Long Zhao <longzhao@ambarella.com>
-> 
-> Document the CV75 RCT clock controller and the clock ID header used by
-> DT consumers.
-> 
-> This initial binding describes only the clock-provider functionality.
-> Reset-controller support is outside scope of this series, so #reset-cells
-> property is intentionally omitted.
-> 
+This one is again a little over 1000 non-merge commits, from 263
+individual authors, with Qualcomm, NXP and Rockchip devicetree
+files making up a majority of the changes. The new SoCs this
+time are mostly a bit older, these include Apple M3 Pro/Max/Ultra,
+Samsung Exynos 1580, Canaan K210, Sophgo SG2000 and the new
+Qualcomm Shikra and as well as Altera Agilex72.
 
-You received feedback at v1 or v2. You ignored it. It was reminded you
-at v3. You ignored it.
+A small but noteworthy change is the deprecation of a number of
+older 32-bit Arm platforms that were getting in the way.
+For this release, nothing is actually being removed, but my
+current testing has shown hundreds of now orphaned drivers that
+can be removed along with those platforms.
 
-Now you send this again.
+The long-running devicetree cleanups are slowly getting to the
+point of fixing known dtc compiler warnings and being able to
+enforce this better for new contributions.
 
-NAK, you need to start responding to feedback.
+The most active contributors this time are:
+     73 Krzysztof Kozlowski
+     52 Stefano Radaelli
+     50 Manivannan Sadhasivam
+     46 Mukesh Ojha
+     29 Konrad Dybcio
+     23 Frank Li
+     21 Arnd Bergmann
+     20 Dmitry Baryshkov
+     19 Sudeep Holla
+     13 Jie Gan
+     12 Luca Weiss
+     12 Komal Bajaj
+     12 James Calligeros
+     12 Ioana Ciornei
+     12 Aurelien Jarno
+     11 Pengpeng Hou
 
-
-Best regards,
-Krzysztof
+Dirstat:
+   0.6% Documentation/devicetree/bindings/arm/
+   0.5% Documentation/devicetree/bindings/clock/
+   0.1% Documentation/devicetree/bindings/gpio/
+   0.2% Documentation/devicetree/bindings/soc/
+   0.5% Documentation/devicetree/bindings/
+   0.1% arch/arm/boot/dts/allwinner/
+   0.6% arch/arm/boot/dts/aspeed/
+   0.1% arch/arm/boot/dts/marvell/
+   0.1% arch/arm/boot/dts/nxp/
+   0.9% arch/arm/boot/dts/qcom/
+   0.1% arch/arm/boot/dts/renesas/
+   0.6% arch/arm/boot/dts/rockchip/
+   0.8% arch/arm/boot/dts/ti/omap/
+   0.3% arch/arm/boot/dts/vt8500/
+   0.2% arch/arm/boot/dts/
+   0.1% arch/arm/configs/
+   0.1% arch/arm/mach-lpc32xx/
+   0.1% arch/arm/mach-orion5x/
+   0.3% arch/arm/mach-sa1100/
+   0.7% arch/arm/
+   0.4% arch/arm64/boot/dts/allwinner/
+   0.3% arch/arm64/boot/dts/amd/
+   0.2% arch/arm64/boot/dts/amlogic/
+   8.3% arch/arm64/boot/dts/apple/
+   2.0% arch/arm64/boot/dts/exynos/
+  16.4% arch/arm64/boot/dts/freescale/
+   0.4% arch/arm64/boot/dts/intel/
+   0.5% arch/arm64/boot/dts/mediatek/
+   0.7% arch/arm64/boot/dts/nvidia/
+  28.0% arch/arm64/boot/dts/qcom/
+   2.4% arch/arm64/boot/dts/renesas/
+  11.8% arch/arm64/boot/dts/rockchip/
+   0.2% arch/arm64/boot/dts/sophgo/
+   0.1% arch/arm64/boot/dts/tesla/
+   5.3% arch/arm64/boot/dts/ti/
+   1.2% arch/arm64/boot/dts/xilinx/
+   0.2% arch/arm64/boot/dts/
+   0.6% arch/riscv/boot/dts/canaan/
+   0.4% arch/riscv/boot/dts/sophgo/
+   1.3% arch/riscv/boot/dts/spacemit/
+   0.1% arch/riscv/boot/dts/thead/
+   0.4% drivers/firmware/arm_scmi/
+   2.3% drivers/firmware/qcom/
+   0.1% drivers/firmware/xilinx/
+   0.2% drivers/memory/tegra/
+   0.4% drivers/soc/amlogic/
+   0.2% drivers/soc/apple/
+   0.3% drivers/soc/fsl/qe/
+   0.7% drivers/soc/fsl/
+   1.1% drivers/soc/mediatek/
+   1.7% drivers/soc/qcom/
+   0.1% drivers/soc/tegra/
+   0.4% drivers/
+   0.7% include/dt-bindings/clock/
+   0.1% include/linux/soc/qcom/
+   0.1% include/linux/
+ 1088 files changed, 70562 insertions(+), 7263 deletions(-)
