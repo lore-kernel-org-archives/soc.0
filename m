@@ -1,286 +1,149 @@
-Received: from spam.axera-tech.com (unknown [114.118.28.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from aposti.net (aposti.net [185.119.170.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A4C47A86A;
-	Fri, 21 Aug 2026 09:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.118.28.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15821476CD2;
+	Fri, 21 Aug 2026 11:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.119.170.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787306095; cv=none; b=DGA0hoyC1gOt3OaAJ1TyXt0v/f1lx9B06/DjIf9HLJF1fM6yX1qZLBnsProFnm66ihU0tpB4PTAK05yjCUI0YRjCR2tsGhpzpSk89ce+oLobc4cEAoODhpLYHw/XcHQvCWqFFH6wWppbzE95ATO5a59MrLGE5p7rV9+sPU2+rD8=
+	t=1787310194; cv=none; b=JDwr5eOcUYf0Na98HVKd81tcOElzcbd9ysrKtBd2+pDkgxTJqDaCRMt4xNx5uAati6Kj0Kb14W0jj6ZHrEsKvPBOxyhn5eo0EdvlLn7RwA8VtZCUtWf+VwnOPT68nn9nKFpRRQZcjWyNeG/356FRV0FMWcvAYigyB9Vtg3jwxN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787306095; c=relaxed/simple;
-	bh=3X3wyaDmXz7D29E5a4YcUgpvoAFMmWNICN87b2MBl5s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=ZmfMG63WQZXMv9e6rKDuK1cOnbM5UQBKxnIFuv14FhlrYmJVv5ql+zJfUIApbOclF8NjDKt6VKQAFFcWaG+oFCO62pU+dH8MpQY9K67uLfatTcieQd5cR/+fLPGzVm+vJSIUxFfWAMNPxGm1KiV9RcxDmkq5xm7PNHK+MSr+wbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com; spf=pass smtp.mailfrom=axera-tech.com; arc=none smtp.client-ip=114.118.28.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axera-tech.com
-Received: from spam.axera-tech.com (localhost [127.0.0.2] (may be forged))
-	by spam.axera-tech.com with ESMTP id 67L9W0aq010059;
-	Fri, 21 Aug 2026 17:32:00 +0800 (+08)
-	(envelope-from lenghonglin@axera-tech.com)
-Received: from aixinexchange02.aixin-chip.com ([10.122.86.161])
-	by spam.axera-tech.com with ESMTPS id 67L9USlF009398
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 21 Aug 2026 17:30:34 +0800 (+08)
-	(envelope-from lenghonglin@axera-tech.com)
-Received: from [127.0.1.1] (10.126.103.103) by aixinexchange02.aixin-chip.com
- (10.122.86.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 21 Aug
- 2026 17:30:31 +0800
-From: Leng Honglin <lenghonglin@axera-tech.com>
-Date: Fri, 21 Aug 2026 17:30:05 +0800
-Subject: [PATCH 5/6] arm64: dts: axera: add AX650 Demo initial support
+	s=arc-20240116; t=1787310194; c=relaxed/simple;
+	bh=vTxNGzhiU+qNcfdup2iOrcIIe1C5zjV7/YGX2sRgMes=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AsSdwjmduT6f2vlmVKWaWfjh6F2EHe6+j/rnzLMkQKNdwHOZ1no5WBWAK9UEtveS3AsNQITvP61f+1Mj8/1ieXQcMIfmd/KCluQA5sQbzedxG/ixQI/I5wWDsnE4pomwOSh2IddX4nsM8qfbtbG05uoxyn14l0DYvkzcxNtqzyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=BpBexqdH; arc=none smtp.client-ip=185.119.170.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="BpBexqdH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=crapouillou.net;
+	s=mail; t=1787309837;
+	bh=vTxNGzhiU+qNcfdup2iOrcIIe1C5zjV7/YGX2sRgMes=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=BpBexqdHP7l9UXTEi7tNsKJ7v5JrQ5ZdZndkkOW3FK62QJkZPxJxds1XBB60/ptCZ
+	 +4FqA3I5gWE42Mn2k6xdUvuXJ8BcmPf1ehfDBkHnO4hKYrgHCV6w9pWnetTgnV1jir
+	 xW2jslhE/JH3XZR6Ix/Z58ce1yPaK58iX5BHv9Jg=
+Message-ID: <3596303d8fc1ccbdbae9277e599b1a37682fac2a.camel@crapouillou.net>
+Subject: Re: [PATCH 14/45] clk: ingenic: Make sure clk_init_data is fully
+ initialized
+From: Paul Cercueil <paul@crapouillou.net>
+To: Geert Uytterhoeven <geert+renesas@glider.be>, Ryan Chen	
+ <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>, Stephen Boyd	
+ <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, Jerome Brunet	
+ <jbrunet+clk@baylibre.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+ Billy Tsai <billy_tsai@aspeedtech.com>, Nicolas Ferre
+ <nicolas.ferre@microchip.com>, Alexandre Belloni	
+ <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+  Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Taichi Sugaya
+ <sugaya.taichi@socionext.com>,  Takao Orito <orito.takao@socionext.com>,
+ Linus Walleij <linusw@kernel.org>, Avi Fishman	 <avifishman70@gmail.com>,
+ Tomer Maimon <tmaimon77@gmail.com>, Tali Perry	 <tali.perry1@gmail.com>,
+ Patrick Venture <venture@google.com>, Nancy Yuen	 <yuenn@google.com>,
+ Benjamin Fair <benjaminfair@google.com>, Sudeep Holla	
+ <sudeep.holla@kernel.org>, Cristian Marussi <cristian.marussi@arm.com>, 
+ David Lechner <david@lechnology.com>, Abel Vesa <abelvesa@kernel.org>, Peng
+ Fan <peng.fan@nxp.com>, Frank Li	 <Frank.Li@nxp.com>, Sascha Hauer
+ <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Santosh Shilimkar	
+ <ssantosh@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement	
+ <gregory.clement@bootlin.com>, Sebastian Hesselbarth	
+ <sebastian.hesselbarth@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, Heiko
+ Stuebner <heiko@sntech.de>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Sylwester Nawrocki	 <s.nawrocki@samsung.com>, Chanwoo Choi
+ <cw00.choi@samsung.com>, Peter Griffin	 <peter.griffin@linaro.org>, Alim
+ Akhtar <alim.akhtar@samsung.com>, Dinh Nguyen	 <dinguyen@kernel.org>,
+ Viresh Kumar <vireshk@kernel.org>, Maxime Coquelin	
+ <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>,  Emilio =?ISO-8859-1?Q?L=F3pez?=	
+ <emilio@elopez.com.ar>, Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec	
+ <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Prashant
+ Gaikwad <pgaikwad@nvidia.com>, Thierry Reding <thierry.reding@kernel.org>,
+ Jonathan Hunter	 <jonathanh@nvidia.com>, Kunihiko Hayashi
+ <hayashi.kunihiko@socionext.com>,  Masami Hiramatsu <mhiramat@kernel.org>,
+ Ulf Hansson <ulfh@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>, Lorenzo
+ Pieralisi <lpieralisi@kernel.org>, Michal Simek <michal.simek@amd.com>,
+ Matthias Brugger	 <matthias.bgg@gmail.com>
+Cc: linux-clk@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	openbmc@lists.ozlabs.org, arm-scmi@vger.kernel.org, imx@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	soc@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org
+Date: Fri, 21 Aug 2026 12:57:09 +0200
+In-Reply-To: <e3a8b277773f46eb200f3c4bac98ee380f3a24bc.1787239813.git.geert+renesas@glider.be>
+References: <cover.1787239813.git.geert+renesas@glider.be>
+	 <e3a8b277773f46eb200f3c4bac98ee380f3a24bc.1787239813.git.geert+renesas@glider.be>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
+ LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
+ FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
+ z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
+ +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
+ 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
+ 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
+ 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
+ dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
+ 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
+ rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
+ lBwgAhlGy6nqP7O3u7q23hRU=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260821-ax650-v1-v1-5-e1b013938e6b@axera-tech.com>
-References: <20260821-ax650-v1-v1-0-e1b013938e6b@axera-tech.com>
-In-Reply-To: <20260821-ax650-v1-v1-0-e1b013938e6b@axera-tech.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shi Zhicheng
-	<shizhicheng@axera-tech.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will
- Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski
-	<krzk@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus
- Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <soc@lists.linux.dev>,
-        Leng Honglin
-	<lenghonglin@axera-tech.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787304625; l=5267;
- i=lenghonglin@axera-tech.com; s=20260818; h=from:subject:message-id;
- bh=3X3wyaDmXz7D29E5a4YcUgpvoAFMmWNICN87b2MBl5s=;
- b=A+yOz1mzO41sVuKiZTa2jE7J5fAut/n6hrrXf1ySrHXQN0hbYy5z1gQPEIGfoDRDKYut1egrh
- H2hf2YunhUxADzQZ1JfZIgWAKSmnOpHwJpRpB92tD1zaO8h4LLpQIJA
-X-Developer-Key: i=lenghonglin@axera-tech.com; a=ed25519;
- pk=fo0agzxyiwbJZc3VZRLVthobvWCvq0qAViAw4TxhF80=
-X-ClientProxiedBy: aixinexchange02.aixin-chip.com (10.122.86.161) To
- aixinexchange02.aixin-chip.com (10.122.86.161)
-X-DKIM-Results: [10.122.86.161]; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:spam.axera-tech.com 67L9W0aq010059
 
-Add initial device tree support for the Axera AX650 SoC and Demo board.
+Hi Geert,
 
-Reviewed-by: Shi Zhicheng <shizhicheng@axera-tech.com>
-Signed-off-by: Leng Honglin <lenghonglin@axera-tech.com>
----
- arch/arm64/boot/dts/Makefile             |   1 +
- arch/arm64/boot/dts/axera/Makefile       |   3 +
- arch/arm64/boot/dts/axera/ax650-demo.dts |  30 +++++++
- arch/arm64/boot/dts/axera/ax650.dtsi     | 134 +++++++++++++++++++++++++++++++
- 4 files changed, 168 insertions(+)
+Le vendredi 21 ao=C3=BBt 2026 =C3=A0 10:53 +0200, Geert Uytterhoeven a =C3=
+=A9crit=C2=A0:
+> The clk_init_data structure contains several mutually-exclusive
+> members
+> for different methods to specify the possible parents of a clock,
+> prompting drivers to initialize only the members they need.=C2=A0 However=
+,
+> not initializing all members may cause subtle issues, which are only
+> exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE
+> is
+> enabled.
+>=20
+> Make sure all members are fully initialized, to avoid such bugs, and
+> to
+> prevent future breakage when converting drivers to a different method
+> for specifying the parents.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index fc726b215f12..93740acb553d 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -10,6 +10,7 @@ subdir-y += apm
- subdir-y += apple
- subdir-y += arm
- subdir-y += aspeed
-+subdir-y += axera
- subdir-y += axiado
- subdir-y += bitmain
- subdir-y += blaize
-diff --git a/arch/arm64/boot/dts/axera/Makefile b/arch/arm64/boot/dts/axera/Makefile
-new file mode 100644
-index 000000000000..76f436a9466a
---- /dev/null
-+++ b/arch/arm64/boot/dts/axera/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+dtb-$(CONFIG_ARCH_AXERA) += ax650-demo.dtb
-diff --git a/arch/arm64/boot/dts/axera/ax650-demo.dts b/arch/arm64/boot/dts/axera/ax650-demo.dts
-new file mode 100644
-index 000000000000..aef8f0516232
---- /dev/null
-+++ b/arch/arm64/boot/dts/axera/ax650-demo.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2026 Axera Semiconductor Co., Ltd.
-+ */
-+
-+/dts-v1/;
-+
-+#include "ax650.dtsi"
-+
-+/ {
-+	model = "Axera AX650 Demo";
-+	compatible = "axera,ax650-demo", "axera,ax650";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	memory@100000000 {
-+		device_type = "memory";
-+		reg = <0x1 0x00000000 0x2 0x00000000>;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/axera/ax650.dtsi b/arch/arm64/boot/dts/axera/ax650.dtsi
-new file mode 100644
-index 000000000000..4fceaee81496
---- /dev/null
-+++ b/arch/arm64/boot/dts/axera/ax650.dtsi
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2026 Axera Semiconductor Co., Ltd.
-+ */
-+
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	interrupt-parent = <&gic>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu1: cpu@100 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x100>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu2: cpu@200 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x200>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu3: cpu@300 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x300>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu4: cpu@400 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x400>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu5: cpu@500 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x500>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu6: cpu@600 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x600>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu7: cpu@700 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x700>;
-+			enable-method = "psci";
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13
-+			(GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>,
-+			<GIC_PPI 14
-+			(GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>,
-+			<GIC_PPI 11
-+			(GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>,
-+			<GIC_PPI 10
-+			(GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
-+	};
-+
-+	/* GIC-400 block base; register frames start at offset 0x1000. */
-+	gic: interrupt-controller@4900000 {
-+		compatible = "arm,gic-400";
-+		#interrupt-cells = <3>;
-+		#address-cells = <0>;
-+		interrupt-controller;
-+		reg = <0x0 0x4901000 0x0 0x1000>,
-+			<0x0 0x4902000 0x0 0x1000>,
-+			<0x0 0x4904000 0x0 0x2000>,
-+			<0x0 0x4906000 0x0 0x2000>;
-+	};
-+
-+	pmu {
-+		compatible = "arm,cortex-a55-pmu";
-+		interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
-+			<&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		uart0: serial@2016000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg = <0x0 0x02016000 0x0 0x400>;
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			clock-frequency = <200000000>;
-+			interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+	};
-+};
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 
--- 
-2.34.1
+Cheers,
+-Paul
 
+> ---
+> Compile-tested only.
+> ---
+> =C2=A0drivers/clk/ingenic/cgu.c | 2 +-
+> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
+> index 41e4c69131bd6ec7..ad223aa20e8db5a5 100644
+> --- a/drivers/clk/ingenic/cgu.c
+> +++ b/drivers/clk/ingenic/cgu.c
+> @@ -644,8 +644,8 @@ static const struct clk_ops ingenic_clk_ops =3D {
+> =C2=A0static int ingenic_register_clock(struct ingenic_cgu *cgu, unsigned
+> idx)
+> =C2=A0{
+> =C2=A0	const struct ingenic_cgu_clk_info *clk_info =3D &cgu-
+> >clock_info[idx];
+> -	struct clk_init_data clk_init;
+> =C2=A0	struct ingenic_clk *ingenic_clk =3D NULL;
+> +	struct clk_init_data clk_init =3D {};
+> =C2=A0	struct clk *clk, *parent;
+> =C2=A0	const char *parent_names[4];
+> =C2=A0	unsigned caps, i, num_possible;
