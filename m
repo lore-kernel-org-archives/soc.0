@@ -1,287 +1,200 @@
-Received: from sender4-op-o11.zoho.com (sender4-op-o11.zoho.com [136.143.188.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA804ADD8A;
-	Fri, 21 Aug 2026 14:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787321187; cv=pass; b=mAjQFXBiCLk6AWya/CwN/x0dzEOAB+lkFWDE1REkqZu7uiAJkKe1Ko/EsEzBPmns3MM1Vyf4D/X8K1wXMZW6TJvZ1L8y6aKgZpKMcAGNJKW8UKMx3TLWTsiq83+zupbHblcJhMPtwc9n+Ex3gMDBm1+TxznsJatej8mS3vx61P4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787321187; c=relaxed/simple;
-	bh=xY6CnZViDMwNpVsvDIJLXlXMPUGateyd8GAa9iRNToI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ASYKITZBlpFE7ea82LiwpOKqHz+YZa/ckOvFqR8JA9bGab4+XK9w7ZRKti8S4w91ulwTt/7lyZ3ygZ1HEoqGpcUcCqqEZpDnlzloYq0lzAjsC0KkI/nhDIOqAJ6arkByfb2qLpAaJ2FV96pNRyA/Mq/nWAYZUmMNe5dutoW9iCk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=TTKVytQB; arc=pass smtp.client-ip=136.143.188.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B42C42E404
+	for <soc@lists.linux.dev>; Fri, 21 Aug 2026 16:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787330456; cv=none; b=IlyuU99cK3QC6wvHkMJ3xHXBuPY2pcjejOWYUng7TcfuG5saIvX3wgbwAkRFHAAhAusgQqanIGnpaobYh0MQVoe343oB+Swmch52uXccdxuEJrsCQyiU65UZT1T4xkrkKghf+H0u50Wq970oL6xnyEQIxp35XWb3HyLKBuXrpTc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787330456; c=relaxed/simple;
+	bh=ZXeo8EI+t7/t3ez1NovFOGBbAko3PEvsb48iBmoNbLk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PmUe9yfmPigvZPcMOxql+Wkg/BCYXijZSx5FLfDPUgtm5hNTMdMCbwFXbYxJUov2IplUL0S9LZXNsg/5xQUq0vufDRHWC9WIn8UH3Pvz7WEc++LMxnbxw8dNvxXj1qB8KmLCE6nuySE3DTICzbpmizH/bGlWZSaZ+dRkgo8FKdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=f05QrYWw; arc=none smtp.client-ip=209.85.221.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="TTKVytQB"
-ARC-Seal: i=1; a=rsa-sha256; t=1787321085; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=aS3Wxr42/WowGTQMOwQn+Aik7EWu3ZtXAyK7Ka9JjnfmyekKH/X9DF7cl903wIOEJg01lQp+gWpZGWmsspCAx0u4fU8P+aSiUAIfuOxMh2gINvbdCDlWZZYuBuYcc4/Hgvq6u6X2dotGYHOAUIOO1A5l2vx+Nlrvv36qnd4Zo1U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1787321085; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=IXNJ/14cVvvKroHplPIGuCBeBYfygG4Y7sUaJ45XWQE=; 
-	b=dGSfR9zZz1WQQVWan6t8MG3C7sldyy+btQ1fIcHks35yTU0HKlGgpqkis8Bvw4NE/R8apiMLyVPbZ2hQ/JtlCZybWHRdin/g6Jwx5Uj4lpEPGM+gKQTp/tJmHKoctrb8wHffa2SpJrAL6iyPO9uS8eTa8hjDXKTHy2rgRVXWuH4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1787321085;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=IXNJ/14cVvvKroHplPIGuCBeBYfygG4Y7sUaJ45XWQE=;
-	b=TTKVytQB8iMxRzpvUXKXpNq1OdRpglO16qtqbszi6lJF4nmFxmWOyOMX5spT+YP3
-	Xv/lujJhnv14rcillKejZcMdJjESzp+mPU/hITTrVhEacTe4GuC1BIRlXTEL7mp/IW2
-	dTt5sCybxxEgKjnIOYRF8dHMon4uyWe1V4AxLMQU=
-Received: by mx.zohomail.com with SMTPS id 1787321084147104.50540849911135;
-	Fri, 21 Aug 2026 07:04:44 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 52022181F47; Fri, 21 Aug 2026 16:04:34 +0200 (CEST)
-Date: Fri, 21 Aug 2026 16:04:34 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>, 
-	Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, 
-	Jerome Brunet <jbrunet+clk@baylibre.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
-	Billy Tsai <billy_tsai@aspeedtech.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Taichi Sugaya <sugaya.taichi@socionext.com>, 
-	Takao Orito <orito.takao@socionext.com>, Linus Walleij <linusw@kernel.org>, 
-	Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>, 
-	Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>, 
-	Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>, 
-	Sudeep Holla <sudeep.holla@kernel.org>, Cristian Marussi <cristian.marussi@arm.com>, 
-	David Lechner <david@lechnology.com>, Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
-	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Paul Cercueil <paul@crapouillou.net>, Santosh Shilimkar <ssantosh@kernel.org>, 
-	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Peter Griffin <peter.griffin@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Viresh Kumar <vireshk@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Emilio =?utf-8?B?TMOzcGV6?= <emilio@elopez.com.ar>, Chen-Yu Tsai <wens@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Prashant Gaikwad <pgaikwad@nvidia.com>, Thierry Reding <thierry.reding@kernel.org>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Ulf Hansson <ulfh@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Michal Simek <michal.simek@amd.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, linux-clk@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org, 
-	arm-scmi@vger.kernel.org, imx@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 28/45] clk: rockchip: Make sure clk_init_data is fully
- initialized
-Message-ID: <aohax7qilvrgV1iE@venus>
-References: <cover.1787239813.git.geert+renesas@glider.be>
- <49127c1f7529acccb17e1408db9f21f6d15aee2b.1787239813.git.geert+renesas@glider.be>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="f05QrYWw"
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-5bfa6766cf6so793726e0c.3
+        for <soc@lists.linux.dev>; Fri, 21 Aug 2026 09:40:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1787330452; x=1787935252; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ZXeo8EI+t7/t3ez1NovFOGBbAko3PEvsb48iBmoNbLk=;
+        b=f05QrYWwekI9b327rQm312zHh/46413OnTV/Qj3tQnl+0zf0q/9I/JAzclb0NrJC8/
+         EcvEVqKQ4ohNXeUjHpe7ByFa6J89fYaauwfGJTSF8J9ZVGQqkqlwUbbI1owrPF78BgLG
+         WxUCY1NK9faS9C95JDauamTGHqE65QZu2W9N4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787330452; x=1787935252;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZXeo8EI+t7/t3ez1NovFOGBbAko3PEvsb48iBmoNbLk=;
+        b=ELHFNN84wvcGSZf3zTgsq9WqZM0zRKvw/OlVY6NicQxNdjFlVxH2Szf3qTv2umZUgZ
+         bH7JDb3PTbo/zyyF2fzYXD8KFfSW5KTQ73MEF/+AUFIm6etOdJ3ppD6+gWvcOJBq2Iu4
+         Z+Ik5OuqU2+35A44aH3zGVoQ98FFHXqL8ZNnzWfqNHhDe3MVb+GKgCb4EdL032Ibzi64
+         MBAGpMHBnNR1EbT2MsD6uvWCcejlNsvQqIbSBRjgANbSHbS5ByPpCa6HEZEHA5CC5QxH
+         BbWNhtbY3NYJ5mOPPFxp7flUHqaY0muJ/1ri+0qB4A8AgbYSFfCJkt0s4VOzXuoKCNsq
+         +emQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpylTd/rvv8VC8K0etiQST73CVT3v0Lj6HNjSbFwmHM7t4LRPOsWhFPlhNQsiox25yZBOA=@lists.linux.dev
+X-Gm-Message-State: AFuF++mBy3an43dsIHe9eZ2kBQjXKOqX8FA9/5aVtX7CK/nBPQ224MZO
+	1Fy+0hHOpbbLnL0y3IyiJ2qmBvr8/Cka2w6+UCuwU4ke4xMt9Rzyf9T5dwlM6ttbkIjsoQIMqBv
+	viBY=
+X-Gm-Gg: AR+sD13sZwcXBBKGkwyKOZMb1ES7R9Ei+uxuIacSgzdNJPvZ6H2xS+4mDbSTTRbcNbk
+	Lo3AwZBqEwGgsumw1h4I5cDeA9h5CMiZ6Ys+SiWW0AdyUuO6qbi5PMbF+58IyTwmtcqrapSFSGm
+	ddoQ01aTQJ6ElJPPGusWc5p70Z+e3/GyfMTvqk2Vu9k/9DoZ2njYQHxQt1M4E+T9Pt71WXjySdi
+	ltNn9jCQuQuiTqpxDebqfBqpHF6SGFwP3d2g3BiDCmI9js8BGcVs1y3LWk4eE278oz2lvGnapcn
+	HQGAPhQk8XN4ONN6vudBhPYG0sfXAC6iX+4VjsDobnbJyfzRoalOfB0tLGD31Th3ndsaidjmkii
+	6l8uU80Ka6LzTbMgBmTu23S6LnrNNjeSbcHGwIGntjZ1c8QUYQyoMFKwNxDrO/uCqIlAB85rMcg
+	AlFfE55RJus1uUc32tfPz7EwlyziiVptfG9q5ZOXORF59XgGC7cwf6vUOxL8IYAdL0z7OixUAcv
+	mfFz4la9yjQQ0awcjXiiUCgs8Ohmqo=
+X-Received: by 2002:a05:6102:5f04:b0:778:699b:a948 with SMTP id ada2fe7eead31-77a605ed50emr3000383137.2.1787330452139;
+        Fri, 21 Aug 2026 09:40:52 -0700 (PDT)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-777dafa9b1dsm9102683137.1.2026.08.21.09.40.50
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Aug 2026 09:40:50 -0700 (PDT)
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5c276bfce7eso1048531e0c.2
+        for <soc@lists.linux.dev>; Fri, 21 Aug 2026 09:40:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RqUdSKRYxeNgw5UrcsvYTD/LJ4oS6s8xsJHRD4b3MCfDY2/rQXVrzppnwWEynb362NFZ+8=@lists.linux.dev
+X-Received: by 2002:a67:c996:0:b0:77a:9991:5d08 with SMTP id
+ ada2fe7eead31-77a9991cec1mr1941674137.9.1787330449569; Fri, 21 Aug 2026
+ 09:40:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zybuuvaovsaw7bmk"
-Content-Disposition: inline
-In-Reply-To: <49127c1f7529acccb17e1408db9f21f6d15aee2b.1787239813.git.geert+renesas@glider.be>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-0.2.10.1.5.2/287.318.86
-X-ZohoMailClient: External
-
-
---zybuuvaovsaw7bmk
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20260722-contrib-pg-pixel10-initial-dts-v2-0-3abae9717feb@linaro.org>
+ <20260722-contrib-pg-pixel10-initial-dts-v2-4-3abae9717feb@linaro.org>
+ <20260724-dancing-skunk-of-novelty-72c1b8@quoll> <CAD=FV=U0HUdjPcg+5Vx8_ag0zLd3CZx5w5SFr38p+YwRnC_G6w@mail.gmail.com>
+ <CAD=FV=V2+D1m5L-0d81W3E_ih2us-SrddeBUAJtMybpQons7Ww@mail.gmail.com>
+ <c0657108-1958-4c4c-b5f5-0eb24e81b2b4@kernel.org> <CAD=FV=VY4AeAf=TMZfJYRo6C0iSqmL-P0GzxRvZHfnNsf+GnYQ@mail.gmail.com>
+ <56db332f-a18e-4a9e-be9d-67d2e25c3666@kernel.org> <CAD=FV=WUMKGRUbAyd7XFFc-NGoJEKRwu4MaUnEQUDB9Mq6YYXA@mail.gmail.com>
+ <d6685094-b241-415e-9e56-d2fba75f3269@kernel.org>
+In-Reply-To: <d6685094-b241-415e-9e56-d2fba75f3269@kernel.org>
+From: Doug Anderson <dianders@chromium.org>
+Date: Fri, 21 Aug 2026 09:40:37 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WPu5tuWA7MhC=48r=1uP3LK6hSqY7Egy=56V1Dqq1wRg@mail.gmail.com>
+X-Gm-Features: AcwNN1WVXS8N4-UYjDXHL5iUmkkapXer1429A5JjKjwhm2wT5WS30SWZHssAmw4
+Message-ID: <CAD=FV=WPu5tuWA7MhC=48r=1uP3LK6hSqY7Egy=56V1Dqq1wRg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] arm64: dts: google: Add initial dts for frankel/blazer/mustang
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>, 
+	Peter Griffin <peter.griffin@linaro.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Linus Walleij <linusw@kernel.org>, 
+	Drew Fustini <fustini@kernel.org>, Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org, 
+	soc@lists.linux.dev, Juan Yescas <jyescas@google.com>, RD Babiera <rdbabiera@google.com>, 
+	Brian Norris <briannorris@google.com>, William McVicker <willmcvicker@google.com>, 
+	kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 28/45] clk: rockchip: Make sure clk_init_data is fully
- initialized
-MIME-Version: 1.0
 
 Hi,
 
-On Fri, Aug 21, 2026 at 10:53:38AM +0200, Geert Uytterhoeven wrote:
-> The clk_init_data structure contains several mutually-exclusive members
-> for different methods to specify the possible parents of a clock,
-> prompting drivers to initialize only the members they need.  However,
-> not initializing all members may cause subtle issues, which are only
-> exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE is
-> enabled.
->=20
-> Make sure all members are fully initialized, to avoid such bugs, and to
-> prevent future breakage when converting drivers to a different method
-> for specifying the parents.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> Compile-tested only.
-> ---
+On Thu, Aug 20, 2026 at 11:51=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.o=
+rg> wrote:
+>
+> >>> I think I've presened my problem fairly concretely [1]. If you hate
+> >>
+> >> There is no description of the problem at [1], except "bootloader adds
+> >> the same type of calibration data".
+> >>
+> >> So I repeat my questions: to every UFS node? To every node? To one UFS
+> >> node (but how do you guarantee that?)?
+> >
+> > I'm sure it's not what you want to hear, but I guess my answer would
+> > be "for these boards".
+>
+> No, the question is how many aliases you need. Devices might have more
+> than one UFS storage, e.g. ExynosAuto.
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+How many UFS aliases do I need for this board? The answer is in the
+patch that started this whole discussion: one UFS alias.
 
-Greetings,
 
--- Sebstian
+> And then someone might need to calibrate UFS and SPI NOR storage? And MMC=
+?
 
->  drivers/clk/rockchip/clk-cpu.c       | 2 +-
->  drivers/clk/rockchip/clk-ddr.c       | 2 +-
->  drivers/clk/rockchip/clk-gate-grf.c  | 2 +-
->  drivers/clk/rockchip/clk-inverter.c  | 2 +-
->  drivers/clk/rockchip/clk-mmc-phase.c | 2 +-
->  drivers/clk/rockchip/clk-muxgrf.c    | 2 +-
->  drivers/clk/rockchip/clk-pll.c       | 2 +-
->  drivers/clk/rockchip/clk.c           | 2 +-
->  8 files changed, 8 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/clk/rockchip/clk-cpu.c b/drivers/clk/rockchip/clk-cp=
-u.c
-> index 6205af9ba88a8def..eb6b8b878e4dbeea 100644
-> --- a/drivers/clk/rockchip/clk-cpu.c
-> +++ b/drivers/clk/rockchip/clk-cpu.c
-> @@ -304,7 +304,7 @@ struct clk *rockchip_clk_register_cpuclk(const char *=
-name,
->  			int nrates, void __iomem *reg_base, spinlock_t *lock)
->  {
->  	struct rockchip_cpuclk *cpuclk;
-> -	struct clk_init_data init;
-> +	struct clk_init_data init =3D {};
->  	struct clk *clk, *cclk;
->  	int ret;
-> =20
-> diff --git a/drivers/clk/rockchip/clk-ddr.c b/drivers/clk/rockchip/clk-dd=
-r.c
-> index 81ae8a4ee30ed95c..fbb702d0b9d996d5 100644
-> --- a/drivers/clk/rockchip/clk-ddr.c
-> +++ b/drivers/clk/rockchip/clk-ddr.c
-> @@ -97,7 +97,7 @@ struct clk *rockchip_clk_register_ddrclk(const char *na=
-me, int flags,
->  					 spinlock_t *lock)
->  {
->  	struct rockchip_ddrclk *ddrclk;
-> -	struct clk_init_data init;
-> +	struct clk_init_data init =3D {};
->  	struct clk *clk;
-> =20
->  	ddrclk =3D kzalloc_obj(*ddrclk);
-> diff --git a/drivers/clk/rockchip/clk-gate-grf.c b/drivers/clk/rockchip/c=
-lk-gate-grf.c
-> index 88e409e91a636aa1..458314a2569181d1 100644
-> --- a/drivers/clk/rockchip/clk-gate-grf.c
-> +++ b/drivers/clk/rockchip/clk-gate-grf.c
-> @@ -73,7 +73,7 @@ struct clk *rockchip_clk_register_gate_grf(const char *=
-name,
->  		u8 gate_flags)
->  {
->  	struct rockchip_gate_grf *gate;
-> -	struct clk_init_data init;
-> +	struct clk_init_data init =3D {};
->  	struct clk *clk;
-> =20
->  	if (IS_ERR(regmap)) {
-> diff --git a/drivers/clk/rockchip/clk-inverter.c b/drivers/clk/rockchip/c=
-lk-inverter.c
-> index bf9072ed9fd4daed..e6c7dad60e966288 100644
-> --- a/drivers/clk/rockchip/clk-inverter.c
-> +++ b/drivers/clk/rockchip/clk-inverter.c
-> @@ -75,8 +75,8 @@ struct clk *rockchip_clk_register_inverter(const char *=
-name,
->  				void __iomem *reg, int shift, int flags,
->  				spinlock_t *lock)
->  {
-> -	struct clk_init_data init;
->  	struct rockchip_inv_clock *inv_clock;
-> +	struct clk_init_data init =3D {};
->  	struct clk *clk;
-> =20
->  	inv_clock =3D kmalloc_obj(*inv_clock);
-> diff --git a/drivers/clk/rockchip/clk-mmc-phase.c b/drivers/clk/rockchip/=
-clk-mmc-phase.c
-> index 4efd22953f3e0533..d92bea75faf73767 100644
-> --- a/drivers/clk/rockchip/clk-mmc-phase.c
-> +++ b/drivers/clk/rockchip/clk-mmc-phase.c
-> @@ -205,8 +205,8 @@ struct clk *rockchip_clk_register_mmc(const char *nam=
-e,
->  				struct regmap *grf, int grf_reg,
->  				int shift)
->  {
-> -	struct clk_init_data init;
->  	struct rockchip_mmc_clock *mmc_clock;
-> +	struct clk_init_data init =3D {};
->  	struct clk *clk;
->  	int ret;
-> =20
-> diff --git a/drivers/clk/rockchip/clk-muxgrf.c b/drivers/clk/rockchip/clk=
--muxgrf.c
-> index ccbb1379501ab474..ecdc77654813a3c3 100644
-> --- a/drivers/clk/rockchip/clk-muxgrf.c
-> +++ b/drivers/clk/rockchip/clk-muxgrf.c
-> @@ -59,7 +59,7 @@ struct clk *rockchip_clk_register_muxgrf(const char *na=
-me,
->  				int shift, int width, int mux_flags)
->  {
->  	struct rockchip_muxgrf_clock *muxgrf_clock;
-> -	struct clk_init_data init;
-> +	struct clk_init_data init =3D {};
->  	struct clk *clk;
-> =20
->  	if (IS_ERR(regmap)) {
-> diff --git a/drivers/clk/rockchip/clk-pll.c b/drivers/clk/rockchip/clk-pl=
-l.c
-> index 706ca4b344d399a3..7204b09243d483ae 100644
-> --- a/drivers/clk/rockchip/clk-pll.c
-> +++ b/drivers/clk/rockchip/clk-pll.c
-> @@ -1069,7 +1069,7 @@ struct clk *rockchip_clk_register_pll(struct rockch=
-ip_clk_provider *ctx,
->  		unsigned long flags, u8 clk_pll_flags)
->  {
->  	const char *pll_parents[3];
-> -	struct clk_init_data init;
-> +	struct clk_init_data init =3D {};
->  	struct rockchip_clk_pll *pll;
->  	struct clk_mux *pll_mux;
->  	struct clk *pll_clk, *mux_clk;
-> diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
-> index ee8c79b938d3c15b..10df21178ba483e2 100644
-> --- a/drivers/clk/rockchip/clk.c
-> +++ b/drivers/clk/rockchip/clk.c
-> @@ -257,7 +257,7 @@ static struct clk *rockchip_clk_register_frac_branch(
-> =20
->  	if (child) {
->  		struct clk_mux *frac_mux =3D &frac->mux;
-> -		struct clk_init_data init;
-> +		struct clk_init_data init =3D {};
->  		struct clk *mux_clk;
->  		int ret;
-> =20
-> --=20
-> 2.43.0
->=20
->=20
+Not for this board.
 
---zybuuvaovsaw7bmk
-Content-Type: application/pgp-signature; name="signature.asc"
+If you're asking about all future boards, of course they may have
+other things to calibrate / tune. My point is that the contract here
+is between the bootloader that will be run on these boards and the
+device tree that will be run on these boards.
 
------BEGIN PGP SIGNATURE-----
+FWIW: the idea of a bootloader using an alias to find a node is not
+something I invented. Coreboot (the upstream, open-source project)
+uses "wifi" and "bluetooth" aliases to find nodes on Chromebooks. It
+uses these aliases to place MAC addresses (which are stored by
+manufacturing outside of DT) into the DT nodes (where bindings expect
+them). Perhaps coreboot is doing it wrong, but this concept isn't new,
+and I didn't invent it.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmqIWusACgkQ2O7X88g7
-+poirhAApVi+Y+WU3mrw03dbGLE92vZNTJMxmeK5fzM3D7/o1HO6GGgy5ZBAlAcY
-AHjbpJgLpOY+bLGDnfv97vri7zP1duirRf2Yw3fhqiFp+tdt8AX6f9hU8bfwu+uy
-IaquBhUMuFejInZcStNJFlC4BF1UJkkacYSNtxFWAsKFMLlzOJQKu7lnBZwfbFWu
-C+FZ7xkWGWrSGNvroDobqiM/LDEYmI6OxnSwbCfoeczBF6D1VEaSeZhbDDVfx0hR
-ja1QtzHWcfm4Y3PLzEaNpmYerMSNE1fZIMFmraZZ3oFaak+uOYWZEWk0UzeZF4cv
-L5jzi4Cwa2V4TIot/53rF+xlSAjZAxTrBEH99onUWqBf4XyMa4k2DnlE+wPNqG5p
-Mz4QW3dtELwXRsHfeWqAT+rF2Iv2rsb8mkWeJ9ir0Ll2v8PHl2Ro9gWyag1zeRF5
-cahZmOPxJFpLKOVsNZX6AAhgvlsJN8kSZ8T48gpuTj+TjdEzrvm8A8l2yU5Or/C1
-kT56IUoCapPk1sZVEqNNPZQZduKm53nfXe9viHXg4BVjz8xXOU2LAZJ/gvrqjqzX
-XzRHvPAAdb+4q0BOqXmFgI6e4nSDBivR2zl2aidohQnxA++NPmGSG0xjBNZAqSY1
-HSFBW4PATNUCcY+1z4MjEfCGtmWtnYk0d23W6+Va0wfJjBcmMi8=
-=BMUY
------END PGP SIGNATURE-----
 
---zybuuvaovsaw7bmk--
+> > I'm not quite clear on the "overlay" suggestion here. You're saying
+> > that we should require the base device tree to be compiled with "-@"?
+> > ...and not because we necessarily have any overlays upstream, but
+> > because the bootloader will generate an overlay dynamically? Compiling
+> > with "-@" would mean we could give a "ufs:" label to the UFS node and
+> > with "-@" that would be preserved. The bootloader could then use the
+> > "ufs:" label to find the node. When compiling with "-@", the exposed
+> > labels are essentially ABI. Did I get that right?
+>
+> I am saying that if you cannot answer my questions earlier (and you did
+> not)
+
+I'm still not quite sure which question I didn't answer, but I guess
+at this point it doesn't matter.
+
+
+> thus this should be treated as adding calibration to multiple
+> random nodes, then essentially you are reimplementing overlays and this
+> won't be accepted. Instead you should use overlays.
+>
+> "-@" will give you the labels in __symbols__ section, but it won't be
+> treated as ABI because it is not feasible. No one would remember which
+> boards have @ and which don't thus which labels are needed externally.
+> Only a comment in DTS code would prevent it from being changed.
+>
+> Well, same for aliases honestly. There is no tool which would guard that
+> ABI.
+
+Given the above response, I'm a bit baffled how "use overlays" helps.
+Each individual board will have different calibration data. It's
+presumably stored in something like an EEPROM on the device. The
+firmware is getting this data out of the EEPROM and putting it in the
+device tree. This puts the calibration data somewhere the Linux driver
+can easily find it. This means any "overlay" would need to be
+dynamically constructed for each device by the firmware. In order for
+this to work, there has to be _some_ guarante that the firmware can
+use to find the UFS node and add the calibration data.
+
+You are saying: "no, there isn't."
+
+I suppose one answer here is that the UFS driver in Linux could get a
+phandle to a "NVMEM" device and read it directly. ...though it might
+not have permissions.
+
+I suppose another answer here is that the UFS driver in Linux should
+somehow figure out how to directly query the firmware for the info.
+That seems unnecessarily convoluted, though.
+
+...so I guess the answer is: time to hardcode the path in the
+bootloader (shhh, don't tell the DT maintainers) and end this
+fruitless conversation.
+
+-Doug
