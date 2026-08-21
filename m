@@ -1,117 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from spam.axera-tech.com (unknown [114.118.28.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E704582CB;
-	Fri, 21 Aug 2026 09:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A637F3D25A2;
+	Fri, 21 Aug 2026 09:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.118.28.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787305558; cv=none; b=kzshoirDAz1aoUcVoywt/+eYRc5IKX0mx/MUPt75Uv1qZj22XlXgpAsLPuk9gFHbzd3S5z9b8BmNRO+3lLC6vO8kJbx+WtxPW82ZVaS4rtnU3Q75NngBYNSrNgeZW5Xf4X1d7ufujAto0Fyglo3uXW7VOH8rasJnykHP+wTgLtY=
+	t=1787305992; cv=none; b=Ym8dLirtsNJ3ToJ5CqiILlEdFccRp1X+gxbLsjKzsqlKeSIVjsOY/3VzSIGXYVfg+E5KirVoQIcPu5P2EYNRLvE9fYQIwN4Nnjm+yB4+q5/nmQmjwDJrm/CWA20RRDq7Wn+2r+dOg6r0dpkGhcu3lKqZ2zQ0yXDGuCh7bGaijAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787305558; c=relaxed/simple;
-	bh=kzqR1WdKbSlmyw7IJ21T0FUlTB4r/ex5U5annYpzBwM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AEjEd5BYFBDxWXd/y1XiQBQL41U+cceY4iIYyYZyLE63yZ4knz7lxwM8sgsJZRAfw8ZRTe9KAz0mf83MOcoTkk+5aBTKw5za69WQ0zrZRm6KKxq8ynSdo1qA4zIyB2Tv5pzWZrO7FXxJ4hKbrbgZNZYiiSPI+mMbhDIXKGudrG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IrUi1wjB; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IrUi1wjB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF811F000E9;
-	Fri, 21 Aug 2026 09:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787305550;
-	bh=lcX1HcIioN6RDOu7kJFmuhD+cDaBL4tzsJMwf2OP5DE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=IrUi1wjBqYEnizRjndZOGvVP/lwYsj9xPGf/RV7kVw5jIuU6Hw8sOmOpH4D5mYhlm
-	 vaKbUogJjRjRPMmf0Wm2xMT1ZeomLp8/XQ++X+rm46BkYlMXNVmIINvSYtzqhvMQAr
-	 2X15Pun5aYZbcUYo+bXBIcJZx86r7fdI7jPw5MEXfKs2Ki31Dh4O7xWigsM+Qxk+6C
-	 6qsrqZQupJgk5H014Dn5EE5jwuKVFcK61025lrEgXbeTVEBNf3RQ4Qd3nv8fSA5wvk
-	 uNVQm+muMoFuiHzDF3nEcGs8YdCy7gZZZDNQpJoetgZFJwmLZ+hb0WgiMIa/0n1NWp
-	 l0e186Z/KwRnw==
-Message-ID: <4af6ebe2-c476-4251-829b-2d41239da7ff@kernel.org>
-Date: Fri, 21 Aug 2026 11:45:42 +0200
+	s=arc-20240116; t=1787305992; c=relaxed/simple;
+	bh=QS02tvkVmFzXqI3twhl3BKem23lCVglLSY1o44tazxE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=ucqd5DpOkFoVMh5nhPclj8DosAOIamUV/7ZI56S6kJSZrNH/Ntk+KnYq1rAwvrpHC4H1URX48QvTQqMfGtp1efbTvypag7RQLcXP6NUn0Xaq0Lpjp33OEfWKQ7uS/DIeBhC1SK/Dv1GA39EBB9F8SP9v+svmJzW6p/IWlGF4kHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com; spf=pass smtp.mailfrom=axera-tech.com; arc=none smtp.client-ip=114.118.28.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axera-tech.com
+Received: from spam.axera-tech.com (localhost [127.0.0.2] (may be forged))
+	by spam.axera-tech.com with ESMTP id 67L9Vr6S009890;
+	Fri, 21 Aug 2026 17:31:53 +0800 (+08)
+	(envelope-from lenghonglin@axera-tech.com)
+Received: from aixinexchange02.aixin-chip.com ([10.122.86.161])
+	by spam.axera-tech.com with ESMTPS id 67L9USlE009398
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 21 Aug 2026 17:30:33 +0800 (+08)
+	(envelope-from lenghonglin@axera-tech.com)
+Received: from [127.0.1.1] (10.126.103.103) by aixinexchange02.aixin-chip.com
+ (10.122.86.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 21 Aug
+ 2026 17:30:30 +0800
+From: Leng Honglin <lenghonglin@axera-tech.com>
+Date: Fri, 21 Aug 2026 17:30:04 +0800
+Subject: [PATCH 4/6] arm64: defconfig: enable ARCH_AXERA
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] arm64: dts: axera: add AX650 Demo initial support
-To: Leng Honglin <lenghonglin@axera-tech.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Shi Zhicheng <shizhicheng@axera-tech.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
-References: <20260821-ax650-v1-v1-0-e1b013938e6b@axera-tech.com>
- <20260821-ax650-v1-v1-5-e1b013938e6b@axera-tech.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <20260821-ax650-v1-v1-5-e1b013938e6b@axera-tech.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20260821-ax650-v1-v1-4-e1b013938e6b@axera-tech.com>
+References: <20260821-ax650-v1-v1-0-e1b013938e6b@axera-tech.com>
+In-Reply-To: <20260821-ax650-v1-v1-0-e1b013938e6b@axera-tech.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shi Zhicheng
+	<shizhicheng@axera-tech.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will
+ Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski
+	<krzk@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linus
+ Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>
+CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <soc@lists.linux.dev>,
+        Leng Honglin
+	<lenghonglin@axera-tech.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787304625; l=635;
+ i=lenghonglin@axera-tech.com; s=20260818; h=from:subject:message-id;
+ bh=QS02tvkVmFzXqI3twhl3BKem23lCVglLSY1o44tazxE=;
+ b=SexAhsJl62b/yFLRpa16G1JgEyohIPxpiuiVcCMEKBEZo9cSrj68FTWJWqvbFlj9BxqHthhpW
+ 3INefI055lgCR0NnNLvDmEaV6vZ0eJH302iK9zR1ht9GQojFrwO/9lr
+X-Developer-Key: i=lenghonglin@axera-tech.com; a=ed25519;
+ pk=fo0agzxyiwbJZc3VZRLVthobvWCvq0qAViAw4TxhF80=
+X-ClientProxiedBy: aixinexchange02.aixin-chip.com (10.122.86.161) To
+ aixinexchange02.aixin-chip.com (10.122.86.161)
+X-DKIM-Results: [10.122.86.161]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:spam.axera-tech.com 67L9Vr6S009890
 
-On 21/08/2026 11:30, Leng Honglin wrote:
-> Add initial device tree support for the Axera AX650 SoC and Demo board.
-> 
-> Reviewed-by: Shi Zhicheng <shizhicheng@axera-tech.com>
+Enable ARCH_AXERA in the arm64 defconfig.
 
-I have more doubts, looks more like automated acking.
+Reviewed-by: Shi Zhicheng <shizhicheng@axera-tech.com>
+Signed-off-by: Leng Honglin <lenghonglin@axera-tech.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-...
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 654a102cb5bc..a2c2b41f0146 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -40,6 +40,7 @@ CONFIG_ARCH_ALPINE=y
+ CONFIG_ARCH_APPLE=y
+ CONFIG_ARCH_ARTPEC=y
+ CONFIG_ARCH_ASPEED=y
++CONFIG_ARCH_AXERA=y
+ CONFIG_ARCH_AXIADO=y
+ CONFIG_ARCH_BCM=y
+ CONFIG_ARCH_BCM2835=y
 
-> +	/* GIC-400 block base; register frames start at offset 0x1000. */
-> +	gic: interrupt-controller@4900000 {
+-- 
+2.34.1
 
-MMIO nodes are not placed in top level and your internal review should
-have tell you that.
-
-Also, entire file looks like failing on dt-style-check.
-
-Best regards,
-Krzysztof
