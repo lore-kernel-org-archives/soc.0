@@ -1,116 +1,159 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BAD41D21B
-	for <soc@lists.linux.dev>; Mon, 24 Aug 2026 12:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C406141D104
+	for <soc@lists.linux.dev>; Mon, 24 Aug 2026 13:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787575656; cv=none; b=P/sz/CvoRw6nLFWwVEXxXSZYNZUUUJ/Dysc/BkQeaJnxj/SY+ZHPvuRZMRBDa8fVAvA3Bok7yuk5b3Pu5RZ+Mifpmaiakh0Wk0BrMpVqTGVjS2IvNig8ggQSiPW8dnufuaV7giFHWXY9WyhFByK1wl6XaVNVWyBiW2PAVTINE4E=
+	t=1787577409; cv=none; b=p99CXx7W68u+38mM0Kos42GQYYhXvpLaYib7In8sLH8s+UseN475EnyRvJN2IXPYWi+6R5UfuohlEUJhyFczN2YpTFGWjrf+LRossz46U6EvWYMCXElzCHuYdxuR0p54tgk1uHrwNxnCeLd9brvtDvTgRQwQtvIJy43owfTpXYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787575656; c=relaxed/simple;
-	bh=lI76YK88ZltuQHg9+zsDOjRNQgdjPki/p5J+GduZo2g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rDX+HRhCI43dZr/5CksReaR8EXq/rD5u/4R713KBHPeZ8XwhWChIVDEAu2vpoOahLVcBUJg8shml8ls0+a0x0TzO+0SGHN2oubQjfNIzI3XT5E/dMp3C4BGAq8NULHm35NGXDZWECZMI+s3DnzSzamROnPOOigttPPYlXEUpcOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-66ce00575dcso4633705d50.0
-        for <soc@lists.linux.dev>; Mon, 24 Aug 2026 05:47:35 -0700 (PDT)
+	s=arc-20240116; t=1787577409; c=relaxed/simple;
+	bh=u69iDQDh65gTSQHaopk712AakCgClJSI2Zoo/JrTLeU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=NDaPfzf5VWzzN9F37wZ3NIdOXxOm0I2OSPGEJ22XdXJn66XzfoQL89UfcPCb+QSk7xOjH4TXHewNno4w2awl9YUdMFq3RhsdN9e67KG9GI6jOOmWqCgoJ4jtOf30CG1uMn63JU2p/nNSdi/yyfXSv28+yh3U+Pcy8olYTFAYbAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IKg/D0on; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IKg/D0on"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787577406;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=a5uoZNVB2XRKnrTBdvCmJrG8M4XSoSEJo8KaXU4b4e8=;
+	b=IKg/D0on6WuGIEkDRlaA0AGzaoUcMm9W7vHGwfBWAJy9PM1TAsZ835LTmG9fe7n+UgnIFF
+	bvopKA+EBWEpOmco21ROIk5dc1pKqA14gO8mCCyOW4PPReTY0qxr9Q2Eqkr9ZRnyin93aC
+	96Kp3cH7vPISNQm2ue5R69NB2ZqffVM=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-515-ixeKnRkqOoag2Tq6Uycs-g-1; Mon, 24 Aug 2026 09:16:43 -0400
+X-MC-Unique: ixeKnRkqOoag2Tq6Uycs-g-1
+X-Mimecast-MFC-AGG-ID: ixeKnRkqOoag2Tq6Uycs-g_1787577403
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-7f5b54da461so58803027b3.3
+        for <soc@lists.linux.dev>; Mon, 24 Aug 2026 06:16:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787575654; x=1788180454;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=9ghuoduRfOzi+AYpDw8t1/oQryAhFbodaTAoc1849Hg=;
-        b=ZDjgRam3LV3H/+OeQl6B+AL3/7Uo/qK96JXtTF06xOFh6/Wtpn+Ve1TRkS6ZaGnwb4
-         e2/KzaeY0ReRZvSSk/+/ZG19a5nSpw5skcX0h9XekNi/65SbEYiK7rs+oWbsvR6olSQW
-         J/rCUVfOs+JhYqjRfF0+98eaicu+te7siZ4+sDBZX4/fsO2s3KjVBSS6FBXvfovY//Gv
-         TGx95y1vwM+etFUdfPNrg9ZLeVBAdPZicBqNqcSrsGsxY+l4zSGuUhVlzgOpVBq2YHIL
-         Z/AAUsOitB2UVDRVHwaVwWRrM/CBc3hSOGIu6m9OANYdX1LPq0VrQCokccismSNgomYR
-         0Xrw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr12ZFuD6HS4KHvVPphVMEktAyRYPkBZbdUw5oDVkK6IcKKA2VEoVKArcHSH9qjPByJxjM=@lists.linux.dev
-X-Gm-Message-State: AFuF++lOx6GUe+PvTe9oQG9Ock4qfVNAp4I6wMprG1vxkXNIJzcGrBYk
-	EBvmc/NaFMXHnh8EkEhiVbKNjwxB5CyULslOg0LlUOB+ssjFSY/ZN0KdeMefgVfp
-X-Gm-Gg: AR+sD13Vtz2zGBlGaaW/ZhJgxW+eAdVy8HtziuKVKLpR7spViF7Bye9UV5StlLThTqW
-	rzXmPRy1kWBnaZxcLavKBmfOx+N0YKfEhcoytH+UBvAo/VRLTAgSvDCZk+a4DhVEgDKUpVIoFkg
-	s1SBMdXuwNpQANOvN3TLkR6TT6bHQOoY23wNj4FiP7f997VVuigBcp7aRp/0xba7LAWolkTRNmB
-	wttpDkHYT0VgbWXvZHd9g6byL8SVIXOaR92isE/VRkohCrLSvoxR7mSpr+dPwUUAN7xhGiCWXrF
-	gQ5qHTLVyIcTCDPF81KMze04wdAi/5kNpRejCQqxm8OwDsXCSC6UMKsljwVumWjh49UTYlNnzs2
-	CFAL39jBBP+HtKzoA9TJObZ2DD/5ia4cbKLNgA/CYAfbMKLzOYRMM80Ox4SvLpPsD3KGFCPgyS7
-	+ugwEGwj9t+a656kpJBMGXnBVHyaSmBPjEXH+QoIsRHCJJcgF303wP4LLBZ0FUMEjrGGFUxe7uK
-	ZccFnRxYNo34IWAB3luRJVtbwU5cw==
-X-Received: by 2002:a05:690e:43c3:b0:66a:c376:6f86 with SMTP id 956f58d0204a3-66ce49e5645mr6821984d50.8.1787575654246;
-        Mon, 24 Aug 2026 05:47:34 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66cf46460a1sm3637652d50.5.2026.08.24.05.47.33
-        for <soc@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Aug 2026 05:47:34 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-80c5cb9a888so36429327b3.3
-        for <soc@lists.linux.dev>; Mon, 24 Aug 2026 05:47:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RoKycRqo5wk0rn213b/Lv5wY5szid5/IT8pfWBGHmYHW3IF3ZCc6lnk1IRXtVLshYe5KcE=@lists.linux.dev
-X-Received: by 2002:a05:6102:26c5:b0:772:5acc:b848 with SMTP id
- ada2fe7eead31-77a62c46273mr7826182137.6.1787575289120; Mon, 24 Aug 2026
- 05:41:29 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787577403; x=1788182203;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=a5uoZNVB2XRKnrTBdvCmJrG8M4XSoSEJo8KaXU4b4e8=;
+        b=l9qVBNYbhZ8RNlqPwq9tt/f/IMQcmhxhekA5RY79caQrPKeND01j5LH1oNWc28ibSZ
+         E93W6bsOWDsOJYFcxotkfZWj0MrorutI+IqyZlWt9Q3gRu8RFaoGhOp8XgrYyCxTjbVy
+         mViNXwqDuO9IvCZmeGf6ZVSJUwFRxqzcN3DdI6+QJLicfiiZLrD79QJtZpUD69x6lRen
+         qw15HzMfNX0hle9pn/IQJX5rQPydADYhM0RSA/nf82DrF/U0ps0cYo1d348rhcgksHSy
+         5xAiu5omeC0xR3QYudjQTjY24KZ3YM3cfinj9EVYFvu43r4P2JAHep1x5za6iPIi04xq
+         n2xA==
+X-Forwarded-Encrypted: i=1; AHgh+RpbXi4kQayqjtKVWB+aQqKAIYGXiRVEfGFwVt1hsSkmnkIAJUyzoHoOdCnR7IYT2ohDzdE=@lists.linux.dev
+X-Gm-Message-State: AFuF++mKEwkyQM9u+huVOqNM/NtBH3+pYb4OpJ5CMiwJWrhn+U0vo6WA
+	Wc1UVJ63yoOAuO0oGBHszoA23KzY2hLx3UYReKQ2hgRlO+TEWG3lzsYrfyScJYjqq/wu/C4epn1
+	UjRtO34iK+ZIZjzQ1/yklba+HgjVziuIM4vKJMbYj1jQWQxK+ybNrQQ==
+X-Gm-Gg: AR+sD13Sb5FIz94PUliig55LBg/czCjtX71Kqj0rNPLISDSkXqMrOqn/Cw/8FQx3odf
+	MicG1btpHXYYvflqlQEVQ3jk/pFVsgmR/jQB3urNwKhxcPfBtIZjDpwQSJMYJjGYrz5rofhSwvs
+	2tbS5vLObmEMwJ4Ci63J+PgZFImGhnzBHvDer+zV7ZNaBPCzxKnKaNTWCWBynSB7iNOI5rFW3jJ
+	VJZcRgJm6OyFTOe0vDNfvipWJXlfZ97oHP4o97L+RZMtnMygdBGmCvYRGAmS06NoK3gJblPdmY6
+	pN6MjJd7+azPGDKYu3U72r2xT7bQwnrYAZf3uTLizxoScjZNMBJwI2VzK2AuVjcs8ZXyWOI8Zz0
+	rR32KhAKLrM4k8mnwI4AorKsqbVPyEsSVuyg=
+X-Received: by 2002:a05:690c:e0c1:10b0:81e:a4cf:131b with SMTP id 00721157ae682-849f4a7cc91mr76172917b3.22.1787577403100;
+        Mon, 24 Aug 2026 06:16:43 -0700 (PDT)
+X-Received: by 2002:a05:690c:e0c1:10b0:81e:a4cf:131b with SMTP id 00721157ae682-849f4a7cc91mr76172227b3.22.1787577402495;
+        Mon, 24 Aug 2026 06:16:42 -0700 (PDT)
+Received: from redhat.com (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-84ca5d254adsm33243617b3.16.2026.08.24.06.16.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 06:16:41 -0700 (PDT)
+Date: Mon, 24 Aug 2026 09:16:34 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Brian Masney <bmasney+clk@redhat.com>,
+	Jerome Brunet <jbrunet+clk@baylibre.com>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Billy Tsai <billy_tsai@aspeedtech.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Sudeep Holla <sudeep.holla@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	David Lechner <david@lechnology.com>,
+	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Vladimir Zapolskiy <vz@mleia.com>, Heiko Stuebner <heiko@sntech.de>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Emilio =?iso-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
+	Chen-Yu Tsai <wens@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Prashant Gaikwad <pgaikwad@nvidia.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Ulf Hansson <ulfh@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	linux-clk@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org, arm-scmi@vger.kernel.org,
+	imx@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 29/45] clk: samsung: Make sure clk_init_data is fully
+ initialized
+Message-ID: <aoxEMm6FGf_onEBf@redhat.com>
+References: <cover.1787239813.git.geert+renesas@glider.be>
+ <87b3e83137e1a987f3c69d214706e93ef3898cab.1787239813.git.geert+renesas@glider.be>
+ <60a8d05a-76fa-43c3-a0f7-fb26a3b659b8@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1787239813.git.geert+renesas@glider.be> <87b3e83137e1a987f3c69d214706e93ef3898cab.1787239813.git.geert+renesas@glider.be>
- <60a8d05a-76fa-43c3-a0f7-fb26a3b659b8@kernel.org>
 In-Reply-To: <60a8d05a-76fa-43c3-a0f7-fb26a3b659b8@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 24 Aug 2026 14:41:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWnXTAVZ_eBfoWNe-sy6BC1X+5EHkDw9R0TAA65Opzi_Q@mail.gmail.com>
-X-Gm-Features: AcwNN1UOdKQEkPlARJoVF2UurscVPaHj9T1_AXs-3b7YtVRMAHuDfcVjJgM-XPk
-Message-ID: <CAMuHMdWnXTAVZ_eBfoWNe-sy6BC1X+5EHkDw9R0TAA65Opzi_Q@mail.gmail.com>
-Subject: Re: [PATCH 29/45] clk: samsung: Make sure clk_init_data is fully initialized
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>, 
-	Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, 
-	Jerome Brunet <jbrunet+clk@baylibre.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
-	Billy Tsai <billy_tsai@aspeedtech.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, 
-	Linus Walleij <linusw@kernel.org>, Avi Fishman <avifishman70@gmail.com>, 
-	Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, Sudeep Holla <sudeep.holla@kernel.org>, 
-	Cristian Marussi <cristian.marussi@arm.com>, David Lechner <david@lechnology.com>, 
-	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, Frank Li <Frank.Li@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Paul Cercueil <paul@crapouillou.net>, 
-	Santosh Shilimkar <ssantosh@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Peter Griffin <peter.griffin@linaro.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Viresh Kumar <vireshk@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, =?UTF-8?Q?Emilio_L=C3=B3pez?= <emilio@elopez.com.ar>, 
-	Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
-	Thierry Reding <thierry.reding@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Ulf Hansson <ulfh@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Michal Simek <michal.simek@amd.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, linux-clk@vger.kernel.org, 
-	linux-aspeed@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org, 
-	arm-scmi@vger.kernel.org, imx@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, 
-	linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mutt/2.4.0 (2026-06-19)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: JQN8vTlJcO9B5xb2S2_h_prrAaNfg1k8itJuu4A1kZA_1787577403
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 Hi Krzysztof,
 
-On Fri, 21 Aug 2026 at 13:04, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+On Fri, Aug 21, 2026 at 01:04:01PM +0200, Krzysztof Kozlowski wrote:
 > On 21/08/2026 10:53, Geert Uytterhoeven wrote:
 > > The clk_init_data structure contains several mutually-exclusive members
 > > for different methods to specify the possible parents of a clock,
@@ -118,30 +161,27 @@ On Fri, 21 Aug 2026 at 13:04, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 > > not initializing all members may cause subtle issues, which are only
 > > exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE is
 > > enabled.
-> >
+> > 
 > > Make sure all members are fully initialized, to avoid such bugs, and to
 > > prevent future breakage when converting drivers to a different method
 > > for specifying the parents.
-> >
+> > 
 > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
+> > ---
+> > Compile-tested only.
+> > ---
+> >  drivers/clk/samsung/clk-cpu.c | 2 +-
+> >  drivers/clk/samsung/clk-pll.c | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> 
 > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-
-Thank you!
-
+> 
 > Let me know if I should take it via Samsung SoC clock tree. I assume by
 > default this will go directly via clock tree.
 
-In that case, please provide your Acked-by, so the clock maintainers
-don't have to parse your English response to find out ;-)
+Please take it through your Samsung tree to avoid merge conflicts if
+there are other changes to these files during this development cycle.
 
-Gr{oetje,eeting}s,
+Brian
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
