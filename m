@@ -1,74 +1,73 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C406141D104
-	for <soc@lists.linux.dev>; Mon, 24 Aug 2026 13:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0365367281
+	for <soc@lists.linux.dev>; Mon, 24 Aug 2026 15:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787577409; cv=none; b=p99CXx7W68u+38mM0Kos42GQYYhXvpLaYib7In8sLH8s+UseN475EnyRvJN2IXPYWi+6R5UfuohlEUJhyFczN2YpTFGWjrf+LRossz46U6EvWYMCXElzCHuYdxuR0p54tgk1uHrwNxnCeLd9brvtDvTgRQwQtvIJy43owfTpXYs=
+	t=1787584462; cv=none; b=Y6bvVH4ZSIg/+htmQ4DMxhKdf0OLQ2te3tHNfsiQsPKHAIjrjQbTQOs75BJttuUDBj7vU9fhWG3oLzagJ5aGGTws+AYtaM4qQ8mIMh4b2nkxClurd8NEi4a90XQBmEL5VnvF1r8hE5YiDxEvR3bqUqaB59tKiKEPy17m1XfP8b8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787577409; c=relaxed/simple;
-	bh=u69iDQDh65gTSQHaopk712AakCgClJSI2Zoo/JrTLeU=;
+	s=arc-20240116; t=1787584462; c=relaxed/simple;
+	bh=PMHzlusqnjEcUolJb6Rj0ihhVcm0EmxTzAkLKIuEEmA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=NDaPfzf5VWzzN9F37wZ3NIdOXxOm0I2OSPGEJ22XdXJn66XzfoQL89UfcPCb+QSk7xOjH4TXHewNno4w2awl9YUdMFq3RhsdN9e67KG9GI6jOOmWqCgoJ4jtOf30CG1uMn63JU2p/nNSdi/yyfXSv28+yh3U+Pcy8olYTFAYbAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IKg/D0on; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type:Content-Disposition; b=DKkZou68FZZpBqSP5H+PiemYvVwL1iWdfSATch1ZJMpf77y4vE3Qo63AbZ7QC2/RjzmQxUmeeW9mfulEEtrfvbXr7ZGz6mGMkapHkrggDUDqD5HLP1FcnUwO3AA9LTJBuG6EVtBCDNk/VdASfigIa1cNPaNYvQqonxgFgWLNM/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=arEZlnlg; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IKg/D0on"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="arEZlnlg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787577406;
+	s=mimecast20190719; t=1787584459;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=a5uoZNVB2XRKnrTBdvCmJrG8M4XSoSEJo8KaXU4b4e8=;
-	b=IKg/D0on6WuGIEkDRlaA0AGzaoUcMm9W7vHGwfBWAJy9PM1TAsZ835LTmG9fe7n+UgnIFF
-	bvopKA+EBWEpOmco21ROIk5dc1pKqA14gO8mCCyOW4PPReTY0qxr9Q2Eqkr9ZRnyin93aC
-	96Kp3cH7vPISNQm2ue5R69NB2ZqffVM=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=r9JEBxETCpjKOyzPxUj8DiK5Y8iV5A7DhykNYlgKppA=;
+	b=arEZlnlg4W2uN8jNuObPdV7XEADzujjJXwvcZ0jsYyOs1GpgplUEFL8fS3dR8trvvObtIj
+	bogtbd+W7m+xsHUVN4Gk5Ma9VphbXjVZO5f8hcrXCgQVPh7THWyq/OlM+xHXE2aDqP4kZc
+	OzOCr0NnyCMMjqrNBjxYsN60anza9lc=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-515-ixeKnRkqOoag2Tq6Uycs-g-1; Mon, 24 Aug 2026 09:16:43 -0400
-X-MC-Unique: ixeKnRkqOoag2Tq6Uycs-g-1
-X-Mimecast-MFC-AGG-ID: ixeKnRkqOoag2Tq6Uycs-g_1787577403
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-7f5b54da461so58803027b3.3
-        for <soc@lists.linux.dev>; Mon, 24 Aug 2026 06:16:43 -0700 (PDT)
+ us-mta-617-CZacIbhKMZ2ecjJg17MVig-1; Mon, 24 Aug 2026 11:14:18 -0400
+X-MC-Unique: CZacIbhKMZ2ecjJg17MVig-1
+X-Mimecast-MFC-AGG-ID: CZacIbhKMZ2ecjJg17MVig_1787584458
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-90c4da3d504so18776816d6.0
+        for <soc@lists.linux.dev>; Mon, 24 Aug 2026 08:14:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787577403; x=1788182203;
+        d=1e100.net; s=20251104; t=1787584458; x=1788189258;
         h=user-agent:in-reply-to:content-disposition:content-type
          :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=a5uoZNVB2XRKnrTBdvCmJrG8M4XSoSEJo8KaXU4b4e8=;
-        b=l9qVBNYbhZ8RNlqPwq9tt/f/IMQcmhxhekA5RY79caQrPKeND01j5LH1oNWc28ibSZ
-         E93W6bsOWDsOJYFcxotkfZWj0MrorutI+IqyZlWt9Q3gRu8RFaoGhOp8XgrYyCxTjbVy
-         mViNXwqDuO9IvCZmeGf6ZVSJUwFRxqzcN3DdI6+QJLicfiiZLrD79QJtZpUD69x6lRen
-         qw15HzMfNX0hle9pn/IQJX5rQPydADYhM0RSA/nf82DrF/U0ps0cYo1d348rhcgksHSy
-         5xAiu5omeC0xR3QYudjQTjY24KZ3YM3cfinj9EVYFvu43r4P2JAHep1x5za6iPIi04xq
-         n2xA==
-X-Forwarded-Encrypted: i=1; AHgh+RpbXi4kQayqjtKVWB+aQqKAIYGXiRVEfGFwVt1hsSkmnkIAJUyzoHoOdCnR7IYT2ohDzdE=@lists.linux.dev
-X-Gm-Message-State: AFuF++mKEwkyQM9u+huVOqNM/NtBH3+pYb4OpJ5CMiwJWrhn+U0vo6WA
-	Wc1UVJ63yoOAuO0oGBHszoA23KzY2hLx3UYReKQ2hgRlO+TEWG3lzsYrfyScJYjqq/wu/C4epn1
-	UjRtO34iK+ZIZjzQ1/yklba+HgjVziuIM4vKJMbYj1jQWQxK+ybNrQQ==
-X-Gm-Gg: AR+sD13Sb5FIz94PUliig55LBg/czCjtX71Kqj0rNPLISDSkXqMrOqn/Cw/8FQx3odf
-	MicG1btpHXYYvflqlQEVQ3jk/pFVsgmR/jQB3urNwKhxcPfBtIZjDpwQSJMYJjGYrz5rofhSwvs
-	2tbS5vLObmEMwJ4Ci63J+PgZFImGhnzBHvDer+zV7ZNaBPCzxKnKaNTWCWBynSB7iNOI5rFW3jJ
-	VJZcRgJm6OyFTOe0vDNfvipWJXlfZ97oHP4o97L+RZMtnMygdBGmCvYRGAmS06NoK3gJblPdmY6
-	pN6MjJd7+azPGDKYu3U72r2xT7bQwnrYAZf3uTLizxoScjZNMBJwI2VzK2AuVjcs8ZXyWOI8Zz0
-	rR32KhAKLrM4k8mnwI4AorKsqbVPyEsSVuyg=
-X-Received: by 2002:a05:690c:e0c1:10b0:81e:a4cf:131b with SMTP id 00721157ae682-849f4a7cc91mr76172917b3.22.1787577403100;
-        Mon, 24 Aug 2026 06:16:43 -0700 (PDT)
-X-Received: by 2002:a05:690c:e0c1:10b0:81e:a4cf:131b with SMTP id 00721157ae682-849f4a7cc91mr76172227b3.22.1787577402495;
-        Mon, 24 Aug 2026 06:16:42 -0700 (PDT)
+        bh=r9JEBxETCpjKOyzPxUj8DiK5Y8iV5A7DhykNYlgKppA=;
+        b=N0ibqbHUD20ishbC04SB2hkdEyzEBK3ZoCuwbcSld90c7ITpj1iejrVSvxHvQpbPAy
+         8JArOWGfhYx8ret6qu7LSoTf7+UNwdryift8Q8vAxvp247VHL4BUtXeLbvKg6xTWGN2B
+         /n1npwruDxUEa3fU2kEwgIb+wrVaFeNld1+ecQSBwOjsZFT32IFkBj82SL8ivBwmyU8F
+         Dq7/RCMBrhJrY7nP9vbRXKEzeszZKC6efiH2/Kaz9l50eJugGj3oijzwqD9YNb4nj6vu
+         Z0h58n29MHwQyt3p+/JVkJLnAOBF/E3Jcgd0zR0zBetY3uiarYImq+IzWb4C/+1VsF8D
+         20RA==
+X-Forwarded-Encrypted: i=1; AHgh+RrDNuNZA4wxifSrjvpk6+sH7ESxmaXy2wWXfPNMZhBh3asNGMaB9pC9oHB4sX7h6Pao0eY=@lists.linux.dev
+X-Gm-Message-State: AFuF++nSjoAht4DUrAt25n5PGccHITvScsJ0ZpPYYcxYZ0+/hyrdABBx
+	FK3XAJvjQNhyXnVZ/tO3vOnnOo+lXUKaxH95mDHCZ4s5ZtZ/8cTC4GPx+fwFbItmV62bATA9C6w
+	UtJykABn1KuPejKi/WYGfYz/NE9hiEloYJTUr0aWEy2BY4StP/CXISw==
+X-Gm-Gg: AR+sD12nmXT6ju7jYcNO2yJIWdITzz1NrDpfVgBdmXgTIwGYxlcjAMx5AFY5Ng1g51q
+	v5+sFmVLflWrZTg7r/c0Ua0K2R3bn9FWWzexY8VwPxOw8t0CsQfld0+SBW8JhnaBzDfZYQSWtL+
+	YNK2bm4A2+pQmngYbygmeQToQPLp3WtfRNOWAJRoQMhMXAKzf0DS2Hx7lnUtkCB/xsgQzpX2Ln+
+	C08IQQomlpCljckg0ZuELAmvBK1RYFMCZX5AvuQizbqCGRPmqTFiJ83hKCOP9cwa7rdF5E3L8bl
+	5LQ5P/hdqST2QAJgpihn6bdAEdUdHDQBvvlNcSDBZ5XAj7997mrsITns6PwZAVUv+oSrEZgTnt9
+	i9/McnYYKLnnd3TKtcOBDMYlKfW8XauGpBRk=
+X-Received: by 2002:a05:6214:2a49:b0:8f1:440c:7f81 with SMTP id 6a1803df08f44-90c80942e22mr260846406d6.4.1787584457453;
+        Mon, 24 Aug 2026 08:14:17 -0700 (PDT)
+X-Received: by 2002:a05:6214:2a49:b0:8f1:440c:7f81 with SMTP id 6a1803df08f44-90c80942e22mr260845166d6.4.1787584456812;
+        Mon, 24 Aug 2026 08:14:16 -0700 (PDT)
 Received: from redhat.com (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-84ca5d254adsm33243617b3.16.2026.08.24.06.16.35
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c93a82554sm64013126d6.45.2026.08.24.08.14.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 06:16:41 -0700 (PDT)
-Date: Mon, 24 Aug 2026 09:16:34 -0400
+        Mon, 24 Aug 2026 08:14:15 -0700 (PDT)
+Date: Mon, 24 Aug 2026 11:14:11 -0400
 From: Brian Masney <bmasney@redhat.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>,
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>,
 	Stephen Boyd <sboyd@kernel.org>,
 	Brian Masney <bmasney+clk@redhat.com>,
 	Jerome Brunet <jbrunet+clk@baylibre.com>,
@@ -100,6 +99,7 @@ Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
 	Gregory Clement <gregory.clement@bootlin.com>,
 	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
 	Vladimir Zapolskiy <vz@mleia.com>, Heiko Stuebner <heiko@sntech.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
 	Sylwester Nawrocki <s.nawrocki@samsung.com>,
 	Chanwoo Choi <cw00.choi@samsung.com>,
 	Peter Griffin <peter.griffin@linaro.org>,
@@ -131,57 +131,53 @@ Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
 	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 29/45] clk: samsung: Make sure clk_init_data is fully
- initialized
-Message-ID: <aoxEMm6FGf_onEBf@redhat.com>
+Subject: Re: [PATCH 00/45] clk: Make sure clk_init_data is fully initialized
+ (part two)
+Message-ID: <aoxfwycOmEzLzhEU@redhat.com>
 References: <cover.1787239813.git.geert+renesas@glider.be>
- <87b3e83137e1a987f3c69d214706e93ef3898cab.1787239813.git.geert+renesas@glider.be>
- <60a8d05a-76fa-43c3-a0f7-fb26a3b659b8@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <60a8d05a-76fa-43c3-a0f7-fb26a3b659b8@kernel.org>
+In-Reply-To: <cover.1787239813.git.geert+renesas@glider.be>
 User-Agent: Mutt/2.4.0 (2026-06-19)
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: JQN8vTlJcO9B5xb2S2_h_prrAaNfg1k8itJuu4A1kZA_1787577403
+X-Mimecast-MFC-PROC-ID: tV-ymX4OtzCPeAuNMp2_0YPo3HwmsFq26pwnsVUD4qA_1787584458
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Krzysztof,
-
-On Fri, Aug 21, 2026 at 01:04:01PM +0200, Krzysztof Kozlowski wrote:
-> On 21/08/2026 10:53, Geert Uytterhoeven wrote:
-> > The clk_init_data structure contains several mutually-exclusive members
-> > for different methods to specify the possible parents of a clock,
-> > prompting drivers to initialize only the members they need.  However,
-> > not initializing all members may cause subtle issues, which are only
-> > exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE is
-> > enabled.
-> > 
-> > Make sure all members are fully initialized, to avoid such bugs, and to
-> > prevent future breakage when converting drivers to a different method
-> > for specifying the parents.
-> > 
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > Compile-tested only.
-> > ---
-> >  drivers/clk/samsung/clk-cpu.c | 2 +-
-> >  drivers/clk/samsung/clk-pll.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, Aug 21, 2026 at 10:53:10AM +0200, Geert Uytterhoeven wrote:
+> 	Hi all,
 > 
+> The clk_init_data structure contains several mutually-exclusive members
+> for different methods to specify the possible parents of a clock,
+> prompting drivers to initialize only the members they need.  However,
+> not initializing all members may cause subtle issues, which are only
+> exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE is
+> enabled.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> Hence this series aims to make sure all members are fully initialized,
+> to avoid such bugs, and to prevent future breakage when converting
+> drivers to a different method for specifying the parents.
 > 
-> Let me know if I should take it via Samsung SoC clock tree. I assume by
-> default this will go directly via clock tree.
+> Part One[1] fixed all cases that I identified to be real bugs, in
+> response to a crash I saw on BeagleBone Black.
+> 
+> This series is the clock subpart of Part Two, which fixes remaining
+> cases that are currently harmless.  These are still fragile, and may
+> cause future breakage when converting drivers to a different method for
+> specifying the parents.
+> 
+> Thanks for your comments!
+> 
+> [1] "[PATCH treewide 0/5] clk: Make sure clk_init_data is fully
+>      initialized (part 1)"
+>     https://lore.kernel.org/cover.1787165329.git.geert+renesas@glider.be
 
-Please take it through your Samsung tree to avoid merge conflicts if
-there are other changes to these files during this development cycle.
+Thanks for cleaning this all up! For the series:
 
-Brian
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
