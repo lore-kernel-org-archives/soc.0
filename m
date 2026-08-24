@@ -1,183 +1,113 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0365367281
-	for <soc@lists.linux.dev>; Mon, 24 Aug 2026 15:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6638838AC9A
+	for <soc@lists.linux.dev>; Mon, 24 Aug 2026 20:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787584462; cv=none; b=Y6bvVH4ZSIg/+htmQ4DMxhKdf0OLQ2te3tHNfsiQsPKHAIjrjQbTQOs75BJttuUDBj7vU9fhWG3oLzagJ5aGGTws+AYtaM4qQ8mIMh4b2nkxClurd8NEi4a90XQBmEL5VnvF1r8hE5YiDxEvR3bqUqaB59tKiKEPy17m1XfP8b8=
+	t=1787603979; cv=none; b=HFXJNZhB2X3gZIJ229+fjQKgV64sJqVvUZBSGfrBuPWRq0KK6i9wIRZPvrE08ZROzEMil6stJUpJFZkn+B6i/BC2LHdyB3O09KnVrH6On7YWxWWFNsCaTlyQxxab6+2A3KUWmQRqMTT81p9gHmWjOGGUVh6q+UgMwJ2ilLwZ4OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787584462; c=relaxed/simple;
-	bh=PMHzlusqnjEcUolJb6Rj0ihhVcm0EmxTzAkLKIuEEmA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=DKkZou68FZZpBqSP5H+PiemYvVwL1iWdfSATch1ZJMpf77y4vE3Qo63AbZ7QC2/RjzmQxUmeeW9mfulEEtrfvbXr7ZGz6mGMkapHkrggDUDqD5HLP1FcnUwO3AA9LTJBuG6EVtBCDNk/VdASfigIa1cNPaNYvQqonxgFgWLNM/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=arEZlnlg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787603979; c=relaxed/simple;
+	bh=EVUwDkr+aRcYVofgEibvAtJX7CxRusSErPl1ti71pZs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fN0rgUPp1QZcfA0mfzuH2zI9CymmducZfI/hjGR/6tzP/ARbrxDVca8vHrLtUAkk5LI0SCoAfm/uHwdOsdr2wT3J2eTrG4Lu3KQHzgmq3sel/rO2iWtBURt00dT3XGqUE5d1lTVT0Fx2FFo6tiTW4Q0oHDXATf2TjsYNgXOHBmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=op1PqS0Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="arEZlnlg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787584459;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=r9JEBxETCpjKOyzPxUj8DiK5Y8iV5A7DhykNYlgKppA=;
-	b=arEZlnlg4W2uN8jNuObPdV7XEADzujjJXwvcZ0jsYyOs1GpgplUEFL8fS3dR8trvvObtIj
-	bogtbd+W7m+xsHUVN4Gk5Ma9VphbXjVZO5f8hcrXCgQVPh7THWyq/OlM+xHXE2aDqP4kZc
-	OzOCr0NnyCMMjqrNBjxYsN60anza9lc=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-CZacIbhKMZ2ecjJg17MVig-1; Mon, 24 Aug 2026 11:14:18 -0400
-X-MC-Unique: CZacIbhKMZ2ecjJg17MVig-1
-X-Mimecast-MFC-AGG-ID: CZacIbhKMZ2ecjJg17MVig_1787584458
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-90c4da3d504so18776816d6.0
-        for <soc@lists.linux.dev>; Mon, 24 Aug 2026 08:14:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787584458; x=1788189258;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=r9JEBxETCpjKOyzPxUj8DiK5Y8iV5A7DhykNYlgKppA=;
-        b=N0ibqbHUD20ishbC04SB2hkdEyzEBK3ZoCuwbcSld90c7ITpj1iejrVSvxHvQpbPAy
-         8JArOWGfhYx8ret6qu7LSoTf7+UNwdryift8Q8vAxvp247VHL4BUtXeLbvKg6xTWGN2B
-         /n1npwruDxUEa3fU2kEwgIb+wrVaFeNld1+ecQSBwOjsZFT32IFkBj82SL8ivBwmyU8F
-         Dq7/RCMBrhJrY7nP9vbRXKEzeszZKC6efiH2/Kaz9l50eJugGj3oijzwqD9YNb4nj6vu
-         Z0h58n29MHwQyt3p+/JVkJLnAOBF/E3Jcgd0zR0zBetY3uiarYImq+IzWb4C/+1VsF8D
-         20RA==
-X-Forwarded-Encrypted: i=1; AHgh+RrDNuNZA4wxifSrjvpk6+sH7ESxmaXy2wWXfPNMZhBh3asNGMaB9pC9oHB4sX7h6Pao0eY=@lists.linux.dev
-X-Gm-Message-State: AFuF++nSjoAht4DUrAt25n5PGccHITvScsJ0ZpPYYcxYZ0+/hyrdABBx
-	FK3XAJvjQNhyXnVZ/tO3vOnnOo+lXUKaxH95mDHCZ4s5ZtZ/8cTC4GPx+fwFbItmV62bATA9C6w
-	UtJykABn1KuPejKi/WYGfYz/NE9hiEloYJTUr0aWEy2BY4StP/CXISw==
-X-Gm-Gg: AR+sD12nmXT6ju7jYcNO2yJIWdITzz1NrDpfVgBdmXgTIwGYxlcjAMx5AFY5Ng1g51q
-	v5+sFmVLflWrZTg7r/c0Ua0K2R3bn9FWWzexY8VwPxOw8t0CsQfld0+SBW8JhnaBzDfZYQSWtL+
-	YNK2bm4A2+pQmngYbygmeQToQPLp3WtfRNOWAJRoQMhMXAKzf0DS2Hx7lnUtkCB/xsgQzpX2Ln+
-	C08IQQomlpCljckg0ZuELAmvBK1RYFMCZX5AvuQizbqCGRPmqTFiJ83hKCOP9cwa7rdF5E3L8bl
-	5LQ5P/hdqST2QAJgpihn6bdAEdUdHDQBvvlNcSDBZ5XAj7997mrsITns6PwZAVUv+oSrEZgTnt9
-	i9/McnYYKLnnd3TKtcOBDMYlKfW8XauGpBRk=
-X-Received: by 2002:a05:6214:2a49:b0:8f1:440c:7f81 with SMTP id 6a1803df08f44-90c80942e22mr260846406d6.4.1787584457453;
-        Mon, 24 Aug 2026 08:14:17 -0700 (PDT)
-X-Received: by 2002:a05:6214:2a49:b0:8f1:440c:7f81 with SMTP id 6a1803df08f44-90c80942e22mr260845166d6.4.1787584456812;
-        Mon, 24 Aug 2026 08:14:16 -0700 (PDT)
-Received: from redhat.com (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c93a82554sm64013126d6.45.2026.08.24.08.14.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 08:14:15 -0700 (PDT)
-Date: Mon, 24 Aug 2026 11:14:11 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Brian Masney <bmasney+clk@redhat.com>,
-	Jerome Brunet <jbrunet+clk@baylibre.com>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Billy Tsai <billy_tsai@aspeedtech.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Sudeep Holla <sudeep.holla@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	David Lechner <david@lechnology.com>,
-	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Santosh Shilimkar <ssantosh@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Vladimir Zapolskiy <vz@mleia.com>, Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Emilio =?iso-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
-	Chen-Yu Tsai <wens@kernel.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Prashant Gaikwad <pgaikwad@nvidia.com>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Ulf Hansson <ulfh@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Michal Simek <michal.simek@amd.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	linux-clk@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	openbmc@lists.ozlabs.org, arm-scmi@vger.kernel.org,
-	imx@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 00/45] clk: Make sure clk_init_data is fully initialized
- (part two)
-Message-ID: <aoxfwycOmEzLzhEU@redhat.com>
-References: <cover.1787239813.git.geert+renesas@glider.be>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="op1PqS0Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 330FA1F0155E
+	for <soc@lists.linux.dev>; Mon, 24 Aug 2026 20:39:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787603977;
+	bh=LEMIXlW7UB4hHdDf5XWpYKY9mKhf7DDvl0I5DYYVcWI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=op1PqS0ZcwJX9065pz+7n7Mhcirj6eX3k7xLqlZ+ppKs9SUQjaRYatOf7zFET/tfn
+	 ul80C8GWnGTALvbcy587qsJUwsDqASYiSFMYfHcPITUgCg3TZF48GkIuTKGWZKFR9M
+	 4KN8Sznl1jMlE46rBL1TjVyK3aAD3CngSTThQG0+P9d0RdhdZTKci8rg+oXU2+Knhy
+	 NbhSdxhVqpnJaSio1FP0K7pN0IwaOCStdR+sCf1wtsi2SseznQCBLMUxP19S9nO/9Q
+	 MUef/TEDW6ujepu5thZa0JHNFheaGU558HmIHS4lCPCIS/Hkxb7SN9fJwNlrWxn60U
+	 rLdy0en7BtOBg==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-45171f2f608so3599667fac.1
+        for <soc@lists.linux.dev>; Mon, 24 Aug 2026 13:39:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rog5I9qeTb2x+PDTggYuhiE312VH6VBtofo4nlzxLc2N34hzV15PxoxVAH3W+xgCld9ago=@lists.linux.dev
+X-Gm-Message-State: AFuF++kPDV9IFgK+ri+vSNRVAfyu+bOHF+01ajCbkjOXWX8j4iHfuV7R
+	I8GrCxJnu9+Ay9ooOvQ+YjX+IMjuVKRhi4fFkojGEy/iutDVsEkFOvf6UJD0/l3rOEUOURXXkSG
+	9YECj0HZfTxiQY0klb3RRMqtYq5TDCPg=
+X-Received: by 2002:a05:6871:331c:b0:457:ed1a:9da3 with SMTP id
+ 586e51a60fabf-4644af0a69cmr1563335fac.17.1787603975698; Mon, 24 Aug 2026
+ 13:39:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <cover.1787239813.git.geert+renesas@glider.be>
-User-Agent: Mutt/2.4.0 (2026-06-19)
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: tV-ymX4OtzCPeAuNMp2_0YPo3HwmsFq26pwnsVUD4qA_1787584458
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1787239813.git.geert+renesas@glider.be> <33f8a87834a75b6677894f1993c90f00eb6a2547.1787239813.git.geert+renesas@glider.be>
+In-Reply-To: <33f8a87834a75b6677894f1993c90f00eb6a2547.1787239813.git.geert+renesas@glider.be>
+From: Linus Walleij <linusw@kernel.org>
+Date: Mon, 24 Aug 2026 22:39:20 +0200
+X-Gmail-Original-Message-ID: <CAD++jLnWF5Y+=Dz4XxFyHqrxuOtGucvYLaqMGDNH4XoR1S+rrQ@mail.gmail.com>
+X-Gm-Features: AcwNN1XmhR7K3AKRJKXT4Sd3qYlnwrUuNbhbfYVIv-485OoNG4okiQZloSgYvOE
+Message-ID: <CAD++jLnWF5Y+=Dz4XxFyHqrxuOtGucvYLaqMGDNH4XoR1S+rrQ@mail.gmail.com>
+Subject: Re: [PATCH 10/45] clk: gemini: Make sure clk_init_data is fully initialized
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>, 
+	Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, 
+	Jerome Brunet <jbrunet+clk@baylibre.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+	Billy Tsai <billy_tsai@aspeedtech.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, 
+	Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>, 
+	Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>, 
+	Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>, 
+	Sudeep Holla <sudeep.holla@kernel.org>, Cristian Marussi <cristian.marussi@arm.com>, 
+	David Lechner <david@lechnology.com>, Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
+	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Paul Cercueil <paul@crapouillou.net>, Santosh Shilimkar <ssantosh@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	Gregory Clement <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, 
+	Heiko Stuebner <heiko@sntech.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Sylwester Nawrocki <s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Peter Griffin <peter.griffin@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Viresh Kumar <vireshk@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	=?UTF-8?Q?Emilio_L=C3=B3pez?= <emilio@elopez.com.ar>, 
+	Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
+	Thierry Reding <thierry.reding@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Ulf Hansson <ulfh@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Michal Simek <michal.simek@amd.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, linux-clk@vger.kernel.org, 
+	linux-aspeed@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org, 
+	arm-scmi@vger.kernel.org, imx@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, 
+	linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 21, 2026 at 10:53:10AM +0200, Geert Uytterhoeven wrote:
-> 	Hi all,
-> 
+On Fri, Aug 21, 2026 at 10:53=E2=80=AFAM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+
 > The clk_init_data structure contains several mutually-exclusive members
 > for different methods to specify the possible parents of a clock,
 > prompting drivers to initialize only the members they need.  However,
 > not initializing all members may cause subtle issues, which are only
 > exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE is
 > enabled.
-> 
-> Hence this series aims to make sure all members are fully initialized,
-> to avoid such bugs, and to prevent future breakage when converting
-> drivers to a different method for specifying the parents.
-> 
-> Part One[1] fixed all cases that I identified to be real bugs, in
-> response to a crash I saw on BeagleBone Black.
-> 
-> This series is the clock subpart of Part Two, which fixes remaining
-> cases that are currently harmless.  These are still fragile, and may
-> cause future breakage when converting drivers to a different method for
-> specifying the parents.
-> 
-> Thanks for your comments!
-> 
-> [1] "[PATCH treewide 0/5] clk: Make sure clk_init_data is fully
->      initialized (part 1)"
->     https://lore.kernel.org/cover.1787165329.git.geert+renesas@glider.be
+>
+> Make sure all members are fully initialized, to avoid such bugs, and to
+> prevent future breakage when converting drivers to a different method
+> for specifying the parents.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Thanks for cleaning this all up! For the series:
+Acked-by: Linus Walleij <linusw@kernel.org>
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
-
+Yours,
+Linus Walleij
