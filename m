@@ -1,114 +1,95 @@
-Received: from spam.axera-tech.com (unknown [114.118.28.34])
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39DE3932ED;
-	Mon, 24 Aug 2026 08:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.118.28.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906F93F927B
+	for <soc@lists.linux.dev>; Mon, 24 Aug 2026 10:39:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.200.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787560978; cv=none; b=Al5LDnrMGIuUZziz0B8G8q57+WqOKyNv1fHZyTjoTcTA9TFOKzzHHYFpArQ0N/Fp4UG9hvJ1ql4hzOlFxdUuIOMd/S8Dqd2kZzFc6XCDPok1ezvm1PAjADQufyDDOG/HULYVL/OA9OPRU+1loXtD4fR9L6bgB92jOsAZIOP6B3U=
+	t=1787567997; cv=none; b=XZP+u2Fjyh1iSDVlt/FQ5DU7MTTKfEWNusi40/vt/90yiiME/QKcVBeuTkpeXTGgb8yZIg0tfaj97GAeIaZiojZYlAeJnECOhvjdXjW4awidqLk0ke4Gcf2O3nkyiv7u97Twtu7Mu2E/QR+Hvnby9In+dMyFugP895Y1v/yx2cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787560978; c=relaxed/simple;
-	bh=5s9fmTdBx0AUYR5j6ZsQuKFd//akurKUYOhk2aCWWo8=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=GOpIwNLInDrYQzEF+xGh6ejkiQnFER3iOsqoIzMO0DnUwyIwQWnLXfWsvZVwtcmpJ9GxunMZ5QntnwGQ7w4ItNSkFHc8OY1EJqLSqEKnyAqr3xECTKnWG3TopBm+57eJs0aJ0PHKA82Nt0nMMoKbj5+RPcLNwioX4zPWhIjeiJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com; spf=pass smtp.mailfrom=axera-tech.com; arc=none smtp.client-ip=114.118.28.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axera-tech.com
-Received: from aixinexchange02.aixin-chip.com ([10.122.86.161])
-	by spam.axera-tech.com with ESMTPS id 67O8fTeo070784
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 24 Aug 2026 16:41:29 +0800 (+08)
-	(envelope-from lenghonglin@axera-tech.com)
-Received: from aixinexchange01.aixin-chip.com (10.122.86.160) by
- aixinexchange02.aixin-chip.com (10.122.86.161) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Mon, 24 Aug 2026 16:41:29 +0800
-Received: from aixinexchange01.aixin-chip.com ([fe80::a517:4f0b:339f:f50b]) by
- aixinexchange01.aixin-chip.com ([fe80::a517:4f0b:339f:f50b%3]) with mapi id
- 15.02.2562.017; Mon, 24 Aug 2026 16:41:29 +0800
-From: =?utf-8?B?5Ya357qi5p6X?= <lenghonglin@axera-tech.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        =?utf-8?B?5pe25b+X5oiQ?= <shizhicheng@axera-tech.com>,
-        Catalin Marinas
-	<catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann
-	<arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Linus
- Walleij" <linusw@kernel.org>,
-        Drew Fustini <fustini@kernel.org>
-CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "soc@lists.linux.dev"
-	<soc@lists.linux.dev>
-Subject: Re: [PATCH 1/6] dt-bindings: vendor-prefixes: add Axera
-Thread-Topic: [PATCH 1/6] dt-bindings: vendor-prefixes: add Axera
-Thread-Index: Ad0zoBvFUJnRy3dgQQGTVELxv6YhCw==
-Date: Mon, 24 Aug 2026 08:41:29 +0000
-Message-ID: <45eb9a27392441898b0c6db7a54a3f61@axera-tech.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1787567997; c=relaxed/simple;
+	bh=900P2PC+wSu8Wlib/tD7n7W4V8IlZK1JlyraA+1xLwU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J69Yaoiobs4kCGUdwZFsvpTonmqhr8yxLjAEpuzvejgstg48KcMWceUZ2mM8NitoXgLwIpmtqI8GJrSw5ytPymKJLD0r5LHp8ybswYioGPvX1SFiy3Gg99I7F3SYcHdMEc1akwjIyYK0WPnVtiN99Yqw8zh6HM3hxMXCdr7yqJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.200.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
+	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 890CC201917;
+	Mon, 24 Aug 2026 12:39:53 +0200 (CEST)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1wyS5p-0035gX-1U;
+	Mon, 24 Aug 2026 12:39:53 +0200
+Received: from pengutronix.de (p4ffb23c7.dip0.t-ipconnect.de [79.251.35.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 26F6358B2AD;
+	Mon, 24 Aug 2026 10:39:53 +0000 (UTC)
+Date: Mon, 24 Aug 2026 12:39:52 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Zi-Yu Chen <zychennvt@gmail.com>
+Cc: arnd@arndb.de, olof@lixom.net, soc@lists.linux.dev, 
+	ychuang3@nuvoton.com, schung@nuvoton.com, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND] arm64: dts: nuvoton: ma35d1: add CAN nodes
+Message-ID: <20260824-smooth-jolly-sponge-ba4b95-mkl@pengutronix.de>
+References: <20260708082457.460710-1-zychennvt@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-DKIM-Results: [10.122.86.161]; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:spam.axera-tech.com 67O8fTeo070784
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="orpiuns42rsyvflb"
+Content-Disposition: inline
+In-Reply-To: <20260708082457.460710-1-zychennvt@gmail.com>
 
-DQoNCj4gLS0tLS3pgq7ku7bljp/ku7YtLS0tLQ0KPiDlj5Hku7bkuro6IEtyenlzenRvZiBLb3ps
-b3dza2kgPGtyemtAa2VybmVsLm9yZz4NCj4g5Y+R6YCB5pe26Ze0OiAyMDI25bm0OOaciDIx5pel
-IDE3OjQ0DQo+IOaUtuS7tuS6ujog5Ya357qi5p6XIDxsZW5naG9uZ2xpbkBheGVyYS10ZWNoLmNv
-bT47IFJvYiBIZXJyaW5nDQo+IDxyb2JoQGtlcm5lbC5vcmc+OyBLcnp5c3p0b2YgS296bG93c2tp
-IDxrcnprK2R0QGtlcm5lbC5vcmc+OyBDb25vciBEb29sZXkNCj4gPGNvbm9yK2R0QGtlcm5lbC5v
-cmc+OyDml7blv5fmiJAgPHNoaXpoaWNoZW5nQGF4ZXJhLXRlY2guY29tPjsgQ2F0YWxpbg0KPiBN
-YXJpbmFzIDxjYXRhbGluLm1hcmluYXNAYXJtLmNvbT47IFdpbGwgRGVhY29uIDx3aWxsQGtlcm5l
-bC5vcmc+OyBBcm5kDQo+IEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPjsgQWxleGFuZHJlIEJlbGxv
-bmkNCj4gPGFsZXhhbmRyZS5iZWxsb25pQGJvb3RsaW4uY29tPjsgTGludXMgV2FsbGVpaiA8bGlu
-dXN3QGtlcm5lbC5vcmc+OyBEcmV3DQo+IEZ1c3RpbmkgPGZ1c3RpbmlAa2VybmVsLm9yZz4NCj4g
-5oqE6YCBOiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
-bmVsLm9yZzsNCj4gbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOyBzb2NAbGlz
-dHMubGludXguZGV2DQo+IOS4u+mimDogUmU6IFtQQVRDSCAxLzZdIGR0LWJpbmRpbmdzOiB2ZW5k
-b3ItcHJlZml4ZXM6IGFkZCBBeGVyYQ0KPiANCj4gT24gMjEvMDgvMjAyNiAxMTozMCwgTGVuZyBI
-b25nbGluIHdyb3RlOg0KPiA+IEFkZCB0aGUgQXhlcmEgU2VtaWNvbmR1Y3RvciB2ZW5kb3IgcHJl
-Zml4IGZvciBkZXZpY2V0cmVlIGJpbmRpbmdzLg0KPiA+DQo+ID4gUmV2aWV3ZWQtYnk6IFNoaSBa
-aGljaGVuZyA8c2hpemhpY2hlbmdAYXhlcmEtdGVjaC5jb20+DQo+IA0KPiBXaGVyZSBkaWQgaXQg
-aGFwcGVuIGFuZCB3aGF0IHdhcyBoZXJlIGV4YWN0bHkgcmV2aWV3ZWQ/IERpZCByZXZpZXdlcg0K
-PiB1bmRlcnN0YW5kIHN0YXRlbWVudCBvZiBvdmVyc2lnaHQ/IEkgYW0gYXNraW5nIGJlY2F1c2Ug
-dGhpcyBpcyB2MSBhbmQgaGFzDQo+IGFscmVhZHkgY2xlYXJseSB2aXNpYmxlIGlzc3VlIChiZWxv
-dykuDQo+IA0KPiANCg0KSGkgS3J6eXN6dG9mLA0KDQpUaGFua3MgZm9yIHBvaW50aW5nIHRoaXMg
-b3V0LiBZb3UgYXJlIGFic29sdXRlbHkgcmlnaHQgdG8gcXVlc3Rpb24gdGhlDQpSZXZpZXdlZC1i
-eSB0YWdzLg0KDQpBcyB0aGlzIGlzIG15IGZpcnN0IHRpbWUgc3VibWl0dGluZyBhIHBhdGNoIHNl
-cmllcyBvZiB0aGlzIHNpemUsIEkNCm1pc3VuZGVyc3Rvb2QgdGhlIHJlcXVpcmVtZW50cyBmb3Ig
-dGhlIFJldmlld2VkLWJ5IHRhZyBhbmQgbWlzdGFrZW5seQ0KdGhvdWdodCBhbiBpbnRlcm5hbCBy
-ZXZpZXcgd2FzIHN1ZmZpY2llbnQuIEkgYXBvbG9naXplIGZvciB0aGUNCmNvbmZ1c2lvbiBhbmQg
-d2lsbCByZW1vdmUgdGhlIHVuY29uZmlybWVkIHRhZ3MgaW4gdjIuDQoNCj4gPiBTaWduZWQtb2Zm
-LWJ5OiBMZW5nIEhvbmdsaW4gPGxlbmdob25nbGluQGF4ZXJhLXRlY2guY29tPg0KPiA+IC0tLQ0K
-PiA+ICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdmVuZG9yLXByZWZpeGVzLnlh
-bWwgfCAyICsrDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4gPg0KPiA+
-IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdmVuZG9yLXBy
-ZWZpeGVzLnlhbWwNCj4gPiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy92ZW5k
-b3ItcHJlZml4ZXMueWFtbA0KPiA+IGluZGV4IDM5NjA0NGYzNjhlNy4uMWRiYWZlNjgyNzI0IDEw
-MDY0NA0KPiA+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy92ZW5kb3It
-cHJlZml4ZXMueWFtbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy92ZW5kb3ItcHJlZml4ZXMueWFtbA0KPiA+IEBAIC0yMTksNiArMjE5LDggQEAgcGF0dGVyblBy
-b3BlcnRpZXM6DQo+ID4gICAgICBkZXNjcmlwdGlvbjogU2hhbmdoYWkgQXdpbmljIFRlY2hub2xv
-Z3kgQ28uLCBMdGQuDQo+ID4gICAgIl5heGVudGlhLC4qIjoNCj4gPiAgICAgIGRlc2NyaXB0aW9u
-OiBBeGVudGlhIFRlY2hub2xvZ2llcyBBQg0KPiA+ICsgICJeYXhlcmEsLioiOg0KPiANCj4gU28g
-eW91ciBkb21haW4gaXMgYXhlcmEuY29tPw0KPiANCj4gDQoNCk91ciBjb3Jwb3JhdGUgZG9tYWlu
-IGlzIGFjdHVhbGx5IGF4ZXJhLXRlY2guY29tLiBJIG5vdyByZWFsaXplIHRoZSB2ZW5kb3INCnBy
-ZWZpeCBzaG91bGQgcmVmbGVjdCB0aGUgZG9tYWluIG5hbWUuIEkgd2lsbCBjaGFuZ2UgdGhlIHBy
-ZWZpeCB0byANCiJheGVyYS10ZWNoLC4qIiBpbiB2MiB0byBjb21wbHkgd2l0aCB0aGUgZ3VpZGVs
-aW5lcy4NCg0KQmVzdCByZWdhcmRzLA0KTGVuZw0KDQo+ID4gKyAgICBkZXNjcmlwdGlvbjogQXhl
-cmEgU2VtaWNvbmR1Y3RvciBDby4sIEx0ZC4NCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YN
-Cg==
+
+--orpiuns42rsyvflb
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 RESEND] arm64: dts: nuvoton: ma35d1: add CAN nodes
+MIME-Version: 1.0
+
+On 08.07.2026 16:24:57, Zi-Yu Chen wrote:
+> Add controller nodes for the four Bosch M_CAN blocks found on the
+> Nuvoton MA35D1 SoC.
+>
+> Additionally, configure pinctrl and enable CAN1 and CAN3 on the
+> MA35D1 SOM board. Also, update the APLL frequency to 200MHz to ensure
+> the CAN controllers receive the required input clock for 50MHz operation.
+
+50 MHz is an unusual CAN clock frequency. Better use a multiple of 40
+MHz. Within the limits of the m_can IP core, the higher the multiple the
+better.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--orpiuns42rsyvflb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCaowfdgAKCRDMOmT6rpmt
+0mIAAPsFglUP+fkdaOYrAYAkWdF9FEg7F4iWq6H/hk8EI1q70AD9EjWExtou8CWm
+bUAesYOpNW53On7fiKeR6VuPs+71UAw=
+=L8lk
+-----END PGP SIGNATURE-----
+
+--orpiuns42rsyvflb--
