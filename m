@@ -1,135 +1,106 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from spam.axera-tech.com (unknown [114.118.28.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4EF1FC110;
-	Mon, 24 Aug 2026 21:12:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF733C4B93;
+	Tue, 25 Aug 2026 06:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.118.28.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787605953; cv=none; b=nyPSubCCgHNHnie1csG+oGRnQgCcmfbrMPMQ1JqhQlSm2sFtNfdjJLt1S/lkMqP9ts09FfE1Dke7arlv1Jw/G5GHt74mST3h+c/HlOFNBItprhbdClGY68Ml2gL3L3WpKw2VA6uYlbH6lGixytONIyEorCNCDDXdCXd6pjmTMcg=
+	t=1787639400; cv=none; b=n9t0Rs2OZeMTv7HRHxYbdv9Ney00Vtv7zjGxARTvJ0b1YuIBaWlT/ySI/yTKRDSbmYkpbcUkDvk8ORrx6rDxIC9B/DcUu4ldmd/8riCIbNlRb6wp6zQJm2Ob/kR3qv5IrZSrQ6q6LZOUMjWxlVFUeDiZkbViZStoDYOtz2diTDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787605953; c=relaxed/simple;
-	bh=hGtroxhvwuDcQoqg/UFYIfOq90LSG6yXB8udPS3pFLs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cF00QoxUDJmd8T4yVQEui2KSsn3wsRApJBpFufgVMhxuU/zh3gWDPJz9boNkW0pHCVksx/5j/gxTidgh2ozTHMYHYKWc/62wU0rdd8pSp6ED92u09YVwYGqwlM8m4M8w1JeTG55oV0Fx7xrzK8WbGUKtJ3rBbh9zkhLV5PMKkB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=gWJzN7dM; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="gWJzN7dM"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=jVWHXt5kccAnCww2YkWc7+CJixLQqoOYi0ZBcColNt0=; b=gWJzN7dM/JTTPxhl+cIzoI7bqh
-	xTglornZsWzyUT6gAWwHlVLJetXnZ2Z5EMuCLuAg11XlHgvf1Wk6a0btrtLN5HhjjAG2Q7UH6bgeO
-	5pNpJ0MEntul+ICrSfwFAc4fEk57NsAyll35Dcvwjx0oFXGnLlTCERbbZn+mD4nieMTql+KosEbZ5
-	inUdcsXbrlIQoUmUoxvJUnR4iJIkSUSNyx7MXP5QpUmuaGKDqp5W4m9eiveS9GyjB0lnwBJYC7Lm9
-	QtCoKLycKYO2D/67maCOOnaxcZahjOMGWSvtkjJmVar4K8lyd1CaB5mAfEoncOElmin1FKJV0R227
-	TIkdKuAg==;
-From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
-To: Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>,
- Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>,
- Jerome Brunet <jbrunet+clk@baylibre.com>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Billy Tsai <billy_tsai@aspeedtech.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
- Taichi Sugaya <sugaya.taichi@socionext.com>,
- Takao Orito <orito.takao@socionext.com>, Linus Walleij <linusw@kernel.org>,
- Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>,
- Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>,
- Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
- Sudeep Holla <sudeep.holla@kernel.org>,
- Cristian Marussi <cristian.marussi@arm.com>,
- David Lechner <david@lechnology.com>, Abel Vesa <abelvesa@kernel.org>,
- Peng Fan <peng.fan@nxp.com>, Frank Li <Frank.Li@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Paul Cercueil <paul@crapouillou.net>,
- Santosh Shilimkar <ssantosh@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Vladimir Zapolskiy <vz@mleia.com>, Krzysztof Kozlowski <krzk@kernel.org>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Dinh Nguyen <dinguyen@kernel.org>,
- Viresh Kumar <vireshk@kernel.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Emilio =?UTF-8?B?TMOzcGV6?= <emilio@elopez.com.ar>,
- Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, Prashant Gaikwad <pgaikwad@nvidia.com>,
- Thierry Reding <thierry.reding@kernel.org>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Ulf Hansson <ulfh@kernel.org>,
- Liviu Dudau <liviu.dudau@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Michal Simek <michal.simek@amd.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-clk@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- openbmc@lists.ozlabs.org, arm-scmi@vger.kernel.org, imx@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- soc@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
- linux-mediatek@lists.infradead.org,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Subject:
- Re: [PATCH 00/45] clk: Make sure clk_init_data is fully initialized (part
- two)
-Date: Mon, 24 Aug 2026 23:11:32 +0200
-Message-ID: <3074509.irdbgypaU6@diego>
-In-Reply-To: <cover.1787239813.git.geert+renesas@glider.be>
-References: <cover.1787239813.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1787639400; c=relaxed/simple;
+	bh=M4iAPdK1cenKR02RCbJ12RIt5gNIC4gVpauO/8odG4s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=eOc8Y1tRary1C7c8hYVRpCdMBQCO6NmQ4XMKEL9ljI1Vw2k402AFpCDLfNy+qwlflVYUf3EYR85CTxp13YNo+bEfF3QPnYOUQ/KP9RY0m/0tVyWDUJ2xu2fZjeRSLjIuZaMjDFg9ZmFMotkDVfqoepjuSlbSbrWnalLQ0kJKQQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com; spf=pass smtp.mailfrom=axera-tech.com; arc=none smtp.client-ip=114.118.28.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axera-tech.com
+Received: from aixinexchange02.aixin-chip.com ([10.122.86.161])
+	by spam.axera-tech.com with ESMTPS id 67P6SqVi023368
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 25 Aug 2026 14:28:52 +0800 (+08)
+	(envelope-from lenghonglin@axera-tech.com)
+Received: from aixinexchange01.aixin-chip.com (10.122.86.160) by
+ aixinexchange02.aixin-chip.com (10.122.86.161) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Tue, 25 Aug 2026 14:28:52 +0800
+Received: from aixinexchange01.aixin-chip.com ([fe80::a517:4f0b:339f:f50b]) by
+ aixinexchange01.aixin-chip.com ([fe80::a517:4f0b:339f:f50b%3]) with mapi id
+ 15.02.2562.017; Tue, 25 Aug 2026 14:28:52 +0800
+From: =?utf-8?B?5Ya357qi5p6X?= <lenghonglin@axera-tech.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        =?utf-8?B?5pe25b+X5oiQ?= <shizhicheng@axera-tech.com>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann
+	<arnd@arndb.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Linus
+ Walleij" <linusw@kernel.org>,
+        Drew Fustini <fustini@kernel.org>
+CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "soc@lists.linux.dev"
+	<soc@lists.linux.dev>
+Subject: Re: [PATCH 1/6] dt-bindings: vendor-prefixes: add Axera
+Thread-Topic: [PATCH 1/6] dt-bindings: vendor-prefixes: add Axera
+Thread-Index: AQHdMU+0mwlW6evsX06KQEq6JCgFnLanum2AgAYS1IA=
+Date: Tue, 25 Aug 2026 06:28:52 +0000
+Message-ID: <516b940c-16a9-4575-b314-4eae340e90d2@axera-tech.com>
+References: <1eab9e7f03338b673c0e544be7eb4e4421-8-26kernel.org@sslemail.net>
+ <202608240638.67O6cTY3025061@spam.axera-tech.com>
+In-Reply-To: <202608240638.67O6cTY3025061@spam.axera-tech.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9ABE69014415B94CBA3D2B2DED32999A@axera-tech.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+X-DKIM-Results: [10.122.86.161]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:spam.axera-tech.com 67P6SqVi023368
 
-Hi Geert,
-
-Am Freitag, 21. August 2026, 10:53:10 Mitteleurop=C3=A4ische Sommerzeit sch=
-rieb Geert Uytterhoeven:
-> 	Hi all,
->=20
-> The clk_init_data structure contains several mutually-exclusive members
-> for different methods to specify the possible parents of a clock,
-> prompting drivers to initialize only the members they need.  However,
-> not initializing all members may cause subtle issues, which are only
-> exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE is
-> enabled.
->=20
-> Hence this series aims to make sure all members are fully initialized,
-> to avoid such bugs, and to prevent future breakage when converting
-> drivers to a different method for specifying the parents.
->=20
-> Part One[1] fixed all cases that I identified to be real bugs, in
-> response to a crash I saw on BeagleBone Black.
->=20
-> This series is the clock subpart of Part Two, which fixes remaining
-> cases that are currently harmless.  These are still fragile, and may
-> cause future breakage when converting drivers to a different method for
-> specifying the parents.
->=20
-> Thanks for your comments!
-
-I guess more a handling question, how do you expect this series to be
-applied?
-
-I.e. each clk-arch-maintainer, or in one big thing by the core clock
-maintainers? Just wondering if I should pick the Rockchip patch
-or just let the whole series get applied by the clock maintainers.
-
-
-Heiko
-
-
+T24gOC8yMS8yMDI2IDU6NDMgUE0sIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+IE9uIDIx
+LzA4LzIwMjYgMTE6MzAsIExlbmcgSG9uZ2xpbiB3cm90ZToNCj4+IEFkZCB0aGUgQXhlcmEgU2Vt
+aWNvbmR1Y3RvciB2ZW5kb3IgcHJlZml4IGZvciBkZXZpY2V0cmVlIGJpbmRpbmdzLg0KPj4NCj4+
+IFJldmlld2VkLWJ5OiBTaGkgWmhpY2hlbmcgPHNoaXpoaWNoZW5nQGF4ZXJhLXRlY2guY29tPg0K
+PiANCj4gV2hlcmUgZGlkIGl0IGhhcHBlbiBhbmQgd2hhdCB3YXMgaGVyZSBleGFjdGx5IHJldmll
+d2VkPyBEaWQgcmV2aWV3ZXINCj4gdW5kZXJzdGFuZCBzdGF0ZW1lbnQgb2Ygb3ZlcnNpZ2h0PyBJ
+IGFtIGFza2luZyBiZWNhdXNlIHRoaXMgaXMgdjEgYW5kDQo+IGhhcyBhbHJlYWR5IGNsZWFybHkg
+dmlzaWJsZSBpc3N1ZSAoYmVsb3cpLg0KPiANCj4gDQoNCkhpIEtyenlzenRvZiwNCg0KVGhhbmtz
+IGZvciBwb2ludGluZyB0aGlzIG91dC4gWW91IGFyZSBhYnNvbHV0ZWx5IHJpZ2h0IHRvIHF1ZXN0
+aW9uIHRoZQ0KUmV2aWV3ZWQtYnkgdGFncy4NCg0KQXMgdGhpcyBpcyBteSBmaXJzdCB0aW1lIHN1
+Ym1pdHRpbmcgYSBwYXRjaCBzZXJpZXMgb2YgdGhpcyBzaXplLCBJDQptaXN1bmRlcnN0b29kIHRo
+ZSByZXF1aXJlbWVudHMgZm9yIHRoZSBSZXZpZXdlZC1ieSB0YWcgYW5kIG1pc3Rha2VubHkNCnRo
+b3VnaHQgYW4gaW50ZXJuYWwgcmV2aWV3IHdhcyBzdWZmaWNpZW50LiBJIGFwb2xvZ2l6ZSBmb3Ig
+dGhlIGNvbmZ1c2lvbg0KYW5kIHdpbGwgcmVtb3ZlIHRoZSB1bmNvbmZpcm1lZCB0YWdzIGluIHYy
+Lg0KDQo+PiBTaWduZWQtb2ZmLWJ5OiBMZW5nIEhvbmdsaW4gPGxlbmdob25nbGluQGF4ZXJhLXRl
+Y2guY29tPg0KPj4gLS0tDQo+PiAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Zl
+bmRvci1wcmVmaXhlcy55YW1sIHwgMiArKw0KPj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlv
+bnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL3ZlbmRvci1wcmVmaXhlcy55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL3ZlbmRvci1wcmVmaXhlcy55YW1sDQo+PiBpbmRleCAzOTYwNDRmMzY4ZTcuLjFkYmFmZTY4
+MjcyNCAxMDA2NDQNCj4+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy92
+ZW5kb3ItcHJlZml4ZXMueWFtbA0KPj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL3ZlbmRvci1wcmVmaXhlcy55YW1sDQo+PiBAQCAtMjE5LDYgKzIxOSw4IEBAIHBhdHRl
+cm5Qcm9wZXJ0aWVzOg0KPj4gICAgICBkZXNjcmlwdGlvbjogU2hhbmdoYWkgQXdpbmljIFRlY2hu
+b2xvZ3kgQ28uLCBMdGQuDQo+PiAgICAiXmF4ZW50aWEsLioiOg0KPj4gICAgICBkZXNjcmlwdGlv
+bjogQXhlbnRpYSBUZWNobm9sb2dpZXMgQUINCj4+ICsgICJeYXhlcmEsLioiOg0KPiANCj4gU28g
+eW91ciBkb21haW4gaXMgYXhlcmEuY29tPw0KPiANCj4gDQoNCk91ciBjb3Jwb3JhdGUgZG9tYWlu
+IGlzIGFjdHVhbGx5IGF4ZXJhLXRlY2guY29tLiBJIG5vdyByZWFsaXplIHRoZQ0KdmVuZG9yIHBy
+ZWZpeCBzaG91bGQgcmVmbGVjdCB0aGUgZG9tYWluIG5hbWUuIEkgd2lsbCBjaGFuZ2UgdGhlIHBy
+ZWZpeA0KdG8gImF4ZXJhLXRlY2gsLioiIGluIHYyIHRvIGNvbXBseSB3aXRoIHRoZSBndWlkZWxp
+bmVzLg0KDQpCZXN0IHJlZ2FyZHMsDQpMZW5nDQoNCj4+ICsgICAgZGVzY3JpcHRpb246IEF4ZXJh
+IFNlbWljb25kdWN0b3IgQ28uLCBMdGQuDQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQoN
+Cg==
