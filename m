@@ -1,170 +1,164 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3385446830;
-	Tue, 25 Aug 2026 15:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DAF9305699;
+	Fri, 28 Aug 2026 23:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787671809; cv=none; b=mvUxlZndN2ce+I03nQb2UeVzHAPWL7g0jA2r7eJB5b/EfEFDx/VpY89QWx7HZ5DLcCt0kZmEABbkJnnQSdFD1pmQL12s7qkhAprK6T7JThgU5fYBeb5RZ9788O9DMNIzIVg2qBBhHyMz4yhqv4hNkex9YweqhdgdwtOyfcBYKOA=
+	t=1787959195; cv=none; b=d0MM8XTzJsVQ5Dvqs1PXBYcDhoRnIGV3nmPQqEVTcJCvnwYtkNiFvl/7use6l9AZdBBKz+BRe05F7T6E0B92gbOURAXZ//3CJWsaFPAWX0GIzDG1DnD6IMGSjVUUPxXtncQEELYOUn7pSY3USn0zCAADNgPpQ6XbOoDV5Nx+YPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787671809; c=relaxed/simple;
-	bh=VX1DQGP64sDlFJU6h6WjC9QKWk4R7erwd33lDUygt+E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kxFc/DPNrRM7Wa8mdbRkuhZOoPAEndp+VxD4uYZ9f1aUkfLPyiLt+wPhS6IrioKWD/uhUVfOlSnTI8XaWj34fylLhR7r4Su/UG4USTdTTqq808FNFLnXBN1XDj9zu4mXqUXB2l/g3F4b+0zgevjmtWwGjpgKHBbo5CEccHmyWoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Yy9eNa8d; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+	s=arc-20240116; t=1787959195; c=relaxed/simple;
+	bh=mCmFhyvB3CiDIQFueNr3U4X4g7jmuLEAwOL4s3m6sKQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OCcQ/HQPKdjMUj1mAfhoRhyLqiEPXuRNf1tFQarevsedxkM7m+E6p7CnSRYx6OHYmCnwfMH/y7J7TFaS/SJ/Aa/DBYHTUIwmG7tnNFRrJsH8e3o0RDpNUNHRtSCmp30A7tKfjWZYyJr7tULd7+87dY4CpMwiXZrV77ILU7YUS4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=AFBr+8MF; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Yy9eNa8d"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=rZPvGbvTxuaUieZ0JykzVrZCBZ6diu5+kEagWcP5i6s=; b=Yy9eNa8dOguB5ai5gM8NWsrx/s
-	S2pMtHYDnED1hvYB5pxj6+Ad4/4TwBMLiekzdUSvMpDKpHx8BPpPmvVJ/cip7X8H9hfTHeZg450Ac
-	2Op9+b8btKUlsb6NhCz7ZVBJEZsw/g05xmeUmxrRYHIzkWgR7QUNJTV7jrb9eXjwXkv34PFL2n521
-	y3/OYaJNFUPrMl+YX4jWZiQMiJAl6RKexP5dMehCDrnC/gaxSb8FbDAvrvjhAGY7LElro/LUGP1iU
-	8OZbYjEdaR/xakIod2clSq/KckMSPAOYC6Q+7GHQmf84+7SOpT2wUQGbrCqdD8QNr8LOptweM15Jp
-	TQq+Evrw==;
-From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
-To: Brian Masney <bmasney@redhat.com>
-Cc: Ryan Chen <ryan_chen@aspeedtech.com>, Joel Stanley <joel@jms.id.au>,
- Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>,
- Jerome Brunet <jbrunet+clk@baylibre.com>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Billy Tsai <billy_tsai@aspeedtech.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
- Taichi Sugaya <sugaya.taichi@socionext.com>,
- Takao Orito <orito.takao@socionext.com>, Linus Walleij <linusw@kernel.org>,
- Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>,
- Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>,
- Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
- Sudeep Holla <sudeep.holla@kernel.org>,
- Cristian Marussi <cristian.marussi@arm.com>,
- David Lechner <david@lechnology.com>, Abel Vesa <abelvesa@kernel.org>,
- Peng Fan <peng.fan@nxp.com>, Frank Li <Frank.Li@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Paul Cercueil <paul@crapouillou.net>,
- Santosh Shilimkar <ssantosh@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Vladimir Zapolskiy <vz@mleia.com>, Krzysztof Kozlowski <krzk@kernel.org>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Dinh Nguyen <dinguyen@kernel.org>,
- Viresh Kumar <vireshk@kernel.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Emilio =?UTF-8?B?TMOzcGV6?= <emilio@elopez.com.ar>,
- Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, Prashant Gaikwad <pgaikwad@nvidia.com>,
- Thierry Reding <thierry.reding@kernel.org>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Ulf Hansson <ulfh@kernel.org>,
- Liviu Dudau <liviu.dudau@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Michal Simek <michal.simek@amd.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>, linux-clk@vger.kernel.org,
- linux-aspeed@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
- arm-scmi@vger.kernel.org, imx@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev,
- linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
- linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject:
- Re: [PATCH 00/45] clk: Make sure clk_init_data is fully initialized (part
- two)
-Date: Tue, 25 Aug 2026 17:28:37 +0200
-Message-ID: <4227750.aeNJFYEL58@diego>
-In-Reply-To: <ao2ws3ZA-o8ZVjTh@redhat.com>
-References:
- <cover.1787239813.git.geert+renesas@glider.be> <3074509.irdbgypaU6@diego>
- <ao2ws3ZA-o8ZVjTh@redhat.com>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="AFBr+8MF"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:From:Reply-To;
+	bh=3lS8Pe52E15AsSTbFDf2Q8tOnEgRxl/Bw8+tn4QAZ3Q=; b=AFBr+8MF6Vo2i6RVnqs6KlfZGV
+	MqMzbqDgglqnFphc/cnp9EsC5M1YMlCCa8uuHY82nTwytw0vgNMyHDHGwexSVgELFlkEj36oG5H8/
+	fqvxBpUdG7QMdriCtgNoTTLJU8jeZHfvE64QQJITv/uP+DgdJCeuhOp0aG12Z++AbA0QHqB1IjVtf
+	9xVemXIycIb/pvCosC495IjxXXO01gZjV+hF1isHqoD/O4Y9/9GmyMjdY/gWK2VXp0yuWg4MLxnn2
+	aV8w51KZdz8AR29jCkajERX+bxfEmlnltDqEOEGYexi9CZ8hOR2XgRjSpQAIBenxVLPKrox169wKa
+	BHvhK/Jg==;
+Received: from [187.57.78.212] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1x05rI-00B3sF-KD; Sat, 29 Aug 2026 01:19:40 +0200
+From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v6 00/13] syscalls: Add a shared table for all archs
+Date: Fri, 28 Aug 2026 20:19:27 -0300
+Message-Id: <20260828-tonyk-syscall_table-v6-0-fdd358456cf1@igalia.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43NTU7DMBQE4KtUXmNkP9uxzYp7VBXyz0trCAmKQ
+ 0RU5e7YZUFRCmI50sw3Z5JxTJjJw+5MRpxTTkNfQnO3I+Hk+iPSFEsmwKBhGiSdhn55oXnJwXX
+ d0+R8h9SC8d5zD433pCzfRmzTx0XdH75yfvfPGKZK1cYp5WkYl8vtzGvv74eZU0ZtUIIbI0FE9
+ 5iOrkvuPgyvpF7McI3o2whUREXZckSpebtBxDdi2C+IKIgOUjkQQTGvNoi8QjjcRmRFpIkMwLo
+ o2QZR/0BUQUQURljQoWH2B7Ku6yfn2gP73QEAAA==
+X-Change-ID: 20260724-tonyk-syscall_table-928bbb1b26bb
+To: Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmanon <arnd@arndb.de>
+Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, kernel-dev@igalia.com, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ linux-alpha@vger.kernel.org, linux-s390@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+ linux-mips@vger.kernel.org, sparclinux@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+X-Mailer: b4 0.15.2
 
-Am Dienstag, 25. August 2026, 17:11:47 Mitteleurop=C3=A4ische Sommerzeit sc=
-hrieb Brian Masney:
-> Hi Heiko,
->=20
-> On Mon, Aug 24, 2026 at 11:11:32PM +0200, Heiko St=C3=BCbner wrote:
-> > Am Freitag, 21. August 2026, 10:53:10 Mitteleurop=C3=A4ische Sommerzeit=
- schrieb Geert Uytterhoeven:
-> > > 	Hi all,
-> > >=20
-> > > The clk_init_data structure contains several mutually-exclusive membe=
-rs
-> > > for different methods to specify the possible parents of a clock,
-> > > prompting drivers to initialize only the members they need.  However,
-> > > not initializing all members may cause subtle issues, which are only
-> > > exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE =
-is
-> > > enabled.
-> > >=20
-> > > Hence this series aims to make sure all members are fully initialized,
-> > > to avoid such bugs, and to prevent future breakage when converting
-> > > drivers to a different method for specifying the parents.
-> > >=20
-> > > Part One[1] fixed all cases that I identified to be real bugs, in
-> > > response to a crash I saw on BeagleBone Black.
-> > >=20
-> > > This series is the clock subpart of Part Two, which fixes remaining
-> > > cases that are currently harmless.  These are still fragile, and may
-> > > cause future breakage when converting drivers to a different method f=
-or
-> > > specifying the parents.
-> > >=20
-> > > Thanks for your comments!
-> >=20
-> > I guess more a handling question, how do you expect this series to be
-> > applied?
-> >=20
-> > I.e. each clk-arch-maintainer, or in one big thing by the core clock
-> > maintainers? Just wondering if I should pick the Rockchip patch
-> > or just let the whole series get applied by the clock maintainers.
->=20
-> Before you pick up anything, let's see if Stephen picks up this series
-> the next few days before he sends his pull to Linus.
->=20
-> Next development cycle, Jerome Brunet and I will be clk co-maintainers
-> [1] and will start collecting patches then. If Stephen doesn't pick up
-> this whole series this week, then pick up the patch(es) relevant for
-> your tree and send Jerome and I pull as usual. That's just in case
-> there's other patches that come in during the next development cycle to
-> these files and to avoid merge conflicts. I don't have a strong opinion
-> about this though, and could be convinced to take the whole series for
-> simplicity.
+While implementing a new syscall, we need to wire up it's number to the arch
+table. Since syscall number 403, all architectures are on sync regarding the
+number (except alpha), which make things a lot easier but more repetitive as
+well. Have a look at commit b36d4b6aa88 ("arch: hookup listns() system call"),
+with 15 lines of mostly:
 
-Thanks for the heads up on the maintainer expansion :-) .
+  +470    common  listns                          sys_listns
 
-At least for me both work - Geert's fixes are for the clock types used
-by the Rockchip clock drivers and generally we mostly get new clock trees,
-so there shouldn't be any conflicts between this and other new stuff ;-) .
+There's already a "common" table shared with a bunch of archs at
+`scripts/syscall.tbl`, but due to historical reasons some archs will never be
+able to move to this table and share all the numbers.
 
+The generic table starts from 403 (clock_gettime64), the first common syscall.
 
-Heiko
+I've compile tested for arm32, arm64, s390, mips, sparc and alpha by comparing
+the syscalls_*.h and unistd_*.h files generated before and after this patchset.
+For most of cases the files are identical, for the few cases that they are not,
+there's a note in the commit explaining why they are equivalent.
 
+Thanks!
+	André
 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/commit/=
-?h=3Dclk-next&id=3D8bc7ceadce1f362a8b0e88075ef3d926b286c01c
->=20
-> Brian
->=20
->=20
+Changes in v6:
+- Rebased on top of 7.3-rc0: new syscall fchroot()
+- Fix compliance with POSIX shells
+- Add $(syscalltbl_common) to the prereq build files, so the build is triggered
+if the common table changes
+- v5: https://patch.msgid.link/20260812-tonyk-syscall_table-v5-0-3d383927c609@igalia.com
 
+Changes in v5:
+- Add archs lists to Cc
+- alpha: Change custom alpha_syscall to __syscall
+- mips: Use "common" for all ABI tables
+- mips: Kept it as a single table for n32/n64
+- Fix bug introduced by mixing --offset and --compat-offset
+- v4: https://patch.msgid.link/20260812-tonyk-syscall_table-v4-0-748d0229ad40@igalia.com
 
+Changes in v4:
+- Replace cln3 with clone3 in the ABIs
+- mips: Get rid of custom mips ABIs (o32, n32, n64) and use 32 and 64
+- mips: Unify n32 and n64 tables
+- Add alpha to the syscall party, along with it's adaptations
+- Remove --no-compat option and define SYSCALL_WITH_COMPAT() macro for archs
+that need it
+- v3: https://patch.msgid.link/20260807-tonyk-syscall_table-v3-0-7c45a23c50b5@igalia.com
 
+Changes in v3:
+- Removed x86 for now, let's wait till x32 is dropped
+- Added much more archs
+- v2: https://patch.msgid.link/20260727-tonyk-syscall_table-v2-0-95d4f1ee471f@igalia.com
+
+Changes in v2:
+- Managed to move to the real first common syscall: 403 (clock_gettime64)
+- Added -no-compat option to be used with x86_64
+- v1: https://patch.msgid.link/20260724-tonyk-syscall_table-v1-0-9c53188423da@igalia.com
+
+---
+André Almeida (13):
+      syscalls: Make --abis parsing more robust
+      syscalls: Create unified partial table for all archs
+      scripts/syscall.tbl: Use the common table
+      arm: Use the common syscall table
+      s390: Use the common syscall table
+      sparc: Use the common syscall table
+      mips: Remove duplicated syscallnr.sh
+      mips: Get rid of custom mips ABIs for syscall tables
+      mips: Use the common syscall table
+      syscalls: Add an option for offsetting the common table
+      alpha: Define entry point for set_mempolicy_home_node syscall
+      alpha: Remove alpha_ prefix from custom syscall entries
+      alpha: Use the common syscall table
+
+ arch/alpha/kernel/entry.S                 |   8 +-
+ arch/alpha/kernel/syscalls/Makefile       |  14 +-
+ arch/alpha/kernel/syscalls/syscall.tbl    |  55 +-
+ arch/alpha/kernel/systbls.S               |   1 +
+ arch/arm/tools/Makefile                   |  14 +-
+ arch/arm/tools/syscall.tbl                |  69 ---
+ arch/arm64/tools/syscall_32.tbl           |  69 ---
+ arch/mips/kernel/scall64-n32.S            |   1 +
+ arch/mips/kernel/scall64-n64.S            |   2 +
+ arch/mips/kernel/syscalls/Makefile        |  30 +-
+ arch/mips/kernel/syscalls/syscall_n.tbl   | 464 +++++++++++++++++
+ arch/mips/kernel/syscalls/syscall_n32.tbl | 413 ---------------
+ arch/mips/kernel/syscalls/syscall_n64.tbl | 389 --------------
+ arch/mips/kernel/syscalls/syscall_o32.tbl | 827 ++++++++++++++----------------
+ arch/mips/kernel/syscalls/syscallnr.sh    |  26 -
+ arch/s390/kernel/syscall.c                |   2 +
+ arch/s390/kernel/syscalls/Makefile        |  12 +-
+ arch/s390/kernel/syscalls/syscall.tbl     |  49 --
+ arch/sparc/kernel/syscalls/Makefile       |  12 +-
+ arch/sparc/kernel/syscalls/syscall.tbl    |  69 ---
+ scripts/Makefile.asm-headers              |  15 +-
+ scripts/syscall.tbl                       |  69 ---
+ scripts/syscall_common.tbl                |  84 +++
+ scripts/syscallhdr.sh                     |  83 ++-
+ scripts/syscalltbl.sh                     |  50 +-
+ 25 files changed, 1111 insertions(+), 1716 deletions(-)
+---
+base-commit: 548e7bcd0c5460ddcbca9600cea603ebeebf4da7
+change-id: 20260724-tonyk-syscall_table-928bbb1b26bb
+
+Best regards,
+--  
+André Almeida <andrealmeid@igalia.com>
 
