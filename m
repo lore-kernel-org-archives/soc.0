@@ -1,177 +1,285 @@
-Received: from spam.axera-tech.com (unknown [114.118.28.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9F4478861;
-	Tue,  1 Sep 2026 09:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.118.28.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3CA48CD5B
+	for <soc@lists.linux.dev>; Tue,  1 Sep 2026 17:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788254452; cv=none; b=d1hmInRoYrTJ0Fc/yp0D1lFov/nILbRBBAYQvpwbFPoHw+6puIh3pfhIdQmq0LYo5zTjhOLUuhtjmEJVf5DOlvVCbFpak/FV9suJlSxssw+UyZMzDiV5grHleGs8LtQ3x8P3w2QPCC2oK0UiIr3eXCA/jleUUVjHJWJd1svlILc=
+	t=1788284894; cv=none; b=ey/O1ARng7/cgXUg0H8YLogCcNaHdRQLadD2vD07aTN79WSfRfIhYYg1uvFNXlvGoevsh2/7I+BzkfPwC4pwlpsaq5ROJ+PoqOhxtqp+kwMjCmB8LZbibUdG/0wOXav9QVqOmcYgMwkeO5HeP67O5zLlCNK8p6rg9gI0gg5/4iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788254452; c=relaxed/simple;
-	bh=TvbSsDTgak+MnPeEHsbRPhBZ/tYUMEamDNLCmIvEvAQ=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=nymBAMX9b0v15PFuaSXJDXwuR7SlT8eDrIuAPFSO+QE3b18TPljhnaT5smju70d135LJGpZGPXoMsDJ/Elu9tBNXgvKCWNU7fSGDwp0rNKn6HP/8VxOb6VxR3BO/69F4W0y/ao5fBpkxJShNCQPxIKEDdx8f5dUlfdWYD1JYT1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com; spf=pass smtp.mailfrom=axera-tech.com; arc=none smtp.client-ip=114.118.28.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axera-tech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axera-tech.com
-Received: from aixinexchange02.aixin-chip.com ([10.122.86.161])
-	by spam.axera-tech.com with ESMTPS id 6819JZwg047669
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 1 Sep 2026 17:19:35 +0800 (+08)
-	(envelope-from lenghonglin@axera-tech.com)
-Received: from [127.0.1.1] (10.126.103.103) by aixinexchange02.aixin-chip.com
- (10.122.86.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 1 Sep 2026
- 17:19:34 +0800
-From: Leng Honglin <lenghonglin@axera-tech.com>
-Subject: [PATCH v2 0/6] arm64: Introduce Axera AX650 SoC and AX650 Demo
- board
-Date: Tue, 1 Sep 2026 17:19:27 +0800
-Message-ID: <20260901-ax650-v1-v2-0-993bea305476@axera-tech.com>
+	s=arc-20240116; t=1788284894; c=relaxed/simple;
+	bh=yy21srLv7iXzaYipu582gBMyRADxOWGsjbxI+30fh90=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EoiS5ddCKy6WCotxoTuF+kbVTT7Ux35LkrihedkXrVtW+kK5nPxwAXiSwG6yN0QhOmbvuWH3Nts5BxmxrO0C6+9F8AtFYhxik5/MyoQSx4+q6oYpYRXkY0oShhG8MUoAwXCpxQd0vxOlNmZ7z/I2CW3oeUc4uWBIPCRzkaBA1Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=starlabs.systems; spf=pass smtp.mailfrom=starlabs.systems; dkim=pass (2048-bit key) header.d=starlabs-systems.20251104.gappssmtp.com header.i=@starlabs-systems.20251104.gappssmtp.com header.b=CPC0TrmZ; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=starlabs.systems
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starlabs.systems
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=starlabs-systems.20251104.gappssmtp.com header.i=@starlabs-systems.20251104.gappssmtp.com header.b="CPC0TrmZ"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-49556f97a9dso456435e9.1
+        for <soc@lists.linux.dev>; Tue, 01 Sep 2026 10:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=starlabs-systems.20251104.gappssmtp.com; s=20251104; t=1788284889; x=1788889689; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=uBK06/P7IANNt8rczOHS7wy56i3XV/2ANmKJ76fwSP0=;
+        b=CPC0TrmZlrFtC8gUkBNrMhY1mM2SCKXNEcLJg3kZg8lfeXxVwSuWxb+LxXsF4htmEq
+         uciyEszuyNQ1/2AFDOpqLxPF7CFBa8M11n88Qd8HpI27DIjNHWiVT2b3CEHuUdEJvMzT
+         dOyghkYhsubu5vOwl2SKwQMBWVt4mfNg3lQVg9SQwtQOtsUBT8PvU05g10XYXcsAdYzN
+         Rvv+VG/7mqsGaUM196qGxZsmei15l9C6xN/Hv3CKb3Jj5eCAsUe9WasZHcHhOrpFDu+U
+         DG6+hs6l7D8eq7qaHH+txWyKdSPXLfMR90HAos6w6210H2hOrq5R8J44XO+x6qvrQS2L
+         W+tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788284889; x=1788889689;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uBK06/P7IANNt8rczOHS7wy56i3XV/2ANmKJ76fwSP0=;
+        b=JeBtUFXpiFwWzfWZnNzlORalI3BWlq1mzuASacfvnPDWkKtTSAgu+BIHko42yp7Rvm
+         MywxzlNvbPChiivoolo8kCgS4ND0PeUpNkdT6ghlmcxLGj0GMiKbBScbqNlKBFZMduYE
+         WSpabzga3bu1Txmmtop5o/3rWWa2zUf2oXxWDZsU/ndYTuO9jG/sYiJtytT6pwMNUjDc
+         TwWAE/6yx7NbfynUZ7w+ul6KnWBSehP7ZmW33tU4sAxXEJaFE08/+bhC5h/lOGOaL9MR
+         Ihg9pZ80ckYzx3cr7UiDD/Tk1iNSXC5naO5XV295gZHSTzc6brq68yw9HLcWmbCK6A4w
+         M3qQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqZ38JtmBrhF/DAZ+azm72/CVSW3HOA3glWiBAocQ7R9SONxbRUqyk8lIoRU5jSNvTMD8s=@lists.linux.dev
+X-Gm-Message-State: AFuF++ncqBxWb2XLYxf9tC9NiqSV5nmzhnX7x9qN5ialunRMyZIKkSO7
+	C2RyVIr86YTB8RH1kkopiC2sLwXZv2hKK0Ssyn6FXIEDZ1Hbn5R5OdggxzSuqHLBQA==
+X-Gm-Gg: AR+sD107tflqfPrs+zX/RBbHUgShSohrVT3iStOfSaS3OjxIMmGogHkfQZo1jHWKtnF
+	yF7FyOxlUuGp3zqJM3OJVcORpXhECPgDwbRxnc/No4kWasYueI13jMJn/Aly/jAmVQYredwxXzv
+	WhzMy9BYI5X1PJFprZsiA3qGwB3WF1LFRR9nlv6SUWnyBhjeKZk90JZ4ZRDUG/zXcdIpSadAc2L
+	Tg1EYLlqrLcGSaNVw9uTwF1AursMzCWNgeIyWXfNJqfJA0cy43N72DvD4MbDj6jNmZATln+2Rh+
+	c2AVzs2gaT1sbi6ZpwuatCK475hJQdTwPEQMUOFwnwEVUun4vcdo/6crQEQAG8SdG0+ZWC/fWPo
+	Rg8DkKKYH9Zn+xWI2d+StZeHL4XpHzZVbHGg/Wt5qe/0EZWC36uzhuMePkaToPN7n6Bjr6wZFU+
+	PzLRR4zW0aOavrKKsB3eO16Q2JwwVyqR2cLaWzZfeG1WQKws+YzBe6Xg7h6XxzwB/9O+Zvor6YT
+	cEk8XwQPG9aetI=
+X-Received: by 2002:a05:600c:4f0e:b0:49b:9433:ea44 with SMTP id 5b1f17b1804b1-49cdc40ff56mr223649635e9.4.1788284888802;
+        Tue, 01 Sep 2026 10:48:08 -0700 (PDT)
+Received: from horizon ([217.155.46.38])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce47885b1sm2369225e9.14.2026.09.01.10.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 10:48:08 -0700 (PDT)
+From: Sean Rhodes <sean@starlabs.systems>
+To: linux-kernel@vger.kernel.org
+Cc: Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Corentin Chary <corentin.chary@gmail.com>,
+	"Luke D. Jones" <luke@ljones.dev>,
+	Denis Benato <denis.benato@linux.dev>,
+	Prasanth Ksr <prasanth.ksr@dell.com>,
+	Jorge Lopez <jorge.lopez2@hp.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	"Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Joshua Grisham <josh@joshuagrisham.com>,
+	Will Deacon <will@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	"Kiryl Shutsemau (Meta)" <kas@kernel.org>,
+	Sean Rhodes <sean@starlabs.systems>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	platform-driver-x86@vger.kernel.org,
+	Dell.Client.Kernel@dell.com,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Brian Norris <briannorris@chromium.org>,
+	Julius Werner <jwerner@chromium.org>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>,
+	Titouan Ameline de Cadeville <titouan.ameline@gmail.com>,
+	Laxman Acharya Padhya <acharyalaxman8848@gmail.com>,
+	Yidi Lin <yidilin@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+	chrome-platform@lists.linux.dev,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	dri-devel@lists.freedesktop.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Sven Peter <sven@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Drew Fustini <fustini@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	soc@lists.linux.dev
+Subject: [PATCH v14 0/5] coreboot CFR firmware attributes
+Date: Tue,  1 Sep 2026 18:48:01 +0100
+Message-ID: <cover.1788284852.git.sean@starlabs.systems>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJ+YlmoC/0WNQQqDMBBFryKzbkomYohd9R7iIsaxSaGmJGmwi
- HdvtIXCbB68/2aFSMFRhEu1QqDsovNzAXGqwFg934i5sTAILiRXqJheZMNZRtZOjcFWNiOShKI
- /A01uOVJd/+X4Gu5k0r7fDeti8uF9/Mq4e7+swH+2HGeEA8e6rRXJ4aoXCpolMvZs/AP6bds+1
- kTiarcAAAA=
-X-Change-ID: 20260818-ax650-v1-9f5c1965d1e6
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shi Zhicheng
-	<shizhicheng@axera-tech.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will
- Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski
-	<krzk@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus
- Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <soc@lists.linux.dev>,
-        Leng Honglin
-	<lenghonglin@axera-tech.com>, <hlleng233@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788254374; l=4126;
- i=lenghonglin@axera-tech.com; s=20260818; h=from:subject:message-id;
- bh=TvbSsDTgak+MnPeEHsbRPhBZ/tYUMEamDNLCmIvEvAQ=;
- b=mMwg/ZYv+GPQG2N4MH/cT9w60+UYs1WADBAWWEumWX6pR8+sSiW936+94pPy1P6G5wLHR1RnQ
- WCjmiIRJmIrCdpOddVo8rpupSe6ZRx4XyC2EeDDQ4kqQpIYP2J7HpR0
-X-Developer-Key: i=lenghonglin@axera-tech.com; a=ed25519;
- pk=fo0agzxyiwbJZc3VZRLVthobvWCvq0qAViAw4TxhF80=
-X-ClientProxiedBy: aixinexchange02.aixin-chip.com (10.122.86.161) To
- aixinexchange02.aixin-chip.com (10.122.86.161)
-X-DKIM-Results: [10.122.86.161]; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:spam.axera-tech.com 6819JZwg047669
+Content-Transfer-Encoding: 8bit
 
-Axera AX650 is an Arm64 SoC developed by Axera Semiconductor. The
-AX650 Demo board is based on the AX650 SoC and provides the hardware
-platform used to validate this series.
+Move the firmware attributes class helper out of platform/x86, rename the
+coreboot-table firmware driver directory from google to coreboot, and add a
+coreboot CFR firmware attributes driver.
 
-This series adds the initial upstream support required to build and
-boot the Linux kernel on the AX650 Demo board.
+Changes in v14:
+- Rebase on current upstream master after Linux 7.3-rc1, preserving the
+  intervening coreboot table bounds and CBMEM no-map changes.
+- Drop the standalone include-order cleanup. Replace the affected relative
+  includes directly in the firmware attributes helper move, as requested by
+  Tzung-Bi.
+- Split the DRM coreboot framebuffer dependency update from the firmware
+  directory and Kconfig rename so it can receive a DRM Acked-by separately.
+- Keep the CFR driver and its runtime behavior unchanged from v13.
 
-The initial platform support includes:
+Changes in v13:
+- Rebase on current upstream master.
+- Restore the CONFIG_GOOGLE_* to CONFIG_COREBOOT_* renames for generic
+  coreboot firmware symbols, with the old names kept as transitional
+  symbols.
+  Julius clarified that the symbol names are part of the directory rename
+  cleanup and should describe coreboot rather than Google. Update the
+  matching Kconfig dependencies and Makefile gates to use the new symbols.
+- Split the arm64 defconfig symbol update into a separate final patch, as
+  requested by Krzysztof and Julius, instead of folding it into the rename.
+- Move the COREBOOT FIRMWARE DRIVERS MAINTAINERS entry to its alphabetical
+  position.
+- Make the CFR APM_CNT runtime-apply dependency explicit with HAS_IOPORT
+  instead of using an x86-only runtime branch.
 
-- Axera AX650 SoC and AX650 Demo devicetree bindings
-- ARCH_AXERA arm64 platform selection
-- arm64 defconfig support
-- Cortex-A55 CPUs and PSCI
-- GIC-400 interrupt controller
-- ARMv8 architectural timer
-- Cortex-A55 PMU
-- UART console
-- 8 GiB system memory
-- Axera ARM64 SoC maintainer information
+Changes in v12:
+- Temporarily kept the existing CONFIG_GOOGLE_* symbols and dropped the
+  arm64 defconfig update after review feedback against the user-visible
+  config rename. v13 supersedes this with transitional symbols and a split
+  defconfig patch.
+- Free invalid enum labels before returning an error from CFR enum parsing.
 
-The patches are organized as follows:
+Changes in v11:
+- Keep the scoped cleanup in the CFR driver, but use explicit goto cleanup
+  for the nested sysfs group registration path.
 
-- Patch 1/6: Add the Axera vendor prefix.
-- Patch 2/6: Add devicetree bindings for the AX650 SoC and
-  AX650 Demo board.
-- Patch 3/6: Add the ARCH_AXERA arm64 platform option.
-- Patch 4/6: Enable ARCH_AXERA in the arm64 defconfig.
-- Patch 5/6: Add the initial devicetree description for the AX650 SoC
-  and AX650 Demo board.
-- Patch 6/6: Add Axera ARM64 SoC entries to MAINTAINERS.
+Changes in v10:
+- Rename generic firmware Kconfig symbols from CONFIG_GOOGLE_* to
+  CONFIG_COREBOOT_* and keep the old names as transitional symbols, as
+  suggested by Julius.
+- Update arm64 defconfig and DRM coreboot framebuffer dependencies for the
+  new symbols. In v13, the arm64 defconfig update is split into its own
+  patch; in v14, the DRM dependency is split into its own patch.
+- Address the nested cleanup-path review on CFR attribute registration.
 
-The series is intentionally limited to the minimum platform support
-required to boot the board with a serial console. Additional
-peripherals will be added in subsequent patches.
+Changes in v9:
+- Add the missing kstrtox.h include used by kstrtou32().
+- Use a single kobject rollback path when setting registration fails.
+- Split a few helper locals for readability, including the pending reboot
+  device lookup and enum-value population.
+- Avoid an intermediate void pointer cast while parsing numeric CFR
+  options.
+- Check the possible-values buffer length before computing each label
+  length.
 
-The platform was tested on an AX650 Demo board using the vendor boot
-chain to load the kernel and device tree. A kernel with an embedded
-initramfs successfully reached an interactive shell on the serial
-console, and all 8 CPUs were brought online.
+Changes in v8:
+- Add a preparatory include-order cleanup before moving the firmware
+  attributes class helper. This is superseded by the direct replacements in
+  v14.
+- Add direct includes for __packed and container_of(), use scoped cleanup
+  for EFI names and the driver mutex, and document the efivar lock
+  requirement on private helpers.
+- Replace the duplicated CFR record walkers with one checked iterator that
+  distinguishes malformed input from the end of a record list.
+- Validate enum entries before accessing them and propagate malformed child
+  records instead of treating them as absent.
+- Restore the EFI variable after a failed runtime apply without retrying
+  the failed firmware operation, and only emit a change event when the new
+  EFI value remains stored.
+- Document the possible-values size limit and why CFR entries without a
+  usable runtime EFI variable are skipped.
 
-Validation performed:
+Changes in v7:
+- Validate the CFR payload checksum and use bounded record walks. Propagate
+  malformed input and transient probe failures instead of silently dropping
+  settings.
+- Make EFI writes transactional, serialize EFI reads and writes, and expose
+  settings read-only when EFI writes are unavailable. Preserve
+  `pending_reboot` when rollback cannot fully restore a setting.
+- Propagate suppressed, dependency-gated, read-only and inactive form
+  state, and bound form nesting.
+- Preserve APM token zero and reject enumerations whose values cannot fit
+  in the sysfs output buffer.
 
-- DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/axera.yaml make ARCH=arm64 dt_binding_check
-- make ARCH=arm64 CHECK_DTBS=y W=1 axera/ax650-demo.dtb
-- scripts/dtc/dt-check-style --mode=strict on both AX650 DTS files
+Earlier revisions:
+- Move the driver from platform/x86 to drivers/firmware/coreboot and split
+  out the firmware-attributes helper move and google-to-coreboot directory
+  rename, following Julius's review.
+- Keep coreboot bus internals and CFR records private, avoid rewriting EFI
+  variables when the requested value is already active, and store driver
+  data on the class device instead of in a file-global pointer.
+- Use the coreboot-specific device ID header, explicit helper includes,
+  scoped resource cleanup and device-managed driver state in response to
+  the initial reviews.
 
-Signed-off-by: Leng Honglin <lenghonglin@axera-tech.com>
----
-Changes in v2:
-- Fix the GIC node placement and unit address in the AX650 SoC device tree.
-- Correct the GICC register region size to 0x2000.
-- Fix DTS property ordering and formatting, and remove a duplicate include.
-- Expand the AX650 device-tree commit message with platform and test details.
-- Remove the unverified Reviewed-by tags.
-- Add the official Axera website link to the vendor-prefix commit.
+Tested on a Star Labs Byte with firmware 26.07: runtime APM_CNT apply was
+verified with power_led, and reboot-needed behavior was verified with
+debug_level.
 
-Link to v1:
-https://patch.msgid.link/20260821-ax650-v1-v1-0-e1b013938e6b@axera-tech.com
+Sean Rhodes (5):
+  firmware: Move firmware attributes class helper
+  firmware: Rename google firmware directory to coreboot
+  drm/sysfb: Update coreboot framebuffer Kconfig symbol
+  firmware: coreboot: Add CFR firmware attributes driver
+  arm64: defconfig: Update coreboot firmware symbols
 
-To: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>
-To: Conor Dooley <conor+dt@kernel.org>
-To: Shi Zhicheng <shizhicheng@axera-tech.com>
-To: Leng Honglin <lenghonglin@axera-tech.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Linus Walleij <linusw@kernel.org>
-To: Drew Fustini <fustini@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: soc@lists.linux.dev
-Cc: hlleng233@gmail.com
-
----
-Leng Honglin (6):
-      dt-bindings: vendor-prefixes: add Axera
-      dt-bindings: arm: add Axera AX650 SoC and AX650 Demo board
-      arm64: Kconfig.platforms: add ARCH_AXERA
-      arm64: defconfig: enable ARCH_AXERA
-      arm64: dts: axera: add AX650 Demo initial support
-      MAINTAINERS: add Axera ARM SoC support
-
- Documentation/devicetree/bindings/arm/axera.yaml   |  24 ++++
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |   8 ++
- arch/arm64/Kconfig.platforms                       |   5 +
- arch/arm64/boot/dts/Makefile                       |   1 +
- arch/arm64/boot/dts/axera/Makefile                 |   3 +
- arch/arm64/boot/dts/axera/ax650-demo.dts           |  30 +++++
- arch/arm64/boot/dts/axera/ax650.dtsi               | 136 +++++++++++++++++++++
- arch/arm64/configs/defconfig                       |   1 +
- 9 files changed, 210 insertions(+)
----
-base-commit: ff68e5f557f69a08fdcfa4ce8b1b809d63bd4f45
-change-id: 20260818-ax650-v1-9f5c1965d1e6
-
-Best regards,
---  
-Leng Honglin <lenghonglin@axera-tech.com>
+ MAINTAINERS                                   |   34 +-
+ arch/arm64/configs/defconfig                  |    6 +-
+ drivers/firmware/Kconfig                      |    5 +-
+ drivers/firmware/Makefile                     |    3 +-
+ drivers/firmware/{google => coreboot}/Kconfig |   89 +-
+ drivers/firmware/coreboot/Makefile            |   15 +
+ drivers/firmware/{google => coreboot}/cbmem.c |    0
+ drivers/firmware/coreboot/coreboot-cfr.c      | 1204 +++++++++++++++++
+ .../{google => coreboot}/coreboot_table.c     |    0
+ .../{google => coreboot}/coreboot_table.h     |    0
+ .../framebuffer-coreboot.c                    |    0
+ drivers/firmware/{google => coreboot}/gsmi.c  |    0
+ .../memconsole-coreboot.c                     |    0
+ .../memconsole-x86-legacy.c                   |    0
+ .../{google => coreboot}/memconsole.c         |    0
+ .../{google => coreboot}/memconsole.h         |    6 +-
+ drivers/firmware/{google => coreboot}/vpd.c   |    0
+ .../{google => coreboot}/vpd_decode.c         |    0
+ .../{google => coreboot}/vpd_decode.h         |    0
+ .../firmware_attributes_class.c               |    2 +-
+ drivers/firmware/google/Makefile              |   14 -
+ drivers/gpu/drm/sysfb/Kconfig                 |    2 +-
+ drivers/platform/x86/Kconfig                  |    3 -
+ drivers/platform/x86/Makefile                 |    2 -
+ drivers/platform/x86/asus-armoury.c           |    2 +-
+ .../x86/dell/dell-wmi-sysman/sysman.c         |    2 +-
+ drivers/platform/x86/hp/hp-bioscfg/bioscfg.c  |    2 +-
+ drivers/platform/x86/lenovo/think-lmi.c       |    2 +-
+ drivers/platform/x86/lenovo/wmi-other.c       |    2 +-
+ drivers/platform/x86/samsung-galaxybook.c     |    2 +-
+ .../linux/firmware_attributes.h               |    6 +-
+ 31 files changed, 1337 insertions(+), 66 deletions(-)
+ rename drivers/firmware/{google => coreboot}/Kconfig (57%)
+ create mode 100644 drivers/firmware/coreboot/Makefile
+ rename drivers/firmware/{google => coreboot}/cbmem.c (100%)
+ create mode 100644 drivers/firmware/coreboot/coreboot-cfr.c
+ rename drivers/firmware/{google => coreboot}/coreboot_table.c (100%)
+ rename drivers/firmware/{google => coreboot}/coreboot_table.h (100%)
+ rename drivers/firmware/{google => coreboot}/framebuffer-coreboot.c (100%)
+ rename drivers/firmware/{google => coreboot}/gsmi.c (100%)
+ rename drivers/firmware/{google => coreboot}/memconsole-coreboot.c (100%)
+ rename drivers/firmware/{google => coreboot}/memconsole-x86-legacy.c (100%)
+ rename drivers/firmware/{google => coreboot}/memconsole.c (100%)
+ rename drivers/firmware/{google => coreboot}/memconsole.h (82%)
+ rename drivers/firmware/{google => coreboot}/vpd.c (100%)
+ rename drivers/firmware/{google => coreboot}/vpd_decode.c (100%)
+ rename drivers/firmware/{google => coreboot}/vpd_decode.h (100%)
+ rename drivers/{platform/x86 => firmware}/firmware_attributes_class.c (94%)
+ delete mode 100644 drivers/firmware/google/Makefile
+ rename drivers/platform/x86/firmware_attributes_class.h => include/linux/firmware_attributes.h (60%)
 
