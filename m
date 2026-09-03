@@ -1,81 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4253C435516;
-	Wed,  2 Sep 2026 10:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D03241F5E6;
+	Thu,  3 Sep 2026 11:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788344083; cv=none; b=UBbLv4nldy5cq0pgZTHHK6PSbbZ5tKrduPMrMV7j1G45eiR+x5JLst+y33PaJ+0wEfHGfxWSnCyFqZJzUI4dlq1JfcP3/+3YGp5KvPCNtJ0MbT723byLF8CVNd8vvtv2P0qppbNsW5y8eXKxNQiR+AV3Eh2O1GFBPxBVz8muyJw=
+	t=1788435676; cv=none; b=shcq/fJH1ZBX3AkMlAZ7uXtmitRgaw1uuiQcSD33FtJ62zDHMZg+j2Cc/HaLGeCAN29I4YCqg0/uvYojmcgFNS71SF2ANQPYu1nwAP9MD8aDs3OfxplSjIXFBWJmR/WnBOdXbs7m4bxbxcDspWFpKenf8uI2u5KL+kyItOnslrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788344083; c=relaxed/simple;
-	bh=dctD5FDJKH/pZrhr+s7iGrUIk+VqdiGrL4P2Rzkz704=;
+	s=arc-20240116; t=1788435676; c=relaxed/simple;
+	bh=JSuJrngTC4olOG03288V/nmLwz2wwieT77d/P4LnfNw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HljwrzLgppwg/brnCcGoIyC8EBEDGyoht3sGcrpYTSivvGhmBfG9EM1oocs8eUlX59s1Zlili3yBIRjKrNr8TvtWG6srf9Dyrwo7W0UgrMMwjfa6QGs0iTHyqIvGg/a211Y2aRG/Jwy+Dec7m1Idw/5Lb07A0O1tmCSk0iXyiLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eht4oMsm; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=F1iCleGE1GLQjU8/lQ/4U6BYbSN7o+AtVK2UMRCRPC+bgaGThdCFv6gDwLanc51gGhrRAHzSyG1NkSEoNJSMVDLG5FweWtNfG7uidwlirfX+SIyQJT95LKqjybNFeEnmEip4hLjgYZ+mIiCeeTS8iCsnsB1BZu6v3ztOS76lhGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eG3y6EKC; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eht4oMsm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 483121F000E9;
-	Wed,  2 Sep 2026 10:14:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788344076;
-	bh=VpxOGqhu6BT68QZvzh8mq5HY8MM0YI0lYLQZVpH2D2k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=eht4oMsmuYUieCvLcJgWlQFWXKj6eMOlWkENmVJ7fz99d8cE5M/khxjI+kFRTKubI
-	 vBrSQEahxQA0eK28x5qdSb0Il4pf/Q/2I0iT39aIhuADV2H3c1H8DS2xuOihKN10xg
-	 6XStfrPYbj5HppVc/nuQtb1nD73AdFbUXLL1+0tThZfHrFxNJGaPF59jFytYkQ2/hl
-	 k6kWHT4CFMXBjMoVPQAD/yyoYUHO+SiV1fX8cJI/uEW5/9br43XqOJ5H5Ky6aSIzxN
-	 BAoDeUSkH+b/s0L5uLGxaN8WCyLPoo0oMwfqOERfu5PAdkpPD3I6Qp5uKB4gkjkTC7
-	 KaeYHeBePhRDw==
-Date: Wed, 2 Sep 2026 10:14:27 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Sean Rhodes <sean@starlabs.systems>
-Cc: linux-kernel@vger.kernel.org, Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Corentin Chary <corentin.chary@gmail.com>,
-	"Luke D. Jones" <luke@ljones.dev>,
-	Denis Benato <denis.benato@linux.dev>,
-	Prasanth Ksr <prasanth.ksr@dell.com>,
-	Jorge Lopez <jorge.lopez2@hp.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Joshua Grisham <josh@joshuagrisham.com>,
-	Will Deacon <will@kernel.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	"Kiryl Shutsemau (Meta)" <kas@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	platform-driver-x86@vger.kernel.org, Dell.Client.Kernel@dell.com,
-	Brian Norris <briannorris@chromium.org>,
-	Julius Werner <jwerner@chromium.org>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>,
-	Titouan Ameline de Cadeville <titouan.ameline@gmail.com>,
-	Laxman Acharya Padhya <acharyalaxman8848@gmail.com>,
-	Yidi Lin <yidilin@google.com>, Kees Cook <kees@kernel.org>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	chrome-platform@lists.linux.dev,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	dri-devel@lists.freedesktop.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Arnd Bergmann <arnd@arndb.de>, Eric Biggers <ebiggers@kernel.org>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Michal Simek <michal.simek@amd.com>, Sven Peter <sven@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eG3y6EKC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788435666; x=1819971666;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JSuJrngTC4olOG03288V/nmLwz2wwieT77d/P4LnfNw=;
+  b=eG3y6EKCLPXilQMr5ClufImzbMiwhJZ/GifwKxi4WoK4t4Y7gag0CA7Z
+   D5rxP4kh4UqL+qdoty0G2d9I8r5OEPpVdcbDj+C3c1aBb4ShmX5Mq6Y15
+   2Ls+A5xk9Nkc5PcsZNrVDO3RwnI0KniXqOWy3TqcqvnnbOTW7+9SzYGHo
+   RfBxJweFDhnJzFM9GFD7XyGC3tWPUvUSSdVw0vBtR50zMHihzsvQ5WQ09
+   Ozi3BLo3L1oSCuCK4Wvqkfr5aLt+qqrlWLFCBsleRWZk4mS9zXMtQQ5ya
+   HqLNEKBso2vQ4UmPsF/BfkYXiYOiddozOX2Zr80SNua5teRYbcz8YOr/9
+   g==;
+X-CSE-ConnectionGUID: L3O4a2LKS7yj/Id3y7g67A==
+X-CSE-MsgGUID: Z6J+0FauRNm/1mEFehy/Qw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11894"; a="88762629"
+X-IronPort-AV: E=Sophos;i="6.25,259,1779174000"; 
+   d="scan'208";a="88762629"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 04:41:03 -0700
+X-CSE-ConnectionGUID: q2c9BakcQlmPlwKURwZPPg==
+X-CSE-MsgGUID: IwhtTsApS+ukKqW3wbyOpg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
+   d="scan'208";a="265355126"
+Received: from smoticic-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.28])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 04:40:57 -0700
+Date: Thu, 3 Sep 2026 14:40:54 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: zl020895 <zl020895@163.com>
+Cc: longzhao <longzhao@ambarella.com>, Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Drew Fustini <fustini@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
-Subject: Re: [PATCH v14 1/5] firmware: Move firmware attributes class helper
-Message-ID: <apf3AwibD6RiYlwk@google.com>
-References: <cover.1788284852.git.sean@starlabs.systems>
- <5682c2228fa4a784d3953664b56a06e0dd9ccdef.1788284852.git.sean@starlabs.systems>
+	soc <soc@lists.linux.dev>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	devicetree <devicetree@vger.kernel.org>,
+	linux-clk <linux-clk@vger.kernel.org>,
+	linux-gpio <linux-gpio@vger.kernel.org>,
+	linux-serial <linux-serial@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	Brian Masney <bmasney@redhat.com>, Lee Jones <lee@kernel.org>,
+	mfd <mfd@lists.linux.dev>
+Subject: Re: Re: [PATCH v5 10/12] serial: 8250: add Ambarella UART driver
+Message-ID: <aplcxoINt0YAjvxL@ashevche-desk.local>
+References: <20260818-cv75-v5-v5-0-7bbb12f0360f@ambarella.com>
+ <20260818-cv75-v5-v5-10-7bbb12f0360f@ambarella.com>
+ <aoRpc2RK2_X3CdAi@ashevche-desk.local>
+ <162c0385.2c076.1a018b82fa7.Coremail.zl020895@163.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -84,25 +82,33 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5682c2228fa4a784d3953664b56a06e0dd9ccdef.1788284852.git.sean@starlabs.systems>
+In-Reply-To: <162c0385.2c076.1a018b82fa7.Coremail.zl020895@163.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Tue, Sep 01, 2026 at 06:48:02PM +0100, Sean Rhodes wrote:
-> Move the firmware attributes class helper from drivers/platform/x86 to
-> drivers/firmware and expose its class declaration through a public Linux
-> header.
+On Wed, Aug 19, 2026 at 02:31:59PM +0800, zl020895 wrote:
 > 
-> The helper is not x86-specific. Keeping it in drivers/firmware lets
-> coreboot firmware drivers use the standard firmware-attributes ABI without
-> living under platform/x86.
-> 
-> Replace the affected drivers' relative helper includes directly with the
-> new public header.
-> 
-> Suggested-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
-> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> Tested-by: Oliver Lin <oliver@liuxiaozhen.dev>
-> Signed-off-by: Sean Rhodes <sean@starlabs.systems>
+> Thanks for the review.
 
-LGTM,
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> This is Ambarella 8250-compatible IP, not Synopsys DesignWare. We
+> first tried 8250_dw after Linus asked us to move to the 8250 library;
+> you then told us not to touch 8250_dw and to use 8250_ambarella
+> instead. That is what this patch is.
+> Background:
+> https://lore.kernel.org/r/CAD++jLm6HzEU1TM-c=Vtjv3FJEBecVP7TyxSgq_Q0zF-YwT6NA@mail.gmail.com/
+> https://lore.kernel.org/linux-serial/an8KvvHWX0naH3Xw@ashevche-desk.local/
+> https://lore.kernel.org/linux-serial/7E774305-3920-4BB7-BA46-E0772D6BED84@ambarella.com/
+> I will also switch to uart_read_port_properties() and trim the
+> 8250_dw-derived boilerplate.
+
+Thanks for the register descriptions, it was helpful. After going through them
+it seems the v3 as you made it is good enough (sorry for going back and forth).
+What it needs is better commit message explaining that while it's not a Synopsys
+DW IP, it was made to be quite compatible with that (on register level) and hence
+no new driver is required, just a small quirk.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
