@@ -1,79 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D874485CCA;
-	Thu,  3 Sep 2026 12:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E43E4A4991;
+	Thu,  3 Sep 2026 12:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788439150; cv=none; b=rIgn+yItH38MxXg0JJ0R9FcXVmSQCpEM7oIL1zzcHTYUGB4bX3T9B11iOtK6Lo1WIfXjOk8fcWzDYV7jJWv2pWJyuvl4oPSizld24jCHdLP1TOZ8vCUMnSV+I1pcMmXRD4FARuAZnRrgF0VtM5U0bFJpedu3RIvgEFa9Ctac67I=
+	t=1788439999; cv=none; b=fnbdzd1DAs8JoPyRE/9HCgcJt5PUOaJICUI6vp+sGHXFdfnvLAB75IEKlDb1TqcVgNBIyA5yd1lAvcK4HrlXUCIOISHWqeTCA+We5V4nOjMxIZu23Eu8HlxpXrxxI1fbvBswoXsHIt5WbKdKA7P9C3gMdg+eNYcfzSd+T6exhXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788439150; c=relaxed/simple;
-	bh=1bKZ7CyUodmmMnbiOXYVATCoCjTPuTDEONjy1Pg4HFo=;
+	s=arc-20240116; t=1788439999; c=relaxed/simple;
+	bh=tG43r3ybKL5uUT1O97RFbvlWYx+uuXHDv+04GQeYfAI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t0NpqQzzN4Mv1f0YoyBMWIInUgwrr4fRUpDauSmvzA6tr3cOf6BRDJYk1yOHiilHLDijbzcbKgadaldlLfhcup8kZurkB8pp9BD7EBFRSSCpvabQO0/9RNvagFJpryBHTX1xF3FdxZsxUl/B24m/wXBFqiy+eVYN7vPrxMCQ4a0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gd0fP+Fr; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=F8beYgGZvfYfV2Yp9Genx8kwV70nCUN+GB7z+Bbwh7j9Y8T2U1nOHHnWlkCHSNQKbqodn8JJI0/15snFBghaTahn33ipbo6xWSp+sCPs3gTsIDt3b5aKEaGRtm7BK+3DGeB8zcM0ah5MSoCCcvyxw2uQ5wCJ/3n1Gn738EpJRz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cGemzVTj; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gd0fP+Fr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EEA1F000E9;
-	Thu,  3 Sep 2026 12:39:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788439148;
-	bh=a88oaMPdFcI/yDDJp6S+ycZVQY3NXBbhhuZ7cepLWEA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Gd0fP+FrBOuDWBABAR4QXGuGsaiDFdjsG7oo5klw7sjSz0ah3CcBVR0vQquw5oOnO
-	 TLF6g1KF4tF3LAS/VvmO9H0zjWiepY1Ga/5ihZkMoxJrMkSsfRzK8omzEcRRX8jICo
-	 ojR7HDtOcR8dVtM3sEXYaIWTXFJCP12/fTzoFfPiHNGYhSbESVlLL83ot0ax3MYXoA
-	 /mSdVhXNpUTSTOgJjusohKDl1zTffFzoXzJ+u2AAPvx5B+OaQJ4MhCprUDy22o0TLw
-	 Ne3tE0F2Ba7Iqc2TtlittI8MU+madugrNVIcv9+Ari7Wn9DaKhK7Fxnua6xz7kya0Q
-	 yPEVTS7/es/uw==
-Date: Thu, 3 Sep 2026 14:39:04 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Leng Honglin <lenghonglin@axera-tech.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Shi Zhicheng <shizhicheng@axera-tech.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Linus Walleij <linusw@kernel.org>, 
-	Drew Fustini <fustini@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, hlleng233@gmail.com
-Subject: Re: [PATCH v2 1/6] dt-bindings: vendor-prefixes: add Axera
-Message-ID: <20260903-impossible-normal-termite-b7f9b8@quoll>
-References: <20260901-ax650-v1-v2-0-993bea305476@axera-tech.com>
- <20260901-ax650-v1-v2-1-993bea305476@axera-tech.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cGemzVTj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788439998; x=1819975998;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tG43r3ybKL5uUT1O97RFbvlWYx+uuXHDv+04GQeYfAI=;
+  b=cGemzVTjhDdm/eKK4bNao3ZNAGnj6P2DnGgCd509ZXfEg/zhh7expQDY
+   aesXNjBG3S1Q0VKb/uRKUdcZxOPi3XRDMvB4ZVbikia/zSiZDklNICZ1E
+   3OGMTrrwZvEPO3KAu+sD8OWGP50UitVu4AfEwJln9ADF515UkGZs3VDUv
+   SQGbzQH6Mkdz0O8sIsoV5oDZRI6zrzOQe0FVr6kayPylqTRYBhl8zPcT+
+   tgUVEozUXzwtdLOxHDDImYtsElbYA0+zMmZWVgP+TMgTbHsd9I6BvHJ9V
+   2fKrrPGK1bFNt6fTxJVxHOS74AS9aztv+85tC20gBsGXNZOMxWr1ewQC0
+   Q==;
+X-CSE-ConnectionGUID: AbP7VoM2Smey2JSGYEkttg==
+X-CSE-MsgGUID: l6uidYN1Sm2FYGbGp0m8EQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11894"; a="100079193"
+X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
+   d="scan'208";a="100079193"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 05:53:17 -0700
+X-CSE-ConnectionGUID: EG6UkGFQT6G/iLYPpVG6aQ==
+X-CSE-MsgGUID: Fv19EkL4QhedtceXVGp5ew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
+   d="scan'208";a="265372033"
+Received: from smoticic-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.28])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 05:53:11 -0700
+Date: Thu, 3 Sep 2026 15:53:08 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: zl020895 <zl020895@163.com>
+Cc: longzhao <longzhao@ambarella.com>, Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	soc <soc@lists.linux.dev>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	devicetree <devicetree@vger.kernel.org>,
+	linux-clk <linux-clk@vger.kernel.org>,
+	linux-gpio <linux-gpio@vger.kernel.org>,
+	linux-serial <linux-serial@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	Brian Masney <bmasney@redhat.com>, Lee Jones <lee@kernel.org>,
+	mfd <mfd@lists.linux.dev>
+Subject: Re: Re: Re: [PATCH v5 10/12] serial: 8250: add Ambarella UART driver
+Message-ID: <aplttDenvZHvn0mF@ashevche-desk.local>
+References: <20260818-cv75-v5-v5-0-7bbb12f0360f@ambarella.com>
+ <20260818-cv75-v5-v5-10-7bbb12f0360f@ambarella.com>
+ <aoRpc2RK2_X3CdAi@ashevche-desk.local>
+ <162c0385.2c076.1a018b82fa7.Coremail.zl020895@163.com>
+ <aplcxoINt0YAjvxL@ashevche-desk.local>
+ <709278f9.9699.1a067207b4c.Coremail.zl020895@163.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260901-ax650-v1-v2-1-993bea305476@axera-tech.com>
+In-Reply-To: <709278f9.9699.1a067207b4c.Coremail.zl020895@163.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Tue, Sep 01, 2026 at 05:19:28PM +0800, Leng Honglin wrote:
-> Add the Axera Semiconductor vendor prefix for devicetree bindings.
+On Thu, Sep 03, 2026 at 07:56:17PM +0800, zl020895 wrote:
 > 
-> For more information, visit the official Axera Semiconductor website:
-> Chinese site: https://www.axera-tech.com/
-> English site: https://www.axera-tech.com/en
-> 
-> Signed-off-by: Leng Honglin <lenghonglin@axera-tech.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 396044f368e7..1dbafe682724 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -219,6 +219,8 @@ patternProperties:
->      description: Shanghai Awinic Technology Co., Ltd.
->    "^axentia,.*":
->      description: Axentia Technologies AB
-> +  "^axera,.*":
+> Thanks for the confirmation. 
+> I will keep 8250_ambarella and update the commit message as you
+> suggested.
 
-So how did you implement own comment?
+No, I mean to go back to the version that modifies 8250_dw.
 
-Best regards,
-Krzysztof
+> At 2026-09-03 19:40:54, "Andy Shevchenko" <andriy.shevchenko@linux.intel.com> wrote:
+> >On Wed, Aug 19, 2026 at 02:31:59PM +0800, zl020895 wrote:
+> >> 
+> >> Thanks for the review.
+> >
+> >> This is Ambarella 8250-compatible IP, not Synopsys DesignWare. We
+> >> first tried 8250_dw after Linus asked us to move to the 8250 library;
+> >> you then told us not to touch 8250_dw and to use 8250_ambarella
+> >> instead. That is what this patch is.
+> >> Background:
+> >> https://lore.kernel.org/r/CAD++jLm6HzEU1TM-c=Vtjv3FJEBecVP7TyxSgq_Q0zF-YwT6NA@mail.gmail.com/
+> >> https://lore.kernel.org/linux-serial/an8KvvHWX0naH3Xw@ashevche-desk.local/
+> >> https://lore.kernel.org/linux-serial/7E774305-3920-4BB7-BA46-E0772D6BED84@ambarella.com/
+> >> I will also switch to uart_read_port_properties() and trim the
+> >> 8250_dw-derived boilerplate.
+> >
+> >Thanks for the register descriptions, it was helpful. After going through them
+> >it seems the v3 as you made it is good enough (sorry for going back and forth).
+> >What it needs is better commit message explaining that while it's not a Synopsys
+> >DW IP, it was made to be quite compatible with that (on register level) and hence
+> >no new driver is required, just a small quirk.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
