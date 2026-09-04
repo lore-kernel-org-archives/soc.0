@@ -1,150 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BCD4C0439;
-	Fri,  4 Sep 2026 14:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9174F3B9D9A
+	for <soc@lists.linux.dev>; Fri,  4 Sep 2026 22:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788533130; cv=none; b=QsjpzgNP7+dvxHJ8Temt4N7rXS3wJpIQnOlIKlJ+XULhgrJNn5dxlg2oK2lGIexXAZXsPVCv76dU/ZX6UEMvrFCF3fKJl5ucoUcgaTEq3sep67TVWF9D8wbFoSWsDk4XthYpxriQz4ymESd0sOFInjm0dz3aLrl5Wm+kC60inZw=
+	t=1788561570; cv=none; b=Voob6ypE3I0XPjPL9qOAJqLXTOIMTBa3ShNsbgfrxFuW1odF2CViIz9GLBvdO3v1Fg5qdZNeOIIQmtdVW9vMsjXVggWklnfELIUO7G1DSQnD4uJ+QJ0UDEaT1ffQNH4K1s48nyFj7MWAF2iB0qz/02NLow7lYEun6wlNMSYHxEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788533130; c=relaxed/simple;
-	bh=z40PlCcBMbHpLqAuaCFHvHiEa61oCALcMXpCz+OzGjk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=irmHKozXXMgcaQ7hKdLAYM1p2XficsaTTEB4LT1yZXm/lFbjZR4yRnrGhMd9bENkk1cze6Ct7m7gzHZGtQH7JQY7Bc1HrFE2hoh5LyQN39LsFdSDgTFjwxl5ZE9l39PlSsTm1tbL/E7rkkG3Vr9XceqZwVhJYCeS56G6Le6KLyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bKKsQRV+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788561570; c=relaxed/simple;
+	bh=llV8+t5XVFTw1AVjhesFZp1A/YnFQGo0lCxhv7P61wE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cyvW6RzgblPsn7eofwzPx4U1NV2HQCukoqXtGeH0b/wuBsWuw6+kmih+Qqb+K1iN8W1J43DshL0+hVPsrmkRwoUHSL+dedZiowLcBiuyhJGb5s6fpYvlOKuTJ9sTRfXVKrYDnHVUNljFZWd5qIHfZLniUozAnt7jNVhryHMXMDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TmQSKZ88; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bKKsQRV+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B641F00A3D;
-	Fri,  4 Sep 2026 14:45:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TmQSKZ88"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3619B1F00ADB
+	for <soc@lists.linux.dev>; Fri,  4 Sep 2026 22:39:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788533128;
-	bh=LHADSBXrcRzI2pjE8Mt5DYoJu2ZeRffm/k2PyoibQUg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=bKKsQRV+2W8er9W9zPMxZVTQT9FXVczm0YCODHPaQKTW6Idf3VqWYDSXczRD4OOP+
-	 iNbsQJjqHF9WA2hMn1R71omIQ7U5KN5gUaJr0j8OrEBhC5b4RDCR0pXzcA5rXfLHiD
-	 xB5GiekqsUIKLQmk5cG9lWaKNpw3Ggb6kzeEfx3C2YmdiZ1kgrALE0azCLwZZ9raPP
-	 LjQpDBvJRUnlaYc+IUUedU+VLlL1uooExGNgzPeQ1mFshbVv41yzzVUeAqg2P8+duB
-	 RLx1nIUjLnZrsG75K6fKNuMDaF2jX8T6Jr5DPOLQxtAPaR8f7wLXr++b0JWKfePYeX
-	 LcVkugdihZnIQ==
-Date: Fri, 4 Sep 2026 09:45:25 -0500
-From: Rob Herring <robh@kernel.org>
-To: Long Zhao <longzhao@ambarella.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>,
-	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 05/13] dt-bindings: gpio: pl061: add Ambarella CV75
- variant
-Message-ID: <20260904144525.GA582418-robh@kernel.org>
-References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com>
- <20260904-cv75-v5-v6-5-e918514cb3b1@ambarella.com>
+	s=k20260515; t=1788561568;
+	bh=llV8+t5XVFTw1AVjhesFZp1A/YnFQGo0lCxhv7P61wE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=TmQSKZ88V4EGqJifsEp+kZ1YixheuM0ONQhC6ST5IL01g+nhibxZhhf862xYvGKiH
+	 zsL6NdJqRE+8cN1+VwhP5RbcocJ2qECR7DnI8Iv+IHuT7vV9bFqiv6IxNyNxc7AnKC
+	 jvnCWfirZFg+sfpoGgMmQfw5FMbvxJKL8jrVzg6wCknRaHWEIQW+26xRLPkPp6IIA0
+	 1Ij41r0fZpIF5xen12KtRMK1loX6JFhp82ACkNDplK8bRD363CGaVx4pITobwiNhEO
+	 UkWhB7Xwkr33bWh7UYYSA9OPrUsRBgpEwUZDefYoz68AWWve8POgu7uDBwiSMOKzcx
+	 qryaovYBoxAsg==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5b4b037a2c1so1357330e87.2
+        for <soc@lists.linux.dev>; Fri, 04 Sep 2026 15:39:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBw9+34CIsiDckVttnHzaD2I+ZZGTpI9FDRTMg5Qi81ik+y20fBXs+CFv+E/iY+H0t2DBF4=@lists.linux.dev
+X-Gm-Message-State: AFuF++m1JXmCXLDa8fCGJ4f+NK6ntmgXNR4p01IqofztUcUd9SPA1uKF
+	VsFeqIvz47t0PFtQUQYwzkzq7T/K3/LzOaE1eQnO579KqPZWbFo9hOrO+9X5e8c1r2C8iyL+Fws
+	HDJJC3Ro0m0Pr5bHU2vLzhV+wuN4/0jk=
+X-Received: by 2002:a05:6512:6186:b0:5b6:1a7c:3b with SMTP id
+ 2adb3069b0e04-5b61a7c02e6mr1037141e87.62.1788561566902; Fri, 04 Sep 2026
+ 15:39:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260904-cv75-v5-v6-5-e918514cb3b1@ambarella.com>
+References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com> <20260904-cv75-v5-v6-1-e918514cb3b1@ambarella.com>
+In-Reply-To: <20260904-cv75-v5-v6-1-e918514cb3b1@ambarella.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Sat, 5 Sep 2026 00:39:15 +0200
+X-Gmail-Original-Message-ID: <CAD++jLm3KLqaQZFsb2Yu0pERjCfrskL=x3arMtrY3Gq6X4rgZg@mail.gmail.com>
+X-Gm-Features: AcwNN1WuNL_yJJgNrKZTtl_t_1Ngwep6ljsejiCgS8bZ3EgANbDs_npxnarBzq8
+Message-ID: <CAD++jLm3KLqaQZFsb2Yu0pERjCfrskL=x3arMtrY3Gq6X4rgZg@mail.gmail.com>
+Subject: Re: [PATCH v6 01/13] dt-bindings: arm: add Ambarella CV75 platforms
+To: longzhao@ambarella.com
+Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>, 
+	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 04, 2026 at 02:38:12PM +0800, Long Zhao wrote:
-> Document the Ambarella CV75 GPIO bank compatible and the synthetic
-> arm,primecell-periphid used with the PL061 binding.
-> 
+On Fri, Sep 4, 2026 at 8:39=E2=80=AFAM Long Zhao via B4 Relay
+<devnull+longzhao.ambarella.com@kernel.org> wrote:
+
+> From: Long Zhao <longzhao@ambarella.com>
+>
+> Add the Ambarella vendor prefix and CV75 EVK board compatible for the
+> initial SoC bring-up.
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 > Signed-off-by: Long Zhao <longzhao@ambarella.com>
-> ---
->  .../devicetree/bindings/gpio/pl061-gpio.yaml       | 32 +++++++++++++++++++---
->  1 file changed, 28 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/pl061-gpio.yaml b/Documentation/devicetree/bindings/gpio/pl061-gpio.yaml
-> index 4d970e55104b..5a6d95e84df2 100644
-> --- a/Documentation/devicetree/bindings/gpio/pl061-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/pl061-gpio.yaml
-> @@ -15,7 +15,9 @@ select:
->    properties:
->      compatible:
->        contains:
-> -        const: arm,pl061
-> +        enum:
-> +          - arm,pl061
-> +          - ambarella,cv75-gpio
->    required:
->      - compatible
->  
-> @@ -24,9 +26,13 @@ properties:
->      pattern: "^gpio@[0-9a-f]+$"
->  
->    compatible:
-> -    items:
-> -      - const: arm,pl061
-> -      - const: arm,primecell
-> +    oneOf:
-> +      - items:
-> +          - const: arm,pl061
-> +          - const: arm,primecell
-> +      - items:
-> +          - const: ambarella,cv75-gpio
-> +          - const: arm,primecell
 
-items:
-  - enum:
-      - ambarella,cv75-gpio
-      - arm,pl061
-  - const: arm,primecell
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
-
->  
->    reg:
->      maxItems: 1
-> @@ -46,6 +52,10 @@ properties:
->  
->    clock-names: true
->  
-> +  arm,primecell-periphid:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Override for the PrimeCell peripheral ID.
-
-Add a $ref to primecell.yaml at the top level and drop this.
-
-> +
->    "#gpio-cells":
->      const: 2
->  
-> @@ -64,6 +74,20 @@ required:
->    - "#gpio-cells"
->    - gpio-controller
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: ambarella,cv75-gpio
-> +    then:
-> +      properties:
-> +        arm,primecell-periphid:
-> +          const: 0x000e8061
-> +      required:
-> +        - arm,primecell-periphid
-> +        - gpio-ranges
-> +
->  additionalProperties: false
-
-And this will need to be unevaluatedProperties.
-
-Rob
+Yours,
+Linus Walleij
