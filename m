@@ -1,54 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34894E3EF8
-	for <soc@lists.linux.dev>; Fri,  4 Sep 2026 22:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E394457BF
+	for <soc@lists.linux.dev>; Fri,  4 Sep 2026 22:41:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788561658; cv=none; b=qzdTf6TCTfMXTV+SNMELDTa9eEXJchfb9cDzrYL1gj/rXqmwDvhL/oCfaklvkvz8JwysLolY7k13eBs53bjeNuYN+6q43a1b8ENDb13NWFVEkxgdaRlui9C36cHEh5OXlQIKTNMvypOc3ojrGGuPP9h1RgwrFmQQkE4fBjMSWfs=
+	t=1788561684; cv=none; b=GlG1SF/eaASy754paMOscfxQeYftToAWhSHNFLMqTSt3F0ku9ePEqikjAcb5NJWI5mrbri4Q/QOUsatLybSbRxTwqWxQAeXXwkfRHSbTUwGOnrP4UNS5F6iKngMZYvttvcNH+yH0yD/WH1wKyYGmjFozxSFmNQAlw0VnHd1cMSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788561658; c=relaxed/simple;
-	bh=T9NTVrwlm0T6q5xmXlu/Zj9XfefDzx/FrPXJ+Bp5H3w=;
+	s=arc-20240116; t=1788561684; c=relaxed/simple;
+	bh=C0myiUlgWF0TZd8+Ku/LAy7GnzKeiD52gDwego64hj0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bh56/xV+anlnWuF1tzA5dFuZEmG2/tH8KcKnED/uqDhsJ/8p6kz4253QLepH749ihZNfOSjyZ6SmZQnaaKdeAscqJJgbZacK0MZpQo88KiZV5N/CMhMvdInsF3XvGFyRV/dkCTpk4iMyTWihZXLLXGxUVLvn8stG5oFRCkythhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJ61hFWd; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=BInioFf4Ij3gG9DqZq9857Z2pil0+L4Tv5+tlKtqGmy9hIVyCWmzznWZgAyNMbhI41ebV8VRDXqzx64qfXsOc0bRbJHjYrHZQE44sj21mfu2bk+ZZyv3xM8BT6Pn5dyH/AAL35fDCC5VCgwRwz/uUNC0WbnQr+4E6LEBft7BY7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=naSfCtaR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJ61hFWd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A79801F01561
-	for <soc@lists.linux.dev>; Fri,  4 Sep 2026 22:40:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="naSfCtaR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7137D1F00ADE
+	for <soc@lists.linux.dev>; Fri,  4 Sep 2026 22:41:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788561655;
-	bh=T9NTVrwlm0T6q5xmXlu/Zj9XfefDzx/FrPXJ+Bp5H3w=;
+	s=k20260515; t=1788561682;
+	bh=C0myiUlgWF0TZd8+Ku/LAy7GnzKeiD52gDwego64hj0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=jJ61hFWdmGdAZt3iISMIPITZqY4gxZC3mfJ6sEZet37Mo9rzg9diBibR0s2PjNTCW
-	 0MnxYR2cjA3wpMkcSUSNRIfBtWqT22oCAJczafxHUfqpDsfK3EFw6zV9kEIGlXqG0l
-	 G4F5F25SFoaKA4tiwurpisUO6Un2GRUjjE12QhB6IYLkYPnr8Smgli9czcH3gwYtzv
-	 +5ZgUob8KFI8Qq68HIhw8Atmh5VtcAjc/eRJQoIXoiRxoUcDV0GA/JW1oe1+Ye0I+0
-	 fc5muqsh+s+QV0bcaPffCtNpMmLstM9wcBL1ImobvUU8oJoO+fz5Nj9GWTgAqna2Yo
-	 g38RLP4vOC8bw==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5b6031cbc6bso1325226e87.1
-        for <soc@lists.linux.dev>; Fri, 04 Sep 2026 15:40:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBx3idpwxC+TpppWnCs2hzs1DNW4n3j8UDyGgJ6vFvn+VMRWEzaD6gMrgEj7j0mnZYGina8=@lists.linux.dev
-X-Gm-Message-State: AFuF++lDTCMNElzhpiP5FSfdbvQdjaSg1rcf9DI+n5ESPuiWyIbBi5b4
-	GJP9pptMCPiajJ6aupiWN0WzKaZ0ii7AXaeNv37s8CxOPCgetwiIsQiPzyNHWLNjPsZKIiDV5PO
-	8jhFS0YUg2u5wuOsGgIMFOwdf5gu3cKY=
-X-Received: by 2002:a05:6512:3f16:b0:5b6:1a7c:59e6 with SMTP id
- 2adb3069b0e04-5b61a7c5b4amr952304e87.64.1788561654360; Fri, 04 Sep 2026
- 15:40:54 -0700 (PDT)
+	b=naSfCtaR2p6Ey3hc9gr+m0RTXINQIfLmrYVBFP7Zn60Gab+HjxyVPF+1umfmk3kS5
+	 Fr7wiAR8LEGRTHb3HOCmnqiyuxt3nQ/6a557N/lDr5ynq2BWNnEO/2J7W+pe7mWFOP
+	 g6TP5F3+pAJfTtukPstuEhnN7TNhHLtSoab2pApfrAkX8ESqyAI/JkMUUS1Ns2iTgP
+	 6mQMC+O/k3Ntc629UnIZFwKzf4rXE3tkCGbqQoaGgjmntpEpWWMXupYIEJapm38jBT
+	 yvghkqGeMeXd4zVrb2u6/MVXLoCOXIPs/BJRcGhZ60zsODhI2HSEA2lrcRjAwOlrAl
+	 piJ9BErTW9euQ==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5b2b92065ffso1328098e87.1
+        for <soc@lists.linux.dev>; Fri, 04 Sep 2026 15:41:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBx6Trl60n3lPKQiTjoWdAHZn8Riqg1wV+BtzGiR2dQVzsDIlv9XRvy5sjEbZ2EMiYd6z1w=@lists.linux.dev
+X-Gm-Message-State: AFuF++kcBb9c8xvc/QwKvxYv+33pXrjr88L9511GmS8jqKVxecgv2o+M
+	dFghbdfdnzHTrWcU9p39eVsNyADgpjS6NvFFxPunVhhiMmfFqMBn4XDY8SWcXS9iEuq8fKDQcxj
+	ZVpEZXVyy5rkRTx/LRqfWkDj2YwdabxY=
+X-Received: by 2002:a05:6512:61a7:b0:5b6:1a7c:aa19 with SMTP id
+ 2adb3069b0e04-5b61a7cad0dmr907279e87.49.1788561681149; Fri, 04 Sep 2026
+ 15:41:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com> <20260904-cv75-v5-v6-4-e918514cb3b1@ambarella.com>
-In-Reply-To: <20260904-cv75-v5-v6-4-e918514cb3b1@ambarella.com>
+References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com> <20260904-cv75-v5-v6-6-e918514cb3b1@ambarella.com>
+In-Reply-To: <20260904-cv75-v5-v6-6-e918514cb3b1@ambarella.com>
 From: Linus Walleij <linusw@kernel.org>
-Date: Sat, 5 Sep 2026 00:40:39 +0200
-X-Gmail-Original-Message-ID: <CAD++jLmVKRobxDb1_U8xCKaH6d5CzLDAn0qe8W=voSUoTtduTA@mail.gmail.com>
-X-Gm-Features: AcwNN1Um3dJHBV2YivCN_BFI8Mitw2Ry9tj9isgsluqoUCSueU7CVUJmlqo5JrE
-Message-ID: <CAD++jLmVKRobxDb1_U8xCKaH6d5CzLDAn0qe8W=voSUoTtduTA@mail.gmail.com>
-Subject: Re: [PATCH v6 04/13] dt-bindings: pinctrl: add Ambarella CV75 pinctrl
+Date: Sat, 5 Sep 2026 00:41:09 +0200
+X-Gmail-Original-Message-ID: <CAD++jLmnkYaXqD7T3ckO7z9g929DvHyuK04j7VKEgVrnF+1C=A@mail.gmail.com>
+X-Gm-Features: AcwNN1VDId_JVjT4HuchtPhHSz9zctXg7JmJYfvX8t2TVwOBsWn_VCTazZMrhFA
+Message-ID: <CAD++jLmnkYaXqD7T3ckO7z9g929DvHyuK04j7VKEgVrnF+1C=A@mail.gmail.com>
+Subject: Re: [PATCH v6 06/13] dt-bindings: serial: snps-dw-apb-uart: add ambarella,cv75-uart
 To: longzhao@ambarella.com
 Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
 	Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
@@ -70,12 +70,12 @@ On Fri, Sep 4, 2026 at 8:39=E2=80=AFAM Long Zhao via B4 Relay
 
 > From: Long Zhao <longzhao@ambarella.com>
 >
-> Document the CV75 pin controller binding using generic function and
-> groups properties for pinmux configuration.
+> Add the Ambarella CV75 compatible string to the Synopsys DW APB UART
+> binding. The block is Ambarella IP with a DW-like register map, so it
+> is described as a DW APB UART variant.
 >
 > Signed-off-by: Long Zhao <longzhao@ambarella.com>
 
-I think this looks great!
 Reviewed-by: Linus Walleij <linusw@kernel.org>
 
 Yours,
