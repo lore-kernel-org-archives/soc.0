@@ -1,199 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BC4352014;
-	Fri,  4 Sep 2026 13:14:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FE1450405
+	for <soc@lists.linux.dev>; Fri,  4 Sep 2026 13:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788527684; cv=none; b=BB5yPuA8JsQHx8K67G74OBY3oCv8lUSXwDJKyUEZ6nqDIriNhd+iKcvhzgOq9yl0Pf+bQJ2+toV68ySdTyBNabD455LTZwHNHlS07fpo8xNFBnJDZvEGYfcrzLwRGIpmsckvtqY/FodhuXyj77znSt4ynNyM5zxnkSUydjZ1BVM=
+	t=1788528094; cv=none; b=hmY9Z6sp17OHlj088syndP+YGXWOY3fQOTbm3Z/jEz5xGU+C9ND2srTI57TKZEjcz4wMUoab1tOiZdxCT/v9MKgGoIIjfCA/GDuIUqXulZi4ZsLE2A3LVKt2dNPREuyNkcmR4/2zppM0GlheyKdI4S+YkhtKnREvcpg6+r0kyPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788527684; c=relaxed/simple;
-	bh=FYT6/iyY31UJEUUxpTSXKwCdDX8cAQywGqhNs1TpiuM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=samzkkq4PQcSyNNeBsHrTEZzOwyLqPY+oycZfMkzNHXjZIm/xCJUmY78W59sG9jR/m+d1UZuGUcbxLmgWjoq2qE6hoj8TYFi0QNNZg+9Vj4NmO6LHWV60D8W5p0sCCuast4Jla77Ro79RTjkWj7k+hfiq5zrT75kdMGfl9YG/h0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kaY3pU9C; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kaY3pU9C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788527681; x=1820063681;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FYT6/iyY31UJEUUxpTSXKwCdDX8cAQywGqhNs1TpiuM=;
-  b=kaY3pU9CJxS1EpC9dbQu4ij4lThfhIx5TJqDFcqo5y0WhaKbJZkg5Ao3
-   gkM22GqH5iIFho6+bd/guZcSXsj59FQSVjmxQRAM9Y3k7lcUbD6FWjMOi
-   4TjXsY9F0FMECS4Mmz/B7JNYnueyk+ktY9/3cpn8K1X8izsQjXxTIzjl3
-   CNgSeLEwQw+T3kST/++lQ9JYwcgntV/EKaRuXINHkM4WGdPq62ZOWbBD+
-   waJXCQoLUQ2y1xP7KCROh9i4bFUrAABjEza8nHsGz0GS63QWDXYzt6bmw
-   UvDMlvLT6lm/z4DwD+mIAUSc/UcKgMPkc8+G3XZbhuY0rwc6O8jBtO7tZ
-   w==;
-X-CSE-ConnectionGUID: /ED//XgGRUqB5Tmb4ZOAcg==
-X-CSE-MsgGUID: mzMr8j/ySgOHvRZ9ei1CIQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11895"; a="91540831"
-X-IronPort-AV: E=Sophos;i="6.25,262,1779174000"; 
-   d="scan'208";a="91540831"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2026 06:14:40 -0700
-X-CSE-ConnectionGUID: unw6z+dxSXa0kQr2G8pHcA==
-X-CSE-MsgGUID: +XaBCkDbTp2V2UqV7nszHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,262,1779174000"; 
-   d="scan'208";a="273823407"
-Received: from slindbla-desk.ger.corp.intel.com (HELO localhost) ([10.245.244.224])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2026 06:14:34 -0700
-Date: Fri, 4 Sep 2026 16:14:32 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: longzhao@ambarella.com
-Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>,
-	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 09/13] gpio: pl061: use gpio-regmap and add Ambarella
- layout
-Message-ID: <aprEOB7AZQWNed4D@ashevche-desk.local>
-References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com>
- <20260904-cv75-v5-v6-9-e918514cb3b1@ambarella.com>
+	s=arc-20240116; t=1788528094; c=relaxed/simple;
+	bh=i3jzcEDjTp6IHGkPQn57ADzdFhYZdRIvfOuNLsDtWRo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jMkiK1SiOWDwsTekyOFiyY3kt26v0cUqkJF6Pae7EvYbbJ8GoRwxj6wgHjShodM/UUtHwk4PTS9bzRRn94mqK/EYzy1vIMXBTKxuZY84nM27SEqWJM1jCzU/8LOCg/yIp7Qwk81olwXRu+jvAA2GH7ybG99KzyEkXkQmcb4ZV38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix)
+	id A33371F00A3D; Fri,  4 Sep 2026 13:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 007DD1F00A3E;
+	Fri,  4 Sep 2026 13:21:27 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@lists.linux.dev,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL]  Renesas SoC fixes for v7.3
+Date: Fri,  4 Sep 2026 15:21:23 +0200
+Message-ID: <cover.1788527983.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260904-cv75-v5-v6-9-e918514cb3b1@ambarella.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Fri, Sep 04, 2026 at 02:38:16PM +0800, Long Zhao via B4 Relay wrote:
+	Hi SoC folks,
 
-> Convert PL061 data and direction handling to gpio-regmap while
-> keeping the existing PL061 irqchip path.
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
-> Add an Ambarella CV75 register layout variant on the AMBA bus, without
-> claiming unverified GPIO suspend/resume support for Ambarella.
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
-This part should be in a separate patch.
+are available in the Git repository at:
 
-So far I see at least 2 patches against gpio-regmap and 2 patches against
-gpio-pl061.
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-fixes-for-v7.3-tag1
 
-...
+for you to fetch changes up to 2ac7bad110be6ebe478d6bd57821f7f5259a1f54:
 
-> +struct pl061_variant_data {
-> +	unsigned int data;
-> +	unsigned int dir;
-> +	unsigned int is;
-> +	unsigned int ibe;
-> +	unsigned int iev;
-> +	unsigned int ie;
-> +	unsigned int ris;
-> +	unsigned int mis;
-> +	unsigned int ic;
-> +	unsigned int mask;
-> +	unsigned int enable;
-> +	unsigned int ngpio;
-> +	bool access_32bit;
-> +	bool masked_data_address;
-> +	bool write_data_after_dir;
-> +	bool clear_irq_on_type;
-> +	bool pm_save_restore;
-> +	const struct regmap_config *regmap_config;
-> +};
+  arm64: dts: renesas: r9a09g087: Switch GBETH TX queue scheduling to WRR (2026-09-02 14:32:37 +0200)
 
-Should not be like this. Part of it is in the respective regmap config (with
-all volatile, precious, et cetera registers, and part of it comes from driver
-data (in other words based on the compatible string or other ID).
+----------------------------------------------------------------
+Renesas fixes for v7.3
 
-...
+  - Fix Ethernet stalls on RZ/V2H, RZ/V2N, RZ/G3E, RZ/T2H, and RZ/N2H.
 
->  struct pl061 {
->  	raw_spinlock_t		lock;
-> -
+Thanks for pulling!
 
-Stray change.
+----------------------------------------------------------------
+Ovidiu Panait (5):
+      arm64: dts: renesas: r9a09g057: Switch GBETH TX queue scheduling to WRR
+      arm64: dts: renesas: r9a09g056: Switch GBETH TX queue scheduling to WRR
+      arm64: dts: renesas: r9a09g047: Switch GBETH TX queue scheduling to WRR
+      arm64: dts: renesas: r9a09g077: Switch GBETH TX queue scheduling to WRR
+      arm64: dts: renesas: r9a09g087: Switch GBETH TX queue scheduling to WRR
 
->  	void __iomem		*base;
-> -	struct gpio_chip	gc;
-> +	const struct pl061_variant_data *variant;
-> +	struct gpio_irq_chip	girq;
->  	int			parent_irq;
+ arch/arm64/boot/dts/renesas/r9a09g047.dtsi | 10 ++++++++++
+ arch/arm64/boot/dts/renesas/r9a09g056.dtsi | 10 ++++++++++
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi | 10 ++++++++++
+ arch/arm64/boot/dts/renesas/r9a09g077.dtsi | 27 +++++++++++++++++++++++++++
+ arch/arm64/boot/dts/renesas/r9a09g087.dtsi | 27 +++++++++++++++++++++++++++
+ 5 files changed, 84 insertions(+)
 
-Here (in this structure) we should get a struct regmap instead of base and
-gpio_chip.
+Gr{oetje,eeting}s,
 
->  	struct pl061_context_save_regs csave_regs;
+						Geert
 
-This is not needed, see how gpio-pca953x does that with enabled regmap cache.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
->  };
-
-...
-
-> +static u32 pl061_read(struct pl061 *pl061, unsigned int reg)
->  {
-> -	struct pl061 *pl061 = gpiochip_get_data(gc);
-> -	unsigned long flags;
-> -	unsigned char gpiodir;
-> +	if (pl061->variant->access_32bit)
-> +		return readl(pl061->base + reg);
->  
-> -	raw_spin_lock_irqsave(&pl061->lock, flags);
-> -	writeb(!!value << offset, pl061->base + (BIT(offset + 2)));
-> -	gpiodir = readb(pl061->base + GPIODIR);
-> -	gpiodir |= BIT(offset);
-> -	writeb(gpiodir, pl061->base + GPIODIR);
-> -
-> -	/*
-> -	 * gpio value is set again, because pl061 doesn't allow to set value of
-> -	 * a gpio pin before configuring it in OUT mode.
-> -	 */
-> -	writeb(!!value << offset, pl061->base + (BIT(offset + 2)));
-> -	raw_spin_unlock_irqrestore(&pl061->lock, flags);
-> -
-> -	return 0;
-> +	return readb(pl061->base + reg);
->  }
-
-> -static int pl061_get_value(struct gpio_chip *gc, unsigned offset)
-> +static void pl061_write(struct pl061 *pl061, u32 value, unsigned int reg)
->  {
-> -	struct pl061 *pl061 = gpiochip_get_data(gc);
-> -
-> -	return !!readb(pl061->base + (BIT(offset + 2)));
-> +	if (pl061->variant->access_32bit)
-> +		writel(value, pl061->base + reg);
-> +	else
-> +		writeb(value, pl061->base + reg);
-
-This is achieved by different regmap config — one for 32-bit, one for 8-bit
-access.
-
->  }
-
-...
-
-I guess it's enough for now. this needs one more round of designing this.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
