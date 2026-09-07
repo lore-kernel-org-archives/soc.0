@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9700C511229
-	for <soc@lists.linux.dev>; Mon,  7 Sep 2026 16:19:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550C0519939
+	for <soc@lists.linux.dev>; Mon,  7 Sep 2026 16:20:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788798000; cv=none; b=BcjrT9vE1hrVu0irbkBI8hgcA0xbFEaDdSnvfG86vH+m+0ICQmfIH+9VODbrg1JspCNmm6ohjGMquWMaYmzrEM203LhSnlNEU7UGdq3SAP7W4FtZTBZ1OpujADZxxtVB446J/DVFzE5SZYFPtYhxKoLfoa629ZEICmrGwpghDDU=
+	t=1788798021; cv=none; b=WSpGksRO0R9Uf20gr4opGOY1Vq9YrjaSOR/VvKZTfl5Jmw61Y1vQ1jhDum7NILeH5kvVVhLigcSqGpAhGXDOLitkEsvEYLSQ0AiwVXEiaI2lKiXt5N/IRO4Ben+qScrihRje5ULAFMyBQ9C883jJHiV4wReTBQdjAQyW3YJDTYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788798000; c=relaxed/simple;
-	bh=gsxQBDgTAXbl9RswFqrHPhOtNeA0CneeA1euV6ONHls=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kyb94lRQLIvzi+z8TfQhyASSImWi/f5ceEe3CQ2a/JEb2WYDQ3YhHzpA2e0JJjyXP+KoqU1GxBf58TBl8m1U42aDqlGil+yVBHhd3955dunWniTcN5grffa2TrnclV5PE7M/+ea7sNq/AhFWNg4Fs7d+LpmjsYVOcn9JC4dLBEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kCTEsmUu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788798021; c=relaxed/simple;
+	bh=sbVDL5RSMYqgpAxVcVYyjtHH7mVbJmdcF9VUb4f1dPA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I8RzMBoIzGW5l3HK362nQ4/Dmfmf4jIxYB/bDqgzCllaHSOLmcHM8NrONkvi9e8fCW0Fph+d+ymlIkrQ/PD2qzvbXhziDuVRtiy9L445iwIQX9gW2OzL831abzlVfBzTlPQIlM/iOXj+FQjakX1zFHecddVbIZir07kODxBHlwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W4I4zQzp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kCTEsmUu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469AB1F00A3A;
-	Mon,  7 Sep 2026 16:19:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W4I4zQzp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF2E1F00A3D;
+	Mon,  7 Sep 2026 16:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788797993;
-	bh=YnExfoRh2l4WPiz+TeqVQ2xa2VPv5FI8CGD0LOGjjoM=;
+	s=k20260515; t=1788798017;
+	bh=Cw8A5DQf1axmrcHfnWBzzoDZK3C6lKXke5eM/STvWnE=;
 	h=From:To:Cc:Subject:Date;
-	b=kCTEsmUuN1Xob1tY0cGMPjUvYzzFAk/bjIwaNS5Xvv8U582JjkV2LOWkt3Q7JVNz7
-	 GquH90Xz1e2EvNa/wvCSEq3trHl3twDWguFMapJm35qi/z4044KNRQSPUcK/JgR0Ar
-	 ud+5/jXxnFJUjF1st+eW+U3PrLbGLtpwwnMDha33BMZy9m8j6w0OYKFWSeupVPgC5Y
-	 57v6LnZRlqtcIH/txvtVkcUKODd43E5+9hfgQAWCUPobAUQt9InG+ZtEtQu27Mvxz0
-	 GjatLNi97qm/W3Aj/FeuJg1fkBCIexNA43qAW8OxbloXmf6eX+OC5DV1b9UIGtyEsl
-	 5V5SSaOZG8IAA==
+	b=W4I4zQzpu0fTBdaqUoh2PeOEf7nwbfRMVCbYj6qdPxWJPFB9xPtYKy3+u8ptXzFEQ
+	 TG9dObe5jMbljHeYQ+KkYmGRUZe+tDYGSCL2OaKNVyTkLaK9xOicnvqklbIVGUVyXH
+	 k8JP9UCkYjzHowX8FEpbLXfZ1HfOo7Vf2GYe48Lg4ky3JwSJj6fXTwBJM8wnOA6lYt
+	 GvYzEelowiO1fdygocZhSCQoov/cw6/Rgj3pDrLVW0+F9YCn4sutcWgP3Q+QF165xK
+	 Hfhx5CLFu3w5djhjK4gbdcA2CGZRx+Li+GuxznGe2kvU3w2EXuiHmTL7Es1OxLOC8k
+	 8jr29JfMuhAIQ==
 From: Dinh Nguyen <dinguyen@kernel.org>
 To: linux-arm-kernel@lists.infradead.org,
 	soc@lists.linux.dev
 Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm: socfpga: fix PL310_ERRATA_753970 Kconfig option
-Date: Mon,  7 Sep 2026 11:19:52 -0500
-Message-ID: <20260907161952.1148669-1-dinguyen@kernel.org>
+Subject: [GIT PULL] arm64: dts: socfpga: fix file access permission
+Date: Mon,  7 Sep 2026 11:20:16 -0500
+Message-ID: <20260907162016.1148705-1-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.42.0.411.g813d9a9188
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -47,19 +47,22 @@ The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_fix_for_v7.3
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_fix_for_v7.3
 
-for you to fetch changes up to cfc1e9a543e3589ba200795b6e7fd8ef4314efdf:
+for you to fetch changes up to 5f8cb07d7a8573753c5d31dc76b51cab8e5e9460:
 
-  ARM: socfpga: select the PL310 erratum 753970 workaround (2026-08-31 10:44:39 -0500)
-
-----------------------------------------------------------------
-SoCFPGA fix for v7.3
-- Fix PL310_ERRATA_753970 Kconfig option
+  arm64: dts: socfpga: change access permission from 755 to 644 (2026-08-31 18:08:36 -0500)
 
 ----------------------------------------------------------------
-Pengpeng Hou (1):
-      ARM: socfpga: select the PL310 erratum 753970 workaround
+SoCFPGA DTS fix for v7.3
+- Fix DTS file access permissions
 
- arch/arm/mach-socfpga/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+Dinh Nguyen (1):
+      arm64: dts: socfpga: change access permission from 755 to 644
+
+ arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dtsi     | 0
+ arch/arm64/boot/dts/altera/socfpga_stratix10_socdk_emmc.dts | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dtsi
+ mode change 100755 => 100644 arch/arm64/boot/dts/altera/socfpga_stratix10_socdk_emmc.dts
