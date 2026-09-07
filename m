@@ -1,112 +1,65 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6745C3B8D4A;
-	Mon,  7 Sep 2026 10:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9700C511229
+	for <soc@lists.linux.dev>; Mon,  7 Sep 2026 16:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788777102; cv=none; b=aFy/P4tFaQQ2oXeLrEQXLiJFz5JtOwzIwCUOhzEROeg4/eY6Skhp2PRmVQObZH860Df8mQgjUUU4+R5Cvdg6VS8Uj4ik8zaKHO7SEzJsxfL5k0gluhwv9RbkQ837jjybmUs99LHTBQ4uuEwYO71BmepWDjzuXtkTFeiX0Y5Hals=
+	t=1788798000; cv=none; b=BcjrT9vE1hrVu0irbkBI8hgcA0xbFEaDdSnvfG86vH+m+0ICQmfIH+9VODbrg1JspCNmm6ohjGMquWMaYmzrEM203LhSnlNEU7UGdq3SAP7W4FtZTBZ1OpujADZxxtVB446J/DVFzE5SZYFPtYhxKoLfoa629ZEICmrGwpghDDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788777102; c=relaxed/simple;
-	bh=izwwPFEZ2YDHlpNeAWpO9gjIXl3/uRvj1NTux/WAIB4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=kjXsdycu8WRycKGQwIRKTLUV4Wd4T1iuRR0vmJnL791mmywUvImw92Ay0T0G777F90FWDUqHnxRx45bpLq5D8fjuS8x7+oL4osl/ASELJSMi3vTHBaidOKZu9Zz/1+DJbWZXypT8imTQl0KzNt2yNN4UK2mz02Jh/sV7/VRd+nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mz9s2nX1; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1788798000; c=relaxed/simple;
+	bh=gsxQBDgTAXbl9RswFqrHPhOtNeA0CneeA1euV6ONHls=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kyb94lRQLIvzi+z8TfQhyASSImWi/f5ceEe3CQ2a/JEb2WYDQ3YhHzpA2e0JJjyXP+KoqU1GxBf58TBl8m1U42aDqlGil+yVBHhd3955dunWniTcN5grffa2TrnclV5PE7M/+ea7sNq/AhFWNg4Fs7d+LpmjsYVOcn9JC4dLBEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kCTEsmUu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mz9s2nX1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=izwwPFEZ2YDHlpNeAWpO9gjIXl3/uRvj1NTux/WAIB4=; b=m
-	z9s2nX1g4LUKLmfdjmG1a2TzjIbwl9fjS8Zzru0oHZeUAVhTgNFR+KwATq79L4Fk
-	cCUPFv89OTZQN2C3/3Y3owqWbabwjWCnuFWjPlmttiAOCqb1SV5iSTO+ilfURmQA
-	JJJ5kFlAMZL8EiHr0W/BfDUxKNJ5obVNJgNP/TyEqs=
-Date: Mon, 7 Sep 2026 18:29:47 +0800 (CST)
-From: zl020895  <zl020895@163.com>
-To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Cc: longzhao@ambarella.com, "Arnd Bergmann" <arnd@arndb.de>,
-	"Krzysztof Kozlowski" <krzk@kernel.org>,
-	"Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	"Rob Herring" <robh@kernel.org>,
-	"Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-	"Conor Dooley" <conor+dt@kernel.org>,
-	"Michael Turquette" <mturquette@baylibre.com>,
-	"Stephen Boyd" <sboyd@kernel.org>,
-	"Linus Walleij" <linusw@kernel.org>,
-	"Bartosz Golaszewski" <brgl@kernel.org>,
-	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-	"Jiri Slaby" <jirislaby@kernel.org>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	"Catalin Marinas" <catalin.marinas@arm.com>,
-	"Will Deacon" <will@kernel.org>, "Lee Jones" <lee@kernel.org>,
-	mfd@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: Re: [PATCH v6 08/13] gpio: regmap: support
- write_data_after_dir and girq
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <ap5BgWtHMAxl28wF@ashevche-desk.local>
-References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com>
- <20260904-cv75-v5-v6-8-e918514cb3b1@ambarella.com>
- <apqxwRgi-uVKkOpr@ashevche-desk.local>
- <27a1901.423e.1a07a183bd4.Coremail.zl020895@163.com>
- <ap5BgWtHMAxl28wF@ashevche-desk.local>
-X-NTES-SC: AL_Qu2TCvucuUEj4SSaZ+kcn0wRhug/UMa4u/sm3YNXc+8GoC3f4joEek5lHXDK79C+JR6CqT2UbRFW0t1ffJNTQiBizjLGGro2SdHZZlp2GQ==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kCTEsmUu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469AB1F00A3A;
+	Mon,  7 Sep 2026 16:19:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788797993;
+	bh=YnExfoRh2l4WPiz+TeqVQ2xa2VPv5FI8CGD0LOGjjoM=;
+	h=From:To:Cc:Subject:Date;
+	b=kCTEsmUuN1Xob1tY0cGMPjUvYzzFAk/bjIwaNS5Xvv8U582JjkV2LOWkt3Q7JVNz7
+	 GquH90Xz1e2EvNa/wvCSEq3trHl3twDWguFMapJm35qi/z4044KNRQSPUcK/JgR0Ar
+	 ud+5/jXxnFJUjF1st+eW+U3PrLbGLtpwwnMDha33BMZy9m8j6w0OYKFWSeupVPgC5Y
+	 57v6LnZRlqtcIH/txvtVkcUKODd43E5+9hfgQAWCUPobAUQt9InG+ZtEtQu27Mvxz0
+	 GjatLNi97qm/W3Aj/FeuJg1fkBCIexNA43qAW8OxbloXmf6eX+OC5DV1b9UIGtyEsl
+	 5V5SSaOZG8IAA==
+From: Dinh Nguyen <dinguyen@kernel.org>
+To: linux-arm-kernel@lists.infradead.org,
+	soc@lists.linux.dev
+Cc: dinguyen@kernel.org
+Subject: [GIT PULL] arm: socfpga: fix PL310_ERRATA_753970 Kconfig option
+Date: Mon,  7 Sep 2026 11:19:52 -0500
+Message-ID: <20260907161952.1148669-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.42.0.411.g813d9a9188
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-ID: <6ca46138.9970.1a07b6abb25.Coremail.zl020895@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:kygvCgD3P+kbkp5qdBRBAA--.16072W
-X-CM-SenderInfo: d2oqjiqyzvqiywtou0bp/xtbCxhvsXmqekhuDRgAA3X
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
 
-SGkgQW5keSwKClRoYW5rcyBmb3IgdGhlIGJ4dHdjIHBvaW50ZXIuCgpJIGxvb2tlZCBhdCBtYXBw
-aW5nIFBMMDYxIG9udG8gcmVnbWFwLWlycS4gU3RhdHVzL21hc2svYWNrIChNSVMvSUUvSUMpCmNv
-dWxkIGZpdCwgYnV0IFBMMDYxIHN0aWxsIG5lZWRzIHRoZSBjaGFpbmVkIGRlbXV4IHBsdXMgSVMv
-SUJFL0lFViB0eXBlCnByb2dyYW1taW5nIChpbmNsdWRpbmcgRURHRV9CT1RIKSBhbmQgdGhlIGV4
-aXN0aW5nIGdwaW9jaGlwIGltbXV0YWJsZQpoZWxwZXJzLiBUaGF0IGxvb2tzIGxpa2UgYSBwb29y
-IGZpdCB2ZXJzdXMgaWRpLTQ4L2J4dHdjLXN0eWxlIGNoaXBzLCBhbmQKc3dpdGNoaW5nIHRoZSBs
-b25nLXN0YW5kaW5nIEFSTSBQTDA2MSBwYXRoIGZyb20gY2hhaW5lZCB0byB0aHJlYWRlZApyZWdt
-YXAtaXJxIHNlZW1zIHJpc2t5LgoKV2hhdCBJIHBsYW4gZm9yIHRoZSBuZXh0IHJvdW5kICh3aXRo
-b3V0IGV4dGVuZGluZyBncGlvLXJlZ21hcCB3aXRoIGdpcnEpOgprZWVwIHRoZSBjdXN0b20gaXJx
-Y2hpcCArIGNoYWluZWQgaGFuZGxlciwgY3JlYXRlIHRoZSBpcnFfZG9tYWluIGluCmdwaW8tcGww
-NjEsIGFuZCBwYXNzIGl0IHZpYSBjb25maWcuaXJxX2RvbWFpbiB0byBncGlvLXJlZ21hcC4KCkRv
-ZXMgdGhhdCBtYXRjaCB3aGF0IHlvdSBoYWQgaW4gbWluZCwgb3IgZG8geW91IHN0aWxsIHByZWZl
-ciBhCnJlZ21hcC1pcnEtYmFzZWQgYXBwcm9hY2g/CgpCZXN0IHJlZ2FyZHMsCkxvbmcgWmhhbwoK
-QXQgMjAyNi0wOS0wNyAxMjo0NTo1MywgIkFuZHkgU2hldmNoZW5rbyIgPGFuZHJpeS5zaGV2Y2hl
-bmtvQGxpbnV4LmludGVsLmNvbT4gd3JvdGU6Cj5PbiBNb24sIFNlcCAwNywgMjAyNiBhdCAxMjoy
-MDowM1BNICswODAwLCB6bDAyMDg5NSB3cm90ZToKPgo+PiA+IEFyZSB5b3UgZ29pbmcgdG8gZml4
-IHRoaXMgSFcgaW4gdGhlIG5leHQgdmVyc2lvbiBvZiB0aGUgU29DPwo+PiBObyDigJQgQW1iYXJl
-bGxhIGRvZXMgbm90IHVzZSB3cml0ZV9kYXRhX2FmdGVyX2Rpci4gSXQgb25seSBwcmVzZXJ2ZXMg
-dGhlCj4+IGV4aXN0aW5nIEFSTSBQTDA2MSBxdWlyayBhbHJlYWR5IGRvY3VtZW50ZWQgaW4gZ3Bp
-by1wbDA2MSAoZGF0YSB3cml0ZXMKPj4gaWdub3JlZCB3aGlsZSB0aGUgcGluIGlzIHN0aWxsIGFu
-IGlucHV0KS4gT25seSBwbDA2MV9hcm0gc2V0cyB0aGUgZmxhZy4KPgo+QWgsIHRoaXMgaXMgYSBn
-b29kIG5ld3MhCj4KPkluIGFueSBjYXNlIHdoZW4gZG9jdW1lbnRpbmcgdGhhdCBmbGFnLCBwbGVh
-c2UgYWxzbyBtZW50aW9uIHRoYXQgYW55IG5ldyBIVwo+c2hvdWxkIG5vdCB1c2UgaXQgYXMgaXQn
-cyBjb25zaWRlcmVkIGJ1Z2d5IChnbGl0Y2hlcyBkdXJpbmcgZGlyZWN0aW9uIGNoYW5nZQo+YXJl
-IGd1YXJhbnRlZWQpLgo+Cj4+IEkgd2lsbCBhbHNvIG1ha2UgdGhlIGZpcnN0IGdwaW9fcmVnbWFw
-X3NldCgpIGNvbmRpdGlvbmFsIHNvIHRoZSBxdWlyawo+PiBwYXRoIHdyaXRlcyBvbmNlIGFmdGVy
-IGRpcmVjdGlvbl9vdXRwdXQsIG5vdCB0d2ljZS4KPgo+SSBzZWUgdGhhdCBvcmlnaW5hbCBwbDA2
-MSBhY3R1YWxseSB3cml0ZXMgdHdpY2UuIFRCSCBJIGRvbid0IGtub3cgdGhlIGJlc3QKPmVmZm9y
-dCBoZXJlIGFuZCBpZiBpdCdzIHJlYWxseSByZXF1aXJlZCB0byBkbyBzby4gUHJvYmFibHkgb3Ro
-ZXJzIGhhdmUKPmJldHRlciBpZGVhcy4uLgo+Cj4+ID4gVGhpcyBuZWVkcyB0byBiZSBpbiBhIHNl
-cGFyYXRlIHVwZGF0ZS4gQWxzbyB3ZSBuZWVkIHRvIHVuZGVyc3RhbmQgd2h5Cj4+ID4gaXQgaXMg
-cmVxdWlyZWQuCj4+IE9LLCBnaXJxIHdpbGwgYmUgYSBzZXBhcmF0ZSBwYXRjaC4gUEwwNjEga2Vl
-cHMgYSBjdXN0b20gY2hhaW5lZAo+PiBpcnFjaGlwIChub3QgcmVnbWFwLWlycSk7IGdwaW9fcmVn
-bWFwIHRvZGF5IG9ubHkgdGFrZXMgaXJxX2RvbWFpbiBvcgo+PiByZWdtYXBfaXJxX2NoaXAsIHNv
-IHdlIHBhc3NlZCBnaXJxIHRvIGtlZXAgdGhlIHVzdWFsIGdwaW9faXJxX2NoaXAgKwo+PiBncGlv
-Y2hpcF9hZGQgZmxvdy4gT3BlbiB0byB1c2luZyBhIGNhbGxlci1jcmVhdGVkIGlycV9kb21haW4g
-aW5zdGVhZCBpZgo+PiB5b3UgcHJlZmVyLgo+Cj5JZiB0aGVyZSBpcyBhIGNoYWluZWQgSVJRLCBs
-b29rIGhvdyBQTUlDIGRyaXZlcnMgdXN1YWxseSBkbyBzaW1pbGFyIHNldHVwcy4KPkZpcnN0IHdo
-YXQgY29tZXMgdG8gbXkgbWluZCBpcyBkcml2ZXJzL21mZC9pbnRlbF9zb2NfcG1pY19ieHR3Yy5j
-Lgo+Cj4tLSAKPldpdGggQmVzdCBSZWdhcmRzLAo+QW5keSBTaGV2Y2hlbmtvCj4K
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_fix_for_v7.3
+
+for you to fetch changes up to cfc1e9a543e3589ba200795b6e7fd8ef4314efdf:
+
+  ARM: socfpga: select the PL310 erratum 753970 workaround (2026-08-31 10:44:39 -0500)
+
+----------------------------------------------------------------
+SoCFPGA fix for v7.3
+- Fix PL310_ERRATA_753970 Kconfig option
+
+----------------------------------------------------------------
+Pengpeng Hou (1):
+      ARM: socfpga: select the PL310 erratum 753970 workaround
+
+ arch/arm/mach-socfpga/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
