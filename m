@@ -1,105 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DAB43E40F5;
-	Tue,  8 Sep 2026 20:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA5B3C1404;
+	Wed,  9 Sep 2026 07:12:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788898344; cv=none; b=rqp21kVfqgF13s0zUOWh5q+r5SDAKhmWiN0QNPeDZh+ZiK78XX5DQ6jpLLCB4bzyKd5wIC3k/mRvbbiSFz7Kh0cyvIo8TFWRHyY7aeONkdAKt4WXPh5cg4Xa3QE0AdETFSpcRLV91pQLfNh0V4FZ/Zl7oFRD71kwN0y6tjhf2x8=
+	t=1788937974; cv=none; b=EFwRkYQjfigDhba69F6edOycwBCSSV5sJ9O9UMHAaB9vHoAeYZbqV2Hq5nN+Z2SYXGZSk/nMDeOyJux5I3BOWtxPjwW847sW/wGbU9LleOaenzrpvFU+rr292faQA/IhMwwQOq/nSxWyVli18js7LD2GSp8dTexqGCCO042tjcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788898344; c=relaxed/simple;
-	bh=wBuPzoKpM+zpy8hbBII3PlrgCbDu1TYCJkrjxFrZJ2c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JQFYYnE5pOqQTom7Y21I8fpmoUwpeenv4WNRBT33Y128k6ZSCYMYj/y2c2u4vrJzKRvIISPHYp3zjzus1sXK3AQ0cFQ86cxTxLkoRniQiMUE6tIf9DyFoANbydmdQhKdRM29k2sXK9XARx3kSJ4ARosuGehur4LnGLRtesDmwPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULmnvtvX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788937974; c=relaxed/simple;
+	bh=hqeJ6JFtF61dco4k7fWQt98q1prPTuM8cmVS/Y2jvjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RkswOUCsbX4O/x6mJ4BGGPOaI42BL+y0iTU0dWeXjclYoIqBMk6yEBRTxTo3ownqW0N7vpeBJM5qo6DUrOLoe4zEAOAkyLC5bbaCYNFpv9cFDvQahl+LV+vMKYORfaY98IBqRM2JBFdJehdAckFBRJdMx9xD2msst2IKYrBB2uE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNfoo70w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULmnvtvX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230951F00A3D;
-	Tue,  8 Sep 2026 20:12:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNfoo70w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9514E1F00A3A;
+	Wed,  9 Sep 2026 07:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788898343;
-	bh=gwQNucgdxcw2xaZoUzt8fjy3dhGHdMi9HJkfZPr1mCU=;
-	h=From:To:Cc:Subject:Date;
-	b=ULmnvtvXbDj0LU0MoJUty1kIDEUyjF0WebZxLtJn+xd9gC+G4AV1T8yB2y7XjVUuu
-	 XWdux3ddf/fbY7xt0Mg+0CzHB2V+Clyd0LoRGSBzLVN9IUDYVQenLTLjX6AaW9Fzm8
-	 9vxFRrY9XS3rpT2a6MS3jaEoPhDzQcoCJRv2fhTCKMnmG8dIktrYJVGGbpAg5rWrFW
-	 AJDn2Z4SMeVdmE9GIRekxICi6bLAnPHRqxbjNMlIpWwrmwm4IcQxSnKJhwTLUlXeDZ
-	 iuRZ8J+BdNu96UlmWePMjw2LKbMv1mCHZo7xnf+MJ65GcR420QMtngExqria/ahZhE
-	 7FWTdGHiTSjcw==
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: SoC Team <soc@lists.linux.dev>,
-	arm-scmi@vger.kernel.org,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm_scmi/ffa: Fixes for v7.3
-Date: Tue,  8 Sep 2026 21:12:14 +0100
-Message-ID: <20260908201216.2993544-1-sudeep.holla@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=k20260515; t=1788937973;
+	bh=ALD2G3jLNVJJ5O+pX/xMU4AjzIvGRp3/WG0X3qz69kw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hNfoo70wmZQoE4YWfUsqb7MPecMxoYTzIiGaRpy49sL4YXsjzvGy5U+/LLh3btFAm
+	 5iLumNWGlfevlvTpsSZNpVNRnJD2ul2afOaGCbP9Xr60IKjfRMR+SBCKXWQ3yc5EtL
+	 eHlx213LUo6gclqX72JlA4g1t9ufkrR05v/9Q5VCVnFjJV3mfT73ycmJagTHRYIGMG
+	 SQPxitTeSO7p9HMog77P4LY7TBhA25OZPip8+ck/j5wftgZamKqHiMkR991WXvIvUp
+	 hlwhYZwaCoi+o2c1yFHrl9Rw4/FlUk1gfHn5BwAa+pYjhaBd9ZLw8D0VN4ovdi6Yji
+	 rUg293B5gJwRw==
+Date: Wed, 9 Sep 2026 09:12:50 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Long Zhao <longzhao@ambarella.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>, Lee Jones <lee@kernel.org>, 
+	mfd@lists.linux.dev, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 06/13] dt-bindings: serial: snps-dw-apb-uart: add
+ ambarella,cv75-uart
+Message-ID: <20260909-objective-zircon-cat-e0ce6f@quoll>
+References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com>
+ <20260904-cv75-v5-v6-6-e918514cb3b1@ambarella.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260904-cv75-v5-v6-6-e918514cb3b1@ambarella.com>
 
-Hi ARM SoC Team,
+On Fri, Sep 04, 2026 at 02:38:13PM +0800, Long Zhao wrote:
+> Add the Ambarella CV75 compatible string to the Synopsys DW APB UART
+> binding. The block is Ambarella IP with a DW-like register map, so it
+> is described as a DW APB UART variant.
+> 
+> Signed-off-by: Long Zhao <longzhao@ambarella.com>
+> ---
+>  Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Please pull !
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-Regards,
-Sudeep
+Best regards,
+Krzysztof
 
--->8
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
-
-  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-ffa-fixes-7.3
-
-for you to fetch changes up to 8544e0da1a04c77b98e2e313a423a5c72e48ea32:
-
-  Merge branches 'for-next/ffa/fixes' and 'for-next/scmi/fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux (2026-09-08 21:04:42 +0100)
-
-----------------------------------------------------------------
-Arm firmware fixes for v7.3
-
-SCPI fixes address resource leaks and invalid firmware responses, while
-FF-A gains shutdown cleanup needed for normal kexec.
-
-- Release the device node reference acquired during SCPI domain lookup.
-- Validate SCPI DVFS OPP counts and indices returned by firmware to
-  prevent out-of-bounds accesses and invalid clock rates.
-- Register the SCPI cpufreq device only once across DVFS providers,
-  preserving the registered device pointer for cleanup and allowing
-  retries after registration failure.
-- Run FF-A teardown during orderly shutdown so notifications, partition
-  devices and RX/TX mappings are released before a replacement kernel
-  boots through normal kexec.
-
-Also includes replacing a literal platform device ID with
-PLATFORM_DEVID_NONE and correcting an SCMI comment typo.
-
-----------------------------------------------------------------
-Hemanth Selam (1):
-      firmware: arm_scmi: Fix typo "upto" in comment
-
-Sudeep Holla (2):
-      firmware: arm_ffa: Tear down driver during shutdown
-      Merge branches 'for-next/ffa/fixes' and 'for-next/scmi/fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux
-
-Xixin Liu (5):
-      firmware: arm_scpi: fix device_node leak in scpi_dev_domain_id
-      firmware: arm_scpi: reject DVFS OPP count above MAX_DVFS_OPPS
-      clk: scpi: bound-check DVFS index in scpi_dvfs_recalc_rate
-      clk: scpi: register scpi-cpufreq once and clear on failure
-      clk: scpi: use PLATFORM_DEVID_NONE for scpi-cpufreq
-
- drivers/clk/clk-scpi.c             | 11 ++++++++---
- drivers/firmware/arm_ffa/driver.c  |  1 +
- drivers/firmware/arm_scmi/driver.c |  2 +-
- drivers/firmware/arm_scpi.c        |  9 ++++++---
- 4 files changed, 16 insertions(+), 7 deletions(-)
