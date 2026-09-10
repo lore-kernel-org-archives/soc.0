@@ -1,72 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA5B3C1404;
-	Wed,  9 Sep 2026 07:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFE826A1AC;
+	Thu, 10 Sep 2026 08:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788937974; cv=none; b=EFwRkYQjfigDhba69F6edOycwBCSSV5sJ9O9UMHAaB9vHoAeYZbqV2Hq5nN+Z2SYXGZSk/nMDeOyJux5I3BOWtxPjwW847sW/wGbU9LleOaenzrpvFU+rr292faQA/IhMwwQOq/nSxWyVli18js7LD2GSp8dTexqGCCO042tjcM=
+	t=1789029204; cv=none; b=nRrYXbvdpVcdRPqGdeL6bVw74kgVmQALOuRhQASfSmduwa9yMDO8tDEyT5BRdlMEoqzNvYid8AIViMBc2otH7tXF9sPHw+3Ud4nNgwa2aI4giegzetL1YOIiqU1iOnYVY8yrv5JdswXVX4onl5TaTkvv7UYMTFUwjiGbPBgkUBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788937974; c=relaxed/simple;
-	bh=hqeJ6JFtF61dco4k7fWQt98q1prPTuM8cmVS/Y2jvjg=;
+	s=arc-20240116; t=1789029204; c=relaxed/simple;
+	bh=crIMr6lHdYoc1yLpuiNmToTTcqtQKMa63bcOTy3RX10=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RkswOUCsbX4O/x6mJ4BGGPOaI42BL+y0iTU0dWeXjclYoIqBMk6yEBRTxTo3ownqW0N7vpeBJM5qo6DUrOLoe4zEAOAkyLC5bbaCYNFpv9cFDvQahl+LV+vMKYORfaY98IBqRM2JBFdJehdAckFBRJdMx9xD2msst2IKYrBB2uE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNfoo70w; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=AVd3sMBBK9Ux5+HIwgigXnChwdHyiN1xNeyd6mub5FTZWA5d7TQxV04xC/eTiI82cH50H62deyrY7aADzoxmuPAiR9oQ2pAfZ+I3yH7njQ2qPFhxecC3DqHo1ROuBbpNFdAfd/4Byk5Kk6U+hxWR1pCJUboHpCRF3cbsD49MuyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dLPFEk65; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNfoo70w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9514E1F00A3A;
-	Wed,  9 Sep 2026 07:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788937973;
-	bh=ALD2G3jLNVJJ5O+pX/xMU4AjzIvGRp3/WG0X3qz69kw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hNfoo70wmZQoE4YWfUsqb7MPecMxoYTzIiGaRpy49sL4YXsjzvGy5U+/LLh3btFAm
-	 5iLumNWGlfevlvTpsSZNpVNRnJD2ul2afOaGCbP9Xr60IKjfRMR+SBCKXWQ3yc5EtL
-	 eHlx213LUo6gclqX72JlA4g1t9ufkrR05v/9Q5VCVnFjJV3mfT73ycmJagTHRYIGMG
-	 SQPxitTeSO7p9HMog77P4LY7TBhA25OZPip8+ck/j5wftgZamKqHiMkR991WXvIvUp
-	 hlwhYZwaCoi+o2c1yFHrl9Rw4/FlUk1gfHn5BwAa+pYjhaBd9ZLw8D0VN4ovdi6Yji
-	 rUg293B5gJwRw==
-Date: Wed, 9 Sep 2026 09:12:50 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Long Zhao <longzhao@ambarella.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>, Lee Jones <lee@kernel.org>, 
-	mfd@lists.linux.dev, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 06/13] dt-bindings: serial: snps-dw-apb-uart: add
- ambarella,cv75-uart
-Message-ID: <20260909-objective-zircon-cat-e0ce6f@quoll>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dLPFEk65"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789029202; x=1820565202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=crIMr6lHdYoc1yLpuiNmToTTcqtQKMa63bcOTy3RX10=;
+  b=dLPFEk65TwI8ZckmhsqDH5yiQHKqrZBQnJWftGGf3lad2koznfB1bYco
+   myLvS1SdxxDBeulJeMXfgJVS4P3yIPjSKrXI/stfV1YJOZWaH/QMksiwa
+   IYXCI+QV0SFDtmuRF1s29EKzrJqRhia0BrMwfEmrE0Ugi/M9fvH9f/HMs
+   kbW+cyLzTOqEXa0fgN/hzKwoiDjQOWXPNOFa56XTKew/NoNibUu+IwWvP
+   i5hseDyYhU6gMRJJEZ09JYIK7UTUtvIC8rEM/fyFRHi0kjMg8Pv71yVQM
+   iJIX7TFDrD2CET9fNnq4hNbr1HZ1+KT0ZHollsYk2rxI+W+bo4TgilnaH
+   A==;
+X-CSE-ConnectionGUID: 5qbn0F95QjqAPoY/T5sHzQ==
+X-CSE-MsgGUID: EfDUtsLpTryniG0iDyb0rg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="106987302"
+X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
+   d="scan'208";a="106987302"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 01:33:21 -0700
+X-CSE-ConnectionGUID: fl6KbBSZRvekShUjRPDzhw==
+X-CSE-MsgGUID: xoSe0ZbyT8KlKM8Xu0u95g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
+   d="scan'208";a="267873193"
+Received: from ncintean-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.177])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 01:33:16 -0700
+Date: Thu, 10 Sep 2026 11:33:14 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: longzhao@ambarella.com
+Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>,
+	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 11/13] serial: 8250_dw: add Ambarella CV75 quirks
+Message-ID: <aqJrSnr0rwv4BOJ3@ashevche-desk.local>
 References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com>
- <20260904-cv75-v5-v6-6-e918514cb3b1@ambarella.com>
+ <20260904-cv75-v5-v6-11-e918514cb3b1@ambarella.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260904-cv75-v5-v6-6-e918514cb3b1@ambarella.com>
+In-Reply-To: <20260904-cv75-v5-v6-11-e918514cb3b1@ambarella.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Fri, Sep 04, 2026 at 02:38:13PM +0800, Long Zhao wrote:
-> Add the Ambarella CV75 compatible string to the Synopsys DW APB UART
-> binding. The block is Ambarella IP with a DW-like register map, so it
-> is described as a DW APB UART variant.
+On Fri, Sep 04, 2026 at 02:38:18PM +0800, Long Zhao via B4 Relay wrote:
+
+> The Ambarella CV75 UART is Ambarella IP, not a Synopsys DesignWare
+> licensed block. At the register level it is close enough to DW APB UART
+> that a full custom UART driver is unnecessary: reuse 8250_dw with a
+> small platform quirk.
 > 
-> Signed-off-by: Long Zhao <longzhao@ambarella.com>
-> ---
->  Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> Quirks:
+> - keep IER ETOI (bit 5) set for RX timeout behaviour
+> - skip set_rate; baud clock is managed outside the UART block
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Best regards,
-Krzysztof
+...
+
+> +static int dw8250_ier_mask_startup(struct uart_port *p)
+> +{
+> +	struct dw8250_data *d = to_dw8250_data(p->private_data);
+> +	struct uart_8250_port *up = up_to_u8250p(p);
+> +	int ret;
+> +
+> +	ret = serial8250_do_startup(p);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Ambarella keeps variant IER bits (e.g. ETOI) set for correct RX
+> +	 * timeout behaviour. Force them into the 8250 IER shadow so later
+> +	 * generic IER updates do not clear them.
+> +	 */
+
+Wondering if we should undo this in the port's .shutdown() callback.
+
+> +	up->ier |= d->pdata->ier_mask;
+> +	serial_port_out(p, UART_IER, up->ier);
+> +
+> +	return 0;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
