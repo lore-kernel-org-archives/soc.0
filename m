@@ -1,87 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFE826A1AC;
-	Thu, 10 Sep 2026 08:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED9B3955C0;
+	Thu, 10 Sep 2026 08:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789029204; cv=none; b=nRrYXbvdpVcdRPqGdeL6bVw74kgVmQALOuRhQASfSmduwa9yMDO8tDEyT5BRdlMEoqzNvYid8AIViMBc2otH7tXF9sPHw+3Ud4nNgwa2aI4giegzetL1YOIiqU1iOnYVY8yrv5JdswXVX4onl5TaTkvv7UYMTFUwjiGbPBgkUBQ=
+	t=1789029899; cv=none; b=FACQRa/aKYy+LP6TSX/usuiC5J7tuzp/gDdF5Z80FUzLTwP+zQKFPTVCSm63Q01G7lKWpUc4BxJcHO48x6oaBfVMRv+8tC3ep1Po5yyQp/n/WONb0VSNN7klz3be8TIHQcufkRQqOeyLlNMeQxjKSZ/wXc4MAM8Y4VK2d2ADFf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789029204; c=relaxed/simple;
-	bh=crIMr6lHdYoc1yLpuiNmToTTcqtQKMa63bcOTy3RX10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AVd3sMBBK9Ux5+HIwgigXnChwdHyiN1xNeyd6mub5FTZWA5d7TQxV04xC/eTiI82cH50H62deyrY7aADzoxmuPAiR9oQ2pAfZ+I3yH7njQ2qPFhxecC3DqHo1ROuBbpNFdAfd/4Byk5Kk6U+hxWR1pCJUboHpCRF3cbsD49MuyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dLPFEk65; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1789029899; c=relaxed/simple;
+	bh=yHF/t7fo4m7uiGHEup1QALUVhVMyuRlqvqxKVfUDfnU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=q0PB/SVp52mMn6LO0Zr3a9HCh/NNyL8kC4RurtwaWyDwvpKuy+8+qrGKm6Qsmi0QFt246AhdjTLHujuUPNDlZmuGgzXOLdmNolYLW3m+A92Lc01yz0NDH33VX+wVWmUk7xkUr6bfB31UOhYU0wwk/tv0kPDR5aWOUULQ5nzasBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m8Plj2aV; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dLPFEk65"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m8Plj2aV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789029202; x=1820565202;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=crIMr6lHdYoc1yLpuiNmToTTcqtQKMa63bcOTy3RX10=;
-  b=dLPFEk65TwI8ZckmhsqDH5yiQHKqrZBQnJWftGGf3lad2koznfB1bYco
-   myLvS1SdxxDBeulJeMXfgJVS4P3yIPjSKrXI/stfV1YJOZWaH/QMksiwa
-   IYXCI+QV0SFDtmuRF1s29EKzrJqRhia0BrMwfEmrE0Ugi/M9fvH9f/HMs
-   kbW+cyLzTOqEXa0fgN/hzKwoiDjQOWXPNOFa56XTKew/NoNibUu+IwWvP
-   i5hseDyYhU6gMRJJEZ09JYIK7UTUtvIC8rEM/fyFRHi0kjMg8Pv71yVQM
-   iJIX7TFDrD2CET9fNnq4hNbr1HZ1+KT0ZHollsYk2rxI+W+bo4TgilnaH
+  t=1789029895; x=1820565895;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=yHF/t7fo4m7uiGHEup1QALUVhVMyuRlqvqxKVfUDfnU=;
+  b=m8Plj2aVGk00xLZl3Z7b/qY8ansYKVgze2AyUbsmSWwc4No+FveMaFIq
+   ZHBTSaDxLkA9U68bdGGIfs8nEG5XyMo0hbeZPAnthWAbXzNzrP+WXClDq
+   /92lOVQ5W8/kRhqpxu6ZDk+05OC0MFCPkf+Q5QmPUsmKdveAW8WGSElIL
+   yXbl4edXQOis9Ry7bSyialPln9B1QYsrBA4EilNIoWebqFRYAjP+uS6Hp
+   QB6zqT/lPnYLdvEKLzJstyS6Dh6aYNFaRmuQ4zRbpVY5FJ1GH1bAl7yxe
+   5BHWxkz8ak9sXOocMuPMgcLf7v9GeeQxxjCfaKrkIXyN6i2e5MsrArubO
    A==;
-X-CSE-ConnectionGUID: 5qbn0F95QjqAPoY/T5sHzQ==
-X-CSE-MsgGUID: EfDUtsLpTryniG0iDyb0rg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="106987302"
+X-CSE-ConnectionGUID: Zxi0x9ElRBWTMfXEQgLlxg==
+X-CSE-MsgGUID: V8mSdaroSxy4Ci4h0gbCMg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="100134959"
 X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
-   d="scan'208";a="106987302"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 01:33:21 -0700
-X-CSE-ConnectionGUID: fl6KbBSZRvekShUjRPDzhw==
-X-CSE-MsgGUID: xoSe0ZbyT8KlKM8Xu0u95g==
+   d="scan'208";a="100134959"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 01:44:54 -0700
+X-CSE-ConnectionGUID: 5c0auEYrQJ+J/JRK8/8NQA==
+X-CSE-MsgGUID: OIeno0AwRwaIfq4Il33w4w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
-   d="scan'208";a="267873193"
-Received: from ncintean-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.177])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 01:33:16 -0700
-Date: Thu, 10 Sep 2026 11:33:14 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: longzhao@ambarella.com
-Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>,
-	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+   d="scan'208";a="295059833"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.221])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 01:44:38 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 10 Sep 2026 11:44:35 +0300 (EEST)
+To: Long Zhao <longzhao@ambarella.com>
+cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+    Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
+    linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>, 
+    Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+    Conor Dooley <conor+dt@kernel.org>, 
+    Michael Turquette <mturquette@baylibre.com>, 
+    Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+    Bartosz Golaszewski <brgl@kernel.org>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    Jiri Slaby <jirislaby@kernel.org>, 
+    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+    Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+    Long Zhao <zl020895@163.com>, Lee Jones <lee@kernel.org>, 
+    mfd@lists.linux.dev, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+    linux-gpio@vger.kernel.org, linux-serial <linux-serial@vger.kernel.org>, 
+    LKML <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v6 11/13] serial: 8250_dw: add Ambarella CV75 quirks
-Message-ID: <aqJrSnr0rwv4BOJ3@ashevche-desk.local>
-References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com>
- <20260904-cv75-v5-v6-11-e918514cb3b1@ambarella.com>
+In-Reply-To: <20260904-cv75-v5-v6-11-e918514cb3b1@ambarella.com>
+Message-ID: <07cdbec9-49af-d500-d93d-56bfcef9f490@linux.intel.com>
+References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com> <20260904-cv75-v5-v6-11-e918514cb3b1@ambarella.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260904-cv75-v5-v6-11-e918514cb3b1@ambarella.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, Sep 04, 2026 at 02:38:18PM +0800, Long Zhao via B4 Relay wrote:
+On Fri, 4 Sep 2026, Long Zhao via B4 Relay wrote:
 
+> From: Long Zhao <longzhao@ambarella.com>
+> 
 > The Ambarella CV75 UART is Ambarella IP, not a Synopsys DesignWare
 > licensed block. At the register level it is close enough to DW APB UART
 > that a full custom UART driver is unnecessary: reuse 8250_dw with a
@@ -90,11 +86,38 @@ On Fri, Sep 04, 2026 at 02:38:18PM +0800, Long Zhao via B4 Relay wrote:
 > Quirks:
 > - keep IER ETOI (bit 5) set for RX timeout behaviour
 > - skip set_rate; baud clock is managed outside the UART block
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-...
-
+> 
+> Signed-off-by: Long Zhao <longzhao@ambarella.com>
+> ---
+>  drivers/tty/serial/8250/8250_dw.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+> index 5fba913f3301..b15de40d1e2a 100644
+> --- a/drivers/tty/serial/8250/8250_dw.c
+> +++ b/drivers/tty/serial/8250/8250_dw.c
+> @@ -43,6 +43,9 @@
+>  #define RZN1_UART_xDMACR_8_WORD_BURST	(2 << 1)
+>  #define RZN1_UART_xDMACR_BLK_SZ(x)	((x) << 3)
+>  
+> +/* Ambarella IER: receive timeout interrupt enable */
+> +#define AMBARELLA_UART_IER_ETOI		BIT(5)
+> +
+>  /* Quirks */
+>  #define DW_UART_QUIRK_OCTEON		BIT(0)
+>  #define DW_UART_QUIRK_ARMADA_38X	BIT(1)
+> @@ -60,6 +63,7 @@
+>  
+>  struct dw8250_platform_data {
+>  	u8 usr_reg;
+> +	u8 ier_mask;
+>  	u32 cpr_value;
+>  	unsigned int quirks;
+>  };
+> @@ -572,6 +576,27 @@ static void dw8250_prepare_rx_dma(struct uart_8250_port *p)
+>  	dw8250_writel_ext(up, RZN1_UART_RDMACR, val);
+>  }
+>  
 > +static int dw8250_ier_mask_startup(struct uart_port *p)
 > +{
 > +	struct dw8250_data *d = to_dw8250_data(p->private_data);
@@ -110,17 +133,50 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > +	 * timeout behaviour. Force them into the 8250 IER shadow so later
 > +	 * generic IER updates do not clear them.
 > +	 */
-
-Wondering if we should undo this in the port's .shutdown() callback.
-
 > +	up->ier |= d->pdata->ier_mask;
 > +	serial_port_out(p, UART_IER, up->ier);
-> +
-> +	return 0;
-> +}
+
+serial8250_do_startup() seems to defer IER update on purpose. Is it fine 
+to override that behavior here?
 
 -- 
-With Best Regards,
-Andy Shevchenko
+ i.
 
-
+> +	return 0;
+> +}
+> +
+>  static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
+>  {
+>  	unsigned int quirks = data->pdata->quirks;
+> @@ -606,6 +631,8 @@ static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
+>  		p->serial_in = dw8250_serial_in32;
+>  		data->uart_16550_compatible = true;
+>  	}
+> +	if (data->pdata->ier_mask)
+> +		p->startup = dw8250_ier_mask_startup;
+>  }
+>  
+>  static void dw8250_reset_control_assert(void *data)
+> @@ -879,6 +906,12 @@ static const struct dw8250_platform_data dw8250_intc10ee = {
+>  	.quirks = DW_UART_QUIRK_IER_KICK,
+>  };
+>  
+> +static const struct dw8250_platform_data dw8250_ambarella_cv75_data = {
+> +	.usr_reg = DW_UART_USR,
+> +	.ier_mask = AMBARELLA_UART_IER_ETOI,
+> +	.quirks = DW_UART_QUIRK_SKIP_SET_RATE,
+> +};
+> +
+>  static const struct dw8250_platform_data dw8250_ultrarisc_dp1000_data = {
+>  	.usr_reg = DW_UART_USR,
+>  	.cpr_value = FIELD_PREP_CONST(DW_UART_CPR_ABP_DATA_WIDTH, 2) |
+> @@ -889,6 +922,7 @@ static const struct dw8250_platform_data dw8250_ultrarisc_dp1000_data = {
+>  };
+>  
+>  static const struct of_device_id dw8250_of_match[] = {
+> +	{ .compatible = "ambarella,cv75-uart", .data = &dw8250_ambarella_cv75_data },
+>  	{ .compatible = "snps,dw-apb-uart", .data = &dw8250_dw_apb },
+>  	{ .compatible = "cavium,octeon-3860-uart", .data = &dw8250_octeon_3860_data },
+>  	{ .compatible = "marvell,armada-38x-uart", .data = &dw8250_armada_38x_data },
+> 
+> 
