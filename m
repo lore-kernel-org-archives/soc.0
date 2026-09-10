@@ -1,114 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07703D1AAA;
-	Thu, 10 Sep 2026 09:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADB1343D63;
+	Thu, 10 Sep 2026 09:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789032836; cv=none; b=t/aTBZyNBlohyRQMWz5w79I42D/y2TPdEZpHQizk2lMWvsXn+T/fSDsAyJJEamDkyZhBzYr5aHRG1qYuMKM0aUl34hbH96ibo/jpzjqbzTGZ6uhKgXeeIKlXvUij5MYaydjEPQdPSbqRZsyYX7iMW59m89WNFC58wNr1HxTB+fg=
+	t=1789033632; cv=none; b=ZSNOJAB1r1vDAOgEtESnQytda8VGWyVJiosfGTy4yCT97bt97qrGPDvqNtEyWfM3OcA5sJbVSTFKQOpff9ZdwM0nTHuiWYXHLTiyg7Xa91S0/3cPOekNGRpDci/WummAWLy7pasCumCJwnJhRCuAUQXddbmj3F5kHmbPIPjMBYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789032836; c=relaxed/simple;
-	bh=FjcDcqvU0235HfXhQqh3BNVRPpVFE3oJFo7uUnHGA88=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=j79tny9sOKOC8csXtjX0sySq32l3SvVfTxPP2J8rF3aKb+AT9LnQ2RpBxpKITfOVFIZGt1yohdSxiQjIKnGZTXrV5ILRpC3QlDyF+yX+QjyLmQhFhMKpsywznRLvASz96WP0L5ahXJ0VvBLGpgBnuTuQJc8TGg1LN9+3T36ZW9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j0Afn0Le; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1789033632; c=relaxed/simple;
+	bh=F5/vPpllGKppAQmvAZ51j2daco6+yuo7BVECN5KUbX0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=FqKUAnQFANwCsVrmyLSsOAPeC5YsGY3aFFxqZdnq4fb5+Z2BI/DzsWuABXnwnoYifQUhQcoLU78rd/V3hXCwrCpjS5AV+oIpriqcXvbfQPs0ifjDqNO9Vc/2wR17ySEX6IJG5ntwXEzSP6dxzICBHwnR3e5CmVt8lynRvI75Xys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=lqXmm7sM; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j0Afn0Le"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789032832; x=1820568832;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=FjcDcqvU0235HfXhQqh3BNVRPpVFE3oJFo7uUnHGA88=;
-  b=j0Afn0Lej0ydhpIAQ+NGGwmQv9OO/GXEe9LiG5Hf9MONOtGPXjrBp/Ul
-   AR+ILa2OtVrPWgMDZbF1eaBlJIcFSfQ40Xang+3kVVrwJpyzqgN6K2/Wu
-   zMTv7MMIT7AbD7wa0jHJZFdfoAhbiRHtuzLYSU4+Lr5EaDBPsIKXJrBIN
-   aGMDCrx4LP1VjOUgrPnC/7t/Y/yijND4hbKDW+RCbzcVnvOkhtaDA3v1+
-   gueI5GoRp8Co+8I5yh95b/RhAIAqjni6XdZKZg3maExzZUKyu7TFp6589
-   m3HrsnZX+8EBTHoMNOJUGMEyJci1vO2TiIuMg5PsrsTgB4jKSR9gc1x1f
-   Q==;
-X-CSE-ConnectionGUID: W7+EuS1oTR2TZc8f6YpZrQ==
-X-CSE-MsgGUID: vUmkur0qReWdVXBsJmk9Cg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="89509916"
-X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
-   d="scan'208";a="89509916"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 02:33:50 -0700
-X-CSE-ConnectionGUID: 3jn/nBKeSJK4lhAyBYfZeA==
-X-CSE-MsgGUID: IkjzOK7hQjS96BFYssBhzg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
-   d="scan'208";a="272089790"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.221])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 02:33:42 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 10 Sep 2026 12:33:38 +0300 (EEST)
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc: zl020895 <zl020895@163.com>, longzhao@ambarella.com, 
-    Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
-    Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
-    linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>, 
-    Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-    Conor Dooley <conor+dt@kernel.org>, 
-    Michael Turquette <mturquette@baylibre.com>, 
-    Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>, 
-    Bartosz Golaszewski <brgl@kernel.org>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Jiri Slaby <jirislaby@kernel.org>, 
-    Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-    Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, 
-    devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
-    linux-gpio@vger.kernel.org, linux-serial <linux-serial@vger.kernel.org>, 
-    LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Re: [PATCH v6 11/13] serial: 8250_dw: add Ambarella CV75
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lqXmm7sM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=F5/vPpllGKppAQmvAZ51j2daco6+yuo7BVECN5KUbX0=; b=l
+	qXmm7sMACXKuGTYrhuNCWfmPg5VEqhYXjr3OUG/evdiii5qKdz1WBt9cWRK4AIyR
+	oOrGDa7nYpOkYEna1BshJ0UY8tk5Wjp5lZbAwr0uJOSm9quHSnEItNUmyjrM/biC
+	LLq2WOZewwsIWu8Riybaa3g98vnHpzOPIGS9fsrNxk=
+Date: Thu, 10 Sep 2026 17:45:36 +0800 (CST)
+From: zl020895  <zl020895@163.com>
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+	longzhao@ambarella.com, "Arnd Bergmann" <arnd@arndb.de>,
+	"Krzysztof Kozlowski" <krzk@kernel.org>,
+	"Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	"Rob Herring" <robh@kernel.org>,
+	"Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+	"Conor Dooley" <conor+dt@kernel.org>,
+	"Michael Turquette" <mturquette@baylibre.com>,
+	"Stephen Boyd" <sboyd@kernel.org>,
+	"Linus Walleij" <linusw@kernel.org>,
+	"Bartosz Golaszewski" <brgl@kernel.org>,
+	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+	"Jiri Slaby" <jirislaby@kernel.org>,
+	"Catalin Marinas" <catalin.marinas@arm.com>,
+	"Will Deacon" <will@kernel.org>, "Lee Jones" <lee@kernel.org>,
+	mfd@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-serial <linux-serial@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: Re:Re: Re: [PATCH v6 11/13] serial: 8250_dw: add Ambarella CV75
  quirks
-In-Reply-To: <aqJ35vMBiBZo2iUE@ashevche-desk.local>
-Message-ID: <b199eb38-b1a2-4db6-81d8-37bab09a75b7@linux.intel.com>
-References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com> <20260904-cv75-v5-v6-11-e918514cb3b1@ambarella.com> <aqJrSnr0rwv4BOJ3@ashevche-desk.local> <122573f8.8232.1a08a9765fc.Coremail.zl020895@163.com> <aqJ35vMBiBZo2iUE@ashevche-desk.local>
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+In-Reply-To: <b199eb38-b1a2-4db6-81d8-37bab09a75b7@linux.intel.com>
+References: <20260904-cv75-v5-v6-0-e918514cb3b1@ambarella.com>
+ <20260904-cv75-v5-v6-11-e918514cb3b1@ambarella.com>
+ <aqJrSnr0rwv4BOJ3@ashevche-desk.local>
+ <122573f8.8232.1a08a9765fc.Coremail.zl020895@163.com>
+ <aqJ35vMBiBZo2iUE@ashevche-desk.local>
+ <b199eb38-b1a2-4db6-81d8-37bab09a75b7@linux.intel.com>
+X-NTES-SC: AL_Qu2TC/yYvE0o4CCfYekcn0wRhug/UMa4u/sm3YNXc8IFoD/G9CUlQFRoOmbk686TGjqAnROpYCR11ftiZ4N9xBLb9kFkJNpkbO2sqGB8hQ==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-ID: <55b27872.8ed9.1a08ab55a52.Coremail.zl020895@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:hCgvCgD3n9RAfKJqJMVDAA--.19073W
+X-CM-SenderInfo: d2oqjiqyzvqiywtou0bp/xtbCxgBy42qifEADiwAA3r
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-On Thu, 10 Sep 2026, Andy Shevchenko wrote:
-
-> On Thu, Sep 10, 2026 at 05:12:52PM +0800, zl020895 wrote:
-> 
-> > > Wondering if we should undo this in the port's .shutdown() callback.
-> > I saw the shutdown path already covers it: dw8250_shutdown() calls
-> > serial8250_do_shutdown(), which does
-> > 	up->ier = 0;
-> > 	serial_port_out(port, UART_IER, 0);
-> > so both the IER shadow and hardware IER are cleared, including ETOI.
-> 
-> Depending on the answer to Ilpo the enabling may need an updated comment
-> summarising the above.
-
-I'd prefer removing the entire "Force them ..." sentence, it feels really 
-basic detail about how ->ier works. I believe that would resolve your 
-concern if relates to what shutdown does for the flag (clears it while 
-the comment as is says nothing is supposed to clear it).
-
-> > At 2026-09-10 16:33:14, "Andy Shevchenko" <andriy.shevchenko@linux.intel.com> wrote:
-> > >On Fri, Sep 04, 2026 at 02:38:18PM +0800, Long Zhao via B4 Relay wrote:
-> 
-> ...
-> 
-> > >> +	/*
-> > >> +	 * Ambarella keeps variant IER bits (e.g. ETOI) set for correct RX
-> > >> +	 * timeout behaviour. Force them into the 8250 IER shadow so later
-> > >> +	 * generic IER updates do not clear them.
-> > >> +	 */
-> > >
-> > >Wondering if we should undo this in the port's .shutdown() callback.
-> 
-> 
-
--- 
- i.
-
+SGkgSWxwbywgQW5keSwKCkknbGwgZ28gd2l0aCB0aGUgc2ltcGxlIGNvbW1lbnQ6CgkvKgoJICog
+QW1iYXJlbGxhIGtlZXBzIHZhcmlhbnQgSUVSIGJpdHMgKGUuZy4gRVRPSSkgc2V0IGZvciBjb3Jy
+ZWN0IFJYCgkgKiB0aW1lb3V0IGJlaGF2aW91ci4KCSAqLwoJdXAtPmllciB8PSBkLT5wZGF0YS0+
+aWVyX21hc2s7CgpCZXN0IHJlZ2FyZHMsCkxvbmcgWmhhbwoKQXQgMjAyNi0wOS0xMCAxNzozMzoz
+OCwgIklscG8gSsOkcnZpbmVuIiA8aWxwby5qYXJ2aW5lbkBsaW51eC5pbnRlbC5jb20+IHdyb3Rl
+Ogo+T24gVGh1LCAxMCBTZXAgMjAyNiwgQW5keSBTaGV2Y2hlbmtvIHdyb3RlOgo+Cj4+IE9uIFRo
+dSwgU2VwIDEwLCAyMDI2IGF0IDA1OjEyOjUyUE0gKzA4MDAsIHpsMDIwODk1IHdyb3RlOgo+PiAK
+Pj4gPiA+IFdvbmRlcmluZyBpZiB3ZSBzaG91bGQgdW5kbyB0aGlzIGluIHRoZSBwb3J0J3MgLnNo
+dXRkb3duKCkgY2FsbGJhY2suCj4+ID4gSSBzYXcgdGhlIHNodXRkb3duIHBhdGggYWxyZWFkeSBj
+b3ZlcnMgaXQ6IGR3ODI1MF9zaHV0ZG93bigpIGNhbGxzCj4+ID4gc2VyaWFsODI1MF9kb19zaHV0
+ZG93bigpLCB3aGljaCBkb2VzCj4+ID4gCXVwLT5pZXIgPSAwOwo+PiA+IAlzZXJpYWxfcG9ydF9v
+dXQocG9ydCwgVUFSVF9JRVIsIDApOwo+PiA+IHNvIGJvdGggdGhlIElFUiBzaGFkb3cgYW5kIGhh
+cmR3YXJlIElFUiBhcmUgY2xlYXJlZCwgaW5jbHVkaW5nIEVUT0kuCj4+IAo+PiBEZXBlbmRpbmcg
+b24gdGhlIGFuc3dlciB0byBJbHBvIHRoZSBlbmFibGluZyBtYXkgbmVlZCBhbiB1cGRhdGVkIGNv
+bW1lbnQKPj4gc3VtbWFyaXNpbmcgdGhlIGFib3ZlLgo+Cj5JJ2QgcHJlZmVyIHJlbW92aW5nIHRo
+ZSBlbnRpcmUgIkZvcmNlIHRoZW0gLi4uIiBzZW50ZW5jZSwgaXQgZmVlbHMgcmVhbGx5IAo+YmFz
+aWMgZGV0YWlsIGFib3V0IGhvdyAtPmllciB3b3Jrcy4gSSBiZWxpZXZlIHRoYXQgd291bGQgcmVz
+b2x2ZSB5b3VyIAo+Y29uY2VybiBpZiByZWxhdGVzIHRvIHdoYXQgc2h1dGRvd24gZG9lcyBmb3Ig
+dGhlIGZsYWcgKGNsZWFycyBpdCB3aGlsZSAKPnRoZSBjb21tZW50IGFzIGlzIHNheXMgbm90aGlu
+ZyBpcyBzdXBwb3NlZCB0byBjbGVhciBpdCkuCj4KPj4gPiBBdCAyMDI2LTA5LTEwIDE2OjMzOjE0
+LCAiQW5keSBTaGV2Y2hlbmtvIiA8YW5kcml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29tPiB3
+cm90ZToKPj4gPiA+T24gRnJpLCBTZXAgMDQsIDIwMjYgYXQgMDI6Mzg6MThQTSArMDgwMCwgTG9u
+ZyBaaGFvIHZpYSBCNCBSZWxheSB3cm90ZToKPj4gCj4+IC4uLgo+PiAKPj4gPiA+PiArCS8qCj4+
+ID4gPj4gKwkgKiBBbWJhcmVsbGEga2VlcHMgdmFyaWFudCBJRVIgYml0cyAoZS5nLiBFVE9JKSBz
+ZXQgZm9yIGNvcnJlY3QgUlgKPj4gPiA+PiArCSAqIHRpbWVvdXQgYmVoYXZpb3VyLiBGb3JjZSB0
+aGVtIGludG8gdGhlIDgyNTAgSUVSIHNoYWRvdyBzbyBsYXRlcgo+PiA+ID4+ICsJICogZ2VuZXJp
+YyBJRVIgdXBkYXRlcyBkbyBub3QgY2xlYXIgdGhlbS4KPj4gPiA+PiArCSAqLwo+PiA+ID4KPj4g
+PiA+V29uZGVyaW5nIGlmIHdlIHNob3VsZCB1bmRvIHRoaXMgaW4gdGhlIHBvcnQncyAuc2h1dGRv
+d24oKSBjYWxsYmFjay4KPj4gCj4+IAo+Cj4tLSAKPiBpLgo=
