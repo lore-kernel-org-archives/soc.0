@@ -1,77 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3274A3F29
-	for <soc@lists.linux.dev>; Mon, 14 Sep 2026 15:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4A84825A1;
+	Mon, 14 Sep 2026 16:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789398693; cv=none; b=bTjROtv8nnZpkyYWL6m6bgxcvLElG5MMTkUzDTWuBfXCPyLZhzGnnjNm2UbWecfEdBgrs6+hXgx324C6J2WIbSz6ULqTZHJFTwr0+NXMUkTtatIvH8ZuriWVmSIwAvFckx4rgHNybGz23Y4lVHNIEjGL9ePw5x8ebwGKTY8XUfw=
+	t=1789403117; cv=none; b=cXEJhsxtiG0B2GjaLvidAQVRV7ycaJWz0wMH/PmyI04CBCu0RT7ib21uh3LjIqGqyPi3Cn9Wo4aA5/96CMimtVrqyaM7yCv/+XfuvxvkMpoyFSgpnvKX2yQAKIJ/ypv4/dcOtEYfyjL8QjN7fLAngLNwozlxpiMj5VL6f8DN26w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789398693; c=relaxed/simple;
-	bh=34S3fBQIPRcIJwjwZ2JdIREgOKyfYs12S1XwL8zG0aM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BrdJnFURp+N3ODXICSAT4Ep+QoajJP8y5XcOsZaS0oBmBgkjXMuKRgkqK9EJyaMEq0vApvfNi6nQCZyb5xIYOrHjMu7qFXtivn9S+pZdKtcfoLZdWrIX07+k2NP0dPCwqZhu/sIuT1IX/bFq7JxJAnRtW91/Ka2B0MMh3T1bS7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E+7MlJYI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789403117; c=relaxed/simple;
+	bh=k+yJoxs+iBvCbwqL5K3XwRqZSTMO/i8PBg/FaHyMurM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lJr5/ZmKo+AoUiNwfaonZ2wEEI7WrdxHYh+uWe36O424ybAMdcsxJ5UeU6lzATTE215Vwk3HcXXbnAzjzBHnd09/bbWqQc1RKCVCf9ymemMhrnLSixfVrPpTfVRYbUS7d0vCG6p5cNQPxSCrLMqkRXZ82YRkEmKAeO3+TTP3rFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RH3msWDJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E+7MlJYI"
-Received: by smtp.kernel.org (Postfix)
-	id 85EEE1F00899; Mon, 14 Sep 2026 15:11:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F8371F00898;
-	Mon, 14 Sep 2026 15:11:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RH3msWDJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0824B1F000FF;
+	Mon, 14 Sep 2026 16:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789398691;
-	bh=/KhDaaZpEPt7K8/3H9dMGqWfPfo0FihEgNW8llJtR60=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=E+7MlJYIw4ruWmghUVTzQvvLwyMNcm15Q8S1Uji4FPB7lUEjUvOynAh4lqKuyvEub
-	 Pz+Mm+Q9szNDkcmKaS3C8VUdQA1deV0O2Y84NpP+7bRxqfUngSF6YICjoGFjG3VsnV
-	 1CCGPlCwMJulzVG9xIlHMYvfFtm4YtSA/UjRGUG2lqsgA4zfapNHDwwOXZSNd0BsYl
-	 j866XRDmrPY8Vf4zkkjGtgd3RcsGhknVylD8DcIbm2OlCSfqwVCEeeZ34W9X48kgLq
-	 mYkEnXtsL3tg2Qaq02XZFM0ZzxT0YwxSTfoGaXn9Ma7ZKjD375QO1hoGcrpPLEO+1l
-	 CeqY+uKV7Kdng==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0B2E3924A6F;
-	Mon, 14 Sep 2026 15:10:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1789403116;
+	bh=gNZpslztfRyq0IuBIyy28yQuWa/X6C/kzRmauUlvwq8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RH3msWDJnWvZC9lFF5JmHHZ2usGXLXpnxpSzvREnCoAyqc6gO/lwfYDYzVgnikhlR
+	 IF93R+Qvms+GhuQdL5XB5/LhaGJFKpJGV3qAhSnAhN3dfJ0s9h9aBq3jtLJ47W8qym
+	 pn8xpfoL568BiBv+X/aNIj3IOqZUfsFGWbLO2DhEkqkUsAOrea7n6AB6oLghVItVe7
+	 sgWLnYk0dqf9XX2N8sZghBd6pRewxB6vIFJNha23F31DEsy4n6mE4Gv27xyBSxTKm+
+	 mX/gP43DGI5O3D8uFCB6+Y6WhdA6WFyGVUkt6DIAhj+qcXVZeurtdN5+WRr+0LfjK9
+	 O/mWOJN7CYqMA==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id 8C12F1AC52F1; Mon, 14 Sep 2026 17:25:10 +0100 (BST)
+Date: Mon, 14 Sep 2026 17:25:10 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, soc@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: Missing signoff in the arm-soc tree
+Message-ID: <aqgf5o_gSUQH1AF0@sirena.co.uk>
+References: <amY1zEUOGFe4Op6W@sirena.org.uk>
+ <fd352f58-8100-4b0f-ac8c-25b08d0e2886@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: socfpga: fix file access permission
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <178939862644.630437.5506877972481160356.git-patchwork-notify@kernel.org>
-Date: Mon, 14 Sep 2026 15:10:26 +0000
-References: <20260907162016.1148705-1-dinguyen@kernel.org>
-In-Reply-To: <20260907162016.1148705-1-dinguyen@kernel.org>
-To: Dinh Nguyen <dinguyen@kernel.org>
-Cc: soc@kernel.org
-
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Mon,  7 Sep 2026 11:20:16 -0500 you wrote:
-> The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
-> 
->   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_fix_for_v7.3
-> 
-> [...]
-
-Here is the summary with links:
-  - [GIT,PULL] arm64: dts: socfpga: fix file access permission
-    https://git.kernel.org/soc/soc/c/ebdad7d867a5
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="YwRVLTNIcQtjbjYP"
+Content-Disposition: inline
+In-Reply-To: <fd352f58-8100-4b0f-ac8c-25b08d0e2886@sirena.org.uk>
+X-Cookie: Not recommended for children.
 
 
+--YwRVLTNIcQtjbjYP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Aug 03, 2026 at 06:25:57PM +0100, Mark Brown wrote:
+> On Sun, Jul 26, 2026 at 05:29:00PM +0100, Mark Brown wrote:
+> > Commit
+> >=20
+> >   3edcea7f0413e ("Merge branch 'arm/fixes' into for-next")
+> >=20
+> > is missing a Signed-off-by from its committer (and also isn't showing up
+> > as a merge).
+>=20
+> This issue (and the matching author signoff) is still present today.
+
+These issues are *still* present today.  It's making noise whenever I
+check -next for ongoing issues, it'd be good if the branch could be
+rebuilt.
+
+--YwRVLTNIcQtjbjYP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqoH+MACgkQJNaLcl1U
+h9DbHgf+KI2TYo2uxEm3AJvMUpcLZnjvmzrW2Hn/Hl9D5/2yEO2vd7lVVpuPfNsN
+l2bS0mLRsnXbLN7JN+zmsCDv1ZuMbvdxtLoyVn4jxIIkjMYHtGAbqSkI43s4GgR/
+XgayR+izqNzT+EV99JFtRPeh9GWUKOpxOyYUFgXvPyNb8k3FucK4vCjKWQ+quivO
+joWunHmuPzFOQtkr1u+/offVGkd1ycT3IiYif9q4ZbkMuvbczPJqEAkyyC2hjWNE
+6OJRq7Qkt5hk4Orwc+rlyV9V6TZj0vaXKIDTKlWsN7+6LHvuvK+GiFc45YZMVnFg
+LY5LomMB5NPzCx2EcPmaxFz96zdsgA==
+=QAk7
+-----END PGP SIGNATURE-----
+
+--YwRVLTNIcQtjbjYP--
