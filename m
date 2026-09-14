@@ -1,119 +1,106 @@
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB82C4915A2
-	for <soc@lists.linux.dev>; Mon, 14 Sep 2026 19:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21863B0581;
+	Mon, 14 Sep 2026 23:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789415623; cv=none; b=iwUk6ogpKTG4/CvQ9uu6lKflWLbX1DNygu27kpQDr5eFDFWrch3oBDb8gyc/1Yf3nrO2wGxSz6QszvNg9+ui90OYdDTh81wcY8JJ5xMfrslcgiIideRu8H7E1T8UMZYkELNOxKE6eKRItpxN8frdgd2AfiXmivuFOSnrpg6UFHw=
+	t=1789427301; cv=none; b=aVxDyLleDwJtJas3W/y4FhclA0Dhm9AqIXaYxGsEowFKrlwaDO5RcCjsl3K0SParlJ8cszraaR8ynobXFjrEN5vMYzgWjyISZdZ0qfjt/q95vTJBUpiZE9M1fuNvHfOtc+1dHWAnz1pp34hNpaE7iTQ1olgYR1LK8C6NLrBlCKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789415623; c=relaxed/simple;
-	bh=E2pDS5GaSNUQXDT27nNSw2vgkOr9Ijzb9Rp2UNGR1Ds=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=P6H0uOgAUMyZpJifuNUMed1eqFMBvYD13dgj5BfRbZ4n6Z3TbUrTBtG8QdYJp7s+1EZ99rAR//h0+F+aUxwoyftZQglgJKVxcT/d6v1CMRveZPtMWKB0esuhlichhsdUtQaYCOCIIwIT0oqDBnHK5h5Z1WIqkI7LA1upzd1FOWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SXx7rO6q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=X1NEAzsG; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1789427301; c=relaxed/simple;
+	bh=0kd6U470hburP/a7YVVUprf1DLkWd0LKevkn3J3aRxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tkQwRkfUkpwBE76ASKWmj7UsteDUlpxMxpBpxHNXOlqCXBktoIuUtwfsTJP02dI6od9m0M6daVL03ichjDgRAGanAmW5cz6FdRg6IJFhfSPvGhzIvR6xry88XtKZwLrsnqrmCsFPNdx5WzGk6xg83W1P1TPAGHVp0SrtwR6QQQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IIL3Tx/1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SXx7rO6q";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="X1NEAzsG"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.stl.internal (Postfix) with ESMTP id 080071D00086;
-	Mon, 14 Sep 2026 15:53:37 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Mon, 14 Sep 2026 15:53:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1789415617;
-	 x=1789502017; bh=opaCvCnTuRSbqkN6v+2aHUWMlgp5xCP12xi1paNZ7Uc=; b=
-	SXx7rO6qIQgZ8O0wzKw8K9aaUJzr0t0oZlP92QFKdwqH3sy4D66HQ5imYyVjHimY
-	4Q5NjIAlfuADMRh2NQgR2csXnodBozzW0fTiaCLDIioVEYt0AynT2QvdNQq97AQR
-	y0Fqw4ykudDpB2jOOm/V1N6yVJOnWAiOqGK/XIMh9UUz+1EAXuyW9v03jq4XgAP2
-	2mHLYxRRGQ6FUtBt0LyVH51Z/qUhqj39vHKlxC5B7YOLk75UVrBPAxOIs+nntDBs
-	yPIiJ+Tp1tHR0N9v9NAq8cQCqeoI0v3PVlyOkf3YKoXLiGCfViVquCUeZtF2MeTg
-	SnYRdmgdCLB/bAAivP9mAw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789415617; x=
-	1789502017; bh=opaCvCnTuRSbqkN6v+2aHUWMlgp5xCP12xi1paNZ7Uc=; b=X
-	1NEAzsG1IAZML9OZDVCbJTAd6PZiIScmF6EQz6HoillENg5x9iKA5PA6e+tdk3Bp
-	PypF9f1EZcvBnWTdclhq8+hMC5rtFMrz5P55YboUD74+Dts/ZWZbghSrXr/6DGr9
-	sJy/ZeJw3Yg/UnkAN0KUvIyMSAy6M13rEQ3njzgcsaPCgZTEtXTrpY3R5hY2d4H1
-	yHRsrNqP87qcOIXEmi1ZzBFdrzlJ0EXacUnBUUalwKvVeiVG27oNX8zTdVlYV+5G
-	BPeWDeVFPDAVKmV5Mub2cFtGdOe3sAibLjPgx0vv7otMZsLrepsonn6oX+niUPf4
-	exLakNAWHLwCmxMhJ3yAQ==
-X-ME-Sender: <xms:v1CoalVLJjEK375I8AcdnZVD6OC4H5j7V-eX8kfLza3iqkRtZodU7A>
-    <xme:v1CoagZF51gy7ynRbWZHjM4_cbvfzlRTOX3Ufyhx5H0lW2eAC7W9sRDxnpYMT7TjZ
-    EITYBhNXSKk7gf-EHLxGaKADUZCwhe04Pu6M76Fq5SAEKIo0SBmXfpW>
-X-ME-Proxy-Cause: dmFkZTFJURTY62Q7SjjrdQBiZ9cK/QsrasdOpZ0C4CYJUiQ8fvYo5xjoK5R5hMDCs5S+mQ
-    4mAz41kXkBUv1l6Ddaa2CyFUStIFEeH1kJgJXUZXCb/OB1VNX7p65ppX+f9DVlMONBQ+tu
-    flzVfJFJIHs740LfRcASx4VtYsjrCfL7Yl2YOLhpICiTIU08KSUD9RAKbSiL9fp/32SgGh
-    zL8SHSRsUNlTljWE6f7j1yPE5YJKIELrlXKP7RmGb7P/YaXFU6WwPdj7YOZvVlTjNslSVf
-    1jO4D+MTMvJbB1ZkG02tSEDwMweIH90UaaDct50l4nhV9wCsh1xG1hk0Zb2+II+9L0vufl
-    /hj0Qtgo1YMFrIf5mNeAH33MAuc4kuVjBL48lbyPzQb19vUkqkFHuhwPEW0et0VPrFaMYP
-    lt+eg6kbYVfci/rFwAh6Q435bhox3yfM+k3d3/jTl87/6UmEDI7gsu3slWu63QTCLUqz7q
-    2sNgGQ1lVHJihAlaKG75Vb0SiR2INSxfvffKh7MLcSm6qTsE1aQ7YFef7KZR3UOjfFAHXA
-    gLmHBrv6KVVDdSTHFydHLqzsfVRrLIEXmn9q/0ltU1HAvx4ZAUMQgfY7WJCm6FaVOvRuPI
-    BaIVzh0cMBzjPiaRTNsl+4dappa2Dvu8HCyCw6xjfju23e4Eznp2uABiRklA
-X-ME-Proxy: <xmx:wFCoanC0J5EtlPbP4_25RowBHhyM5I-veJHZduujJNKiIspCFs9sPw>
-    <xmx:wFCoakZacQzLrx6V3EqUzdeTs0SdXOM4s7_Kd6vzCW-XHks_MTbJSQ>
-    <xmx:wFCoaq7m-LKVRJOt8bawE0kMJeMaH7nnhhn6jMAFf0xtfLnN-D_G_w>
-    <xmx:wFCoala2Q-U8mB3lS6H1MDeuO6RvdOMLt3t4hPiMED5wX5DDI30XIA>
-    <xmx:wVCoajF7Z1GjnWQObrlfo8_TigsADRNglTK9FlQPS9NxekYjYlzzAZFt>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 6595732A0084; Mon, 14 Sep 2026 15:53:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IIL3Tx/1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957F91F000FF;
+	Mon, 14 Sep 2026 23:08:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789427299;
+	bh=+JwfP4y9dWX2umGppJpN343xctgJroMcZ6+wN0r1j4Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=IIL3Tx/1/cExYPHaIpyvy0J20exmoyCYxZzxIY4LpJA+2wv7mpvHrm+To0Wu6soa3
+	 LjLEeQVmzDiHS/nYbtWkAWfjfPwNbD7QumCG5aVX/tEH7wLHAeKWMvCmDnFm3JNVOr
+	 Ioq19vwmpwdeyWShySn0KEdelCgDpTPaqc+ZkoGX0hq7GDwwWpglahnDfsfn3Aq9xd
+	 mKNywz3Is8AOQQcrmLqzCE35WvjF+HCJQsYLRD+ciqwPqsWRQUGJYCyzcD/9kgoU/K
+	 BJf/rjNhu1Dl7x5Js38YAkbP8kkX7K4exLPUjdHrD8RnPgRgvpYQN95ALbShxHLp0e
+	 3Y02aqwuK4z+w==
+Received: by traversing.sirena.org.uk (Postfix, from userid 1000)
+	id A238F101088E; Tue, 15 Sep 2026 00:08:16 +0100 (BST)
+Date: Tue, 15 Sep 2026 00:08:16 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-next <linux-next@vger.kernel.org>
+Subject: Re: Missing signoff in the arm-soc tree
+Message-ID: <aqh-YO7Rqki2ehLb@sirena.org.uk>
+References: <amY1zEUOGFe4Op6W@sirena.org.uk>
+ <fd352f58-8100-4b0f-ac8c-25b08d0e2886@sirena.org.uk>
+ <aqgf5o_gSUQH1AF0@sirena.co.uk>
+ <b6ca14bc-a4f6-477b-bbb0-da12d27b61af@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AmIRJ1Q9JmRB
-Date: Mon, 14 Sep 2026 21:53:00 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mark Brown" <broonie@kernel.org>, soc@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org, linux-next <linux-next@vger.kernel.org>
-Message-Id: <b6ca14bc-a4f6-477b-bbb0-da12d27b61af@app.fastmail.com>
-In-Reply-To: <aqgf5o_gSUQH1AF0@sirena.co.uk>
-References: <amY1zEUOGFe4Op6W@sirena.org.uk>
- <fd352f58-8100-4b0f-ac8c-25b08d0e2886@sirena.org.uk>
- <aqgf5o_gSUQH1AF0@sirena.co.uk>
-Subject: Re: Missing signoff in the arm-soc tree
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Xp+J77/ykdLTk1ES"
+Content-Disposition: inline
+In-Reply-To: <b6ca14bc-a4f6-477b-bbb0-da12d27b61af@app.fastmail.com>
+X-Cookie: Orders subject to approval.
 
-On Mon, Sep 14, 2026, at 18:25, Mark Brown wrote:
-> On Mon, Aug 03, 2026 at 06:25:57PM +0100, Mark Brown wrote:
->> On Sun, Jul 26, 2026 at 05:29:00PM +0100, Mark Brown wrote:
->> > Commit
->> > 
->> >   3edcea7f0413e ("Merge branch 'arm/fixes' into for-next")
->> > 
->> > is missing a Signed-off-by from its committer (and also isn't showing up
->> > as a merge).
->> 
->> This issue (and the matching author signoff) is still present today.
->
-> These issues are *still* present today.  It's making noise whenever I
-> check -next for ongoing issues, it'd be good if the branch could be
-> rebuilt.
 
-I assume you hit this on the branch I pushed out earlier today, which
-started fresh from 7.3 with just a single merge. I've amended that
-commit with an S-o-b now, but I'm not sure if that is what you are
-asking.
+--Xp+J77/ykdLTk1ES
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When you write "and also isn't showing up as a merge", do you mean
-your script has an exception for merge commits to not need S-o-b
-but fails to detect this one as a merge? I see that about half the
-merges in linux-next (including your daily merges) are not signed off,
-so I'm not sure if we are all doing this wrong the same way, or if
-there is a different problem with the soc tree.
+On Mon, Sep 14, 2026 at 09:53:00PM +0200, Arnd Bergmann wrote:
+> On Mon, Sep 14, 2026, at 18:25, Mark Brown wrote:
 
-      Arnd
+> > These issues are *still* present today.  It's making noise whenever I
+> > check -next for ongoing issues, it'd be good if the branch could be
+> > rebuilt.
+
+> I assume you hit this on the branch I pushed out earlier today, which
+> started fresh from 7.3 with just a single merge. I've amended that
+> commit with an S-o-b now, but I'm not sure if that is what you are
+> asking.
+
+It is in whatever was there when I fetched the trees this morning which
+was some time before I finished the merge and ran the summary stuff so
+you may have updated it later.
+
+> When you write "and also isn't showing up as a merge", do you mean
+> your script has an exception for merge commits to not need S-o-b
+> but fails to detect this one as a merge? I see that about half the
+> merges in linux-next (including your daily merges) are not signed off,
+> so I'm not sure if we are all doing this wrong the same way, or if
+> there is a different problem with the soc tree.
+
+As indicated in the original mail and repeated followups the relevant
+commit is 3edcea7f0413e84863300998ad3838eb87e6fca7 which looks from the
+changelog like it was originally a merge but is not described as such in
+the git metadata, it is just an apparently empty commit with a single
+parent with a suspiciously similar changelog.  My theory was that
+something had gone wrong with a rebase or scripting.  I only check for
+signoff problems on non-merge commits, merge commits are ignored since
+they are not normally signed off.
+
+--Xp+J77/ykdLTk1ES
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqofl8ACgkQJNaLcl1U
+h9BpfAf+N0qMWHybnYPoX5MY02Np8i3KeJiufCQkrsdAk1GlrPftgl0FRn5FQshY
+oIjF2tOO8itqr5QtqXL9SI2ejS18hbUxWV+/49BID35uQj+2AAtsR1yGz7dr06qR
+W+AfvI0iqkEcWCNpu7q3MmZ1kUp1tRlXF3V80/FgZvfGulab//4sYM7/3DUDBcRW
+kVWsprw96kUJbCQ2wLyVFd4VbroSCJquHuO3hPsvUIdwnNU81NK3j/loPE0zQGfW
+I3zPc2BVCOhIHNPaGNb/vTAvnJABHphFehlVZXzaUQASV6v7RS+vSXY+C5uNF1Z4
+Z5lhHKLX0fjN2WzYizS4jaDv9N0FjA==
+=Zbn3
+-----END PGP SIGNATURE-----
+
+--Xp+J77/ykdLTk1ES--
