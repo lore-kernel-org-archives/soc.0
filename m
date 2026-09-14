@@ -1,37 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C33B3EC808
-	for <soc@lists.linux.dev>; Mon, 14 Sep 2026 14:09:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66694756D3;
+	Mon, 14 Sep 2026 14:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789394948; cv=none; b=ZSERveQjtVMiV9rsdXw77JHFxnxO0uD5+py7sGsxp4hffMLswnMR1QWI2RHq0s5giiBV/K/FDrSFXODaUnIcY/ZdE2ERfmj6jDzZqgi3MeI9lsfejL/hsk/vtilDfSbXpyJA0EUnY3cq+Orsmz+iBnNRjp1witPA1Kt9ULsMqLg=
+	t=1789394949; cv=none; b=O6grwVZ4ViKGYphRtVZlODxVqG615VvOwKs4Z5bL92lzgByJydsJ+RgNJ6rDDw/C0eNm9iKkFacUgy1M004pwFDtol6mmedGfWneObAYZzwbvQYgeQjhG46cP4ognw3CJQkdoZUfgCSmxWkxsKcpGSWduxo8Yy4fR2EIEF3j7y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789394948; c=relaxed/simple;
-	bh=SDlwZczGEoVSDdgAwWgm72t9tUC2amJSluZaPGFg/LQ=;
+	s=arc-20240116; t=1789394949; c=relaxed/simple;
+	bh=ZnTwSaVfM3mWeMjUtbyK0oHWVF12+iCjEfUVFLeKIzo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pG2NJTlXGXWV9WQkTZAttcch5XutVUrt39S6SRFt43k8IW5hZ5wLYrF/6qZpZDmOYJh6v2bJheVcYjiT4eqlq1/kv4OG6sjOyYfaBefxxiPDDeE4YQBW4CASC8OLL/7hHSWm5FOa3cgF8591OQoHKjqZC7xeoRo/gUiy6Rvau8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3dDWJ8g; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=cTtikzHdsQ7ExlFo+JjsHR+Q4SqnAmmPnQEhrIsUCySstbcdAv9/SJmNKlicbAkLimvPA2qP/d3NdfFzMo+iFE5bXZcCMBz3Qji6qzAQoEjBSwt0Ak/RIlwSzD/vhtgFGbzVgv0Dr5z3Gkn9a6CZGhWkr09IX/AKmfHnVmQpVTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nyfEdouN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3dDWJ8g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0191D1F00893;
-	Mon, 14 Sep 2026 14:09:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nyfEdouN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7DF1F0089B;
+	Mon, 14 Sep 2026 14:09:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789394945;
-	bh=WCLLZ89a7TBbsVin84dQ+duiXZIhrRmby328SRrFUN0=;
+	s=k20260515; t=1789394944;
+	bh=42inLRz8gZhU+AxY5sJ0nlLEYyFSC3HrJiu1Lcb0MdA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=S3dDWJ8gRKpyUP8Qh/5VuPB7y0jOpQPEGzhmo7lNc9ahR4dweAJg1AT0vuo1hjgDK
-	 HU7j65QUam7j9GXjGDUrTW9qIcorzVID/BsKLsQ5hS9QB6j58uMtXdubdKC4Y+z7sW
-	 GIAigjNU6+WB8fjqqTNzCNpSQmtgYfSPSLUZnFrmiPwZg8MYtWgREJa5J6BjhVQR6t
-	 Wfi0rjxlUWMzbvi3uoVbEKHCq94GvSGo05CmJ9Imin8xilFuWO7DtzjLghrfbjSFrb
-	 pD54a/iBuEgdqshUuXLWQ1niDgf57wiVad5DMHFBf7K0/8+fK5cnLLK/aDljJH+tdo
-	 kvZsaot6fRCbg==
+	b=nyfEdouNrEKZPBYL4MEv96BNZroQIcz+olKVxd2fLp+Di6OmsOBiJdevI7rJNHNmc
+	 /krcVaNjQwMgg9pF83+H9uPz//5Mav5YiC01d4tWryydFoG5cD+b3jfy1869lLr7ro
+	 k1OK7s2QRU6eJHuUa7+xz470S/2c6RxhByof1MDg3jqcXDyLz5wL7iOvGbzP+SJmgp
+	 rsTL8Y9OpCuYWXAcdZKz+mQiibkNoLIsKHYjNSqyv0zhV9ld/r5Ns9al/pBQWawvey
+	 zMEr+7AyMy23w/ATfYhGMnYtN53XceVapUfxFClaZEWyFR31qC+FGLDsQZBiDiDWQu
+	 udGa+1rlNy+4A==
 From: Arnd Bergmann <arnd@kernel.org>
 To: soc@lists.linux.dev
-Cc: Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v2 08/14] ARM: versatile: remove Integrator/CM1136JF-S option
-Date: Mon, 14 Sep 2026 16:08:10 +0200
-Message-ID: <20260914140821.1805449-9-arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	imx@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	Frank Li <Frank.Li@nxp.com>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	Vladimir Zapolskiy <vz@mleia.com>
+Subject: [PATCH v2 07/14] ARM: imx: remove i.MX31 SoC support
+Date: Mon, 14 Sep 2026 16:08:09 +0200
+Message-ID: <20260914140821.1805449-8-arnd@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914140821.1805449-1-arnd@kernel.org>
 References: <20260914140821.1805449-1-arnd@kernel.org>
@@ -45,40 +56,939 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-This one is now the last user of the original revision of the ARM1136
-cpu, with both OMAP2 and i.MX31 gone. Since it was only intended as a
-reference implementation, there is no point in keeping this one either
-without the others.
+The Freescale i.MX31 was an early SoC based on the ARM1136r0 CPU core. It
+was used in the Bug Labs modular computer but ultimately much less
+popular than most other i.MX SoCs.
 
-The board support can still be built, but won't work with that particular
-core module any more.
+As the ARM1136r0 support is causing a lot of extra maintenance effort
+to keep alive and there are no known users, remove i.MX31 in order to
+allow removing support for that CPU core altogether.
 
+The related i.MX35 is based on a slightly newer ARM1136r1 CPU core that
+does not have this problem, so there is no reason to remove that.
+
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: imx@lists.linux.dev
+Cc: devicetree@vger.kernel.org
+Acked-by: Frank Li <Frank.Li@nxp.com>
+Acked-by: Daniel Baluta <daniel.baluta@nxp.com>
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-versatile/Kconfig | 10 ----------
- 1 file changed, 10 deletions(-)
+I have follow-up patches to remove the i.MX31 specific clk
+and hwrng drivers as well as the orphaned wm8350 driver.
+---
+ arch/arm/Kconfig.debug                   |   9 -
+ arch/arm/boot/dts/nxp/imx/Makefile       |   3 -
+ arch/arm/boot/dts/nxp/imx/imx31-bug.dts  |  22 --
+ arch/arm/boot/dts/nxp/imx/imx31-lite.dts | 178 -----------
+ arch/arm/boot/dts/nxp/imx/imx31.dtsi     | 371 -----------------------
+ arch/arm/configs/imx_v6_v7_defconfig     |   1 -
+ arch/arm/include/debug/imx-uart.h        |  10 -
+ arch/arm/mach-imx/Kconfig                |  11 -
+ arch/arm/mach-imx/Makefile               |   1 -
+ arch/arm/mach-imx/common.h               |   2 -
+ arch/arm/mach-imx/cpu-imx31.c            |  72 -----
+ arch/arm/mach-imx/mach-imx31.c           |  18 --
+ arch/arm/mach-imx/mm-imx3.c              |  44 ---
+ 13 files changed, 742 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/nxp/imx/imx31-bug.dts
+ delete mode 100644 arch/arm/boot/dts/nxp/imx/imx31-lite.dts
+ delete mode 100644 arch/arm/boot/dts/nxp/imx/imx31.dtsi
+ delete mode 100644 arch/arm/mach-imx/cpu-imx31.c
+ delete mode 100644 arch/arm/mach-imx/mach-imx31.c
 
-diff --git a/arch/arm/mach-versatile/Kconfig b/arch/arm/mach-versatile/Kconfig
-index 1ee9b6608d71..1bd83de55320 100644
---- a/arch/arm/mach-versatile/Kconfig
-+++ b/arch/arm/mach-versatile/Kconfig
-@@ -109,16 +109,6 @@ config INTEGRATOR_CM1026EJS
- 	depends on ARCH_MULTI_V5
- 	select CPU_ARM1026
+diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+index 237a2ea717ed..729f5184fba5 100644
+--- a/arch/arm/Kconfig.debug
++++ b/arch/arm/Kconfig.debug
+@@ -424,13 +424,6 @@ choice
+ 		  Say Y here if you want kernel low-level debugging support
+ 		  on i.MX28.
  
--config INTEGRATOR_CM1136JFS
--	bool "Integrator/CM1136JF-S core module (DEPRECATED)"
--	depends on ARCH_INTEGRATOR_AP
--	depends on ARCH_MULTI_V6
+-	config DEBUG_IMX31_UART
+-		bool "i.MX31 Debug UART"
+-		depends on SOC_IMX31
+-		help
+-		  Say Y here if you want kernel low-level debugging support
+-		  on i.MX31.
+-
+ 	config DEBUG_IMX35_UART
+ 		bool "i.MX35 Debug UART"
+ 		depends on SOC_IMX35
+@@ -1411,7 +1404,6 @@ config DEBUG_IMX_UART_PORT
+ 	depends on DEBUG_IMX1_UART || \
+ 		   DEBUG_IMX25_UART || \
+ 		   DEBUG_IMX27_UART || \
+-		   DEBUG_IMX31_UART || \
+ 		   DEBUG_IMX35_UART || \
+ 		   DEBUG_IMX50_UART || \
+ 		   DEBUG_IMX51_UART || \
+@@ -1468,7 +1460,6 @@ config DEBUG_LL_INCLUDE
+ 	default "debug/imx.S" if DEBUG_IMX1_UART || \
+ 				 DEBUG_IMX25_UART || \
+ 				 DEBUG_IMX27_UART || \
+-				 DEBUG_IMX31_UART || \
+ 				 DEBUG_IMX35_UART || \
+ 				 DEBUG_IMX50_UART || \
+ 				 DEBUG_IMX51_UART || \
+diff --git a/arch/arm/boot/dts/nxp/imx/Makefile b/arch/arm/boot/dts/nxp/imx/Makefile
+index 1a2539fa19b4..e0747cb6e772 100644
+--- a/arch/arm/boot/dts/nxp/imx/Makefile
++++ b/arch/arm/boot/dts/nxp/imx/Makefile
+@@ -16,9 +16,6 @@ dtb-$(CONFIG_SOC_IMX27) += \
+ 	imx27-pdk.dtb \
+ 	imx27-phytec-phycore-rdk.dtb \
+ 	imx27-phytec-phycard-s-rdk.dtb
+-dtb-$(CONFIG_SOC_IMX31) += \
+-	imx31-bug.dtb \
+-	imx31-lite.dtb
+ dtb-$(CONFIG_SOC_IMX35) += \
+ 	imx35-eukrea-mbimxsd35-baseboard.dtb \
+ 	imx35-pdk.dtb
+diff --git a/arch/arm/boot/dts/nxp/imx/imx31-bug.dts b/arch/arm/boot/dts/nxp/imx/imx31-bug.dts
+deleted file mode 100644
+index d87eee3f9b3c..000000000000
+--- a/arch/arm/boot/dts/nxp/imx/imx31-bug.dts
++++ /dev/null
+@@ -1,22 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright 2012 Denis 'GNUtoo' Carikli <GNUtoo@no-log.org>
+- */
+-
+-/dts-v1/;
+-#include "imx31.dtsi"
+-
+-/ {
+-	model = "Buglabs i.MX31 Bug 1.x";
+-	compatible = "buglabs,imx31-bug", "fsl,imx31";
+-
+-	memory@80000000 {
+-		device_type = "memory";
+-		reg = <0x80000000 0x8000000>; /* 128M */
+-	};
+-};
+-
+-&uart5 {
+-	uart-has-rtscts;
+-	status = "okay";
+-};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx31-lite.dts b/arch/arm/boot/dts/nxp/imx/imx31-lite.dts
+deleted file mode 100644
+index 630f8fa69ba8..000000000000
+--- a/arch/arm/boot/dts/nxp/imx/imx31-lite.dts
++++ /dev/null
+@@ -1,178 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-//
+-// Copyright (C) 2016-2018 Vladimir Zapolskiy <vz@mleia.com>
+-
+-/dts-v1/;
+-
+-#include "imx31.dtsi"
+-
+-#include <dt-bindings/gpio/gpio.h>
+-#include <dt-bindings/interrupt-controller/irq.h>
+-
+-/ {
+-	model = "LogicPD i.MX31 Lite";
+-	compatible = "logicpd,imx31-lite", "fsl,imx31";
+-
+-	chosen {
+-		stdout-path = &uart1;
+-	};
+-
+-	memory@80000000 {
+-		device_type = "memory";
+-		reg = <0x80000000 0x8000000>;
+-	};
+-
+-	leds {
+-		compatible = "gpio-leds";
+-
+-		led0 {
+-			gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
+-		};
+-
+-		led1 {
+-			gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
+-		};
+-	};
+-};
+-
+-&ata {
+-	status = "okay";
+-};
+-
+-&nfc {
+-	nand-bus-width = <8>;
+-	nand-ecc-mode = "hw";
+-	nand-on-flash-bbt;
+-	status = "okay";
+-};
+-
+-&sdhci1 {
+-	bus-width = <4>;
+-	cd-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+-	wp-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+-	status = "okay";
+-};
+-
+-&spi2 {
+-	status = "okay";
+-
+-	pmic@0 {
+-		compatible = "fsl,mc13783";
+-		reg = <0>;
+-		spi-cs-high;
+-		spi-max-frequency = <1000000>;
+-		interrupt-parent = <&gpio1>;
+-		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
+-
+-		fsl,mc13xxx-uses-adc;
+-		fsl,mc13xxx-uses-rtc;
+-
+-		regulators {
+-			sw1a {		/* QVCC */
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <1500000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			sw1b {		/* QVCC */
+-				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt = <1500000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			sw2a {		/* 1.8V_DDR, NVCC2, NVCC21 and NVCC22 */
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			sw2b {		/* NVCC10 */
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			violo {		/* NVCC1 and NVCC7 */
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			viohi {		/* VIOHI */
+-				regulator-min-microvolt = <2775000>;
+-				regulator-max-microvolt = <2775000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			vaudio {	/* VAUDIO */
+-				regulator-min-microvolt = <2775000>;
+-				regulator-max-microvolt = <2775000>;
+-			};
+-
+-			vcam {		/* NVCC4 */
+-				regulator-min-microvolt = <2800000>;
+-				regulator-max-microvolt = <2800000>;
+-			};
+-
+-			vgen {		/* NVCC5 / NVCC8 and NVCC6 / NVCC9 */
+-				regulator-min-microvolt = <2775000>;
+-				regulator-max-microvolt = <2775000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-
+-			vmmc2 {		/* NVCC3 */
+-				regulator-min-microvolt = <1600000>;
+-				regulator-max-microvolt = <3000000>;
+-				regulator-always-on;
+-				regulator-boot-on;
+-			};
+-		};
+-	};
+-};
+-
+-&uart1 {
+-	uart-has-rtscts;
+-	status = "okay";
+-};
+-
+-/* Routed to the extension board */
+-&uart2 {
+-	uart-has-rtscts;
+-	status = "okay";
+-};
+-
+-/* Routed to the extension board */
+-&uart3 {
+-	uart-has-rtscts;
+-	status = "okay";
+-};
+-
+-&weim {
+-	status = "okay";
+-
+-	flash@0,0 {
+-		compatible = "cfi-flash";
+-		reg = <0 0x0 0x200000>;
+-		bank-width = <2>;
+-		linux,mtd-name = "physmap-flash.0";
+-		fsl,weim-cs-timing = <0x0000cf03 0xa0330d01 0x00220800>;
+-	};
+-
+-	ethernet@4,0 {
+-		compatible = "smsc,lan9117", "smsc,lan9115";
+-		reg = <4 0x0 0x100>;
+-		interrupt-parent = <&gpio1>;
+-		interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
+-		phy-mode = "mii";
+-		reg-io-width = <2>;
+-		smsc,irq-push-pull;
+-		fsl,weim-cs-timing = <0x00008701 0x04000541 0x00010000>;
+-	};
+-};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx31.dtsi b/arch/arm/boot/dts/nxp/imx/imx31.dtsi
+deleted file mode 100644
+index c58f855ea851..000000000000
+--- a/arch/arm/boot/dts/nxp/imx/imx31.dtsi
++++ /dev/null
+@@ -1,371 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-//
+-// Copyright 2016-2018 Vladimir Zapolskiy <vz@mleia.com>
+-// Copyright 2012 Denis 'GNUtoo' Carikli <GNUtoo@no-log.org>
+-
+-/ {
+-	#address-cells = <1>;
+-	#size-cells = <1>;
+-	/*
+-	 * The decompressor and also some bootloaders rely on a
+-	 * pre-existing /chosen node to be available to insert the
+-	 * command line and merge other ATAGS info.
+-	 */
+-	chosen {};
+-
+-	aliases {
+-		gpio0 = &gpio1;
+-		gpio1 = &gpio2;
+-		gpio2 = &gpio3;
+-		i2c0 = &i2c1;
+-		i2c1 = &i2c2;
+-		i2c2 = &i2c3;
+-		serial0 = &uart1;
+-		serial1 = &uart2;
+-		serial2 = &uart3;
+-		serial3 = &uart4;
+-		serial4 = &uart5;
+-		spi0 = &spi1;
+-		spi1 = &spi2;
+-		spi2 = &spi3;
+-	};
+-
+-	cpus {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		cpu@0 {
+-			compatible = "arm,arm1136jf-s";
+-			device_type = "cpu";
+-			reg = <0>;
+-		};
+-	};
+-
+-	avic: interrupt-controller@68000000 {
+-		compatible = "fsl,imx31-avic", "fsl,avic";
+-		interrupt-controller;
+-		#interrupt-cells = <1>;
+-		reg = <0x68000000 0x100000>;
+-	};
+-
+-	soc: soc {
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		compatible = "simple-bus";
+-		interrupt-parent = <&avic>;
+-		ranges;
+-
+-		iram: sram@1fffc000 {
+-			compatible = "mmio-sram";
+-			reg = <0x1fffc000 0x4000>;
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			ranges = <0 0x1fffc000 0x4000>;
+-		};
+-
+-		aips1: bus@43f00000 { /* AIPS1 */
+-			compatible = "fsl,aips-bus", "simple-bus";
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			reg = <0x43f00000 0x100000>;
+-			ranges;
+-
+-			i2c1: i2c@43f80000 {
+-				compatible = "fsl,imx31-i2c", "fsl,imx21-i2c";
+-				reg = <0x43f80000 0x4000>;
+-				interrupts = <10>;
+-				clocks = <&clks 33>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				status = "disabled";
+-			};
+-
+-			i2c3: i2c@43f84000 {
+-				compatible = "fsl,imx31-i2c", "fsl,imx21-i2c";
+-				reg = <0x43f84000 0x4000>;
+-				interrupts = <3>;
+-				clocks = <&clks 35>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				status = "disabled";
+-			};
+-
+-			ata: ata@43f8c000 {
+-				compatible = "fsl,imx31-pata", "fsl,imx27-pata";
+-				reg = <0x43f8c000 0x4000>;
+-				interrupts = <15>;
+-				clocks = <&clks 26>;
+-				status = "disabled";
+-			};
+-
+-			uart1: serial@43f90000 {
+-				compatible = "fsl,imx31-uart", "fsl,imx21-uart";
+-				reg = <0x43f90000 0x4000>;
+-				interrupts = <45>;
+-				clocks = <&clks 10>, <&clks 30>;
+-				clock-names = "ipg", "per";
+-				status = "disabled";
+-			};
+-
+-			uart2: serial@43f94000 {
+-				compatible = "fsl,imx31-uart", "fsl,imx21-uart";
+-				reg = <0x43f94000 0x4000>;
+-				interrupts = <32>;
+-				clocks = <&clks 10>, <&clks 31>;
+-				clock-names = "ipg", "per";
+-				status = "disabled";
+-			};
+-
+-			i2c2: i2c@43f98000 {
+-				compatible = "fsl,imx31-i2c", "fsl,imx21-i2c";
+-				reg = <0x43f98000 0x4000>;
+-				interrupts = <4>;
+-				clocks = <&clks 34>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				status = "disabled";
+-			};
+-
+-			spi1: spi@43fa4000 {
+-				compatible = "fsl,imx31-cspi";
+-				reg = <0x43fa4000 0x4000>;
+-				interrupts = <14>;
+-				clocks = <&clks 10>, <&clks 53>;
+-				clock-names = "ipg", "per";
+-				dmas = <&sdma 8 8 0>, <&sdma 9 8 0>;
+-				dma-names = "rx", "tx";
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				status = "disabled";
+-			};
+-
+-			kpp: kpp@43fa8000 {
+-				compatible = "fsl,imx31-kpp", "fsl,imx21-kpp";
+-				reg = <0x43fa8000 0x4000>;
+-				interrupts = <24>;
+-				clocks = <&clks 46>;
+-				status = "disabled";
+-			};
+-
+-			uart4: serial@43fb0000 {
+-				compatible = "fsl,imx31-uart", "fsl,imx21-uart";
+-				reg = <0x43fb0000 0x4000>;
+-				clocks = <&clks 10>, <&clks 49>;
+-				clock-names = "ipg", "per";
+-				interrupts = <46>;
+-				status = "disabled";
+-			};
+-
+-			uart5: serial@43fb4000 {
+-				compatible = "fsl,imx31-uart", "fsl,imx21-uart";
+-				reg = <0x43fb4000 0x4000>;
+-				interrupts = <47>;
+-				clocks = <&clks 10>, <&clks 50>;
+-				clock-names = "ipg", "per";
+-				status = "disabled";
+-			};
+-		};
+-
+-		spba-bus@50000000 {
+-			compatible = "fsl,spba-bus", "simple-bus";
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			reg = <0x50000000 0x100000>;
+-			ranges;
+-
+-			sdhci1: mmc@50004000 {
+-				compatible = "fsl,imx31-mmc";
+-				reg = <0x50004000 0x4000>;
+-				interrupts = <9>;
+-				clocks = <&clks 10>, <&clks 20>;
+-				clock-names = "ipg", "per";
+-				dmas = <&sdma 20 3 0>;
+-				dma-names = "rx-tx";
+-				status = "disabled";
+-			};
+-
+-			sdhci2: mmc@50008000 {
+-				compatible = "fsl,imx31-mmc";
+-				reg = <0x50008000 0x4000>;
+-				interrupts = <8>;
+-				clocks = <&clks 10>, <&clks 21>;
+-				clock-names = "ipg", "per";
+-				dmas = <&sdma 21 3 0>;
+-				dma-names = "rx-tx";
+-				status = "disabled";
+-			};
+-
+-			uart3: serial@5000c000 {
+-				compatible = "fsl,imx31-uart", "fsl,imx21-uart";
+-				reg = <0x5000c000 0x4000>;
+-				interrupts = <18>;
+-				clocks = <&clks 10>, <&clks 48>;
+-				clock-names = "ipg", "per";
+-				status = "disabled";
+-			};
+-
+-			spi2: spi@50010000 {
+-				compatible = "fsl,imx31-cspi";
+-				reg = <0x50010000 0x4000>;
+-				interrupts = <13>;
+-				clocks = <&clks 10>, <&clks 54>;
+-				clock-names = "ipg", "per";
+-				dmas = <&sdma 6 8 0>, <&sdma 7 8 0>;
+-				dma-names = "rx", "tx";
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				status = "disabled";
+-			};
+-
+-			iim: efuse@5001c000 {
+-				compatible = "fsl,imx31-iim";
+-				reg = <0x5001c000 0x1000>;
+-				interrupts = <19>;
+-				clocks = <&clks 25>;
+-			};
+-		};
+-
+-		bus@53f00000 { /* AIPS2 */
+-			compatible = "fsl,aips-bus", "simple-bus";
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			reg = <0x53f00000 0x100000>;
+-			ranges;
+-
+-			clks: ccm@53f80000 {
+-				compatible = "fsl,imx31-ccm";
+-				reg = <0x53f80000 0x4000>;
+-				interrupts = <31>, <53>;
+-				#clock-cells = <1>;
+-			};
+-
+-			spi3: spi@53f84000 {
+-				compatible = "fsl,imx31-cspi";
+-				reg = <0x53f84000 0x4000>;
+-				interrupts = <17>;
+-				clocks = <&clks 10>, <&clks 28>;
+-				clock-names = "ipg", "per";
+-				dmas = <&sdma 10 8 0>, <&sdma 11 8 0>;
+-				dma-names = "rx", "tx";
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				status = "disabled";
+-			};
+-
+-			gpt: timer@53f90000 {
+-				compatible = "fsl,imx31-gpt";
+-				reg = <0x53f90000 0x4000>;
+-				interrupts = <29>;
+-				clocks = <&clks 10>, <&clks 22>;
+-				clock-names = "ipg", "per";
+-			};
+-
+-			gpio3: gpio@53fa4000 {
+-				compatible = "fsl,imx31-gpio";
+-				reg = <0x53fa4000 0x4000>;
+-				interrupts = <56>;
+-				gpio-controller;
+-				#gpio-cells = <2>;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-			};
+-
+-			rng@53fb0000 {
+-				compatible = "fsl,imx31-rnga";
+-				reg = <0x53fb0000 0x4000>;
+-				interrupts = <22>;
+-				clocks = <&clks 29>;
+-			};
+-
+-			gpio1: gpio@53fcc000 {
+-				compatible = "fsl,imx31-gpio";
+-				reg = <0x53fcc000 0x4000>;
+-				interrupts = <52>;
+-				gpio-controller;
+-				#gpio-cells = <2>;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-			};
+-
+-			gpio2: gpio@53fd0000 {
+-				compatible = "fsl,imx31-gpio";
+-				reg = <0x53fd0000 0x4000>;
+-				interrupts = <51>;
+-				gpio-controller;
+-				#gpio-cells = <2>;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-			};
+-
+-			sdma: dma-controller@53fd4000 {
+-				compatible = "fsl,imx31-sdma";
+-				reg = <0x53fd4000 0x4000>;
+-				interrupts = <34>;
+-				clocks = <&clks 10>, <&clks 27>;
+-				clock-names = "ipg", "ahb";
+-				#dma-cells = <3>;
+-				fsl,sdma-ram-script-name = "imx/sdma/sdma-imx31.bin";
+-			};
+-
+-			rtc: rtc@53fd8000 {
+-				compatible = "fsl,imx31-rtc", "fsl,imx21-rtc";
+-				reg = <0x53fd8000 0x4000>;
+-				interrupts = <25>;
+-				clocks = <&clks 2>, <&clks 40>;
+-				clock-names = "ref", "ipg";
+-			};
+-
+-			wdog: watchdog@53fdc000 {
+-				compatible = "fsl,imx31-wdt", "fsl,imx21-wdt";
+-				reg = <0x53fdc000 0x4000>;
+-				clocks = <&clks 41>;
+-				interrupts = <55>;
+-			};
+-
+-			pwm: pwm@53fe0000 {
+-				compatible = "fsl,imx31-pwm", "fsl,imx27-pwm";
+-				reg = <0x53fe0000 0x4000>;
+-				interrupts = <26>;
+-				clocks = <&clks 10>, <&clks 42>;
+-				clock-names = "ipg", "per";
+-				#pwm-cells = <3>;
+-				status = "disabled";
+-			};
+-		};
+-
+-		emi-bus@b8000000 { /* External Memory Interface */
+-			compatible = "simple-bus";
+-			reg = <0xb8000000 0x5000>;
+-			ranges;
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-
+-			nfc: nand-controller@b8000000 {
+-				compatible = "fsl,imx31-nand", "fsl,imx27-nand";
+-				reg = <0xb8000000 0x1000>;
+-				interrupts = <33>;
+-				clocks = <&clks 9>;
+-				dmas = <&sdma 30 17 0>;
+-				dma-names = "rx-tx";
+-				#address-cells = <1>;
+-				#size-cells = <1>;
+-				status = "disabled";
+-			};
+-
+-			weim: memory-controller@b8002000 {
+-				compatible = "fsl,imx31-weim", "fsl,imx27-weim";
+-				reg = <0xb8002000 0x1000>;
+-				clocks = <&clks 56>;
+-				#address-cells = <2>;
+-				#size-cells = <1>;
+-				ranges = <0 0 0xa0000000 0x08000000
+-					  1 0 0xa8000000 0x08000000
+-					  2 0 0xb0000000 0x02000000
+-					  3 0 0xb2000000 0x02000000
+-					  4 0 0xb4000000 0x02000000
+-					  5 0 0xb6000000 0x02000000>;
+-				status = "disabled";
+-			};
+-		};
+-	};
+-};
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index ed588add8d31..6ac42c06c1e9 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -15,7 +15,6 @@ CONFIG_PERF_EVENTS=y
+ CONFIG_KEXEC=y
+ CONFIG_ARCH_MULTI_V6=y
+ CONFIG_ARCH_MXC=y
+-CONFIG_SOC_IMX31=y
+ CONFIG_SOC_IMX35=y
+ CONFIG_SOC_IMX50=y
+ CONFIG_SOC_IMX51=y
+diff --git a/arch/arm/include/debug/imx-uart.h b/arch/arm/include/debug/imx-uart.h
+index 3edbb3c5b42b..df038a0852f9 100644
+--- a/arch/arm/include/debug/imx-uart.h
++++ b/arch/arm/include/debug/imx-uart.h
+@@ -26,14 +26,6 @@
+ #define IMX27_UART_BASE_ADDR(n)	IMX27_UART##n##_BASE_ADDR
+ #define IMX27_UART_BASE(n)	IMX27_UART_BASE_ADDR(n)
+ 
+-#define IMX31_UART1_BASE_ADDR	0x43f90000
+-#define IMX31_UART2_BASE_ADDR	0x43f94000
+-#define IMX31_UART3_BASE_ADDR	0x5000c000
+-#define IMX31_UART4_BASE_ADDR	0x43fb0000
+-#define IMX31_UART5_BASE_ADDR	0x43fb4000
+-#define IMX31_UART_BASE_ADDR(n)	IMX31_UART##n##_BASE_ADDR
+-#define IMX31_UART_BASE(n)	IMX31_UART_BASE_ADDR(n)
+-
+ #define IMX35_UART1_BASE_ADDR	0x43f90000
+ #define IMX35_UART2_BASE_ADDR	0x43f94000
+ #define IMX35_UART3_BASE_ADDR	0x5000c000
+@@ -116,8 +108,6 @@
+ #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX25)
+ #elif defined(CONFIG_DEBUG_IMX27_UART)
+ #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX27)
+-#elif defined(CONFIG_DEBUG_IMX31_UART)
+-#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX31)
+ #elif defined(CONFIG_DEBUG_IMX35_UART)
+ #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX35)
+ #elif defined(CONFIG_DEBUG_IMX50_UART)
+diff --git a/arch/arm/mach-imx/Kconfig b/arch/arm/mach-imx/Kconfig
+index 3f0521c652cb..77704c6a70ba 100644
+--- a/arch/arm/mach-imx/Kconfig
++++ b/arch/arm/mach-imx/Kconfig
+@@ -39,17 +39,6 @@ if ARCH_MULTI_V6
+ 
+ comment "ARM1136 platforms"
+ 
+-config SOC_IMX31
+-	bool "i.MX31 support (DEPRECATED)"
 -	depends on !SMP
 -	select CPU_ARM1136R0
+-	select MXC_AVIC
 -	help
--	  This machine is scheduled for removal in early 2027,
+-	  This enables support for Freescale i.MX31 processor
+-
+-	  This SoC is scheduled for removal in early 2027,
 -	  since it uses the ARM1136r0 CPU revision.
 -
- config ARCH_INTEGRATOR_CP
- 	bool "Support Integrator/CP platform"
- 	depends on ARCH_MULTI_V5 || ARCH_MULTI_V6
+ config SOC_IMX35
+ 	bool "i.MX35 support"
+ 	select CPU_ARM1136R1
+diff --git a/arch/arm/mach-imx/Makefile b/arch/arm/mach-imx/Makefile
+index 5c650bf40e02..fa0144f0882d 100644
+--- a/arch/arm/mach-imx/Makefile
++++ b/arch/arm/mach-imx/Makefile
+@@ -5,7 +5,6 @@ obj-$(CONFIG_SOC_IMX25) += cpu-imx25.o mach-imx25.o pm-imx25.o
+ 
+ obj-$(CONFIG_SOC_IMX27) += cpu-imx27.o pm-imx27.o mach-imx27.o
+ 
+-obj-$(CONFIG_SOC_IMX31) += mm-imx3.o cpu-imx31.o mach-imx31.o
+ obj-$(CONFIG_SOC_IMX35) += mm-imx3.o cpu-imx35.o mach-imx35.o
+ 
+ imx5-pm-$(CONFIG_PM) += pm-imx5.o
+diff --git a/arch/arm/mach-imx/common.h b/arch/arm/mach-imx/common.h
+index d7ecaa822adb..158ea819f5be 100644
+--- a/arch/arm/mach-imx/common.h
++++ b/arch/arm/mach-imx/common.h
+@@ -15,9 +15,7 @@ struct pt_regs;
+ struct clk;
+ struct device_node;
+ 
+-void mx31_map_io(void);
+ void mx35_map_io(void);
+-void imx31_init_early(void);
+ void imx35_init_early(void);
+ void mxc_set_cpu_type(unsigned int type);
+ void mxc_restart(enum reboot_mode, const char *);
+diff --git a/arch/arm/mach-imx/cpu-imx31.c b/arch/arm/mach-imx/cpu-imx31.c
+deleted file mode 100644
+index e81ef9e36a1f..000000000000
+--- a/arch/arm/mach-imx/cpu-imx31.c
++++ /dev/null
+@@ -1,72 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * MX31 CPU type detection
+- *
+- * Copyright (c) 2009 Daniel Mack <daniel@caiaq.de>
+- */
+-
+-#include <linux/module.h>
+-#include <linux/of_address.h>
+-#include <linux/io.h>
+-
+-#include "common.h"
+-#include "hardware.h"
+-#include "iim.h"
+-
+-static int mx31_cpu_rev = -1;
+-
+-static struct {
+-	u8 srev;
+-	const char *name;
+-	unsigned int rev;
+-} mx31_cpu_type[] = {
+-	{ .srev = 0x00, .name = "i.MX31(L)", .rev = IMX_CHIP_REVISION_1_0 },
+-	{ .srev = 0x10, .name = "i.MX31",    .rev = IMX_CHIP_REVISION_1_1 },
+-	{ .srev = 0x11, .name = "i.MX31L",   .rev = IMX_CHIP_REVISION_1_1 },
+-	{ .srev = 0x12, .name = "i.MX31",    .rev = IMX_CHIP_REVISION_1_1 },
+-	{ .srev = 0x13, .name = "i.MX31L",   .rev = IMX_CHIP_REVISION_1_1 },
+-	{ .srev = 0x14, .name = "i.MX31",    .rev = IMX_CHIP_REVISION_1_2 },
+-	{ .srev = 0x15, .name = "i.MX31L",   .rev = IMX_CHIP_REVISION_1_2 },
+-	{ .srev = 0x28, .name = "i.MX31",    .rev = IMX_CHIP_REVISION_2_0 },
+-	{ .srev = 0x29, .name = "i.MX31L",   .rev = IMX_CHIP_REVISION_2_0 },
+-};
+-
+-static int mx31_read_cpu_rev(void)
+-{
+-	void __iomem *iim_base;
+-	struct device_node *np;
+-	u32 i, srev;
+-	int rev = IMX_CHIP_REVISION_UNKNOWN;
+-
+-	np = of_find_compatible_node(NULL, NULL, "fsl,imx31-iim");
+-	iim_base = of_iomap(np, 0);
+-	of_node_put(np);
+-	BUG_ON(!iim_base);
+-
+-	/* read SREV register from IIM module */
+-	srev = imx_readl(iim_base + MXC_IIMSREV);
+-	srev &= 0xff;
+-
+-	for (i = 0; i < ARRAY_SIZE(mx31_cpu_type); i++)
+-		if (srev == mx31_cpu_type[i].srev) {
+-			rev = mx31_cpu_type[i].rev;
+-			imx_print_silicon_rev(mx31_cpu_type[i].name,
+-						mx31_cpu_type[i].rev);
+-			goto out;
+-		}
+-
+-	imx_print_silicon_rev("i.MX31", IMX_CHIP_REVISION_UNKNOWN);
+-
+-out:
+-	iounmap(iim_base);
+-	return rev;
+-}
+-
+-int mx31_revision(void)
+-{
+-	if (mx31_cpu_rev == -1)
+-		mx31_cpu_rev = mx31_read_cpu_rev();
+-
+-	return mx31_cpu_rev;
+-}
+-EXPORT_SYMBOL(mx31_revision);
+diff --git a/arch/arm/mach-imx/mach-imx31.c b/arch/arm/mach-imx/mach-imx31.c
+deleted file mode 100644
+index e9a1092b6093..000000000000
+--- a/arch/arm/mach-imx/mach-imx31.c
++++ /dev/null
+@@ -1,18 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright 2012 Sascha Hauer, Pengutronix
+- */
+-
+-#include <asm/mach/arch.h>
+-#include "common.h"
+-
+-static const char * const imx31_dt_board_compat[] __initconst = {
+-	"fsl,imx31",
+-	NULL
+-};
+-
+-DT_MACHINE_START(IMX31_DT, "Freescale i.MX31 (Device Tree Support)")
+-	.map_io		= mx31_map_io,
+-	.init_early	= imx31_init_early,
+-	.dt_compat	= imx31_dt_board_compat,
+-MACHINE_END
+diff --git a/arch/arm/mach-imx/mm-imx3.c b/arch/arm/mach-imx/mm-imx3.c
+index 9b0b014d7fe2..42e73518004a 100644
+--- a/arch/arm/mach-imx/mm-imx3.c
++++ b/arch/arm/mach-imx/mm-imx3.c
+@@ -69,49 +69,6 @@ static void __iomem *imx3_ioremap_caller(phys_addr_t phys_addr, size_t size,
+ 	return __arm_ioremap_caller(phys_addr, size, mtype, caller);
+ }
+ 
+-#ifdef CONFIG_SOC_IMX31
+-static struct map_desc mx31_io_desc[] __initdata = {
+-	imx_map_entry(MX31, X_MEMC, MT_DEVICE),
+-	imx_map_entry(MX31, AVIC, MT_DEVICE_NONSHARED),
+-	imx_map_entry(MX31, AIPS1, MT_DEVICE_NONSHARED),
+-	imx_map_entry(MX31, AIPS2, MT_DEVICE_NONSHARED),
+-	imx_map_entry(MX31, SPBA0, MT_DEVICE_NONSHARED),
+-};
+-
+-/*
+- * This function initializes the memory map. It is called during the
+- * system startup to create static physical to virtual memory mappings
+- * for the IO modules.
+- */
+-void __init mx31_map_io(void)
+-{
+-	iotable_init(mx31_io_desc, ARRAY_SIZE(mx31_io_desc));
+-}
+-
+-static void imx31_idle(void)
+-{
+-	int reg = imx_readl(mx3_ccm_base + MXC_CCM_CCMR);
+-	reg &= ~MXC_CCM_CCMR_LPM_MASK;
+-	imx_writel(reg, mx3_ccm_base + MXC_CCM_CCMR);
+-
+-	imx3_idle();
+-}
+-
+-void __init imx31_init_early(void)
+-{
+-	struct device_node *np;
+-
+-	mxc_set_cpu_type(MXC_CPU_MX31);
+-	arch_ioremap_caller = imx3_ioremap_caller;
+-	arm_pm_idle = imx31_idle;
+-	np = of_find_compatible_node(NULL, NULL, "fsl,imx31-ccm");
+-	mx3_ccm_base = of_iomap(np, 0);
+-	of_node_put(np);
+-	BUG_ON(!mx3_ccm_base);
+-}
+-#endif /* ifdef CONFIG_SOC_IMX31 */
+-
+-#ifdef CONFIG_SOC_IMX35
+ static struct map_desc mx35_io_desc[] __initdata = {
+ 	imx_map_entry(MX35, X_MEMC, MT_DEVICE),
+ 	imx_map_entry(MX35, AVIC, MT_DEVICE_NONSHARED),
+@@ -147,4 +104,3 @@ void __init imx35_init_early(void)
+ 	of_node_put(np);
+ 	BUG_ON(!mx3_ccm_base);
+ }
+-#endif /* ifdef CONFIG_SOC_IMX35 */
 -- 
 2.53.0
 
