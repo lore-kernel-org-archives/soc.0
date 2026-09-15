@@ -1,367 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0225B49BD69;
-	Tue, 15 Sep 2026 11:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0D74156F0;
+	Tue, 15 Sep 2026 11:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789470942; cv=none; b=Z40w0qJ60R6CxpF01KSoakM/5Wv/QkpvU4Z/liFIwPWuVJUhVaJG2pOXYcYYU+KrMEAnS1kKZuK24nFt8zC+95sPwWabtRER3gsApgdnFhhL0KoyIdQxBo5XfFR+KZekFPgEkqKTOYgEO4c+CxpwYIozrOWciufQnHHCgMdswlA=
+	t=1789472843; cv=none; b=vBoKc5yR3jg5zKSvWw366bshkHwrWCi25lvezC59p5WV/tTsMLbZaoQ42p7rlccbFsL7vI8EJTgdUsLco6f1M6Av3SZCNb+2Z+hDs/s5zuFjrWZ5BzvEehxeF9g6l9O7nPhxZaKOVlL5wmPNlnSek8uDN4pgwEAT/r6LosoHCeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789470942; c=relaxed/simple;
-	bh=+gPK4YaQ6wkQB/Gz2SEXT2tTE6dm0Abvvb1HwTdmHE8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KlYiR+WIqPwo0krBx/8RMmnIoNOlQoWVG8R0agVwF8BxPO8gRgKgpHF4QipRi/vdMpI9/amXZOpFvyYLQIzOHrM6Mogt6ch0C43J5RgTt4xY9NvddZWzd1p+KJdrN/1mZZ4lZYJsX1LW3DsAnWVweXvBpDhJzMckffISHdeDBfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HSQ3tEcC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1789472843; c=relaxed/simple;
+	bh=deAw/7TDEohbf1HV3Iyjt4R4cZRwIuWCKoEuiGhjWkQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=iFsQ1A07ueIm654wps1j1cQNCKI8n1OUSL/YTtsvFylzLNTYJvB90QJ74Y0y6jSDbJaFKecXg928h5hX8T9l5l4rbVm3H8r8A9KsWpk87H62seicBxUKuhoKZZU5afqxC/pmRO0IdFUyQYowJAIxvVl5DJJnh5ou30oJ9vA1FYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D4a+k1mr; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HSQ3tEcC"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CDCEEC2BCFC;
-	Tue, 15 Sep 2026 11:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1789470941;
-	bh=+gPK4YaQ6wkQB/Gz2SEXT2tTE6dm0Abvvb1HwTdmHE8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=HSQ3tEcCQR2O6MyO6IKLqL1XHko/MW4pd3o5+tgcWw0Kgd1k3gDJiRt5GDlfemUBn
-	 UY9K2Fu3nEOEvtS3dtANyGxzkwRT2IucdIMjINr+fX1d3gFTAWLXSeG7xWc7YEV8+9
-	 hfFfT39EsoW7NfU+rYFPzJr+/FQrv5sv/AEiF1+FKijb2NtkVFbcnqTbi0RKpajX20
-	 pVaW5Pw6pe8+XusK4oqNg4nPjPGhZW+ArAguvreY7t7WlAP830eKCw7yKuEZJrdHjK
-	 Kku5IijRRgnniRuHLnRISov1Wd92oHNwkrw0lC9zaaH1DALt13XSdDDQ+1Nc61KcU9
-	 sEEBTd4w6WyEQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5E42C88E7F;
-	Tue, 15 Sep 2026 11:15:41 +0000 (UTC)
-From: Long Zhao via B4 Relay <devnull+longzhao.ambarella.com@kernel.org>
-Date: Tue, 15 Sep 2026 19:15:44 +0800
-Subject: [PATCH v7 14/15] arm64: ambarella: add ARCH_AMBARELLA and CV75 EVK
- DT
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D4a+k1mr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789472842; x=1821008842;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=deAw/7TDEohbf1HV3Iyjt4R4cZRwIuWCKoEuiGhjWkQ=;
+  b=D4a+k1mrnJqwP5UriUKJC/Qt9VT2LHtQN4GdkQC+1bOskFFcXNB4n4ju
+   2xdE2BAO5CVnqcxUxL8S1jHBSSXF9CDsGuxm07AmItc4VpcJpaC8LYD03
+   ebJFlcGz1r0xcTE6Ii9Jo7+WKKXQb73QaAB6pOgo7FbI9O832TZV227e6
+   obYW+4qCN3vMXHY2VqVLAZ7vJywgCGfAI4iYdmPAxcdafsR4W2uVj/ZRt
+   SGnp7NnsuYZ2nuBWBEs9J3MqB6xNS7zPJqYhPtqutCp2f1emY8xFGLkPP
+   PIfHLdWnDjTwuOqXElqmHvO3FX1c1xQVI+8aqh2gCEJO14a56B7uPC0uZ
+   g==;
+X-CSE-ConnectionGUID: lqwhih+YTVWSLbp++aFcpQ==
+X-CSE-MsgGUID: 2911caO+R9CU+hE6oCAItA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="88967168"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="88967168"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 04:47:21 -0700
+X-CSE-ConnectionGUID: G6cPanw3St+oo08ir6C0kQ==
+X-CSE-MsgGUID: Z+tNzAXeQFy/qftCJFxY9w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="311254377"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.24])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 04:47:12 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 15 Sep 2026 14:47:07 +0300 (EEST)
+To: Long Zhao <longzhao@ambarella.com>
+cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+    Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
+    linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>, 
+    Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+    Conor Dooley <conor+dt@kernel.org>, 
+    Michael Turquette <mturquette@baylibre.com>, 
+    Stephen Boyd <sboyd@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>, 
+    Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    Jiri Slaby <jirislaby@kernel.org>, 
+    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+    Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+    Long Zhao <zl020895@163.com>, Lee Jones <lee@kernel.org>, 
+    mfd@lists.linux.dev, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+    linux-gpio@vger.kernel.org, linux-serial <linux-serial@vger.kernel.org>, 
+    LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 13/15] serial: 8250_dw: add Ambarella CV75 quirks
+In-Reply-To: <20260915-cv75-v5-v7-13-3297d3fbc9c0@ambarella.com>
+Message-ID: <4eca948b-ebf7-ee86-78e8-af886f19ed0c@linux.intel.com>
+References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com> <20260915-cv75-v5-v7-13-3297d3fbc9c0@ambarella.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260915-cv75-v5-v7-14-3297d3fbc9c0@ambarella.com>
-References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
-In-Reply-To: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
-To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org
-Cc: Long Zhao <longzhao@ambarella.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>, 
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Long Zhao <zl020895@163.com>, Lee Jones <lee@kernel.org>, 
- mfd@lists.linux.dev, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789470938; l=8107;
- i=longzhao@ambarella.com; s=20260730; h=from:subject:message-id;
- bh=DEAMc2vofaBUV896UxD87q9HiCotMrVdpC7L4SePgqQ=;
- b=aoTbaYYYCiah6FyPZv/A02JDmlnDyUBlmt2OCSkNsQU5Q402lHzn7g4kmFAQji+j2/inH7WkC
- 9d5DRaHdNqRAirs66FAQjoxBA1sjpFwOugwSqeeNIrRAjgP3YCAT6F3
-X-Developer-Key: i=longzhao@ambarella.com; a=ed25519;
- pk=/xGhPTOX0/eYsyTWzyjjgAIW1Z/YD+IlnOnvcdRozow=
-X-Endpoint-Received: by B4 Relay for longzhao@ambarella.com/20260730 with
- auth_id=903
-X-Original-From: Long Zhao <longzhao@ambarella.com>
-Reply-To: longzhao@ambarella.com
+Content-Type: multipart/mixed; boundary="8323328-710529132-1789472827=:1365"
 
-From: Long Zhao <longzhao@ambarella.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Enable ARCH_AMBARELLA and add a minimal CV75 SoC / EVK device tree for
-console bring-up with the RCT clocks, UART, pinctrl and GPIO banks.
+--8323328-710529132-1789472827=:1365
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Reviewed-by: Linus Walleij <linusw@kernel.org>
-Signed-off-by: Long Zhao <longzhao@ambarella.com>
----
- arch/arm64/Kconfig.platforms               |   6 +
- arch/arm64/boot/dts/Makefile               |   1 +
- arch/arm64/boot/dts/ambarella/Makefile     |   3 +
- arch/arm64/boot/dts/ambarella/cv75-evk.dts |  30 +++++
- arch/arm64/boot/dts/ambarella/cv75.dtsi    | 177 +++++++++++++++++++++++++++++
- arch/arm64/configs/defconfig               |   1 +
- 6 files changed, 218 insertions(+)
+On Tue, 15 Sep 2026, Long Zhao via B4 Relay wrote:
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index d2acfac73003..16d7e3a4c2d6 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -26,6 +26,12 @@ config ARCH_SUNXI
- 	help
- 	  This enables support for Allwinner sunxi based SoCs like the A64.
- 
-+config ARCH_AMBARELLA
-+	bool "Ambarella SoC family"
-+	select PINCTRL
-+	help
-+	  This enables support for the ARM64 based Ambarella SoCs like CV75.
-+
- config ARCH_ALPINE
- 	bool "Annapurna Labs Alpine platform"
- 	select ALPINE_MSI if PCI
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index fc726b215f12..f1709eb5d915 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -4,6 +4,7 @@ subdir-y += airoha
- subdir-y += allwinner
- subdir-y += altera
- subdir-y += amazon
-+subdir-y += ambarella
- subdir-y += amd
- subdir-y += amlogic
- subdir-y += apm
-diff --git a/arch/arm64/boot/dts/ambarella/Makefile b/arch/arm64/boot/dts/ambarella/Makefile
-new file mode 100644
-index 000000000000..ddca3d7b18cc
---- /dev/null
-+++ b/arch/arm64/boot/dts/ambarella/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+dtb-$(CONFIG_ARCH_AMBARELLA) += cv75-evk.dtb
-diff --git a/arch/arm64/boot/dts/ambarella/cv75-evk.dts b/arch/arm64/boot/dts/ambarella/cv75-evk.dts
-new file mode 100644
-index 000000000000..42a0fe24b83b
---- /dev/null
-+++ b/arch/arm64/boot/dts/ambarella/cv75-evk.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Ambarella CV75 EVK board
-+ */
-+
-+/dts-v1/;
-+
-+#include "cv75.dtsi"
-+
-+/ {
-+	model = "Ambarella CV75 EVK Board";
-+	compatible = "ambarella,cv75-evk", "ambarella,cv75";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart0;
-+	};
-+
-+	memory@200000 {
-+		device_type = "memory";
-+		reg = <0x0 0x00200000 0x0 0x07e00000>;
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/ambarella/cv75.dtsi b/arch/arm64/boot/dts/ambarella/cv75.dtsi
-new file mode 100644
-index 000000000000..c36b6af48237
---- /dev/null
-+++ b/arch/arm64/boot/dts/ambarella/cv75.dtsi
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Ambarella CV75 SoC
-+ *
-+ * Boot peripheral: UART0 console.
-+ * Clocks: a single ambarella,cv75-rct provider.
-+ */
-+
-+#include <dt-bindings/clock/ambarella,cv75-rct.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	compatible = "ambarella,cv75";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			compatible = "arm,cortex-a76";
-+			device_type = "cpu";
-+			reg = <0x000>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu@1 {
-+			compatible = "arm,cortex-a76";
-+			device_type = "cpu";
-+			reg = <0x100>;
-+			enable-method = "psci";
-+		};
-+	};
-+
-+	osc: oscillator {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <24000000>;
-+		clock-output-names = "osc";
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-0.2";
-+		method = "smc";
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		ahb@ffe0000000 {
-+			compatible = "simple-bus";
-+			reg = <0xff 0xe0000000 0x0 0x01000000>;
-+			ranges = <0xe0000000 0xff 0xe0000000 0x01000000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			s_scratchpad_syscon: scratchpad@e002e000 {
-+				compatible = "ambarella,cv75-sec-scratchpad", "syscon";
-+				reg = <0xe002e000 0x1000>;
-+			};
-+		};
-+
-+		apb@ffe4000000 {
-+			compatible = "simple-bus";
-+			reg = <0xff 0xe4000000 0x0 0x01000000>;
-+			ranges = <0xe4000000 0xff 0xe4000000 0x01000000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			uart0: serial@e4000000 {
-+				compatible = "ambarella,cv75-uart", "snps,dw-apb-uart";
-+				reg = <0xe4000000 0x1000>;
-+				clocks = <&rct CV75_GCLK_UART0>;
-+				interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
-+				reg-shift = <2>;
-+				reg-io-width = <4>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&uart0_pins>;
-+
-+				status = "disabled";
-+			};
-+
-+			pinctrl: pinctrl@e4010000 {
-+				compatible = "ambarella,cv75-pinctrl";
-+				reg = <0xe4010000 0x1000>;
-+				ambarella,drive-strength-syscon = <&rct>;
-+				ambarella,pull-syscon = <&s_scratchpad_syscon>;
-+
-+				uart0_pins: uart0-pins {
-+					function = "uart0";
-+					groups = "uart0";
-+				};
-+			};
-+
-+			gpio0: gpio@e4013000 {
-+				compatible = "ambarella,cv75-gpio", "arm,primecell";
-+				reg = <0xe4013000 0x1000>;
-+				clocks = <&rct CV75_GCLK_APB>;
-+				clock-names = "apb_pclk";
-+				interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				gpio-ranges = <&pinctrl 0 0 32>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				arm,primecell-periphid = <0x000e8061>;
-+			};
-+
-+			gpio1: gpio@e4014000 {
-+				compatible = "ambarella,cv75-gpio", "arm,primecell";
-+				reg = <0xe4014000 0x1000>;
-+				clocks = <&rct CV75_GCLK_APB>;
-+				clock-names = "apb_pclk";
-+				interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				gpio-ranges = <&pinctrl 0 32 32>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				arm,primecell-periphid = <0x000e8061>;
-+			};
-+
-+			gpio2: gpio@e4015000 {
-+				compatible = "ambarella,cv75-gpio", "arm,primecell";
-+				reg = <0xe4015000 0x1000>;
-+				clocks = <&rct CV75_GCLK_APB>;
-+				clock-names = "apb_pclk";
-+				interrupts = <GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				gpio-ranges = <&pinctrl 0 64 32>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				arm,primecell-periphid = <0x000e8061>;
-+			};
-+		};
-+
-+		rct: clock-controller@ffed080000 {
-+			compatible = "ambarella,cv75-rct", "syscon";
-+			reg = <0xff 0xed080000 0x0 0x1000>;
-+			clocks = <&osc>;
-+			clock-names = "osc";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			assigned-clocks = <&rct CV75_GCLK_UART0>;
-+			assigned-clock-parents = <&osc>;
-+			assigned-clock-rates = <24000000>;
-+		};
-+
-+		gic: interrupt-controller@fff0101000 {
-+			compatible = "arm,gic-400";
-+			reg = <0xff 0xf0101000 0x0 0x1000>,
-+			      <0xff 0xf0102000 0x0 0x2000>,
-+			      <0xff 0xf0104000 0x0 0x2000>,
-+			      <0xff 0xf0106000 0x0 0x2000>;
-+			interrupt-controller;
-+			#interrupt-cells = <3>;
-+			#address-cells = <0>;
-+			interrupts = <GIC_PPI 9
-+				      (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_HIGH)>;
-+		};
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 12 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-+	};
-+};
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index ad3bd3d9507b..454f07a6a6a6 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -36,6 +36,7 @@ CONFIG_CRASH_DUMP=y
- CONFIG_ARCH_ACTIONS=y
- CONFIG_ARCH_AIROHA=y
- CONFIG_ARCH_SUNXI=y
-+CONFIG_ARCH_AMBARELLA=y
- CONFIG_ARCH_ALPINE=y
- CONFIG_ARCH_APPLE=y
- CONFIG_ARCH_ARTPEC=y
+> From: Long Zhao <longzhao@ambarella.com>
+>=20
+> The Ambarella CV75 UART is Ambarella IP, not a Synopsys DesignWare
+> licensed block. At the register level it is close enough to DW APB UART
+> that a full custom UART driver is unnecessary: reuse 8250_dw with a
+> small platform quirk.
+>=20
+> Quirks:
+> - keep IER ETOI (bit 5) set for RX timeout behaviour
+> - skip set_rate; baud clock is managed outside the UART block
+>=20
+> Reviewed-by: Linus Walleij <linusw@kernel.org>
+> Signed-off-by: Long Zhao <longzhao@ambarella.com>
+> ---
+>  drivers/tty/serial/8250/8250_dw.c | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>=20
+> diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/=
+8250_dw.c
+> index 5fba913f3301..19431c476c55 100644
+> --- a/drivers/tty/serial/8250/8250_dw.c
+> +++ b/drivers/tty/serial/8250/8250_dw.c
+> @@ -43,6 +43,9 @@
+>  #define RZN1_UART_xDMACR_8_WORD_BURST=09(2 << 1)
+>  #define RZN1_UART_xDMACR_BLK_SZ(x)=09((x) << 3)
+> =20
+> +/* Ambarella IER: receive timeout interrupt enable */
+> +#define AMBARELLA_UART_IER_ETOI=09=09BIT(5)
+> +
+>  /* Quirks */
+>  #define DW_UART_QUIRK_OCTEON=09=09BIT(0)
+>  #define DW_UART_QUIRK_ARMADA_38X=09BIT(1)
+> @@ -60,6 +63,7 @@
+> =20
+>  struct dw8250_platform_data {
+>  =09u8 usr_reg;
+> +=09u8 ier_mask;
+>  =09u32 cpr_value;
+>  =09unsigned int quirks;
+>  };
+> @@ -572,6 +576,25 @@ static void dw8250_prepare_rx_dma(struct uart_8250_p=
+ort *p)
+>  =09dw8250_writel_ext(up, RZN1_UART_RDMACR, val);
+>  }
+> =20
+> +static int dw8250_ier_mask_startup(struct uart_port *p)
+> +{
+> +=09struct dw8250_data *d =3D to_dw8250_data(p->private_data);
+> +=09struct uart_8250_port *up =3D up_to_u8250p(p);
+> +=09int ret;
+> +
+> +=09ret =3D serial8250_do_startup(p);
+> +=09if (ret)
+> +=09=09return ret;
+> +
+> +=09/*
+> +=09 * Ambarella keeps variant IER bits (e.g. ETOI) set for correct RX
+> +=09 * timeout behaviour.
+> +=09 */
+> +=09up->ier |=3D d->pdata->ier_mask;
+> +
+> +=09return 0;
+> +}
+> +
+>  static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
+>  {
+>  =09unsigned int quirks =3D data->pdata->quirks;
+> @@ -606,6 +629,8 @@ static void dw8250_quirks(struct uart_port *p, struct=
+ dw8250_data *data)
+>  =09=09p->serial_in =3D dw8250_serial_in32;
+>  =09=09data->uart_16550_compatible =3D true;
+>  =09}
+> +=09if (data->pdata->ier_mask)
+> +=09=09p->startup =3D dw8250_ier_mask_startup;
+>  }
+> =20
+>  static void dw8250_reset_control_assert(void *data)
+> @@ -879,6 +904,12 @@ static const struct dw8250_platform_data dw8250_intc=
+10ee =3D {
+>  =09.quirks =3D DW_UART_QUIRK_IER_KICK,
+>  };
+> =20
+> +static const struct dw8250_platform_data dw8250_ambarella_cv75_data =3D =
+{
+> +=09.usr_reg =3D DW_UART_USR,
+> +=09.ier_mask =3D AMBARELLA_UART_IER_ETOI,
+> +=09.quirks =3D DW_UART_QUIRK_SKIP_SET_RATE,
+> +};
+> +
+>  static const struct dw8250_platform_data dw8250_ultrarisc_dp1000_data =
+=3D {
+>  =09.usr_reg =3D DW_UART_USR,
+>  =09.cpr_value =3D FIELD_PREP_CONST(DW_UART_CPR_ABP_DATA_WIDTH, 2) |
+> @@ -889,6 +920,7 @@ static const struct dw8250_platform_data dw8250_ultra=
+risc_dp1000_data =3D {
+>  };
+> =20
+>  static const struct of_device_id dw8250_of_match[] =3D {
+> +=09{ .compatible =3D "ambarella,cv75-uart", .data =3D &dw8250_ambarella_=
+cv75_data },
+>  =09{ .compatible =3D "snps,dw-apb-uart", .data =3D &dw8250_dw_apb },
+>  =09{ .compatible =3D "cavium,octeon-3860-uart", .data =3D &dw8250_octeon=
+_3860_data },
+>  =09{ .compatible =3D "marvell,armada-38x-uart", .data =3D &dw8250_armada=
+_38x_data },
 
--- 
-2.34.1
+Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 
+--=20
+ i.
 
+--8323328-710529132-1789472827=:1365--
