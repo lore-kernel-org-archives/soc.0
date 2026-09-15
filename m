@@ -1,106 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21863B0581;
-	Mon, 14 Sep 2026 23:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AD42F7EF1
+	for <soc@lists.linux.dev>; Tue, 15 Sep 2026 07:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789427301; cv=none; b=aVxDyLleDwJtJas3W/y4FhclA0Dhm9AqIXaYxGsEowFKrlwaDO5RcCjsl3K0SParlJ8cszraaR8ynobXFjrEN5vMYzgWjyISZdZ0qfjt/q95vTJBUpiZE9M1fuNvHfOtc+1dHWAnz1pp34hNpaE7iTQ1olgYR1LK8C6NLrBlCKc=
+	t=1789458400; cv=none; b=he7MBENj7p4eMp9esrl7ovA5PwInpvGQbVeJqgSmjRxy6zzZvJRNqymcfRPe3l8BTMo44W0lXzgvDZXNd9Y5l1AIcrLPOiJeMIgfOTDH+Aqpg0Ou2iOh+xQFRJxyW/4RA2nTa3ygNS2HeAiUFdowuUS/il5vnxf+biOY7axkYj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789427301; c=relaxed/simple;
-	bh=0kd6U470hburP/a7YVVUprf1DLkWd0LKevkn3J3aRxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tkQwRkfUkpwBE76ASKWmj7UsteDUlpxMxpBpxHNXOlqCXBktoIuUtwfsTJP02dI6od9m0M6daVL03ichjDgRAGanAmW5cz6FdRg6IJFhfSPvGhzIvR6xry88XtKZwLrsnqrmCsFPNdx5WzGk6xg83W1P1TPAGHVp0SrtwR6QQQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IIL3Tx/1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789458400; c=relaxed/simple;
+	bh=TGxiytZbwlmv2BP60EKFFTrI1970pAfKpcdYND/NbhU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=bQ/X3XkCtjQHJaYJ0JErIhMo9L31C0O6uJ3QqtSF43viQaG3Osa/1H7o0Y9iYohz/KY9X5tlDhB4/GPb/pmQFE1Iafpo1ZRiSLE3kXet9NlRywaQqNpw8j52hMiepjv7C6OK7Dy6AYyb2S/Dl+EOmuFEVoI28J55pTjdiRkbICk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gWJOwkn8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qdEMAFAK; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IIL3Tx/1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957F91F000FF;
-	Mon, 14 Sep 2026 23:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789427299;
-	bh=+JwfP4y9dWX2umGppJpN343xctgJroMcZ6+wN0r1j4Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=IIL3Tx/1/cExYPHaIpyvy0J20exmoyCYxZzxIY4LpJA+2wv7mpvHrm+To0Wu6soa3
-	 LjLEeQVmzDiHS/nYbtWkAWfjfPwNbD7QumCG5aVX/tEH7wLHAeKWMvCmDnFm3JNVOr
-	 Ioq19vwmpwdeyWShySn0KEdelCgDpTPaqc+ZkoGX0hq7GDwwWpglahnDfsfn3Aq9xd
-	 mKNywz3Is8AOQQcrmLqzCE35WvjF+HCJQsYLRD+ciqwPqsWRQUGJYCyzcD/9kgoU/K
-	 BJf/rjNhu1Dl7x5Js38YAkbP8kkX7K4exLPUjdHrD8RnPgRgvpYQN95ALbShxHLp0e
-	 3Y02aqwuK4z+w==
-Received: by traversing.sirena.org.uk (Postfix, from userid 1000)
-	id A238F101088E; Tue, 15 Sep 2026 00:08:16 +0100 (BST)
-Date: Tue, 15 Sep 2026 00:08:16 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-next <linux-next@vger.kernel.org>
-Subject: Re: Missing signoff in the arm-soc tree
-Message-ID: <aqh-YO7Rqki2ehLb@sirena.org.uk>
-References: <amY1zEUOGFe4Op6W@sirena.org.uk>
- <fd352f58-8100-4b0f-ac8c-25b08d0e2886@sirena.org.uk>
- <aqgf5o_gSUQH1AF0@sirena.co.uk>
- <b6ca14bc-a4f6-477b-bbb0-da12d27b61af@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gWJOwkn8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qdEMAFAK"
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfout.phl.internal (Postfix) with ESMTP id 44038EC062E;
+	Tue, 15 Sep 2026 03:46:36 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 15 Sep 2026 03:46:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1789458395;
+	 x=1789544795; bh=J9TVHqMg6DzzuOSZ1h26Nn1hQ6ISaDnr9mEy//ELed0=; b=
+	gWJOwkn8qVN0hj5f7WGvUZAhs3CZBeo3GtMSnu/ybA444ItsfZGyyR6+lz82aTX5
+	EL7LNzJnDcPjzFwK7THKOIdKd+pVUpYX7LxF27ZbNQbvDamNN35AuOBsC6X6iWWC
+	gMkW8RwX1lPflvdT5EZNkGaqcVLkBypc3ZpdJkP6I0hlpxBI5eDHQSNs3Ihflz9Z
+	wfy+YCcLbTeW11trLS8vNBqg3sMcfvIdPtn4qbJzLODTh6jfPUY6L4WJ/xqWajfC
+	8l1ukToruj4EtuzHVD/1s/GJ72cqNlWjljgzwiZeZPlvGw6BdC45WzYMl8uxChxm
+	ILs5ft66VzolU0WB9BwLkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789458395; x=
+	1789544795; bh=J9TVHqMg6DzzuOSZ1h26Nn1hQ6ISaDnr9mEy//ELed0=; b=q
+	dEMAFAKJsWQ2+R7P4+Ed6WvD9pC356dz6S04fOLECMzm8F3kEeumGyrGIp9GdH7n
+	rJAZrdpKqns8Sh0JpUZPL+7pZL7A88OOFpWfWmUBFH4cB/ST9byyoJ1fU0/7v3rk
+	Cw5a6/yyFr44xw34IwXHNnDR6Ek7yGWQRcAGYSaNnktd1J993qmFQS56O2ETIj8+
+	Fi8RqszY9Z+VOG+LjF6463mAlf4Al91GBm9J5INvRXbC4KWaEvQ6BtT7ONVMppEf
+	ClnohD6ujLK7MKzAw41NP3nTQtUCgsrb/SAM8tZBZgLHczjucu127P6jZbts1dar
+	670Hd9OULOrJVEuZN79Xw==
+X-ME-Sender: <xms:1veoaq-s-zK2UArd3jLyOSO5wgaVrbeebs-nQ5DuVrX_z0-9H71hyQ>
+    <xme:1veoaliUMKFoItbNkdFPzPq-h_rIyk8e6dnqDrRxPIacByiVZzEhzZipYdnRVMavs
+    bYeTGnTMAU98JOQ1tFDypHz-PO5QqWM3P7qsj-YmmYJu9ofMetskFM>
+X-ME-Proxy-Cause: dmFkZTFjBJTPSsEvy7MdPYY6zoz5hEujSdjlA0j1/ndTB6CM/iz4MVRXgkhD+6Up0/ryRu
+    xEKhw7XJzajgoXQusJgmwVrHZmGtqCQvgETtVrkeGYuXdxEoqFrBwJbIKAeiBLsoCdS4by
+    UTMePArx3+74ccqnNttcOua34hzVwQqbxzZEliOytewiy6U/yDTXlu01lwA1i4z02FxOeY
+    cQMGEYrfctlDcOg/PWPqgycJxZY6uswSnNn9EWOz2NKeVkGVxOPeVjyHqG+aa3YRBLZK3+
+    qDvmOvsQTDC4uQg9wePtcFpouKeI+yVVPp4ahrnz+mqeTgRbjRkbmT7F4A7l5Zg3mRtZem
+    V1YTrkyQYtU/UrXQRE+v6Up2nhaqvUqzuxKIYY28PgJxjwr8y6dyBPzzJ8q3igIyZSzb8a
+    yi/2ZGz1krnOkI63xE7YqxxTTZTzmzbynlxlCj6WWZOJKyzTNJ/5eL/sHFZ1/cVfS51at/
+    gb1AdH/c/zYpgO4Vcice7yl/S7IAL2p29oJAbte/BKvAByatZfMVfT1Gq6V7IXwyrXZ8Ko
+    VfyG6z/JW8cm3p2JBFul+1KZzSruB/ey6Nb71FEe7/u1j9S7r6SnUqmz38RuV0/LPP77cl
+    eEgXy9ucq2nzC/+/yMwfyDCiv6sTZB0cQCjs5hveFN0OaIIdbgsZibgZq5mQ
+X-ME-Proxy: <xmx:2feoauhm05MVTTJFNChLLZ1eEI5vzlR1J4HNxrorZrOq3zNpDqSXkg>
+    <xmx:2feoavezASGoXoYquy_goSx0civPySVKcBZ1RDM6sU5tu2LUzLSjCQ>
+    <xmx:2feoal36ABBh5m1iTrh0wreAOmUA8HFVmzS3bQvWmDTc_87EzWkVMw>
+    <xmx:2feoajr3p3sPVKfBW7otUAqGoHu_zctcV3NxIEfgODa2TeI_vp-uwA>
+    <xmx:2_eoahL73tD2rKVLVCoyvzx-4DgTHujZF_SW7UbuyouYn8oDxnXmPXfq>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id A85E332A0081; Tue, 15 Sep 2026 03:46:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Xp+J77/ykdLTk1ES"
-Content-Disposition: inline
-In-Reply-To: <b6ca14bc-a4f6-477b-bbb0-da12d27b61af@app.fastmail.com>
-X-Cookie: Orders subject to approval.
+X-ThreadId: AA0MNwphKERR
+Date: Tue, 15 Sep 2026 09:45:50 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>
+Cc: "Christian Brauner" <brauner@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, kernel-dev@igalia.com,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ linux-alpha@vger.kernel.org, linux-s390@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
+ linux-mips@vger.kernel.org, sparclinux@vger.kernel.org
+Message-Id: <95b693c0-ca51-4355-99ba-2b37a1ab2169@app.fastmail.com>
+In-Reply-To: <20260828-tonyk-syscall_table-v6-0-fdd358456cf1@igalia.com>
+References: <20260828-tonyk-syscall_table-v6-0-fdd358456cf1@igalia.com>
+Subject: Re: [PATCH v6 00/13] syscalls: Add a shared table for all archs
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, Aug 29, 2026, at 01:19, Andr=C3=A9 Almeida wrote:
+> While implementing a new syscall, we need to wire up it's number to th=
+e arch
+> table. Since syscall number 403, all architectures are on sync regardi=
+ng the
+> number (except alpha), which make things a lot easier but more repetit=
+ive as
+> well. Have a look at commit b36d4b6aa88 ("arch: hookup listns() system=
+ call"),
+> with 15 lines of mostly:
+>
+>   +470    common  listns                          sys_listns
+>
+> There's already a "common" table shared with a bunch of archs at
+> `scripts/syscall.tbl`, but due to historical reasons some archs will n=
+ever be
+> able to move to this table and share all the numbers.
+>
+> The generic table starts from 403 (clock_gettime64), the first common =
+syscall.
+>
+> I've compile tested for arm32, arm64, s390, mips, sparc and alpha by c=
+omparing
+> the syscalls_*.h and unistd_*.h files generated before and after this =
+patchset.
+> For most of cases the files are identical, for the few cases that they=
+ are not,
+> there's a note in the commit explaining why they are equivalent.
 
---Xp+J77/ykdLTk1ES
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I've tried merging these for the asm-generic tree now, and would like to
+send them for 7.4.
 
-On Mon, Sep 14, 2026 at 09:53:00PM +0200, Arnd Bergmann wrote:
-> On Mon, Sep 14, 2026, at 18:25, Mark Brown wrote:
+Unfortunately, the build bot flagged problems on mips, see the patch bel=
+ow
+for my workarounds=3D, but I think we have to improve that still and did=
+n't
+just fold it into your patch.
 
-> > These issues are *still* present today.  It's making noise whenever I
-> > check -next for ongoing issues, it'd be good if the branch could be
-> > rebuilt.
+As you took out the dependencies on the syscall_*.tbl files, the
+output does not get rebuilt if changes are made to the table, and I
+have not come up with a good solution for mips. My hack just adds both
+input files to all outputs, which works but is not technically correct.
 
-> I assume you hit this on the branch I pushed out earlier today, which
-> started fresh from 7.3 with just a single merge. I've amended that
-> commit with an S-o-b now, but I'm not sure if that is what you are
-> asking.
+The rt_sigtimedwait and ustat entries had a typo that caused a link
+error, but I did not check if there were any additional mistakes that
+caused incorrect output data without causing a link failure.
 
-It is in whatever was there when I fetched the trees this morning which
-was some time before I finished the merge and ran the summary stuff so
-you may have updated it later.
+       Arnd
 
-> When you write "and also isn't showing up as a merge", do you mean
-> your script has an exception for merge commits to not need S-o-b
-> but fails to detect this one as a merge? I see that about half the
-> merges in linux-next (including your daily merges) are not signed off,
-> so I'm not sure if we are all doing this wrong the same way, or if
-> there is a different problem with the soc tree.
-
-As indicated in the original mail and repeated followups the relevant
-commit is 3edcea7f0413e84863300998ad3838eb87e6fca7 which looks from the
-changelog like it was originally a merge but is not described as such in
-the git metadata, it is just an apparently empty commit with a single
-parent with a suspiciously similar changelog.  My theory was that
-something had gone wrong with a rebase or scripting.  I only check for
-signoff problems on non-merge commits, merge commits are ignored since
-they are not normally signed off.
-
---Xp+J77/ykdLTk1ES
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqofl8ACgkQJNaLcl1U
-h9BpfAf+N0qMWHybnYPoX5MY02Np8i3KeJiufCQkrsdAk1GlrPftgl0FRn5FQshY
-oIjF2tOO8itqr5QtqXL9SI2ejS18hbUxWV+/49BID35uQj+2AAtsR1yGz7dr06qR
-W+AfvI0iqkEcWCNpu7q3MmZ1kUp1tRlXF3V80/FgZvfGulab//4sYM7/3DUDBcRW
-kVWsprw96kUJbCQ2wLyVFd4VbroSCJquHuO3hPsvUIdwnNU81NK3j/loPE0zQGfW
-I3zPc2BVCOhIHNPaGNb/vTAvnJABHphFehlVZXzaUQASV6v7RS+vSXY+C5uNF1Z4
-Z5lhHKLX0fjN2WzYizS4jaDv9N0FjA==
-=Zbn3
------END PGP SIGNATURE-----
-
---Xp+J77/ykdLTk1ES--
+diff --git a/arch/mips/kernel/syscalls/Makefile b/arch/mips/kernel/sysca=
+lls/Makefile
+index aaa5443ea906..51b9939ecff0 100644
+--- a/arch/mips/kernel/syscalls/Makefile
++++ b/arch/mips/kernel/syscalls/Makefile
+@@ -40,10 +40,10 @@ src_n32 :=3D $(src)/syscall_n.tbl
+ src_n64 :=3D $(src)/syscall_n.tbl
+ src_o32 :=3D $(src)/syscall_o32.tbl
+=20
+-$(kapi)/unistd_nr_%.h: $(systbl_common) $(sysnr) FORCE
++$(kapi)/unistd_nr_%.h: $(src_o32) $(src_n64) $(systbl_common) $(sysnr) =
+FORCE
+        $(call if_changed,sysnr)
+=20
+-$(kapi)/syscall_table_%.h: $(systbl) $(systbl_common) FORCE
++$(kapi)/syscall_table_%.h: $(src_o32) $(src_n64) $(systbl) $(systbl_com=
+mon) FORCE
+        $(call if_changed,systbl)
+=20
+ uapisyshdr-y           +=3D unistd_n32.h                 \
+diff --git a/arch/mips/kernel/syscalls/syscall_n.tbl b/arch/mips/kernel/=
+syscalls/syscall_n.tbl
+index e3d278f715b7..84c35c1f0c3e 100644
+--- a/arch/mips/kernel/syscalls/syscall_n.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n.tbl
+@@ -133,14 +133,14 @@
+ 123    common  capget                          sys_capget
+ 124    common  capset                          sys_capset
+ 125    common  rt_sigpending                   sys_rt_sigpending       =
+compat_sys_rt_sigpending
+-126    common  rt_sigtimedwait                 sys_rt_sigtimedwait_time=
+        compat_sys_rt_sigtimedwait_time32
++126    common  rt_sigtimedwait                 sys_rt_sigtimedwait     =
+compat_sys_rt_sigtimedwait_time32
+ 127    common  rt_sigqueueinfo                 sys_rt_sigqueueinfo     =
+compat_sys_rt_sigqueueinfo
+ 128    common  rt_sigsuspend                   sys_rt_sigsuspend       =
+compat_sys_rt_sigsuspend
+ 129    common  sigaltstack                     sys_sigaltstack         =
+compat_sys_sigaltstack
+ 130    common  utime                           sys_utime               =
+sys_utime32
+ 131    common  mknod                           sys_mknod
+ 132    common  personality                     sys_personality         =
+sys_32_personality
+-133    common  ustat                           sys_usta                =
+compat_sys_usta
++133    common  ustat                           sys_ustat               =
+compat_sys_ustat
+ 134    common  statfs                          sys_statfs              =
+compat_sys_statfs
+ 135    common  fstatfs                         sys_fstatfs             =
+compat_sys_fstatfs
+ 136    common  sysfs                           sys_sysfs
