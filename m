@@ -1,181 +1,316 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457534BD108
-	for <soc@lists.linux.dev>; Wed, 16 Sep 2026 10:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789553393; cv=pass; b=ZZ1vyk5qzIKLF/6WB2vTPENnTIrVEcLDHA3GqJm5MZ5dIDcHvDDW2Mrk6ImR8ziie7L9Ke0aTTqmnGeLtDgsbclJo0HT5szjVwSRHWHoEna3zajHUr8XnvW7swfcn7ljYGlNVbT68RED1gzWZSTKaC6j0fhiKqkPkYCvLws7gYs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789553393; c=relaxed/simple;
-	bh=Od6sUkRARDFcDJ7U2rdul+8wgmOhxH5va5NWIxJPQpg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Mu9ONxQMI0x13N7SGG446h45l3XlxKy+9J+qELumTYlNGAXVxm//nM8HtSoC+/IuzY67/DTHZr+0xz+JpL7mQQYIWttcKhL32ZSL4VS9sUm6btLs9Zu+XtlvWNzpjDA/raoC41BqTLVRT3kcCK8t3fVFVpVnTZSbjxSious86wI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jFm57Igq; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A984E80B8;
+	Wed, 16 Sep 2026 10:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789554112; cv=none; b=OsmLvLZc1XJ2dv9bj4F3prYAtC5Yesjrmvro5+d0TgeDT3KCl7bUa3vInAM9Eh38GvzwAh811mHmCDSl9zQ3OyA/PGZITXfVs8WasdFYIiqT8noYI+M1fg3pPFvmzq163zXxgQufWBUHtywdJ1cFYxLeT4abgA6DbAl7/K7s9qs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789554112; c=relaxed/simple;
+	bh=n152J+oW0inBpcepl+1yWkdMqbhm6d/xZ403pWrV3Ew=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T5O3pF5JLmMFyV74eljYMuqeHIHUtIRNdjLbHb5Ur8HW8UXbTj+w1fgnfyVqCIFXUrHfPu6CPtsTDJTz4riNYguiCsOJSKEVGbxJBTJ0DRw12QLuNcLzNN95yjfYigWFbrwHUypn1XfP2Ynm8I/j2mNT643/djgX90tWuR3w7Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iNz56Cnk; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jFm57Igq"
-Received: by smtp.kernel.org (Postfix)
-	id ADCBD1F00899; Wed, 16 Sep 2026 10:09:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=74.125.225.79
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1789553365;
-	b=3nR28XxA0ccQ4sFz9ft30CBF2ow0j/tVf/MEiJezdG7vwMD0xq6jhKTu9oDF1RAsVDLN
-	 Nom3T7+dCQppEFqraY0ZvejFdVbhyquVO5kNXcORVNRNZ1ABGqaMCfAlCgM8XqEXDlVCq
-	 0MZ928S4bWtViImF/EbvyfWP0c7CgDV1kvwoesvMS2aF79frDLA4+F7OMzlGoY82E/Ri2
-	 LSAwqMQouy1HVgs7ipoCQipPvgzfB6HmRVkgSA6J8t63gIm0F9cjyeIST5yzjgSJaXLoo
-	 stN77TmEAkAzl+41MezkDKfjxac360BD3gF+g2GnIMw1n7bIHljkDUNgPkzE6JwRo9g==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789553365;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:From:Subject:Reply-To:To:Cc:Content-Language:
-	 Autocrypt:Organization:Content-Type:Content-Transfer-Encoding;
-	bh=nD+B6Ap2Znzafi5abLa/1qGSU6lf02Nk2PfhG8i1pKQ=;
-	b=fsStqCHxGGelQjbnhzD28DQMuAEQSPWogQnvosbB4mKYvjqaBDTfThRHei1iNQR0WtGV
-	 suH+r+FKo7yXwrm2sU9K2sgCojXU7fULjllM3lY1W0AfJQZzRmEqhy1Tu5H1G5+LWz6rU
-	 9bh3FK3Q8LGAX9SpxWOeQEAbAtb6uiQXujs+qV5tvnwcdgMam742lg0yHv6MbwiFCwSxk
-	 kHOnulP/no3pmJeYocMEEuyvm8TczQkrJL7FbsFydM4HYwSyN9HWzkDMYcC5h+VsoJq/z
-	 YbS99E+hqEh0hVMgsNPnHMZ9J4Wj2en4yX02p4tqr7XuDXtz+6NYUknTrOYdjqcmRuA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=jFm57Igq;
-	dmarc=pass header.from=linaro.org;
-	spf=pass smtp.mailfrom=linaro.org;
-	arc=none smtp.remote-ip=74.125.225.79
-Received: from mail-wr2-f15.google.com (mail-wr2-f15.google.com [74.125.225.79])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C36E81F00898
-	for <soc@kernel.org>; Wed, 16 Sep 2026 10:09:24 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=jFm57Igq
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org C36E81F00898
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr2-f15.google.com with SMTP id ffacd0b85a97d-482f633ecdeso533145f8f.2
-        for <soc@kernel.org>; Wed, 16 Sep 2026 03:09:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1789553363; x=1790158163; darn=kernel.org;
-        h=content-transfer-encoding:content-type:organization:autocrypt
-         :content-language:cc:to:reply-to:subject:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=nD+B6Ap2Znzafi5abLa/1qGSU6lf02Nk2PfhG8i1pKQ=;
-        b=jFm57IgqKv6b2oK7Jcer7I3R6p3g4rOaKYU0vuwBHhE0wgJ/zoP2r91gEKUvrzTbWO
-         gTKhOUWINxbd6T6v9loq6JdZLTpvDF/FcMnD6vHRSSz0zTFmKTahS+IgSY9qxHh7Cyaf
-         ZhSFeEQi8lqRDQqFyGsO0sXRFuj9gr9wImBxAv0ljcpyhF5feM8t6WWNav9fmVwmNm/8
-         yoc6lu3vUb/bk/MULK3eRr9Btiz9oQAU5N6gROw++Qt/9pJd+gCOAUEFWD2TbcQnmaaS
-         ex9BZhmoa40480p0tZ37LVSAcMYs1UVuHNJWr2S/551S7SuBPvKrnmXe4jINvwD1WViL
-         Bp/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789553363; x=1790158163;
-        h=content-transfer-encoding:content-type:organization:autocrypt
-         :content-language:cc:to:reply-to:subject:from:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=nD+B6Ap2Znzafi5abLa/1qGSU6lf02Nk2PfhG8i1pKQ=;
-        b=tHBRzzc/OQgarRpvhDGPaGSBNodbDAMRWaXexddS9G9F2YId0mmYIagCAE6KD78FMS
-         sAlmQWU4vZEaX6PvGj++fSfFuWrN2pAskcXLFahIa/KMiwbYnFzFfk2QZ8cU0ZHT8Xhm
-         WkU1sJSC9gf6DnEW0H+h5f6bdIb+bIbCEvuxIkDxBJYbJCqCTjiDx9jFuW/jLe5xuoOY
-         znEHm2s59or6K6fE7qu7d0+tyr5nIy2hRk4hDwi+IbxumX+Ha5rkhNj502GpeClZO9t/
-         Oc9X8Mc8lRDgP9gW9wGyq+7mjTa3AY/48qYhaOHM20DYRYVdTW76wfrAIzg+Wr1naGhk
-         lO+g==
-X-Gm-Message-State: AFuF++m+xh6sZ4kg9DLuoBrlLgo6CkMqoRFNTVfDYNBa811bg9N/aj/w
-	7qMwPnlbvCoh8ZwGE0Bh+fXSjOIAcpGnmK+Z/wbm+HahxBWZB7DJgBRCa+yR6/MDW6eMvtKSsr7
-	OjTFu
-X-Gm-Gg: AYBFou3jl0JmVIweVbEF0/ewLhu8On5H13WLNi8yLK1h7FHWofeOJgHgwsumcsnFJmK
-	c9YUAQVC77UP2vCECYOd8YEUjPwERokbgxIYe/O5nED3ct/hKjM1RoJEsCbkD7g4C6241VVf3fw
-	AaFTfxBimHNMuYNqQ7zIUnG3H/CKlsytaslQsiYVP5UtCaJKzQjQmAwYIJ76Kj897oNqBOT9Q5e
-	E6A0W9wFJHDDzc+0fxlE36qAShIiYhxCEZwNDd88V/rdQhGzMNtYP6OvrP4LxWHTSvZRw6Dx3fb
-	K2QYEVvVB6BB/jmrY4ZAPWVZxyJchqS59KpsD9crM1KJaSQhrJbp8IJfuDrA8wynrNiLuDhubC1
-	tJADaqL4Cqkm42BtOF/pvWtA3WNw7sesuYMqVJ3uIEsVGz5fZaGvCGPlmzb5AZKg8i6Ylu5iJ9L
-	2xv2/SzrSSeL5AnhCz2P4p/wxcF81rHtK6H6wqISbLg7XyVUsxK+mRHjS38icoP7uAENxFdkWxx
-	F1n1eseGTZpU9H935mIYrlPK+7mfmoMrf/FN08jesGVaMm+qNjTKZ7tgtxWwr8BUA==
-X-Received: by 2002:a05:6000:2304:b0:487:b32:9d6f with SMTP id ffacd0b85a97d-4870cf25729mr2502387f8f.22.1789553362827;
-        Wed, 16 Sep 2026 03:09:22 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:449b:f2fb:7cc4:bd4e? ([2a01:e0a:106d:1080:449b:f2fb:7cc4:bd4e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bf414c3sm4832517f8f.30.2026.09.16.03.09.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2026 03:09:22 -0700 (PDT)
-Message-ID: <71b955e9-dd75-44ca-8eb8-90267dc70eee@linaro.org>
-Date: Wed, 16 Sep 2026 12:09:21 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iNz56Cnk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789554094; x=1821090094;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n152J+oW0inBpcepl+1yWkdMqbhm6d/xZ403pWrV3Ew=;
+  b=iNz56CnkopDNW1QLXWeZ72rrUCZndyI3DOTe7pKnXKArlq1SvHhhffwq
+   ih5iolx4Y9dPQRIttQQeDzwNxngOsAGsGxhurv42Y7XdLuW8T4T9ro37q
+   JBVtwDWAWloAFxI19HdR2ziT4wlnIfTiMB6cVjIDDgYw4Sl6scxJEvjhc
+   fCUNhChcRltb3fEOVf1FvwssKqHVsT0rLj92i/1UceEHHY52x2piUwQZu
+   VwPiPGeicNqEfgMNe3pRySXZ3QQy/nro417nMQDj3Dt/9HBpcIhaoWnld
+   088iFY3lQXOVGtFJ29DjmjWo0WbDizOvLkuPW8H1m8TD14Lr/yHxZzBlT
+   A==;
+X-CSE-ConnectionGUID: 19Vg5WNLRxWNn6fMO0gfKw==
+X-CSE-MsgGUID: n5JbsmEHSuasQ3kRgG90CQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="89062966"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="89062966"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2026 03:21:29 -0700
+X-CSE-ConnectionGUID: DcsR/rdNR8SqKlqBIDDynw==
+X-CSE-MsgGUID: 6lqV8nerQouNtUP4U2SofA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="273266901"
+Received: from ettammin-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.244.145])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2026 03:21:24 -0700
+Date: Wed, 16 Sep 2026 13:21:21 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: longzhao@ambarella.com
+Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>,
+	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 10/15] gpio: pl061: convert to gpio-regmap and a
+ custom irqchip
+Message-ID: <aqptoZYyclWSE_-A@ashevche-desk.local>
+References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
+ <20260915-cv75-v5-v7-10-3297d3fbc9c0@ambarella.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT fixes for v7.3-rc
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260915-cv75-v5-v7-10-3297d3fbc9c0@ambarella.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi,
+On Tue, Sep 15, 2026 at 07:15:40PM +0800, Long Zhao via B4 Relay wrote:
+> 
+> Move line get/set/direction onto gpio-regmap. Keep the existing ARM
+> masked data addresses and write-after-direction behaviour.
+> 
+> Do not use gpiochip irqchip setup (girq) or regmap-irq. gpio-regmap
+> owns gpiochip registration, so girq would have to be plumbed through
+> that helper. PL061 IRQ type programming needs IS/IBE/IEV, including
+> both-edge, plus a hardirq chained demux from the parent AMBA IRQ;
+> regmap-irq is a poor fit for that.
+> 
+> Create a linear irq_domain with gpio_chip as host data, attach it with
+> gpiochip_irqchip_add_domain(), and chain the parent IRQ in this driver.
 
-Here's the Amlogic ARM64 DT fixes for v7.3-rc, including a bunch of fixes
-for the Amlogic T7/Khadas VIM4.
+Besides some comments below about splitting more of this patch to better
+isolated logical changes, this one can also be split to a few stages. For
+example, one stage is to move to regmap (from direct MMIO access) without
+really switching over to gpio-regmap.
 
-Thanks,
-Neil
+...
 
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+> +#include <linux/err.h>
+>  #include <linux/errno.h>
 
-   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+Now errno.h can be removed as basic errno is provided by err.h.
 
-are available in the Git repository at:
+...
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-fixes-v7.3-rc
+> -#include <linux/irqchip/chained_irq.h>
 
-for you to fetch changes up to 406292fd75f95aa3010fec95b5beb5a8b7e3ba3a:
+> +#include <linux/irqchip/chained_irq.h>
 
-   arm64: dts: amlogic: t7: fix the pin groups of the vsync PWM (2026-08-31 14:42:59 +0200)
+Unneeded churn.
 
-----------------------------------------------------------------
-Amlogic DT Fixes for v7.3:
-- Set of fixes for Amlogic T7:
-  - use the real UART pclk
-  - allow the SD card to be power cycled by dropping regulator-always-on
-  - fix the pin groups of two PWM outputs
-  - add the CPU cores PWM-driven supplies to fix runtime crashes
-  - fix the pin groups of the vsync PWM using non-existing pin group
+...
 
-----------------------------------------------------------------
-Lucas Tanure (5):
-       arm64: dts: amlogic: t7: use the real UART pclk
-       arm64: dts: amlogic: t7: khadas-vim4: allow the SD card to be power cycled
-       arm64: dts: amlogic: t7: fix the pin groups of two PWM outputs
-       arm64: dts: amlogic: t7: khadas-vim4: add the PWM-driven supplies
-       arm64: dts: amlogic: t7: fix the pin groups of the vsync PWM
+> -	if ((trigger & (IRQ_TYPE_LEVEL_HIGH | IRQ_TYPE_LEVEL_LOW)) &&
+> -	    (trigger & (IRQ_TYPE_EDGE_RISING | IRQ_TYPE_EDGE_FALLING)))
+> -	{
 
-  .../boot/dts/amlogic/amlogic-t7-a311d2-an400.dts   |   2 +-
-  .../dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts  | 113 ++++++++++++++++++++-
-  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        |  44 ++++++--
-  3 files changed, 149 insertions(+), 10 deletions(-)
+> +	if ((trigger & IRQ_TYPE_LEVEL_MASK) && (trigger & IRQ_TYPE_EDGE_BOTH)) {
+
+See below, this belongs to a separate change.
+
+...
+
+> @@ -142,14 +121,19 @@ static int pl061_irq_type(struct irq_data *d, unsigned trigger)
+>  		return -EINVAL;
+>  	}
+>  
+> -
+>  	raw_spin_lock_irqsave(&pl061->lock, flags);
+
+Stray change. If required, should be in a separate patch.
+
+...
+
+> -	if (trigger & (IRQ_TYPE_LEVEL_HIGH | IRQ_TYPE_LEVEL_LOW)) {
+> +	if (trigger & IRQ_TYPE_LEVEL_MASK) {
+
+This change should be in a separate patch.
+
+...
+
+> -	writeb(gpiois, pl061->base + GPIOIS);
+> -	writeb(gpioibe, pl061->base + GPIOIBE);
+> -	writeb(gpioiev, pl061->base + GPIOIEV);
+> +	ret = regmap_write(pl061->regmap, regs->is, gpiois);
+> +	if (ret)
+> +		goto out;
+> +	ret = regmap_write(pl061->regmap, regs->ibe, gpioibe);
+> +	if (ret)
+> +		goto out;
+> +	ret = regmap_write(pl061->regmap, regs->iev, gpioiev);
+> +	if (ret)
+> +		goto out;
+> +	if (pl061->data->clear_irq_on_type)
+> +		ret = regmap_write(pl061->regmap, regs->ic, bit);
+>  
+> +out:
+>  	raw_spin_unlock_irqrestore(&pl061->lock, flags);
+> -
+> -	return 0;
+> +	return ret;
+
+Make an additional patch to move current driver to use cleanup.h, id est
+guard()() and possibly scoped_guard() from there.
+
+Then in this patch those ton's of goto:s should be replaced with simple
+'return ret;'.`
+
+>  }
+
+...
+
+> +	if (!regmap_read(pl061->regmap, pl061->data->regs->mis, &mis) && mis) {
+
+Why not handling error properly here?
+
+	ret = regmap_read(...);
+	if (ret)
+		goto out_irq_exit;
+
+> +		pending = mis;
+> +		for_each_set_bit(offset, &pending, pl061->data->ngpio)
+> +			generic_handle_domain_irq(pl061->irq_domain, offset);
+>  	}
+
+...
+
+> +static int pl061_irq_domain_map(struct irq_domain *d, unsigned int virq,
+> +				irq_hw_number_t hwirq)
+> +{
+> +	struct gpio_chip *gc = d->host_data;
+> +	struct pl061 *pl061 = pl061_from_gpio_chip(gc);
+> +
+> +	irq_set_chip_data(virq, gc);
+> +	irq_set_chip_and_handler(virq, &pl061_irqchip, handle_bad_irq);
+> +	irq_set_noprobe(virq);
+> +	irq_set_parent(virq, pl061->parent_irq);
+
+
+Is lockdep happy with this?
+
+> +	return 0;
+> +}
+
+...
+
+> +static void pl061_remove_irq(void *data)
+> +{
+> +	struct pl061 *pl061 = data;
+> +
+> +	irq_set_chained_handler_and_data(pl061->parent_irq, NULL, NULL);
+> +
+> +	for (unsigned int i = 0; i < pl061->data->ngpio; i++) {
+
+> +		unsigned int virq = irq_find_mapping(pl061->irq_domain, i);
+
+Split assignment
+
+		unsigned int virq;
+
+		virq = irq_find_mapping(pl061->irq_domain, i);
+		if (virq)
+
+> +		if (virq)
+> +			irq_dispose_mapping(virq);
+> +	}
+> +
+> +	irq_domain_remove(pl061->irq_domain);
+> +}
+
+...
+
+>  	struct device *dev = &adev->dev;
+> +	const struct pl061_drvdata *data = id->data;
+
+Split assignment as it is validated later on.
+
+> +	const struct pl061_regs *regs;
+> +	struct gpio_regmap_config config = {};
+> +	struct gpio_regmap *gpio_regmap;
+> +	struct gpio_chip *gc;
+>  	struct pl061 *pl061;
+> -	struct gpio_irq_chip *girq;
+> +	void __iomem *base;
+>  	int ret, irq;
+>  
+> +	if (!data)
+> +		return -EINVAL;
+
+-ENODATA?
+
+> +	regs = data->regs;
+
+...
+
+> +	for (offset = 0; offset < pl061->data->ngpio; offset++) {
+> +		if (!(dir & BIT(offset)))
+> +			continue;
+
+for_each_set_bit(), but make sure the type of the variable is unsigned long
+(might require a temporary one).
+
+> +		ret = regmap_read_bypassed(pl061->regmap,
+> +					   BIT(offset + PL061_DATA_OFFSET),
+> +					   &val);
+> +		if (ret)
+> +			return ret;
+> +		pl061->saved_dat |= val;
+>  	}
+
+...
+
+> +	for (offset = 0; offset < pl061->data->ngpio; offset++) {
+> +		if (!(dir & BIT(offset)))
+> +			continue;
+
+Ditto.
+
+> +		ret = regmap_write(pl061->regmap,
+> +				   BIT(offset + PL061_DATA_OFFSET),
+> +				   !!(pl061->saved_dat & BIT(offset)) << offset);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return regcache_sync_region(pl061->regmap, regs->is, regs->ie);
+>  }
+
+...
+
+> static const struct amba_id pl061_ids[] = {
+>  	{
+>  		.id	= 0x00041061,
+>  		.mask	= 0x000fffff,
+> +		.data	= (void *)&pl061_arm,
+
+Oh, this is something that needs to be fixed (but it's not your issue).
+Why on earth this is not const?
+
+>  	},
+>  	{ 0, 0 },
+>  };
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
