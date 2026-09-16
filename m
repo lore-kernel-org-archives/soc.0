@@ -1,64 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026D547F77E
-	for <soc@lists.linux.dev>; Wed, 16 Sep 2026 09:14:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CCD4AA1FA
+	for <soc@lists.linux.dev>; Wed, 16 Sep 2026 09:43:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789550060; cv=none; b=Vtb+B52EyTjRi9tZ5fUAcxrs1PHuskLBRDnQs2fr9TRJeW3dOf6apLzOUmUieR+4soO+3ZI49000z6TIK0cg60swl5EE4dcjYMEwQe0xitKsgLJr0Vvjox5Hp+7NlamsEluiNJ6u+jDkM61zKLm2qObmKpF0/oW14M9TF91oSho=
+	t=1789551801; cv=none; b=QwhzuW3KtEqefzqN+M9I8cg1OdAVBY1hLPUnBsLCykXL2MbElYhDNJafEo3lHATCaCq7FD1GgHyiHR0g4faluYILkrpknURlzG+ccosfy2s3VZckVb0wI3k5yJHqwHgTDEG2sOLYQz2eK3GFF7PAdIz3baRypf/u7c2rzVjjWv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789550060; c=relaxed/simple;
-	bh=IqWr3OCkEbgbUvmDu/uRyxYgoRP9YkYUb5hBzz6eFS4=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fTUB/L2QXndiRxp6NjlFMQ1IzBVqVvKH3DXfd/HdwnH62MXFDRtJNG7MdQfHl0rT4KbBs1WfHbo0KktZkBma6FH0rj5SmBEu9kruOQm0f0zvycfHjkc1NWb3j9E32alVjFq1pGNAIEBbwCYigNfCnLbbTyKqvzD24xHHz40WO1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4629f/U; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789551801; c=relaxed/simple;
+	bh=F3XAkt71bhIAWEC1ICnSKPfvdKIX/T9WRczYZnwW3iw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y2CUCNvc8D3a+PVhlZBhhEpKdpffUBduljA3c2JwCikd72y3r7U1EluQIMirmCSC4/CApavWG1xtlR45av6bF/mc0gHUY1WW7sJvCBjlZxC9H479GEW27ILDmXZ7cEpmg2amrI0/MMzzyg1lVnUuWzhQL3FXzldquNCWjVe/Qnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXl8q9ZC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4629f/U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 123BD1F0089D
-	for <soc@lists.linux.dev>; Wed, 16 Sep 2026 09:14:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXl8q9ZC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B65031F008A7
+	for <soc@lists.linux.dev>; Wed, 16 Sep 2026 09:43:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789550045;
-	bh=IqWr3OCkEbgbUvmDu/uRyxYgoRP9YkYUb5hBzz6eFS4=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc;
-	b=G4629f/UcKe7I5SlFPmwy6hXIMvYowntf5zI+TVR5dUYVPVgiH/HGqzVVCQI9+K9x
-	 r9HPN+Oq8a/822bZWof702+JiwGheNgxzoaFwJMc07QmoyD69TKuZGt8ZvBqRKU6E5
-	 ydySK/Mu/7VVjVD/79Z1Y5Ol/GL3efea9FLw+lj2hnBatbnfO+98mZlzKsTeq8+fcr
-	 iPlHBdT68m0oPDLgPCIoPG7jwOFP+zKzdDXx3QpR6bSNenfMopFTUSZwA8SdG+this
-	 V4rtdEx7iar3eLNPj3luvexbGMwq2uVwhh9X4fLIgHt12mph04moHTNd7A89RwSgXR
-	 KdWQOXnCs808g==
-Received: by mail-lr2-f33.google.com with SMTP id 38308e7fff4ca-3a2ff16c0e6so5416261fa.0
-        for <soc@lists.linux.dev>; Wed, 16 Sep 2026 02:14:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBxoQq/IP+9b3UtqidaQsd3gxKzSMXIFA+j76FKh6otMQl2IXzLHYKlQ3SWvaqlgjuy9x9A=@lists.linux.dev
-X-Gm-Message-State: AFuF++lS68w4xAo5vXLbSnL+7+d9vf+7pfqjc1f5H8EQXXXGGvxneZjG
-	vw0Q4vrwzaMMlwXxK0B7vHmw0suI5o8M3331EwUvzIn1JD1uJqc4AE846BVTQeKXBNpO4iPc+pd
-	CEqGVEPTFxqAiMuP4Z1xGEZFPCW2v+CZNuVxwz5ZBUQ==
-X-Received: by 2002:a2e:b8c3:0:b0:3a2:72c:cde9 with SMTP id
- 38308e7fff4ca-3a5dc9a7cefmr3078451fa.4.1789550043681; Wed, 16 Sep 2026
- 02:14:03 -0700 (PDT)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 16 Sep 2026 05:14:01 -0400
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 16 Sep 2026 05:14:01 -0400
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
+	s=k20260515; t=1789551790;
+	bh=F3XAkt71bhIAWEC1ICnSKPfvdKIX/T9WRczYZnwW3iw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=IXl8q9ZCD1dvSn2KHw7LYsq5TamJfBC9svJngVUoPtAjGvN3AGOWjcegBVIRcvmFF
+	 XT6NrbG9olT/96quf46Aj1p5TW/bOlRJqGEpKc2DvnnTXZ7qmrFaUvn7S/QkLAj9xA
+	 VTA9+RM2dRfHk3re3CEfd0MoKCHcUNuhj2uVDlfmDu5vlNWPRtjDIjCN7m2aK4dKa+
+	 vri7E5HQr9oevAF/INz6el1lZ/EqryyIvvWL5AuaOv2lDJ9wQjNtc9HTuu5uI9yeIU
+	 jvNRYpp4RADOHSwGl1NXhGtH8HhW4PYN63KmDV1bs399TWMPA2ZvEm7XDa38cyNSOc
+	 fNkQ+oRZi1HCA==
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f18010so642594e87.0
+        for <soc@lists.linux.dev>; Wed, 16 Sep 2026 02:43:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBy4Emx21gDCEJcyZEtNwy+D9PwHNSmuCMkVxviHZ1gkW8mEL2XdNnmqDXj5HhoVhQHs6lM=@lists.linux.dev
+X-Gm-Message-State: AFuF++llaQIoF9buijU+O5V84yGa3L2EpntBH1MTbJ6hE8H60ejnAZIy
+	NLRnCuD9Cr9fSOPW5IMXfmyws7SX1VjD9vKBrfwJSLPOGFh8m3dbg2AUixWUGTLdF0dB6l0uToX
+	Rmikqi1Uivq3HtmO/mvNzw1VCrNVyeRw=
+X-Received: by 2002:a05:6512:318d:b0:5b4:b03e:b17 with SMTP id
+ 2adb3069b0e04-5b8b6611fb9mr542523e87.4.1789551789409; Wed, 16 Sep 2026
+ 02:43:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
-Date: Wed, 16 Sep 2026 05:14:01 -0400
-X-Gmail-Original-Message-ID: <CAMRc=McEOcWq8i3B01AR1PnfBzSQaLEaOzE6Qa+QdVXrvS_YrA@mail.gmail.com>
-X-Gm-Features: AcwNN1V2X8i9yMMrAT1QmpJK0AF7EkMhYvRTvc6M9zTS3HHfv-L8qE4KXcdtIiI
-Message-ID: <CAMRc=McEOcWq8i3B01AR1PnfBzSQaLEaOzE6Qa+QdVXrvS_YrA@mail.gmail.com>
+References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com> <CAMRc=McEOcWq8i3B01AR1PnfBzSQaLEaOzE6Qa+QdVXrvS_YrA@mail.gmail.com>
+In-Reply-To: <CAMRc=McEOcWq8i3B01AR1PnfBzSQaLEaOzE6Qa+QdVXrvS_YrA@mail.gmail.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Wed, 16 Sep 2026 11:42:56 +0200
+X-Gmail-Original-Message-ID: <CAD++jLnRL_s9zPNkSj2UnHWPx+QHAXV19DA7dEmGZu0AkxxyaA@mail.gmail.com>
+X-Gm-Features: AcwNN1WkFxjMauP_yhzfkji573cflVZ6I3z5YLnNlcrQliI-kEo2Pckshh4B6Vw
+Message-ID: <CAD++jLnRL_s9zPNkSj2UnHWPx+QHAXV19DA7dEmGZu0AkxxyaA@mail.gmail.com>
 Subject: Re: [PATCH v7 00/15] Ambarella CV75 SoC minimal bring-up
-To: longzhao@ambarella.com
-Cc: Long Zhao via B4 Relay <devnull+longzhao.ambarella.com@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+To: Bartosz Golaszewski <brgl@kernel.org>, soc@lists.linux.dev
+Cc: longzhao@ambarella.com, 
+	Long Zhao via B4 Relay <devnull+longzhao.ambarella.com@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Jerome Brunet <jbrunet@baylibre.com>, Linus Walleij <linusw@kernel.org>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jerome Brunet <jbrunet@baylibre.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
 	Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
 	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
 	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>, 
@@ -66,23 +62,34 @@ Cc: Long Zhao via B4 Relay <devnull+longzhao.ambarella.com@kernel.org>,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
 	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
 	linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 15 Sep 2026 13:15:30 +0200, Long Zhao via B4 Relay
-<devnull+longzhao.ambarella.com@kernel.org> said:
-> This series adds minimal Ambarella CV75 support for early bring-up with
-> a serial console: DT bindings, RCT clocks, pinctrl, PL061 GPIO via
-> gpio-regmap, 8250_dw UART quirks, ARCH_AMBARELLA, CV75 EVK DT, and
-> MAINTAINERS.
+On Wed, Sep 16, 2026 at 11:14=E2=80=AFAM Bartosz Golaszewski <brgl@kernel.o=
+rg> wrote:
+> On Tue, 15 Sep 2026 13:15:30 +0200, Long Zhao via B4 Relay
+> <devnull+longzhao.ambarella.com@kernel.org> said:
+> > This series adds minimal Ambarella CV75 support for early bring-up with
+> > a serial console: DT bindings, RCT clocks, pinctrl, PL061 GPIO via
+> > gpio-regmap, 8250_dw UART quirks, ARCH_AMBARELLA, CV75 EVK DT, and
+> > MAINTAINERS.
+> >
+> > This is a single unified series. Please apply via the SoC
+> > tree; subsystem maintainers are Cc'd for their pieces.
+> >
 >
-> This is a single unified series. Please apply via the SoC
-> tree; subsystem maintainers are Cc'd for their pieces.
->
+> I would prefer to take the GPIO regmap bits through the GPIO tree and pro=
+vide
+> an immutable branch to the SoC tree as it has potential for conflicts tha=
+t
+> early into the cycle.
 
-I would prefer to take the GPIO regmap bits through the GPIO tree and provide
-an immutable branch to the SoC tree as it has potential for conflicts that
-early into the cycle.
+Queue them up and send us the IB if you think they are ready!
 
-Bart
+Long can probably send a PR based on that IB for the rest to the
+SoC tree, a bit tricksy but it works.
+
+Yours,
+Linus Walleij
