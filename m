@@ -1,100 +1,156 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88ABA2D3ED1;
-	Thu, 17 Sep 2026 12:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8B34ED18E;
+	Thu, 17 Sep 2026 21:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789649779; cv=none; b=VOcXsBMKl8qplTeVJsJx0X7dsyjQXwDfh3xmsP8pqYUZjSHe2dSAWgA/ru11UyB8ipV0OJJJYmyZk/gIqS1c2v9zQqqztjgvv1g8ZtE2hDaXH+p1OHFsWpJ5M0kX5d1PdmTqoqTXHJlZ8FmNCf57Ydn16W1d2Dc/QmuA2XB2LNs=
+	t=1789680258; cv=none; b=sdlTcSkxnB8eeHFAGnUDpA+uAP8YF2d/6bvhVOij32EWgtjC8nfr7gkAPGw/5yyWS+SDFUHc74iikhpYiXiaOdviuGo/RNML398T2V5a+TKf3BOIZYdXolbVFk1Z53LORWhp1x5eWSufVzfwF4qeDShLCBEet27eAzAaik8b3aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789649779; c=relaxed/simple;
-	bh=hJcOsp7/4gBcZglC/7Pd3zJVofVyfh4TOUzPHB2LbyM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=LVs/yl5nQszdkempOkss+oUKLYCDUf+EQaqL5sBcolSAAg82CainZ+rYbAnjRBvnxF0MPRnDSuD681t0O1gijw/LdnXXEJlLQfbRromME9vOKAhnf5Z/sFzYFQ0FG9XblBFMSNhziBLlgZ47tXy3Pi8+jPCe7xIx8IB0K+pYqkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=bhDMZFuC; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1789680258; c=relaxed/simple;
+	bh=sSbcXjG5M7vBTEb7+nYI+22U+3VbmgzgG4sDQ38deqs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R4Gq/+BHm0/XuqDxPEwvQpjXPKDquRwvvfLzg1pAVfhjahhhM1780DtHFwkp8FMELLbjCQXwyrXJSfy/Ab0n4JWAHFn2w7RP+5Ww1te1tqtFNkaI1tqA9x6H43+mg7bhHaERB4vpWQxb1nWd/BNZsDgnCaQFiVfoLEamVztGOrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=QuaBpeD6; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bhDMZFuC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=hJcOsp7/4gBcZglC/7Pd3zJVofVyfh4TOUzPHB2LbyM=; b=b
-	hDMZFuCwZhSkhaMjahcX5Bc05UtoeH3U7Sl3PP+Z0O5nklwxOkrfAsaVj1kzJ1/C
-	Ph75WHXQ6Jwlmp3FaB5SqyXkkkLmh60LChtuTjj/FD/tHRgEBQYw7CSWjYln4dl9
-	yKGQ/bZSPv+fNWsI53VzHJ5JbdjGW84sZEoBkxnOAo=
-Date: Thu, 17 Sep 2026 20:55:15 +0800 (CST)
-From: zl020895  <zl020895@163.com>
-To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Cc: longzhao@ambarella.com, "Arnd Bergmann" <arnd@arndb.de>,
-	"Krzysztof Kozlowski" <krzk@kernel.org>,
-	"Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	"Rob Herring" <robh@kernel.org>,
-	"Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-	"Conor Dooley" <conor+dt@kernel.org>,
-	"Michael Turquette" <mturquette@baylibre.com>,
-	"Stephen Boyd" <sboyd@kernel.org>,
-	"Jerome Brunet" <jbrunet@baylibre.com>,
-	"Linus Walleij" <linusw@kernel.org>,
-	"Bartosz Golaszewski" <brgl@kernel.org>,
-	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-	"Jiri Slaby" <jirislaby@kernel.org>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	"Catalin Marinas" <catalin.marinas@arm.com>,
-	"Will Deacon" <will@kernel.org>, "Lee Jones" <lee@kernel.org>,
-	mfd@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: Re: [PATCH v7 12/15] pinctrl: ambarella: add CV75 pin
- controller
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <aqvbfCQ6cxfGYJeC@ashevche-desk.local>
-References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
- <20260915-cv75-v5-v7-12-3297d3fbc9c0@ambarella.com>
- <aqp0VlwWotnuK9t7@ashevche-desk.local>
- <40f1f819.7f85.1a0ae9e4dae.Coremail.zl020895@163.com>
- <aqvbfCQ6cxfGYJeC@ashevche-desk.local>
-X-NTES-SC: AL_Qu2TC/qftk8q4yGQY+kcn0wRhug/UMa4u/sm3YNXc+4Eqibs3gYGRG9PH0nv/8uJLS6Juh6wVSdN18d0QrRHMpJrKUK/9tD+DJuJ0EekfA==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="QuaBpeD6"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:From:Cc:To:Subject:
+	MIME-Version:Date:Message-ID:From:Reply-To;
+	bh=RpWZdNHGYoV/6JCrVSKz8y6ytrZaFDnDxpAF1ip5BB0=; b=QuaBpeD6kNNs0NDL9br7Pv641+
+	S1LZkytpjjX4zFGy6uQJmiFf53WqKEvJggJM9Fz0Vq+36RY9zXW2NWJYzHj9ZsLpqrZzVsDpXSdH1
+	M+Towaj8mtbiLL0+vdO+FPmik3ZcIlfAnZgL7q5EH6726fbDQzmwrXoqMVI74blt8dUCv+Q57ZrPu
+	4rcOwFBifSgHEfGQBKnGUDoZkjRL+BzXacQkSVMcZt0c+NBXHDgc8ssJdA/fkQk8/Il9NawvtfShs
+	skfT8YFqmyOHLPBUHWRjguGnj7o8mYbFPSgnxL/4n0D9BFLG0mqU22x9Wb05mUh/0j21YtbvNsIRH
+	J3LnpKUg==;
+Received: from [177.172.123.214] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1x7JaO-003erL-DT; Thu, 17 Sep 2026 23:24:04 +0200
+Message-ID: <e553953e-d784-4eb5-b3fc-6e847b2dfcd1@igalia.com>
+Date: Thu, 17 Sep 2026 18:24:02 -0300
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-ID: <4bd10649.9ba9.1a0af6f7ffd.Coremail.zl020895@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:aSgvCgAHvpUz46tqpbxGAA--.49547W
-X-CM-SenderInfo: d2oqjiqyzvqiywtou0bp/xtbC7hOK+2qr4zO2kQAA36
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 00/13] syscalls: Add a shared table for all archs
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, kernel-dev@igalia.com,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-alpha@vger.kernel.org, linux-s390@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
+ linux-mips@vger.kernel.org, sparclinux@vger.kernel.org
+References: <20260828-tonyk-syscall_table-v6-0-fdd358456cf1@igalia.com>
+ <95b693c0-ca51-4355-99ba-2b37a1ab2169@app.fastmail.com>
+ <6fa4e1e3-c023-465c-9490-ce2f18ffaa91@igalia.com>
+ <5aedf90f-d30d-4f55-b066-dd8fdf3ff8f9@app.fastmail.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <5aedf90f-d30d-4f55-b066-dd8fdf3ff8f9@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-VGhhbmtzLCBBbmR5LgoKUElOQ1RSTF9QSU5HUk9VUCBvbmx5IGNhcnJpZXMgcGluIG51bWJlcnMu
-IFRoZSBJT01VWCBhbHQgaXMgbm90IHRoZQpwaW5jdHJsIGZ1bmN0aW9uOiB0aGUgc2FtZSBwaW4g
-aXMgaW4gc2V2ZXJhbCBncm91cHMgd2l0aCBkaWZmZXJlbnQKYWx0cywgYW5kIGEgZmV3IGdyb3Vw
-cyBtaXggYWx0cy4KCkluIHY4IEkgd2lsbCBzd2l0Y2ggdGhlIGdyb3VwIHRhYmxlcyB0byBQSU5D
-VFJMX1BJTkdST1VQIGFuZCBwYXNzIGEKcGVyLXBpbiBhbHQgYXJyYXkgYXMgZ3JvdXAgZGF0YSBm
-b3Igc2V0X211eCgpLiBQSU5DVFJMX1BJTkZVTkNUSU9OCnN0YXlzIGFzIGl0IGlzLgoKQmVzdCBy
-ZWdhcmRzLApMb25nIFpoYW8KCkF0IDIwMjYtMDktMTcgMjA6MjI6MjAsICJBbmR5IFNoZXZjaGVu
-a28iIDxhbmRyaXkuc2hldmNoZW5rb0BsaW51eC5pbnRlbC5jb20+IHdyb3RlOgo+T24gVGh1LCBT
-ZXAgMTcsIDIwMjYgYXQgMDU6MDY6NDVQTSArMDgwMCwgemwwMjA4OTUgd3JvdGU6Cj4+IFRoYW5r
-cyBmb3IgdGhlIHJldmlldy4gVGhlIHNtYWxsIGNvbW1lbnRzIHdpbGwgYmUgaW4gdjgsCj4+IGlu
-Y2x1ZGluZyBwaW5jb25mIHNldCB2aWEgcmVnbWFwX2Fzc2lnbl9iaXRzLgo+PiAKPj4gUElOQ1RS
-TF9QSU5HUk9VUCBkb2VzIG5vdCBmaXQgaGVyZTogZ3JvdXBzIGNhcnJ5Cj4+IEFNQkFfUElOTVVY
-KHBpbiwgYWx0KSwgbm90IGEgcGluLW51bWJlciBsaXN0LCBzbyBJIHdpbGwga2VlcAo+PiBDVjc1
-X0dST1VQLgo+Cj5JIGRpZG4ndCBnZXQuIEl0IHRha2VzIGEgcGluIGFzIGEgcGFyYW1ldGVyIGFu
-ZCBhZGRzIHRoZSBmdW5jdGlvbiBvbiB0b3AKPm9mIGl0LiBJdCBpcyBhIGNvbWJvLCBidXQgSSB0
-aGluayBpdCBzdGlsbCBmaXRzIHRoZSBwdXJwb3NlLiBQbGVhc2UsIHVzZQo+ZXhpc3RpbmcgZGF0
-YSBzdHJ1Y3R1cmUgYW5kIGEgbWFjcm8uCj4KPj4gQXQgMjAyNi0wOS0xNiAxODo0OTo1OCwgIkFu
-ZHkgU2hldmNoZW5rbyIgPGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmludGVsLmNvbT4gd3JvdGU6
-Cj4+ID5PbiBUdWUsIFNlcCAxNSwgMjAyNiBhdCAwNzoxNTo0MlBNICswODAwLCBMb25nIFpoYW8g
-dmlhIEI0IFJlbGF5IHdyb3RlOgo+Cj4uLi4KPgo+PiA+PiArI2RlZmluZSBBTUJBX1BJTk1VWChw
-aW4sIGFsdCkJCSgoKGFsdCkgPDwgMTIpIHwgKHBpbikpCj4+ID4+ICsjZGVmaW5lIEFNQkFfUElO
-TVVYX1RPX1BJTihtdXgpCQkoKG11eCkgJiAweGZmZikKPj4gPj4gKyNkZWZpbmUgQU1CQV9QSU5N
-VVhfVE9fQUxUKG11eCkJCSgoKG11eCkgPj4gMTIpICYgMHg3KQo+PiA+PiArCj4+ID4+ICtzdHJ1
-Y3QgYW1iX3Bpbm11eF9ncm91cCB7Cj4+ID4+ICsJY29uc3QgY2hhciAqbmFtZTsKPj4gPj4gKwlj
-b25zdCB1MzIgKm11eDsKPj4gPj4gKwl1bnNpZ25lZCBpbnQgbm11eDsKPj4gPj4gK307Cj4KPl5e
-XiBsZWZ0IGZvciB0aGUgY29udGV4dC4KPgo+Cj4tLSAKPldpdGggQmVzdCBSZWdhcmRzLAo+QW5k
-eSBTaGV2Y2hlbmtvCj4K
+Em 17/09/2026 02:55, Arnd Bergmann escreveu:
+> On Thu, Sep 17, 2026, at 00:19, André Almeida wrote:
+>> Em 15/09/2026 04:45, Arnd Bergmann escreveu:
+>>> On Sat, Aug 29, 2026, at 01:19, André Almeida wrote:
+>>
+>> Thanks for testing! I believe I found a simple solution for this. I
+>> modified syscall_o32.tbl and can confirm it triggers a rebuild now:
+>>
+>> diff --git a/arch/mips/kernel/syscalls/Makefile
+>> b/arch/mips/kernel/syscalls/Makefile
+>> index aaa5443ea906..9e31d1ce5015 100644
+>> --- a/arch/mips/kernel/syscalls/Makefile
+>> +++ b/arch/mips/kernel/syscalls/Makefile
+>> @@ -40,10 +40,10 @@ src_n32 := $(src)/syscall_n.tbl
+>>    src_n64 := $(src)/syscall_n.tbl
+>>    src_o32 := $(src)/syscall_o32.tbl
+>>
+>> -$(kapi)/unistd_nr_%.h: $(systbl_common) $(sysnr) FORCE
+>> +$(kapi)/unistd_nr_%.h: $(systbl_common) $(src_%) $(sysnr) FORCE
+>>           $(call if_changed,sysnr)
+>>
+>> -$(kapi)/syscall_table_%.h: $(systbl) $(systbl_common) FORCE
+>> +$(kapi)/syscall_table_%.h: $(systbl) $(systbl_common) $(src_%) FORCE
+>>           $(call if_changed,systbl)
+> 
+> I had tried the same thing already, but in my testing, it did
+> not rebuild after changing the syscall_n.tbl file, only the
+> syscall_o32.tbl file. Can you verify that your change rebuilds
+> all nine files in the correct cases?
+>
+After a more careful look, I have found out a couple of issues:
+
+- The first one, the one that the build bot originally warned as about 
+this outdated rule:
+
+  $(uapi)/unistd_%.h: $(src)/syscall_%.tbl $(syshdr) FORCE
+  	$(call if_changed,syshdr)
+
+$(src)/syscall_%.tbl doesn't make anymore for n32 and n64, and needed to 
+be updated.
+
+- Secondly, $(src_%) doesn't work as I expected. % only works like this 
+for files (like syscall_%.tbl). For variables, the correct form is 
+$(src_$*). Now the pattern matching started working and generating 
+$(src_n32), $(src_n64), ...
+
+- Finally, this wasn't enough either. Due to how make works[1], the 
+variable was being generated but it wasn't being evaluated. So I had to 
+add the .SECONDEXPANSION target to finally make it work, resulting on 
+those rules:
+
+.SECONDEXPANSION:
+
+$(uapi)/unistd_%.h: $(systbl_common) $$(src_$$*) $(syshdr) FORCE
+	$(call if_changed,syshdr)
+
+$(kapi)/unistd_nr_%.h: $(systbl_common) $$(src_$$*) $(sysnr) FORCE
+	$(call if_changed,sysnr)
+
+$(kapi)/syscall_table_%.h: $(systbl) $(systbl_common) $$(src_$$*) FORCE
+	$(call if_changed,systbl)
+
+And now, testing updating the tables:
+
+$ touch arch/mips/kernel/syscalls/syscall_o32.tbl
+$ make -j31 W=1 O=mips ARCH=mips LLVM=1 prepare | grep SYS
+   SYSHDR  arch/mips/include/generated/uapi/asm/unistd_o32.h
+   SYSTBL  arch/mips/include/generated/asm/syscall_table_o32.h
+   SYSNR   arch/mips/include/generated/asm/unistd_nr_o32.h
+
+$ touch arch/mips/kernel/syscalls/syscall_n.tb
+$ make -j31 W=1 O=mips ARCH=mips LLVM=1 prepare | grep SYS
+   SYSHDR  arch/mips/include/generated/uapi/asm/unistd_n32.h
+   SYSHDR  arch/mips/include/generated/uapi/asm/unistd_n64.h
+   SYSTBL  arch/mips/include/generated/asm/syscall_table_n32.h
+   SYSTBL  arch/mips/include/generated/asm/syscall_table_n64.h
+   SYSNR   arch/mips/include/generated/asm/unistd_nr_n32.h
+   SYSNR   arch/mips/include/generated/asm/unistd_nr_n64.h
+
+$ touch scripts/syscall_common.tbl
+$ make -j31 W=1 O=mips ARCH=mips LLVM=1 prepare | grep SYS
+   SYSHDR  arch/mips/include/generated/uapi/asm/unistd_n32.h
+   SYSHDR  arch/mips/include/generated/uapi/asm/unistd_n64.h
+   SYSHDR  arch/mips/include/generated/uapi/asm/unistd_o32.h
+   SYSTBL  arch/mips/include/generated/asm/syscall_table_n32.h
+   SYSTBL  arch/mips/include/generated/asm/syscall_table_n64.h
+   SYSTBL  arch/mips/include/generated/asm/syscall_table_o32.h
+   SYSNR   arch/mips/include/generated/asm/unistd_nr_n32.h
+   SYSNR   arch/mips/include/generated/asm/unistd_nr_n64.h
+   SYSNR   arch/mips/include/generated/asm/unistd_nr_o32.h
+
+I will send a v7 with this changes for mips.
+
+Thanks!
+
+[1] 
+https://www.gnu.org/software/make/manual/html_node/Secondary-Expansion.html
