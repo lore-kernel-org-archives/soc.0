@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1784FDA48
-	for <soc@lists.linux.dev>; Fri, 18 Sep 2026 13:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A4B4F93D3
+	for <soc@lists.linux.dev>; Fri, 18 Sep 2026 13:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789738877; cv=none; b=OKBJZ/bNdc4ImU/fBeyJDPd2cGyEzQIIKFcZh6cFugDrYXC+0OvvlfI+5rsMcI302pQX7piDKgghO993TJ4w2raKIRCf5ec555TfpFbG+Sbo6rw7BllJDXCUdNJWSc5ph+vAuwr8aJn1Uq5QZga+MdWeHQnXtw8awz+BW7oelZ8=
+	t=1789738879; cv=none; b=EtWu6rZhnt+EpRLA2WASPI1vGwQXHUt5eEN6nh/XTRYApFUBLe9id7xD2ZG8umWbVDWRwYlUd0xvr6QES26Y8496QMqmyIHxLtawnouJcfx7WgkaRMfaKN0QxebP+HlnKu5HRUdCo19iRnS70r39odBvzWwub64/+y6mpSnK+5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789738877; c=relaxed/simple;
-	bh=46pIXCxrCB2PS3S9dsriDDBPX58ccvZ9/Q3BPkWCy2s=;
+	s=arc-20240116; t=1789738879; c=relaxed/simple;
+	bh=UcZUj7tZFc0Ex0fxb1a05dyuHKVTGo7ZrxX4+UHrhMg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WIKQnNguvZp3LyC9CWrCELu1Pd2HLXnUKaoyGwFVkJj+BZuuFsl7Q2pYo6yUBsNfzdQaJaRdClf+oBXN5ipv94MzrtmOo2reHfUwU1yMF10aM/t/QIn/BCtMuZVt2/BeJd8UQ/m+9YSLDfVbmOwNnb9I5PQUTDymWdRn/YVREpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kf+bryqu; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=JO1BKkHaLu6D7lR6/1+ZM/mfi8X2hiZmzXwdkYfapvr6CsNCwutqAV0Hr+UPYdcXA54Q622a20i9Y5MjuFN36K8FaTnhiSChD26XhOCW69gRdA8670R6b2Xdzt1Afb6o2eUEY6N6oBVNDsp/xnu2cjAIcYkLdlVvN2wcVofOEw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cY39VXUi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kf+bryqu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cY39VXUi"
 Received: by smtp.kernel.org (Postfix)
-	id 853911F0089B; Fri, 18 Sep 2026 13:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7541F0089A;
-	Fri, 18 Sep 2026 13:41:16 +0000 (UTC)
+	id 0B3771F00898; Fri, 18 Sep 2026 13:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E891F000FF;
+	Fri, 18 Sep 2026 13:41:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789738876;
-	bh=QGV1XC/kOIQ4M15Tj4xwmIErWQOwEjKaqbSSq06dz8E=;
+	s=k20260515; t=1789738877;
+	bh=h1fXCau6+J+e/AuEkAuCL3iKwOI2WosGMY+Ne8tuBjk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Kf+bryquABFaGIaoiF5tLprqWkijj0gIy6iWsT0Lu7z+2LRyWuQcOy0ceNkwkN1aN
-	 j1s05Tn+45UZMK55DxqVNkUAJ0BE0O0aDN3RcDChbyP+fKEi70//PbpsClGe2xgPYu
-	 T4A52RSGPJthHV4/ZxApfLX6Op4liwv2sL5wI8RzTl1r3grV2QBGMLjYTWgArObupQ
-	 jlOeWhN7Dr46czhZ7btHkQbyy5Ili1i9WbMQBcG0No66wr5Ea9TZBhX0LpxARaPdo5
-	 7/OQnWxAVHldKpxorAgdT88I5zJV/SuvTBhKFf2DZGJ/1hX2uT3LLWtPLIaIJBQM6T
-	 38R//wBx7HRpA==
+	b=cY39VXUiB2UdNZxmBYhQjms3yaMJxV9g//vYlENALaX1NusYPR50q0HdLVe9O0yC2
+	 kFriH+aIWv4uEprVuMNR53ic85wbOr9S4Rzd89FncXOxda7exeP+9U75QWkCenI1gR
+	 UC2LEdUCOAbpgoOsG2qhzF7SGGMiOAs3xaRRg4x/0uhmxwv6KfgnIOTi56bF1pJlJW
+	 Pm+yTF20VG1P49iaxX9KeR2HcEk6liJC/n6b4H7B9OrvJ6xhxWi4DBVyEQaM7ni97d
+	 D3XImYT5Rs1m4pok6JFV+8ezrtQfs3cSOcj7S0wnUTAuPnXFyqMEsMXeTP6VRTioei
+	 G/fWak3ntzn+w==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D09B6380CEE2;
-	Fri, 18 Sep 2026 13:40:10 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56936380CEE2;
+	Fri, 18 Sep 2026 13:40:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,35 +39,36 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Renesas SoC fixes for v7.3 (take two)
+Subject: Re: [PATCH fixes] soc: samsung: exynos-pmu: fix use-after-free of
+ interrupt generator node
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <178973880966.506446.171339996647655437.git-patchwork-notify@kernel.org>
-Date: Fri, 18 Sep 2026 13:40:09 +0000
-References: <cover.1789722755.git.geert@linux-m68k.org>
-In-Reply-To: <cover.1789722755.git.geert@linux-m68k.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
+ <178973881089.506446.24975099019611844.git-patchwork-notify@kernel.org>
+Date: Fri, 18 Sep 2026 13:40:10 +0000
+References: <20260917081641.72291-2-krzk@kernel.org>
+In-Reply-To: <20260917081641.72291-2-krzk@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 18 Sep 2026 11:13:52 +0200 you wrote:
-> From: Geert Uytterhoeven <geert+renesas@glider.be>
+On Thu, 17 Sep 2026 10:16:42 +0200 you wrote:
+> From: Alexey Klimov <alexey.klimov@linaro.org>
 > 
-> 	Hi SoC folks,
-> 
-> The following changes since commit 2ac7bad110be6ebe478d6bd57821f7f5259a1f54:
-> 
->   arm64: dts: renesas: r9a09g087: Switch GBETH TX queue scheduling to WRR (2026-09-02 14:32:37 +0200)
+> The setup_cpuhp_and_cpuidle() parses the device tree node for the
+> interrupt generation block via of_parse_phandle() and decrements its
+> reference count using of_node_put() immediately after fetching the resource
+> address. However, later the intr_gen_node pointer is passed into
+> of_syscon_register_regmap().
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Renesas SoC fixes for v7.3 (take two)
-    https://git.kernel.org/soc/soc/c/2d5061ff3762
+  - [fixes] soc: samsung: exynos-pmu: fix use-after-free of interrupt generator node
+    https://git.kernel.org/soc/soc/c/4dd1999783d7
 
 You are awesome, thank you!
 -- 
