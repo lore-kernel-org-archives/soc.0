@@ -1,256 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382C13B42F2
-	for <soc@lists.linux.dev>; Fri, 18 Sep 2026 09:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789724242; cv=none; b=RKPA+luP4n7kr/0Bh+f7SyNKdupO22jNenOHdpmmnTggYb5xaidQuTC+lAc6MeqHsieMc/IeqpcyPsvrvwoSfpKztbuWFUTJe/W4L8aJu6NoWJM06mo15hSz8h8SrCT0lwEY6Y4vEIzfUUfbnWqZz1z7skDwXirCfH5bug8Tv24=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789724242; c=relaxed/simple;
-	bh=tdLzM35fvNa+ePTZFB6PwfoolvSKeDWJH3gr9YBT3aE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XilkEB1RrHO7gXgiWwmnevFbYG6fY2rqAqtVeTwTqZc/GP8q2fsOVD9YNS2Hqbb8m5aEvPJGmjsckjTVDTh217Qvi9QAXGu3lB+wDztPVq/Ubl3/tsAKbXl9uixvEx3e+sjCf7CAlEFuK8vdJwqZpdOgR0XafW7INdopPOrMBwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix)
-	id 0803A1F000FF; Fri, 18 Sep 2026 09:37:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ECD71F00893;
-	Fri, 18 Sep 2026 09:37:19 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/3] Renesas DTS updates for v7.4
-Date: Fri, 18 Sep 2026 11:37:05 +0200
-Message-ID: <cover.1789722875.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1789722868.git.geert+renesas@glider.be>
-References: <cover.1789722868.git.geert+renesas@glider.be>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6025F4DAF85
+	for <soc@lists.linux.dev>; Fri, 18 Sep 2026 10:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789728912; cv=pass; b=kreUYVlk4h/6MWzwGBYE+4/DEwRndtVtsxYDetgVDePHGMB/oKUhTkOCpUpv9ZLLc9UqcatjtYlQPwMW0C+sVraJH9wJPXnYGsPT0bcRNModb2Ii8gIqIyIDbx0eOKb7XuPfA8/6iKM/XloBj8RrvxpeaXLctRsFGVgFwjJXuzM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789728912; c=relaxed/simple;
+	bh=0QFLY2cyWzIGxwHrQ7HwSGwbi9sjKL2DXLzkJTDdzU8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qVfRUBob6z8Xu74/ieTflI9bEX6kxMEZAgm/qwUsnDWQ2a0MUSFftvGCPBsTKRaOAX5zt/IrTFlPTFCGMSXmymHWB9Y1faU0haMpD6pWpZjmdtbyTQBWaM0ZIFU+RWcXBWn/Pef+EN/u1GDA3xFIG/KmdrsVa2jD8BgSkdmfcz4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pO+fCtJK; arc=pass smtp.client-ip=74.125.228.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pO+fCtJK"
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254f6c7a4aso67513466b.0
+        for <soc@lists.linux.dev>; Fri, 18 Sep 2026 03:55:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789728907; cv=none;
+        d=google.com; s=arc-20260327;
+        b=iDRqx69N69zDwwSgoucruHmLAYsPDBGnZUpTB2wNWCpXCr3oNC/lj2XNZOSR+wFJb+
+         7EpahSbyq6YreMMY/vIQikdlBvqVJ3kclABeYlhICqgghF44D3Y7kIUx4PJJ1uBrStgD
+         SHJjX3awNaHHUT83Xgy21y1TJ3k0vTQsXDZaFjwRwtTuRWp7oDoSVudY36bqY/7ujRsE
+         tficFCRnr6DSInDdiUjzoIJLxTszGVeSY6aJIoLqYaAie9ZmTd/oTapuUQAHVFiT+zKG
+         UyiReuCtok15l9nUxRc2pEQF4Z5n9F2cnHGTPDZKW9EKrIWMsSxN17xsEdMAw6OLMEhr
+         6YJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=c9KFaw0r3zy7as/jjFJHUlbx8sYj2YFXt4OlbArB54Y=;
+        fh=jS4E5k9Ow8kMh/LQclrGxedVnN5RBhcTdUYSJ6Vu7Q8=;
+        b=pW4QP/6cr8NvUPZdFGudy/oasRGuOkC1vp5pFvTNmqBqC+829qbc0tnqH8kR5/k+BG
+         +fV3/cInDglCWw92FwZzlLIm1M7zVLlVxenm8m8lOzLc3fL/3fhIG3ABhKdSfZnHNJM1
+         3S6H74r6XJPtC9aa7VOBhUM2mGI2VRby0zwZIiSnJnI6JvUBsrrOjqRK6jjgfpXV6R2O
+         MjK3WqA3w+UV4PXLGKmQmfUW38k/nzDdaOAXp0OUTko50qdJeunszqcCmT718Ex65TDM
+         DLtu8CVkzFWqp2yJ/4oXt9uhYxSxiHIp403aF8/D6Clr1VC1u7gp47OUAfSwqOcw2Jxy
+         4XXw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789728907; x=1790333707; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=c9KFaw0r3zy7as/jjFJHUlbx8sYj2YFXt4OlbArB54Y=;
+        b=pO+fCtJKm1uX04V+6TfeNtwxSrJIHEYR/wttcIukxZgrhPhF6GFXmuVM6ZOV2+H/wL
+         LOdE9nWtH7hPmbMAMEUVeuZT2tSkyqnuPbQmuolDITho6Gl1FPwenBVhV6uLCfM9UE0p
+         Cz334aIct1VXhuIk+AMGOQLExDlyJ6GORXCw5TZCTpWLi/1tGkZQioWXcznUD+W19+9F
+         In4LAUht3YD/2uWda7x2ILNdXA4LG0li+AK0AYBN4ilS+uiGddGpPNv0Ky9M0NSfmK5S
+         O6BV6/HNl9w/O5Oz6qtBzM0MjkD1gTnX2KlheBslXxJzaAo9LDT0teVkzqnuTmH/3qWj
+         hhOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789728907; x=1790333707;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=c9KFaw0r3zy7as/jjFJHUlbx8sYj2YFXt4OlbArB54Y=;
+        b=2Am0oys3YsKQoayn+Bky2x4OHHVbQKPy/xI8tEgqMLS66spVhRVVcxnZhHnifKOr/8
+         tyy8rSJo0WNswYO5AYMV6jRLwu1qGvs44DcGtv8Y+iHZZOjp+6gDIuM0uGCtAflk/Kjw
+         herOW7+0ezNyFYTsYwmcrXFOd9gKPu99SHmc5iqgEQv6Pr1CeifwAfLh+v4PXCRSvmew
+         ujCKZIJ8j2kXfEiJ3lwTFCSEIgGs4UnenN1RuJou6q09WMMomH7T66yH9SW9OrE50Upv
+         hvEQNuhMBeeXMPjU8SK1OH4iBjV2fT3Kny1Mj4IKFzqpACWpHHK3TAvvqtM8nt40Ac2S
+         4S9Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzu47xe6RkXe1PcgqtAaW3UWWb+KDVjO8f1jKf3Lo48p698UgD2AhNb6HgLz3Zhn5hGKPk=@lists.linux.dev
+X-Gm-Message-State: AFuF++l7c+lQfjlMalU4+1aKFROcXZ8rrudnaDElvRkwZdDAsBvWos5l
+	b6i2R62CN7sb4452ctpPbHFmwgo1Pkh4++NdEro4Cv1diwFnoiZ738/IYdjIcmAwlU8gelLpPVn
+	8gDvSZPpSEOepb291y4IQ7ZLmJkT4ZXs=
+X-Gm-Gg: AYBFou1Wzz3BnBn5NVzFK29X0iykmRFZ6ODRhkMSDM+7RvVq8y9YrdrQZBwPEeJ4nyr
+	PNzHLcJpF6e3752E2rgxFYWfKW31Yet57Ng9S4ugWfHTH9s/sB9B8ux5Wu21Ol/rgShF/zleYXK
+	l3fPJUr9M8z1VaLhHFdpJMmhC550oYqXixxCKGDjPNhelpUgaLqe/K24pQLw1eNSo93aBI52QKw
+	1mzsZpplQCQ+hnKhhPcVlKAtXWuuuIOE5AaJLX0gIAhavbMo+dEoPwRE0jXCuOxiEjj579ka+US
+	syYiy9hKKQg8pGsekD8Q5PMg/XCSkwshxAIfPD2rMNYhIRxQlgZqAj8CFZkoOLIki60VJKbQEyz
+	/QYOvS4ULlwREl3142+1DbY3X3CVIfkcAL1TUmXtnVefPZP8cP0sM
+X-Received: by 2002:a17:907:d0a:b0:c28:ec7c:27ae with SMTP id
+ a640c23a62f3a-c2a15aecddfmr221737866b.25.1789728906928; Fri, 18 Sep 2026
+ 03:55:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260917-tonyk-syscall_table-v7-0-f4cd8f8e3265@igalia.com> <20260917-tonyk-syscall_table-v7-12-f4cd8f8e3265@igalia.com>
+In-Reply-To: <20260917-tonyk-syscall_table-v7-12-f4cd8f8e3265@igalia.com>
+From: Magnus Lindholm <linmag7@gmail.com>
+Date: Fri, 18 Sep 2026 12:54:55 +0200
+X-Gm-Features: AcwNN1XYBCc8XytQv7lpPsMdlPdL7ChQXyccU8FUv6otEOv13o1h6_2iRPXOShM
+Message-ID: <CA+=Fv5Q+sOLmT0Wf3OGdKw=mBt_EoS8ZQDF3wwGrm2-2vnOYgg@mail.gmail.com>
+Subject: Re: [PATCH v7 12/13] alpha: Remove alpha_ prefix from custom syscall entries
+To: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmanon <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, kernel-dev@igalia.com, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-alpha@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	soc@lists.linux.dev, linux-mips@vger.kernel.org, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 8dc2615d5702059b2b71fca6f93c0d7d10ae54cb:
+Hi Andr=C3=A9,
 
-  arm64: dts: renesas: r8a779f0: Set UFS lane count (2026-09-14 10:07:09 +0200)
+On Fri, Sep 18, 2026 at 1:48=E2=80=AFAM Andr=C3=A9 Almeida <andrealmeid@iga=
+lia.com> wrote:
+>
+> Some architectures need special entry points for some syscalls (like
+> clone3). The current approach is, instead of having a special name like
+> arch_syscall, to name if as __syscall. This is enough to different the
+> common entry point to the architecture specific entry point.
+>
+> Change alpha special syscall entries to do the same. This makes easier to
+> join the syscall tables. Leave alpha_syscall_zero because this syscall on=
+ly
+> exists in alpha anyway.
+>
+> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
+> ---
+>  arch/alpha/kernel/entry.S              | 8 ++++----
+>  arch/alpha/kernel/syscalls/syscall.tbl | 8 ++++----
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/alpha/kernel/entry.S b/arch/alpha/kernel/entry.S
+> index 9f2608de2544..8a85fcf117cb 100644
+> --- a/arch/alpha/kernel/entry.S
+> +++ b/arch/alpha/kernel/entry.S
+> @@ -879,9 +879,9 @@ ret_from_kernel_thread:
+>
+>  .macro fork_like name
+>         .align  4
+> -       .globl  alpha_\name
+> -       .ent    alpha_\name
+> -alpha_\name:
+> +       .globl  __sys_\name
+> +       .ent    __sys_\name
+> +__sys_\name:
+>         .prologue 0
+>         bsr     $1, do_switch_stack
+>         // NB: if anyone adds preemption, this block will need to be prot=
+ected
+> @@ -896,7 +896,7 @@ alpha_\name:
+>         ldq     $26, 56($sp)
+>         lda     $sp, SWITCH_STACK_SIZE($sp)
+>         ret
+> -.end   alpha_\name
+> +.end   __sys_\name
+>  .endm
+>
+>  fork_like fork
+> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/s=
+yscalls/syscall.tbl
+> index 8fc4701a6328..a41276634923 100644
+> --- a/arch/alpha/kernel/syscalls/syscall.tbl
+> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
+> @@ -9,7 +9,7 @@
+>  #
+>  0      common  osf_syscall                     alpha_syscall_zero
+>  1      common  exit                            sys_exit
+> -2      common  fork                            alpha_fork
+> +2      common  fork                            __sys_fork
+>  3      common  read                            sys_read
+>  4      common  write                           sys_write
+>  5      common  osf_old_open                    sys_ni_syscall
+> @@ -72,7 +72,7 @@
+>  63     common  getpgrp                         sys_getpgrp
+>  64     common  getpagesize                     sys_getpagesize
+>  65     common  osf_mremap                      sys_ni_syscall
+> -66     common  vfork                           alpha_vfork
+> +66     common  vfork                           __sys_vfork
+>  67     common  stat                            sys_newstat
+>  68     common  lstat                           sys_newlstat
+>  69     common  osf_sbrk                        sys_ni_syscall
+> @@ -242,7 +242,7 @@
+>  309    common  get_kernel_syms                 sys_ni_syscall
+>  310    common  syslog                          sys_syslog
+>  311    common  reboot                          sys_reboot
+> -312    common  clone                           alpha_clone
+> +312    common  clone                           __sys_clone
+>  313    common  uselib                          sys_uselib
+>  314    common  mlock                           sys_mlock
+>  315    common  munlock                         sys_munlock
+> @@ -474,7 +474,7 @@
+>  542    common  fsmount                         sys_fsmount
+>  543    common  fspick                          sys_fspick
+>  544    common  pidfd_open                      sys_pidfd_open
+> -545    common  clone3                          alpha_clone3
+> +545    common  clone3                          __clone3
+>  546    common  close_range                     sys_close_range
+>  547    common  openat2                         sys_openat2
+>  548    common  pidfd_getfd                     sys_pidfd_getfd
+>
+> --
+> 2.55.0
+>
+>
 
-are available in the Git repository at:
+The fork_like macro now defines __sys_clone3, but the syscall table
+entry is changed from alpha_clone3 to __clone3.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v7.4-tag1
+This should be __sys_clone3, like the other custom entry points.
 
-for you to fetch changes up to b43aa6a6ebe8ca8bdd75ee688e1eb2d0d16a888e:
+I also confirmed this by building the tree at this patch, before applying
+patch 13:
 
-  arm64: dts: renesas: r8a779f0: Add GICv3 ITS and update PCIe nodes (2026-09-15 10:46:16 +0200)
+LD      .tmp_vmlinux1
+alpha-unknown-linux-gnu-ld: arch/alpha/kernel/systbls.o:
+in function `sys_call_table':
+(.data+0x1108): undefined reference to `__clone3'
 
-----------------------------------------------------------------
-Renesas DTS updates for v7.4
+Patch 13 hides the issue because the common table uses __clone3 as the
+ABI tag but correctly selects __sys_clone3 as the syscall entry point.
 
-  - Add GPU and display support for the RZ/G3L SoC,
-  - Add display and RTC support for the RZ/T2H and RZ/N2H SoCs, and
-    their EVK development boards,
-  - Add I3C support for the RZ/G3S SMARC SoM,
-  - Specify ethernet PHY reset timings on various ARM32 boards,
-  - Add Clock Pulse Generator (CPG) and Module Controller (MDLC) support
-    on the R-Car X5H SoC,
-  - Add GICv3 Interrupt Translation Services (ITS) support on the R-Car
-    V4H, V4M, and S4-8 SoCs,
-  - Add GPIO support for the RZ/N1D-EB Expansion Board,
-  - Add Display Stream Compressor (DSC) and (more) DisplayPort support
-    for the R-Car V4H SoC and the Sparrow Hawk and White Hawk
-    development boards,
-  - Add WaveShare dual-channel CANFD HAT support for the Sparrow Hawk
-    development board,
-  - Miscellaneous fixes and improvements.
-
-Note that this is based on renesas-fixes-for-v7.3-tag2, for which I have
-just sent a PR.
-
-Thanks for pulling!
-
-----------------------------------------------------------------
-Biju Das (7):
-      arm64: dts: renesas: r9a08g046: Add Mali-G31 GPU node
-      arm64: dts: renesas: rzg3l-smarc-som: Enable Mali-G31
-      arm64: dts: renesas: r9a08g045: Move max-frequency to SoC dtsi
-      arm64: dts: renesas: r9a08g046: Add FCPVD node
-      arm64: dts: renesas: r9a08g046: Add VSPD node
-      arm64: dts: renesas: r9a08g046: Add DU and DSI nodes
-      arm64: dts: renesas: r9a08g046: Add LVDS node
-
-Claudiu Beznea (1):
-      arm64: dts: renesas: rzg3s-smarc-som: Enable I3C
-
-Geert Uytterhoeven (4):
-      arm64: dts: renesas: r8a78000: Add CPG node
-      arm64: dts: renesas: r8a78000: Add MDLC nodes
-      arm64: dts: renesas: r9a09g047e57-smarc: Update CAN transceivers
-      arm64: dts: renesas: white-hawk: Add second mini-DP output support
-
-Krzysztof Kozlowski (3):
-      ARM: dts: renesas: Correct white-space style
-      arm64: dts: renesas: Correct white-space style
-      arm64: dts: renesas: Use hyphens in node names
-
-Lad Prabhakar (12):
-      arm64: dts: renesas: r9a09g077: Add VSPD and FCPVD nodes
-      arm64: dts: renesas: r9a09g077: Add DU node
-      arm64: dts: renesas: r9a09g087: Add VSPD and FCPVD nodes
-      arm64: dts: renesas: r9a09g087: Add DU node
-      arm64: dts: renesas: r9a09g077: Adjust CPG register region sizes
-      arm64: dts: renesas: r9a09g087: Adjust CPG register region sizes
-      arm64: dts: renesas: rzt2h-n2h-evk: Use consistent switch notation
-      arm64: dts: renesas: Add LCDC overlays for RZ/T2H and RZ/N2H EVKs
-      arm64: dts: renesas: r9a09g077: Add RTC node
-      arm64: dts: renesas: r9a09g087: Add RTC node
-      arm64: dts: renesas: rzt2h-n2h-evk: Enable RTC support
-      arm64: dts: renesas: rzt2h-n2h-evk: Mark XSPI1 boot partitions read-only
-
-Marek Vasut (22):
-      arm64: dts: renesas: sparrow-hawk: Always enable edge connector I2C busses
-      ARM: dts: renesas: gr-peach: Specify ethernet PHY reset timings
-      ARM: dts: renesas: armadillo800eva: Specify ethernet PHY reset timings
-      ARM: dts: renesas: lager: Specify ethernet PHY reset timings
-      ARM: dts: renesas: stout: Specify ethernet PHY reset timings
-      ARM: dts: renesas: koelsch: Specify ethernet PHY reset timings
-      ARM: dts: renesas: porter: Specify ethernet PHY reset timings
-      ARM: dts: renesas: gose: Specify ethernet PHY reset timings
-      ARM: dts: renesas: alt: Specify ethernet PHY reset timings
-      ARM: dts: renesas: silk: Specify ethernet PHY reset timings
-      ARM: dts: renesas: sk-rzg1m: Specify ethernet PHY reset timings
-      ARM: dts: renesas: sk-rzg1e: Specify ethernet PHY reset timings
-      arm64: dts: renesas: cat875: Specify ethernet PHY reset timings
-      arm64: dts: renesas: hihope-rzg2-ex: Specify ethernet PHY reset timings
-      arm64: dts: renesas: beacon: Specify ethernet PHY reset timings
-      arm64: dts: renesas: r8a779g0: Add GICv3 ITS and update PCIe nodes
-      arm64: dts: renesas: r8a779h0: Add GICv3 ITS and update PCIe node
-      arm64: dts: renesas: r8a779g0: Add DSC
-      arm64: dts: renesas: sparrow-hawk: Enable DisplayPort by adding DSC
-      arm64: dts: renesas: sparrow-hawk: Align MSIOF1 PFC node name with label
-      arm64: dts: renesas: sparrow-hawk: Add overlay for WaveShare 2CH CANFD HAT
-      arm64: dts: renesas: r8a779f0: Add GICv3 ITS and update PCIe nodes
-
-Tommaso Merciai (1):
-      arm64: dts: renesas: r9a09g047e57-smarc: Set I2C1 clock frequency to 1 MHz
-
-Wolfram Sang (5):
-      ARM: dts: renesas: lager: Specify correct connector for i2cexio0 bus
-      ARM: dts: renesas: lager: Use inclusive wording
-      ARM: dts: renesas: r9a06g032-rzn1d400: Don't enable gpiochips which are always on
-      ARM: dts: renesas: r9a06g032: Don't set status to the default value
-      ARM: dts: renesas: r9a06g032-rzn1d400-eb: Enable GPIOs on CN12
-
- arch/arm/boot/dts/renesas/r7s72100-gr-peach.dts    |   2 +
- .../boot/dts/renesas/r8a7740-armadillo800eva.dts   |   2 +
- arch/arm/boot/dts/renesas/r8a7743-sk-rzg1m.dts     |   2 +
- arch/arm/boot/dts/renesas/r8a7743.dtsi             |   6 +-
- arch/arm/boot/dts/renesas/r8a7744.dtsi             |   6 +-
- arch/arm/boot/dts/renesas/r8a7745-sk-rzg1e.dts     |   2 +
- arch/arm/boot/dts/renesas/r8a7745.dtsi             |   6 +-
- arch/arm/boot/dts/renesas/r8a77470.dtsi            |   6 +-
- arch/arm/boot/dts/renesas/r8a7790-lager.dts        |  28 +-
- arch/arm/boot/dts/renesas/r8a7790-stout.dts        |   4 +-
- arch/arm/boot/dts/renesas/r8a7790.dtsi             |   4 +-
- arch/arm/boot/dts/renesas/r8a7791-koelsch.dts      |   2 +
- arch/arm/boot/dts/renesas/r8a7791-porter.dts       |   2 +
- arch/arm/boot/dts/renesas/r8a7791.dtsi             |   4 +-
- arch/arm/boot/dts/renesas/r8a7792.dtsi             |   4 +-
- arch/arm/boot/dts/renesas/r8a7793-gose.dts         |   2 +
- arch/arm/boot/dts/renesas/r8a7793.dtsi             |   4 +-
- arch/arm/boot/dts/renesas/r8a7794-alt.dts          |   2 +
- arch/arm/boot/dts/renesas/r8a7794-silk.dts         |   2 +
- arch/arm/boot/dts/renesas/r8a7794.dtsi             |   4 +-
- .../arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts |   1 -
- .../arm/boot/dts/renesas/r9a06g032-rzn1d400-eb.dts |  14 +-
- arch/arm/boot/dts/renesas/r9a06g032.dtsi           |   2 -
- arch/arm64/boot/dts/renesas/Makefile               |   9 +
- .../dts/renesas/aistarvision-mipi-adapter-2.1.dtsi |   2 +-
- .../boot/dts/renesas/beacon-renesom-baseboard.dtsi |   6 +-
- .../arm64/boot/dts/renesas/beacon-renesom-som.dtsi |  12 +-
- arch/arm64/boot/dts/renesas/cat875.dtsi            |   2 +
- arch/arm64/boot/dts/renesas/condor-common.dtsi     |   2 +-
- arch/arm64/boot/dts/renesas/draak.dtsi             |   2 +-
- arch/arm64/boot/dts/renesas/ebisu.dtsi             |   6 +-
- arch/arm64/boot/dts/renesas/gray-hawk-single.dtsi  |   8 +-
- arch/arm64/boot/dts/renesas/hihope-common.dtsi     |   4 +-
- arch/arm64/boot/dts/renesas/hihope-rev2.dtsi       |   8 +-
- arch/arm64/boot/dts/renesas/hihope-rev4.dtsi       |   4 +-
- arch/arm64/boot/dts/renesas/hihope-rzg2-ex.dtsi    |   6 +-
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |  14 +-
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |  12 +-
- arch/arm64/boot/dts/renesas/r8a774c0-cat874.dts    |   4 +-
- arch/arm64/boot/dts/renesas/r8a774c0.dtsi          |  12 +-
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi          |  14 +-
- arch/arm64/boot/dts/renesas/r8a77951.dtsi          |  14 +-
- arch/arm64/boot/dts/renesas/r8a77960.dtsi          |  14 +-
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |  14 +-
- arch/arm64/boot/dts/renesas/r8a77965.dtsi          |  12 +-
- .../renesas/r8a77970-eagle-function-expansion.dtso |   2 +-
- arch/arm64/boot/dts/renesas/r8a77970-eagle.dts     |   2 +-
- arch/arm64/boot/dts/renesas/r8a77970-v3msk.dts     |   2 +-
- arch/arm64/boot/dts/renesas/r8a77970.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77980-v3hsk.dts     |   2 +-
- arch/arm64/boot/dts/renesas/r8a77980.dtsi          |   4 +-
- arch/arm64/boot/dts/renesas/r8a77990.dtsi          |  10 +-
- arch/arm64/boot/dts/renesas/r8a77995.dtsi          |   6 +-
- .../boot/dts/renesas/r8a779a0-falcon-cpu.dtsi      |   2 +-
- arch/arm64/boot/dts/renesas/r8a779a0-falcon.dts    |   4 +-
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |   2 +-
- .../boot/dts/renesas/r8a779f0-spider-cpu.dtsi      |   2 +-
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi          |  36 ++-
- arch/arm64/boot/dts/renesas/r8a779f4-s4sk.dts      |   2 +-
- .../arm64/boot/dts/renesas/r8a779g0-white-hawk.dts |  94 +++++++
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          |  69 ++++-
- .../renesas/r8a779g3-sparrow-hawk-fan-argon40.dtso |   1 -
- .../r8a779g3-sparrow-hawk-ws-2ch-canfd.dtso        | 135 ++++++++++
- .../boot/dts/renesas/r8a779g3-sparrow-hawk.dts     |  19 +-
- arch/arm64/boot/dts/renesas/r8a779h0.dtsi          |  26 +-
- arch/arm64/boot/dts/renesas/r8a779md-geist.dts     |  12 +-
- arch/arm64/boot/dts/renesas/r8a78000.dtsi          | 300 +++++++++++++++++++--
- .../arm64/boot/dts/renesas/r9a07g044l2-remi-pi.dts |   2 +-
- arch/arm64/boot/dts/renesas/r9a08g045.dtsi         |   5 +-
- arch/arm64/boot/dts/renesas/r9a08g046.dtsi         | 265 ++++++++++++++++++
- arch/arm64/boot/dts/renesas/r9a09g011.dtsi         |   4 +-
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi         |   2 +-
- arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts |  27 +-
- arch/arm64/boot/dts/renesas/r9a09g056.dtsi         |   2 +-
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi         |   2 +-
- .../boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts    |   6 +-
- arch/arm64/boot/dts/renesas/r9a09g077.dtsi         |  65 ++++-
- .../dts/renesas/r9a09g077m44-evk-cn15-lcdc.dtso    |  53 ++++
- .../boot/dts/renesas/r9a09g077m44-rzt2h-evk.dts    |  18 +-
- arch/arm64/boot/dts/renesas/r9a09g087.dtsi         |  65 ++++-
- .../dts/renesas/r9a09g087m44-evk-cn20-lcdc.dtso    |  63 +++++
- .../boot/dts/renesas/r9a09g087m44-rzn2h-evk.dts    |  32 ++-
- arch/arm64/boot/dts/renesas/renesas-smarc2.dtsi    |  13 +-
- .../boot/dts/renesas/rzg2l-smarc-pinfunction.dtsi  |  16 +-
- arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi   |  20 +-
- arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi       |   2 +-
- .../boot/dts/renesas/rzg2lc-smarc-pinfunction.dtsi |  16 +-
- arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi  |  20 +-
- arch/arm64/boot/dts/renesas/rzg2lc-smarc.dtsi      |   2 +-
- .../boot/dts/renesas/rzg2ul-smarc-pinfunction.dtsi |  16 +-
- arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi  |  20 +-
- arch/arm64/boot/dts/renesas/rzg3l-smarc-som.dtsi   |  14 +
- arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi   |  25 +-
- arch/arm64/boot/dts/renesas/rzg3s-smarc-switches.h |   4 +
- arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi       |   1 -
- .../boot/dts/renesas/rzt2h-n2h-evk-common.dtsi     |   7 +
- .../boot/dts/renesas/rzt2h-n2h-evk-du-adv7513.dtsi |  72 +++++
- arch/arm64/boot/dts/renesas/salvator-common.dtsi   |  14 +-
- arch/arm64/boot/dts/renesas/salvator-xs.dtsi       |   2 +-
- .../ulcb-kf-audio-graph-card2-mix+split.dtsi       |  18 +-
- arch/arm64/boot/dts/renesas/ulcb-kf.dtsi           |   2 +-
- arch/arm64/boot/dts/renesas/ulcb.dtsi              |   8 +-
- .../boot/dts/renesas/white-hawk-cpu-common.dtsi    |   6 +-
- 103 files changed, 1577 insertions(+), 358 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779g3-sparrow-hawk-ws-2ch-canfd.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g077m44-evk-cn15-lcdc.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g087m44-evk-cn20-lcdc.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzt2h-n2h-evk-du-adv7513.dtsi
+Magnus
