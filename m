@@ -1,629 +1,197 @@
-Received: from mail-vs2-f42.google.com (mail-vs2-f42.google.com [74.125.227.42])
+Received: from mail-ej2-f43.google.com (mail-ej2-f43.google.com [74.125.228.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F324741A91C
-	for <soc@lists.linux.dev>; Fri, 18 Sep 2026 17:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789750901; cv=pass; b=Q2Klb25xMwgG2p/3/K6Gkr7cgoxXWoEcFM+v/YugO/OmKgXqgn/o3vYRF3Bv+BxPVsxBpJb0kISMRmr/mpeHfc8ACjD8EMHWcZzzxzfl2PSPpRKwdkpI0N60+gMan06JIo/zCLZAouAgbi1j+BmSdwvILAyZHJ/8996Kvf6xOM4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789750901; c=relaxed/simple;
-	bh=sXARDWUbBfHUZpPSMaLLZiSIzHg03NzPFsXEQiNHkrs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PMlUN+Bdwl02/ZAxxA9pxL6+DsL3XcFEI2QmJ3wU6o7k5ws7EhiE3iyWM5OLL8dq9Zzl6ObcL2BjdtJSz14ymsQ/QDuiDeGbwkXVtQqRRowkVnOi4YtevITCjXNSvDt+c2+XoWAB8fN6QAKqPEojIjSB7+8LFYJs7Lp/TyovCpM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=thLWqKHM; arc=pass smtp.client-ip=74.125.227.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A43F5172C3
+	for <soc@lists.linux.dev>; Fri, 18 Sep 2026 17:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789752414; cv=none; b=hu4sh0m2OWs0MgqNPGQ/bBdxf1ubhZgjrV+t8EvdC3u9goUvHgsOZkN4kFwNpaBdtcXTb1coP9dC6ZYNzSgZW3pFO/r+5ZAEPZkfgQ1clZd6Zrf4LiB/o+5SSmvyGY34iavJNB1C3XO5zvLs8OR1YwmYedMJ8F5lRLedo2cXSMA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789752414; c=relaxed/simple;
+	bh=TkeK6vGmZcwODlJlEq5gVtqOmy+dm0WEcZnbleLPAiE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jBYxYuVY9hQGpLpG47MqL2O1pak1lPUlAg9iZ0H7jp/2cM4EJlEUdBJHm5tG2HxxEu0H422154tf9eVdlmB+rdDhppRNDEyxrOJlAty+vOjzJj/RIkhZ+Z1OQyrQLfpPthHqGBKeav/N6do9trk0Jo4/iVp3VgRG3+17imbA7Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PcQ1NLJw; arc=none smtp.client-ip=74.125.228.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="thLWqKHM"
-Received: by mail-vs2-f42.google.com with SMTP id 71dfb90a1353d-5c98e1942dfso651779e0c.3
-        for <soc@lists.linux.dev>; Fri, 18 Sep 2026 10:01:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789750897; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RHWVvtrg3M9DxtxRyrpFEB7bXt3vL1sMe5b8fDUznFGgx+4Eu2OyUej8qy0lP2ywCe
-         nPmbKROxbusPxiPuibE2dZ7PvqHUWtQfAm3oB3AzPv4X86HdOKMq10Xi4KfnMB421LNQ
-         DtaLXnv2MhImXRz5Ovptqx0aPHp4ezrd05Z3uBNGpoFmjwEUj6CJtcRxLeigsSyT1EtP
-         cmpOLmBG8H/YEc5Ima+twRMi65jYHx2sXXSA8PNF61JWb1KChlr/HMcu7+fi6Z8S7Nt3
-         GxKiaQSGj7oeo9NLx4+OF4/nrCszJ8JIAl+fmfbte3Ex3QDkMyy0BPmI1BIzAbpfwYmo
-         0qrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=XvEzZ5yV9vzGVdbkrsIgJ4kI78ty053dRTiVvQhIbhM=;
-        fh=ywqS1R0W9Tc4NeU2dqVb8Vgk+8KekVF3IWq9VMFsrFQ=;
-        b=JyL2F8sUl8SCrfgyxnkQL+ROUwAwn3+aafPML8q+KXvUjcCAoagEKliqLfybca0YF0
-         8m3gX0YIInoB8dOT9Ros2U5e6W75RuLIqW9CJzafqnZg9VXaIOKRbAARWCkE3pZ0Hnkt
-         99xs1iKTfL0N/D4cnYtcW2LrqKPrcRc4z/7yaqSMh8mTguRjpKzSAJ3fNQFq0CELwE07
-         3IV6zjGscw09zGa1gyukq3KnRzcL1wkrtZ9cxnduAXKzuseAsX8myfQoH/3p4eJ+Xyig
-         f68JbMpHYak4Tqd/KLqu8sQM0zsQr9jP2IjPmm8danyy1YIeaAlYeWZny41oyoklryDA
-         j9jg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PcQ1NLJw"
+Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2a1a631f6aso114432066b.3
+        for <soc@lists.linux.dev>; Fri, 18 Sep 2026 10:26:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1789750897; x=1790355697; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XvEzZ5yV9vzGVdbkrsIgJ4kI78ty053dRTiVvQhIbhM=;
-        b=thLWqKHMzTkOR/+WgNPGT9V7Y9hLl67W/XlaX8YDPuh2HC4CN0cvdT2MSdRa3pquMI
-         /76g8iJyGBlRfrEyV+0muj88IXXPtfYTDyUwtFOtFBjm1Xdy5nJa0SML8r30CgCmcny1
-         jS+MuRKq4sw4lwMijUkdxytq6FzftBZ+3k9gAYsn4fPvI7dVCtzDlrl0PpP49vy4ZGci
-         MpMJt2GiqY7G6nOIi8zI+nbog/jV3wcACQdrT3CxA6G+QaR+UL1aWH4KLigv5IoW31Zx
-         vhd/A2OcW0JPC1G4U2JNhK9j/2Xzg3WP1gCvxI+XJmqqrj+TIEhaLVb2NiUNfiRgYI8U
-         dHUA==
+        d=linaro.org; s=google; t=1789752410; x=1790357210; darn=lists.linux.dev;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=q3e71ONX+G/tBeD/v6Wra0d6veIuI4yfjRsJjDPREyI=;
+        b=PcQ1NLJwEUy0LJHMHF3xcFa/XneZbj0HSwv/7lloVsvtmmFx/fJ3mY6CK86OXagXRz
+         2mhJYuF70Nn/6jkCHdOg18OI3/wtS3PR0OEdyQarP20ELq+LNKgHxN9V4SF41sJmstBb
+         4aegXtDLRIMtlvZbiQX/C2U7tJnXdfD3sSqzasJpg04XejNE7FtlszgevCUMN8pHo/Wo
+         X2AKRWkfSxE472a0EAr2S0J/aDk5ZhqJyJ3/MKgfsCoYb4sCW3gYoSeL8aM6ymSWCYdO
+         DlQUJq7ppyACpNxMps+O1fn46thIbzkaXbSeCeAPH3sN80g7Ra3P/xwK3dDSJE64ZRmm
+         aRUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789750897; x=1790355697;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=XvEzZ5yV9vzGVdbkrsIgJ4kI78ty053dRTiVvQhIbhM=;
-        b=y12ZYFfABHE7B9r1DytTxE5MzDkN8eDLU2pKuGzL+ZJ0zUS6kSyVw2zK+xy7qCLi7B
-         Kfr/5GnFM2zmQjfUeid2E1UC28TMKlVj0qubO9qgaoiVrFVBnMUsRUXfZ71lay78x1Dz
-         dOX1p79wNLbkDMW4ASgawNamb3xixn4VCqrz4IJbUgR8ShIedGTrNTqZtQ9cEA976/1/
-         u9Tn1A695bXMijQxgUnvaf/oy7OBO0x6keKSOVliu6xyDpEVbFlnmShE1fgBAaJ21gQl
-         rRN7VFlCET0I99Z/AkaBbQYWCNjUr4tJcDGMtL/vg+2H5OFzSW/CRnMaysvllEMGAUsc
-         i1Hw==
-X-Forwarded-Encrypted: i=1; AKwUvBzdpYBVSl95fD8ncdcI1IGU1mN13HpDWWJZhffx1DAP43ruzkWBTBkyOKmT/wErCo/jRV8=@lists.linux.dev
-X-Gm-Message-State: AFuF++l5t/GfbIIPSaN37lWsyIaVEQrMVFL8D80hLuAragjBsNCkH7Ti
-	Iot75OwOs2sFCEo1WntVdZMnIKB5QoBh37uFdLkT32nA8gaY69b6khBOZZG6TH9EaP65CCwLlfE
-	nyZpJ/Lf3oGV4w4CHrS10xUvPJPz35ClOkCAehIK+fw==
-X-Gm-Gg: AYBFou1Qo/aTJ7ZSYRYkQrZQ0UY14XARJAZDHQgRvBvXUTXPFE0+8kF8NCaU1q2CjlD
-	Bdh2tC/NJMuLaI+M1ySwLj4azo9qKjAgExdxbDooHdb/KSVyXI31sK8r/uWPOmluJyIp738KgEz
-	vIhW+12RG4GiHOck5IsvccjtzDbdxfi8VL5R1SKNTMpwMgHKHpFERacLpxk56IvXeZQjjRa3m6g
-	ou1oXTe/HTda3ZqJ1nJFtDvJlS7MfDYFhKz7vmKZBuAvQKyeI+tieMktM/hy80eXBIOGvYprzgL
-	zo8/s7S90qfCe/TlF3+o+0ZcIyJM4IMdHY2WSCIFttxPz/pZ0/A7tvnUAm0Fe4+gU0itRvewtbG
-	EO8uvt5bCmUKPeGg=
-X-Received: by 2002:a05:6122:8c5:b0:5c8:2a47:b111 with SMTP id
- 71dfb90a1353d-5c9b58bee96mr1899596e0c.3.1789750886990; Fri, 18 Sep 2026
- 10:01:26 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789752410; x=1790357210;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=q3e71ONX+G/tBeD/v6Wra0d6veIuI4yfjRsJjDPREyI=;
+        b=2hBB137p/Mm2zP1u2nvILB/G4+HaQBkzQLyFubgR4a7QOHEswOP2qaB98M5HDglwGy
+         dd0Lgb+0Fp8Uk+JH/y9zPxfkTyi8QlEvD/vxmaLn9yauPdZIdZVdri2YG3ULIziN5fM0
+         kDHB85+nopI8x383UuUe0jWVi8Arry3wHym96+SXJ0TpQHmObURC/1vOSRM1gECN/jZD
+         LolDln0wOWUc1dMqCUUzT0K0/dJgt6dlEFNQtUD4tJtBab/aFwb3XQTmlpqY4mhDXlPA
+         PI+TSN2zO64gmQp1Y5H3HJfzDl485NjDgrW9oqiDwXeUlnMs0A0QB/TkHRQWtHeiNhsc
+         9IZw==
+X-Forwarded-Encrypted: i=1; AKwUvByHcSww+dVBaOUIx+EBcfdAOioO52v8EY3igM5EFEIOC2WpK1m8/J6XQdxk+PHjSM81mOM=@lists.linux.dev
+X-Gm-Message-State: AFuF++n1SqO0qzKScm7kp/2RhcsOs2uvH9SKn12PSU+iNDuSLfVrjhg0
+	B7fcSesQ/NBQI3iyc1rioHkV19hc1Xr2d80J5u2xytVwoA5k98r4u46ykmQfW3rUBEeT6l7XtMR
+	MScUDHj8=
+X-Gm-Gg: AYBFou2yotHj452OoyMBOkNpG8KHA3xvaFlmUr3c0FiPiML5nyDDDeJS1vQZUvpH50q
+	nep6hU705wfAydWRaPtHoHbXVZd6CQh6Fr1HX9VXNGZ4xocsAnHHaYqFRKBss/Tr2+FIPayLG8/
+	TYkus66VNcLmb+iAslGCYWqZ+bsNSPTajfrjouQFpiiaD+2mIDkrWiPfxlnfm4pxjJebjt0E0De
+	f28ueLckf3lB1Y9aPg14j7LuPbFVI2XKk5l+Byoz+argstw8sOaW8ntmuzk7mB5MRLRejumSM7G
+	JbmxqI0+MGJRIAqOuxrIaetJG7WUmksyHLF1YiD96NEaI7gXg7Q0VVN5Klb3q+plm5Cd4R91nzV
+	jQLLBYQpFwPzhJdvzMKO72O78of62RUbXQFyhslqDu/rveqyB5b+Ah6PPjFFP7SG0bgRvaW01es
+	dM5yafENdSB0GL8mQtLe8qkd3DbJNow6DTEU9nE1XGe1EHIpmxtXxouNEf0iswo1aIVd/WCMpXh
+	wJjeTeShGsArM/wZztkK6a/yKrpbEXeKlMSGgJ3nTsPI4wFvePMwKEnSzfNqOAxEA==
+X-Received: by 2002:a17:907:971e:b0:c25:fdbc:52df with SMTP id a640c23a62f3a-c2a15699d4cmr283478866b.10.1789752410253;
+        Fri, 18 Sep 2026 10:26:50 -0700 (PDT)
+Received: from petegriffin.c.googlers.com (116.118.90.34.bc.googleusercontent.com. [34.90.118.116])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2a35701d8bsm902966b.27.2026.09.18.10.26.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 10:26:49 -0700 (PDT)
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Fri, 18 Sep 2026 17:26:35 +0000
+Subject: [PATCH v3 2/4] arm64: dts: google: Add dts directory for
+ Google-designed silicon
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260722-contrib-pg-pixel10-initial-dts-v2-0-3abae9717feb@linaro.org>
- <20260722-contrib-pg-pixel10-initial-dts-v2-4-3abae9717feb@linaro.org> <20260724-dancing-skunk-of-novelty-72c1b8@quoll>
-In-Reply-To: <20260724-dancing-skunk-of-novelty-72c1b8@quoll>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Fri, 18 Sep 2026 18:01:14 +0100
-X-Gm-Features: AcwNN1X4yZ0E4jX5loLfFRJVRA0cZleBO7KYxG0RnMrM3HwM6hHoo94HHHxPgno
-Message-ID: <CADrjBPr3Z9z43iEpv5dXKR3iBAr0mAP=Gp--9inaiRkn19BDng@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] arm64: dts: google: Add initial dts for frankel/blazer/mustang
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Linus Walleij <linusw@kernel.org>, 
-	Drew Fustini <fustini@kernel.org>, Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org, 
-	soc@lists.linux.dev, Douglas Anderson <dianders@chromium.org>, 
-	Juan Yescas <jyescas@google.com>, RD Babiera <rdbabiera@google.com>, 
-	Brian Norris <briannorris@google.com>, William McVicker <willmcvicker@google.com>, 
-	kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260918-contrib-pg-pixel10-initial-dts-v3-2-c94e51140509@linaro.org>
+References: <20260918-contrib-pg-pixel10-initial-dts-v3-0-c94e51140509@linaro.org>
+In-Reply-To: <20260918-contrib-pg-pixel10-initial-dts-v3-0-c94e51140509@linaro.org>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>, 
+ Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+ "Guilherme G. Piccoli" <gpiccoli@igalia.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ soc@lists.linux.dev, Douglas Anderson <dianders@chromium.org>, 
+ Juan Yescas <jyescas@google.com>, RD Babiera <rdbabiera@google.com>, 
+ Brian Norris <briannorris@google.com>, 
+ William McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ linux-serial@vger.kernel.org, Peter Griffin <peter.griffin@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+ Brian Norris <briannorris@chromium.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2879;
+ i=peter.griffin@linaro.org; h=from:subject:message-id;
+ bh=prHtn5W9Y5dmFFjTBpt1J6sbCTHN8IgoPCiN1ehs4ME=;
+ b=owEBbQKS/ZANAwAKAc7ouNYCNHK6AcsmYgBqrXRXFTEYAGEsoS7MUfIrg6CjdIOaifPmsSFmo
+ QQ8leTp7q6JAjMEAAEKAB0WIQQO/I5vVXh1DVa1SfzO6LjWAjRyugUCaq10VwAKCRDO6LjWAjRy
+ ug/fD/9Urr6DgBP6/xSBuCZzkbqwlAfIRnR0z+L2WO+ksdtXeV/usopNI2AWlnxNecYkTWIZGJa
+ nEg5M1CL0S432JJKZVtOBTqNyd3O3himpBwj8neXDBebwgX61R3vSYad2+Ux1jX1O/Klpi4qnPb
+ oOqdhdPqvqxSOVUE2sk8HR53f0KERaeGyP0yrfXHq+bYR1M/KtSQoUGXuqfDH/0dIHedUIYy/dh
+ X5jFUZvD4fhLsridougvieTgMWG79r/RcfaeeakcMYvEjU2eOgZWA2vxlhQpsHd/T0aBahZhRHr
+ VYTEMfKs2DWxuMakwGN39vpfRy630y/vqTowyXYfAUZqFM8Iw/frDfJTm61WD6dvAB3rVU6ToZt
+ pEcem4gWuKQcuROBYfK3PepyoPV2dWpA+kwsYy3tMGkw5z334AP7kqOxBt5A83YssgBip21tv9+
+ Fp2Fwgi7hYNtNCTiGOEn9mqSsp6ysDQYA9mf/0b7wIehZUycnJrVRAYijVrhOH2K62bvqeMH7ZA
+ 8Ini+nFiLhcz+uYLVsqNuJfSY8lZ185M79jJY9EzEVarntgmQhWexSBmttBx74LR64QRnudxm1i
+ f5x2MsrmsBrVPnJIml/VkouixLbIM9jrTMEqGSfCLiDTtIrDIP1Bh5z7dE3Icy1rqDk8mVlHF51
+ btmyUow4Did/arA==
+X-Developer-Key: i=peter.griffin@linaro.org; a=openpgp;
+ fpr=0EFC8E6F5578750D56B549FCCEE8B8D6023472BA
 
-Hi Krzysztof,
+From: Douglas Anderson <dianders@chromium.org>
 
-Thank you for the time spent reviewing this and review feedback.
+The first four Google Tensor SoCs were offshoots of Samsung Exynos
+SoCs and their device trees were organized under the "exynos/google"
+directory. Starting with the Google Tensor G5 SoC in Pixel 10 phones,
+Google Tensor SoCs are now of Google's own design. Add a location in
+the tree to store these device tree files.
 
-On Fri, 24 Jul 2026 at 07:59, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On Wed, Jul 22, 2026 at 10:55:55AM +0100, Peter Griffin wrote:
-> > diff --git a/arch/arm64/boot/dts/google/lga-pixel-common.dtsi b/arch/arm64/boot/dts/google/lga-pixel-common.dtsi
-> > new file mode 100644
-> > index 000000000000..57c318ab44c9
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/google/lga-pixel-common.dtsi
-> > @@ -0,0 +1,23 @@
-> > +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> > +/*
-> > + * Google Pixel 10 family common dtsi.
-> > + *
-> > + * Copyright 2024-2025 Google LLC.
-> > + */
-> > +
-> > +#include "lga.dtsi"
-> > +
-> > +&{/} {
->
-> This is overlay style, but the file is DTSI. Just use standard '/ {' -
-> that's simple and obvious enough path.
+Changes by Peter Griffin
+ * update config symbol help with at least 4 lines to avoid checkpatch
+   warning
 
-I've fixed this and all the other review points made here in v3 (which
-I will send out shortly). After seeing your recent DT cleanup patches
-for Exynos/gs101 I've made it pass `dt-check-style --mode=strict ` as
-well.
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Tested-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+---
+ MAINTAINERS                         | 1 +
+ arch/arm64/Kconfig.platforms        | 8 ++++++++
+ arch/arm64/boot/dts/Makefile        | 1 +
+ arch/arm64/boot/dts/google/Makefile | 1 +
+ 4 files changed, 11 insertions(+)
 
->
-> > +     chosen {
-> > +             stdout-path = "serial0";
-> > +     };
-> > +
-> > +     aliases {
-> > +             serial0 = "/soc@0/serial@db62000";      /* &lsion_cli16_uart */
-> > +             ufs0 = "/ufs-placeholder";              /* &ufs - TODO "/soc@0/ufs@3c400000" */
->
-> UFS does not have aliases, please drop.
->
-> > +     };
-> > +};
-> > +
-> > +&osc {
-> > +     clock-frequency = <38400000>;
-> > +};
-> > diff --git a/arch/arm64/boot/dts/google/lga.dtsi b/arch/arm64/boot/dts/google/lga.dtsi
-> > new file mode 100644
-> > index 000000000000..343156a8c039
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/google/lga.dtsi
-> > @@ -0,0 +1,423 @@
-> > +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> > +/*
-> > + * Google Tensor G5 (laguna) SoC rev B0
-> > + *
-> > + * Copyright 2024-2025 Google LLC.
-> > + */
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +#include <dt-bindings/interrupt-controller/irq.h>
-> > +
-> > +/ {
-> > +     #address-cells = <2>;
-> > +     #size-cells = <2>;
-> > +     interrupt-parent = <&gic>;
-> > +
-> > +     osc: clock-38400000 {
-> > +             compatible = "fixed-clock";
-> > +             #clock-cells = <0>;
-> > +     };
-> > +
-> > +     cpus: cpus {
-> > +             #address-cells = <1>;
-> > +             #size-cells = <0>;
-> > +
-> > +             hayes_0: cpu@0 {
-> > +                     compatible = "arm,cortex-a520";
-> > +                     reg = <0x000>;
-> > +
-> > +                     #cooling-cells = <2>;
-> > +                     capacity-dmips-mhz = <258>;
-> > +                     device_type = "cpu";
-> > +                     enable-method = "psci";
-> > +                     power-domain-names = "psci";
-> > +                     power-domains = <&cpu_pd0>;
-> > +             };
-> > +
-> > +             hayes_1: cpu@100 {
-> > +                     compatible = "arm,cortex-a520";
-> > +                     reg = <0x100>;
-> > +
-> > +                     #cooling-cells = <2>;
-> > +                     capacity-dmips-mhz = <258>;
-> > +                     device_type = "cpu";
-> > +                     enable-method = "psci";
-> > +                     power-domain-names = "psci";
-> > +                     power-domains = <&cpu_pd1>;
-> > +             };
-> > +
-> > +             hunter_0: cpu@200 {
-> > +                     compatible = "arm,cortex-a725";
-> > +                     reg = <0x200>;
-> > +
-> > +                     #cooling-cells = <2>;
-> > +                     capacity-dmips-mhz = <891>;
-> > +                     device_type = "cpu";
-> > +                     enable-method = "psci";
-> > +                     power-domain-names = "psci";
-> > +                     power-domains = <&cpu_pd2>;
-> > +             };
-> > +
-> > +             hunter_1: cpu@300 {
-> > +                     compatible = "arm,cortex-a725";
-> > +                     reg = <0x300>;
-> > +
-> > +                     #cooling-cells = <2>;
-> > +                     capacity-dmips-mhz = <891>;
-> > +                     device_type = "cpu";
-> > +                     enable-method = "psci";
-> > +                     power-domain-names = "psci";
-> > +                     power-domains = <&cpu_pd3>;
-> > +             };
-> > +
-> > +             hunter_2: cpu@400 {
-> > +                     compatible = "arm,cortex-a725";
-> > +                     reg = <0x400>;
-> > +
-> > +                     #cooling-cells = <2>;
-> > +                     capacity-dmips-mhz = <891>;
-> > +                     device_type = "cpu";
-> > +                     enable-method = "psci";
-> > +                     power-domain-names = "psci";
-> > +                     power-domains = <&cpu_pd4>;
-> > +             };
-> > +
-> > +             hunter_3: cpu@500 {
-> > +                     compatible = "arm,cortex-a725";
-> > +                     reg = <0x500>;
-> > +
-> > +                     #cooling-cells = <2>;
-> > +                     capacity-dmips-mhz = <891>;
-> > +                     device_type = "cpu";
-> > +                     enable-method = "psci";
-> > +                     power-domain-names = "psci";
-> > +                     power-domains = <&cpu_pd5>;
-> > +             };
-> > +
-> > +             hunter_4: cpu@600 {
-> > +                     compatible = "arm,cortex-a725";
-> > +                     reg = <0x600>;
-> > +
-> > +                     #cooling-cells = <2>;
-> > +                     capacity-dmips-mhz = <891>;
-> > +                     device_type = "cpu";
-> > +                     enable-method = "psci";
-> > +                     power-domain-names = "psci";
-> > +                     power-domains = <&cpu_pd6>;
-> > +             };
-> > +
-> > +             hunterelp_0: cpu@700 {
-> > +                     compatible = "arm,cortex-x4";
-> > +                     reg = <0x700>;
-> > +
-> > +                     #cooling-cells = <2>;
-> > +                     capacity-dmips-mhz = <1024>;
-> > +                     device_type = "cpu";
-> > +                     enable-method = "psci";
-> > +                     power-domain-names = "psci";
-> > +                     power-domains = <&cpu_pd7>;
-> > +             };
-> > +
-> > +             cpu-map {
-> > +                     cluster0 {
-> > +                             core0 {
-> > +                                     cpu = <&hayes_0>;
-> > +                             };
-> > +                             core1 {
-> > +                                     cpu = <&hayes_1>;
-> > +                             };
-> > +                             core2 {
-> > +                                     cpu = <&hunter_0>;
-> > +                             };
-> > +                             core3 {
-> > +                                     cpu = <&hunter_1>;
-> > +                             };
-> > +                             core4 {
-> > +                                     cpu = <&hunter_2>;
-> > +                             };
-> > +                             core5 {
-> > +                                     cpu = <&hunter_3>;
-> > +                             };
-> > +                             core6 {
-> > +                                     cpu = <&hunter_4>;
-> > +                             };
-> > +                             core7 {
-> > +                                     cpu = <&hunterelp_0>;
-> > +                             };
-> > +                     };
-> > +             };
-> > +
-> > +             idle-states {
-> > +                     entry-method = "psci";
-> > +
-> > +                     cpu_lit_c2: cpu-lit-c2 {
-> > +                             compatible = "arm,idle-state";
-> > +
-> > +                             entry-latency-us = <132>;
-> > +                             exit-latency-us = <296>;
-> > +                             min-residency-us = <3610>;
-> > +
-> > +                             idle-state-name = "cpu-lit-c2";
-> > +                             local-timer-stop;
-> > +
-> > +                             arm,psci-suspend-param = <0x40000003>;
-> > +                     };
-> > +
-> > +                     cpu_mid1_c2: cpu-mid1-c2 {
-> > +                             compatible = "arm,idle-state";
-> > +
-> > +                             entry-latency-us = <130>;
-> > +                             exit-latency-us = <274>;
-> > +                             min-residency-us = <2720>;
-> > +
-> > +                             idle-state-name = "cpu-mid1-c2";
-> > +                             local-timer-stop;
-> > +
-> > +                             arm,psci-suspend-param = <0x40000003>;
-> > +                     };
-> > +
-> > +                     cpu_mid2_c2: cpu-mid2-c2 {
-> > +                             compatible = "arm,idle-state";
-> > +
-> > +                             entry-latency-us = <130>;
-> > +                             exit-latency-us = <274>;
-> > +                             min-residency-us = <2720>;
-> > +
-> > +                             idle-state-name = "cpu-mid2-c2";
-> > +                             local-timer-stop;
-> > +
-> > +                             arm,psci-suspend-param = <0x40000003>;
-> > +                     };
-> > +
-> > +                     cpu_big_c2: cpu-big-c2 {
-> > +                             compatible = "arm,idle-state";
-> > +
-> > +                             entry-latency-us = <110>;
-> > +                             exit-latency-us = <413>;
-> > +                             min-residency-us = <3950>;
-> > +
-> > +                             idle-state-name = "cpu-big-c2";
-> > +                             local-timer-stop;
-> > +
-> > +                             arm,psci-suspend-param = <0x40000003>;
-> > +                     };
-> > +             };
-> > +
-> > +             domain-idle-states {
-> > +                     cluster_1_c3: cluster-1-c3 {
-> > +                             compatible = "domain-idle-state";
-> > +
-> > +                             entry-latency-us = <325>;
-> > +                             exit-latency-us = <553>;
-> > +                             min-residency-us = <10000>;
-> > +
-> > +                             idle-state-name = "cluster-1-c3";
-> > +
-> > +                             arm,psci-suspend-param = <0x40010033>;
-> > +                     };
-> > +
-> > +                     cluster_2_c3: cluster-2-c3 {
-> > +                             compatible = "domain-idle-state";
-> > +
-> > +                             entry-latency-us = <345>;
-> > +                             exit-latency-us = <673>;
-> > +                             min-residency-us = <10000>;
-> > +
-> > +                             idle-state-name = "cluster-2-c3";
-> > +
-> > +                             arm,psci-suspend-param = <0x40010033>;
-> > +                     };
-> > +
-> > +                     cluster_c4_deep: cluster-c4-deep {
-> > +                             compatible = "domain-idle-state";
-> > +
-> > +                             entry-latency-us = <510>;
-> > +                             exit-latency-us = <1027>;
-> > +                             min-residency-us = <10000>;
-> > +
-> > +                             idle-state-name = "cluster-c4-deep";
-> > +
-> > +                             arm,psci-suspend-param = <0x40020333>;
-> > +                     };
-> > +             };
-> > +     };
-> > +
-> > +     memory: memory@80000000 {
-> > +             device_type = "memory";
-> > +             /* We expect the bootloader to fill in the size */
-> > +             reg = <0x0 0x80000000 0x0 0x0>;
-> > +     };
->
-> The memory node should go to the DTS (or common DTSI). It's not part of
-> SoC usually.
->
-> Also, add short comment why do you need label. It will cause
-> dt-style-check warning.
->
->
-> > +
-> > +     psci {
-> > +             compatible = "arm,psci-1.0";
-> > +             method = "smc";
-> > +
-> > +             cpu_pd0: power-domain-cpu0 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states = <&cpu_lit_c2>;
-> > +                     power-domains = <&cpu_top_cl>;
-> > +             };
-> > +
-> > +             cpu_pd1: power-domain-cpu1 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states =  <&cpu_lit_c2>;
-> > +                     power-domains = <&cpu_top_cl>;
-> > +             };
-> > +
-> > +             cpu_pd2: power-domain-cpu2 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states =  <&cpu_mid1_c2>;
-> > +                     power-domains = <&cpucl1>;
-> > +             };
-> > +
-> > +             cpu_pd3: power-domain-cpu3 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states =  <&cpu_mid1_c2>;
-> > +                     power-domains = <&cpucl1>;
-> > +             };
-> > +
-> > +             cpu_pd4: power-domain-cpu4 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states =  <&cpu_mid1_c2>;
-> > +                     power-domains = <&cpucl1>;
-> > +             };
-> > +
-> > +             cpu_pd5: power-domain-cpu5 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states =  <&cpu_mid2_c2>;
-> > +                     power-domains = <&cpucl2>;
-> > +             };
-> > +
-> > +             cpu_pd6: power-domain-cpu6 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states =  <&cpu_mid2_c2>;
-> > +                     power-domains = <&cpucl2>;
-> > +             };
-> > +
-> > +             cpu_pd7: power-domain-cpu7 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states =  <&cpu_big_c2>;
-> > +                     power-domains = <&cpucl2>;
-> > +             };
-> > +
-> > +             cpucl1: power-domain-cluster-1 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states = <&cluster_1_c3>;
-> > +                     power-domains = <&cpu_top_cl>;
-> > +             };
-> > +
-> > +             cpucl2: power-domain-cluster-2 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states = <&cluster_2_c3>;
-> > +                     power-domains = <&cpu_top_cl>;
-> > +             };
-> > +
-> > +             cpu_top_cl: power-domain-top-cluster {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states = <&cluster_c4_deep>;
-> > +             };
-> > +     };
-> > +
-> > +     reserved_memory: reserved-memory {
-> > +             #address-cells = <2>;
-> > +             #size-cells = <2>;
-> > +             ranges;
-> > +
-> > +             /*
-> > +              * Store ramoops at a known location in DRAM, for access by the ABL
-> > +              * following a crash-reset.
-> > +              */
-> > +             ramoops@95200000 {
-> > +                     compatible = "ramoops";
-> > +                     reg = <0x0 0x95200000 0x0 0x400000>;
-> > +                     console-size = <0x200000>;
-> > +                     pmsg-size = <0x200000>;
-> > +             };
-> > +
-> > +             /* bootloader logs */
-> > +             bldr_log_reserved: bldr-log-reserved@95600000 {
-> > +                     reg = <0x0 0x95600000 0x0 0x100000>;
-> > +                     no-map;
-> > +             };
-> > +
-> > +             /* gsa logs */
-> > +             gsa_reserved_log: gsa-reserved-log@a61b0000 {
-> > +                     reg = <0x0 0xa61b0000 0x0 0x00004000>;
-> > +                     no-map;
-> > +             };
-> > +
-> > +             /* Android BootLoader (ABL) for ramdump/coredump processing */
-> > +             abl@be000000 {
-> > +                     reg = <0x0 0xbe000000 0x0 0x1000000>;
-> > +                     no-map;
-> > +             };
-> > +     };
-> > +
-> > +     soc: soc@0 {
-> > +             compatible = "simple-bus";
-> > +             ranges = <0 0 0 0 0x10 0>;
-> > +
-> > +             dma-ranges = <0 0 0 0 0x10 0>;
-> > +
-> > +             #address-cells = <2>;
-> > +             #size-cells = <2>;
-> > +
-> > +             gic: interrupt-controller@5880000 {
-> > +                     compatible = "arm,gic-v3";
-> > +                     reg = <0 0x05880000 0 0x10000>,
-> > +                           <0 0x05900000 0 0x200000>;
->
-> In some other places you use hex everywhere, also for '0' (so '0x0').
-> Switch to consistent 0x0 everywhere for new code.
->
-> > +                     ranges;
->
-> Why ranges? There is no MSI child node with unit address.
->
-> > +
-> > +                     #address-cells = <2>;
-> > +                     #size-cells = <2>;
-> > +
-> > +                     #interrupt-cells = <4>;
-> > +                     interrupt-controller;
-> > +                     interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +
-> > +                     ppi-partitions {
-> > +                             ppi_cluster0: interrupt-partition-0 {
-> > +                                     affinity = <&hayes_0 &hayes_1
-> > +                                                 &hunter_0 &hunter_1 &hunter_2
-> > +                                                 &hunter_3 &hunter_4>;
-> > +                             };
-> > +
-> > +                             ppi_cluster1: interrupt-partition-1 {
-> > +                                     affinity = <&hunterelp_0>;
-> > +                             };
-> > +                     };
-> > +             };
-> > +
-> > +             lsion_cli16_uart: serial@db62000 {
-> > +                     compatible = "google,lga-uart", "snps,dw-apb-uart";
-> > +                     reg = <0 0x0db62000 0 0x100>;
-> > +
-> > +                     clock-frequency = <200000000>;
-> > +                     interrupts = <GIC_SPI 688 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +                     reg-io-width = <4>;
-> > +                     reg-shift = <2>;
-> > +
-> > +                     status = "disabled";
-> > +             };
-> > +     };
-> > +
-> > +     timer {
-> > +             compatible = "arm,armv8-timer";
-> > +             interrupts =
-> > +                     <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW) 0>,
->
-> Join line:
->
-> interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW) 0>,
->
-> even if it goes beyond 80 char limit. That's fine, exceptions are
-> allowed and one line makes 'greps' or 'seds' easier.
->
-> > +                     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW) 0>,
-> > +                     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW) 0>,
-> > +                     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW) 0>;
-> > +     };
-> > +
-> > +     /*
-> > +      * The Pixel bootloader considers it a fatal error if it doesn't find
-> > +      * a `ufs0` alias so it can add calibration data to the node. Until
->
-> Fake node is ok, but alias won't fly because aliases are not allowed for
-> ufs. Well, would work 10 years ago, but this is a device from ~2025 (so
-> SoC maybe a bit earlier), thus Google already knew that they MUST talk
-> with upstream open source maintainers before they ship such ABI.
->
-> They did not talk, so you reap what you sow.
->
-> There is no more excuse for a vendor to ignore open source and push
-> whatever-ABI-they-wish into their product, if they ever want to upstream
-> that product.
->
-> I know it is not your fault, obviously. And I know that not much you can
-> do, so that is not rant towards you nor towards Doug.
->
-> You will have to keep this part of patch out of tree or fix the Pixel
-> bootloader.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 06760c45c582c..bee67180e93e1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11245,6 +11245,7 @@ F:	Documentation/devicetree/bindings/phy/google,lga-usb-phy.yaml
+ F:	Documentation/devicetree/bindings/soc/google/google,gs101-pmu-intr-gen.yaml
+ F:	Documentation/devicetree/bindings/usb/google,lga-dwc3.yaml
+ F:	arch/arm64/boot/dts/exynos/google/
++F:	arch/arm64/boot/dts/google/
+ F:	drivers/clk/samsung/clk-gs101.c
+ F:	drivers/phy/phy-google-usb.c
+ F:	drivers/soc/samsung/gs101-pmu.c
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 1489bad527d8e..c52dc955df5f0 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -154,6 +154,14 @@ config ARCH_EXYNOS
+ 	help
+ 	  This enables support for ARMv8 based Samsung Exynos SoC family.
+ 
++config ARCH_GOOGLE
++	bool "Google-Designed SoC family"
++	help
++	  This enables support for Google Tensor SoCs starting at the
++	  Google Tensor G5 (Laguna) found in Pixel 10 and later phones.
++	  Tensor G1 to G4 are offshoots of the Exynos family and are
++	  enabled via ARCH_EXYNOS.
++
+ config ARCH_K3
+ 	bool "Texas Instruments Inc. K3 multicore SoC architecture"
+ 	select SOC_TI
+diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+index fc726b215f125..f2d7cd6eb5695 100644
+--- a/arch/arm64/boot/dts/Makefile
++++ b/arch/arm64/boot/dts/Makefile
+@@ -19,6 +19,7 @@ subdir-y += cavium
+ subdir-y += cix
+ subdir-y += exynos
+ subdir-y += freescale
++subdir-y += google
+ subdir-y += hisilicon
+ subdir-y += intel
+ subdir-y += lg
+diff --git a/arch/arm64/boot/dts/google/Makefile b/arch/arm64/boot/dts/google/Makefile
+new file mode 100644
+index 0000000000000..a6b187e2d6318
+--- /dev/null
++++ b/arch/arm64/boot/dts/google/Makefile
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 
-I've dropped the ufs0 alias in v3 and added some glue to our build
-system so things still boot while we await a new bootloader that
-doesn't treat this as a fatal error.
+-- 
+2.55.0.1082.g2b9226bbc0-goog
 
-Thanks,
-
-Peter.
