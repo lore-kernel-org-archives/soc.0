@@ -1,135 +1,126 @@
-Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F1838AC6A
-	for <soc@lists.linux.dev>; Fri, 18 Sep 2026 06:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED02391842;
+	Fri, 18 Sep 2026 07:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789714605; cv=none; b=LN8/TrQ4SvY4D+tJ/wRtC55IVvsw9b30ZHX3JIcW2JwjL7PmQ4OCh/7oX2gadhtUhhnrt0St+FUTJ0QUypiA51kD8QqcKJ8uQQE89ENlz8LcD8OEojlD2brHOlpRs2eRqMpCuEBFCZMKDnoAhM07p0KVDbsH+KgFY2MyRcRQ6NE=
+	t=1789715738; cv=none; b=ulj98p/qUCG9J1ztGJdFgfhL3P1TO69oIu8Pny+xHb2unEKAfNO3H3jzahWmtP7kZLRXSOmUhMGMYlzIUS2fBOKU/qLb/znfPSSipi/7Lr4+Ywoq+1JIXRkYQgSl22Xcuagzc3vge/ojdcFVpc50zd0eE5sEiGkeukOxGiEstH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789714605; c=relaxed/simple;
-	bh=Eql6S6hQXWeH0N4kCka61rLc8c51ongE29CL/iVEhZA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=WgWbkyT0tf1orZixK1SIEszsNCkRBqhvyIl93ttYhjZK1TxQrVKXcmF8ur2BdQ7uv5vBQ2wn05QhFqtUH1RYiaQ5BFO2C/tktbIFDaRpsTtTKWK78K3fFYbRsYgytiW5vJ4f+8Wyq8+aHr6eRObTxnj72hrRYSQ8jsGQSzLO9bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=IIQG6gVl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Aun6ov5A; arc=none smtp.client-ip=202.12.124.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1789715738; c=relaxed/simple;
+	bh=IyQG4uF4U2HMYFS0whlenRlq0+4izpBq85YAFExkrKM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sDjMH4h+zmyPI1Af5WNUMlsKY/qPyC1fOYokACApIey0BCZHAFftodUORbt4P0Czg59AFqPXpZTratSABZ3XhspF+50p9/67exnLZ3SvZavZsrHR/6xKdd23skUVz85ZhR/p5EyNmL7im0yeSAf/+Quadc8OwecOShkGCf9GMb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hhrdEkJP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="IIQG6gVl";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Aun6ov5A"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.stl.internal (Postfix) with ESMTP id E59B21D000D1;
-	Fri, 18 Sep 2026 02:56:40 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Fri, 18 Sep 2026 02:56:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1789714600;
-	 x=1789801000; bh=r0DMlHDuV2LFIDoZEFEovDOSN4mbDMuTeZ8dyf8LL5E=; b=
-	IIQG6gVlwyxnfndRAOQF8DPr3eBvygmerR9HX3Oji7Q7NGUw4Dt0JtZRHMbRnta0
-	V80YTxJisJyPw0B0KeLvc8fhYZ9decGe62XP5QNmcbqttuv8TtFG79IfU0aemYi4
-	uiEuZZb1ozW0tBn3HorBYNYyJirlSe0YEIiOGm4WtPsWxMBcic3I8MBEaVwUIB53
-	O6yqA+aBYMve0jUXckC/vuLQMCnPXPDyyABB/sKT/GmER1hez66cimoKbVQ+zXiO
-	RXXVnnQcdqd1pbI1j1q9K7g4rweyfHXnq+FRmpVMlWAAWv9MwE9VVaHLfTD5J2jY
-	+6qu/hzvAezLr/4ZD5xFZQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789714600; x=
-	1789801000; bh=r0DMlHDuV2LFIDoZEFEovDOSN4mbDMuTeZ8dyf8LL5E=; b=A
-	un6ov5AyafMFDReHcxlqnbIvzm5Y30awBH8QlPD3wG5JnjypDCimPS/USVE3wq3q
-	YJWDInr8ToPbJTpXlrl+9Od+A0AlTYNFMqsS/3tlqdxd9zYVgwnzkr8UYFI9fTMH
-	DpT05u3F8wMtFqK+GOFph+r2xvR8/fErHwFvCy0EWpWUrtTYGEacY3NQPmMYHDkx
-	WkpppmNtRU5aliQ8Op2iXvONOYwkwQXXsQOVrluwrs/DvNDvVG2pbpEoGfNRoI6z
-	mXPTgp1q7tAivKcgOsSWGHgqJgNiK8Urg7pJ0zgCAYxNonLZcgLI0d19+Bly+RsZ
-	bpdvxUvUUNyk2+eotnEkA==
-X-ME-Sender: <xms:o-CsajFMjXBHK0crUge2XUaK2TNXE-RUYAlBczbg3g3ZCPsFg3GBeQ>
-    <xme:o-CsarJKWHWLG0uRXtna6zQxxl86JsbkYVoqbljcwJd46nj2cG2OkJyMmyAT6CHMt
-    hTlIoBOQD1e7PFj2I_YQzuILUybBJ75pDmeQGylXXiT4KQLbPW0eY9o>
-X-ME-Proxy-Cause: dmFkZTE51d9azPAy3ibgXqxIXNxqm9lJw06wJQTHmRm8LbSiKF8Xd7g8qBGhORcyEHzQ/1
-    0DlqsN+aXKv5vz1vSZ7AZAg5II1V2VVdx9CydhKGL0xtVYzUmWP7ID29eUPxi8x+1smOpa
-    rKrSvlCwSQyRFZXYCQlObz7bsCd3B03+ZYsA1IK5u4M7TzcL4La1jMvSsDiLl4WWVU5Rdm
-    Xyc9Yv33Wmp84TQcyYjsModn+ZUEs6WCXbyOI3q3qcWLIKXQ4QUortHdB4OQF8Xj3BpZBe
-    6WwBIG5S4vWLPoHQ/AKujLQeE3W48W9bxCEuIu6XBoB+YUYgTmwV7XqCjooXciDC4E3ip1
-    sc36EVWpP5l38nvEnQO23IZLUnaCD6L+jkg51GP9h4lyS4a7+LB2VhN20oe1jDGhLwthpF
-    11TxFT6LnC5znRnCc5mzQKHnJIjWlL1lwjWdUfSkn/VMwTFAkkYzim06996E60GjghK3Z6
-    QR+QaMsxDSrTftli7qiYJlCDdUz00v05LlqpXI8JYuUuchjhNFX9A/8s4O/MGFea5ihmXi
-    02SUuppX9nV+9clOVZXtgSUCbuSyh/sBW5OOhhtk1/rlLeEngR9BYvzHJHKz/5tiOTSMyn
-    I+TlWyxAqJW+3RklCko3m4md0A54Bl0rpnRYScEsTLFTHDfgm7FCJAPdc/oQ
-X-ME-Proxy: <xmx:peCsajoasIFWDIfYN0Z5BvnoiRwLeQ1SsVNAe20SYsPe0fPLfT4_mg>
-    <xmx:peCsauG5rRzL-MrGt2xYGh4WUsBai_iocFMRwsfTraB7qUaQyOdG8A>
-    <xmx:peCsav-6RyWXfDW6GLs8yHTNJWI083jbsHWVsj-g-p5SqEvjOHQaBQ>
-    <xmx:peCsajSIMS0v_VPXpFQi9IMbYJ_8IakqvpeCSO5eNOFC7S34_WNpeA>
-    <xmx:qOCsapSQj-4EJquIFoeo8pK6xMvtP3o2VkG57_DRjjxLl4vQ4ZJiqObj>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 1D2CC32A0084; Fri, 18 Sep 2026 02:56:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hhrdEkJP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 559BC1F00893;
+	Fri, 18 Sep 2026 07:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789715725;
+	bh=yGXP8T1zvW5Ml5ZoTKLO3915Guu8fl2jGwWEp0ekuH8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hhrdEkJPsCM1e0xAT8nx+2dL6Mk346k4lOVF4xldrlPrjN5pRcKLlC36i5umsgAEX
+	 Mp9h8oSRLYPkXnX0ofmhNPnYdlFaaDlt75luOA2LPxQMGglwZYxE8YneYoFFIrm9VI
+	 BlQBv75lqp6fBDi3G2QcfvUEtdAqHwbvPo2DdlOaS6Q4KNMSO4H/eGby5OJ08w8Jj5
+	 Rqe5dl6AsQrb2fKQkEJpUbf3d2BeXzwkYnUjSNr6T93S99i6Iv352HA7tpVBA4Q3UO
+	 Lgv9HZaeycMuaLOLue3xeMnw41S7U8WqPV4QoW/jUnIAui9ss1pj6XqDza7wqdaL1k
+	 YsEo9YjVPbeIw==
+Date: Fri, 18 Sep 2026 09:15:21 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Long Zhao <longzhao@ambarella.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>, 
+	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 05/15] dt-bindings: gpio: pl061: add Ambarella CV75
+ variant
+Message-ID: <20260918-affable-aardvark-of-superiority-6a5ed2@quoll>
+References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
+ <20260915-cv75-v5-v7-5-3297d3fbc9c0@ambarella.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AytAa-GFwSww
-Date: Fri, 18 Sep 2026 08:56:14 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
- "Masami Hiramatsu" <mhiramat@kernel.org>
-Cc: "Christian Brauner" <brauner@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, kernel-dev@igalia.com,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- linux-alpha@vger.kernel.org, linux-s390@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
- linux-mips@vger.kernel.org, sparclinux@vger.kernel.org
-Message-Id: <6e91a8c6-c078-4b42-92b6-9902e6d0d270@app.fastmail.com>
-In-Reply-To: <20260917-tonyk-syscall_table-v7-9-f4cd8f8e3265@igalia.com>
-References: <20260917-tonyk-syscall_table-v7-0-f4cd8f8e3265@igalia.com>
- <20260917-tonyk-syscall_table-v7-9-f4cd8f8e3265@igalia.com>
-Subject: Re: [PATCH v7 09/13] mips: Use the common syscall table
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <20260915-cv75-v5-v7-5-3297d3fbc9c0@ambarella.com>
 
-On Fri, Sep 18, 2026, at 01:46, Andr=C3=A9 Almeida wrote:
+On Tue, Sep 15, 2026 at 07:15:35PM +0800, Long Zhao wrote:
+> Add ambarella,cv75-gpio as a PrimeCell-compatible PL061 variant, with
+> arm,primecell-periphid and gpio-ranges required. Reference
 
+You just described the diff, but this should explain why you do these
+changes. Why a fixed periphid is needed? Isn't it implied by compatible?
+
+> primecell.yaml and use unevaluatedProperties.
+> 
+> Signed-off-by: Long Zhao <longzhao@ambarella.com>
+> ---
+>  .../devicetree/bindings/gpio/pl061-gpio.yaml       | 25 +++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/pl061-gpio.yaml b/Documentation/devicetree/bindings/gpio/pl061-gpio.yaml
+> index 4d970e55104b..00d0d8ddd2c9 100644
+> --- a/Documentation/devicetree/bindings/gpio/pl061-gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/pl061-gpio.yaml
+> @@ -15,17 +15,36 @@ select:
+>    properties:
+>      compatible:
+>        contains:
+> -        const: arm,pl061
+> +        enum:
+> +          - arm,pl061
+> +          - ambarella,cv75-gpio
+>    required:
+>      - compatible
+>  
+> +allOf:
+
+allOf should be placed after "required:" block.
+
+> +  - $ref: /schemas/arm/primecell.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: ambarella,cv75-gpio
+> +    then:
+> +      properties:
+> +        arm,primecell-periphid:
+> +          const: 0x000e8061
+> +      required:
+> +        - arm,primecell-periphid
+> +        - gpio-ranges
 > +
-> +src_n32 :=3D $(src)/syscall_n.tbl
-> +src_n64 :=3D $(src)/syscall_n.tbl
-> +src_o32 :=3D $(src)/syscall_o32.tbl
-> +
-> +.SECONDEXPANSION:
-> +
-> +$(uapi)/unistd_%.h: $(systbl_common) $$(src_$$*) $(syshdr) FORCE
-> +	$(call if_changed,syshdr)
-> +
-> +$(kapi)/unistd_nr_%.h: $(systbl_common) $$(src_$$*) $(sysnr) FORCE
->  	$(call if_changed,sysnr)
->=20
-> -$(kapi)/syscall_table_%.h: $(src)/syscall_%.tbl $(systbl) FORCE
-> +$(kapi)/syscall_table_%.h: $(systbl) $(systbl_common) $$(src_$$*) FOR=
-CE
->  	$(call if_changed,systbl)
+>  properties:
+>    $nodename:
+>      pattern: "^gpio@[0-9a-f]+$"
+>  
+>    compatible:
+>      items:
+> -      - const: arm,pl061
+> +      - enum:
+> +          - ambarella,cv75-gpio
+> +          - arm,pl061
 
-I can see how this will work, but I'm not sure we want to keep
-maintaining it like this, if anybody wanting to use the syscall
-table input files now has to use and understand .SECONDEXPANSION.
+So a PrimeCell-compatible PL061 variant which is not compatible with
+PL061? You have entire commit msg to explain that and say something
+non-obvious about the hardware.
 
-For instance, we will already have to duplicate this for the
-./tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-directory in the kernel, but I assume that others already have
-something like this in userspace.
+>        - const: arm,primecell
+>  
 
-I really liked the idea of combining the n32/n64 tables into one
-file, but the added complexity of using two input files for three
-ABIs here makes this much less appealing. The easiest way would
-be to give up here and revert back to three input files.
+Best regards,
+Krzysztof
 
-A possible alternative may be to go all the way and only have
-one syscall.tbl file per architecture to simplify the scripts,
-and then combine mips o32/n32/n64 into one file and do the
-same thing for arm oabi/eabi/aarch64 and x86 i386/x86-64/x32.
-
-      Arnd
