@@ -1,119 +1,98 @@
-Received: from mail-pj2-f26.google.com (mail-pj2-f26.google.com [74.125.227.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A492F486400
-	for <soc@lists.linux.dev>; Mon, 21 Sep 2026 11:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9361D48D880;
+	Mon, 21 Sep 2026 11:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789988821; cv=none; b=lqMARvZYQjKCeXAXlX2Z05ykLEbAGsTwtxLzyPYKkKvpGDWp6We+Wuqz4difQtTLqkoPtGcpg7zzA8yZkJ51Y0li/YZoEOmQcScN37YdE6W4rykrRRFXaoCdmz0zj7GAOFjuNFJtBS+AX5+9O9glHC0w0AKCT0vtxAdtN3yc8b4=
+	t=1789989018; cv=none; b=J9NIrLgDsXU4PJMMXzaBkcZD7SAGp8xacCFwXMAIXc3ljcpwFfMdLN4Edg1Dou1yLeI3ggbW6DLPKjYciPJ+7WVH1hOSmbAiZ/XNW9j0R4hEQ8OwexHSH3ePWjNFgJY/JUtY7i7XYUU2Uj4ad77Our/7VmF3Vz6/tjrwCSfxXxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789988821; c=relaxed/simple;
-	bh=UUOINDD93jJS+LUcebWPI3js4hVCQibaR3IC0U7k49c=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=G06fqySCQymC0tDuFx1wuH1TFIXgaS0URYwvw9Fvb2vyYYV85him9/85PEvkc/Vr0jmlsLyvyVsBqBHmpQc0Ad8gmmpiMBGdErkNNq9iLGxWCRMzrN+0WQvggETi4nxMPv1AJuqJXj0Tw2Qt5nEDnXIlTg7IA+kY0RTHVqWM2zM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EM4VAF1s; arc=none smtp.client-ip=74.125.227.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789989018; c=relaxed/simple;
+	bh=1BhpQZoAXGVHhCY2yPQOy2cprPNEspiRapZr8208ImA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=VdoYLNqISZkrixrl6DUNEt/TJ7u2gNmbVa8NbUdvK6dMp2viIBjXQGpMJpGAa9KnzpATzIsm72zrsCcECIV5MpkivCMDr3xj7rUCk27CBT9EsvJ6gyGeWOPgv3y/xUD3nVXbAEc+sdwuWgfgiAH5qYnwEJkG96XGtV6XGeTLZ1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=e+cHLb2E; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EM4VAF1s"
-Received: by mail-pj2-f26.google.com with SMTP id d9443c01a7336-2d8fb334e72so25251235ad.1
-        for <soc@lists.linux.dev>; Mon, 21 Sep 2026 04:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789988815; x=1790593615; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ycnprV0l+QiM05HZAYzXXqeG9wnBaUsBNe37TTIlwsM=;
-        b=EM4VAF1skfHaqpw7gjenE0gKSECkKjG+R1EGpGpanuh74iRekWGwnRkz58h5XZzv34
-         AQqMr6mky8+mfBBuzzWVYhkPFaRFrg+fedOEOLduxgm6E56FJ6wnZaT5HJmMvjMs7oMP
-         Vdx95Ebze8oeZHDuajBtwfGRoNTlofnesJoCOAsnXe5xoztEuMLP1LMmNyWqSP2ualCH
-         +O7zVogSWZXnyC1J8HezwzDZ/jFOoAxUEjRm5XFOJthIuhT84gwp7g7xqt+VmCvK6pVi
-         XBUZrCwAUf+UdaWP7vfCEFpeyH1AB8mB7qoJbVA+Id6PLLjwpsQ8pEcglNDZKRpxsi37
-         7k+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789988815; x=1790593615;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ycnprV0l+QiM05HZAYzXXqeG9wnBaUsBNe37TTIlwsM=;
-        b=ZEP5xWRKIG1KRgEO7OwaLR7v0+7UkX2dwqBvim8e5euK5/xLzxzyX6JI29ZFQNKLyg
-         yVlw9xHlbXNo/vt9aeUpLJJwsXJ6VwanDE4X5mpTvM9bVIASSpXEPltg4lblZ51oc9Ez
-         aj1nFlYeZmdknHRsUUMoSmoB4vIB737Po399Y+B9UiTpwhqozJ+MONAcCdf0/FFaf7G7
-         7z27TXiseKAQJFHUj2lthxontTB1pYQ4N4OUJXZ240MoLkCN7CvMyf5pbJasHPzyhme4
-         hJst6lCvQdnyDfckyTh4Va/TfPKSnb4M12PeMVpLYZNNX9wJ8Z0U1yizXXxbMSzbwbXz
-         p0FA==
-X-Forwarded-Encrypted: i=1; AKwUvByeFag+gzCCOIhj5NyZYmoB5MEvnA8D/oS+411pkcBgXVrbS/Zve8Sl/VcGh9swCw7kUhI=@lists.linux.dev
-X-Gm-Message-State: AFuF++lUfZjg1KOr/4kpvoSbpBOj3FF7/IhLYaz3eVtDh3ViK/e7jWqJ
-	3nhAvaHzyFN25d9bpTfF50Hm38q4ou3Ex1GZ/+rKnwy3WrZBS/XuiOHd
-X-Gm-Gg: AYBFou3sWSDFei9fG0Rw8kna/3fvLj6jNlqqkceulUVK4vVNCIIMzBAWM4iyhGpUkIC
-	wF1UPE48nIqpK8gtKzdmsZ9dbmWVVrTQPcNLkB7W+kwXPOk2p1/Nk/nxtgUo04AQLJ3QDU7csEf
-	hS8lIofgLewyrEH+ZkRtCgcFnLAtLT5mBQ8RQW+DTsqWOUWE39rCETX7U3etjBYBLlcSQwz9YHS
-	YBEHywtr1qTvT1pczoWCw/p+/5VJiHQXecqn+v0CZmM3fLUJjdEUOS62qaHYK/m5e/xxz1KOwYu
-	aGbes5uu6tmx22Q436MVxAOEeVBygVz8l+RAvTsnV2CEYb16SmdfddP6Yy8qHyjV2srxo3Inkqw
-	sZU4FUFtZ5Wv29WsK8U/t323mTD1YjJSkYq0e3LiWIO4xHG48QtTOGS+kbuDOulf8NvvB9KO3d5
-	ZbNO6kXKo3oKeoUIdDRz5MvwYtNxNhtRYOAcv5yLpChOtYry+915UijUyyXNsM/FR6sGVoj8t7g
-	1a8JW3xfN1tXnHhEr+WssMuI8D39PMcQa0QFQLl8VgxYpqQH0LjFGTzgfraeA==
-X-Received: by 2002:a17:903:2447:b0:2d9:43f5:b462 with SMTP id d9443c01a7336-2ddb1b79df8mr144230985ad.5.1789988815140;
-        Mon, 21 Sep 2026 04:06:55 -0700 (PDT)
-Received: from [192.168.151.214] (222-228-113-186.aichi.fdn.vectant.ne.jp. [222.228.113.186])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc17ba719sm31428165ad.56.2026.09.21.04.06.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2026 04:06:54 -0700 (PDT)
-Message-ID: <17a74e90-27d1-4954-86a8-491267f00cb8@gmail.com>
-Date: Mon, 21 Sep 2026 20:06:47 +0900
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="e+cHLb2E"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=1BhpQZoAXGVHhCY2yPQOy2cprPNEspiRapZr8208ImA=; b=e
+	+cHLb2EsoCJmyv5IQM9q0sqiir1Lv71mBv80vQnaKLgpB66FeKfHDB22f4OxAXsT
+	YlEkv1c5YP+QgfMfc3gFGTFXs/blWnWK4cAhKXR1FQtwWLlZDbUifAVtv52YRxA6
+	VyiDIwOpZjj1P+MtR2DXrhnthimjQTFHDMsLDQarek=
+Date: Mon, 21 Sep 2026 19:08:48 +0800 (CST)
+From: zl020895  <zl020895@163.com>
+To: "Bartosz Golaszewski" <brgl@kernel.org>
+Cc: longzhao@ambarella.com,
+	"Long Zhao via B4 Relay" <devnull+longzhao.ambarella.com@kernel.org>,
+	"Rob Herring" <robh@kernel.org>,
+	"Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+	"Conor Dooley" <conor+dt@kernel.org>,
+	"Michael Turquette" <mturquette@baylibre.com>,
+	"Stephen Boyd" <sboyd@kernel.org>,
+	"Jerome Brunet" <jbrunet@baylibre.com>,
+	"Linus Walleij" <linusw@kernel.org>,
+	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+	"Jiri Slaby" <jirislaby@kernel.org>,
+	"Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Catalin Marinas" <catalin.marinas@arm.com>,
+	"Will Deacon" <will@kernel.org>, "Lee Jones" <lee@kernel.org>,
+	mfd@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>,
+	"Arnd Bergmann" <arnd@arndb.de>,
+	"Krzysztof Kozlowski" <krzk@kernel.org>,
+	"Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re:Re: [PATCH v8 00/18] Ambarella CV75 SoC minimal bring-up
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+In-Reply-To: <CAMRc=Mf-0oLOPZsPboE0dzOGE2AzNE0LXmv9fcmgWO47FtGu1g@mail.gmail.com>
+References: <20260921-cv75-v5-v8-0-282ff5d98dda@ambarella.com>
+ <CAMRc=Mf-0oLOPZsPboE0dzOGE2AzNE0LXmv9fcmgWO47FtGu1g@mail.gmail.com>
+X-NTES-SC: AL_Qu2TC/WTt0Ep7iiZZukcn0wRhug/UMa4u/sm3YNXc+oEoxnL1BEgV2ZqNGrf3+6vEQOojDKXWThy0/tgZolRgdClO9P1d1YqDPcyYtmcnA==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Yoshifumi SHU <envzhu@gmail.com>
-Subject: Re: [PATCH v2 00/14] ARM: deprecated platform removal
-To: arnd@kernel.org
-Cc: Frank.Li@nxp.com, aaro.koskinen@iki.fi, alexander.sverdlin@siemens.com,
- alexandre.belloni@bootlin.com, alexandre.torgue@foss.st.com,
- andreas@kemnade.info, andrew@lunn.ch, arnd@arndb.de,
- claudiu.beznea@tuxon.dev, conor+dt@kernel.org, david@kernel.org,
- devicetree@vger.kernel.org, enelsonmoore@gmail.com, festevam@gmail.com,
- geert@linux-m68k.org, gregory.clement@bootlin.com, imx@lists.linux.dev,
- kernel@pengutronix.de, khilman@baylibre.com, kmehltretter@gmail.com,
- kristoffer.ericson@gmail.com, krzk@kernel.org, linusw@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux@armlinux.org.uk,
- liviu.dudau@arm.com, lpieralisi@kernel.org, mcoquelin.stm32@gmail.com,
- nicolas.ferre@microchip.com, npitre@baylibre.com, robert.jarzmik@free.fr,
- robh@kernel.org, rogerq@kernel.org, s.hauer@pengutronix.de,
- sebastian.hesselbarth@gmail.com, shawnguo@kernel.org, soc@lists.linux.dev,
- stefan@agner.ch, sudeep.holla@kernel.org, tony@atomide.com, vz@mleia.com,
- thehajime@gmail.com
-References: <20260914140821.1805449-1-arnd@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20260914140821.1805449-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Message-ID: <c90c1c.9973.1a0c3a77d36.Coremail.zl020895@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:ZSgvCgD3d8BAELFqlexLAA--.37435W
+X-CM-SenderInfo: d2oqjiqyzvqiywtou0bp/xtbCxgAbjGqxEEAmzQAA3x
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-Hi Arnd and all,
-
-I would like to request that the core Arm Cortex-M support be retained, specifically for v8-M.
-
-I'm heavily using Arm Cortex-M / NOMMU Linux for academic research.
-In particular, I frequently run Linux on newer Arm v8-M (Cortex-M33/M55/M85) processors.
-However, dropping CONFIG_CPU_V7M also removes support for these newer CPUs.
-Because v8-M is highly compatible with the older v7-M (Cortex-M3/M4/M7), the v8-M support is tightly coupled with CONFIG_CPU_V7M, despite the name. 
-The major differences are essentially CPU IDs and PMSAv8 MPU support.
-So I need the majority of CONFIG_CPU_V7M to support Arm v8-M. 
-
-Regarding platform support, I don't need Linux-side device drivers.
-In my current setup, Linux runs in a virtualized environment hosted by an RTOS (like Zephyr) and accesses devices through virtio served by the RTOS.
-I also understand that maintaining legacy MCU platform support is a significant burden.
-Therefore, I don't object to removing the platform support, though the MPS platform remains convenient for bare-metal testing.
-
-I am willing to help maintain this support, including modernizing the relevant code. I can regularly test kernels on real Armv8-M hardware.
-If an active maintainer is required to keep the support, I am willing to take on that responsibility.
-Please let me know how I can help keep the support.
-
-Thanks,
-Yoshifumi
+VGhhbmtzLCBCYXJ0LiAKClBsZWFzZSBxdWV1ZSB0aGUgR1BJTyBwYXRjaGVzIHlvdXJzZWxmIGFu
+ZCBwcm92aWRlIGFuIGltbXV0YWJsZQpicmFuY2ggZm9yIHRoZSBTb0MgdHJlZS4KClRoZSBHUElP
+IHBhcnQgaXM6CiAgZ3Bpb2xpYjogcmVnbWFwOiBhZGQgd3JpdGVfZGF0YV9hZnRlcl9kaXIgcXVp
+cmsKICBncGlvbGliOiByZWdtYXA6IGFkZCBncGlvX3JlZ21hcF9nZXRfY2hpcCgpCiAgZ3Bpbzog
+cGwwNjE6IGNvbnZlcnQgcmVnaXN0ZXIgYWNjZXNzIHRvIHJlZ21hcAogIGdwaW86IHBsMDYxOiB1
+c2UgSVJRX1RZUEVfTEVWRUxfTUFTSyBhbmQgSVJRX1RZUEVfRURHRV9CT1RICiAgZ3BpbzogcGww
+NjE6IHVzZSBjbGVhbnVwIGhlbHBlcnMgZm9yIGxvY2tzCiAgZ3BpbzogcGwwNjE6IHN3aXRjaCBk
+YXRhIHBhdGggdG8gZ3Bpby1yZWdtYXAKICBncGlvOiBwbDA2MTogYWRkIEFtYmFyZWxsYSByZWdp
+c3Rlci1sYXlvdXQgdmFyaWFudAoKSSB3aWxsIHNlbmQgYSBmb2xsb3ctdXAgZm9yIGdwaW9fcmVn
+bWFwX2dldF9jaGlwKCkgd2l0aCB0aGUgbWlzc2luZwprZXJuZWwtZG9jLiBUaGUgcmVzdCBvZiB0
+aGUgc2VyaWVzIChjbGssIHBpbmN0cmwsIFVBUlQsIERUKSBjYW4gc3RheQp3aXRoIHRoZSBTb0Mg
+dHJlZSBvbmNlIHRoYXQgR1BJTyBicmFuY2ggaXMgYXZhaWxhYmxlLgoKQmVzdCByZWdhcmRzLApM
+b25nIFpoYW8KCkF0IDIwMjYtMDktMjEgMTg6MzE6NDUsICJCYXJ0b3N6IEdvbGFzemV3c2tpIiA8
+YnJnbEBrZXJuZWwub3JnPiB3cm90ZToKPk9uIE1vbiwgMjEgU2VwIDIwMjYgMDY6MjM6MTkgKzAy
+MDAsIExvbmcgWmhhbyB2aWEgQjQgUmVsYXkKPjxkZXZudWxsK2xvbmd6aGFvLmFtYmFyZWxsYS5j
+b21Aa2VybmVsLm9yZz4gc2FpZDoKPj4gVGhpcyBzZXJpZXMgYWRkcyBtaW5pbWFsIEFtYmFyZWxs
+YSBDVjc1IHN1cHBvcnQgZm9yIGVhcmx5IGJyaW5nLXVwIHdpdGgKPj4gYSBzZXJpYWwgY29uc29s
+ZTogRFQgYmluZGluZ3MsIFJDVCBjbG9ja3MsIHBpbmN0cmwsIFBMMDYxIEdQSU8gdmlhCj4+IGdw
+aW8tcmVnbWFwLCA4MjUwX2R3IFVBUlQgcXVpcmtzLCBBUkNIX0FNQkFSRUxMQSwgQ1Y3NSBFVksg
+RFQsIGFuZAo+PiBNQUlOVEFJTkVSUy4KPj4KPj4gVGhpcyBpcyBhIHNpbmdsZSB1bmlmaWVkIHNl
+cmllcy4gUGxlYXNlIGFwcGx5IHZpYSB0aGUgU29DCj4+IHRyZWU7IHN1YnN5c3RlbSBtYWludGFp
+bmVycyBhcmUgQ2MnZCBmb3IgdGhlaXIgcGllY2VzLgo+Pgo+Cj5BcyBJIHNhaWQgYmVmb3JlOiB0
+aGlzIGJyaW5ncyBpbiBhIGxvdCBvZiBwb3RlbnRpYWxseSBjb25mbGljdGluZyBjb2RlIGludG8K
+PmRyaXZlcnMvZ3Bpby8gc28gSSdsbCBuZWVkIGFuIGltbXV0YWJsZSBicmFuY2ggdG8gcHVsbCBv
+ciBJIGNhbiBxdWV1ZSB0aGUgR1BJTwo+cGFydCBteXNlbGYgYW5kIHByb3ZpZGUgYW4gaW1tdXRh
+YmxlIGJyYW5jaCB0byBvdGhlciB0cmVlcy4KPgo+QmFydG9zego=
