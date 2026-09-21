@@ -1,123 +1,162 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4E6448BAB
-	for <soc@lists.linux.dev>; Mon, 21 Sep 2026 20:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790023346; cv=none; b=RJhw/NOtL8VHtkl03RKS6Z9AleomNtouCAWTQW/TQwoFukWRN4pW4gB85YJjNtPYCJSX1IZLCffpaCEgmhrQPk59OnE7RGrqaVVBhVc+CP3/IJlXmtiWKsQoqhkR1aKyZs8y/qn0Z50AtSkAokwoVAaoVE3JA8n6grc2rCxNRBo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790023346; c=relaxed/simple;
-	bh=Cbhq5AY4F38rOC/Kyo867bYsHX9pFIIo/xsqTNuiRaQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Pzr6cupH7SPB24gi6ElfWVGxrr0sVJw+Hj5ZIatuYJXXi6hODPv9gckyfgsU8/XrTg9bKoN3TXOK0S0Hy9k7hRzsGXuFqIeJXh3Qr3pXitGEcr3TZJJY3pDhlvM73mUbNqKP3A1zLnAEtabBVwusFRR3sNbBDh6VW7vWHUq9nH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nY0kDJHH; arc=none smtp.client-ip=74.125.228.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790703C5855
+	for <soc@lists.linux.dev>; Mon, 21 Sep 2026 21:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790027077; cv=pass; b=ANMez7Wegg5ZJQgKgg5ESkjLdnCdm9b+fMphlGnJ49iZFfvItRLcL0SaxeGfDC6yzP4IN2QEeIqcwQrpTcGhTM9bKW6SIJSK6S3Dddq9fQ/FfsAaSQ1Vgm8FsiEaoN2TDChd5urujWO3HoruaKR70QidEYgJ4PV2VO+ppr1m0KU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790027077; c=relaxed/simple;
+	bh=KP38Fp5u/bgG4aGPq7DbMF7m3P6S1VpJ5w4CveIikIk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZkveLILR8fKaMeHGmlZBXL8TiYFDrYVeJ4CyR7ZicgI+kOO1yYa0q0i6ZGZQGYmKMcYpvVdL0N1B5/oo8i1S9o9l6RiUExgegphgq5zpm+YoBL7MHK7UDGtETd+q3NxquuK8M5bEQYY3LjOjGEZg0xlhrrYos4IvNEFeeX8he8s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=gkkASxzz; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nY0kDJHH"
-Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc5256c2a4bso2331074a12.1
-        for <soc@lists.linux.dev>; Mon, 21 Sep 2026 13:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790023344; x=1790628144; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=19ujXM0/uR0vXBiub8+6aoHd0jV8R/3wu1J8/sZV+qw=;
-        b=nY0kDJHHmvJYWotJ5P2i7lbRMVlyQiM+ZJDhEQH03pOeOkXT+NIsdbc991vqbHiu9G
-         qy2G8E8dZ5UkgukRBh7aNXuUVXR8iU/wIZb/kCAt0ChKSRKPcobmHLD1XN4OVxVoptkN
-         0OrQIwsWQXtwAL4o69uR4WzUdZIG8z2X2lcJ0jYn2kvLmPlevjy56eTYXesakCOR1sL2
-         a1+t+MDqySDDTVIkAicdOqqCyDwfg3LHfpY34T3Oc9Zb1SpajXG+8eEemPi8bY3wa5hm
-         QyHJvRg1w3setcD8zwpVinpJqM64ObyHkOFJlsh6Pa8Ul24A1DXoQDfxzQpW1euXbxp/
-         2PJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790023344; x=1790628144;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=19ujXM0/uR0vXBiub8+6aoHd0jV8R/3wu1J8/sZV+qw=;
-        b=U3lEwwYuPXip81Jd8LQsPvZZGoIeLLBhZTWwlxIGjSuHckN1ZldwYu9yM0ySSnWl4u
-         yWuTwtjMSxcKsV8rCXILf2t0cLAIRZyKKLWg41hX8EbSVlciNrQTUoqGjvhImPCJA6W6
-         brrWvh5FiCiSUGTS9tPmWhIzcS8Kx0qYl8NwJ+FvHkDPmZQI5OKqH8jeY7brD+iWX80Z
-         n5QGkN6IlwEVgu5GmiD76b4F1Jn3AyTmsb9/RPViii615ZCYzIN7hYkmQPEUCM2IvXqk
-         cXIG5z0p1jK1z/4OnfyXq1sJb0jjQCb/ahJmGbJbiWON9uK8UkiNOBRbNWXLQF2j7I4s
-         wpLg==
-X-Gm-Message-State: AFuF++ni9zNB982FmPvYrvq8FH/fQnypWGXnpFjT59vjOrkxtLxdCrJs
-	o3whaiGk7i0r1RC6GezKj6fBYqLua+3OKMb/r8NX/1+KR+3/010euiqm
-X-Gm-Gg: AYBFou11DoSAlE3s/k1IJg7JDH4wMCVHD5NFI6+LUGbzuzmJN7Pcd38O2vA+gdQUOeh
-	mZe0Z0CKGSKRMe8In4Nc5T5jrbhO20Hso95wrRzw6OVnc/1lWihkUvHoahgA2wJxmFBZIPu3y4Q
-	B/9kqgp2xos24EPHEoHQciIn4TbjdEuLSyDBdOUa1eirHMPSFv8tjTD8hAVHJf6zyixh1GpRwO3
-	mq0KsA/Wpnn3BHKUXBQNzftFlGmXLAeUCoxddq3IUXObngvUB7ViS6xiW34plijKYyNP/ckd6xa
-	nCWS5fYzdzp5GlYk+ZKYMN587oUznTSRYyxpf7wLEzZLMXwBFz2kNJlK6Mi6Dh4THFM1MiYPJb2
-	7NrCzYwyZV6SsLiZqKcIhIL5i/K0hlEID1sXXrzHit7QFUaXL4HfJiH+u1l7VoydmHiddyLSan3
-	x4ZXx+YaXZl+C6rIfsaCpYcoILyABunDg7a1OYGn0vxMRg/kj1Sh7izslc650vKOmYxoqbrTXQT
-	/hOvsHDmcCfhzotm5G1
-X-Received: by 2002:a17:90b:4c02:b0:39e:2036:8243 with SMTP id 98e67ed59e1d1-39e54eb71f7mr17140919a91.25.1790023343451;
-        Mon, 21 Sep 2026 13:42:23 -0700 (PDT)
-Received: from cfarm424.jing.rocks (cfarm424.jing.rocks. [2600:3c18:e002:2e11::c424])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a067021ca6sm967996a91.2.2026.09.21.13.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 13:42:22 -0700 (PDT)
-From: Ridham Khurana <khurana.ridham222@gmail.com>
-To: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Cc: soc@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	Jori Koolstra <jkoolstra@xs4all.nl>,
-	Brigham Campbell <me@brighamcampbell.com>,
-	linux-kernel-mentees@lists.linux.dev,
-	Ridham Khurana <khurana.ridham222@gmail.com>
-Subject: [PATCH RESEND] platform: cznic: turris-omnia-mcu: Add missing MODULE_DEVICE_TABLE()
-Date: Mon, 21 Sep 2026 20:41:47 +0000
-Message-ID: <20260921204204.797294-1-khurana.ridham222@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="gkkASxzz"
+Received: by smtp.kernel.org (Postfix)
+	id 1A89F1F00898; Mon, 21 Sep 2026 21:44:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1790027074;
+	b=fwZSF2otszcSexnr85iv+wB1aFu0hyPoCS3M0yMevYf3IlZTFXWq5YsDB+rzWiRdCkDn
+	 rqx093e1jns9CIB32yjzNP7iDJ38YFrUztpIHPqsr80CQXpFDUk0PlV5LfC3VLQuMO/pl
+	 14Th4pFNETth9PLesfandqHT2+OnP4v2Ts3jnbW9Wbb43JiLofnpRiL8Go+BiyYy3wK4l
+	 FJnZ9uu4ZGIOA6O6hqhsUy9MIu0Wu1xRvwl74XktPgwfFSJ0gQPXWscWWzNa8ezTPXIZ1
+	 WKoqWFV3oHkfXDhmT1Lyr9efOo0jN5D+ADDisqZU+HG/XMTJaL1+kfzG5lBdJli4I4Q==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1790027074;
+	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type;
+	bh=5d8cZcq00OBRMbOBW9FZW3L7ElhwWqksD0+jNdj5kXA=;
+	b=fl+t8E62CphHdP0K9DaI5KlKEVaIPWDPSf2V5dfFbMs/pxRVy2SwKrEG6chFPNK9IFX1
+	 DzbXpxTmlYGBLgqhrpZu6YBgGAV8oDq37IbtbMN7OFjt0iP7D1WEGicWOofo2R0b7B3Wo
+	 XO8w+kDHgvFGmRgfjzGotEZ1XQjjn2R7Dxlm+DF22FrGZzIz0SyaFs30beyyj/7fpAEzU
+	 Izp0qxzD1Fxyt9/sj2RZ/sRn8CHTFY6IX++xbboUM6NeGSrunLqqVy+CEO5vcu5LTAHN+
+	 FYjudRiVWPUjGdEjqWTCfGDbf352CyPvRGlDsolbyjmyZo/V3H7AN20Ktuo5RyjteUg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=gkkASxzz;
+	dmarc=pass header.from=sntech.de;
+	spf=pass smtp.mailfrom=sntech.de;
+	arc=none smtp.remote-ip=185.11.138.130
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8E1F71F000FF;
+	Mon, 21 Sep 2026 21:44:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=gkkASxzz
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 8E1F71F000FF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=5d8cZcq00OBRMbOBW9FZW3L7ElhwWqksD0+jNdj5kXA=; b=gkkASxzzZBHosD6yqAXh6sYMMZ
+	Idb8SH7+3w4ayXMngQSuX9OU1HO4snKVv5+8fJW9oYhXCcJSF/U30f/JMyt491M99/GNQGMi/hjHh
+	dH5UTLnnCK5fEaDhzO5b/Y8LADjcOpGvlQY64VKUHhANuQoKMub4OphyFbs4BdYmfdsolCSKEt/Wm
+	QJyQkjIvL8Gxz7keP9OVqiPJkpJUMfGg5Q/7m/Vp7ni4FGuBidcqqGbUrhBLSnBp2HIghiH9Ou/CK
+	wR4llBydAXU3O8X/qcPWHx+TqSEjmEeqjs/1fN/vL+7bCEcC7jbMHvpylDPpYshhgsIBFvFJNhgi8
+	QVXFdg/Q==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 7.4 #1
+Date: Mon, 21 Sep 2026 23:44:31 +0200
+Message-ID: <1940582.atdPhlSkOF@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-The driver wires of_omnia_mcu_match into the i2c_driver's
-.of_match_table but never exports it with MODULE_DEVICE_TABLE(), so no
-module alias is generated and the module is not autoloaded when the MCU
-is probed from the device tree.
+Hi soc maintainers,
 
-Found by code inspection. Not tested on the hardware itself; with the
-module built, the alias lookup
+please find below some initial Rockchip DT64 changes for the merge-window
+for 7.4 .
 
-  $ modprobe -R 'of:Nsystem-controllerT(null)Ccznic,turris-omnia-mcu'
 
-reports no match before this change and resolves to turris_omnia_mcu
-after it.
+Please pull.
+Thanks
+Heiko
 
-Fixes: 992f1a3d4e88 ("platform: cznic: Add preliminary support for Turris Omnia MCU")
-Signed-off-by: Ridham Khurana <khurana.ridham222@gmail.com>
----
-Resend of the original posting, unchanged, widening Cc to the SoC tree
-(drivers/platform/cznic goes upstream through it). No response to the
-original posting or to the ping on Sep 9.
 
-Build-tested on linux-next (next-20260921).
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
-Link: https://lore.kernel.org/all/20260827113241.993923-1-khurana.ridham222@gmail.com/
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
- drivers/platform/cznic/turris-omnia-mcu-base.c | 1 +
- 1 file changed, 1 insertion(+)
+are available in the Git repository at:
 
-diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
-index e8fc0d7b3343..f0416302a1f3 100644
---- a/drivers/platform/cznic/turris-omnia-mcu-base.c
-+++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
-@@ -403,6 +403,7 @@ static const struct of_device_id of_omnia_mcu_match[] = {
- 	{ .compatible = "cznic,turris-omnia-mcu" },
- 	{}
- };
-+MODULE_DEVICE_TABLE(of, of_omnia_mcu_match);
- 
- static struct i2c_driver omnia_mcu_driver = {
- 	.probe		= omnia_mcu_probe,
--- 
-2.47.3
+  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.4-rockchip-dts64-1
+
+for you to fetch changes up to 7aa165b62ccaf340da22c517074e7c6853db55cd:
+
+  arm64: dts: rockchip: support CAN1-CAN2-UART4 adapter for RK3588 Jaguar (2026-09-02 13:07:56 +0200)
+
+----------------------------------------------------------------
+New board: LubanCat 5IO
+
+Support for the CAN controllers on RK3588 and enabling them on some
+boards.
+
+And a number of board-specific smaller changes/fixes.
+
+----------------------------------------------------------------
+Amin Gattout (1):
+      arm64: dts: rockchip: correct rk3576 SDGMAC GRF reg size
+
+Chris Morgan (1):
+      arm64: dts: rockchip: Correct Device Orientation on Gameforce Ace
+
+Cunhao Lu (3):
+      arm64: dts: rockchip: add CAN-FD nodes for RK3588
+      dt-bindings: arm: rockchip: Add LubanCat 5IO board
+      arm64: dts: rockchip: Add LubanCat 5IO board
+
+Diederik de Haas (7):
+      arm64: dts: rockchip: Remove unneeded vcc_3v3_pcie20 on NanoPC-T6
+      arm64: dts: rockchip: Fix PCIe 2 pinctrl names and sorting on NanoPC-T6
+      arm64: dts: rockchip: Fix hym8563 pinctrl name and sorting on NanoPC-T6
+      arm64: dts: rockchip: Don't pull up rtc int pin on NanoPC-T6
+      arm64: dts: rockchip: Sort usb nodes on NanoPC-T6
+      arm64: dts: rockchip: Improve sound config on NanoPC-T6
+      arm64: dts: rockchip: Drop duplicate USB nodes on NanoPC-T6 LTS
+
+Heiko Stuebner (1):
+      arm64: dts: rockchip: Enable CAN controller on RK3588-Tiger-Haikou
+
+Jiaxing Hu (1):
+      arm64: dts: rockchip: fix an error and a typo in the CM5-IO comment
+
+Quentin Schulz (2):
+      arm64: dts: rockchip: enable CAN0 on RK3588 Jaguar
+      arm64: dts: rockchip: support CAN1-CAN2-UART4 adapter for RK3588 Jaguar
+
+Rudi Heitbaum (1):
+      arm64: dts: rockchip: add i2c2 scl timing to rk3399pro-vmarc-som
+
+ .../devicetree/bindings/arm/rockchip.yaml          |    7 +
+ arch/arm64/boot/dts/rockchip/Makefile              |    6 +
+ .../boot/dts/rockchip/rk3399pro-vmarc-som.dtsi     |    2 +
+ .../boot/dts/rockchip/rk3576-armsom-cm5-io.dts     |    4 +-
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi           |    2 +-
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      |   39 +
+ .../rockchip/rk3588-jaguar-can1-can2-uart4.dtso    |   26 +
+ arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts     |   16 +
+ .../boot/dts/rockchip/rk3588-lubancat-5-btb.dtsi   |  534 ++++++++++
+ .../boot/dts/rockchip/rk3588-lubancat-5io.dts      | 1032 ++++++++++++++++++++
+ .../boot/dts/rockchip/rk3588-nanopc-t6-lts.dts     |   17 -
+ arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi |  165 ++--
+ .../boot/dts/rockchip/rk3588-tiger-haikou.dts      |    4 +
+ arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi     |    5 +
+ .../boot/dts/rockchip/rk3588s-gameforce-ace.dts    |    7 +-
+ 15 files changed, 1748 insertions(+), 118 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-jaguar-can1-can2-uart4.dtso
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-lubancat-5-btb.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-lubancat-5io.dts
+
+
 
