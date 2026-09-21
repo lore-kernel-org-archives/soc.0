@@ -1,208 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3618B3AF66E
-	for <soc@lists.linux.dev>; Mon, 21 Sep 2026 17:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=100.103.45.18
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790010262; cv=fail; b=kw44IdTWcZ9sMjI8TEt+QF0/TbeMwRB6D7V2UdbPjUnmCAr8GTLD7OtQRze5oc4U+M6GQx7lk04O+BTwcnELF6UZ2UsSvKMPbwVL0JEJf49uv5PwjKXsfxZRj4h01/GP0L2YVBreKRIrAFcZUzmCYBtUpdn94OjBPH5ZC2DwZp0=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790010262; c=relaxed/simple;
-	bh=nrA9Xj7XGXM3EPMXPKa/BBp6dPLYUHs2CesSGo9o128=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Uh/ME5AzWwwTVtFYC99xOpv7xQx+ZJCJQdZi9ZzE9p/DYOLmbMAVFI9ryU7OuAnp+7V+EFRK1sRsMSfDPWXB8cIbwNoXCb1jCUfdukzfM0zX6lS1mwJqvOm0DaQE9E1NCWUw19QFH8e4E9IfdiRBnCSfhto1wZ8vdUmbo4NayTg=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=CubPWkQB; arc=fail smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4E6448BAB
+	for <soc@lists.linux.dev>; Mon, 21 Sep 2026 20:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790023346; cv=none; b=RJhw/NOtL8VHtkl03RKS6Z9AleomNtouCAWTQW/TQwoFukWRN4pW4gB85YJjNtPYCJSX1IZLCffpaCEgmhrQPk59OnE7RGrqaVVBhVc+CP3/IJlXmtiWKsQoqhkR1aKyZs8y/qn0Z50AtSkAokwoVAaoVE3JA8n6grc2rCxNRBo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790023346; c=relaxed/simple;
+	bh=Cbhq5AY4F38rOC/Kyo867bYsHX9pFIIo/xsqTNuiRaQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Pzr6cupH7SPB24gi6ElfWVGxrr0sVJw+Hj5ZIatuYJXXi6hODPv9gckyfgsU8/XrTg9bKoN3TXOK0S0Hy9k7hRzsGXuFqIeJXh3Qr3pXitGEcr3TZJJY3pDhlvM73mUbNqKP3A1zLnAEtabBVwusFRR3sNbBDh6VW7vWHUq9nH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nY0kDJHH; arc=none smtp.client-ip=74.125.228.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="CubPWkQB"
-Received: by smtp.kernel.org (Postfix)
-	id C85981F00893; Mon, 21 Sep 2026 17:04:20 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.162.57
-ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
-	t=1790010260;
-	b=dQP0FEM1zc+mnX+Xi0GMGaCWNE8vg3+W1pzCRcRtXdM6VJZlAtzGywZJyHo1W58GCsZO
-	 +8651avDMth7hxkJi9BUauZJNJMabMfR9Pq/MwZvY9WhzxG6dfkzWMsDEM+TAhIRpBU8o
-	 6mvqEpl+MotAw+UtkA9HIdVGkEPeUK6CJTiAu0WFcmEoJwUOzyFNmL5MGI2qMLr1L3H/V
-	 Gh1IYyoM6Y0eaIAbJ96x5s6SOvtONx3bmcV2hV/J/5gDu7R5xnjveiaTIdJKRIEyQmy50
-	 8Y69WwcdaOhQiOz0Ute3Qz6JAVb4WGyrAXRFypbIKTO1k7IP6WAJhnGrPT1lNERVksw==
-ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790010260;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=fEQKgq61LC9Fg8HDfwNkAAHRBJbra6zaQUkH+aaUiMY=;
-	b=iSEijYhIIOfHMaZDWUOW7lbN71ZnVnX1plBAaICDfdGHVdYZ85lwpeO0ybeuud8Lut3k
-	 jX+hnyHrhnQFJYsaDw2HAa5CJv/3j+Q9GK9bTbeJCDKj6dTwrcnhYnUjoYY6ceD6Kobhy
-	 OJNtZoODRObKBGK+W4D9dyjkGr7n3yNktJ605memSxJ75bOvhxvdAzqegnbceqC7FCoMH
-	 OIG3/FfvtDyt64QWGH9mql+SqbFYU9JUvzWrI++jOoGmaHJ9SEFbumJ0bvq3rUteFASHL
-	 I48y+vASchJFuSy7W5bhWltdXb5Nnz+0sAI+82cmOfm/olQuOLxEH/JtlGf8oV6BFCw==
-ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=CubPWkQB;
-	dmarc=pass header.from=oss.nxp.com;
-	spf=pass smtp.mailfrom=oss.nxp.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.162.57
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013057.outbound.protection.outlook.com [40.107.162.57])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 08B811F000FF
-	for <soc@kernel.org>; Mon, 21 Sep 2026 17:04:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=CubPWkQB
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 08B811F000FF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bajCJBiAfbULfjZX38S6sg7X8g5vtihJXbIziFbCfKZ8fJJF8Uv78mjviPHuZtcTcXuzQIAXhg/p1v2EeZalwa6FThR/8a9dBYhm2sgm10YHa+bitnci06z19rEuyVogQTD7YgsFkkql77DT6PrPtkKkxjmPYH5Ui4KffRQ25/S9d14K+yjJP5VgUcXr8Sv9a4Qo+kLFikJHfedv39ZKT0wyc9t4qOyPE4zGEGAdkSxaHSHfRkjuanbu1nGGKsYcnaiL57GYq8F245e93ZonpKJ5UlQDvfkwZndELu97iPKHFzuH0xRDyITt4nSIIHMhLO3ALoDj+vfa2L/vu6bqKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fEQKgq61LC9Fg8HDfwNkAAHRBJbra6zaQUkH+aaUiMY=;
- b=HGvJP+g1xqOm94scDA7dwjnw7onMESZgONHqLlo7pedDnt66hrcSC9kJjAYf2tNs+MNoQw8nfkf2ZBD3G87LIwsSOscZRS+ryoRcCvZj8372cioicubNfAAckUH+WcR6FlF9RU8p+avyckNsqu1iLZ8mHLyNO3e6YtV41H9Rud8dd+o+LADshjl9wcCvjP/myAd5fTdShUB9lU68fZSk3Pv7k3xjKiGzkZWXNh8F+n2IGcEE1tPDW+/hoSjHcXMNq+SsRCnG9qac1Bzmy+MC0pvwt05ocWvfQeGA7KGizhniRhe+BINL3ka8T44EQcUNjYVZYqOn3sYDjsiYMklmiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fEQKgq61LC9Fg8HDfwNkAAHRBJbra6zaQUkH+aaUiMY=;
- b=CubPWkQBYF3ZdyYZ9v80bkFVcTfNjS3dR+PvOxTxkv2ymvR8YHGL29IN2AkTt427rOCtJs0Uh4Lc8u1y58uCGXUuJ4Kip9JZVEj8PGBqbg5r0cdE0WFG35bLhfTap9QzfMMLoxiJAq1fZzTlRs8/LuSY86mh1WzhbXsa82Rgp8nDnMEYdKKvxo7syPEgUCrcldx5H7k8YuzNH8NvlX7Q0Qeq8mHePHGv1lMWX4ZYqCUmHFTULHCIbF50m/w5lGBuxi7giSmXGj5NQn+oVvUlVQMNgiCiuRNl9myT4/+eJsxkJIb8Z0f2wru+GnXOvdeLlNWydMNqKnLMbsWTaXBvFg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from GV2PR04MB11799.eurprd04.prod.outlook.com (2603:10a6:150:2cf::9)
- by AS5PR04MB9756.eurprd04.prod.outlook.com (2603:10a6:20b:677::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.16; Mon, 21 Sep
- 2026 17:04:12 +0000
-Received: from GV2PR04MB11799.eurprd04.prod.outlook.com
- ([fe80::2146:83a2:5329:b7c]) by GV2PR04MB11799.eurprd04.prod.outlook.com
- ([fe80::2146:83a2:5329:b7c%7]) with mapi id 15.21.0428.015; Mon, 21 Sep 2026
- 17:04:12 +0000
-Date: Mon, 21 Sep 2026 12:04:04 -0500
-From: Frank Li <Frank.li@oss.nxp.com>
-To: soc@kernel.org
-Cc: Frank.Li@nxp.com, kernel@pengutronix.de, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, stefano.r@variscite.com,
-	vjardin@free.fr
-Subject: Re: [GIT PULL] iMX fixes for 7.2
-Message-ID: <arFjhMrpfJ0OBjUp@SMW015318>
-References: <20260921160016.1139490-1-Frank.Li@oss.nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260921160016.1139490-1-Frank.Li@oss.nxp.com>
-X-ClientProxiedBy: CY8PR12CA0050.namprd12.prod.outlook.com
- (2603:10b6:930:4c::18) To GV2PR04MB11799.eurprd04.prod.outlook.com
- (2603:10a6:150:2cf::9)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nY0kDJHH"
+Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc5256c2a4bso2331074a12.1
+        for <soc@lists.linux.dev>; Mon, 21 Sep 2026 13:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790023344; x=1790628144; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=19ujXM0/uR0vXBiub8+6aoHd0jV8R/3wu1J8/sZV+qw=;
+        b=nY0kDJHHmvJYWotJ5P2i7lbRMVlyQiM+ZJDhEQH03pOeOkXT+NIsdbc991vqbHiu9G
+         qy2G8E8dZ5UkgukRBh7aNXuUVXR8iU/wIZb/kCAt0ChKSRKPcobmHLD1XN4OVxVoptkN
+         0OrQIwsWQXtwAL4o69uR4WzUdZIG8z2X2lcJ0jYn2kvLmPlevjy56eTYXesakCOR1sL2
+         a1+t+MDqySDDTVIkAicdOqqCyDwfg3LHfpY34T3Oc9Zb1SpajXG+8eEemPi8bY3wa5hm
+         QyHJvRg1w3setcD8zwpVinpJqM64ObyHkOFJlsh6Pa8Ul24A1DXoQDfxzQpW1euXbxp/
+         2PJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790023344; x=1790628144;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=19ujXM0/uR0vXBiub8+6aoHd0jV8R/3wu1J8/sZV+qw=;
+        b=U3lEwwYuPXip81Jd8LQsPvZZGoIeLLBhZTWwlxIGjSuHckN1ZldwYu9yM0ySSnWl4u
+         yWuTwtjMSxcKsV8rCXILf2t0cLAIRZyKKLWg41hX8EbSVlciNrQTUoqGjvhImPCJA6W6
+         brrWvh5FiCiSUGTS9tPmWhIzcS8Kx0qYl8NwJ+FvHkDPmZQI5OKqH8jeY7brD+iWX80Z
+         n5QGkN6IlwEVgu5GmiD76b4F1Jn3AyTmsb9/RPViii615ZCYzIN7hYkmQPEUCM2IvXqk
+         cXIG5z0p1jK1z/4OnfyXq1sJb0jjQCb/ahJmGbJbiWON9uK8UkiNOBRbNWXLQF2j7I4s
+         wpLg==
+X-Gm-Message-State: AFuF++ni9zNB982FmPvYrvq8FH/fQnypWGXnpFjT59vjOrkxtLxdCrJs
+	o3whaiGk7i0r1RC6GezKj6fBYqLua+3OKMb/r8NX/1+KR+3/010euiqm
+X-Gm-Gg: AYBFou11DoSAlE3s/k1IJg7JDH4wMCVHD5NFI6+LUGbzuzmJN7Pcd38O2vA+gdQUOeh
+	mZe0Z0CKGSKRMe8In4Nc5T5jrbhO20Hso95wrRzw6OVnc/1lWihkUvHoahgA2wJxmFBZIPu3y4Q
+	B/9kqgp2xos24EPHEoHQciIn4TbjdEuLSyDBdOUa1eirHMPSFv8tjTD8hAVHJf6zyixh1GpRwO3
+	mq0KsA/Wpnn3BHKUXBQNzftFlGmXLAeUCoxddq3IUXObngvUB7ViS6xiW34plijKYyNP/ckd6xa
+	nCWS5fYzdzp5GlYk+ZKYMN587oUznTSRYyxpf7wLEzZLMXwBFz2kNJlK6Mi6Dh4THFM1MiYPJb2
+	7NrCzYwyZV6SsLiZqKcIhIL5i/K0hlEID1sXXrzHit7QFUaXL4HfJiH+u1l7VoydmHiddyLSan3
+	x4ZXx+YaXZl+C6rIfsaCpYcoILyABunDg7a1OYGn0vxMRg/kj1Sh7izslc650vKOmYxoqbrTXQT
+	/hOvsHDmcCfhzotm5G1
+X-Received: by 2002:a17:90b:4c02:b0:39e:2036:8243 with SMTP id 98e67ed59e1d1-39e54eb71f7mr17140919a91.25.1790023343451;
+        Mon, 21 Sep 2026 13:42:23 -0700 (PDT)
+Received: from cfarm424.jing.rocks (cfarm424.jing.rocks. [2600:3c18:e002:2e11::c424])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a067021ca6sm967996a91.2.2026.09.21.13.42.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2026 13:42:22 -0700 (PDT)
+From: Ridham Khurana <khurana.ridham222@gmail.com>
+To: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Cc: soc@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	Jori Koolstra <jkoolstra@xs4all.nl>,
+	Brigham Campbell <me@brighamcampbell.com>,
+	linux-kernel-mentees@lists.linux.dev,
+	Ridham Khurana <khurana.ridham222@gmail.com>
+Subject: [PATCH RESEND] platform: cznic: turris-omnia-mcu: Add missing MODULE_DEVICE_TABLE()
+Date: Mon, 21 Sep 2026 20:41:47 +0000
+Message-ID: <20260921204204.797294-1-khurana.ridham222@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV2PR04MB11799:EE_|AS5PR04MB9756:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9148b6e5-33b4-421b-3627-08df18025bbf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|1800799024|366016|376014|23010399003|10067099003|11063799006|22082099003|18002099003|56012099006|41080700001;
-X-Microsoft-Antispam-Message-Info:
-	/vroqT9GOqUpOYrIXWy0XBrK3Q6car606tWKE8S6QesiNXOpNeiyi2U1r8JH3dTbgGd6iqDS+Xuah1wbSeilbUmAhKxlMb+geMQZyzHHZqz2k57yO05BO4JdarXxhX0jJ6m1b9JMrIwAqHlcIgBiN2LCXJEMxDRXqfiH5WIH4qcZUH29nQOmaMdfu5IjvCWxesvosQxY5ssAvM7a33GoB+izRmq0OzmKztW0kZty0woZjFZr6SglqLH1gOQsp4VlPFrxmIA3TcCYmIfznTq5CTozXxcnfFovVBhT8j/zcwNjepabEGpkEewKkXmUbEyRQC2tjEcLYl8dF239QsVcGNUcHpxFFAnrj/lhilJVo9/IhB9uvMJEHSJp4pjL+Ep2CjiHu0e4/JYoqPZxxmb92rRP+heSm1G0h3KIH9e3dJHIv+VpnT+i+QNHt2GziWEmtvRZEefIYfhEQPE9KPcy3LVnqfVFqwmnytK3WlAPNGg6k3NuqqZJXBWOki6XiYgph5Oj/6IGTR+GiUOSpMBg38O6T/sxYqyRFP+0Y5FNZaqwInq5WW9uuETzrZiGoJ+84+r8X8Bv94+ttLXY9Rrw50ZN1JVI01ea4RFiUbCZR2dPTE2Mp+xRxoU4rdUUfyM+UDMH05MmRfCiztvrTCV8xUhP1TD3wmFZhFd31lg760I=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11799.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(376014)(23010399003)(10067099003)(11063799006)(22082099003)(18002099003)(56012099006)(41080700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?CDtW/0jN4LDKtn1YWeJw+TVAgGPsu3UQoKp5R+fznFcLsgbmF/Nks5GHWIxU?=
- =?us-ascii?Q?J2y7x0+Mw+c4rziUTysIPntUrOTxG9Fkqe8a7dMz2R+iajj1tffcCmpz3+N1?=
- =?us-ascii?Q?SJjDPBaaHUcVZgs0rFX1pOfwhIIFs59bsmaxzZRHc3goozknZBqQJ771xjkb?=
- =?us-ascii?Q?/kBUSeKpx565KxT+Ou9DJeBQ4rTjLcNr032ydw5IUwTbquvUCY7YLbEu+ztv?=
- =?us-ascii?Q?pDMmLyR9PJPrPXjQVy9JfcWecQGPBcfbDYV7de66dyz7XgjNPiwx93d8LZNx?=
- =?us-ascii?Q?57BPPYLNxQgmQ8Qbnt4VL0lX3LVvWkal/IO3Wo3BVLA4DS1Sf07Daj05AJDB?=
- =?us-ascii?Q?g1dPR9pqstevpyfLu1vjPTHGBVFBGl4RZP51O7mUaYQCA2ndUAD5sOElWLVs?=
- =?us-ascii?Q?w0XVpiEutGPZpycNkyt0gag8De+wlbUdKhZsPO9xe2nZ089YITDSBq56akk5?=
- =?us-ascii?Q?PtEpFkSw1gg0rc6Mc4lmVxO4JjjzXpvAnBu9HN3mHs4+3I6WZCTnS/BmmNbl?=
- =?us-ascii?Q?x9n0zcXFzWX7h+5FOzKIbYZ8Ul52r7vZi0Gu8Mhseyl2LwpUnE4j0NMbfzRh?=
- =?us-ascii?Q?3ewCvm65iCNL33U7EGmbtrOb48DCkCJx92OylnzVOXnowdOHCMDRYWo6XbTA?=
- =?us-ascii?Q?6azk4HP+edBYJmbU1cXcKBDqC5qUC3kC+Hk7brL+nC5duSP8PSMCHdWxMa98?=
- =?us-ascii?Q?Yx3IrnzuDu/1nmOY0IP0+UNOOxhMFhVzQuPV7XQQ1mJA+OOB+K+CC+MISHga?=
- =?us-ascii?Q?auLrW0iQkh5/Y2u3RCUJvEAUYKsoXdWvLfWKn70ci8o/nanyjrOrXT2A5IsU?=
- =?us-ascii?Q?MetaH5kKQCtywcN4pxTQxnfg8+qMi1GlVksDbkmT8LFWFhTQ5Y4sv+90JjU+?=
- =?us-ascii?Q?zQWRqPYuoV6f+VflJnW64ixRyQ6Bd+9Z+dGrabSIWE4thY139aRQW/DyD9ve?=
- =?us-ascii?Q?xfU3q5D12HGjqPrJv95NzDc4Vt/XnUn8uodjrugt3Sk0T7cgN64Ef2Q5Xtk7?=
- =?us-ascii?Q?gp56lGwIS0/EPw3UqWXG0dZaread/wnu1QBrfs0Gl2Qhaks/lWr/h7M2irQ8?=
- =?us-ascii?Q?phCn75vUKdFerLVup7II4lfP+03QMbLaP1AiEJmTlj488ydCpQRVR7YFyOb+?=
- =?us-ascii?Q?K3nN2YjNr5N3tjb3IdAkrXXgoq9GcrqGULQAnDCiMpqCM7zMXEKZ9g2FHlK3?=
- =?us-ascii?Q?rlVpxCPWk7uS5KjbbXe/sF9WZzLfHwbhqVYn/Lf1WbTHFDCPo/4/Xb4firov?=
- =?us-ascii?Q?JPa0s4dNNbxEOksGWDsj7KkuvkBWExUDK3aXxoqjJSUFY+2eiiwpkG7dbCI1?=
- =?us-ascii?Q?Fe2gXnSOE7qBEXjGxUxaeK7J2FckhHxO3pT7bbSq+aUFPxq7WxuwBYN7R9Ti?=
- =?us-ascii?Q?QbO7FfoFNG4A79X5Is2Vu6JUegAslh6JoltqUElBzyHo7WoqD3mRKkuMkk9x?=
- =?us-ascii?Q?FD16oK1iK7/woBN7sSW9rfy32aGCwZ5FhFle7aEhIX9r/vsIOaZs/aHpZ/N6?=
- =?us-ascii?Q?b3eibEQ2gSJ6ZO3y5QSoCB9BKqMILNAlyRNCfCP3OPO4xOLeo+KG5BPC8y9F?=
- =?us-ascii?Q?PcAhQFHelGL0chOUFzlUxEa+eJj0OBIze0AkBoAJqVyQyAgwGwRVViyDT+IA?=
- =?us-ascii?Q?dEvDe4HXimPLCcVM2sb0Kft85efR+xm8wZnZ40NrRgnTpM1yCJ1UZuSm6Fxa?=
- =?us-ascii?Q?IKStn5ms6KTdIZV+SIvbXVquYSMksgpY0OyHumx0DKjKdUZnVuo3CYpLYsS2?=
- =?us-ascii?Q?wOWC+cfC4kJ47og/l0hkyb6YL5Evqz/tHJj9p31ABVcJZSd+8fyy?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9148b6e5-33b4-421b-3627-08df18025bbf
-X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11799.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2026 17:04:12.1605
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TysiNdDEtY5N1MDzLNtqSu5YS9lbbhmoFEEQ6Vzkegf3YPRoIfJVQixqKqJ+HhlAmeu5okD6XqP44qZ/HehHtbD3Ob0GpQipvsIjT178LXabv0ih9RsuO2UZzIlW2HOp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9756
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 21, 2026 at 12:00:14PM -0400, Frank.Li@oss.nxp.com wrote:
-> From: Frank.Li@nxp.com
->
-> The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
->
->   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
->
-> are available in the Git repository at:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux.git tags/imx-fixes-7.2
+The driver wires of_omnia_mcu_match into the i2c_driver's
+.of_match_table but never exports it with MODULE_DEVICE_TABLE(), so no
+module alias is generated and the module is not autoloaded when the MCU
+is probed from the device tree.
 
-Sorry, I mess up version number, it should be 7.3, I will resend pull
-request.
+Found by code inspection. Not tested on the hardware itself; with the
+module built, the alias lookup
 
-Frank
+  $ modprobe -R 'of:Nsystem-controllerT(null)Ccznic,turris-omnia-mcu'
 
->
-> for you to fetch changes up to 7ba5290db6bf365e46fb70bf13dc2a47048165ea:
->
->   arm64: dts: imx8mp-var-dart-sonata: Fix Sonata SD I/O supply (2026-09-11 14:50:09 -0400)
->
-> ----------------------------------------------------------------
-> iMX fixes for 7.2
->
-> - Fix incorrect pinmux values for LX2160A.
-> - Fix Sonata SD I/O supply to avoid filesystem I/O errors because the kernel
->   was disabling LDO5 during late init.
->
-> ----------------------------------------------------------------
-> Stefano Radaelli (1):
->       arm64: dts: imx8mp-var-dart-sonata: Fix Sonata SD I/O supply
->
-> Vincent Jardin (3):
->       arm64: dts: lx2160a: fix incorrect pinmux
->       arm64: dts: lx2160a: fix IIC1 pinmux submask rejected by pinctrl-single
->       arm64: dts: lx2160a: fix the iic5 spi3 pinmux offset and value
->
->  arch/arm64/boot/dts/freescale/fsl-lx216x.dtsi         | 19 +++++++++++++------
->  .../boot/dts/freescale/imx8mp-var-dart-sonata.dts     |  1 +
->  2 files changed, 14 insertions(+), 6 deletions(-)
->
+reports no match before this change and resolves to turris_omnia_mcu
+after it.
+
+Fixes: 992f1a3d4e88 ("platform: cznic: Add preliminary support for Turris Omnia MCU")
+Signed-off-by: Ridham Khurana <khurana.ridham222@gmail.com>
+---
+Resend of the original posting, unchanged, widening Cc to the SoC tree
+(drivers/platform/cznic goes upstream through it). No response to the
+original posting or to the ping on Sep 9.
+
+Build-tested on linux-next (next-20260921).
+
+Link: https://lore.kernel.org/all/20260827113241.993923-1-khurana.ridham222@gmail.com/
+
+ drivers/platform/cznic/turris-omnia-mcu-base.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
+index e8fc0d7b3343..f0416302a1f3 100644
+--- a/drivers/platform/cznic/turris-omnia-mcu-base.c
++++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
+@@ -403,6 +403,7 @@ static const struct of_device_id of_omnia_mcu_match[] = {
+ 	{ .compatible = "cznic,turris-omnia-mcu" },
+ 	{}
+ };
++MODULE_DEVICE_TABLE(of, of_omnia_mcu_match);
+ 
+ static struct i2c_driver omnia_mcu_driver = {
+ 	.probe		= omnia_mcu_probe,
+-- 
+2.47.3
+
