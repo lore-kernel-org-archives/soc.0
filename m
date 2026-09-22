@@ -1,54 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49634D178B
-	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 07:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E774746B1
+	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 07:26:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790061890; cv=none; b=a+g+mNQZTNqdoooNext1K06/TOONj/BzINm1NuyIi9yF/t0abVb+G1/z1RB8YfJ4jVZBBHUX5IbuUK7zYJvImIwtQHHCJxM19r1g5YwXJcrDOzcpkrVjXFl1EpuD7AoGuBwQzyg58wd6X/sa87FRZzcAQ+h6a9FV9MsbQ29D43w=
+	t=1790061975; cv=none; b=H0kXV4nnXKBAMEXz2IAvoAu46gi8TOZMVAWSgAXchxYbSJXp1JBixyodiqtsJjglQS/QdpK7YpMtzAXtSnWlbjU9NxnFs1bZOERKlKx7HnaJZlsmk7xQ4Fx2Hy1MQVYAGZD2BmdiMMlQ4xc18mWCh6eTvLX4+h2El3H78n9wBSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790061890; c=relaxed/simple;
-	bh=jv6MlIuZXXaVscNrKeKjACmCF9DaajcuzQUfRu2mAFE=;
+	s=arc-20240116; t=1790061975; c=relaxed/simple;
+	bh=gnWpQWAf2Ex2oJ3zXG70LBtRWnH3/op21r4JuH9R6k8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ifRNHwE7LOUl6B7wRz/99b+gcCVJh9B1Z9AuLOINs3LjBr/b1BbtlZ+RhR4/OoDaTUFsxkBRlHBkXkXO38m7AkQeaPxLVF5aXKm0S8hz8dzM8YDocMWT5iDMOCj/7KsQoCNlTpwBomOi3paF6cf4ktkeYcPLHGOqDoxDfpLx0Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5byt1AG; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=PA2jM96edq+MyKdQLkJRJ4lf3RE2BR3rN26yQy/7mDBZ5d00YwRRlVYybuJrEmm6LWc0d3kjxMsTRND24w45ezGKvT3IRRmxiZWRXFSV7ExZTnf//2mx/37dhbbVXztP1A2QTItCAD1oj7Zqa5DQWZIo0usp2SZuQBIc29ShKIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpPaCgMf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5byt1AG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 892341F008A2
-	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 07:24:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpPaCgMf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6CA1F00902
+	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 07:26:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790061889;
-	bh=jv6MlIuZXXaVscNrKeKjACmCF9DaajcuzQUfRu2mAFE=;
+	s=k20260515; t=1790061972;
+	bh=gnWpQWAf2Ex2oJ3zXG70LBtRWnH3/op21r4JuH9R6k8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=a5byt1AG2ujcSfM+RR7j9cz1KjAzXibSWOuFJQ/0h/JQpfaz04mxmXP61RUh/aVXy
-	 vo1byg+7aGrWooKr9mk5fUUXnHTgA6UgYcPHOPiUrOi+vrQRC+4eD9uZtGKyjEm4Jz
-	 i0JBxBub7tvduMTaeuK11Mv3KE1yHrO1C+nY+vAY17a81Lmdz0ol3+6GdWRvEcaPY2
-	 JiuKq6V6Ve0DV3k6Fl4ntpxBZqKj9wEw1LGAT9rldh97KmTeW6FmPrbWkFpQQqrNJs
-	 e5XXfqwVZrw2FtbY2L8ECFoO7dMl0B4jxHMhggQSG29ZcIZxRCHbTjJhcHoUKmpSy7
-	 Yw81U2cuHJaJA==
-Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b5e4f16cd1so3488541e87.3
-        for <soc@lists.linux.dev>; Tue, 22 Sep 2026 00:24:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBwgvSA+J3jGQ3frqScvirS6T+I3D2a+iUUyQvbfwPxA7jsu2lYA0s1mlhMZf4hfikVaKQA=@lists.linux.dev
-X-Gm-Message-State: AFuF++mHzlpdHh6rDLR2efnMVtZQY6BsNH3/CCUWydD5jsa4xgz3ljbC
-	ezQpxTQ8OIlX2oJWPPzZ1/XfmIoJ1+CYuzDbzTuB6/xstjFML8nJKdsRKU4A3nitbYzssT+W3B5
-	uwV5RAq8A+AN4bJho4GgX/JcpDTy+F4M=
-X-Received: by 2002:a05:6512:23a2:b0:5b6:6b8:1fc5 with SMTP id
- 2adb3069b0e04-5b8c18226eamr4364173e87.17.1790061888255; Tue, 22 Sep 2026
- 00:24:48 -0700 (PDT)
+	b=LpPaCgMfm7Z/l2fIA8loLyB5vdxzaW1ZDVozibGGyVLMyp4L34Hz7A2+B9/dcNKb5
+	 07pLtUzBbf0bcXxMw6Nj384h0azqSOYWrria8j8hkyizjlWbHDUZtWZW76P3za9Gcz
+	 ko2nZYFjmS34xykMS4YPRHkovdmkhNPF98xXFdMJVT7se1qNpephkhu5d3ybtQy/nf
+	 HRkpnbN/WmnMPXDw8mbo/04rtkJ+i6dTaMFjRoG9OilOrxgp4KiHA4W1dxFZx5iNVr
+	 ZxG+hOdUqrbk6++INNyy+0nyoXMH9py+prmwqWFvw4Y5XDo890pjLP8FFgFpoTPx/6
+	 VMoIqNOq5sc1A==
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f17450so3351314e87.0
+        for <soc@lists.linux.dev>; Tue, 22 Sep 2026 00:26:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBxCXQ1o59Zf/PXNYY6cE5peyZLviSVp/RSuW0lby0My4mUX5G3N6psk9WLpZHtY0MrL8wk=@lists.linux.dev
+X-Gm-Message-State: AFuF++lolex+aB/8QAXX345J1qqxaKwtJI8Z08G+i7Lp9S/q3p5DvAkq
+	XPzXiOmoxSopAjrjCEVKNeZOaCsC3a7I7R+G0evvKMdakNSpiVjPJd7efgqNbGUlRU48X5/trMm
+	sAZKCIE3ZQ49oeS8RJLbmziQqoEk8t58=
+X-Received: by 2002:a05:6512:3046:b0:5b6:183c:5ca2 with SMTP id
+ 2adb3069b0e04-5b8c195c05emr4518896e87.64.1790061971274; Tue, 22 Sep 2026
+ 00:26:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260921-cv75-v5-v8-0-282ff5d98dda@ambarella.com> <20260921-cv75-v5-v8-12-282ff5d98dda@ambarella.com>
-In-Reply-To: <20260921-cv75-v5-v8-12-282ff5d98dda@ambarella.com>
+References: <20260921-cv75-v5-v8-0-282ff5d98dda@ambarella.com> <20260921-cv75-v5-v8-13-282ff5d98dda@ambarella.com>
+In-Reply-To: <20260921-cv75-v5-v8-13-282ff5d98dda@ambarella.com>
 From: Linus Walleij <linusw@kernel.org>
-Date: Tue, 22 Sep 2026 09:24:36 +0200
-X-Gmail-Original-Message-ID: <CAD++jLkDOPyStRwtoeUysCCXxOFUs142xw8Cdcm2CCo5MghP7g@mail.gmail.com>
-X-Gm-Features: AclHuK_MFbUz-mrJnpdTRjizQpZ1o1JRe1ZMXbr4OoxUHWYI1Yt8b8NWQaKPwv4
-Message-ID: <CAD++jLkDOPyStRwtoeUysCCXxOFUs142xw8Cdcm2CCo5MghP7g@mail.gmail.com>
-Subject: Re: [PATCH v8 12/18] gpio: pl061: use cleanup helpers for locks
+Date: Tue, 22 Sep 2026 09:25:57 +0200
+X-Gmail-Original-Message-ID: <CAD++jLkAfQTGNGTqL_bMD7S_x-kRMtJY=nOEkVdHR4eEoUJVOg@mail.gmail.com>
+X-Gm-Features: AclHuK_tzDtaJ_wl5w9PHnR3CExWinf1MCYYaeMXhkMyxrZ9pQpsY3Z4mhWO3ik
+Message-ID: <CAD++jLkAfQTGNGTqL_bMD7S_x-kRMtJY=nOEkVdHR4eEoUJVOg@mail.gmail.com>
+Subject: Re: [PATCH v8 13/18] gpio: pl061: switch data path to gpio-regmap
 To: longzhao@ambarella.com
 Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
 	Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
@@ -71,7 +71,15 @@ On Mon, Sep 21, 2026 at 6:23=E2=80=AFAM Long Zhao via B4 Relay
 
 > From: Long Zhao <longzhao@ambarella.com>
 >
-> Convert raw_spinlock critical sections to guard() from cleanup.h.
+> Keep a custom irqchip and irq domain. The gpio_chip is owned by
+> gpio-regmap, so gpio_regmap_get_chip() is used to wire the domain.
+>
+> Check the chained-handler regmap_read() return and always
+> run chained_irq_exit(). irq_type keeps the MMIO write style
+> and uses cleanup helpers from the previous patch.
+>
+> irq_set_parent() nests the GPIO irq_desc under the AMBA parent
+> for irq_set_wake() and lockdep; checked with PROVE_LOCKING on CV75.
 >
 > Signed-off-by: Long Zhao <longzhao@ambarella.com>
 
