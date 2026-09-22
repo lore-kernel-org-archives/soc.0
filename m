@@ -1,54 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E774746B1
-	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 07:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CC08635D
+	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 07:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790061975; cv=none; b=H0kXV4nnXKBAMEXz2IAvoAu46gi8TOZMVAWSgAXchxYbSJXp1JBixyodiqtsJjglQS/QdpK7YpMtzAXtSnWlbjU9NxnFs1bZOERKlKx7HnaJZlsmk7xQ4Fx2Hy1MQVYAGZD2BmdiMMlQ4xc18mWCh6eTvLX4+h2El3H78n9wBSs=
+	t=1790062129; cv=none; b=nckhF7ueVCBSuFK9JaK6R6NMr8/NQOzJt0q7OXltNpP/F+7e4v/WK2uApxaKy72XBp2+u+UsFUkcdjyHtSj8Mdv/5ynKmAiShRufMVy73bdVpULnlYOP1xLs7fTWD1W0DMivHi1dR01wpCMCtULj1jNInXlmBnWKc/QK0Lh94qI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790061975; c=relaxed/simple;
-	bh=gnWpQWAf2Ex2oJ3zXG70LBtRWnH3/op21r4JuH9R6k8=;
+	s=arc-20240116; t=1790062129; c=relaxed/simple;
+	bh=jUNbiy0xDuTi7c+5s9qvfuW81PbsVIyH32dQ/SjREYU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PA2jM96edq+MyKdQLkJRJ4lf3RE2BR3rN26yQy/7mDBZ5d00YwRRlVYybuJrEmm6LWc0d3kjxMsTRND24w45ezGKvT3IRRmxiZWRXFSV7ExZTnf//2mx/37dhbbVXztP1A2QTItCAD1oj7Zqa5DQWZIo0usp2SZuQBIc29ShKIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpPaCgMf; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=niLFKJRWMslyo8LS3UlY0KJlNCeG/QFtSRkc94JpVhRy8VWrxc5KH9ekYoM7zdHaJdelehQ3HaKexxGUNBgts9P17OrvmjBnl2u6se4Ipmtsk8jDoPhonypbaGS6lNDGMNM8qiT7fQyQ5GP/fXjVhu4C7JWavmzV+n1OKFNm2mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZp0caBb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpPaCgMf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6CA1F00902
-	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 07:26:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZp0caBb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 249A41F008BF
+	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 07:28:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790061972;
-	bh=gnWpQWAf2Ex2oJ3zXG70LBtRWnH3/op21r4JuH9R6k8=;
+	s=k20260515; t=1790062127;
+	bh=RlS/01WyyurIPf4QsRysWjeX/pYeyMHVRzkWTplgkuo=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=LpPaCgMfm7Z/l2fIA8loLyB5vdxzaW1ZDVozibGGyVLMyp4L34Hz7A2+B9/dcNKb5
-	 07pLtUzBbf0bcXxMw6Nj384h0azqSOYWrria8j8hkyizjlWbHDUZtWZW76P3za9Gcz
-	 ko2nZYFjmS34xykMS4YPRHkovdmkhNPF98xXFdMJVT7se1qNpephkhu5d3ybtQy/nf
-	 HRkpnbN/WmnMPXDw8mbo/04rtkJ+i6dTaMFjRoG9OilOrxgp4KiHA4W1dxFZx5iNVr
-	 ZxG+hOdUqrbk6++INNyy+0nyoXMH9py+prmwqWFvw4Y5XDo890pjLP8FFgFpoTPx/6
-	 VMoIqNOq5sc1A==
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f17450so3351314e87.0
-        for <soc@lists.linux.dev>; Tue, 22 Sep 2026 00:26:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBxCXQ1o59Zf/PXNYY6cE5peyZLviSVp/RSuW0lby0My4mUX5G3N6psk9WLpZHtY0MrL8wk=@lists.linux.dev
-X-Gm-Message-State: AFuF++lolex+aB/8QAXX345J1qqxaKwtJI8Z08G+i7Lp9S/q3p5DvAkq
-	XPzXiOmoxSopAjrjCEVKNeZOaCsC3a7I7R+G0evvKMdakNSpiVjPJd7efgqNbGUlRU48X5/trMm
-	sAZKCIE3ZQ49oeS8RJLbmziQqoEk8t58=
-X-Received: by 2002:a05:6512:3046:b0:5b6:183c:5ca2 with SMTP id
- 2adb3069b0e04-5b8c195c05emr4518896e87.64.1790061971274; Tue, 22 Sep 2026
- 00:26:11 -0700 (PDT)
+	b=OZp0caBbpefIvj9oDAZUhKHN7HmbUmSQEDEtJyByiNinpZk0O8y4fxtBhC2HvSwG3
+	 nVn3uGo7rfGHO0FJAzg3l8b+9tkirrGKqpKntbc1kLUFH8BTKzyUGr51prwRh0TT8A
+	 jmKeyXJeVqznfFEmqluszLaZuv8CtgzLp19JetSlzAJSToGilc4NUXKXeZrCz2xhe6
+	 X7tA51sgsYuxNEbq10r+KXuYWZYb8M2U1qJxyJC9D5q3iqM8mHzzyusLZ8KQse/rV/
+	 VtDcdTYWoki9oBne42YfmbwPaJv9I98IdOA4Xf4FTY/WfuzkM8U5IDrx7TAxDxmisn
+	 0h0nFQkVVbtYg==
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f16c72so3068153e87.0
+        for <soc@lists.linux.dev>; Tue, 22 Sep 2026 00:28:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwXVhTBu1SitP5b+wnBYC1SxCugVPBssS47pA5q08kRx+NyWnpAVmThpt5HkfMy7lJf9qc=@lists.linux.dev
+X-Gm-Message-State: AFuF++m/fq+MbZlU/OSJWD8YTNbhdsr5jIaMRbzR4P4SaU0Awa+2dwuf
+	A85l2hLzQlNtqbvVZNlnoPMwgjuWlgHv7rejW+/iTIlZQxFZO5/EA+JvqxitOP8v4B9ALUGEj5n
+	6j21igJSPZEFYw4/593Vh7b0jHA5QyCo=
+X-Received: by 2002:a05:6512:3d1d:b0:5ae:c8da:6254 with SMTP id
+ 2adb3069b0e04-5b8c18298d5mr3810337e87.22.1790062125682; Tue, 22 Sep 2026
+ 00:28:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260921-cv75-v5-v8-0-282ff5d98dda@ambarella.com> <20260921-cv75-v5-v8-13-282ff5d98dda@ambarella.com>
-In-Reply-To: <20260921-cv75-v5-v8-13-282ff5d98dda@ambarella.com>
+References: <20260921-cv75-v5-v8-0-282ff5d98dda@ambarella.com> <20260921-cv75-v5-v8-15-282ff5d98dda@ambarella.com>
+In-Reply-To: <20260921-cv75-v5-v8-15-282ff5d98dda@ambarella.com>
 From: Linus Walleij <linusw@kernel.org>
-Date: Tue, 22 Sep 2026 09:25:57 +0200
-X-Gmail-Original-Message-ID: <CAD++jLkAfQTGNGTqL_bMD7S_x-kRMtJY=nOEkVdHR4eEoUJVOg@mail.gmail.com>
-X-Gm-Features: AclHuK_tzDtaJ_wl5w9PHnR3CExWinf1MCYYaeMXhkMyxrZ9pQpsY3Z4mhWO3ik
-Message-ID: <CAD++jLkAfQTGNGTqL_bMD7S_x-kRMtJY=nOEkVdHR4eEoUJVOg@mail.gmail.com>
-Subject: Re: [PATCH v8 13/18] gpio: pl061: switch data path to gpio-regmap
+Date: Tue, 22 Sep 2026 09:28:33 +0200
+X-Gmail-Original-Message-ID: <CAD++jLnL5h2AD5rYvUYGT_TvQ=m9CQd6bh_NT=T28G7hDGFLDw@mail.gmail.com>
+X-Gm-Features: AclHuK_pNJ1evLbofDMJ7O-GTWjLgf41H8iNHME4i3icaRDTTyzpN_Rs6YR6w7U
+Message-ID: <CAD++jLnL5h2AD5rYvUYGT_TvQ=m9CQd6bh_NT=T28G7hDGFLDw@mail.gmail.com>
+Subject: Re: [PATCH v8 15/18] pinctrl: ambarella: add CV75 pin controller
 To: longzhao@ambarella.com
 Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
 	Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
@@ -71,19 +71,22 @@ On Mon, Sep 21, 2026 at 6:23=E2=80=AFAM Long Zhao via B4 Relay
 
 > From: Long Zhao <longzhao@ambarella.com>
 >
-> Keep a custom irqchip and irq domain. The gpio_chip is owned by
-> gpio-regmap, so gpio_regmap_get_chip() is used to wire the domain.
->
-> Check the chained-handler regmap_read() return and always
-> run chained_irq_exit(). irq_type keeps the MMIO write style
-> and uses cleanup helpers from the previous patch.
->
-> irq_set_parent() nests the GPIO irq_desc under the AMBA parent
-> for irq_set_wake() and lockdep; checked with PROVE_LOCKING on CV75.
+> Add an Ambarella pinmux-only pinctrl driver with CV75 function/group
+> tables. GPIO is handled by the PL061 driver.
 >
 > Signed-off-by: Long Zhao <longzhao@ambarella.com>
 
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+I feel I could just apply this patch.
+
+> +       select GPIO_PL061
+
+This doesn't matter so much, I can just assume this will appear in
+the merge window.
+
+If some bots complain it we can just ignore it.
+
+Once the bindings are ACKed I will consider just apply the
+bindings and this patch to the pinctrl tree.
 
 Yours,
 Linus Walleij
