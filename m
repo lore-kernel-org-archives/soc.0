@@ -1,91 +1,74 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C114E021C;
-	Tue, 22 Sep 2026 09:03:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A341253D0D2
+	for <soc@lists.linux.dev>; Tue, 22 Sep 2026 13:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790067815; cv=none; b=krlHw91LDvtdd+W2gLtv942zVOSGQDOzWAhWHZOKQFmx4hkK2DStG8BozMCPG8CTl2WB4QrAvBJseyXolQ8AjVwnOXz6onjxySfDniDtc4++zmUO+EQH4ZA5Nffk8aP4yX+OWt+x2xI3WUMNeOSMOyA69qweqCeMNNCrmrsea1g=
+	t=1790082417; cv=none; b=GRL+27CYpwPRahIu3Y/MXgotpcXK3GkIOnrtsPlI7cQDt85Gx8Cb7Or44R/HnwPKExJNDKE1+XJEWHpwYPL4xbqaJW/TeN+VUB77scbZwsqo4soc/2CQkzZjvToT6C8ywkexQOcn9MSL7zKOT0lBaam8BdTaLF0nMX1mA5fSWcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790067815; c=relaxed/simple;
-	bh=sMJE4hNbjphW0GvkigJLBEzXqY1LqCjd/zuEvelbozM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=l4xqZZsVY48E7FuFD2HQVlIIw7C/2GtHwXtfoFww33MQYmBDbHkuP/QOt0fuZqrrtxmVcrWvb+EHnTdK1OSrSa/H4egZwhvIbnreF3aw/TY+7blgdUN3Mp139WBqx1gDoQuwlJOzOPVXPJ0ZVVnh1Vezkh1mzKRIaJebVEx9biE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=er9AjLnn; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1790082417; c=relaxed/simple;
+	bh=e5FZjMFoNgtHU0oXMqkq8rwsKD9j35nzQqXf1yEy758=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GRxI/mOQrT9SAPWJsFhUalW6bYFVTZ24JfPOb8pOIr1OjOw36YFF0kdeApv+pyPN1+Yo+OewqbM5GTUH28vSJ6/VwfPgCWuJH8QaaeyWikE6vu7wWIIRZKscPMo1qYJ4I6kN1oFjTRgijA/5yV3kDI3zhMYorq9UTe62eYz2CX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DQ38gUXO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="er9AjLnn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=sMJE4hNbjphW0GvkigJLBEzXqY1LqCjd/zuEvelbozM=; b=e
-	r9AjLnnLYALemIC2MdYQiKsDylh2yKtRFp1tzUhGSrgiJV4PbY5vs4DZt7Sd/XIZ
-	hB5tvgBvP+zdnfbYSXB3+MkiZKJ4wqyAAeFnD9ET05UPPdB64719VMt2K8gX8jlA
-	08dDlknEf7R9T+I5ZZ4hVq11QJcckS0/dAhYvEDHoM=
-Date: Tue, 22 Sep 2026 17:02:23 +0800 (CST)
-From: zl020895  <zl020895@163.com>
-To: "Linus Walleij" <linusw@kernel.org>
-Cc: longzhao@ambarella.com, "Arnd Bergmann" <arnd@arndb.de>,
-	"Krzysztof Kozlowski" <krzk@kernel.org>,
-	"Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	"Rob Herring" <robh@kernel.org>,
-	"Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-	"Conor Dooley" <conor+dt@kernel.org>,
-	"Michael Turquette" <mturquette@baylibre.com>,
-	"Stephen Boyd" <sboyd@kernel.org>,
-	"Jerome Brunet" <jbrunet@baylibre.com>,
-	"Bartosz Golaszewski" <brgl@kernel.org>,
-	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-	"Jiri Slaby" <jirislaby@kernel.org>,
-	"Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	"Catalin Marinas" <catalin.marinas@arm.com>,
-	"Will Deacon" <will@kernel.org>, "Lee Jones" <lee@kernel.org>,
-	mfd@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re:Re: Re: [PATCH v7 00/15] Ambarella CV75 SoC minimal bring-up
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <CAD++jLkZ9F3_KQwGDZyKaFYBzO9PXVq+5v8geFE+oOM47KmagQ@mail.gmail.com>
-References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
- <CAD++jLkCNkcf-gn0FgvLZZTibLUvbKaH6L+=nRqkNZr2iKFqsQ@mail.gmail.com>
- <39641ec4.7a73.1a0c848bfa4.Coremail.zl020895@163.com>
- <CAD++jLkZ9F3_KQwGDZyKaFYBzO9PXVq+5v8geFE+oOM47KmagQ@mail.gmail.com>
-X-NTES-SC: AL_Qu2SAvyduE8v5SWRZukcn0wRhug/UMa4u/sm3YNXc84FpwPw5QMjZmNDNHL32tKTBxilqxOseRpTx8lTXqZ3SWk2S31eMJkw9vz6qHwtgQ==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DQ38gUXO"
+Received: by smtp.kernel.org (Postfix)
+	id 57B891F00893; Tue, 22 Sep 2026 13:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1ECD1F000FF;
+	Tue, 22 Sep 2026 13:06:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790082416;
+	bh=nmNg/7yNiyHCpTaffEz86tC403fYQxzrM4+1NqBtFlk=;
+	h=From:To:Cc:Subject:Date;
+	b=DQ38gUXOHTJXF+4OxYYh5GYRffcJUaQ3EHttkwbDl8o2/vt3+9dxOU4TEbWQd7gNw
+	 3HBqyJFoOlPWKRw2jud7SdO/1Cv8uixnnSQo0hkkBS4SgDdFEgOUOQK5SRKjzw3mNN
+	 f+//ZFDyJqswm+zvSpNz6TyW5qVjGrXNn3qzkRP7Ps2q01gHdEgiMpX/acmrFFbbZO
+	 T0OrkX3JqofIO4faXji9+E9hV6+j7fwJeDBBCtxBQ4arGOGUOPBZ89vrhG7EReUSEv
+	 Czv2EkuiJE57ifAliIzTT/iIncC6OMg9ohHPLT6M3T4f2fa0lMH8V63kFclNXq9HX3
+	 J5eQ0kKxKVG3w==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Sumit Garg <sumit.garg@oss.qualcomm.com>
+Subject: [GIT PULL] Qualcomm driver fixes for v7.3
+Date: Tue, 22 Sep 2026 08:06:53 -0500
+Message-ID: <20260922130653.357615-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-ID: <14afb3f3.803a.1a0c85a1b75.Coremail.zl020895@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:gygvCgD3PyYfRLJq18cVAA--.40048W
-X-CM-SenderInfo: d2oqjiqyzvqiywtou0bp/xtbCxh9f0GqyRB-tfAAA3E
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
 
-SGkgTGludXMsCgpJIHNlZSwgdGhhbmtzIGZvciB0aGUgY2xhcmlmaWNhdGlvbi4gCkkgd2lsbCBh
-ZGQgdGhlIGBBc3Npc3RlZC1ieTogTExNYCB0YWcgaW4gZWFjaCBwYXRjaCBmb3IgdGhlIG5leHQg
-cmVzcGluLgoKQmVzdCByZWdhcmRzLApMb25nIFpoYW8KCkF0IDIwMjYtMDktMjIgMTY6NTI6NTIs
-ICJMaW51cyBXYWxsZWlqIiA8bGludXN3QGtlcm5lbC5vcmc+IHdyb3RlOgo+T24gVHVlLCBTZXAg
-MjIsIDIwMjYgYXQgMTA6NDTigK9BTSB6bDAyMDg5NSA8emwwMjA4OTVAMTYzLmNvbT4gd3JvdGU6
-Cj4KPj4gTm8gTExNIHdhcyB1c2VkIGZvciBjb2Rpbmcgb3IgdGVzdGluZy4gRGlmZmVyZW50IGRl
-dmVsb3BlcnMgYXJlIHJlc3BvbnNpYmxlIGZvcgo+PiBkaWZmZXJlbnQgcGFydHMgb2YgdGhlIGNv
-ZGUuIExMTSB3YXMgb25seSB1c2VkIHRvIHBvbGlzaCBjb21taXQgbWVzc2FnZXMuCj4+IENvdWxk
-IHlvdSBhZHZpc2Ugd2hldGhlciBJIHN0aWxsIG5lZWQgdG8gZGlzY2xvc2UgdGhpcz8KPgo+V2Ug
-YWRkIGl0IGV2ZW4gaWYgaXQganVzdCB1c2VkIGZvciBjb21taXQgbWVzc2FnZXMsIHdlIGRvbid0
-IHJlYWxseQo+ZGlmZmVyZW50aWF0ZS4KPgo+TWF5YmUgdGhpcyBpcyB0byBjb2Fyc2UgYnV0IGl0
-J3Mgd2hhdCB3ZSBoYXZlLgo+Cj5UaGUgdGFnIGRvZXNuJ3QgcmVhbGx5IG1lYW4gbXVjaCwgaXQg
-anVzdCBtZWFuICJhbiBMTE0gd2FzCj5pbnZvbHZlZCB3aXRoIHNvbWV0aGluZyByZWxhdGVkIHRv
-IHRoaXMgcGF0Y2giLCBpdCBjb3VsZAo+aGF2ZSBiZWVuIHVzZWQganVzdCBmb3IgdGVzdGluZyBv
-ciByZXZpZXcuCj4KPlNpbmNlIHdlIGhhdmUgU2FzaGlrbyByZXZpZXdpbmcgZXZlcnl0aGluZyBJ
-IGd1ZXNzIGluIHRoZW9yeQo+d2Ugc2hvdWxkIGV2ZW4gYWRkIGl0IGlmIHdlIGxvb2tlZCBhdCB0
-aGUgU2FzaGlrbyByZXZpZXdzLAo+YnV0IG5vYm9keSBkb2VzIHRoYXQuIFNvIGl0J3MgYSBiaXQg
-YXJiaXRyYXJ5LiBOb2JvZHkncyBnb25uYQo+YmUgdXBzZXQgYWJvdXQgZWl0aGVyLCBpdCdzIGp1
-c3Qgc29tZSBoZWxwZnVsIG1ldGFkYXRhLgo+Cj5Zb3VycywKPkxpbnVzIFdhbGxlaWoK
+
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-7.3
+
+for you to fetch changes up to 3eda4fa73e30207eb7afedde6987f7f321f74fbc:
+
+  firmware: qcom_scm: Remove SCM PAS wrappers (2026-08-31 15:35:06 -0500)
+
+----------------------------------------------------------------
+Qualcomm driver fixes for v7.3
+
+All clients was migrated from the Qualcomm SCM PAS API to the Qualcomm
+PAS API in v7.3, remove the now unused direct API.
+
+----------------------------------------------------------------
+Sumit Garg (1):
+      firmware: qcom_scm: Remove SCM PAS wrappers
+
+ drivers/firmware/qcom/qcom_scm.c       | 143 +++++++--------------------------
+ include/linux/firmware/qcom/qcom_scm.h |  29 -------
+ 2 files changed, 29 insertions(+), 143 deletions(-)
