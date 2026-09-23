@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9AB47F2DD
-	for <soc@lists.linux.dev>; Wed, 23 Sep 2026 10:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47FF486634
+	for <soc@lists.linux.dev>; Wed, 23 Sep 2026 10:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790159561; cv=pass; b=GhS3qHsX93zShYtcw8N6mYj837LtWEWbk7jf+0niPBTwXf/1GM3KA6ocL+K/cEcXa6LDKT2aYgQBH6F0Yjsj/IUjjYysSBoWCR8INZv+7OiB31IF8YyKxNl1a+MSnnxRobtHRf+/K4yHyF6U/wcyVVHW0YGdnBh5qj+f//IsVjU=
+	t=1790159571; cv=pass; b=prGFNpuu0Zxj2bjF0c0XiEI8ZsPDRSzhIBplBN4FYNcm3IgMcITii8jdUlGblEalgvpiAEJnt1JA2eFE8SK7nLlVGTk9VrRPd2P2ndBoWqaqL1dkZ9yKZBeckc81Sx2uH69oIQfLzMYrOykLshLOyQMLv7bL3OO48kamdopBDJ8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790159561; c=relaxed/simple;
-	bh=988dhDBtd7g+tpgVz0uwEhaGJxjatXUHLGg6/ZegZJk=;
+	s=arc-20240116; t=1790159571; c=relaxed/simple;
+	bh=MlU0I3ZU5CQhUEWmtUjU7hoUECBy7HNDtouJfvmnWUY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DtkNCOSbbf/9FF1ivAelJ1JfAEEMlWr02TYOx1ndoVGHLVBwSPoR4gIDEPGvuyqpjAb5aHr5Tv9LuXPjAXFpxj8uHCVGkGoXmHrIenmv+X6+Tdj8AUFFMICSjB2iQCGcez1t2o9wqHs/Imauoac3F9i486oQU4ijl9vz4B9C/T8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KLTpos7r; arc=pass smtp.client-ip=100.103.45.18
+	 MIME-Version; b=fltu39MyWWD7KOklse8azzZ7UOG798jEmv0IpM5s8w2go5/XcrWBDtoKbTPs81+hjIuBquDpuZIZD1GO4gU7E7Zd1IEhFaCr5Zl1Xn6gOdau7uKNdEvvakNfk9gN13BBl2aK/6J3MJf9xN8dUlHYe46S3b1eDCZwkt4OsZCYJQg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=G35gyO8T; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KLTpos7r"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="G35gyO8T"
 Received: by smtp.kernel.org (Postfix)
-	id C24681F00893; Wed, 23 Sep 2026 10:32:28 +0000 (UTC)
+	id 6815C1F000FF; Wed, 23 Sep 2026 10:32:28 +0000 (UTC)
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=148.251.105.195
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1790159548;
-	b=WnpngNrGnhyKtBDs87N6YhPVwClw0HipBQJJjASV2YhF3pxtpYmljn7zSU93GguqO75l
-	 ujSlDiTbObnVMx6pJMBPnm8vawXObWzsNHTXFey1SwQOCFmNSuCikSh44QTXQRYmMVKCF
-	 a/rhHrbYRGR+blFc54JxqzgVhAvqJYZmY0djp5oFd+IpZ737yK5gSMOA5htbDHLot7VZ9
-	 3+GGWzqng6z8psDe03ighBLeexhq4poO0baeMknSJ22k+MsjzRJraAehs1cxKCH+jOZwf
-	 ZNCf7q7BJUirISJhPBZM/VviAT67zjbePeQBMFZTD7Zkvo5yhvHrwci/BMmfCf2x0Rg==
+	b=f0fKNY2TJmjasE4vCHx1Mh7O1X4rj3TokUT1eFq7pxoLXyiUnbm2DAi3ZmKfRazSzxFq
+	 c79Cp2w6TMmtvrhIjk+9dFk7NY1pedExHIQNL4Q3NTPNFWKKEW1O6mmlM8yuEn4y+TJU3
+	 TRhxb+bMPNsiH9OW/UOBQlt7AwnHWvbSSdnmUJgqzHtx4WgzQkPRGhRsck/LYKUwsZxEc
+	 TPqOemVYdqTWVGVeP5rXnAynTZW41XfIwvm5jvenAo8nc6yxNhNjRWhNLzbVWrKgE7M9d
+	 mHmx8FqB0PY1xStZdAbKkO66dY8ML3zxXTq107FeHydGwiM97XX0Sj3OgPPByfgze9A==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1790159548;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=AoaZpaOhxJ3jsXpsRX7MsSfy3c9E4uGe0ETxzBg6RFg=;
-	b=ooXT1GzUXw5zHeSGU5qT8YO5Zg7Q1hAkfA5mbkALLdTW89lllkMiO6KDAKQy8RCnAt04
-	 zl5h37Mg4YHpfWwqGnHeJ5J0JL0SdMZWMff3al8Qh9/0oJX8PPeBYSu7WJ74L4zkxymtb
-	 4sL2Z0bZNvxcUXyLXHzXeg/ba5UfCKqQbZbZmd+l6kO73IEItSyE78io88OXES8TEv2GM
-	 ps7sWICHBqLanjMZwLWXe+HrqJhadj/QLuM39les/x0bXHq9qvbR+qAUntgGSD2TPPeJA
-	 ee9uM6vBlaGVrW6Sc9BAxI+Dnl8L1o8hKoB+jKwKcoHWwfV/FQIyzIAv9XxxnaWtxww==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=KLTpos7r;
+	bh=SV1I/v/iKlHr4fJyFgei4IhQeXGMMlj7HID5DV29eSI=;
+	b=1TnUEF+oyElmuvQ9HwEi/OtgiWCMnqL977vSrVZ6lhu6w6c1cs3KorRuHSdRhCBHWQpx
+	 fXEFECj854bXyPhqJcz/8h2dhhHc/p6ecKlAR4nBv8rZbyJ5V88V8eX6xDaiZUw2Dbe61
+	 OfI79FnjpW6Ctcunp1BFNOeCjEe85vFHRm/cf0L3/6gERNX7qXsHt27dJlltHnOlotxF/
+	 94SXqadNgo2hefFsKtdCVvoIctQXCtFziaYckU6E6FI/tyJSs/QGibh5Q0YoGpNZbKdmy
+	 CKr2g70vvGmuOj53odkLPXwPh5TwpZw10yX/3tvYS9YA7zDb8aA7aLxd7+0XYXbGwTA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=G35gyO8T;
 	dmarc=pass header.from=collabora.com;
 	spf=pass smtp.mailfrom=collabora.com;
 	arc=none smtp.remote-ip=148.251.105.195
@@ -43,39 +43,39 @@ Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 012151F00898;
+	by smtp.kernel.org (Postfix) with ESMTPS id 98AE71F00893;
 	Wed, 23 Sep 2026 10:32:27 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=KLTpos7r
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 012151F00898
+	dkim=pass (2048-bit key, unprotected) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=G35gyO8T
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 98AE71F00893
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1790159546;
-	bh=988dhDBtd7g+tpgVz0uwEhaGJxjatXUHLGg6/ZegZJk=;
+	bh=MlU0I3ZU5CQhUEWmtUjU7hoUECBy7HNDtouJfvmnWUY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KLTpos7rUO64wlQRUWMGS63EqfFNAxOjxjY+SPUd2fHlX3gSgVmrvD6wpOuHm9e/Z
-	 J3O4oOVupFjMyzzXuUPv7dS7mRfEaZpgz3LWZQ1/zWoy+bguQ9QHaljA4As9bl4TtQ
-	 NronXdNzZMKfXhfh1laq5VN6SmGBE7JCmQ5F8Mt1tMghwWm57iXba7q6XZVTzHKH9f
-	 Qy3nfK8bzoVB1JHXWzUbdw7hFrRmNc6ym/B5jVJjYaYqBTfJPwToOm8LGql720N81v
-	 TGqP6bmWqVRBZE8IWyu9pds7gOUkoW0tdBczdOwhzq3fa65zoKisSADme2T5ShAOrZ
-	 BV6UkDnRIbotA==
+	b=G35gyO8T4XqhIR9m+aMzGaE5wPpF4m5NrBZhNhNlw3PHqY3zE4WuJ6smI+aZu/tzg
+	 RGAPuSLy7FonLOg0XxEIVT9KIwoQ/Ds0h9NRx9tc2Osn84prWuQi68fn/bERSUlNst
+	 0vLYo46nZyowmK/2Oi9fopr1WgEVpJLB1bBR/BLH1wt0O3LoUiH/HN+YEgWPu67YLL
+	 1aghRxhNBEUV4/j0Woqoaft0o4GZd8oVdx6tPIBBCTZCfWW2DCzP6t7PmTk4Os9j6S
+	 pkXM4GoQVM6MG8kQ7OP/5ON47WNtvb5McH8uV6kzlimQ281Q1G6VXc8/XyYMr9j2Y4
+	 5j5A1jxQXAWSQ==
 Received: from IcarusMOD.eternityproject.eu (unknown [100.64.1.21])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 504E317E020C;
-	Wed, 23 Sep 2026 12:32:26 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id E006717E0104;
+	Wed, 23 Sep 2026 12:32:25 +0200 (CEST)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: arm-soc <arm@kernel.org>,
 	soc <soc@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org,
 	matthias.bgg@gmail.com
-Subject: [GIT,PULL,3/3] MediaTek SoC driver updates for v7.4
-Date: Wed, 23 Sep 2026 12:32:07 +0200
-Message-ID: <20260923103222.25504-3-angelogioacchino.delregno@collabora.com>
+Subject: [GIT,PULL,2/3] MediaTek ARM32 Device Tree updates for v7.4
+Date: Wed, 23 Sep 2026 12:32:06 +0200
+Message-ID: <20260923103222.25504-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260923103222.25504-1-angelogioacchino.delregno@collabora.com>
 References: <20260923103222.25504-1-angelogioacchino.delregno@collabora.com>
@@ -93,27 +93,29 @@ The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ tags/mtk-soc-for-v7.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ tags/mtk-dts32-for-v7.4
 
-for you to fetch changes up to 96c2b43b1fb305e91700f64e9f758fc140c66b83:
+for you to fetch changes up to 2e195497fc9fc0dd89cf95dab80a2d0486dab65b:
 
-  soc: mediatek: mt8167-mmsys: add routes for all display paths (2026-09-21 15:10:28 +0200)
-
-----------------------------------------------------------------
-MediaTek SoC driver updates
-
-This adds support for GPU<->SRAM regulator coupling for the
-MediaTek MT8189 SoC, and introduces more MMSYS routes for
-display controller pahs of the MediaTek MT8167 SoC.
+  ARM: dts: mediatek: Add basic support for Amazon ford board (2026-09-10 16:41:20 +0200)
 
 ----------------------------------------------------------------
-Justin Yeh (1):
-      soc: mediatek: mtk-regulator-coupler: Add support for MT8189
+MediaTek ARM32 DeviceTree updates
 
-Luca Leonardo Scorcia (1):
-      soc: mediatek: mt8167-mmsys: add routes for all display paths
+This adds support for the watchdog found in the MediaTek MT8127 SoC
+and a new devicetree to enable basic boot on the Amazon Fire 7 2015
+tablet using the MT8127 SoC.
 
- drivers/soc/mediatek/mt8167-mmsys.h          | 183 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----
- drivers/soc/mediatek/mtk-regulator-coupler.c |   1 +
- 2 files changed, 175 insertions(+), 9 deletions(-)
+----------------------------------------------------------------
+Zakariya Hadrami (3):
+      dt-bindings: arm: mediatek: Add MT8127 Amazon ford
+      ARM: dts: mediatek: mt8127: Add watchdog support
+      ARM: dts: mediatek: Add basic support for Amazon ford board
+
+ Documentation/devicetree/bindings/arm/mediatek.yaml |  1 +
+ arch/arm/boot/dts/mediatek/Makefile                 |  1 +
+ arch/arm/boot/dts/mediatek/mt8127-amazon-ford.dts   | 54 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/mediatek/mt8127.dtsi              |  7 +++++++
+ 4 files changed, 63 insertions(+)
+ create mode 100644 arch/arm/boot/dts/mediatek/mt8127-amazon-ford.dts
 
