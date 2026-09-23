@@ -1,123 +1,166 @@
-Received: from 0001.3ffe.de (0001.3ffe.de [159.69.201.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90D344471C;
-	Wed, 23 Sep 2026 06:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.201.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790146636; cv=none; b=etsuM0vxZrPBt4rot3QEoxYlo+yJ7Om8b7AI0SmkB3r4WxiVnD5vW3jJIZWljk//n0XIbg9eVFCtslHOnWJzGsEA+IePElnxsWxACs4Xwne4tCshpwYo0xVZby97ozCCLFlVmRGZzW2kL2XYkL27WSnnllqtz02q/V1nL1CfBW8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790146636; c=relaxed/simple;
-	bh=Aplh7dJTViOVzCjHVkbCEOKv4UcGtIR4VW/U3iKThjc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
-	 References:In-Reply-To; b=eaG+8aIRRh23YnAg9FKiCIlgvLoHZ/orKZBCRfVkHWtYx6ZeYoiaNTdHHV92SorEJFb66fA9naBjFyMM/d4dnjcGy+el78SeIuBfdO9s40l8TLcD1RUKD850JDToFJEg66xIj5ckbG24y/qDVkNl9nZp+qaCV6NutyeH9uIHobI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=walle.cc; spf=pass smtp.mailfrom=walle.cc; dkim=pass (2048-bit key) header.d=walle.cc header.i=@walle.cc header.b=a6C66Cms; arc=none smtp.client-ip=159.69.201.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=walle.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=walle.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE26488234
+	for <soc@lists.linux.dev>; Wed, 23 Sep 2026 10:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790159559; cv=pass; b=u8fHZvt5fgWnS3r0dsC0OTs6NSw09+HKFLJSM2XgBkGalHc5AJPsgWQVYjGDKQTeJQ0C6k//YT/pwxMA5VF1M7NsqvHkABjv2NbLtBmUW99fuHt6ghztSdHQtgc3dpjjhDT9l0LnfiCN3X4a5nRb+CkvJ30LS9F5rS0mjwR3BUM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790159559; c=relaxed/simple;
+	bh=kHhWudTgVsro0XbOJkN9vDbK3sEtyOdWWA0FcJwwoOw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lpfi40C9DkjeZHCD7ACjdL+Z7zaSS5FCi0HATGk8y9xARMeOKGoJ7brGfRwdxcAuclm7fQI+Ni4WaqEUM4AWlP7c4IeFCYwsQDKDUWvfVL2knSC7prUPIIwdnhamfEPnD0u2VOXRptN2Jn2jqWBRqMSffjEctEUlGtpKY5LbClY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=OEBcH7GG; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=walle.cc header.i=@walle.cc header.b="a6C66Cms"
-Received: from localhost (unknown [213.135.10.150])
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OEBcH7GG"
+Received: by smtp.kernel.org (Postfix)
+	id 62C851F0089A; Wed, 23 Sep 2026 10:32:28 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=148.251.105.195
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1790159548;
+	b=PC6Y3g/n/qDt6ld+vik/X6q3xsB1k+2MS+6s0grzNB1EfO3ljksrDlw4GbaRsVsFFAa0
+	 Pa3LLZFwZXPvajTFJWbZ94wqIhT3RYU6FMiuBw8LQFZAgLA3nQ93Im7CkH6W9YmnE4pTx
+	 yigWyKoZn5wfQ/jvFuZXYI8tePAAST2dJTY7ARLnX/uOMDDu3qyodxD+iBQHMNffPgDuG
+	 CdoexOd79aOCuuUiTLnblDZQNxLDSsIyG6Hw+txWiyDkmdIniw/yYpMAKHKTwbvp1KwpL
+	 Qmy4oJ90uaX8QzxG1juDS195cd04Z/eRJRXhf2E71nyi1wve0fAHH6qB7T9WnWMiqrg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1790159548;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=H5S0ck3gdeA68aFJF+/2ViN8qQjJT7WhfD6QVIMv7Vk=;
+	b=Cp1lWWetgU+bXigpQk1aKDNes2FdgN146VQdoSZ8Fcgt5vKl53g/Izmem1VMUBcW9ddT
+	 OmhKZO62lADtvonRqX/ORIkXtwRCsMHICAeppd5QW4iuh73oZA/DrA3BDhZGvwVCTGihH
+	 om/012N0PPOS/vMYGSV4Jd+RgYgmmWvLglJDsVOtD34RBsnpw2YdqYllRLYvEpegmu8My
+	 NMR0mjXV22atyG5bq8vL8tLWqcEsxBEhr6OO2sqSVI8KSJw2fVn6N2KHdS/jDyWMwCod1
+	 gr7MpdRPM8POXlxJcGVSviYmtPO8Z5hn7Om+O3eeebh7Ser5ViqwBBYPKmNseicwX9A==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=OEBcH7GG;
+	dmarc=pass header.from=collabora.com;
+	spf=pass smtp.mailfrom=collabora.com;
+	arc=none smtp.remote-ip=148.251.105.195
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by mail.3ffe.de (Postfix) with ESMTPSA id DEC2A5D;
-	Wed, 23 Sep 2026 08:57:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-	t=1790146623;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Aplh7dJTViOVzCjHVkbCEOKv4UcGtIR4VW/U3iKThjc=;
-	b=a6C66CmseqidgmeBJlOBRw5wwOqfckQBCRM2EHmuSQ/tjDoUJVjdWa2uhEz2Q4mmrOA7RK
-	BW6A+P9gGreJnsPw8EJSE+Bqvzjxyapc7ICNjHyyCA535LH730HY9e4T1hykVEOAnUDvHi
-	i4VLXnxOHEFFImpmkRqu7Jkw5ng5DJuhnexpycD1ULRnQBacxQqEynR+TLkDGa6vHFGwmU
-	36QfKryCCcIFwMv0FEcfsONjPbdAJ/nsz0Qsa3cTN5p79f7hbbHPOwWdeQey9efHdNRoeu
-	hVrtQ/uGMgF7JMEFmmVoXg2Xl5QJ2K8bOjKFcmsFX28SrKZS27zNsozce6Kigg==
+	by smtp.kernel.org (Postfix) with ESMTPS id 7DA911F000FF;
+	Wed, 23 Sep 2026 10:32:27 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=OEBcH7GG
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 7DA911F000FF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1790159545;
+	bh=kHhWudTgVsro0XbOJkN9vDbK3sEtyOdWWA0FcJwwoOw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OEBcH7GGSk65/WVw1yqb8yhjClfiiQd6etWpk+bVbcFuJu53V2F/ciAzfGo2WkhHx
+	 cHmCpxGKYK5DlMem9Y/p3H2aj4+LZnITHtpr/WMZJJIHiZ2cT1qp0HsbgFSN4mPQ36
+	 Ah1RQShb818V1ENAExkvbmltAtoS0yUvw6XincUDIUjtb0RXEgl5wJ+YkPDTKEI+M9
+	 C7gWWS/SFgnfMn8cOOQLCOXh4xjKZJwM5DXHM0s03LaZOlwVqQMhjSYOuEbQMG8Mlx
+	 7aAmsujck1Z/vRGsCN21daXkVHOBwkqa7kguncNU55BKuAbxS9+t2Exm9cwDzwFwMz
+	 2qcg3Q3BJzI5A==
+Received: from IcarusMOD.eternityproject.eu (unknown [100.64.1.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 788DF17E0034;
+	Wed, 23 Sep 2026 12:32:25 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	matthias.bgg@gmail.com
+Subject: [GIT,PULL,1/3] MediaTek ARM64 Device Tree updates for v7.4
+Date: Wed, 23 Sep 2026 12:32:05 +0200
+Message-ID: <20260923103222.25504-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=66e4aab55ce6c10e65aac407de2f18ed76c4de06773e522fce8193b51364;
- micalg=pgp-sha384; protocol="application/pgp-signature"
-Date: Wed, 23 Sep 2026 08:57:00 +0200
-Message-Id: <DLMI0KJW4743.2J11ZTFS2FUH0@walle.cc>
-From: "Michael Walle" <michael@walle.cc>
-To: "zl020895" <zl020895@163.com>
-Subject: Re: [PATCH v7 09/15] gpiolib: regmap: add gpio_regmap_get_chip()
-Cc: <longzhao@ambarella.com>, "Arnd Bergmann" <arnd@arndb.de>, "Krzysztof
- Kozlowski" <krzk@kernel.org>, "Alexandre Belloni"
- <alexandre.belloni@bootlin.com>, <soc@lists.linux.dev>,
- <linux-arm-kernel@lists.infradead.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>, "Jerome Brunet" <jbrunet@baylibre.com>,
- "Linus Walleij" <linusw@kernel.org>, "Bartosz Golaszewski"
- <brgl@kernel.org>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Jiri
- Slaby" <jirislaby@kernel.org>, "Andy Shevchenko"
- <andriy.shevchenko@linux.intel.com>, =?utf-8?q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Lee Jones"
- <lee@kernel.org>, <mfd@lists.linux.dev>, <devicetree@vger.kernel.org>,
- <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
- <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.20.0
-References: <20260915-cv75-v5-v7-0-3297d3fbc9c0@ambarella.com>
- <20260915-cv75-v5-v7-9-3297d3fbc9c0@ambarella.com>
- <DLL08SC6PWNS.2BUBIQYMBWIKQ@walle.cc>
- <650e4694.3f81.1a0c7598840.Coremail.zl020895@163.com>
-In-Reply-To: <650e4694.3f81.1a0c7598840.Coremail.zl020895@163.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
---66e4aab55ce6c10e65aac407de2f18ed76c4de06773e522fce8193b51364
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
-Hi,
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
-On Tue Sep 22, 2026 at 6:22 AM CEST, zl020895 wrote:
-> gpio-regmap can already attach a domain via config.irq_domain or
-> regmap_irq_chip. PL061 cannot use regmap-irq: type is programmed in
-> IS/IBE/IEV (including both-edge) and the parent IRQ is an AMBA chained
-> demux.
->
-> In v8 the custom linear domain used the gpio_chip as host_data, and
-> that chip only exists after gpio_regmap_register(), so I added
-> gpio_regmap_get_chip().
->
-> I can drop the helper: create the domain with the PL061 private data as
-> host_data, pass it in config.irq_domain, and let gpio-regmap register
-> it. I will do that in the next revision if you agree.
+are available in the Git repository at:
 
-Yes please. You shouldn't need any of gpio_chip members.
+  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ tags/mtk-dts64-for-v7.4
 
--michael
+for you to fetch changes up to bf89276b2db391cbb25d1a0e898280fe85b16fb5:
 
-> At 2026-09-21 20:48:44, "Michael Walle" <michael@walle.cc> wrote:
->>On Tue Sep 15, 2026 at 1:15 PM CEST, Long Zhao via B4 Relay wrote:
->>> From: Long Zhao <longzhao@ambarella.com>
->>>
->>> Let drivers that implement a custom irqchip retrieve the gpio_chip
->>> after registration. Attach a caller-provided irq_domain only when it
->>> is present.
->>
->>So why do we need this? Why can't gpio-regmap register the
->>irq_domain?
->>
->>-michael
+  arm64: dts: mediatek: mt7988a-bpi-r4pro: label gpio-hogs (2026-09-21 12:22:18 +0200)
 
+----------------------------------------------------------------
+MediaTek ARM64 DeviceTree updates
 
---66e4aab55ce6c10e65aac407de2f18ed76c4de06773e522fce8193b51364
-Content-Type: application/pgp-signature; name="signature.asc"
+As the most exciting change, this finally adds support for the
+PowerVR Rogue GX6250 GPU on the MediaTek MT8173 SoC which can
+now enjoy graphics acceleration after years of SW rendering on
+a SoC featuring rather slow CPU cores by today's standards.
 
------BEGIN PGP SIGNATURE-----
+This also adds an important fix for the frequency of the
+architected timer on the MT7986A/MT7986B SoCs, resolving
+issues with NTP correction limits.
 
-iKcEABMJAC8WIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCarN4PREcbWljaGFlbEB3
-YWxsZS5jYwAKCRASJzzuPgIf+EqJAYCURfSHF28/wy7zcS9T5rqwQKdtr6Vi+fm6
-FKEPiUj0ESQUaJWITdtLmMhXUYTwU4sBgKrlZbW1f9Nl/NmxVqpSp5Yv9aq5pAEe
-oRACiSMyH2ZwhTvQKxQkjpEcDZZyx4q0Fw==
-=oMt8
------END PGP SIGNATURE-----
+Additional changes include:
+ - Addition of labels to the GPIO hogs and the GPIO expander
+   chip on the BananaPi R4 Pro;
+ - Addition of ramoops memory region on BananaPi R3 and R4;
+ - Addition of address/size cells in /firmware node for all
+   of the supported Chromebooks;
+ - Size increase for the SCP Core 0 memory region in MT8188 Geralt;
+ - Indentation fixes in MT8173
 
---66e4aab55ce6c10e65aac407de2f18ed76c4de06773e522fce8193b51364--
+----------------------------------------------------------------
+Andrea Pesaresi (1):
+      arm64: dts: mediatek: mt7986: correct timer frequency
+
+Brian Norris (1):
+      arm64: dts: mediatek: Add #{address,size}-cells to Chromium-based /firmware
+
+Chen-Yu Tsai (2):
+      arm64: dts: mediatek: mt8173: Fix MFG_ASYNC power domain clock
+      arm64: dts: mediatek: mt8173: Add GPU device nodes
+
+Frank Wunderlich (2):
+      arm64: dts: mediatek: mt7988a-bpi-r4pro: add names for i2c-to-gpio chip
+      arm64: dts: mediatek: mt7988a-bpi-r4pro: label gpio-hogs
+
+Igor Belwon (2):
+      arm64: dts: mediatek: mt6878-pinfunc: Fix pinctrl header path
+      arm64: dts: mediatek: mt6893-pinfunc: Fix pinctrl header path
+
+Justin Yeh (1):
+      arm64: dts: mediatek: mt8188-geralt: Enlarge SCP core0 memory region
+
+Krzysztof Kozlowski (1):
+      arm64: dts: mediatek: mt8173: Replace spaces indentation with tabs
+
+Martino Dell'Ambrogio (2):
+      arm64: dts: mediatek: mt7986a-bananapi-bpi-r3: add ramoops region
+      arm64: dts: mediatek: mt7988a-bananapi-bpi-r4: add ramoops region
+
+ arch/arm64/boot/dts/mediatek/mt6878-pinfunc.h                      |  2 +-
+ arch/arm64/boot/dts/mediatek/mt6893-pinfunc.h                      |  2 +-
+ arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts           | 13 +++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi                          |  1 +
+ arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-pro-cn13.dtso |  1 +
+ arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-pro-cn14.dtso |  1 +
+ arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-pro-cn15.dtso |  1 +
+ arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-pro-cn18.dtso |  1 +
+ arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4-pro.dtsi      | 18 ++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dtsi          | 13 +++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi                       |  5 +++++
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi                           | 35 +++++++++++++++++++++++++++++++++--
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi                     |  5 +++++
+ arch/arm64/boot/dts/mediatek/mt8186-corsola.dtsi                   |  5 +++++
+ arch/arm64/boot/dts/mediatek/mt8188-geralt.dtsi                    |  7 ++++++-
+ arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi                   |  5 +++++
+ arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi                    |  5 +++++
+ 17 files changed, 115 insertions(+), 5 deletions(-)
+
