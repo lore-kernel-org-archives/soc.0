@@ -1,96 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054C644AB97
-	for <soc@lists.linux.dev>; Fri, 25 Sep 2026 13:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5588E3B71B0
+	for <soc@lists.linux.dev>; Fri, 25 Sep 2026 16:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790343026; cv=none; b=C9fDhW+9XPuC7uyGmWvBTC704BuTF+TRbEsGKArFcA4WtzMVN3eafEqZaKUuTe0tUkP1RYN2ckwwp8qtYCQO2//4dIP/Z3l59MA0ntSFuNo1xQMu6Dw+FBvfh0KYIGn+T58z/zWb3c4MXgWJN4Au3KMZOxxdv6PYzC5nVMCo/qI=
+	t=1790355373; cv=none; b=kEzOQ43A3RQ4R4j+i6w2MTsliBc3i1Ohl93PmtHxK7CUUx8xiPfhwPEHxJaAXXVVB3/GIf3kTwJOVDGVo/1OKEwL+2fjAtApjfWLoJEBJt6tt5nagnh6kLVHvEu0CEErRHn3yp3QZJtmqV/ViLXPYFSeRxxwotVrPQX6Rse4mlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790343026; c=relaxed/simple;
-	bh=/jFCjg6nDyLS94dvgK/EEMc/s+8n2QPDNYXmC3S7fXI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=junmKRNyYgr8x5YVnfWdssu4AJoDTjNgzYIm1aMp0RK3pYJv7Q4jYcnioZ0hl/LMX4szl+rOv8M2FMpwo+6oQY0s3wdvwoL6yK1xEhoKJ89W3LE2Gj6YcX7xFtPpY25qUBc3lMFdFwD5b4DNJle/GyQaVR4rx8wgduCIfWF+1YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLJ6EOp3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790355373; c=relaxed/simple;
+	bh=fQIn2krXCgmcO27EkqC/KY/KFL31Yh5adie8oUuUCN4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QQbtSXTkrxntLUWD7qAOEci8QbYzagO0i3bBOOkdcr9ipb98G7qRmUxA84NTc3m98kKH8EZ/T5lbR4uy55p0UV9VR40SHsdvPDc6Ij31RPoBlNuFEvHLJdEnLup6vgKR3kjHvjUZVcPXNU5rfvBbXwNLAT2ZhXHcNwCWawFv1dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MyE329IJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLJ6EOp3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA00E1F00903
-	for <soc@lists.linux.dev>; Fri, 25 Sep 2026 13:30:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MyE329IJ"
+Received: by smtp.kernel.org (Postfix)
+	id 13E7C1F00898; Fri, 25 Sep 2026 16:56:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0608D1F000FF;
+	Fri, 25 Sep 2026 16:56:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790343020;
-	bh=hjEFWSQNzvV2cy7ibgDjEb2o00pPnzmhtpFfAirbXj0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=BLJ6EOp3/teQGF4Z82GqbDk1ISdqixvgqoFpvboexYsyn0LdOG9ImSBQvSVdscpVx
-	 wD3YnH6iTcML4IJrMqZVmmfdAnmj1OZe0hqQlgp3r+FlQV4DHqarG1wTok/jG1HK/7
-	 NcevHggAYLOOLsKswOtKUIhp2nGkGdtWs1LFIpThudzx0DqAa+ukcUHGgdge7rAISq
-	 OSTdJRe3EaqHD/pmiV7E67uuOBvLsCE7MV83veEncrzzwVjtoAPczPmD2vf18mLKEX
-	 n3iHAnAI1BkabQPxBZgX15nKh8j2vOq10iMHmBClPLb8O210D0EX6GZJWVEcDyD9Gn
-	 TftJhpnZpKauQ==
-Received: by mail-oo2-f40.google.com with SMTP id 006d021491bc7-6b4bff33ceaso597503eaf.0
-        for <soc@lists.linux.dev>; Fri, 25 Sep 2026 06:30:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBw4PnZK4j/pyCmHGlAnXGvk8tqjW+W7cpUHsWkGK+oLcM1csPVgdwO9Ya692d7xeCXB9WQ=@lists.linux.dev
-X-Gm-Message-State: AFuF++lf+XUk1jWVPWUCgiYsmpYDAS7PMhMsDeXCZGPc/nOadeqgstTe
-	6QLx99Fz0YzHS0qTElMsweES0iZk0x1xS7dL6m6jWCQ0eQiRLa7YLXVHriLbBrvofYLcKsxP53g
-	ZOOMS3lJxpYevRqRAW7HYOaexk9Kdk2M=
-X-Received: by 2002:a05:6820:818f:b0:6cd:3ffc:ad01 with SMTP id
- 006d021491bc7-6d441c7de80mr5856938eaf.81.1790343019904; Fri, 25 Sep 2026
- 06:30:19 -0700 (PDT)
+	s=k20260515; t=1790355367;
+	bh=JyWMU3JvXb+q6hdn+2pHzQzTmrdk/tb2/VNmym1OxiE=;
+	h=Date:From:To:Cc:Subject;
+	b=MyE329IJKXECgPMCU7g59WRo4Z0HFKqQEFu1JcnSrB/pCQBVw1e+r+iE93uWZsSdZ
+	 HsEf/LPxDGyS3WOPqB+eUQ6oScpK5EiZ9UIUqsj+wgylZKjU2nqwYll5iYa9T9QKHM
+	 SEGzqZ9mgShJ0BNhiknIh2r6p1KYj6itYHi8wb84CbrxBPgS5xyDHaXaE4L9wf+Ilr
+	 kgb8k8l9q2jLWpxa1/k9jthp4vOCx2mQue2K2P2wVmxWB2vn8xk/r+XPRsAT/ohK51
+	 W5gTASa+BD1ynQfikdaBfq83OK17MzfEx2sbtEAKnOdylX+KqUxYe+4myfeKrquXtw
+	 PlQx0NokznLMw==
+Date: Fri, 25 Sep 2026 17:56:03 +0100
+From: Conor Dooley <conor@kernel.org>
+To: soc@kernel.org
+Cc: conor@kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RISC-V devicetrees fixes for v7.3-rc
+Message-ID: <20260925-parlor-snowfield-6ca46312a610@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260914140821.1805449-1-arnd@kernel.org> <17a74e90-27d1-4954-86a8-491267f00cb8@gmail.com>
-In-Reply-To: <17a74e90-27d1-4954-86a8-491267f00cb8@gmail.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Fri, 25 Sep 2026 15:30:05 +0200
-X-Gmail-Original-Message-ID: <CAD++jL=VJsnk-GzAvR4oR8oKJayQzq9Oes+ZW7K=iHGrQ1jh0w@mail.gmail.com>
-X-Gm-Features: AclHuK_tdwElKKmMYGPFlmZM1P8fO1IIRCqgIQbs7o9aMikBwWdJXpQ3EUUcqPA
-Message-ID: <CAD++jL=VJsnk-GzAvR4oR8oKJayQzq9Oes+ZW7K=iHGrQ1jh0w@mail.gmail.com>
-Subject: Re: [PATCH v2 00/14] ARM: deprecated platform removal
-To: Yoshifumi SHU <envzhu@gmail.com>
-Cc: arnd@kernel.org, Frank.Li@nxp.com, aaro.koskinen@iki.fi, 
-	alexander.sverdlin@siemens.com, alexandre.belloni@bootlin.com, 
-	alexandre.torgue@foss.st.com, andreas@kemnade.info, andrew@lunn.ch, 
-	arnd@arndb.de, claudiu.beznea@tuxon.dev, conor+dt@kernel.org, 
-	david@kernel.org, devicetree@vger.kernel.org, enelsonmoore@gmail.com, 
-	festevam@gmail.com, geert@linux-m68k.org, gregory.clement@bootlin.com, 
-	imx@lists.linux.dev, kernel@pengutronix.de, khilman@baylibre.com, 
-	kmehltretter@gmail.com, kristoffer.ericson@gmail.com, krzk@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux@armlinux.org.uk, 
-	liviu.dudau@arm.com, lpieralisi@kernel.org, mcoquelin.stm32@gmail.com, 
-	nicolas.ferre@microchip.com, npitre@baylibre.com, robert.jarzmik@free.fr, 
-	robh@kernel.org, rogerq@kernel.org, s.hauer@pengutronix.de, 
-	sebastian.hesselbarth@gmail.com, shawnguo@kernel.org, soc@lists.linux.dev, 
-	stefan@agner.ch, sudeep.holla@kernel.org, tony@atomide.com, vz@mleia.com, 
-	thehajime@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LTB7MCFcjfB9m+dv"
+Content-Disposition: inline
 
-On Mon, Sep 21, 2026 at 1:06=E2=80=AFPM Yoshifumi SHU <envzhu@gmail.com> wr=
-ote:
+--LTB7MCFcjfB9m+dv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> I would like to request that the core Arm Cortex-M support be retained, s=
-pecifically for v8-M.
-(...)
-> I am willing to help maintain this support, including modernizing the rel=
-evant code. I can regularly test kernels on real Armv8-M hardware.
-> If an active maintainer is required to keep the support, I am willing to =
-take on that responsibility.
-> Please let me know how I can help keep the support.
+Hey folks,
 
-All right, now we're talking! Could you test and review this patch:
-https://lore.kernel.org/linux-arm-kernel/20260910-arm-generic-irq-entry-v7-=
-1-v3-1-5fd90f6859e1@kernel.org/
+Wee PR, but I feel like I should send it now rather than much later in the
+cycle after we all get our conference fix.
 
-I do avoid touching the v7m path and it worked last time I tested
-it  (on an STM32) but I'd like to see your take on it, AFAICT generic
-entry is not really possible (easily) on v7m because of the
-pendable service call mechanism but maybe we can think of a
-really complicated solution? ;)
+Cheers,
+Conor.
 
-Yours,
-Linus Walleij
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+
+are available in the Git repository at:
+
+  git@gitolite.kernel.org:pub/scm/linux/kernel/git/conor/linux tags/riscv-dt-fixes-for-v7.3-rc
+
+for you to fetch changes up to 0f70fd6f4c1d6c1f2ea298d8dd07c4a4d5dff9af:
+
+  riscv: dts: microchip: beaglev-fire: remove double definition of gpio interrupts (2026-09-08 19:18:19 +0100)
+
+----------------------------------------------------------------
+RISC-V devicetrees fixes for v7.3-rc
+
+Microchip:
+Remove double definition of interrupts on the BeagleV-Fire, which cause
+the sensor to be associated the wrong plic interrupt.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+----------------------------------------------------------------
+Conor Dooley (1):
+      riscv: dts: microchip: beaglev-fire: remove double definition of gpio interrupts
+
+ arch/riscv/boot/dts/microchip/mpfs-beaglev-fire.dts | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+--LTB7MCFcjfB9m+dv
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaranowAKCRB4tDGHoIJi
+0qmBAQD2DjL9gXJ3DfkQQ1F/Yzuivzla65ZZxHDJAf+GKEjD9QD/QkrFmKI9/NVR
+Tx74zNF/tvKx0SN4UAQC0eDmkflBVQM=
+=rnWx
+-----END PGP SIGNATURE-----
+
+--LTB7MCFcjfB9m+dv--
