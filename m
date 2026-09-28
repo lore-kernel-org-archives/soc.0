@@ -1,67 +1,67 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pz2-f38.google.com (mail-pz2-f38.google.com [74.125.228.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CAB34887B
-	for <soc@lists.linux.dev>; Mon, 28 Sep 2026 17:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E624418A29
+	for <soc@lists.linux.dev>; Mon, 28 Sep 2026 17:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790617150; cv=none; b=ppGJMjmFnhKZwLOBd5SS3nr1tqYXm87hzc6VWd4cLC5JicUVKdmbz3opye7sG9KSNBuiav3Uv/2S+/vT9GKCuVuCkgtqL76qG0J7JatVOQR3CfEgD1NRXwJOzmqOP8+kQemzVjp8+sLxjAsE6XU3vCPSQPoDCoD5PtI4ZEhETfk=
+	t=1790617181; cv=none; b=NHqQDAAMjCfwf3K/Imr3c/QASkKYLaqWIRhNkdfwUCUM25qJ+o2NpaV08wVEobEl3Cemz3pk/9LXiwv+WR9200IQGj2uZ4t1W9Wqm8elhXFCr76k+5uqHHNulJpRy39ccNa90EqP7WCy1LOqcW9YspF0e7DaPXZ2MBulFvhkBEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790617150; c=relaxed/simple;
-	bh=g+4oTeY8QR1R4YLmG26YkV30pNEmlYAmrs8+WG8WE8k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kPwlJfkJfajcBMI/pw62fv2o933Ws5i3ohTd94qz56QIs8Isdf4y5Z2R+4t8pOuKgadgco8gw55Ba4pnQk9g2xXoelSK4VlQCGnceSXoxp5Ag6a7nbFSdR2i4risZNSEiUC9Kafvc1FG6xtKZVWgjwi+9HXv7nsjkFbCAGPdoNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=IXj0g3a8; arc=none smtp.client-ip=74.125.227.141
+	s=arc-20240116; t=1790617181; c=relaxed/simple;
+	bh=JyI1uQfKUkOzEB8Vx94OVELkLRvhB+A8B+iLp/uqpV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Km9eXbSSrUCo7v9QSao4jCXo6Cl889P3qniqPWiFpxE5B+XUHx2D0RSpCaF+EObaLdVIz4RyAuO4jRTlxmMxtsMialzfr3O/bIDdqltIyM6RoKqI9zMxTlCz3N2uojJ5Fvdm/HfYjuuJmPx1mU/mINWy/v/4e8WwfH/30cYLxWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=MYRt7ANd; arc=none smtp.client-ip=74.125.228.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="IXj0g3a8"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccd4f99dso2178709a91.2
-        for <soc@lists.linux.dev>; Mon, 28 Sep 2026 10:39:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="MYRt7ANd"
+Received: by mail-pz2-f38.google.com with SMTP id d2e1a72fcca58-88206fc44c6so1818386b3a.2
+        for <soc@lists.linux.dev>; Mon, 28 Sep 2026 10:39:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1790617148; x=1791221948; darn=lists.linux.dev;
+        d=baylibre.com; s=google; t=1790617180; x=1791221980; darn=lists.linux.dev;
         h=content-type:mime-version:message-id:date:subject:cc:to:from:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KQcSNDmKTezvsQvsnROQYZUeQT8pZqDnSHqZSPctCj8=;
-        b=IXj0g3a87E94c3kXjD12JbtSlHgHn7z/Pa1J+ySTFCx/dZkyO301zxBzsS6KCW+DTg
-         FGB9MnOx9lNPH4GuRQcZTxbrhA24GrEW02+PX+J2r/i4CsB+povsJTC46+MRoRw6q6RA
-         3WVVvVOyw5acA3zprQGUw+UPYuMBZ1LYIDhYij9cAkvoE+oLF9t3e7H8THt+uomcGwpE
-         fBcfZJ77zBP/N1xlfapYV/R5CHjiE43tn4qi+k7ezYugOw2tps9prgl7XXAUfOtXKW6R
-         ZxC/uAgLsKXCENbuHVt9DA90ZUvimjjKeHM/egfsPAG9Rxt5konE7REPoSFLDxOArMiF
-         UK2A==
+        bh=tHHkl+PrizyhmQl262VvRoaJ4qE1pvxLqUjujb+MLVc=;
+        b=MYRt7ANdcUYgEiUbppI9nlwHqm6lDBKGEJGMTB3H9cwlpX6rHHLffnSXcRFrU4QyM0
+         qbA/f3fZnWYX9nUdPrMqt7BYVKNjuYW+H4t6GbssYlhT5os+lt26HexhAMgek47hY6jf
+         Popjp3uxChK55rz/npQpCxkW+eqNr9LzgVqlYfgwzpq7BFOeGc/wRtvSHRC1UWlHukbH
+         nLAMnQhIsJwxBf4kjftZ70Fb0mPSogzDBu2owfI8J3ToiDwjNyzTpHgpyDJc2QvEI/26
+         0Dp21Scdt6mfNAezZ2BbGRIQGUUtnxb+HNBnj5wSoPeOnggZ4H5K/Rdpzzmgmj1NyXw5
+         mdZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790617148; x=1791221948;
+        d=1e100.net; s=20260707; t=1790617180; x=1791221980;
         h=content-type:mime-version:message-id:date:subject:cc:to:from
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=KQcSNDmKTezvsQvsnROQYZUeQT8pZqDnSHqZSPctCj8=;
-        b=pEB3IQmPHDV7DrpwIzYGoi/WzYjJe9Arj5dmKnWgDzvBHOiP50BUa4Vo3j05Ltw+Zu
-         EpDia0JaOwt7EIs1kIjPsaRFhwCcTl+31ppd8jYXBmyuGh1h0Rxg0UemQPwjxNTnKfdn
-         ShVhBkuKz8GqOFr55h4FheWd+xLQXQFcJc+Nu/Mw4HB6GSpSNyZx5H5p9fAhHqC78OU3
-         7mFrOZJLfdOHFrMEjf0vbBpFZkmVNGgOplwf16di3RgKNf8ovqJTaPTFeFbYCJ9bhn9d
-         MvOpY7fBe0MTBB7sWkyF1wT0wL7usbR++CJM/NO1wZZJcmfu4qGXnduns91uXFu1qYSa
-         5vsw==
-X-Gm-Message-State: AFq9FYL/4LzkZubD2yZJoZ4q5/x882ojUA8adItFrkNoproXND1fEDt6
-	k+KZ1CLyZd9uULWel1XS8iltcmcfmoOrjAh7knkQP9p2m4POqSlt7yFYcDSQ9JthtoUlMZqqsJR
-	HENWE
-X-Gm-Gg: AYBFou2J7HaSMpFVOXZ/wxeZI6B+mZMbDC6j33OYSdGS4uXAkunNIzkXDYLk8+NkUrq
-	vHfQ8W1t576ONwu976/k7WuxV9I6airEneBQLqgnNrO7k9a2P8O+9hZic5m8cbtLEdsN5/06XnG
-	2Sf/aj5GtcmUdyDy/BWNLe5thJywa2AntVbPB5HTEnxZYT/dAvUw+qdizBu6P8B4bNXIrDTNRkk
-	VdHuc2jpyiE2G2vGKRzmBoZaffde9oWugY1yyKdTrH3tOR2ksH+R/rEEDQ7yv0hcvf92GFCHgmU
-	+cVAkzo/pVepo3ySzDBmNXmh21v3ulJyqmhqGV9ImYNRn9T24uPQk0fdv3IHIf+dkUmx03NoJ4i
-	ffRsanBlm3lcCLuO+8PuVVDMeOVPLo4Ybm2FtlU4Zn3khPT05zscrISdW3f+yONSNNDJk7M6D2t
-	K5+L3uf/YwbR4JQSeRJTom/3t5kLyBNFBEVQoA7aN6pJ/GfcNVBmrFt1rE9I+YnNYpAaA=
-X-Received: by 2002:a17:90b:4b86:b0:3a0:ea9b:1e38 with SMTP id 98e67ed59e1d1-3a0ea9b31d0mr5816499a91.27.1790617148332;
-        Mon, 28 Sep 2026 10:39:08 -0700 (PDT)
+        bh=tHHkl+PrizyhmQl262VvRoaJ4qE1pvxLqUjujb+MLVc=;
+        b=urhXjbxo9hpgnFrMzgfRJ/NrP4KRkkWpoDxa+QQLHOwPeSTfh4WzgzMUx3Dp62/quF
+         3tbJJ6fKR7cQsjZ3qYyaDdN/EbUXDVm6FD+enhZG3mqW9oqQ9m68+bPUaPVakHlwuqv3
+         3Bd3CSzfirg9ctgk+if1RlaghwmN+FWeXfpMeoorlZAOrTvOfg7zG1SdXnnF2sggKCfI
+         h5ZLyvf4EaESz4UqR8V516K41buzYvlQ54a7JJy2+v7G8zX1WZMCZzvdopDeCZM7ikQ0
+         wkUo+WwhtpX1UCayxqcz2KsVpZoPKDsiRAG+p8BPEuCuUclGn86DhaIcXYUz/Trh3yiI
+         mjAA==
+X-Gm-Message-State: AFuF++nVTlQ81EIjS0Mv+xBp+OfjAkM2TGLcr+m3Ldg5rwVU5cCK0BnQ
+	xzQwSb837Jr0pQoSnrEFYM8G3NX5X3cGXwlELi1pP76lWJJ+p+q2bP7zGXkPcKGK/ssZTkdaBy+
+	aufui
+X-Gm-Gg: AYBFou36PRbDsoVLHymLCfjdd4PGSVumYbIxicmxm0pBxcIXjK2yZHeb735yI6PXTjL
+	rkrYwfQIVvPTi2M0IidfMlScX0xIH/cy5QMFtreqTEj5dTTjAOmATYVhFHUPZAKA8w6SNcUrpUP
+	JK5fPddNWAfACM8hDW47WJTHaTrj4swBqIHUXdLCdw/uci6YVM4fB51Ko3Sr/VL+5NqwZv2XuIO
+	xt1ltOASIOPJTVcsWrTH8tXa4u85Ewikg4NNfHfF4gboXtPyKumrjDtUJcrO0nAk0Od3it4IXdU
+	6Q5DGemwKjZODc4Rzdhqy/BlyTdT4LyxeKbLZ54yowf5dzjkHBBty1Z9cc3ssje1gY8pd4J748P
+	buxk8ePEqTs10P20fNn6ae6JADReWbYAvbSYnO6ZE/XOkWB6/Jh0m7ySH2IESCFXLH8vc3mNcJi
+	5/iDPvlH8vxRkk9ppnnOl+u+O2bLPRrzchd5Ux6HKyKBrp3SlrC5LBkUV6ubU2bB8Yyi8=
+X-Received: by 2002:a05:6a00:a90:b0:882:359f:ef17 with SMTP id d2e1a72fcca58-88235a00258mr4914774b3a.12.1790617179575;
+        Mon, 28 Sep 2026 10:39:39 -0700 (PDT)
 Received: from localhost ([71.212.197.238])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-3a4986e964asm515286a91.15.2026.09.28.10.39.07
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-87feb97e845sm4583378b3a.54.2026.09.28.10.39.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 10:39:07 -0700 (PDT)
+        Mon, 28 Sep 2026 10:39:39 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 To: soc@lists.linux.dev
 Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] arm: soc: OMAP fixes for v7.4
-Date: Mon, 28 Sep 2026 10:39:07 -0700
-Message-ID: <7hzex19sxw.fsf@baylibre.com>
+Subject: [GIT PULL] arm: defconfig: OMAP related updates for v7.4
+Date: Mon, 28 Sep 2026 10:39:38 -0700
+Message-ID: <7htsn99sx1.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -76,27 +76,25 @@ The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.4/soc-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.4/defconfig-signed
 
-for you to fetch changes up to d1e94aea2b15f076d3f95b309fbb372a8fe2e9f0:
+for you to fetch changes up to b45c06f362ee5ce9ef6402fcf57077a740cf1063:
 
-  ARM: OMAP2+: remove unused ctrl_module_wkup_44xx.h header (2026-09-21 09:01:49 -0700)
-
-----------------------------------------------------------------
-arm: soc: OMAP fixes for v7.4
-- remove unused ctrl_module_wkup_44xx.h header
-- Replace __ASSEMBLY__ with __ASSEMBLER__
+  arm: multi_v7_defconfig: Enable SND_ALOOP (2026-08-31 11:09:59 -0700)
 
 ----------------------------------------------------------------
-Ethan Nelson-Moore (1):
-      ARM: OMAP2+: remove unused ctrl_module_wkup_44xx.h header
+arm: defconfig: OMAP related updates for v7.4
+- Enable SND_ALOOP (omap2plus, multi_v7)
+- Support for compressed firmware (omap2plus)
 
-Thomas Huth (1):
-      ARM: OMAP2+: Replace __ASSEMBLY__ with __ASSEMBLER__
+----------------------------------------------------------------
+Andreas Kemnade (1):
+      ARM: omap2plus_defconfig: Support for compressed firmware
 
- arch/arm/mach-omap2/control.h               |  8 ++++----
- arch/arm/mach-omap2/ctrl_module_wkup_44xx.h | 89 -----------------------------------------------------------------------------------------
- arch/arm/mach-omap2/soc.h                   |  4 ++--
- arch/arm/mach-omap2/sram.h                  |  4 ++--
- 4 files changed, 8 insertions(+), 97 deletions(-)
- delete mode 100644 arch/arm/mach-omap2/ctrl_module_wkup_44xx.h
+Sen Wang (2):
+      ARM: omap2plus_defconfig: Enable SND_ALOOP
+      arm: multi_v7_defconfig: Enable SND_ALOOP
+
+ arch/arm/configs/multi_v7_defconfig  | 1 +
+ arch/arm/configs/omap2plus_defconfig | 3 +++
+ 2 files changed, 4 insertions(+)
