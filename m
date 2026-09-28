@@ -1,134 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE903909AE;
-	Mon, 28 Sep 2026 06:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2464E3EF6
+	for <soc@lists.linux.dev>; Mon, 28 Sep 2026 17:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790578277; cv=none; b=XHkIUScXzXKPlv+zvGYzSYFeJ/OHAhw9GTBZ6X9kxri5Dzxq3IW8CJMdv71R5+kAu4PzK5vsBKEKajhnbJwFPnSB6reocueVz58QqdbgecfSQ0IEDm3R9f30K4RWYdjVHGKgUsHnpqOKms+moiGL3+uXwlD7EkmS+rh5dCDE97k=
+	t=1790616989; cv=none; b=cASiCoJ6H5SX1P4hIvbCoYABOBq7osRnNvnTaaZ53kk7f2SLoUd9Q/kFubpBbIso1dAOI/olXSuGdhcZ9fnVcmwgFzWsX1iEs3+y0cljiikn9ag5VShqtM3iAjkLXPLqW5ed4tYnMEyO3IATVb80zvyPdLkmXZwD3Au6OuKhoUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790578277; c=relaxed/simple;
-	bh=7iMgxJ6dkciQz13RzBhjQN1l3MLtlY9dar1eA/dAYS0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=foQsyiqIbKVAzQCo7GK/DSCO29EW/p2UsCSWVzIS5H+ZB/dAeZXdWTD0B2yC9xKzAp8HXxysoxWOMV1jDHCRpvbYOoGUJsoMsndqjfEdvssKuJUseprwrJ1saDcRr7EjM11ZC2Y2a1r7pENsW9cDdsiKvCbq7aisSnDiMcRXISg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DLZ4eoPX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790616989; c=relaxed/simple;
+	bh=bvv2oS4oIBucXPP7+zG21vJ1hRwRJThPHQGWsxYyRG4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bqY6wfu2c5mQFVH7i1GbXlvNR2yGSOFxNMiPwJWiFtpibGX2IxYBorUtE8KqJpeETmB6sMmK6He+qC7PgCAqp5huLHL9fk9U4PEfC+820xPEvKauGCJTCE5bdiRCffGnyIMcO+yoU0aFnIxQ2ZNFuf48ymZmilbU+6JA1bOngLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=R+SR8bt8; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DLZ4eoPX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BBAD1F00893;
-	Mon, 28 Sep 2026 06:51:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790578276;
-	bh=zHG1TEVzidZB3jJv+mxUjAITxuE7BNdYUm0NY7yc8I8=;
-	h=From:To:Cc:Subject:Date;
-	b=DLZ4eoPXwN4hh2nj2PBY1DcnztaUGovFz2ht75A3YIDBI12I4OM98PZ5FyC1uCoYZ
-	 w0yt8gloYIHQPMmjxJofGJJTwOJUT+X3+3k6VPutuGZS4KoIYmgIV2sM2pf3QBsahu
-	 neoASyhbB8aF0P+JKR7BVSfIeFYU7zuXotb+WYJMi947CQFiYq6becB9095JB7MHx2
-	 0ftks7G55lo/XqewNAsVqCwJDcwLnZ41oTWsfsltkjoNIl85b2hynTMlnB6Kt2xaOU
-	 fpWYe7MFSfOEjgpuwNSFEpJPQx58khMs8YdgxkIcDxmFMRKWwISGVSUITY8pWOxg3+
-	 r1gfAfOlSmA8A==
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: SoC Team <soc@lists.linux.dev>,
-	arm-scmi@vger.kernel.org,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v7.4
-Date: Mon, 28 Sep 2026 07:51:11 +0100
-Message-ID: <20260928065112.2492223-1-sudeep.holla@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="R+SR8bt8"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4d04d73b8so1244941a12.1
+        for <soc@lists.linux.dev>; Mon, 28 Sep 2026 10:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1790616985; x=1791221785; darn=lists.linux.dev;
+        h=content-type:mime-version:message-id:date:subject:cc:to:from:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=QcMM/70ueq1BvxYllSAMCDlH687AiK6lQ79IdX64Iy4=;
+        b=R+SR8bt8Xc8G+WXnXlTcwPWKx0KH7H8ECqxPGceN8BYk7QmYnwwx6RS4bd3SotkKDw
+         s+XnbKgxwudRcSWDe+4e86UXAYoK4ypDy6pT+hqYgYeOft8PmOPDqgAudhV6YCs/rxZf
+         v86FnRROTVzHToza14VevYpDSss02WjhYN0hximi44jJqTEBBc5hAem2Mu8HNwCQ+DX6
+         TY8ppoNoV6uyukGpurLVr6roVgpg53iqhLLMsQOdcAIYVQMbj+Ns+g9E0fzPQgxgsqDu
+         4/xnjAunv1X6eVD7cin+Pzwe4/er6i4KxeN/b2RDnO0s5gCi7KMgD9LPc6s+ZeeeUyed
+         7kHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790616985; x=1791221785;
+        h=content-type:mime-version:message-id:date:subject:cc:to:from
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=QcMM/70ueq1BvxYllSAMCDlH687AiK6lQ79IdX64Iy4=;
+        b=aQ+k3uK5z6+OHDOscEJbKw8oxVBhXaAIoOXPUNIwWoZF/EslSkZcpwh3BuUg+yrCkg
+         z7RUKG3SEohEIrOKP0XIQE6iOfY2alzOO0S/DCVskyfMw9LBNMfK+hDJA2urQV/IfK0W
+         JBSBw2lzszun4FiB31gT4p5Sg9fdvaPm3NmGDlD7o24fwcWTkgZZPaiUUCltBMAsQbh5
+         6xGuitRAkl+HjtAH42zwa8BahajocmA4zCI8n+CquxX3LaRx3QKtw0svdgeiwQQSWwZI
+         CMHsW/BfoNXpX69lGWq6ueQFvD/9XpbV/seuM9UBW+0NxIdfBvEDE2Rg+OzU/ZUPzL4/
+         w5jQ==
+X-Gm-Message-State: AFq9FYL9DlUuco/UyehUP5jj2OW4JpkBMH8j82ba2qopbILCcWAMG+Fn
+	HN9I4XXA+EHcrcsHo5RuefTR/MiX+tIBaod7/f0PWk+1nXQpPqMmHKkXar+Hx8GnYjwkjard1ng
+	jYu2U
+X-Gm-Gg: AYBFou2irkhcDZZZQ7QmcABwlRY5uBp4KiQsQVnsAWkRZ0ZbDoO75NiNI2D4XwpqT4s
+	qADnvp3Ari/08JmHYr92k7DT40ItLRH151+Zj+PO6v4ZAr/6PZCkoAmBHibHdBWDoFZvVkDYIn4
+	YuWmvQUkCpAqpkbwSuYhPxt1mo7e5UUXdCP44jqGvrMlHI94LjaQQVp0W4zESfj8y/SkOWoFVgy
+	LKJmLHkx2AQCiNQW4hP3VtPJFBu8hDm08+x5DhAP0QmPKxEX21wRK7yRtjsK8+vbxKTAUhUm1F3
+	2RuUKwNydOqfE26+7oweStmII4EEAeWc94ytHZUnqdRpGGJRMYILgin/OXLhcIztRfM2fik4Qvq
+	KY2NfyZDyXF7u2ITlZ84qigAuMzYRvryBO2Y99rqasKJaYGTLKQ0WeMRh9BirSmv9mFsAl9nVM6
+	X/L9qRWAt+ldXF3DnB3OZliGwnXprtNziQ2tjZ5jJCDKImMEnE4SjUSaMGZtsEHxyvvvw=
+X-Received: by 2002:a17:90b:4cc4:b0:3a0:ace4:d2a9 with SMTP id 98e67ed59e1d1-3a0ace4d746mr9210271a91.64.1790616985559;
+        Mon, 28 Sep 2026 10:36:25 -0700 (PDT)
+Received: from localhost ([71.212.197.238])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2df91409040sm46157205ad.41.2026.09.28.10.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 10:36:25 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: soc@lists.linux.dev
+Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: dts: OMAP fixes for v7.3-rc
+Date: Mon, 28 Sep 2026 10:36:24 -0700
+Message-ID: <7hecedb7mv.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi ARM SoC Team,
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
-Please pull !
-
-Regards,
-Sudeep
-
--->8
-The following changes since commit 8544e0da1a04c77b98e2e313a423a5c72e48ea32:
-
-  Merge branches 'for-next/ffa/fixes' and 'for-next/scmi/fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux (2026-09-08 21:04:42 +0100)
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-7.4
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.3/fixes-signed
 
-for you to fetch changes up to aac4e67d6eb93118cfa70c6562b5f9c81a7042ef:
+for you to fetch changes up to 2fabd2f406d0cf787be47b3bbeea99b30004033d:
 
-  firmware: arm_scmi: Always create devices for standard protocols (2026-09-24 09:10:43 +0100)
-
-----------------------------------------------------------------
-Arm SCMI updates for v7.4
-
-Add an ACPI PCC transport for SCMI. The core now propagates firmware
-nodes and supports protocol-specific channel lookup, while the new
-transport parses and validates ACPI _DSD mappings for shared and
-dedicated command and notification channels. ACPI protocol devices can
-be initialized without device tree child nodes.
-
-Enable SCMI protocol driver module autoloading by generating stable
-SCMI module aliases and creating standard protocol devices before
-their drivers register.
-
-Fix delayed-response completion and raw transfer reuse races, and
-release a raw transfer on an error path. Also consolidate reset domain
-information queries and use string helpers in SCMI trace events.
+  ARM: dts: ti/omap: dra7: fix PCIe PHY clock divider definition (2026-08-31 09:54:09 -0700)
 
 ----------------------------------------------------------------
-Bjorn Andersson (1):
-      firmware: arm_scmi: Add SCMI device table alias support
+ARM: dts: OMAP fixes for v7.3-rc
+- ti/omap: dra7: fix PCIe PHY clock divider definition
 
-Cristian Marussi (1):
-      include: trace: Use string helpers in msg_dump trace events
+----------------------------------------------------------------
+David Oberhollenzer (1):
+      ARM: dts: ti/omap: dra7: fix PCIe PHY clock divider definition
 
-Geert Uytterhoeven (1):
-      firmware: arm_scmi: Merge scmi_reset_proto_ops.name_get() and .latency_get()
-
-Hans de Goede (1):
-      firmware: arm_scmi: Always create devices for standard protocols
-
-Roland Dreier (3):
-      firmware: arm_scmi: Protect xfer->async_done with xfer->lock
-      firmware: arm_scmi: Don't reuse raw xfers with async_done still armed
-      firmware: arm_scmi: Fix error path leak in scmi_raw_message_send()
-
-Sudeep Holla (9):
-      firmware: arm_scmi: Set generated device fwnode with platform helpers
-      firmware: arm_scmi: Extend transport driver macro to support ACPI
-      firmware: arm_scmi: Convert OF-only paths to generic fwnode in SCMI core
-      firmware: arm_scmi: Fall back to ACPI HID when "compatible" is absent
-      firmware: arm_scmi: Pass protocol ID to transport chan_available()
-      firmware: arm_scmi: Refactor protocol device creation logic
-      firmware: arm_scmi: Add ACPI PCC transport
-      firmware: arm_scmi: Initialise known ACPI protocol devices and channels
-      firmware: arm_scmi: Validate PCC shared memory signature
-
- MAINTAINERS                                    |   1 +
- drivers/firmware/arm_scmi/bus.c                | 109 ++-
- drivers/firmware/arm_scmi/common.h             |  61 +-
- drivers/firmware/arm_scmi/driver.c             | 260 +++++---
- drivers/firmware/arm_scmi/protocols.h          |   9 +-
- drivers/firmware/arm_scmi/raw_mode.c           |  30 +-
- drivers/firmware/arm_scmi/reset.c              |  36 +-
- drivers/firmware/arm_scmi/transports/Kconfig   |  12 +
- drivers/firmware/arm_scmi/transports/Makefile  |   2 +
- drivers/firmware/arm_scmi/transports/mailbox.c |   7 +-
- drivers/firmware/arm_scmi/transports/optee.c   |   7 +-
- drivers/firmware/arm_scmi/transports/pcc.c     | 875 +++++++++++++++++++++++++
- drivers/firmware/arm_scmi/transports/smc.c     |  10 +-
- drivers/firmware/arm_scmi/transports/virtio.c  |   3 +-
- include/linux/device-id/scmi.h                 |  17 +
- include/linux/scmi_protocol.h                  |  20 +-
- include/trace/events/scmi.h                    |   8 +-
- scripts/mod/devicetable-offsets.c              |   5 +
- scripts/mod/file2alias.c                       |  12 +
- 19 files changed, 1300 insertions(+), 184 deletions(-)
- create mode 100644 drivers/firmware/arm_scmi/transports/pcc.c
- create mode 100644 include/linux/device-id/scmi.h
+ arch/arm/boot/dts/ti/omap/dra7xx-clocks.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
