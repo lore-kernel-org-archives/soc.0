@@ -1,67 +1,67 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-pz2-f39.google.com (mail-pz2-f39.google.com [74.125.228.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2464E3EF6
-	for <soc@lists.linux.dev>; Mon, 28 Sep 2026 17:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12CC64EB84F
+	for <soc@lists.linux.dev>; Mon, 28 Sep 2026 17:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790616989; cv=none; b=cASiCoJ6H5SX1P4hIvbCoYABOBq7osRnNvnTaaZ53kk7f2SLoUd9Q/kFubpBbIso1dAOI/olXSuGdhcZ9fnVcmwgFzWsX1iEs3+y0cljiikn9ag5VShqtM3iAjkLXPLqW5ed4tYnMEyO3IATVb80zvyPdLkmXZwD3Au6OuKhoUQ=
+	t=1790617022; cv=none; b=lrcvtRuNK+EMki70f19U71iZzrKsoFaMkmmA6oeo3ljyQ5GEBBHgvetlS7xwJTwhJCSyrQ0HesfCpMI0B+mrogh38SAysRkk7K6DxMVbYF8ANcHXmBD8x/flEmI3PQZ2BIQ2mgzSySNPELnK1QYhtmjBh0JtbttI+wHD2VTqEfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790616989; c=relaxed/simple;
-	bh=bvv2oS4oIBucXPP7+zG21vJ1hRwRJThPHQGWsxYyRG4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bqY6wfu2c5mQFVH7i1GbXlvNR2yGSOFxNMiPwJWiFtpibGX2IxYBorUtE8KqJpeETmB6sMmK6He+qC7PgCAqp5huLHL9fk9U4PEfC+820xPEvKauGCJTCE5bdiRCffGnyIMcO+yoU0aFnIxQ2ZNFuf48ymZmilbU+6JA1bOngLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=R+SR8bt8; arc=none smtp.client-ip=74.125.228.12
+	s=arc-20240116; t=1790617022; c=relaxed/simple;
+	bh=51IqI+Wuv3O2K3tbr9n/d59/5qo9ePT36iarXmxvd48=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ad6E6TE0cCwwRRKAU+SVdRQLefgSycvaYejOFzHbfN+XeGFSi0kwBQXny5IhiE3dmDCZulkIFqEsCl8zxy0qvtXqeubmFOsvighb8QAdZ8r64xVq6sd1XeS7f4bnRdJQbIEqGVfHZpD/yYlK+iO+FfiWHPxLR13i6UrPZeVFIlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=NLIYp0Pm; arc=none smtp.client-ip=74.125.228.39
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="R+SR8bt8"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4d04d73b8so1244941a12.1
-        for <soc@lists.linux.dev>; Mon, 28 Sep 2026 10:36:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="NLIYp0Pm"
+Received: by mail-pz2-f39.google.com with SMTP id 41be03b00d2f7-cc78dd412cfso1198573a12.0
+        for <soc@lists.linux.dev>; Mon, 28 Sep 2026 10:37:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1790616985; x=1791221785; darn=lists.linux.dev;
+        d=baylibre.com; s=google; t=1790617020; x=1791221820; darn=lists.linux.dev;
         h=content-type:mime-version:message-id:date:subject:cc:to:from:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QcMM/70ueq1BvxYllSAMCDlH687AiK6lQ79IdX64Iy4=;
-        b=R+SR8bt8Xc8G+WXnXlTcwPWKx0KH7H8ECqxPGceN8BYk7QmYnwwx6RS4bd3SotkKDw
-         s+XnbKgxwudRcSWDe+4e86UXAYoK4ypDy6pT+hqYgYeOft8PmOPDqgAudhV6YCs/rxZf
-         v86FnRROTVzHToza14VevYpDSss02WjhYN0hximi44jJqTEBBc5hAem2Mu8HNwCQ+DX6
-         TY8ppoNoV6uyukGpurLVr6roVgpg53iqhLLMsQOdcAIYVQMbj+Ns+g9E0fzPQgxgsqDu
-         4/xnjAunv1X6eVD7cin+Pzwe4/er6i4KxeN/b2RDnO0s5gCi7KMgD9LPc6s+ZeeeUyed
-         7kHw==
+        bh=U7p18ol6P0YPGqM1fpj3iPohmUFqHGT7j7iYHvqBoic=;
+        b=NLIYp0PmW33oRLmMT//La13BKOWM7BTlbKqWjsteNjr0oa05SOdU5BMWjGKCvmlUub
+         CAyiwQiYi/ybwkJ2yWxY2ABoQ4twKNNHdHdznbk+8n+GPGk1jAxFP8DJPdFLwcH6iEa5
+         7KJBbtJkm0NjavVNdnHBe/uvadczmyvYBS4fZLJtl+VBmGuPR4cwCAcsoPMfoFEOm7DO
+         Wx1AbJXtbcdI5qssCwPzcW0EggIh12Ra+YB/eIxxwR7GZlHFslu2G7VRARmh7x2JTKP4
+         mSylKDpOKUAKSQKfVFIcFhYs2bKhnjqlgxpTbBh832Ahv+oPHgUSOtU5ro2xyrhzTCVr
+         QKWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790616985; x=1791221785;
+        d=1e100.net; s=20260707; t=1790617020; x=1791221820;
         h=content-type:mime-version:message-id:date:subject:cc:to:from
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=QcMM/70ueq1BvxYllSAMCDlH687AiK6lQ79IdX64Iy4=;
-        b=aQ+k3uK5z6+OHDOscEJbKw8oxVBhXaAIoOXPUNIwWoZF/EslSkZcpwh3BuUg+yrCkg
-         z7RUKG3SEohEIrOKP0XIQE6iOfY2alzOO0S/DCVskyfMw9LBNMfK+hDJA2urQV/IfK0W
-         JBSBw2lzszun4FiB31gT4p5Sg9fdvaPm3NmGDlD7o24fwcWTkgZZPaiUUCltBMAsQbh5
-         6xGuitRAkl+HjtAH42zwa8BahajocmA4zCI8n+CquxX3LaRx3QKtw0svdgeiwQQSWwZI
-         CMHsW/BfoNXpX69lGWq6ueQFvD/9XpbV/seuM9UBW+0NxIdfBvEDE2Rg+OzU/ZUPzL4/
-         w5jQ==
-X-Gm-Message-State: AFq9FYL9DlUuco/UyehUP5jj2OW4JpkBMH8j82ba2qopbILCcWAMG+Fn
-	HN9I4XXA+EHcrcsHo5RuefTR/MiX+tIBaod7/f0PWk+1nXQpPqMmHKkXar+Hx8GnYjwkjard1ng
-	jYu2U
-X-Gm-Gg: AYBFou2irkhcDZZZQ7QmcABwlRY5uBp4KiQsQVnsAWkRZ0ZbDoO75NiNI2D4XwpqT4s
-	qADnvp3Ari/08JmHYr92k7DT40ItLRH151+Zj+PO6v4ZAr/6PZCkoAmBHibHdBWDoFZvVkDYIn4
-	YuWmvQUkCpAqpkbwSuYhPxt1mo7e5UUXdCP44jqGvrMlHI94LjaQQVp0W4zESfj8y/SkOWoFVgy
-	LKJmLHkx2AQCiNQW4hP3VtPJFBu8hDm08+x5DhAP0QmPKxEX21wRK7yRtjsK8+vbxKTAUhUm1F3
-	2RuUKwNydOqfE26+7oweStmII4EEAeWc94ytHZUnqdRpGGJRMYILgin/OXLhcIztRfM2fik4Qvq
-	KY2NfyZDyXF7u2ITlZ84qigAuMzYRvryBO2Y99rqasKJaYGTLKQ0WeMRh9BirSmv9mFsAl9nVM6
-	X/L9qRWAt+ldXF3DnB3OZliGwnXprtNziQ2tjZ5jJCDKImMEnE4SjUSaMGZtsEHxyvvvw=
-X-Received: by 2002:a17:90b:4cc4:b0:3a0:ace4:d2a9 with SMTP id 98e67ed59e1d1-3a0ace4d746mr9210271a91.64.1790616985559;
-        Mon, 28 Sep 2026 10:36:25 -0700 (PDT)
+        bh=U7p18ol6P0YPGqM1fpj3iPohmUFqHGT7j7iYHvqBoic=;
+        b=ARRJ/g2dW7F1zoIPGbAx4i/A3MhvUtGa1nGfzh2pp3o/XrtC9ExrpSGIQ2qz+c/Yjy
+         6A/GceYhbWrii+eZDQMn1tu7KwSFudhbxI4VZVU/UccucufU6GKfnovoQTDz5HaWsZO2
+         XIDE5J1GUt35f58l+aCj/kcDhfHuVknRYc2uJWU+H3KWgsu8pOVc/NTnaP/kwbi23Xtc
+         J3ws3HkYg6c/Ehpu2kXSARU8h+k9f5Oc0uVrHcynm8SM8vWc6aqkd6MjHYt7U5qt0Pms
+         uI7ETuK/L90rb3Z0zCZEQdjFOhwV372lzbqxZyU+VsFwmvVs9W9UG7spDC6lU51q6Zh8
+         Y0cQ==
+X-Gm-Message-State: AFuF++kxZzb5DFxAa3ijMAQKzrOhsUCE+iunhHyC/byuDlg/WlWRSlG1
+	YJW9hlqEjMyC9fdkjp/fAsC5Gj+QO+LPJSKiplKe+InPnUoUT0Q0ajq84ya2U3wE1mMhG5P7OHa
+	fsPs9
+X-Gm-Gg: AYBFou0uAJ4B1eZkO0UWd7zXYhpF/hnLmix0Gx9xneSAJBreqLYnebKksBBLtwnLHI0
+	jqlkxkqXaa9iPLQXTkHMwEorxFSp7lOoReeuiHkadHlI1eQ5v9vmbN0o82FO1EIV8juKtElnsml
+	k9mz5XB8ygh58S4Sm7x5u7l/pagKIEcc+o7R4+SPO4pJYs6WotTuz6ydE9DA8ei70vZp54w3XL+
+	92gA1mFyKYGgwHS9O2dD+6gHmAmOlQAlHq5ZPzaHt4mNR534Sa5MrVt1MEKEke4JluGvtfD4bZR
+	Al3CkQJ9a7Fy0oiZx8caZNA9yhEMk2zod+D0XY3fkmojR8CeFlxSrk4867NYaFJkfQ2/lmpDGdE
+	ieS7VZ/LHQGw0kFwRQJ7MQWVsjDGnZ8wbrWkXtp7ZsxzhJWxKPnAkHjMpv7aq7xUdo7BT/UHxYB
+	BR5CB0X3j+TcKP6iZSKxgfzDEvxP/5dYXMSYV7xe7H2zaFYGSOtBq+hEbjLZyQ6vak05g=
+X-Received: by 2002:a05:6300:6d87:10b0:3de:74ee:c04c with SMTP id adf61e73a8af0-3de74eec3bfmr966694637.60.1790617020321;
+        Mon, 28 Sep 2026 10:37:00 -0700 (PDT)
 Received: from localhost ([71.212.197.238])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2df91409040sm46157205ad.41.2026.09.28.10.36.24
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-cc7a4b03082sm2807652a12.11.2026.09.28.10.36.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 10:36:25 -0700 (PDT)
+        Mon, 28 Sep 2026 10:36:59 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 To: soc@lists.linux.dev
 Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: dts: OMAP fixes for v7.3-rc
-Date: Mon, 28 Sep 2026 10:36:24 -0700
-Message-ID: <7hecedb7mv.fsf@baylibre.com>
+Subject: [GIT PULL] ARM: dts: OMAP updates for v7.4
+Date: Mon, 28 Sep 2026 10:36:59 -0700
+Message-ID: <7ha4p1b7lw.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -76,19 +76,72 @@ The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.3/fixes-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v7.4/dt-signed
 
-for you to fetch changes up to 2fabd2f406d0cf787be47b3bbeea99b30004033d:
+for you to fetch changes up to c3037b5c7c38bdf78c214e7dbe513a553ce8f47b:
 
-  ARM: dts: ti/omap: dra7: fix PCIe PHY clock divider definition (2026-08-31 09:54:09 -0700)
-
-----------------------------------------------------------------
-ARM: dts: OMAP fixes for v7.3-rc
-- ti/omap: dra7: fix PCIe PHY clock divider definition
+  ARM: dts: am335x-bonegreen-eco: Enable 1GHz OPP by increasing vdd_mpu voltage (2026-09-21 09:02:20 -0700)
 
 ----------------------------------------------------------------
-David Oberhollenzer (1):
-      ARM: dts: ti/omap: dra7: fix PCIe PHY clock divider definition
+ARM: dts: OMAP updates for v7.4
+- am335x-bonegreen-eco: Enable 1GHz OPP
+- clock fixes for camera sensors
+- misc cleanups, DT fallbacks, schema updates
 
- arch/arm/boot/dts/ti/omap/dra7xx-clocks.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+Bhargav Joshi (3):
+      ARM: dts: ti: am57xx-idk-common: Remove unused ext-clk-src property
+      ARM: dts: ti: am335x-shc: Remove unused ti,no-init property
+      ARM: dts: omap: dra7: add da830 fallback to am3352 rtc compatible string
+
+Eduard Bostina (3):
+      dt-bindings: input: Convert TI Keypad Controller to DT schema
+      ARM: dts: ti: omap: Disable keypad and enable it on the boards that use it
+      ARM: dts: ti: omap: Fix Palmas RTC node names
+
+Kory Maincent (TI.com) (1):
+      ARM: dts: am335x-bonegreen-eco: Enable 1GHz OPP by increasing vdd_mpu voltage
+
+Krzysztof Kozlowski (2):
+      ARM: dts: ti: omap: Correct white-space style
+      ARM: dts: ti: omap: Replace spaces indentation with tabs
+
+Laurent Pinchart (3):
+      ARM: dts: ti: omap3-n950: Replace clock-frequency in camera sensor node
+      ARM: dts: ti: omap3-n9: Replace clock-frequency in camera sensor node
+      ARM: dts: ti: omap3-n900: Replace clock-frequency in camera sensor node
+
+Roger Quadros (1):
+      ARM: dts: ti: Add device tree nodes for PRU-ICSS1 instance on AM571x
+
+ Documentation/devicetree/bindings/input/omap-keypad.txt      | 28 ----------------------------
+ Documentation/devicetree/bindings/input/ti,omap4-keypad.yaml | 63 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/ti/omap/am335x-boneblack-hdmi.dtsi         |  2 +-
+ arch/arm/boot/dts/ti/omap/am335x-bonegreen-eco.dts           |  2 +-
+ arch/arm/boot/dts/ti/omap/am335x-shc.dts                     |  4 ----
+ arch/arm/boot/dts/ti/omap/am437x-l4.dtsi                     |  2 +-
+ arch/arm/boot/dts/ti/omap/am57-pruss.dtsi                    | 11 +++++++++++
+ arch/arm/boot/dts/ti/omap/am571x-idk.dts                     | 65 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ arch/arm/boot/dts/ti/omap/am5729-beagleboneai.dts            |  2 +-
+ arch/arm/boot/dts/ti/omap/am57xx-beagle-x15-common.dtsi      |  2 +-
+ arch/arm/boot/dts/ti/omap/am57xx-idk-common.dtsi             |  3 +--
+ arch/arm/boot/dts/ti/omap/dra7-l4.dtsi                       |  2 +-
+ arch/arm/boot/dts/ti/omap/motorola-mapphone-common.dtsi      |  8 ++++----
+ arch/arm/boot/dts/ti/omap/motorola-mapphone-mz607-mz617.dtsi |  2 ++
+ arch/arm/boot/dts/ti/omap/omap3-igep.dtsi                    |  2 +-
+ arch/arm/boot/dts/ti/omap/omap3-n9.dts                       |  5 ++++-
+ arch/arm/boot/dts/ti/omap/omap3-n900.dts                     |  3 ++-
+ arch/arm/boot/dts/ti/omap/omap3-n950.dts                     |  5 ++++-
+ arch/arm/boot/dts/ti/omap/omap3-tao3530.dtsi                 |  8 ++++----
+ arch/arm/boot/dts/ti/omap/omap4-droid-bionic-xt875.dts       |  2 ++
+ arch/arm/boot/dts/ti/omap/omap4-droid4-xt894.dts             |  2 ++
+ arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts            |  2 ++
+ arch/arm/boot/dts/ti/omap/omap4-l4.dtsi                      |  1 +
+ arch/arm/boot/dts/ti/omap/omap4-samsung-espresso-common.dtsi |  6 +++---
+ arch/arm/boot/dts/ti/omap/omap4-sdp.dts                      |  2 ++
+ arch/arm/boot/dts/ti/omap/omap4.dtsi                         |  6 +++---
+ arch/arm/boot/dts/ti/omap/omap5-l4.dtsi                      |  1 +
+ arch/arm/boot/dts/ti/omap/omap5.dtsi                         |  2 +-
+ 28 files changed, 183 insertions(+), 60 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/omap-keypad.txt
+ create mode 100644 Documentation/devicetree/bindings/input/ti,omap4-keypad.yaml
