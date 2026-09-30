@@ -1,114 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3544BF952;
-	Wed, 30 Sep 2026 12:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC84E46D2DA
+	for <soc@lists.linux.dev>; Wed, 30 Sep 2026 21:47:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790772032; cv=none; b=LtF6yD9StYDkTCDa8yb7BwBGqyGtqKhI+pKVIMmWs7u7VD8AjwwN+e8C8BRwK2yfZ8eO4nQWb3oDOBam5UwD9o45IHBuEzXEz87YhnRs5UYNDxE1oebB+V+PRm2iB7PmvD4/V7lijUnj8Bl8YtUDIH3oHidVEON8rgGq+22PTPQ=
+	t=1790804855; cv=none; b=Q/zg2aZBpkEm3KrfBgK5RfG0OrbM0A2FJM2IMu4c9omSJzre/xL3xIkkgdjMUxc8XkgOWm4Pn/vJYqWRq4CkbqraygyBcXRJ20GFGs1yE+ejqntBEpyedgjgFosBzFcOnK5D2jtk4K0pJQJ1nyLVWdEnO1jjIJiH9oycXyuWHX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790772032; c=relaxed/simple;
-	bh=URImWBL6YohY2ESYiH9TUFchpKUMqBvejWUELAc1UNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m3riN+bV4UBm5boWDqjG5PK5MuDsxxoQ5J9LO74s0cOf6PDFC/AVkRU5M1I3RXw8oXajzxhLEIjXWdXFCUlTa0ZcSKZuY6zwpDqftYaW1pzTX2s4J/wdKOhCl1pMBBXiHmIG5ov89JAoBHE3PoGmgJoF9RjFtxc1lZTRz/JgluA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nvOII3Cy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790804855; c=relaxed/simple;
+	bh=m+T593NoH9LHM4nyge2qVy8iIDHmmBHMv1mbnGq3CSE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t8aX+LS8ZPV3mzdAV6SjQVQWww8JDpW47Xdws0kTbY1YQcrMUX7yYd8lDE/tOW5xxkGXkKd63NzgT5neN/MjO2UvLnpKs9Mt/Tpgoh9w/zCTWYDqs5fW0IkYx+un6ec1Lsad9XxS79lvEcnRNmauBVDi6r+Gjmt8tGr6e15sAPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UioBh4V9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nvOII3Cy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84EB31F000FF;
-	Wed, 30 Sep 2026 12:40:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UioBh4V9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C6831F0089B
+	for <soc@lists.linux.dev>; Wed, 30 Sep 2026 21:47:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790772030;
-	bh=Rr5XxTaxMajYl2p+/oqpRV9/N2vSKguphALuMIRhPjc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nvOII3CyyGuxBQXg4/f08TQEIcxSnuxhlGb9if/4Rvqi/p95diQT0DQ2r4kXK/9oT
-	 wM3HzhMoHfzzJJvGXa1M5kiDLYuw6Lg/+rNO9ti6uRuqkdH0p4/GySl9ldje6U+JVH
-	 FdBoBDcdmNoMcZGk0Fv4ufHX4hz+lJDF1mxP2Ua5dcmvYDcIwYK3BYISggsCysT12N
-	 kmn/ld+nPBE6t1fS+k7GzAAS0W6834ieZwRu5F8+ydos8586llFmM12msSRlrMVbd6
-	 s9SNsesHPdGR+MruNTV5fFkmf8Jcu7gIO+KjmWJJsqjVWTXy57U2BwnYZBez6s1hDa
-	 QiEZdwOl1MkJA==
-Date: Wed, 30 Sep 2026 20:40:20 +0800
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Sean Rhodes <sean@starlabs.systems>
-Cc: linux-kernel@vger.kernel.org, Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Corentin Chary <corentin.chary@gmail.com>,
-	"Luke D. Jones" <luke@ljones.dev>,
-	Denis Benato <denis.benato@linux.dev>,
-	Prasanth Ksr <prasanth.ksr@dell.com>,
-	Jorge Lopez <jorge.lopez2@hp.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Joshua Grisham <josh@joshuagrisham.com>,
-	Will Deacon <will@kernel.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	"Kiryl Shutsemau (Meta)" <kas@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	platform-driver-x86@vger.kernel.org, Dell.Client.Kernel@dell.com,
-	Brian Norris <briannorris@chromium.org>,
-	Julius Werner <jwerner@chromium.org>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>,
-	Titouan Ameline de Cadeville <titouan.ameline@gmail.com>,
-	Laxman Acharya Padhya <acharyalaxman8848@gmail.com>,
-	Yidi Lin <yidilin@google.com>, Kees Cook <kees@kernel.org>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	chrome-platform@lists.linux.dev,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	dri-devel@lists.freedesktop.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Arnd Bergmann <arnd@arndb.de>, Eric Biggers <ebiggers@kernel.org>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Michal Simek <michal.simek@amd.com>, Sven Peter <sven@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Drew Fustini <fustini@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
-Subject: Re: (subset) [PATCH v14 0/5] coreboot CFR firmware attributes
-Message-ID: <ar0DNFlI7MEA8zp2@tzungbi-laptop>
-References: <cover.1788284852.git.sean@starlabs.systems>
+	s=k20260515; t=1790804854;
+	bh=MfzXiat9H5DF2PiTWs4O9ojHJwLpSTSb+XBwmSF47uA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=UioBh4V9PQcDGpw9Unc/Da5NbMY7NE901fFzRagTGXiAlkHHTtMmv1OqBE/22sWOa
+	 ngwmBVUj4zgjk9SlH7sYU4Nv1ZzJIwb4Zq1x40gAI9cvvsjpikYfYtDp+lgEnyYGXg
+	 qScvN3edrMuJeR6BOwCCpC2Y+KnFw+L6rdq7ow0vWuIZqo0zXRVILaeDOaFVSQKNw8
+	 LmaJ9GFc2x/aAm8iXx244y0PS3EdDOee0MNGKX7OzSxfi32rRN9FAnQh4Kp9dMnp4I
+	 7p/6JJ3P9u0fBzDoVhvRo4kvrX0Rx95HHSgX7GHkA4gtPhA21ZGGayF7McLMZ5BG+m
+	 Q5MEMnDNsf5Qw==
+Received: by mail-lr2-f35.google.com with SMTP id 38308e7fff4ca-3a776fd3b88so8572571fa.3
+        for <soc@lists.linux.dev>; Wed, 30 Sep 2026 14:47:34 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBy6DWG/W/YVkifE9IAekqX307/qIKl0ZhMmnPEYsMDX3nbU8jy2qfWkHXRFQ49Kcybj0vg=@lists.linux.dev
+X-Gm-Message-State: AFq9FYJxwe+CiUDGo8R6z6uab9YP+ATG3aXnIW6Trlwg5nxBjgK/0QaO
+	IepZhUCW3kic4mwSZRn9UYmu4/4NdgD/9w8YOI82Hodm9d0osG6J0oWv3Kzv0/ArgqqaHvvyhEq
+	gLXlZqi/vdKjph0cjW6rq09pvWO9Z67U=
+X-Received: by 2002:a05:651c:1990:b0:3a7:7ddb:aab3 with SMTP id
+ 38308e7fff4ca-3a77ddbad7emr6934201fa.16.1790804853193; Wed, 30 Sep 2026
+ 14:47:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1788284852.git.sean@starlabs.systems>
+References: <20260918-contrib-pg-pixel10-initial-dts-v4-0-745eaca28b1a@linaro.org>
+ <20260918-contrib-pg-pixel10-initial-dts-v4-2-745eaca28b1a@linaro.org>
+In-Reply-To: <20260918-contrib-pg-pixel10-initial-dts-v4-2-745eaca28b1a@linaro.org>
+From: Linus Walleij <linusw@kernel.org>
+Date: Wed, 30 Sep 2026 23:47:20 +0200
+X-Gmail-Original-Message-ID: <CAD++jLntPtJVosWrmO4Hh_kuAPyC2G8MRB9BAwwR0wx1OUzLiw@mail.gmail.com>
+X-Gm-Features: AclHuK9JASmZ3mAuwTzXMDc2vQ_yXfdUx9hC2uGUMFRzKST4nRDXC-j2uJr4VPc
+Message-ID: <CAD++jLntPtJVosWrmO4Hh_kuAPyC2G8MRB9BAwwR0wx1OUzLiw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] arm64: dts: google: Add dts directory for
+ Google-designed silicon
+To: Peter Griffin <peter.griffin@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Drew Fustini <fustini@kernel.org>, Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
+	Douglas Anderson <dianders@chromium.org>, Juan Yescas <jyescas@google.com>, 
+	RD Babiera <rdbabiera@google.com>, Brian Norris <briannorris@google.com>, 
+	William McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+	linux-serial@vger.kernel.org, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+	Brian Norris <briannorris@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 01, 2026 at 06:48:01PM +0100, Sean Rhodes wrote:
-> Move the firmware attributes class helper out of platform/x86, rename the
-> coreboot-table firmware driver directory from google to coreboot, and add a
-> coreboot CFR firmware attributes driver.
-> 
-> Changes in v14:
-> - Rebase on current upstream master after Linux 7.3-rc1, preserving the
->   intervening coreboot table bounds and CBMEM no-map changes.
-> - Drop the standalone include-order cleanup. Replace the affected relative
->   includes directly in the firmware attributes helper move, as requested by
->   Tzung-Bi.
-> - Split the DRM coreboot framebuffer dependency update from the firmware
->   directory and Kconfig rename so it can receive a DRM Acked-by separately.
-> - Keep the CFR driver and its runtime behavior unchanged from v13.
-> 
-> [...]
+On Fri, Sep 18, 2026 at 9:05=E2=80=AFPM Peter Griffin <peter.griffin@linaro=
+.org> wrote:
 
-Applied to
+> From: Douglas Anderson <dianders@chromium.org>
+>
+> The first four Google Tensor SoCs were offshoots of Samsung Exynos
+> SoCs and their device trees were organized under the "exynos/google"
+> directory. Starting with the Google Tensor G5 SoC in Pixel 10 phones,
+> Google Tensor SoCs are now of Google's own design. Add a location in
+> the tree to store these device tree files.
+>
+> Changes by Peter Griffin
+>  * update config symbol help with at least 4 lines to avoid checkpatch
+>    warning
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> Tested-by: Brian Norris <briannorris@chromium.org>
+> Reviewed-by: Brian Norris <briannorris@chromium.org>
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 
-    https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-firmware-next
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
-[1/5] firmware: Move firmware attributes class helper
-      commit: 6f3adf358c8808973dc44aa333bdc0b06ae5f0c5
-[4/5] firmware: coreboot: Add CFR firmware attributes driver
-      commit: f2e05ce9763feb1dd7da15afd2cc61df227ee85a
-
-Thanks!
+Yours,
+Linus Walleij
