@@ -1,86 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A725226BF
-	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 19:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC28E457E66
+	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 19:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790882696; cv=none; b=DZszW00tE071NEVmawkMdnMcc2eAVFNa/tFU6voPkV0BDL2B0rUtdon/Y86xP7tA3tSSw/Bg7pefzF5c66qlZ2YYqMmp1AD7XmnuMc9vkgkLGeraGHeGyfW9XN2Grba7amaB+H433PDKv5KiCjZmnQ0L/clHKS0DXS87ELkU7eE=
+	t=1790883428; cv=none; b=eABJIY9u27NPeR2NyDlmorXdlIWqqR5enCEVDposAx3tjC5svXRKNxgoBi4+VM7dobV0zhu+GiFwwhXlEsxl977sbHR/fDacgQptrppX6aKtKPCrOacpYTasYDs2oyy4QIHUw2rP00UUglyAAPVrTslZClinVEgTcajN1rQ283E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790882696; c=relaxed/simple;
-	bh=0zl8OdSxO7h7NIIa6eK3AAK31USq1E+LqAcwfp8Skpk=;
+	s=arc-20240116; t=1790883428; c=relaxed/simple;
+	bh=qvwz9H5czi1T2bET1rcGtlq0MACGNFWYAMQiSkHpdX8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CLaFrOYtqX9q54mkazDMaTlaMabTN3mxUDRymOlSbJWpwYNK78/C3TRisaa8czqc3OmKaEqd8BgNj3j+ehazjkIYJvwRSi7KxXl2Xr91iRaBhQpDp3B/Jc3XQb+l0h+/Mk1NTlk0dEdw4LdUcK+J+iYbrU90BQihZL883blWsyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hE40VTv5; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=nz6O7b0b7lusSWgNp3K30lL1NrNiX08ikUkdCZ2EyIatRbj73sH47R/XyDxqvw0dscMAbKYYdEtXhvIF8cEw5C+oLk+wwY2KFgTmXc2OwkRotLRqdZ0Hg0VZBMzsWrZAVYg+3VTlYjRPr6CKTYkHzLEVxfFnpDLqkXd6dOWw0oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYEkWZSG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hE40VTv5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF071F00898
-	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 19:24:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYEkWZSG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 274691F0089D
+	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 19:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790882694;
-	bh=vUgg6Q6C7bmDuxn2xo5vJ0z9fBM6ieoXi9Gwqqo6ztg=;
+	s=k20260515; t=1790883425;
+	bh=qvwz9H5czi1T2bET1rcGtlq0MACGNFWYAMQiSkHpdX8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=hE40VTv5kwI5vC8qst+3Ul5mT0paNlCQ+tf7CAY4EHEkad3Nu5hQAnl9sDO34Uc0T
-	 YrVoz5Yw1WccIZzYQFyvFfnow3Gd9+veVtMXJVaJ41gEnU2Blv71WjfVfE1YG3Tkrq
-	 580XnIWKwqe+M1s7w27PmqMFE6UOviplL3z3V6CS/A87ABMKsT+Wh8Rhgf6u8pIQ00
-	 5lHnBb9fw820KAJvWsLfoxtfNfiGLLPPlP/ZskPfW1EqwC41p1o63Ymg8kXMcd1pRI
-	 eIHpCCp2qzYzvwoy3NDA1DQ+NgOttFGltKFKhDoBo+V4cyI4JmWYM4kq6zAaWRitzl
-	 VP9b/mYLMmt1w==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3a87e23860cso1760071fa.0
-        for <soc@lists.linux.dev>; Thu, 01 Oct 2026 12:24:54 -0700 (PDT)
-X-Gm-Message-State: AFq9FYLBwYvsePbuZOsHvQAslKOKs44VleSrxL5Pc2ICwAUO4HUWQ+oH
-	A953tpS65zeZR+8qWQvaoGoHt5K26vynnQODNNnyT3HJlZZ8YnwxgE3Ux4czrJ+/JRqs90HIMLF
-	w7wJRlh2eUjasNbfyo4cwuZYeeJZUsu0=
-X-Received: by 2002:a05:651c:1987:b0:3a4:68f1:8bee with SMTP id
- 38308e7fff4ca-3a7833da2afmr10860121fa.6.1790882693269; Thu, 01 Oct 2026
- 12:24:53 -0700 (PDT)
+	b=OYEkWZSGIPm9u5E7vvPyKgWBtWXoYDM0EGPIKCETLZ8/uJTQU6+6fMwQSj1CEDMG9
+	 FEEP8B3Z/9kj0+e2SotAzqmeMPnIBCHDFQOFg0xrbc0jJCUxSPgWEOcUbRie4b8j5c
+	 9RR+PHZ9l26jsi2i043ZuZn3uXED1Mm6U72f7Wijc09/6J0y8vHBHdIG+USOiIeFYj
+	 WC2zyQWU2k7Jb9PHARWTCN6M6FeE34OaK28p/Q8j2R9egjckrpBv7vM0mfRN6kDiDO
+	 yqsl0jruXuftKkvxc23FjyHcIjhLyHLPY+6FKwA1j8tONQgQTIt7IgO9/dMkXJJsOc
+	 PxPefttg9aAyw==
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5ba3d90ac37so160216e87.3
+        for <soc@lists.linux.dev>; Thu, 01 Oct 2026 12:37:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBz0S9Q/K3JJOjsj5i3uk7IhDP7ERiwB7B/s0UQedLp/Kbjm+O9HvAX+DPggtUtWid1UgJ8=@lists.linux.dev
+X-Gm-Message-State: AFq9FYLxXj0u8rzTUoU1d9xZTN9KIxos3zDVjtYScoMM2ivOvYRm42LK
+	1DM39wiCHSPFdT8Luzr5W20a/8qxqexTf5IAvnyW6mEYiiWHpzCVrpl7xg82DtJDK6lF82yLFJ/
+	FemiPhrdu8uvCSskwB9DUxByEuBuRIg8=
+X-Received: by 2002:a05:6512:3a8e:b0:5ba:3db3:66d6 with SMTP id
+ 2adb3069b0e04-5bb9bc3baeemr71428e87.38.1790883423882; Thu, 01 Oct 2026
+ 12:37:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAD++jL=vbc7DM1RB8_VfzWJhT0ZSGYegKN7NKJLbBB7bgFio2w@mail.gmail.com>
- <20261001-striped-polar-tuatara-d66794@quoll>
-In-Reply-To: <20261001-striped-polar-tuatara-d66794@quoll>
+References: <20261001-cv75-v5-v9-0-486cc289a4b8@ambarella.com>
+ <20261001-cv75-v5-v9-4-486cc289a4b8@ambarella.com> <20261001-attempt-savior-5d4a0eed4320@spud>
+In-Reply-To: <20261001-attempt-savior-5d4a0eed4320@spud>
 From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 1 Oct 2026 21:24:40 +0200
-X-Gmail-Original-Message-ID: <CAD++jLk4Kyzi51qm1_N459xA6jxZR_97xGa+wuUQZLB_uU0A-g@mail.gmail.com>
-X-Gm-Features: AclHuK-limh2gCePDThBkjOajbz9qF9G52sFUd6I5HvvxJLugmHTOb6rOCipE6c
-Message-ID: <CAD++jLk4Kyzi51qm1_N459xA6jxZR_97xGa+wuUQZLB_uU0A-g@mail.gmail.com>
-Subject: Re: [GIT PULL] Ux500 DTS changes for v7.4
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: soc@lists.linux.dev, Linux ARM <linux-arm-kernel@lists.infradead.org>
+Date: Thu, 1 Oct 2026 21:36:50 +0200
+X-Gmail-Original-Message-ID: <CAD++jL=tsETOFvC-AdethTdrGtet5neVanj3KyyB4EtEOpJ_Gg@mail.gmail.com>
+X-Gm-Features: AclHuK8gO_d9ZPMvc-1W1f079XpNQoWfhmnQkIh3LHrwFtzhfvV51TArzhkyp58
+Message-ID: <CAD++jL=tsETOFvC-AdethTdrGtet5neVanj3KyyB4EtEOpJ_Gg@mail.gmail.com>
+Subject: Re: [PATCH v9 04/15] dt-bindings: gpio: pl061: add Ambarella CV75 variant
+To: Conor Dooley <conor@kernel.org>
+Cc: longzhao@ambarella.com, Arnd Bergmann <arnd@arndb.de>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Jerome Brunet <jbrunet@baylibre.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Michael Walle <mwalle@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>, 
+	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 1, 2026 at 2:15=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
+On Thu, Oct 1, 2026 at 9:23=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
+e:
+> On Thu, Oct 01, 2026 at 08:40:53PM +0800, Long Zhao via B4 Relay wrote:
+> > From: Long Zhao <longzhao@ambarella.com>
+> >
+> > The CV75 GPIO banks sit on the AMBA PrimeCell bus but are not
+> > register-compatible with the ARM PL061. Each bank is 32-bit and 32
+> > lines, with extra mask/enable registers, so arm,pl061 must not be used
+> > as a fallback compatible.
+>
+> What has this got in common with the pl061 beyond using the PrimeCell
+> bus? Current reason for putting them together is a bit tenuous to me.
 
-> > Linus Walleij (9):
-> >       ARM: dts: ux500: Make panel regulators have unique names
-> >       ARM: dts: ux500: Harmonize GPIO key names
-> >       ARM: dts: ux500: Add the Imagis ISA to Janice DTS
-> >       ARM: dts: ux500: Add the Imagis ISA to Gavini DTS
-> >       ARM: dts: ux500: Add new AB8500/AB8505 regulators
-> >       ARM: dts: ux500: Fix up regulator assignments
-> >       ARM: dts: ux500: Add sound DAI provider cells
-> >       ARM: dts: ux500: Convert HREF audio to audio-graph-card2
-> >       ARM: dts: ux500: Add Samsung phone audio graphs
->
-> None of this was in next:
->
-> Days in linux-next:
-> ----------------------------------------
->  0 | +++++++++ (9)
->
-> Commits with 0 days in linux-next (9 of 9: 100.0%):
->
-> What happened?
+It was determined in early review that this is very clearly a modified
+PL061 block. The basic registers are even named the same.
+https://lore.kernel.org/linux-arm-kernel/CAD++jLk0LoOJk=3DTXin42AL3_z_7eVVk=
+vMnYr1S8090C6A_B+dQ@mail.gmail.com/
 
-I've never had any -next tree for this SoC, I always just collected
-the patches and used the SoC tree itself as testing ground as
-for most minor SoCs...
+PL061 is different and quirky and could not use gpio-mmio, while
+with these changes to gpio-regmap it can handle its pecularities
+and use a library which is a good thing on its own.
 
 Yours,
 Linus Walleij
