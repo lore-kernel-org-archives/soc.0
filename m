@@ -1,93 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC28E457E66
-	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 19:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A89338C2B8
+	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 20:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790883428; cv=none; b=eABJIY9u27NPeR2NyDlmorXdlIWqqR5enCEVDposAx3tjC5svXRKNxgoBi4+VM7dobV0zhu+GiFwwhXlEsxl977sbHR/fDacgQptrppX6aKtKPCrOacpYTasYDs2oyy4QIHUw2rP00UUglyAAPVrTslZClinVEgTcajN1rQ283E=
+	t=1790886404; cv=none; b=TVGUZYPo4yn4LeF7DHYKME8MSlxgnNmK55wSf4UerTUsQSptZkZ7kfEHTuTgVwOSU2qbpjmCspD3jQ5cCOFUdBwCxn7UF2OeHGCCosWTyh1VrxCV+IE3w9D549ygsjhz/b38YLzbeqvCysoXZojBWPhsP56aBUj1v9eCxx4vTog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790883428; c=relaxed/simple;
-	bh=qvwz9H5czi1T2bET1rcGtlq0MACGNFWYAMQiSkHpdX8=;
+	s=arc-20240116; t=1790886404; c=relaxed/simple;
+	bh=TDzyHBnvN6Az74PoI0viABsOFItZGrFL39Cl60uyHr8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nz6O7b0b7lusSWgNp3K30lL1NrNiX08ikUkdCZ2EyIatRbj73sH47R/XyDxqvw0dscMAbKYYdEtXhvIF8cEw5C+oLk+wwY2KFgTmXc2OwkRotLRqdZ0Hg0VZBMzsWrZAVYg+3VTlYjRPr6CKTYkHzLEVxfFnpDLqkXd6dOWw0oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYEkWZSG; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=XVRT37HgVxBQbG46BPgXW/XfEFMfX+HfbU+imbm48Zd12bmD+HA0ANWzhbS+BY0nlSay7hpFUeX8HRQJpfUYJfGFpX4M84vp1Al+aJE8eXpgHbM7ax5F/BZUry5Hw778E+jg2EIWU3a5jrGpyXZXAO7nCKfJqwRJ2TDhQkVYVlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSQa0Q1T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYEkWZSG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 274691F0089D
-	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 19:37:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSQa0Q1T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6261F0089B
+	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 20:26:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790883425;
-	bh=qvwz9H5czi1T2bET1rcGtlq0MACGNFWYAMQiSkHpdX8=;
+	s=k20260515; t=1790886402;
+	bh=cuZLwo8L/Pz3tHEl/pgaDbc4NC6C8bTc4OVbV4XoCzU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=OYEkWZSGIPm9u5E7vvPyKgWBtWXoYDM0EGPIKCETLZ8/uJTQU6+6fMwQSj1CEDMG9
-	 FEEP8B3Z/9kj0+e2SotAzqmeMPnIBCHDFQOFg0xrbc0jJCUxSPgWEOcUbRie4b8j5c
-	 9RR+PHZ9l26jsi2i043ZuZn3uXED1Mm6U72f7Wijc09/6J0y8vHBHdIG+USOiIeFYj
-	 WC2zyQWU2k7Jb9PHARWTCN6M6FeE34OaK28p/Q8j2R9egjckrpBv7vM0mfRN6kDiDO
-	 yqsl0jruXuftKkvxc23FjyHcIjhLyHLPY+6FKwA1j8tONQgQTIt7IgO9/dMkXJJsOc
-	 PxPefttg9aAyw==
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5ba3d90ac37so160216e87.3
-        for <soc@lists.linux.dev>; Thu, 01 Oct 2026 12:37:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBz0S9Q/K3JJOjsj5i3uk7IhDP7ERiwB7B/s0UQedLp/Kbjm+O9HvAX+DPggtUtWid1UgJ8=@lists.linux.dev
-X-Gm-Message-State: AFq9FYLxXj0u8rzTUoU1d9xZTN9KIxos3zDVjtYScoMM2ivOvYRm42LK
-	1DM39wiCHSPFdT8Luzr5W20a/8qxqexTf5IAvnyW6mEYiiWHpzCVrpl7xg82DtJDK6lF82yLFJ/
-	FemiPhrdu8uvCSskwB9DUxByEuBuRIg8=
-X-Received: by 2002:a05:6512:3a8e:b0:5ba:3db3:66d6 with SMTP id
- 2adb3069b0e04-5bb9bc3baeemr71428e87.38.1790883423882; Thu, 01 Oct 2026
- 12:37:03 -0700 (PDT)
+	b=lSQa0Q1Tmp6AnEKgZnzPKAv/nZxq4L0eN0mmIfFPzFE5VKiKhEGw64PZ7Kest0yXV
+	 RzLDkDkLeYWVXbGEQfwzqJqjYVVNGGYhRgrR4HUFdg4s+OAustLvpWFzE92VIwrb0/
+	 9ZvmBbLQfjnX+M7swxzFDVVEoTPUkJDTYRC8dlpLkW7wTbrvs35hfgqRrt1jOTyFJd
+	 oyENsUwCm/haQNacO7s9VBgPOEqYf5dFgNjh3hFEAW74RIKj7XbxuV330RPHQVL+El
+	 +Ngt2IDbG2nLQoLI4gAr4xzgufiAHYXlwgqjBnar7jYmCiPqHE3X/YbOX++L6davvF
+	 fiRa2L2zsx+rQ==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-3a87e23860cso2211961fa.0
+        for <soc@lists.linux.dev>; Thu, 01 Oct 2026 13:26:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBzK7uom4T1NnjsRBIlwx3JRPlkQIrFg/obVthQAZQH12VC+12er6FGJ6JjduWqTKlUbiLU=@lists.linux.dev
+X-Gm-Message-State: AFq9FYJE8giScGFstAsd/Ucg4LAOWhmt8axgIUVS49eVLksjBBqy6nEm
+	XZ4nUJRReROG9IqE99JHrmVDIoMuyIg+stq6cEnSjyT5KLMEYS2Rf/FVvw2ml/58vOEXWuEhL63
+	PudOkQzrrl/zzOliPqoKir99lY2s59lo=
+X-Received: by 2002:a05:651c:982:b0:3a7:83fb:a2f4 with SMTP id
+ 38308e7fff4ca-3a783fba4b6mr9981301fa.15.1790886401618; Thu, 01 Oct 2026
+ 13:26:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261001-cv75-v5-v9-0-486cc289a4b8@ambarella.com>
- <20261001-cv75-v5-v9-4-486cc289a4b8@ambarella.com> <20261001-attempt-savior-5d4a0eed4320@spud>
-In-Reply-To: <20261001-attempt-savior-5d4a0eed4320@spud>
+References: <20260918-contrib-pg-pixel10-initial-dts-v4-0-745eaca28b1a@linaro.org>
+ <20260918-contrib-pg-pixel10-initial-dts-v4-3-745eaca28b1a@linaro.org>
+In-Reply-To: <20260918-contrib-pg-pixel10-initial-dts-v4-3-745eaca28b1a@linaro.org>
 From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 1 Oct 2026 21:36:50 +0200
-X-Gmail-Original-Message-ID: <CAD++jL=tsETOFvC-AdethTdrGtet5neVanj3KyyB4EtEOpJ_Gg@mail.gmail.com>
-X-Gm-Features: AclHuK8gO_d9ZPMvc-1W1f079XpNQoWfhmnQkIh3LHrwFtzhfvV51TArzhkyp58
-Message-ID: <CAD++jL=tsETOFvC-AdethTdrGtet5neVanj3KyyB4EtEOpJ_Gg@mail.gmail.com>
-Subject: Re: [PATCH v9 04/15] dt-bindings: gpio: pl061: add Ambarella CV75 variant
-To: Conor Dooley <conor@kernel.org>
-Cc: longzhao@ambarella.com, Arnd Bergmann <arnd@arndb.de>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Jerome Brunet <jbrunet@baylibre.com>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Michael Walle <mwalle@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>, 
-	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 1 Oct 2026 22:26:27 +0200
+X-Gmail-Original-Message-ID: <CAD++jLkCXt2jPps1+X3gmT-+o_ST59GOT1Huhqx70NK1RDCExQ@mail.gmail.com>
+X-Gm-Features: AclHuK-u9udZl77wTM7_r_7heAhhugb-sGNthmiZZXg0N5M_CZnxPf-YeiEWQxc
+Message-ID: <CAD++jLkCXt2jPps1+X3gmT-+o_ST59GOT1Huhqx70NK1RDCExQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] arm64: dts: google: Add initial dts for frankel/blazer/mustang
+To: Peter Griffin <peter.griffin@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Drew Fustini <fustini@kernel.org>, Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
+	Douglas Anderson <dianders@chromium.org>, Juan Yescas <jyescas@google.com>, 
+	RD Babiera <rdbabiera@google.com>, Brian Norris <briannorris@google.com>, 
+	William McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+	linux-serial@vger.kernel.org, Brian Norris <briannorris@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 1, 2026 at 9:23=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
-> On Thu, Oct 01, 2026 at 08:40:53PM +0800, Long Zhao via B4 Relay wrote:
-> > From: Long Zhao <longzhao@ambarella.com>
-> >
-> > The CV75 GPIO banks sit on the AMBA PrimeCell bus but are not
-> > register-compatible with the ARM PL061. Each bank is 32-bit and 32
-> > lines, with extra mask/enable registers, so arm,pl061 must not be used
-> > as a fallback compatible.
+On Fri, Sep 18, 2026 at 9:05=E2=80=AFPM Peter Griffin <peter.griffin@linaro=
+.org> wrote:
+
+> From: Douglas Anderson <dianders@chromium.org>
 >
-> What has this got in common with the pl061 beyond using the PrimeCell
-> bus? Current reason for putting them together is a bit tenuous to me.
+> Add initial device trees for frankel (Pixel 10), blazer (Pixel 10
+> Pro) and mustang (Pixel 10 Pro XL). These device trees are enough to
+> boot to a serial prompt using an initramfs.
+>
+> Currently only Laguna B0 silicon found in mass production phones is
+> officially supported. Further revisions such as A0 silicon and EVT
+> devices maybe added in the future if they are useful. As of today,
+> these device trees boot fine on EVT devices with A0 silicon.
+>
+> A few things can be noted about these device trees:
+>
+> 1. They purposely choose to use the full 64-bit address and size cells
+>    for the root node and the `soc@0` node. Although I haven't tested
+>    the need for this, I presume the arguments made in
+>    commit bede7d2dc8f3 ("arm64: dts: qcom: sdm845: Increase address
+>    and size cells for soc") would apply here.
+> 2. Though it looks as if the UART is never enabled, the bootloader
+>    knows to enable the UART when the console is turned on. Baud rate
+>    is configurable in the bootloader so is never hardcoded in the
+>    device tree.
+>
+> Changes by Peter Griffin:
+>  - Remove dtbo overlay approach and add individual board dts
+>  - Update to lga-pixel-common naming like gs101-pixel-common
+>  - Reorder nodes alpha-numerically by the node name
+>  - Add ramoops reserved-memory (tested with console=3Dpstore)
+>  - Add reserved-memory for bootloader & gsa logs
+>  - Add reserved-memory for Android BootLoader ABL (used on Watchdog
+>    reset to extract boolotader logs / parse breadcrumbs / ramdump etc).
+>  - Add osc 38.4Mhz fixed-clock
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Co-developed-by: Peter Griffin <peter.griffin@linaro.org>
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> Tested-by: Brian Norris <briannorris@chromium.org>
+> Reviewed-by: Brian Norris <briannorris@chromium.org>
 
-It was determined in early review that this is very clearly a modified
-PL061 block. The basic registers are even named the same.
-https://lore.kernel.org/linux-arm-kernel/CAD++jLk0LoOJk=3DTXin42AL3_z_7eVVk=
-vMnYr1S8090C6A_B+dQ@mail.gmail.com/
-
-PL061 is different and quirky and could not use gpio-mmio, while
-with these changes to gpio-regmap it can handle its pecularities
-and use a library which is a good thing on its own.
+I think I reviewed an older version of this yesterday or
+this morning.
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
 Yours,
 Linus Walleij
