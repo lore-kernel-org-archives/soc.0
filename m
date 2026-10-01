@@ -1,118 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A89338C2B8
-	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 20:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F474C33C4;
+	Thu,  1 Oct 2026 21:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790886404; cv=none; b=TVGUZYPo4yn4LeF7DHYKME8MSlxgnNmK55wSf4UerTUsQSptZkZ7kfEHTuTgVwOSU2qbpjmCspD3jQ5cCOFUdBwCxn7UF2OeHGCCosWTyh1VrxCV+IE3w9D549ygsjhz/b38YLzbeqvCysoXZojBWPhsP56aBUj1v9eCxx4vTog=
+	t=1790889379; cv=none; b=gPMBUfFUfk5hCp34JN4pkwiW97YF60HQTV36/W64FD5psxnqNF87rsT185+N8JIQrvBSAUQ6RDN66ueS+tQCOZOSC+cpp4tEHVaARUa06D/3QzpPrm2ZoayaXZhFTXd4doDhotzYKU+So+VjQzR+D2Wy32QlqzfL5uzFNymsLAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790886404; c=relaxed/simple;
-	bh=TDzyHBnvN6Az74PoI0viABsOFItZGrFL39Cl60uyHr8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XVRT37HgVxBQbG46BPgXW/XfEFMfX+HfbU+imbm48Zd12bmD+HA0ANWzhbS+BY0nlSay7hpFUeX8HRQJpfUYJfGFpX4M84vp1Al+aJE8eXpgHbM7ax5F/BZUry5Hw778E+jg2EIWU3a5jrGpyXZXAO7nCKfJqwRJ2TDhQkVYVlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSQa0Q1T; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790889379; c=relaxed/simple;
+	bh=j3tZSe6EjWvLL4etfciKqeLMj4yhwYHePqQZXrAv+es=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OpeviNuzI4POAtAoUfcNAT2AYtXsB52ylsS+LjfZ772RnRtMpYmWe7Gf8juluIbYgTxS9mwzZwJAvr5VISACgPUOdIvAcXMyG08RmLn1PL3lpDymLZKpCg3Y16CcFXYEXs9OS9JUb7CD3hjGnckKSS6edAcjG2Wp7v+3y6HhqnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+jof2y/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSQa0Q1T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6261F0089B
-	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 20:26:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+jof2y/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924FB1F000FF;
+	Thu,  1 Oct 2026 21:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790886402;
-	bh=cuZLwo8L/Pz3tHEl/pgaDbc4NC6C8bTc4OVbV4XoCzU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=lSQa0Q1Tmp6AnEKgZnzPKAv/nZxq4L0eN0mmIfFPzFE5VKiKhEGw64PZ7Kest0yXV
-	 RzLDkDkLeYWVXbGEQfwzqJqjYVVNGGYhRgrR4HUFdg4s+OAustLvpWFzE92VIwrb0/
-	 9ZvmBbLQfjnX+M7swxzFDVVEoTPUkJDTYRC8dlpLkW7wTbrvs35hfgqRrt1jOTyFJd
-	 oyENsUwCm/haQNacO7s9VBgPOEqYf5dFgNjh3hFEAW74RIKj7XbxuV330RPHQVL+El
-	 +Ngt2IDbG2nLQoLI4gAr4xzgufiAHYXlwgqjBnar7jYmCiPqHE3X/YbOX++L6davvF
-	 fiRa2L2zsx+rQ==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-3a87e23860cso2211961fa.0
-        for <soc@lists.linux.dev>; Thu, 01 Oct 2026 13:26:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzK7uom4T1NnjsRBIlwx3JRPlkQIrFg/obVthQAZQH12VC+12er6FGJ6JjduWqTKlUbiLU=@lists.linux.dev
-X-Gm-Message-State: AFq9FYJE8giScGFstAsd/Ucg4LAOWhmt8axgIUVS49eVLksjBBqy6nEm
-	XZ4nUJRReROG9IqE99JHrmVDIoMuyIg+stq6cEnSjyT5KLMEYS2Rf/FVvw2ml/58vOEXWuEhL63
-	PudOkQzrrl/zzOliPqoKir99lY2s59lo=
-X-Received: by 2002:a05:651c:982:b0:3a7:83fb:a2f4 with SMTP id
- 38308e7fff4ca-3a783fba4b6mr9981301fa.15.1790886401618; Thu, 01 Oct 2026
- 13:26:41 -0700 (PDT)
+	s=k20260515; t=1790889368;
+	bh=j3tZSe6EjWvLL4etfciKqeLMj4yhwYHePqQZXrAv+es=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=P+jof2y/i9vG8bCW/VDqxjV0fYlsPcFcvV28SPkTi5EJkbAwebXlyhwbk/MQ368pc
+	 rdm8EYPgjhCtlAZJs+7OoyURvkpvTWYf0ZfXp/jnS9jZ3s4Y2Fewt00mMzHcQ5VguI
+	 7RvKWaUmQzXZBW/5JrzHPjcFhjVnANeuN260qA5Go4yg3zxY7w7j0IDgr3mgnUOO6Y
+	 GnY7M1Z7c17LDioDVv3RS0hpTYkR1+Neb4KRV4RwLnQqDDjnU29kwFjoJjx76cK42i
+	 7CDncrEAwGN+7bD0jTKHlNIdDigTs+QFArBhFGJjTbFUmE3GpONC/CHQarPyJYhOO8
+	 mcUX60w2LtQKg==
+Date: Thu, 1 Oct 2026 22:16:01 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Linus Walleij <linusw@kernel.org>
+Cc: longzhao@ambarella.com, Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Michael Walle <mwalle@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>,
+	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 04/15] dt-bindings: gpio: pl061: add Ambarella CV75
+ variant
+Message-ID: <20261001-snuggle-flying-e7180d4ac1e8@spud>
+References: <20261001-cv75-v5-v9-0-486cc289a4b8@ambarella.com>
+ <20261001-cv75-v5-v9-4-486cc289a4b8@ambarella.com>
+ <20261001-attempt-savior-5d4a0eed4320@spud>
+ <CAD++jL=tsETOFvC-AdethTdrGtet5neVanj3KyyB4EtEOpJ_Gg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260918-contrib-pg-pixel10-initial-dts-v4-0-745eaca28b1a@linaro.org>
- <20260918-contrib-pg-pixel10-initial-dts-v4-3-745eaca28b1a@linaro.org>
-In-Reply-To: <20260918-contrib-pg-pixel10-initial-dts-v4-3-745eaca28b1a@linaro.org>
-From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 1 Oct 2026 22:26:27 +0200
-X-Gmail-Original-Message-ID: <CAD++jLkCXt2jPps1+X3gmT-+o_ST59GOT1Huhqx70NK1RDCExQ@mail.gmail.com>
-X-Gm-Features: AclHuK-u9udZl77wTM7_r_7heAhhugb-sGNthmiZZXg0N5M_CZnxPf-YeiEWQxc
-Message-ID: <CAD++jLkCXt2jPps1+X3gmT-+o_ST59GOT1Huhqx70NK1RDCExQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] arm64: dts: google: Add initial dts for frankel/blazer/mustang
-To: Peter Griffin <peter.griffin@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Drew Fustini <fustini@kernel.org>, Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
-	Douglas Anderson <dianders@chromium.org>, Juan Yescas <jyescas@google.com>, 
-	RD Babiera <rdbabiera@google.com>, Brian Norris <briannorris@google.com>, 
-	William McVicker <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-serial@vger.kernel.org, Brian Norris <briannorris@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1WD25rPQ8gIjRFJm"
+Content-Disposition: inline
+In-Reply-To: <CAD++jL=tsETOFvC-AdethTdrGtet5neVanj3KyyB4EtEOpJ_Gg@mail.gmail.com>
+
+--1WD25rPQ8gIjRFJm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 18, 2026 at 9:05=E2=80=AFPM Peter Griffin <peter.griffin@linaro=
-.org> wrote:
+On Thu, Oct 01, 2026 at 09:36:50PM +0200, Linus Walleij wrote:
+> On Thu, Oct 1, 2026 at 9:23=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
+ote:
+> > On Thu, Oct 01, 2026 at 08:40:53PM +0800, Long Zhao via B4 Relay wrote:
+> > > From: Long Zhao <longzhao@ambarella.com>
+> > >
+> > > The CV75 GPIO banks sit on the AMBA PrimeCell bus but are not
+> > > register-compatible with the ARM PL061. Each bank is 32-bit and 32
+> > > lines, with extra mask/enable registers, so arm,pl061 must not be used
+> > > as a fallback compatible.
+> >
+> > What has this got in common with the pl061 beyond using the PrimeCell
+> > bus? Current reason for putting them together is a bit tenuous to me.
+>=20
+> It was determined in early review that this is very clearly a modified
+> PL061 block. The basic registers are even named the same.
+> https://lore.kernel.org/linux-arm-kernel/CAD++jLk0LoOJk=3DTXin42AL3_z_7eV=
+VkvMnYr1S8090C6A_B+dQ@mail.gmail.com/
 
-> From: Douglas Anderson <dianders@chromium.org>
->
-> Add initial device trees for frankel (Pixel 10), blazer (Pixel 10
-> Pro) and mustang (Pixel 10 Pro XL). These device trees are enough to
-> boot to a serial prompt using an initramfs.
->
-> Currently only Laguna B0 silicon found in mass production phones is
-> officially supported. Further revisions such as A0 silicon and EVT
-> devices maybe added in the future if they are useful. As of today,
-> these device trees boot fine on EVT devices with A0 silicon.
->
-> A few things can be noted about these device trees:
->
-> 1. They purposely choose to use the full 64-bit address and size cells
->    for the root node and the `soc@0` node. Although I haven't tested
->    the need for this, I presume the arguments made in
->    commit bede7d2dc8f3 ("arm64: dts: qcom: sdm845: Increase address
->    and size cells for soc") would apply here.
-> 2. Though it looks as if the UART is never enabled, the bootloader
->    knows to enable the UART when the console is turned on. Baud rate
->    is configurable in the bootloader so is never hardcoded in the
->    device tree.
->
-> Changes by Peter Griffin:
->  - Remove dtbo overlay approach and add individual board dts
->  - Update to lga-pixel-common naming like gs101-pixel-common
->  - Reorder nodes alpha-numerically by the node name
->  - Add ramoops reserved-memory (tested with console=3Dpstore)
->  - Add reserved-memory for bootloader & gsa logs
->  - Add reserved-memory for Android BootLoader ABL (used on Watchdog
->    reset to extract boolotader logs / parse breadcrumbs / ramdump etc).
->  - Add osc 38.4Mhz fixed-clock
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> Co-developed-by: Peter Griffin <peter.griffin@linaro.org>
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> Tested-by: Brian Norris <briannorris@chromium.org>
-> Reviewed-by: Brian Norris <briannorris@chromium.org>
+Right. I think that'd be good to have in the commit message, because as
+an outsider reading this it sounds like it could well be an entirely
+different device.
 
-I think I reviewed an older version of this yesterday or
-this morning.
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+With that explanation,
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+but as things stand,
+pw-bot: changes-requested
 
-Yours,
-Linus Walleij
+Thanks,
+Conor.
+
+>=20
+> PL061 is different and quirky and could not use gpio-mmio, while
+> with these changes to gpio-regmap it can handle its pecularities
+> and use a library which is a good thing on its own.
+>=20
+> Yours,
+> Linus Walleij
+
+--1WD25rPQ8gIjRFJm
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCar7NkQAKCRB4tDGHoIJi
+0iH7AQC+o17BgBwJe3k2EAZcRXfzE2tgNWgAPkP28V9wBeNGDwD/UAU1TinKSygv
+MtUtKTvPb1iV01w1PpMHV1VZJCr5NA8=
+=TwJs
+-----END PGP SIGNATURE-----
+
+--1WD25rPQ8gIjRFJm--
