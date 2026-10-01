@@ -1,71 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01A13F8893
-	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 10:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F713B27D8;
+	Thu,  1 Oct 2026 11:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790851966; cv=none; b=QLDjolkiqJb05uwTpWIngQ3b7Nn1wHhSzpcQaFyvE0xybXaE9YWtEkNCesihu0sqgFA+6V0FgeTgoRMg/ya9vHXg890cH3Au5REBbn7fZsSi0KUS1iJOeBtgOHaTSVhZ4a9tg8Bzm2Ni13tETC305GoUaCx0GLGwocrmHIrodNY=
+	t=1790854975; cv=none; b=PxBiCC/+JGIioiMbzYUX3734By5+/j5QboaCNnHEW++ILL0yvhkyVC0zvT5xmNEjDDiXxUKFPq3E8lK8kBRnUCm6ezdf3qUvI+aPZHjl7XTWXB+3TmFBpp9GziwSv3iXHilIt1H7wEenpCdaWD5pPyRocCayPuSsZQ66tnz4n6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790851966; c=relaxed/simple;
-	bh=780ay/rPZSN3NbrBW3TTFXkcQj7FwFJFVcYCj/QF0XY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iFs4B+Sys4qRBE0jAw2mL84IlqE9WZOvyygaOYgT62I84OlRs8NgO82gZP9Klw25m42q5XzT8G3Q6HFD/AJBck7L0cs62fy8PIZGDigv+lJuboSB9wOMjuUJ9axBe3Xtk3uJmCrYvf0OdW8RjIBChDH9psRwKOlfNjYqeefSMfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1A+EKm2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790854975; c=relaxed/simple;
+	bh=/ZEMQHkWmcKgXb9n9tm3zJMbwbpKg2VRquvky9560/Y=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=jo7KLBV5HrSUBp4TZwaCW85+/NM3dQ2U6VBifF+t11PcjRpVXFuHV8wVLooWPcGJFQMEKOtIn5PTqaIB+E7izzc5IP1q01ttVSV1SJMxT41IxAZDZ0b4ZACtxZbI9KIinhnTvxROhjs2bUXSaO2scoHopbArgVwdtisGgUTI1VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7bGx+9Y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1A+EKm2"
-Received: by smtp.kernel.org (Postfix)
-	id E425D1F00899; Thu,  1 Oct 2026 10:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDE61F000FF;
-	Thu,  1 Oct 2026 10:52:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7bGx+9Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EED1F00898;
+	Thu,  1 Oct 2026 11:42:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790851964;
-	bh=5v+zWwwJPJ+6upaLSj7GZeordEUySthm51XOvMAy040=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=O1A+EKm20eeiMQW5rVeHqHTUdrdzjgpqeAM2j6LLSTlsFSr2nqsw188zHDCXLytcC
-	 qn5EmGljjmkKXFg+RI31wTMHavfCkKvhK5OgrDAXpCPewd6zb85JN4yrrf4nLdLFkM
-	 377C1qhlPR3t61itb6HDJT/HG5O2Uhxg0vzMrn87RepV42GPp7m37vVixuUeGcQg4C
-	 xZg5Ywct6UDJERvP+k9+fuAUg/IeiADWYb/8K13CCzbTT0BVapHxO51noeJZkemmKh
-	 s1qw2gLU/9jmSqbT66teOHHfDvShWIFbysmxEZaeZxOXY74Yzz4Ti/a2iXMScEQ8Ep
-	 9O8obJOPgS9tw==
-Date: Thu, 1 Oct 2026 12:52:41 +0200
+	s=k20260515; t=1790854974;
+	bh=ezo9AABzihn8v9w+EzLT2Oqew0alnRrS/G6JzrXB5K0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=Z7bGx+9YjwQE9mmx5xOfDrWwbuyPcSv80D+JAIMF/rbGp+AAKEwfzI+EPb7nQsdJK
+	 pK0KmwY+OHTVp2I1huCwyQFIXyUXy3IbfwBL6c/P089Bn46pBhVyEYJ5Gfcu1jV1Tp
+	 Vj0QjTMV7Nwb8S6ea+60PhwGOA1LattBvoasIP7H7WZ13C1P/lk2Ydbhk5jyPA/yzM
+	 uttRxmd8TJSFcv9+pQhG+RZrCrHq51nRqfqnuyefDqHLe4qN+xucigLvVBd05DwTRW
+	 e2pjwmZJgo089MtmhNI+1kqpYx5e3KGU28SBQWzwq9A6Beg3t/x2///mazUmVJV+Kj
+	 aE03LVf3B+8ag==
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: soc@lists.linux.dev, soc <soc@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [GIT PULL 3/3] Renesas DTS updates for v7.4
-Message-ID: <20261001-relaxed-annoying-swine-56f50e@quoll>
-References: <cover.1789722868.git.geert+renesas@glider.be>
- <cover.1789722875.git.geert+renesas@glider.be>
+To: =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>, 
+ Ridham Khurana <khurana.ridham222@gmail.com>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
+ Shuah Khan <shuah@kernel.org>, Jori Koolstra <jkoolstra@xs4all.nl>, 
+ Brigham Campbell <me@brighamcampbell.com>, 
+ linux-kernel-mentees@lists.linux.dev
+In-Reply-To: <20260921204204.797294-1-khurana.ridham222@gmail.com>
+References: <20260921204204.797294-1-khurana.ridham222@gmail.com>
+Subject: Re: [PATCH RESEND] platform: cznic: turris-omnia-mcu: Add missing
+ MODULE_DEVICE_TABLE()
+Message-Id: <179085497050.480978.17953690152528059792.b4-ty@b4>
+Date: Thu, 01 Oct 2026 13:42:50 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1789722875.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.16.0
 
-On Fri, Sep 18, 2026 at 11:37:05AM +0200, Geert Uytterhoeven wrote:
-> The following changes since commit 8dc2615d5702059b2b71fca6f93c0d7d10ae54cb:
-> 
->   arm64: dts: renesas: r8a779f0: Set UFS lane count (2026-09-14 10:07:09 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v7.4-tag1
-> 
-> for you to fetch changes up to b43aa6a6ebe8ca8bdd75ee688e1eb2d0d16a888e:
-> 
->   arm64: dts: renesas: r8a779f0: Add GICv3 ITS and update PCIe nodes (2026-09-15 10:46:16 +0200)
-> 
-> ----------------------------------------------------------------
-> Renesas DTS updates for v7.4
 
-Thanks, applied
+On Mon, 21 Sep 2026 20:41:47 +0000, Ridham Khurana wrote:
+> The driver wires of_omnia_mcu_match into the i2c_driver's
+> .of_match_table but never exports it with MODULE_DEVICE_TABLE(), so no
+> module alias is generated and the module is not autoloaded when the MCU
+> is probed from the device tree.
+> 
+> Found by code inspection. Not tested on the hardware itself; with the
+> module built, the alias lookup
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] platform: cznic: turris-omnia-mcu: Add missing MODULE_DEVICE_TABLE()
+      https://git.kernel.org/soc/soc/c/59797443846bc2451c35816026bbb79d281c9f23
 
 Best regards,
-Krzysztof
+-- 
+Krzysztof Kozlowski <krzk@kernel.org>
 
