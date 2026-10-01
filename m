@@ -1,73 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F713B27D8;
-	Thu,  1 Oct 2026 11:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F563B443F
+	for <soc@lists.linux.dev>; Thu,  1 Oct 2026 11:50:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790854975; cv=none; b=PxBiCC/+JGIioiMbzYUX3734By5+/j5QboaCNnHEW++ILL0yvhkyVC0zvT5xmNEjDDiXxUKFPq3E8lK8kBRnUCm6ezdf3qUvI+aPZHjl7XTWXB+3TmFBpp9GziwSv3iXHilIt1H7wEenpCdaWD5pPyRocCayPuSsZQ66tnz4n6k=
+	t=1790855463; cv=none; b=LYIZ+aN5O3UZg5M2upeiSgyDrUqWKJ6trJ5VvOlq9d8r0iehBYYYQyufEXCQCK2tSvr90cvh3yF1KxkoHQJwTafGT/TGOBXFyQ6lRc4YDpvz663ikR0uM4GBKqVSGwNHvVba9MLvFadmfqnc7EudLtq6MxOFMInmnJF59FGdEsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790854975; c=relaxed/simple;
-	bh=/ZEMQHkWmcKgXb9n9tm3zJMbwbpKg2VRquvky9560/Y=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=jo7KLBV5HrSUBp4TZwaCW85+/NM3dQ2U6VBifF+t11PcjRpVXFuHV8wVLooWPcGJFQMEKOtIn5PTqaIB+E7izzc5IP1q01ttVSV1SJMxT41IxAZDZ0b4ZACtxZbI9KIinhnTvxROhjs2bUXSaO2scoHopbArgVwdtisGgUTI1VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7bGx+9Y; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790855463; c=relaxed/simple;
+	bh=6R8F3xd4or363gN69JaibvxR2L25WDGIdl3wlNBH4fs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D4yPHiroMJriGGr4IQD++Tg1Tsn/N7U3Jq79byOmB618BCEUJwBerlfQLnN3E21L8EunSD3LFlIr47Q+9Ge3KN2HyhcZHnVSWGrCc0XjTzfZwjgXcaegvEVdterE3C/oXadNstB88j+Gedb9XZkkATuYMJ0J0XW7N1XXPsKX5J4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hs0AK4OZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7bGx+9Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EED1F00898;
-	Thu,  1 Oct 2026 11:42:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hs0AK4OZ"
+Received: by smtp.kernel.org (Postfix)
+	id 275AE1F000FF; Thu,  1 Oct 2026 11:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44D71F00899;
+	Thu,  1 Oct 2026 11:50:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790854974;
-	bh=ezo9AABzihn8v9w+EzLT2Oqew0alnRrS/G6JzrXB5K0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=Z7bGx+9YjwQE9mmx5xOfDrWwbuyPcSv80D+JAIMF/rbGp+AAKEwfzI+EPb7nQsdJK
-	 pK0KmwY+OHTVp2I1huCwyQFIXyUXy3IbfwBL6c/P089Bn46pBhVyEYJ5Gfcu1jV1Tp
-	 Vj0QjTMV7Nwb8S6ea+60PhwGOA1LattBvoasIP7H7WZ13C1P/lk2Ydbhk5jyPA/yzM
-	 uttRxmd8TJSFcv9+pQhG+RZrCrHq51nRqfqnuyefDqHLe4qN+xucigLvVBd05DwTRW
-	 e2pjwmZJgo089MtmhNI+1kqpYx5e3KGU28SBQWzwq9A6Beg3t/x2///mazUmVJV+Kj
-	 aE03LVf3B+8ag==
+	s=k20260515; t=1790855455;
+	bh=rZYiPvtNcrffY7Ay63KQhcl5bvMLOR7QVe2mHkSjCNY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hs0AK4OZmuEBYLvLfJJltebCbczCtGNT7ZlMgjJiptd89xDI97/NcJZQSkSIrZaix
+	 Be5R5sZUuN/h7+rNflp+QleaQi7e9p6fkQ1Geg4N3MIQYneYPLvZHMLNCdeRt7jyZl
+	 jZIfvCwbcSge59pDGXHCRUScwE53ze/147sZnljgaTLMn8nj/mRxsgejCqLlKpN0lS
+	 uH6bjaVj/mxRnHT/T631DwSp9pgm4Q5AsvIsqoLvPE2x+ZEewiWYXVqpIwmhwbtoge
+	 u0cmNa9JN0JRUeRTtyxYFv2gE924XJ9i7SHnpFIlDNaJIHLIhXFbd4Twf8l1e6Dpk+
+	 w4y5jQFU9on/w==
+Date: Thu, 1 Oct 2026 13:50:50 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>, 
- Ridham Khurana <khurana.ridham222@gmail.com>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
- Shuah Khan <shuah@kernel.org>, Jori Koolstra <jkoolstra@xs4all.nl>, 
- Brigham Campbell <me@brighamcampbell.com>, 
- linux-kernel-mentees@lists.linux.dev
-In-Reply-To: <20260921204204.797294-1-khurana.ridham222@gmail.com>
-References: <20260921204204.797294-1-khurana.ridham222@gmail.com>
-Subject: Re: [PATCH RESEND] platform: cznic: turris-omnia-mcu: Add missing
- MODULE_DEVICE_TABLE()
-Message-Id: <179085497050.480978.17953690152528059792.b4-ty@b4>
-Date: Thu, 01 Oct 2026 13:42:50 +0200
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 7.4 #1
+Message-ID: <20261001-amusing-fat-parrot-a0c726@quoll>
+References: <1940582.atdPhlSkOF@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.16.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1940582.atdPhlSkOF@phil>
 
-
-On Mon, 21 Sep 2026 20:41:47 +0000, Ridham Khurana wrote:
-> The driver wires of_omnia_mcu_match into the i2c_driver's
-> .of_match_table but never exports it with MODULE_DEVICE_TABLE(), so no
-> module alias is generated and the module is not autoloaded when the MCU
-> is probed from the device tree.
+On Mon, Sep 21, 2026 at 11:44:31PM +0200, Heiko Stuebner wrote:
+> Hi soc maintainers,
 > 
-> Found by code inspection. Not tested on the hardware itself; with the
-> module built, the alias lookup
+> please find below some initial Rockchip DT64 changes for the merge-window
+> for 7.4 .
 > 
-> [...]
+> 
+> Please pull.
+> Thanks
+> Heiko
+> 
+> 
+> The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+> 
+>   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.4-rockchip-dts64-1
+> 
+> for you to fetch changes up to 7aa165b62ccaf340da22c517074e7c6853db55cd:
+> 
+>   arm64: dts: rockchip: support CAN1-CAN2-UART4 adapter for RK3588 Jaguar (2026-09-02 13:07:56 +0200)
+> 
 
-Applied, thanks!
-
-[1/1] platform: cznic: turris-omnia-mcu: Add missing MODULE_DEVICE_TABLE()
-      https://git.kernel.org/soc/soc/c/59797443846bc2451c35816026bbb79d281c9f23
+Thanks, applied
 
 Best regards,
--- 
-Krzysztof Kozlowski <krzk@kernel.org>
+Krzysztof
 
