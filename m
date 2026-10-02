@@ -1,210 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA1E468C1A;
-	Fri,  2 Oct 2026 11:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79285493649;
+	Fri,  2 Oct 2026 11:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790940541; cv=none; b=aO6JReVu6ZwHGetesLRv3pCmavr9uG1gXGtJhHkWYxTWHmNMNuhTAPa+PxCcbkqnOSZRcMV5nzAQn2CY10UbYPBjJo3GOPeW8ws3fVi9TYT3/zdK7swmB9cmXnERL96x3A7G9nl1ohK3VVElL4sFkRsjpXB2mZ89IeQWkT+w8R0=
+	t=1790942188; cv=none; b=nDdeLalT3XzuV9B9g4iMQC9+pvKkyvQjpO7fNgaQ6RJswYStBK8ZsyiCPEDeGykKERRe5RJOvFS2LL9ZLgtVjmosFzeMNYuyE6TRftXsk3iHtDzyn+YOS3J258DbJrs+UAa9cXgS5kXuSAf7CDVhjPaQ5Ju1K2O+JzaCGgfZfe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790940541; c=relaxed/simple;
-	bh=zdenfoRb2D0ai0YJahFZ4Y7aiO0/hzaDiFgJBhc+Qe8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l45qZUxAQ6iUejIDaJm11mCDWBggWk7waYCY3VvZ1pqA3LEpEHbuVohL+PaAzYny258GG++ma5LRkUuRgjqnctENpeqMWma8ueWZmPEft+nKyfxjOAlJ/Yp58b74VmyQjB9sPTJ8JMqrhhUt6aJ7LS3kSIjgPWzBANOBHk7TKtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E321F00898;
-	Fri,  2 Oct 2026 11:28:58 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 2/2] Renesas DTS updates for v7.4 (take two)
-Date: Fri,  2 Oct 2026 13:28:40 +0200
-Message-ID: <cover.1790939715.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1790939711.git.geert+renesas@glider.be>
-References: <cover.1790939711.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1790942188; c=relaxed/simple;
+	bh=jOcDRnklkMgmPm774oWtcfd9RDQ6pUOTDLH7EEg8Roo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JZwwlzgMlQP/drAzvIjCD5Dc6+Ev9eRQKW80OUAZCOfgsFSPM9DCuyPkV6hh9AZDKOUuAfb8djP7aaZrgHAp2jPXtd9U8dA1BEPUzVjUtUUrdM/zDgPXoO60YMo/OnQt1bCGQQfmZxG8fLHWp8sGiu7zIVE8H2TOStwHvwwwnq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7sbB20D; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7sbB20D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D411F000FF;
+	Fri,  2 Oct 2026 11:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790942183;
+	bh=RSfD30IZWnjtjXV8E3LRj/ELy85Jrj6EZVRalRD69XY=;
+	h=Date:From:To:Cc:Subject;
+	b=k7sbB20DiCj/wEmd/29BfuuG7B3+MUE82l1fDO1J1tUCZalPDtPKgp7W0NaOKquu8
+	 ejfzORcEPiNeP3BdkEzxDHF5uLjESHWfwarla1R4lFyLwEwjdsNNM2PWlp17h+y3hh
+	 MEjqw5KclBZIRnn0zyq8pDC2nT2HJrzGxSdxOvY6NL4BmgISfZbXgh/84V46FwGcr5
+	 +mKvcWEH8KVZr3l/HEGo8zo1IDs6ON/g+NZUzrxKKKvQs9K/N4KA650yJdxTfLiW9Y
+	 J6nB/rpPC2BfSVm7GXrDmFHcKupy8W12lsSDEVf7wBNRSr3km6qi2ojH602ylZVYaH
+	 QNuHILfyQDw+A==
+Date: Fri, 2 Oct 2026 12:56:19 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Mehmet Fide <mehmet.fide@screeningeagle.com>, soc@lists.linux.dev
+Subject: linux-next: manual merge of the imx-mxs tree with the arm-soc tree
+Message-ID: <ar-b43IGJLSB4an2@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7zVcKFgh5qLTfFge"
+Content-Disposition: inline
 
-The following changes since commit b43aa6a6ebe8ca8bdd75ee688e1eb2d0d16a888e:
 
-  arm64: dts: renesas: r8a779f0: Add GICv3 ITS and update PCIe nodes (2026-09-15 10:46:16 +0200)
+--7zVcKFgh5qLTfFge
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+Hi all,
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v7.4-tag2
+Today's linux-next merge of the imx-mxs tree got a conflict in:
 
-for you to fetch changes up to d99e991749f3b12a3a8b23224725dbc1ca15f6bf:
+  arch/arm/boot/dts/nxp/vf/Makefile
 
-  arm64: dts: renesas: Add support for solidrun rzg2ul som on hb-ripple (2026-10-02 11:59:02 +0200)
+between commit:
 
-----------------------------------------------------------------
-Renesas DTS updates for v7.4 (take two)
+  2e1031df3c5f6 ("ARM: imx: remove nommu support")
 
-  - Add PCIe support for the RZ/G3L SoC,
-  - Add ADC DMA support for the RZ/T2H and RZ/N2H SoCs,
-  - Add initial support for the RZ/G2M v3.0 SoC and the HopeRun HiHope
-    RZ/G2M v3.0 board stack,
-  - Add USB support for the RZ/G3E SoC and the RZ/G3E SMARC EVK board,
-  - Add SPI (MSIOF) and I2C support for the R-Car X5H SoC,
-  - Add support for various SolidRun boards based on RZ/G2L, RZ/G2LC,
-    RZ/V2L, and RZ/G2UL,
-  - Miscellaneous fixes and improvements.
+=66rom the arm-soc tree and commit:
 
-Note that this includes DT binding definitions and updates for the
-RZ/G2M v3.0 and R-Car X5H SoCs, which are shared by the clock and
-pmdomain subsystems and DT source files.
+  c90f5f176da7f ("ARM: dts: vf: add Iris carrier board support for Colibri =
+VF50 and VF61")
 
-Thanks for pulling!
+=66rom the imx-mxs tree.
 
-----------------------------------------------------------------
-Anurag Pateriya (1):
-      dt-bindings: power: qcom,rpmhpd: Add NMXC power domain index
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Ayman Chaudhry (6):
-      dt-bindings: power: renesas,rcar-sysc: Document vendor-prefixed header paths
-      dt-bindings: power: Add r8a774a3 SYSC power domain definitions
-      dt-bindings: clock: Add r8a774a3 CPG Core Clock definitions
-      arm64: dts: renesas: Add initial SoC DTSI for RZ/G2M v3.0
-      arm64: dts: renesas: Add HiHope RZ/G2M v3.0 SoC main board support
-      arm64: dts: renesas: Add HiHope RZ/G2M v3.0 SoC sub board support
+diff --cc arch/arm/boot/dts/nxp/vf/Makefile
+index 1733506c0c725,47be8bc318e28..0000000000000
+--- a/arch/arm/boot/dts/nxp/vf/Makefile
++++ b/arch/arm/boot/dts/nxp/vf/Makefile
+@@@ -1,9 -1,13 +1,11 @@@
+  # SPDX-License-Identifier: GPL-2.0
+  dtb-$(CONFIG_SOC_VF610) +=3D \
+  	vf500-colibri-eval-v3.dtb \
++ 	vf500-colibri-iris.dtb \
+  	vf610-bk4.dtb \
+  	vf610-colibri-eval-v3.dtb \
++ 	vf610-colibri-iris.dtb \
+ -	vf610m4-colibri.dtb \
+  	vf610-cosmic.dtb \
+ -	vf610m4-cosmic.dtb \
+  	vf610-twr.dtb \
+  	vf610-zii-cfu1.dtb \
+  	vf610-zii-dev-rev-b.dtb \
 
-Biju Das (1):
-      arm64: dts: renesas: r9a08g046: Add PCIe support
+--7zVcKFgh5qLTfFge
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Cosmin Tanislav (2):
-      arm64: dts: renesas: r9a09g077: Wire up DMA support for ADC
-      arm64: dts: renesas: r9a09g087: Wire up DMA support for ADC
+-----BEGIN PGP SIGNATURE-----
 
-Geert Uytterhoeven (5):
-      Merge tag 'renesas-r8a774a3-dt-binding-defs-tag1' into renesas-dts-for-v7.4
-      Merge branch 'dt' of git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm into renesas-dts-for-v7.4
-      dt-bindings: clock: renesas,r8a78000-cpg: Add MSIOF clocks
-      Merge tag 'renesas-r8a78000-dt-binding-defs-tag3' into renesas-dts-for-v7.4
-      arm64: dts: renesas: r8a78000: Add MSIOF nodes
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmq/m9EACgkQJNaLcl1U
+h9BJlQf/TMX3BzXaecgi/O3zpBkQx2ZpOuoGYtc7QfWMT5vr9rqlbsnpmhmeiZvh
+49RYjbiULuS9L3iNzx8l6YoMK45M4NwfE4lxb5KvIP8x9UhLG6RJY6uyGL2tBret
+roGgT49fUT91x+1Df0/J5bFXd9kbXD0yAnos/pJ2whyUJq1bsRE4GkHIbm8tMJZX
+JZxIbg8604tYm3IK3rvpTwpGCV0TEtTp0eMwh4t08wsQ+zl4HymMTy6OAjLlLmq7
+5w6dqnJaczbXE8ffFeDwZ5kyFo+IALPtIkRW1kOQBKkeTbIhsjv1Hups/hEmD5EX
++X2oTa5RtoDfACScbp8obVRJw6RmnQ==
+=X8t/
+-----END PGP SIGNATURE-----
 
-Hardeep Sharma (1):
-      dt-bindings: power: rpmpd: Document Kuno RPMh power domains
-
-Joshua Yeong (1):
-      dt-bindings: power: Add RPMI device power service
-
-Josua Mayer (9):
-      dt-bindings: soc: renesas: Add various SolidRun RZ/G2 based boards
-      arm64: dts: renesas: Add support for solidrun rzg2l som and hb-iiot evb
-      arm64: dts: renesas: Add support for solidrun rzv2l som and hb-iiot evb
-      arm64: dts: renesas: Add support for solidrun rzg2lc som and hb-iiot evb
-      arm64: dts: renesas: rzg2l(c)/rzv2l hb-iiot: Add dsi panel dt overlay
-      arm64: dts: renesas: Add support for solidrun hb-ripple with rzg2l som
-      arm64: dts: renesas: Add support for solidrun hb-ripple with rzv2l som
-      arm64: dts: renesas: Add support for solidrun hb-ripple with rzg2lc som
-      arm64: dts: renesas: Add support for solidrun rzg2ul som on hb-ripple
-
-Lad Prabhakar (2):
-      arm64: dts: renesas: r9a09g077: Drop unwired ADC interrupts
-      arm64: dts: renesas: r9a09g087: Drop unwired ADC interrupts
-
-Marek Vasut (4):
-      arm64: dts: renesas: ironhide: Align inline ECC carveout sizes with bootloader settings
-      arm64: dts: renesas: r8a779f0: Add PCIe Application/Local register reset
-      arm64: dts: renesas: r8a779g0: Add PCIe Application/Local register reset
-      arm64: dts: renesas: r8a779h0: Add PCIe Application/Local register reset
-
-Sreeshankar K (1):
-      dt-bindings: power: qcom,rpmhpd: Document RPMh power domain for SM7250
-
-Tommaso Merciai (3):
-      arm64: dts: renesas: r9a08g046: Add USB2.0 placeholder nodes
-      arm64: dts: renesas: r9a09g047: Add USB2.0 support
-      arm64: dts: renesas: r9a09g047e57-smarc: Enable USB2.0 support
-
-Wolfram Sang (1):
-      arm64: dts: renesas: r8a78000: Add I2C nodes
-
- .../devicetree/bindings/power/qcom,rpmpd.yaml      |   2 +
- .../bindings/power/renesas,rcar-sysc.yaml          |   7 +-
- .../bindings/power/riscv,rpmi-device-power.yaml    |  65 +++
- .../power/riscv,rpmi-mpxy-device-power.yaml        |  65 +++
- .../devicetree/bindings/soc/renesas/renesas.yaml   |  37 ++
- arch/arm64/boot/dts/renesas/Makefile               |  76 ++-
- .../boot/dts/renesas/r8a774a3-hihope-rzg2m-ex.dts  |  14 +
- .../boot/dts/renesas/r8a774a3-hihope-rzg2m.dts     |  49 ++
- arch/arm64/boot/dts/renesas/r8a774a3.dtsi          | 302 +++++++++++
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi          |  16 +-
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          |  16 +-
- arch/arm64/boot/dts/renesas/r8a779h0.dtsi          |   8 +-
- arch/arm64/boot/dts/renesas/r8a78000-ironhide.dts  |  12 +-
- arch/arm64/boot/dts/renesas/r8a78000.dtsi          | 216 ++++++++
- .../renesas/r9a07g043u12-hummingboard-ripple.dts   |  89 ++++
- .../dts/renesas/r9a07g044c2-hummingboard-iiot.dts  |  20 +
- .../renesas/r9a07g044c2-hummingboard-ripple.dts    |  93 ++++
- .../dts/renesas/r9a07g044l2-hummingboard-iiot.dts  |  16 +
- .../renesas/r9a07g044l2-hummingboard-ripple.dts    |  18 +
- .../dts/renesas/r9a07g054l2-hummingboard-iiot.dts  |  16 +
- .../renesas/r9a07g054l2-hummingboard-ripple.dts    |  18 +
- arch/arm64/boot/dts/renesas/r9a08g046.dtsi         |  70 ++-
- arch/arm64/boot/dts/renesas/r9a08g046l48-smarc.dts |  36 ++
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi         | 124 +++++
- arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts |  31 ++
- arch/arm64/boot/dts/renesas/r9a09g077.dtsi         |  24 +-
- arch/arm64/boot/dts/renesas/r9a09g087.dtsi         |  24 +-
- arch/arm64/boot/dts/renesas/renesas-smarc2.dtsi    |  25 +
- .../renesas/rzg2l-hummingboard-iiot-common.dtsi    | 560 +++++++++++++++++++++
- .../renesas/rzg2l-hummingboard-iiot-microsd.dtso   |  26 +
- ...hummingboard-iiot-panel-dsi-WJ70N3TYJHMNG0.dtso |  79 +++
- .../renesas/rzg2l-hummingboard-iiot-rs485-a.dtso   |  17 +
- .../renesas/rzg2l-hummingboard-iiot-rs485-b.dtso   |  17 +
- .../boot/dts/renesas/rzg2l-hummingboard-iiot.dtsi  |  49 ++
- .../renesas/rzg2l-hummingboard-pulse-common.dtsi   | 116 +++++
- .../rzg2l-hummingboard-pulse-micro-hdmi.dtsi       |  79 +++
- .../dts/renesas/rzg2l-hummingboard-ripple.dtsi     | 122 +++++
- arch/arm64/boot/dts/renesas/rzg2l-sr-som-emmc.dtso |  44 ++
- arch/arm64/boot/dts/renesas/rzg2l-sr-som.dtsi      | 473 +++++++++++++++++
- .../renesas/rzg2lc-hummingboard-pulse-leds.dtso    |  48 ++
- arch/arm64/boot/dts/renesas/rzg2lc-sr-som.dtsi     | 436 ++++++++++++++++
- .../renesas/rzg2ul-hummingboard-pulse-leds.dtso    |  48 ++
- arch/arm64/boot/dts/renesas/rzg2ul-sr-som.dtsi     | 418 +++++++++++++++
- arch/arm64/boot/dts/renesas/rzg3l-smarc-som.dtsi   |  11 +
- .../dt-bindings/clock/renesas,r8a774a3-cpg-mssr.h  |  59 +++
- include/dt-bindings/clock/renesas,r8a78000-cpg.h   |   2 +
- include/dt-bindings/power/qcom,rpmhpd.h            |   1 +
- include/dt-bindings/power/renesas,r8a774a3-sysc.h  |  30 ++
- 48 files changed, 4069 insertions(+), 55 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/riscv,rpmi-device-power.yaml
- create mode 100644 Documentation/devicetree/bindings/power/riscv,rpmi-mpxy-device-power.yaml
- create mode 100644 arch/arm64/boot/dts/renesas/r8a774a3-hihope-rzg2m-ex.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a774a3-hihope-rzg2m.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a774a3.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g043u12-hummingboard-ripple.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044c2-hummingboard-iiot.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044c2-hummingboard-ripple.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l2-hummingboard-iiot.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l2-hummingboard-ripple.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g054l2-hummingboard-iiot.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g054l2-hummingboard-ripple.dts
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-iiot-common.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-iiot-microsd.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-iiot-panel-dsi-WJ70N3TYJHMNG0.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-iiot-rs485-a.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-iiot-rs485-b.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-iiot.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-pulse-common.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-pulse-micro-hdmi.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-hummingboard-ripple.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-sr-som-emmc.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2l-sr-som.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2lc-hummingboard-pulse-leds.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2lc-sr-som.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2ul-hummingboard-pulse-leds.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rzg2ul-sr-som.dtsi
- create mode 100644 include/dt-bindings/clock/renesas,r8a774a3-cpg-mssr.h
- create mode 100644 include/dt-bindings/power/renesas,r8a774a3-sysc.h
+--7zVcKFgh5qLTfFge--
