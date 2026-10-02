@@ -1,98 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CD44718C1;
-	Fri,  2 Oct 2026 09:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA18C48C3FA;
+	Fri,  2 Oct 2026 11:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790932966; cv=none; b=RzztBvDjDipPHWbHKy12RTPwVEu99boaYNvaHWAcJeS9MoTKLQy3NvFgCqwF1eYMr+ZuXZRLPTy/qsWXjYKwZtknDdDmePXpIIeEC0oAMf+10qSWp8COHOaK4JAWNME+hSfgq+MafeS+dH3HKlWdJZVY3dqrN9rfDN0G9AGa288=
+	t=1790940533; cv=none; b=px3prmS3QQqR3qjBV4vZitx8OLmOT65Meww7BQWKzjpruovOneIqedRjfS32Famiexwtrepjdw0zqNGA+ApQY/OkZNKZK3egLEi5MIZIU8LPQzN+OVqcDtv/AnjjiptjWTDYUSqXYTckhvMvLb+hA87/4oHs85GJI1ulCA5GQH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790932966; c=relaxed/simple;
-	bh=fjiLNweLxwmozP439aS0ZNu1H6FrPKQa3Ai1bKR9ZlE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hRSkOlQiKdBpMmIPWz+Ej6BdPlu9z4jFB+WazOQFl5ZCmPhEpzxaR19ENpvSnCWdSSb25OD0aFXwzFfXDdZUjZKUej9jVCoqr3pN2N1vhWmOLh8YuiRep5s2mMrXEMl2ELSI6bfhD1OHcXlmNWe63rdjuO2DA4v6GIvYM+mgYfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LdRYyhbw; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LdRYyhbw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790932965; x=1822468965;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fjiLNweLxwmozP439aS0ZNu1H6FrPKQa3Ai1bKR9ZlE=;
-  b=LdRYyhbwjtEqAllMZnnUdIlQLD4P7oRusht+jqt4IF06wNlxK4NsMfwF
-   STPirGH1aRRLaY79CNcDoRuY2RgLLznJlPzctExPIzCjXsERQCuJKrbPu
-   Z0UD39/QDvqlZGb7UYX+yWmt5tBn/7om+U3G0q7sAROZ0OucrP4NQEona
-   ZWLMYJJ8NKV2WaFK61cuV5tTyy7AK8nJZv5gV7rxbmXvBweHIhDeDTiCJ
-   JdSfs/Zt7OZjuCSWiHBsyRY5CXaahEKu8MNBBSmTBijX84z4o9lxbZXkc
-   Hpe1lsNFGUHkpkaiV6o3Z4Duuw1E90kwfCtMP8+dZm6wVSnzXYMdKq+cv
-   g==;
-X-CSE-ConnectionGUID: ow5H8wKgQxWPUwF2VezaiQ==
-X-CSE-MsgGUID: A9XOwadnRdWC1Buayu9t2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="90728981"
-X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
-   d="scan'208";a="90728981"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 02:22:43 -0700
-X-CSE-ConnectionGUID: eNU2YW10T22FBc3/h+ZAhw==
-X-CSE-MsgGUID: y1/IruAGQNa1bH81g2tJsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
-   d="scan'208";a="302464580"
-Received: from conormcd-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.244.188])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 02:22:37 -0700
-Date: Fri, 2 Oct 2026 12:22:34 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: longzhao@ambarella.com
-Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Michael Walle <mwalle@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Long Zhao <zl020895@163.com>,
-	Lee Jones <lee@kernel.org>, mfd@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 09/15] gpio: pl061: use IRQ_TYPE_LEVEL_MASK and
- IRQ_TYPE_EDGE_BOTH
-Message-ID: <ar932rg30_MnbRhf@ashevche-desk.local>
-References: <20261001-cv75-v5-v9-0-486cc289a4b8@ambarella.com>
- <20261001-cv75-v5-v9-9-486cc289a4b8@ambarella.com>
+	s=arc-20240116; t=1790940533; c=relaxed/simple;
+	bh=J3IYfsaAc5bEqT72C0bYBKIihCW4srsNQCWU8WiqSyE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZVOyKHyRuyi7PjCJhgK6RCfI16yYEr90TIq/WYmFYdMssn/4XapfZkfa3H7CmS3shBsi2JTb09VL6hA/p0KInSLblIPAio+CTsmaawKu0mw1g088IpDCraHV/izBIZ9bqk7IGHwYgSAf6rHL9datyN49YFs39n6CaaZ6ElrpZ0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D64621F000FF;
+	Fri,  2 Oct 2026 11:28:50 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@lists.linux.dev,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 0/2] Renesas SoC updates for v7.4 (take two)
+Date: Fri,  2 Oct 2026 13:28:38 +0200
+Message-ID: <cover.1790939711.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261001-cv75-v5-v9-9-486cc289a4b8@ambarella.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 01, 2026 at 08:40:58PM +0800, Long Zhao via B4 Relay wrote:
+	Hi SoC folks,
 
-> Use the standard IRQ_TYPE_LEVEL_MASK and IRQ_TYPE_EDGE_BOTH helpers
-> instead of open-coded edge and level comparisons.
+This is my second pull request for the inclusion of Renesas SoC updates
+for v7.4.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+It consists of two parts:
 
--- 
-With Best Regards,
-Andy Shevchenko
+  [GIT PULL 1/2] Renesas driver updates for v7.4 (take two)
 
+    - Select core functionality that will be required for proper operation
+      on RZ/G2M v3.0, RZ/G3E, and RZ/V2N.
 
+  [GIT PULL 2/2] Renesas DTS updates for v7.4 (take two)
+
+    - Add PCIe support for the RZ/G3L SoC,
+    - Add ADC DMA support for the RZ/T2H and RZ/N2H SoCs,
+    - Add initial support for the RZ/G2M v3.0 SoC and the HopeRun HiHope
+      RZ/G2M v3.0 board stack,
+    - Add USB support for the RZ/G3E SoC and the RZ/G3E SMARC EVK board,
+    - Add SPI (MSIOF) and I2C support for the R-Car X5H SoC,
+    - Add support for various SolidRun boards based on RZ/G2L, RZ/G2LC,
+      RZ/V2L, and RZ/G2UL,
+    - Miscellaneous fixes and improvements.
+
+Note that the second PR includes DT binding definitions and updates for
+the RZ/G2M v3.0 and R-Car X5H SoCs, which are shared by the clock and
+pmdomain subsystems and DT source files.
+
+Thanks for pulling!
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
