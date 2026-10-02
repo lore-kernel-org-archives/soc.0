@@ -1,383 +1,393 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF763486B87
-	for <soc@lists.linux.dev>; Fri,  2 Oct 2026 13:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE672F60B2
+	for <soc@lists.linux.dev>; Fri,  2 Oct 2026 14:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=100.103.45.18
 ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790948244; cv=fail; b=Zuu9SVS28tjA2iy77v9iauw5CQgr0q8aP94EAyQOHmi6YpYhJYY3YK3QylrJgr0vI8FXZoVEwT0aOTwK0mgrvtQ7ooQLI5VHFkhSiVOzyVRm9Ulb2h9W5v3Cb0i3WAHqZqitMvJeTNk6vjPU5ySznrBEvjBV/q4wHTKwq8Tb2ek=
+	t=1790950119; cv=fail; b=OKKLyAp8NorKONe18/TH/CpMhlcPfJYpKJCBo15J2kFoi7uajfJdZ1EdQGUl1suGra9NMcqscJnAnt6gtbrmXGuCY/REr5IYprFc5tM3vxef/y4jKg/MrW6vOaJvlMO/6LxaTUjCtYxok8qiDmj5CIZSOlHTsmuLFgdyVlzToE8=
 ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790948244; c=relaxed/simple;
-	bh=og+hkCB3QhNB7pHoF+pP8l15ZqQlaf21UOP17O8NQko=;
-	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=WwchY5j/fSpI0BqZ/pZI/phbNU2mncS5F63I2wkPf3W8uA6/NI+7iGorxs836qwtsf5bHagqHbqFeTN2lJnP947mTN1RLxmBMwnuaOxA028RbeFnOHIzqpUolcOgsgF+GmWgnGEtEcgePsB3Qv1uO9+IIox7gNP15iMI43IQouw=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=eai49ntX; arc=fail smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790950119; c=relaxed/simple;
+	bh=i1D3X8QUcI92ugrYgb9vxHDuM01421b4TEJNkUs01l0=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=W9dmMFMt80egzeEvlpQdQz4f9ylm5CH8oJxxsqI5Efj3T40ds0W5YHUXytJuMhqKqvKImigCQn/PyTW4vItXg10/lNO2xmpTnwYNDwyEkSXWdjeK1buFV2519SWDWvSivYFJjsM9RsqDzJVkhFFuIOCnraHPvPEyYWd+2c92kbk=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=dAJsw3um; arc=fail smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="eai49ntX"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="dAJsw3um"
 Received: by smtp.kernel.org (Postfix)
-	id 672391F00898; Fri,  2 Oct 2026 13:37:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.159.0
+	id 827251F00893; Fri,  2 Oct 2026 14:08:37 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.84.44
 ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
-	t=1790948241;
-	b=2HVy4uoOBQXbba8JoBlz+tPF7/Zt1oAyvUVz6flC4pAu6oikC83gMRIgBMLu8ZoEhLOq
-	 6whNyvvLoW2TOVC/Lp66858EXevBuL/sMvw2SmFToWgFyyHX1NTQr5tYqKAEpFd6C1xM+
-	 SoLe/9ljjkFfiaYb07b5+TkwPIZ+vH+inLvuGMd9fS577U9/p7pR2aJOxUmBJEAPSVtGu
-	 OdgYB2Ho2XgIJWvNVgu9hGgEoRIRN/TxR4dBUEd+3eNoUV317gs8YKwADf8WXw4S4Gs3x
-	 FZWBYSVu554badQ8FuNqQCZ12DcGGDr8L0HMnC2DFueDZ+muNb4IX9EjQq1oI/kjC9g==
+	t=1790950117;
+	b=g+M/63Z78XhUEb9d7KZEBlre7zPKIbmWJ/hEQCzc2aoeY2Jxevl0xddlTwFokXzGXMYs
+	 Y8+2tkuYMzCaLjAJdRF5QrVn91a1jH52A0HlyaQyJ61n4EOq5iciaTR6wCzakyqrgup2x
+	 5uXWi5iBhBmPZSjBzHRKLhyrKa59OlMtbJyZmkswnTGGbWBgo/C1u3HMaB5t7ylSTycGH
+	 JzzVU3SbPZpJTgBL0Vh+SsNrCtW7jsBknBwr2sEiCpgejDSsukTAlk0FBhw/LSun16rCt
+	 jHOrpb27AgvXK4l5tLKoMJCfU5vxp+KbtDsFjhBS8Q3wmMpwHB1D4mlT3qFMkOdIs4A==
 ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790948241;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Content-Language:To:
-	 CC:From:Subject:Content-Type:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy:X-EOPAttributedMessage:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	c=relaxed/relaxed; t=1790950117;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:Content-Transfer-Encoding:Content-Type:
+	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-LD-Processed:X-MS-Exchange-SenderADCheck:
 	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
 	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
 	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
 	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
 	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
 	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
 	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=MG4ZOO7mvob/hxywPQxDxFqpvK66P+W5f1TI46tMZAA=;
-	b=kOtfhWUTngoXy1cSmiBlMwY8hXh74eG0CzXllG8k8PH5nbgdMsLHvM9GP54UIhEVzPAH
-	 9+Rwj/hXGyZjlhF2w2MtJf6hxga/ws7OEFDR8x+5l4w1AGbu4KsqmVyUTgSd0G8bV+Rwe
-	 qNcPtqKCnhTAAsNlD5XLp0zb6yqrvtr2GfjKzj8ceWBAwNt71R5qtixAdwv9wN3cvchCG
-	 pB2TqwAOpGCB7rz34PTIqCIX6B+26qVx4WP7ONzto/DIecCkve2Kw4oNNbkCQxFulBU5S
-	 disv2cq0y9sxnF6ChLEKPniD6Wp+D0/fmOR1Q9xoiO0yFxncwdTS1iJzDNnuSLdASmQ==
-ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=foss.st.com header.i=@foss.st.com header.a=rsa-sha256 header.s=selector2 header.b=eai49ntX;
-	dmarc=pass header.from=foss.st.com;
-	spf=pass smtp.mailfrom=foss.st.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.159.0
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013000.outbound.protection.outlook.com [40.107.159.0])
+	bh=3Ve7VB+tMulDcN/DBYp4fI3nisHsfeD0PVMfwmCylPI=;
+	b=xflqfk8NI9BDfftlf4gTQObBNlVrreu8kJ45xyNF2Qunr/PACZftRk4fN1NGObJy10pK
+	 mEmG/er66T5vxnqHvRw3UV92Fvx8jYyR6EBQByNnhR8kiM4BprfgRfE7opoxYXsn4YTBX
+	 d3FOIE7OJsqC4ZS2DgkUh0r4naMfv3isePFAN+i1YjJauSG3L22miaxpqDpvV3B44cNPB
+	 2kDkgOWT9V3fE51/NWeFIx56xOT2KFKpGfyAiQ9gFDbgVGT7Y7S6WfgY1xtx0Jm8kYirp
+	 DspVg0xeJjVIOUAxkAvih+SzNDwawzxwBQvvL+N2rPyvnQIl3jRMt2DnWlcTmul3lMw==
+ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=dAJsw3um;
+	dmarc=pass header.from=oss.nxp.com;
+	spf=pass smtp.mailfrom=oss.nxp.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.84.44
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010044.outbound.protection.outlook.com [52.101.84.44])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 233C11F000FF;
-	Fri,  2 Oct 2026 13:37:19 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 1D90B1F000FF
+	for <soc@kernel.org>; Fri,  2 Oct 2026 14:08:35 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=foss.st.com header.i=@foss.st.com header.a=rsa-sha256 header.s=selector2 header.b=eai49ntX
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 233C11F000FF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	dkim=pass (2048-bit key, unprotected) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=dAJsw3um
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 1D90B1F000FF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Pt3tQr6RaA6hbIeBouJRxnUgChgY4sUm1xlLe2Y7O9DjPKIXSrEmOGmoENu+eIVxvNttTcIvLS7gtDBVR0dbywHrRnuHm5fFH7Zsq34mFqRkegyvQp1F2AB4lG+HgXrGJZ/44oEe17iG1kouvIJ3j6Fg/0AqNjJtOs7xEZdXIOedrT81PtZZl5mlD9ezcABobri3ypuMB+woeb5+yp0OrqTsgVEkda7023kAudfxSWsgzAAOZ0BkOzPtWgLDHBlAgWtwVMHsOXvoqwZTauJEvVBmPM2zobwm49ymXbJjsa1EWYohE4Ze6cEumfp8v6OY5motP9yjtdZ2dYRjdW2Ucg==
+ b=dFBE+phnu5jkikgZW3H+geoLWFoC842rA21kiOK/1EN1qGJUsp1X6GAZ/S/5RbV0HqnyXpAI1RfHZwFLers7P8QxtJ0ft32AlndrzOoZraUcJIalg9rIGCMYsgzINL1nKjl8hj1ImGfLPVV0wBR9+SX5pffJNjStW9tz0aOgNaqzjJnsfLf6Hgko8DqowipaBydkSfMsKPSffUg1vF+DhtbbS+bTDH29K5odbmzBBWSXZ65GkRFZwIeoU60FV5ZqxtC3hJcePPxtotfV7SMQRdo8TerzZ3N22AalBTcpk9AZHyQnhusvQxgTVX7iFi4wGC7gjKl27gUJpEAc+nH+5A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MG4ZOO7mvob/hxywPQxDxFqpvK66P+W5f1TI46tMZAA=;
- b=viLYkl7qp1/+7OblnltptdYn5jmtukuv4qlMMdJvdPJtf4Ub2i+1lTtaxQDhZIqxj8pWrQA5jYDFh+mkRRf76CeSMkmqjXevDX3fFGS2wMuZ4M3WqVW9fdWTGGmrXuCFcNdnjt2njbbwj57RrCr/eYZff3BdLTC3YQR+/8PW6Qc7AJwHyRtmddK2941xzT++ON6IcJRfdW5kHkI0Yu9cFCWSXFvuJv8Bg8DIdolfc2YnngpeE7nt5C+07UvStKEEZLU6tVybDphMDIUOBdbdMMkC7WNyepMoTWrTfRkyhYgvJw3akCibUj1jWWQybR5q8OBQAhP/1S9uD6U+EGW4og==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 164.130.1.59) smtp.rcpttodomain=arndb.de smtp.mailfrom=foss.st.com;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
- s=selector2;
+ bh=3Ve7VB+tMulDcN/DBYp4fI3nisHsfeD0PVMfwmCylPI=;
+ b=yz4Z+2A0Frg2pfnTCPvpDGgVIV7qhOU+8qj5qkOX5IqjrnqsW7aKlNDdA1VRFerc9kAD7gWFaTcLEEpj8UdYr78qVkYZny63Ff7yDy1LOYjDHriTku5zDulllW5mqbt0xb8xcZYOj5/RJURdJlDqj5Ovu1JgmHBN0H14kEDQFNAvRLE0g89EMQK2m2b2AEU1+asFyj0mcQmsgQ7SOL2PVJeb4rn6jDUfvVoLufiwR59FLCOvhcYC+rfN+beYOQZq2NgLar3V/2mEKIdth1Bod+kuzc8HmuuILij+PSJZuKgr3tkxt4e8R5PrltkLSe0dzNpyefk8A8m2GCdwXt+X2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MG4ZOO7mvob/hxywPQxDxFqpvK66P+W5f1TI46tMZAA=;
- b=eai49ntXMhumnR0oDcJ8xb3TuUbgnklMih7D6YPlddAMCBXLSvvajMJBxlU2nUmE39jKxhnfb/GPFn2twITklqBRM1+FXzWcYAJA9nMIExDPNMq49Mob2ZHK5vX3j0KHsZcCky+cIloU17NqW95HzeuesC9LgeCCoFgWCdWkistCkJDue70brhAiu5F9Jy0gqHNvQW2YHL0aG6KccBqAJk1k/yLTOUo7gqG8PtjW7QG2bwrsmv4z/n0GRDgejUwago7sPMSKT6XSrvJDGxun9HyhE0+MJiO3X8DFbL1QPcEFA3uFhhvcP2t3sPs/4BsBJ8umOK95buBiqf8gPkX4Xw==
-Received: from DU7P189CA0017.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:552::31)
- by AS1PR10MB5339.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4a1::6) with
+ bh=3Ve7VB+tMulDcN/DBYp4fI3nisHsfeD0PVMfwmCylPI=;
+ b=dAJsw3umJUFKLg58b66rPbV32hJWzjYxTJP+y0qIFNzawlPxiHlr2BF53zzab0WYteuiGo0hwTGHyQ7WYyoy4ux/FYBUzdx9cNtaei9LbKt9Y+lHhuQA8Ai9vun3W8RJnOUf2+WRsKOLhyKYq2Y5tsA1KihWja48F2t9clV4YRgmI86zBuAEv6n0PW/L/AOa8WDJRjTvDwwYGwLIl1dgGnK9m72vBNHfTcUtE8C0zUEa3//INZ31x98Fu1eDkfU0E571qZxBbQIZZTYvOSfmUnJxmOBJcCk3f/e35No3iKgV0HfdQF1G9ywakPYsOzS6u9a0WW9Qs8EZna1gnWYrMQ==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from GV2PR04MB11799.eurprd04.prod.outlook.com (2603:10a6:150:2cf::9)
+ by GV4PR04MB11849.eurprd04.prod.outlook.com (2603:10a6:150:2de::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.15; Fri, 2 Oct
- 2026 13:37:13 +0000
-Received: from DB1PEPF000509FA.eurprd03.prod.outlook.com
- (2603:10a6:10:552:cafe::a0) by DU7P189CA0017.outlook.office365.com
- (2603:10a6:10:552::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.472.18 via Frontend Transport; Fri, 2
- Oct 2026 13:37:13 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=fail (sender IP
- is 164.130.1.59) smtp.mailfrom=foss.st.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=foss.st.com;
-Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
- designate 164.130.1.59 as permitted sender) receiver=protection.outlook.com;
- client-ip=164.130.1.59; helo=smtpO365.st.com;
-Received: from smtpO365.st.com (164.130.1.59) by
- DB1PEPF000509FA.mail.protection.outlook.com (10.167.242.36) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.472.14 via Frontend Transport; Fri, 2 Oct 2026 13:37:12 +0000
-Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpo365.st.com
- (10.250.44.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.43; Fri, 2 Oct
- 2026 15:43:45 +0200
-Received: from [10.48.86.79] (10.48.86.79) by STKDAG1NODE2.st.com
- (10.75.128.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.43; Fri, 2 Oct
- 2026 15:37:11 +0200
-Message-ID: <44917365-a20e-484e-a252-f420f566ddb1@foss.st.com>
-Date: Fri, 2 Oct 2026 15:37:10 +0200
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.18; Fri, 2 Oct
+ 2026 14:08:33 +0000
+Received: from GV2PR04MB11799.eurprd04.prod.outlook.com
+ ([fe80::2146:83a2:5329:b7c]) by GV2PR04MB11799.eurprd04.prod.outlook.com
+ ([fe80::2146:83a2:5329:b7c%7]) with mapi id 15.21.0472.016; Fri, 2 Oct 2026
+ 14:08:32 +0000
+From: Frank.Li@oss.nxp.com
+To: soc@kernel.org
+Cc: Frank.Li@nxp.com,
+	kernel@pengutronix.de,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	alexander.stein@ew.tq-group.com,
+	andrijsalivon@plajta.eu,
+	eberhard.stoll@kontron.de,
+	francesco.dolcini@toradex.com,
+	krzysztof.kozlowski@oss.qualcomm.com,
+	laurent.pinchart@ideasonboard.com,
+	mehmet.fide@screeningeagle.com,
+	nora.schiffer@ew.tq-group.com,
+	oualid.derouiche@kontron.de,
+	primoz.fiser@norik.com,
+	stefano.r@variscite.com,
+	y.bas@phytec.de
+Subject: [GIT PULL] i.MX ARM dt changes for 7.4:
+Date: Fri,  2 Oct 2026 10:08:25 -0400
+Message-ID: <20261002140826.3947315-1-Frank.Li@oss.nxp.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PH0PR07CA0083.namprd07.prod.outlook.com
+ (2603:10b6:510:f::28) To GV2PR04MB11799.eurprd04.prod.outlook.com
+ (2603:10a6:150:2cf::9)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@baylibre.com>,
-	<soc@kernel.org>, <arm@kernel.org>
-CC: <alexandre.torgue@foss.st.com>, "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>, Marek Vasut <marex@nabladev.com>,
-	Dario Binacchi <dario.binacchi@amarulasolutions.com>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Subject: [GIT PULL] STM32 DT changes for v7.4#1
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ENXCAS1NODE2.st.com (10.75.128.138) To STKDAG1NODE2.st.com
- (10.75.128.133)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509FA:EE_|AS1PR10MB5339:EE_
-X-MS-Office365-Filtering-Correlation-Id: c88356ac-3933-43b2-be33-08df208a4403
+X-MS-TrafficTypeDiagnostic: GV2PR04MB11799:EE_|GV4PR04MB11849:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0dbcdcc2-14e3-4ba3-c84f-08df208ea47d
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|23010399003|82310400026|36860700016|18002099003|6133799003|11063799006|10067099003|56012099006;
+	BCL:0;ARA:13230040|7416014|376014|366016|23010399003|19092799006|1800799024|10067099003|56012099006|6133799003|3023799007|11063799006|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	ipuLu2pXqv1meS1Xt6Qj95gxa0y0NDGrGWjoOweN3Dq5+DfCYx2V9y6WTbfZOGeVm6bo2tDWcPLF5hMUz6QlXg6/CyiGLL5zhCHYtus8SYB8ApB+sJLPr3RcgOBZQrJg9qtAd56NsCNsBzKKrNPdoKlFpoICL349Z6MpZV8Z9Y1YT00ClcYQpJNGBNe96MQgfvMIAA2juOEJlI69Y4zayy4bJdtiJBNBHjJIEbyOVHbo3FESE5hge53WX5bpyj7HaZMkjtu00bA0DFv6E3RaHc2KArTcrDmo4DLtOaowIMrd+lMSV28Y7VfKyCk3XZhWXe+O7ZyK02oGeYjrpyK+EstNQyki7gTyFW2wEOuW16biOtTiPPdI73/HtuKN8/9Z7lRkGDwlr92QvITzt7JX5TkX3qI+aR+2Rq+nVCt8K/rIAZsnhqOnr+ln/nkQGUcUUeE3BSAAZvKftWOjYPhGkDa7zX5loF3xVzcnRP4PhUvJy9M42Z+oV6DmEAWaxyoHZMYnH+lBB3OAPfH94fc1Iep79X8A30IKXV5tFo2PERumSMggWbBrK8wGp2glfg9mg5mzfxSVxm/DKeQUXP7nEZLS0tsAWO2s6PZJWX43EngkKe4hzxJg3f/hyTr75qm9Cgd6PfidNQLDKL/SfnAv1BQ0cNUblCgYrVnm6eHwxN5JKCNTxdFMtfa2+/sasH3/maPD68Ssbusm7lIS1avglQ==
+	hYxf9oacNdhNRr8ZHIVYaqjJfIe7unNpMCgjgGboxnk+1RRBTJLfzDS0VtZ7q3Y8jAjAkGFDGIlQH/mI81y/+puQUaVIB6l61DZ4lx9isVHgcvGd0fK71F42ot0maZlw5BVHdvkHpLd52+MZIg9SklLxINZ0zSJ6lmHT4kQMa0Bsyg0NbpqIK3C7lmXsji0AI5AhxjfTrJlsYXEFxgwbGsIauBW0Y/zbD6GxrworGN5FApEtqIaiCHuBbtZ01/uJTpfDdo8W0ZC9M05BSv3sygoX2GptLL4u5rfh/aSVLko0rkXBDT9QbBqKanMBnwQuedSs8RmzHwjLNit3WsrBpfK9Itd091E/dhpmD49DozG3kOOuEzQ0n/VgpfdgWkMm/Zhj4mb6l26dZSk/hgyRbDHLJzUQOsVH0bGEYxzqWskZquFsJo2ueATi/yIYGvZFguFmcOFBQisYhTulQdNxEyHp+oyBJctH/FzWF3Z0IE4kUgbuTwmc4EKqmClxuOV7hw9K5G2xhG6a2yky9Zks1bOzZTOPS0JqQFze7vvc6RZIWqkfbrFeElnQj2k1OrwZVevgz+tt5lVWhpPAmKo+8DdpCWpTeK94hFNS6BBDPfh04N8MRAbQrDDbTcK3CGv0h6KYTEmRbJp9EQbnbU5ABAcHBPa/jUjuUqdQtAXx9Po=
 X-Forefront-Antispam-Report:
-	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(23010399003)(82310400026)(36860700016)(18002099003)(6133799003)(11063799006)(10067099003)(56012099006);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11799.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(23010399003)(19092799006)(1800799024)(10067099003)(56012099006)(6133799003)(3023799007)(11063799006)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	TIlEOUdGtSVk20603ptb3MAB/ZvihVPbXiYnIgMu1S0aEDa4k6KSUBO9VBP9llbCiKRS+NAuxVdSZnl8OvhH3js2kBBd54TZVkko2Cg1focC7+5Y+BftvYS4UmB00YArR3+EDNLtMrRtSNTKPkpimDavDrG5rJRn7ruaySBnnaXfaYnD63YyIJ2FfEMPg86Pu655pu2syvwXvA8hkgmVAa59VteLTr5lE2HMCirmhh0hxa4Fb6iQ5eL2BBReD5Hj2RbZB0M9JTVsI8dXCigi1sh4Q99DUkoDkak4u4e4hNJ4zniwxOuEtY0vwgGU8/tphENzXNuI+bV0B54fmGkIGk5qDJOFjl2HRn1J+hjk1Lb0bvCrMOFWqCCEfNg0kZXXgEeJAKxIaC33lHovew445OUB5PabSY/7aOJ7JTeM4mrv4R2HOW4r6P0F48bhm5Zw
-X-OriginatorOrg: foss.st.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2026 13:37:12.7416
+	=?us-ascii?Q?DNBYKleQVACoIAVXQHq1kbToP+rvzKEgPI34UEGh+pClbZZg6qnDPZMEzXpH?=
+ =?us-ascii?Q?Ql/MjuXRwEzEL5yj/DBvNUlcBZvGR5Fj0dsp5XUKqzqJbu8PmnvuyZrGWo3T?=
+ =?us-ascii?Q?f4TH6Hgun9/7jSwUG0vmkJDhV1JSEe/GDp3MUQpoC4K8Z0OgzMTgKFHtBKPg?=
+ =?us-ascii?Q?GGDwBiu4PZW+XmlE0DCkKjHntIpjh69DpMcOSVrIUlIuFo4G2lraa0JNczXu?=
+ =?us-ascii?Q?z1l7FCOwq5x2fbyTsxvEny764t8BudUKUc7VdnYzifx//M3efOu5SD3yLqLf?=
+ =?us-ascii?Q?n9BweNol7tcxXspKRD4wV+ZlRRLnADVL8B3P+rVnGU9NqX8tjQaZmVn+YKWh?=
+ =?us-ascii?Q?aft4RCIjb2y6XnS6hMcoWIIQU4VIB/filfunjMedDFBgksOJA3UDavAtEHy8?=
+ =?us-ascii?Q?HZKQNT3Ib46FrBRWcYxeIX4dXDHxMp2eOExuOPaeHiCibni51m0rp7itJghB?=
+ =?us-ascii?Q?UE4Y/CYJV+4u+/JPUDJgMJ/fLfNZ/pXl5Y5s7zTaP3j5t0lxC5efomKURERc?=
+ =?us-ascii?Q?CSSpTwm14rAtKXGPaKSpI6Tm39UBx2DvCciDmgGFDHpHwpkEQ0HTv+H9ei/M?=
+ =?us-ascii?Q?ue4VGJNAvNVH7dOsiA0fEd2o5FOhFkp3c2pN++379CnFZjC9WeMhJ00RP5RP?=
+ =?us-ascii?Q?4UWqDG4fh8anViIgFWjUBw2RvYhKAgeK8pprfdg2uAVYCBYvYkpN52dQBy7s?=
+ =?us-ascii?Q?T4sUs1wCZMX0zqcaUOGdOEor6OQGdqZM3YaIfYd2W0Rp3UCJAStw4vocshCa?=
+ =?us-ascii?Q?UJIDdeOvgR2sD5VCe82H4PbeW6W7Uv7VXyKBhy6yDHDLivuAuwobVWlkYkQq?=
+ =?us-ascii?Q?/q8Ahg63lWpnd7pu8LbpUAVmpLE1P/az8P7MCLvzePivJWIpcKUQpTTnxjUA?=
+ =?us-ascii?Q?Qk9NAWXMmP4k6zGo9kT+j6pLAlsTG6/xKxfLGsek60qy0pj3WMCskP0Pu+lK?=
+ =?us-ascii?Q?5JvGon8CZR/1RFyG4qLbrYqVT8/yQr1yRW60AWpVkROp0sgbsnN6tUjdym1Y?=
+ =?us-ascii?Q?esGlY0uiFHvpzlvF+PwAjuj2QWWTpwGQto9KjRXEtP4z0RQMIJxFvxGiDEi5?=
+ =?us-ascii?Q?24bBYldNNZxYJYY1JlR5JkFYxGSNE5sdGkWT5HcqwZJ7pe4YNXEUYlA/PbIa?=
+ =?us-ascii?Q?i0VYnOQIKAqrrfRsmxsNOHneeO3/gQmUysIEufXgOclBq0DMwK58gBi80wJt?=
+ =?us-ascii?Q?2ewqXn0VCweYjjiV5A606Tpq7uHatpiE5w5n1qEYFuhLu5S2cWaDg7a07APl?=
+ =?us-ascii?Q?te5HZAQkfSQwPxPeGAC5JFGlybUAuixcYbGiIrVjauSOM2ZxTdPqnzCaULkA?=
+ =?us-ascii?Q?F1m+gTxHGDJpRQU1giyiIGpWqyYOVmoNpi15UNQlYWVGct9KI5LYE8BkZtor?=
+ =?us-ascii?Q?oNmlvaUN5rWRIa5zxtGXM5ubMJ5IF4ux7po1b8zvhETso1Hush26FdpqxWvc?=
+ =?us-ascii?Q?gKoYCKfj40XNOCqkYervYp2WAu7uQoUCWldP/WTqGJi9o6fM/HrzkoVGi3az?=
+ =?us-ascii?Q?OHwY2GLvWCPGy7c09rEYYcHehyfwbMvXvn6+ihYctgKA8Fu9eqExKd3yZoPQ?=
+ =?us-ascii?Q?6kkEUpPPSiQzNHPo31eR75K4Fx5ix8h70Na7s/MIEN6JhWyeDtzQoXtwAnMt?=
+ =?us-ascii?Q?QkzN4s+5km0q0FOI+I5+/VUThgp76CcLYMJIrx/DbKQ42HBsuaBO4mv0tH+l?=
+ =?us-ascii?Q?3IgT3i+jCmJ5z6xe1e4Ql/P9nxipxES01/M11b5DYw3kD8iGdu3vpBXkjKs4?=
+ =?us-ascii?Q?h3iINfImcG1gvzTolMJS6PKar80hje+Qptb4I1kZLXBl8CtrrEFv?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0dbcdcc2-14e3-4ba3-c84f-08df208ea47d
+X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11799.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2026 14:08:32.8479
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c88356ac-3933-43b2-be33-08df208a4403
-X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.59];Helo=[smtpO365.st.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB1PEPF000509FA.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB5339
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Yfo7EGAkM+XOeXPp1xSpoFJ/0KP1uFb9hmcbjYnDtU29y/SIN1VDT0JyCHwXA2/vDWxfJhS+oocRYSrL1it+edAo4QujG8+P/EfWAnn90jW0Gjh1+daSPjiHTszvUfoH
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV4PR04MB11849
 
-Hi ARM SoC maintainers,
-
-Please consider this first round of STM32 DT changes for v7.4 cycle.
-
-Thanks
-Alex
-
+From: Frank.Li@nxp.com
 
 The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
-   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
 are available in the Git repository at:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git tags/stm32-dt-for-v7.4-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux.git tags/imx-dt-7.4
 
-for you to fetch changes up to f831584128ac2a36fb4fa62fe106793d08c2dbf1:
+for you to fetch changes up to ec7b37c768d34107d06bd629d05cde0e2218ee9a:
 
-   soc: st: Add STM32MP2 SYSCFG driver (2026-10-01 11:39:46 +0200)
-
-----------------------------------------------------------------
-STM32 DT for v7.4, round 1
-
-Highlights:
-==========
-
-   - STM32MP13:
-     - Add DCMI / LTDC ETZPC access controler.
-     - Add SRAM nodes: SRAM1 16kB, SRAM2 8kB, SRAM3 8kB.
-     - Add SPI5 DMA chaining support.
-
-   - STMP32MP15:
-     - Use DMA FIFO for all SPIs.
-     - Add SPI4 DMA chaining support
-
-   - STM32MP25/23:
-     - Add SYSCFG driver to bind USB PHY.
-     - Add digital temperature sendore (Moortec).
-     - Add DCMI nodes.
-     - Enable eMMC on stm32mp257f-dk.
-     - Add I/O sync to eth1 rgmii pins to match with RGMII
-       specification.
-
-     - ENGICAM:
-      - Add Engicam MicroGEA-STM32MP257D-RMM board support
-        based on Engicam MicroGEA-STM32MP257 SoM (8GB eMMC Flash,
-        2 GB LPDDR4 DRAM). Embedding CAN, LEDS, LCD with touchscreen,
-        uSD, Audiocodec.
-
-     - DH:
-       - Add DH STM32MP23xx/STM32MP25xx DHCOS SoM and Breakout Board
-         and DHSBC support: This stm32mp25xx-dhcos-bb board is a stack
-	of DHCOS SoM based on STM32MP25xx SoC (1200MHz /
-	crypto capabilities) populated on SoM Breakout Board,
-	the stm32mp255c-dhcos-dhsbc is the SoM populated on DHSBC
-	carrier board. The stm32mp23xx-dhcos-bb is a stack with
-         STM32MP23xx SoC.
-
-       - The SoM contains the following peripherals:
-         - STPMIC (power delivery)
-         - 4GiB LPDDR4 memory
-         - eMMC and SDIO WiFi module
-
-       - The Breakout Board carrier board contains the following peripherals:
-         - USB-C peripheral port, power supply plug
-
-       - The DHSBC carrier board contains the following peripherals:
-         - Two RGMII Ethernet ports
-         - MicroSD slot
-         - LVDS connector
-         - MIPI CSI2 connector
-         - USB-A Host port, USB-C power supply plug
-         - USB-C / DP port
-         - Expansion connector
+  ARM: dts: imx6dl-phytec-mira: Add phyBOARD-Mira-i.MX6DL with eMMC (2026-10-01 11:05:32 -0400)
 
 ----------------------------------------------------------------
-Ahmad Fatoum (3):
-       ARM: dts: stm32: lxa-mc1: change stdout-path baud rate from 9600 to 115200
-       ARM: dts: stm32: lxa-tac: change stdout-path baud rate from 9600 to 115200
-       ARM: dts: stm32: fairytux2: change stdout-path baud rate from 9600 to 115200
+i.MX ARM dt changes for 7.4:
 
-Alain Volmat (9):
-       ARM: dts: stm32: add LTDC / DCMIPP access controller for STM32MP135
-       ARM: dts: stm32: Use DMA FIFO mode for all spi in stm32mp151
-       ARM: dts: stm32: Add disabled spi4 and spi5 in stm32mp15xx-dkx
-       arm64: dts: st: add imx335/csi/dcmipp nodes on stm32mp257f-dk
-       arm64: dts: st: ensure IMX335 is enabled on stm32mp257f-ev1
-       arm64: dts: st: use video-interfaces media bus type in stm32mp257f-ev1
-       arm64: dts: st: add imx335/csi/dcmipp nodes on stm32mp235f-dk
-       arm64: dts: st: add dcmi node on stm32mp25x
-       arm64: dts: st: add dcmi node on stm32mp23x
+- dt-bindings fixes and cleanups: allow single reg for fsl,imx6sx-ldb,
+  allow bridge@18 child in imx-iomuxc-gpr, allow display0 child for i.MX6UL
+  lcdif, add deprecated/optional properties for st,stmpe MFD.
 
-Amelie Delaunay (5):
-       arm64: dts: st: reorder ommanager node in stm32mp257f-ev1.dts
-       ARM: dts: stm32: reorder cs_cti_trace node in stm32mp135f-dk.dts
-       ARM: dts: stm32: reorder cs_cti_trace node in stm32mp15xx-dkx.dtsi
-       ARM: dts: stm32: reorder cs_cti_trace node in stm32mp157c-ev1.dts
-       ARM: dts: stm32: reorder mdma1 node in stm32mp15*-scmi.dts
+- ARM dts cleanups: whitespace/indentation fixes, drop undocumented
+  st,stmpe properties, drop fallback "dlg,da9052" compatible, remove unused
+  CSI nodes, fix/remove unrecognized PCIe/wakeup properties
 
-Christophe Roullier (1):
-       arm64: dts: st: Add I/O sync to eth1 pinctrl in stm32mp25-pinctrl.dtsi
+- ARM dts board updates:
+  - Add Variscite VAR-SOM-MX7, Colibri VF50/VF61, Amazon Kindle 4 (Yoshi)
+    board.
+  - imx7d Colibri eMMC: add Toradex Capacitive/Resistive 7" Parallel
+    displays and VGA overlay.
+  - imx7-colibri/imx6ull-colibri: set LCDIF bus width.
+  - imx7d: add Variscite VAR-SOM-MX7 and MX7CustomBoard support.
+  - imx7-tqma7: fix PMIC voltage constraints, sort I2C nodes by address.
+  - imx6ul-kontron-bl: add GPIO labels, fix USB OTG1 ID pin, replace UART3
+    with DIP switch GPIOs.
+  - imx6qdl-pico/wandboard: replace clock-frequency in camera sensor.
+  - mba6ulx: add Ethernet PHY interrupt and USB hub nodes.
+  - imx6dl-phytec-mira: add phyBOARD-Mira-i.MX6DL with eMMC.
+  - imx6qdl phycore-som: add custom volt/freq OPP table.
 
-Clément Le Goffic (3):
-       ARM: dts: stm32: add sram[123] nodes on stm32mp131
-       ARM: dts: stm32: add sram pool to spi4 for DMA-MDMA chaining on MP15 DK
-       ARM: dts: stm32: add sram pool to spi5 for DMA-MDMA chaining on MP13 DK
+----------------------------------------------------------------
+Alexander Stein (2):
+      ARM: dts: mba6ulx: Add Ethernet PHY interrupt support
+      ARM: dts: mba6ulx: Add USB hub node
 
-Dario Binacchi (18):
-       dt-bindings: arm: stm32: support Engicam MicroGEA-STM32MP257D-RMM board
-       arm64: dts: st: add power-domains to sdmmc1 on stm32mp231
-       arm64: dts: st: add power-domains to sdmmc1 on stm32mp251
-       arm64: dts: st: add SDMMC2 support on stm32mp25
-       arm64: dts: st: add CAN1 support on stm32mp25
-       arm64: dts: st: add i2c1 pins for stm32mp25
-       arm64: dts: st: add ltdc pins for stm32mp25
-       arm64: dts: st: add can1 pins for stm32mp25
-       arm64: dts: st: add pwm2/pwm4 pins for stm32mp25
-       arm64: dts: st: add sai1 pins for stm32mp25
-       arm64: dts: st: add sdmmc2 pins for stm32mp25
-       arm64: dts: st: add spi1 pins for stm32mp25
-       arm64: dts: st: add usart1 pins for stm32mp25
-       arm64: dts: st: support Engicam MicroGEA-STM32MP257 SoM
-       arm64: dts: st: support Engicam MicroGEA-STM32MP257D-RMM board
-       arm64: defconfig: enable configs for Engicam MicroGEA-STM32MP257D-RMM
-       arm64: dts: st: move Engicam MicroGEA-STM32MP257D-RMM display to an overlay
-       arm64: dts: st: add Engicam MicroGEA-STM32MP257D-RMM LVDS display overlay
+Andrii Salivon (2):
+      dt-bindings: arm: fsl: add Amazon Kindle 4 (Yoshi)
+      ARM: dts: imx50: add support for Amazon Kindle 4 (Yoshi)
 
-Fabrice Gasnier (3):
-       ARM: dts: stm32: fix vdda supply for onboard hub on stm32mp15 DK boards
-       ARM: dts: stm32: fix vdda supply for onboard hub on stm32mp157c-ev1
-       ARM: dts: stm32: fix vdda supply for onboard hub on stm32mp135f-dk
+Eberhard Stoll (1):
+      ARM: dts: imx6ul-kontron-bl-common: Replace UART3 with DIP switch GPIOs
 
-Marek Vasut (13):
-       dt-bindings: arm: stm32: Sort the document
-       ARM: dts: stm32: Drop bias-disable from STM32MP15xx DHCOM SoM sdmmc1_b4_pins_a
-       dt-bindings: arm: stm32: Document STM32MP23xx/STM32MP25xx DHCOS SoM and Breakout Board and DHSBC
-       arm64: dts: st: Fix SDMMC1 indent on stm32mp231
-       arm64: dts: st: Fix SDMMC1 indent on stm32mp251
-       arm64: dts: st: Add SDMMC2 and SDMMC3 nodes on stm32mp231
-       arm64: dts: st: Add SDMMC3 nodes on stm32mp251 and update SDMMC2 max freq
-       arm64: dts: st: Add OMM node on stm32mp231
-       arm64: dts: st: Add pinmux nodes for DH electronics STM32MP23xx/STM32MP25xx DHCOS SoM and Breakout Board
-       arm64: dts: st: Add support for DH electronics STM32MP23xx/STM32MP25xx DHCOS SoM and Breakout Board and DHSBC
-       MAINTAINERS: Add DH electronics DHCOS SoM entry and fix email address
-       dt-bindings: arm: stm32: Document st,stm32mp23/25-syscfg subnodes and cells
-       soc: st: Add STM32MP2 SYSCFG driver
+Francesco Dolcini (7):
+      ARM: dts: imx7d-colibri-emmc: Add Toradex Capacitive Touch Display 7" Parallel
+      ARM: dts: imx7d-colibri-emmc: Add Toradex Capacitive Touch Display 7" Parallel with Touch Adapter
+      ARM: dts: imx7d-colibri-emmc: Add Toradex Resistive Touch Display 7" Parallel
+      ARM: dts: imx7d-colibri-emmc: Add VGA overlay
+      ARM: dts: imx7-colibri-iris-v2: drop no-op delete-property
+      ARM: dts: imx6ull-colibri: Set LCDIF bus width
+      ARM: dts: imx7-colibri: Set LCDIF bus width
 
-Mateusz Nowicki (7):
-       arm64: dts: st: fix arm,smc-id of the SMC watchdog on stm32mp2
-       arm64: dts: st: add sdmmc2 pins_b for stm32mp25
-       arm64: dts: st: enable eMMC on stm32mp257f-dk
-       arm64: dts: st: add digital temperature sensor on stm32mp251
-       arm64: defconfig: enable Moortec MR75203 PVT controller
-       arm64: dts: st: fix sai3b unit address on stm32mp251
-       arm64: dts: st: fix sai3b unit address on stm32mp231
+Frank Li (16):
+      dt-bindings: display: bridge: ldb: allow a single reg for fsl,imx6sx-ldb
+      dt-bindings: soc: imx-iomuxc-gpr: allow bridge@18 as child node
+      dt-bindings: display: lcdif: Allow display0 child node for i.MX6UL
+      ARM: dts: imx6ul-tx6ul: rename disp0 to display0
+      ARM: dts: imx51-zii-rdu1: rename node name i2c-gpio to i2c-0
+      ARM: dts: imx6qdl-emcon: Remove unrecognized disable-gpio PCIe property
+      ARM: dts: imx7d-nitrogen7: drop unsupported wakeup-gpios from tsc2004
+      ARM: dts: imx7d-meerkat96: disable lcdif node
+      ARM: dts: imx50-kobo-aura: convert sd2_vmmc to regulator-fixed
+      ARM: dts: imx6dl-b125v2: add touchscreen-size-x/y to exc80h60 node
+      ARM: dts: imx6sll: remove unused node csi@20e8000
+      ARM: dts: imx6ul-14x14-evk: remove reduntant bus-type under csi node
+      ARM: dts: imx53: drop fallback compatible "dlg,da9052"
+      dt-bindings: mfd: st,stmpe: add deprecated properties
+      dt-bindings: mfd: st,stmpe: let interrupt property optional
+      ARM: dts: imx: remove undocument properties of st,stmpe*
 
-Patrice Chotard (1):
-       ARM: dts: stm32: Remove User-PA13 button on stm32mp135f-dk
+Krzysztof Kozlowski (2):
+      ARM: dts: nxp: Correct white-space style
+      ARM: dts: nxp: imx: Replace spaces indentation with tabs
 
-Valentin Caron (1):
-       ARM: dts: stm32: add pins for spi4 and spi5 in stm32mp15-pinctrl
+Laurent Pinchart (2):
+      ARM: dts: nxp: imx6qdl-pico: Replace clock-frequency in camera sensor node
+      ARM: dts: nxp: imx6qdl-wandboard: Replace clock-frequency in camera sensor node
 
-  Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml                           |  30 +++++-
-  Documentation/devicetree/bindings/arm/stm32/stm32.yaml                                     |  39 ++++++--
-  MAINTAINERS                                                                                |   3 +-
-  arch/arm/boot/dts/st/stm32mp131.dtsi                                                       |  24 +++++
-  arch/arm/boot/dts/st/stm32mp135.dtsi                                                       |  42 ++++-----
-  arch/arm/boot/dts/st/stm32mp135f-dk.dts                                                    |  28 +++---
-  arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi                                                |  34 +++++++
-  arch/arm/boot/dts/st/stm32mp151.dtsi                                                       |  20 ++--
-  arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2.dtsi                                        |   2 +-
-  arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts                                              |   8 +-
-  arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts                                              |   8 +-
-  arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts                                              |   8 +-
-  arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts                                              |   8 +-
-  arch/arm/boot/dts/st/stm32mp157c-ev1.dts                                                   |   7 +-
-  arch/arm/boot/dts/st/stm32mp157c-lxa-mc1.dts                                               |   2 +-
-  arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi                                             |   1 +
-  arch/arm/boot/dts/st/stm32mp15xc-lxa-tac.dtsi                                              |   2 +-
-  arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi                                            |   2 +
-  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi                                                  |  33 ++++++-
-  arch/arm64/boot/dts/st/Makefile                                                            |  23 +++++
-  arch/arm64/boot/dts/st/stm32mp231.dtsi                                                     | 105 ++++++++++++++++++++-
-  arch/arm64/boot/dts/st/stm32mp235f-dk.dts                                                  |  75 +++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp23xc.dtsi                                                    |   7 ++
-  arch/arm64/boot/dts/st/stm32mp23xx-dhcos-bb.dts                                            |  15 +++
-  arch/arm64/boot/dts/st/stm32mp23xx-dhcos-som.dtsi                                          |  51 +++++++++++
-  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi                                              | 925 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------
-  arch/arm64/boot/dts/st/stm32mp251.dtsi                                                     |  67 +++++++++++++-
-  arch/arm64/boot/dts/st/stm32mp253.dtsi                                                     |  16 ++++
-  arch/arm64/boot/dts/st/stm32mp255c-dhcos-dhsbc-overlay-imx219-x10.dtso                     | 111 ++++++++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp255c-dhcos-dhsbc.dts                                         | 213 ++++++++++++++++++++++++++++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp257-engicam-microgea.dtsi                                    |  63 +++++++++++++
-  arch/arm64/boot/dts/st/stm32mp257d-engicam-microgea-rmm-overlay-am-1280800w8tzqw-t00h.dtso |  67 ++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp257d-engicam-microgea-rmm-overlay-rk050hr345-ct106a.dtso     |  68 ++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp257d-engicam-microgea-rmm.dts                                | 275 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp257f-dk.dts                                                  |  93 +++++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts                                                 | 101 +++++++++-----------
-  arch/arm64/boot/dts/st/stm32mp25xc.dtsi                                                    |   7 ++
-  arch/arm64/boot/dts/st/stm32mp25xx-dhcos-bb.dts                                            |  15 +++
-  arch/arm64/boot/dts/st/stm32mp25xx-dhcos-som.dtsi                                          |  51 +++++++++++
-  arch/arm64/boot/dts/st/stm32mp2xxx-dhcos-som.dtsi                                          | 456 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm64/configs/defconfig                                                               |   5 +
-  drivers/soc/Kconfig                                                                        |   1 +
-  drivers/soc/Makefile                                                                       |   1 +
-  drivers/soc/st/Kconfig                                                                     |  12 +++
-  drivers/soc/st/Makefile                                                                    |   1 +
-  drivers/soc/st/stm32mp2-syscfg.c                                                           |  33 +++++++
-  46 files changed, 2969 insertions(+), 189 deletions(-)
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp23xc.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp23xx-dhcos-bb.dts
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp23xx-dhcos-som.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp255c-dhcos-dhsbc-overlay-imx219-x10.dtso
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp255c-dhcos-dhsbc.dts
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp257-engicam-microgea.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp257d-engicam-microgea-rmm-overlay-am-1280800w8tzqw-t00h.dtso
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp257d-engicam-microgea-rmm-overlay-rk050hr345-ct106a.dtso
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp257d-engicam-microgea-rmm.dts
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp25xx-dhcos-bb.dts
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp25xx-dhcos-som.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp2xxx-dhcos-som.dtsi
-  create mode 100644 drivers/soc/st/Kconfig
-  create mode 100644 drivers/soc/st/Makefile
-  create mode 100644 drivers/soc/st/stm32mp2-syscfg.c
+Mehmet Fide (4):
+      ARM: dts: vf-colibri: apply the EXT_IO pin group
+      ARM: dts: vf-colibri: name the SODIMM gpio lines
+      dt-bindings: arm: fsl: add the Colibri VF50 and VF61 on Iris
+      ARM: dts: vf: add Iris carrier board support for Colibri VF50 and VF61
+
+Nora Schiffer (2):
+      ARM: dts: imx7-tqma7: correctly specify PMIC voltage constraints
+      ARM: dts: imx7-tqma7: sort I2C device nodes by address
+
+Oualid Derouiche (2):
+      ARM: dts: imx6ul-kontron-bl-common: Add GPIO labels
+      ARM: dts: imx6ul-kontron-bl-common: Fix USB OTG1 ID pin configuration
+
+Primoz Fiser (1):
+      ARM: dts: imx6dl-phytec-mira: Add phyBOARD-Mira-i.MX6DL with eMMC
+
+Stefano Radaelli (3):
+      dt-bindings: arm: fsl: add Variscite VAR-SOM-MX7 boards
+      ARM: dts: imx7d: add Variscite VAR-SOM-MX7 support
+      ARM: dts: imx7d: add Variscite MX7CustomBoard support
+
+Yunus Bas (2):
+      ARM: dts: imx6dl: Add a label to cpu1 node
+      ARM: dts: imx6qdl: phycore-som: Add custom volt/freq table
+
+ Documentation/devicetree/bindings/arm/fsl.yaml     |  30 +-
+ .../bindings/display/bridge/fsl,ldb.yaml           |  23 +-
+ .../devicetree/bindings/display/fsl,lcdif.yaml     |   1 +
+ .../devicetree/bindings/mfd/st,stmpe.yaml          |  25 +-
+ .../bindings/soc/imx/fsl,imx-iomuxc-gpr.yaml       |  62 +++
+ arch/arm/boot/dts/nxp/imx/Makefile                 |  51 ++
+ arch/arm/boot/dts/nxp/imx/e60k02.dtsi              |   8 +-
+ arch/arm/boot/dts/nxp/imx/e70k02.dtsi              |   8 +-
+ arch/arm/boot/dts/nxp/imx/imx50-amazon-yoshi.dts   |  59 +++
+ arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts      |   7 +-
+ arch/arm/boot/dts/nxp/imx/imx51-zii-rdu1.dts       |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx53-m53.dtsi           |   3 -
+ arch/arm/boot/dts/nxp/imx/imx53-qsb.dts            |   2 +-
+ .../arm/boot/dts/nxp/imx/imx53-voipac-dmm-668.dtsi |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6dl-b125pv2.dts       |   2 +
+ arch/arm/boot/dts/nxp/imx/imx6dl-b125v2.dts        |   2 +
+ arch/arm/boot/dts/nxp/imx/imx6dl-mamoj.dts         |   2 +-
+ .../dts/nxp/imx/imx6dl-phytec-mira-rdk-emmc.dts    |  75 +++
+ .../dts/nxp/imx/imx6dl-phytec-mira-rdk-nand.dts    |   2 +-
+ .../dts/nxp/imx/imx6dl-phytec-phycore-som.dtsi     |  23 +
+ arch/arm/boot/dts/nxp/imx/imx6dl-plym2m.dts        |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6dl-prtvt7.dts        |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6dl-victgo.dts        |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6dl.dtsi              |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6q-bosch-acc.dts      |   4 +-
+ arch/arm/boot/dts/nxp/imx/imx6q-novena.dts         |   3 -
+ .../dts/nxp/imx/imx6q-phytec-mira-rdk-emmc.dts     |   2 +-
+ .../dts/nxp/imx/imx6q-phytec-mira-rdk-nand.dts     |   2 +-
+ .../boot/dts/nxp/imx/imx6q-phytec-phycore-som.dtsi |  75 +++
+ arch/arm/boot/dts/nxp/imx/imx6qdl-apalis.dtsi      |   3 -
+ arch/arm/boot/dts/nxp/imx/imx6qdl-colibri.dtsi     |   3 -
+ arch/arm/boot/dts/nxp/imx/imx6qdl-emcon.dtsi       |   1 -
+ arch/arm/boot/dts/nxp/imx/imx6qdl-gw560x.dtsi      |  20 +-
+ arch/arm/boot/dts/nxp/imx/imx6qdl-pico.dtsi        |   4 +-
+ arch/arm/boot/dts/nxp/imx/imx6qdl-skov-cpu.dtsi    |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6qdl-wandboard.dtsi   |   4 +-
+ arch/arm/boot/dts/nxp/imx/imx6qdl-zii-rdu2.dtsi    |  10 +-
+ arch/arm/boot/dts/nxp/imx/imx6qdl.dtsi             |  10 +-
+ arch/arm/boot/dts/nxp/imx/imx6sl-kobo-aura2.dts    |   8 +-
+ .../boot/dts/nxp/imx/imx6sl-tolino-shine2hd.dts    |   8 +-
+ arch/arm/boot/dts/nxp/imx/imx6sll-evk.dts          |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6sll.dtsi             |  11 -
+ arch/arm/boot/dts/nxp/imx/imx6ul-14x14-evk.dtsi    |   1 -
+ .../boot/dts/nxp/imx/imx6ul-kontron-bl-common.dtsi |  38 +-
+ arch/arm/boot/dts/nxp/imx/imx6ul-tx6ul.dtsi        |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6ull-colibri.dtsi     |   1 +
+ .../arm/boot/dts/nxp/imx/imx7-colibri-iris-v2.dtsi |   1 -
+ arch/arm/boot/dts/nxp/imx/imx7-colibri.dtsi        |   1 +
+ arch/arm/boot/dts/nxp/imx/imx7-tqma7.dtsi          |  52 +-
+ ...nel-cap-touch-7inch-parallel-touch-adapter.dtso |  58 +++
+ ...olibri-emmc-panel-cap-touch-7inch-parallel.dtso |  43 ++
+ ...olibri-emmc-panel-res-touch-7inch-parallel.dtso |  32 ++
+ .../boot/dts/nxp/imx/imx7d-colibri-emmc-vga.dtso   |  59 +++
+ arch/arm/boot/dts/nxp/imx/imx7d-meerkat96.dts      |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx7d-nitrogen7.dts      |   1 -
+ .../nxp/imx/imx7d-var-som-emmc-mx7customboard.dts  |  23 +
+ .../imx7d-var-som-emmc-wm8731-mx7customboard.dts   |  23 +
+ arch/arm/boot/dts/nxp/imx/imx7d-var-som-emmc.dtsi  |  56 +++
+ .../dts/nxp/imx/imx7d-var-som-mx7customboard.dtsi  | 358 ++++++++++++++
+ .../nxp/imx/imx7d-var-som-nand-mx7customboard.dts  |  23 +
+ .../imx7d-var-som-nand-wm8731-mx7customboard.dts   |  23 +
+ arch/arm/boot/dts/nxp/imx/imx7d-var-som-nand.dtsi  |  73 +++
+ .../imx/imx7d-var-som-v2-emmc-mx7customboard.dts   |  24 +
+ .../imx/imx7d-var-som-v2-nand-mx7customboard.dts   |  24 +
+ arch/arm/boot/dts/nxp/imx/imx7d-var-som-v2.dtsi    |  66 +++
+ .../arm/boot/dts/nxp/imx/imx7d-var-som-wm8731.dtsi | 102 ++++
+ .../arm/boot/dts/nxp/imx/imx7d-var-som-wm8904.dtsi | 118 +++++
+ arch/arm/boot/dts/nxp/imx/imx7d-var-som.dtsi       | 533 +++++++++++++++++++++
+ arch/arm/boot/dts/nxp/imx/imx7s-warp.dts           |   2 +-
+ arch/arm/boot/dts/nxp/imx/mba6ulx.dtsi             |  36 +-
+ arch/arm/boot/dts/nxp/ls/ls1021a.dtsi              |  10 +-
+ arch/arm/boot/dts/nxp/vf/Makefile                  |   2 +
+ arch/arm/boot/dts/nxp/vf/vf-colibri-iris.dtsi      | 126 +++++
+ arch/arm/boot/dts/nxp/vf/vf-colibri.dtsi           |  56 +++
+ arch/arm/boot/dts/nxp/vf/vf500-colibri-iris.dts    |  14 +
+ arch/arm/boot/dts/nxp/vf/vf610-colibri-iris.dts    |  14 +
+ 76 files changed, 2398 insertions(+), 168 deletions(-)
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx50-amazon-yoshi.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-phytec-mira-rdk-emmc.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-phytec-phycore-som.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6q-phytec-phycore-som.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-colibri-emmc-panel-cap-touch-7inch-parallel-touch-adapter.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-colibri-emmc-panel-cap-touch-7inch-parallel.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-colibri-emmc-panel-res-touch-7inch-parallel.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-colibri-emmc-vga.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-emmc-mx7customboard.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-emmc-wm8731-mx7customboard.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-emmc.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-mx7customboard.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-nand-mx7customboard.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-nand-wm8731-mx7customboard.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-nand.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-v2-emmc-mx7customboard.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-v2-nand-mx7customboard.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-v2.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-wm8731.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-wm8904.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/vf/vf-colibri-iris.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/vf/vf500-colibri-iris.dts
+ create mode 100644 arch/arm/boot/dts/nxp/vf/vf610-colibri-iris.dts
