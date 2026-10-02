@@ -1,152 +1,181 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EAB44213A
-	for <soc@lists.linux.dev>; Fri,  2 Oct 2026 19:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543AE331200
+	for <soc@lists.linux.dev>; Fri,  2 Oct 2026 21:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790970677; cv=pass; b=DtJQEa9mMp/Mo7So0RwkNeG4mxlK+SccoVeYBixgEBpD05NATKTuIMqG4l6cX6EJ+Kpbv1d2NsS+9ESBB0R+3RT/jz2G8LKpiD8tGtYOLMHezHhr4gCKopxQLs1t46c4Y3qAHWyvfkZXBus3fulnSu0tjsy0o/2SousW9OpfZsk=
+	t=1790975869; cv=pass; b=T2hehJJZidEJAQeOaXgwcrS+vgWlTJebbHXM428SHCT/jMh84+bQmRNbK3Sz2dbscj4xxIQFLdKkdkQV4htqSTvKq2XpLr58MUB35CxD9o+mIQU2s8LAUWq65hpMedmEZXrqAk7BKRpZVy1J2hQ+hhHuw8M/nJiXL0nq/DI69dE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790970677; c=relaxed/simple;
-	bh=WiNBuEQv6dMvTXhO9orx74TnReKesSrj/Ai1PYKpad4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KCbJOavcAB5CiDT3WRbi1rKnyu7zAGtWZL9/fVJ/CfHegBvDWiVBSiZmMWK8Tqf1CTUWqzk9B8sAnI3o08/sxvWv9ioXjuKG59oCjmLYEDc6MmEN7JwIJWjt1MW4yFIGuTUIk+El/Yn4skjWbZhZDkdFrj50wsSxYUskVL9FOO4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=HEqIMhHd; arc=pass smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790975869; c=relaxed/simple;
+	bh=SwVzjzCEvI9xgzYskQdRtxzYscx6RxP9paKnYNf4bDY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=DgmhRB6NZ/paHzEz43OYOoa3nbji3MNQuvMDQjCxpokC+bA4W00FKdiPGy7Od0ZlPNMJqBwHWylGooQUCI7u34Edi7QKfZAr4hrCbA5ATuLT7GoFnbSjGHvSPmt7oPpp/T1vpjfBxit2iVU33QA8toLytlxnYv4jpQirRBL9gAY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=XDFwohhb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CjNitlPj; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="HEqIMhHd"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="XDFwohhb";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CjNitlPj"
 Received: by smtp.kernel.org (Postfix)
-	id D54361F00893; Fri,  2 Oct 2026 19:50:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=192.19.166.231
+	id 4C62E1F00898; Fri,  2 Oct 2026 21:17:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=103.168.172.147
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1790970656;
-	b=K/PRIee4T29KPtVCR6hzwW0ukEGRkFK9SWH6Yu8QtAOOGyUHP4BX/G3NE2MJ7Hks4sE8
-	 VszWOkInPWthI46tBVfrBxeuYlUZEmenfDaR57BvqDeCse+f+sSMXDCE2UPJqye9gkfRR
-	 YuZjYzt3f5xaCmeNfbVR+IoeYpZwrHoDKG0phK4OL/WOX96r7u6g8VJKHZNXsNHfGXTWb
-	 I4Y+6MrEULR3GW/W6+CafbTjHs/ys5EIAgpIxec8IdU7lwTG+tiZgBtJTUi8AID18xbWl
-	 U9WNDI1HHT9L9aEUn3jrzACvY/Ap32uzaZcuF5AhRlk51jl5CDtAFcmIRBzjrcLaZ+Q==
+	t=1790975868;
+	b=Ef0b9KVfUFkUa9OSS+vawg7Fcku6X6BE3uQLBRnB6M972wrddwV6ItR3YkwwEm/L5dJe
+	 iecPCsWpTyXG1pzFO+Ixy6KDq4560zmNRuUBS/6a33hjga0Or5xRmpccv6/Usgnf45XNf
+	 tVemUoCn/IYCDxDfP6fDsvQMyf5OgHh3IasdoOwOWTB2EOf3byIdp/O5vMrmQqYtnRx7F
+	 txZnclciwPrSrgKITy/YiQwHyOqY0K2opJ4+9/3YuH1KVUl3LpcGl1mUhfjdP6RhnCZRP
+	 RfXNADCjFCaouEd/diY0wo6IFwvQrmO+adn99ck2aBMaaDs7LSpTk5QKdEWuEdOP2Xw==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790970656;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=m0VvAogCPfC8hL2UvXxXnVJMr1C6NdDN0eRshYZll/E=;
-	b=v/r3x5BDYzV/89tQKD+l2nstVIyIwUbFugLbU2SKLpwv+XTS4Lgz24K79fQSZXhDZWnC
-	 5mhXoDDlBrdkDSnXFbrnvxrlPU6FxxgqrAmRfjfW/APTliCQ2TBgvQJgGqUyrH9+pPCs0
-	 fMMM7hMBeFVdt+1alpadVfYLlxJ4yhnJKQpKC5N25bNWS4B/fElDfyVOPxqm3bOwc89qf
-	 uYj4I7rLHD4pVQfSr/ey3WC9bhI1wFi/hPHQmfsK/WX0XtEXXQL8LbEULXKCM/NJAq86m
-	 LBpdWmynO2Ahabb34lSYcTJQk+3/bkObxDx8lCNA0VFXvvehpQj4/ZKwmeknHAc68FA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=dkimrelay header.b=HEqIMhHd;
-	dmarc=fail header.from=broadcom.com;
-	spf=fail smtp.mailfrom=broadcom.com;
-	arc=none smtp.remote-ip=192.19.166.231
-Received: from relay.smtp-ext.broadcom.com (lpdvsmtp11.broadcom.com [192.19.166.231])
+	c=relaxed/relaxed; t=1790975868;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=YX7f5u1JAxSjRaaI8LoRy7woQY9evgYyUE4A3mVXrJo=;
+	b=x+pBoC6p726VTSlS9kWf0m2KYrSUlmXhLfXjXXTh+vuYRO1P+9Pf639rewBwdedoltwP
+	 CtMtZba1WNaC+TP6ue6qxujbzGyz2mIflJd1vcd3TYEpJFkoWsZHseuoS553UbdlZ1wCK
+	 TonqRxq2Q885bjqHOvxszsAaO3Z+F9Ra4//ZBk802xWGRQOBTkiT68gV/20hTSU9HUXU4
+	 u/kzbTRMS5tCgbbD8tVuIWH37Nl/Q+0cK6dMNhSm8c1k22TDInyxP/1E7mpU7ZZuXt3P/
+	 8JKsd8WiMwiD43oZlcVyULFhHp6DLoFviyroPgu2chpAnRZafm3lT38EYh4IBQuNuXQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=XDFwohhb;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm1 header.b=CjNitlPj;
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	arc=none smtp.remote-ip=103.168.172.147
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 18CF21F000FF;
-	Fri,  2 Oct 2026 19:50:55 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 1C1321F00893
+	for <soc@kernel.org>; Fri,  2 Oct 2026 21:17:47 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=dkimrelay header.b=HEqIMhHd
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 18CF21F000FF
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id C255FC0000D0;
-	Fri,  2 Oct 2026 12:50:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com C255FC0000D0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1790970648;
-	bh=WiNBuEQv6dMvTXhO9orx74TnReKesSrj/Ai1PYKpad4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HEqIMhHd8hcJlFaIrYL6xLoVkeb0M3qDObAnx8przMPDOHpeVMmJ6mgMIOPyGAtig
-	 GgaaF8WHin83kyHVL96lGK4UV0HiiIkp/iKCRktde3ebhOl3nsCqab34KMYvuLMNQ0
-	 s8FtrbmqbIUg1Wbr3wGTydwkVC13mKYgI12pXQ1M=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 97BE5A88;
-	Fri,  2 Oct 2026 12:50:48 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: soc@kernel.org
-Cc: Daniel Drake <dan@reactivated.net>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Stanimir Varbanov <svarbanov@suse.de>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Gregor Herburger <gregor.herburger@linutronix.de>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 2/2] Broadcom devicetree-arm64 changes for 7.4
-Date: Fri,  2 Oct 2026 12:50:46 -0700
-Message-ID: <20261002195046.364682-2-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261002195046.364682-1-florian.fainelli@broadcom.com>
-References: <20261002195046.364682-1-florian.fainelli@broadcom.com>
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=XDFwohhb;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm1 header.b=CjNitlPj
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 1C1321F00893
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfout.phl.internal (Postfix) with ESMTP id 45730EC0015
+	for <soc@kernel.org>; Fri,  2 Oct 2026 17:17:46 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Fri, 02 Oct 2026 17:17:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1790975865;
+	 x=1791062265; bh=YX7f5u1JAxSjRaaI8LoRy7woQY9evgYyUE4A3mVXrJo=; b=
+	XDFwohhbdyvMVgoVNzE34ILFZPZsBzNkZtOVPLOdg2DoLWLMqVn/ZjghTdLoKs6H
+	hAixXvzH7jBemHZwf8HA91H16m7D7mmLRx6Iuv96QE6O3ExeXP8CXucJ3iUUP0t8
+	Tbb44YKKjoe2t20483jXnOOy5Glaks4SAbKteRAulIwU2m4q7MCy5qVTCOQiGg30
+	cQpRbU5Zb+2dOb/nNcses34tdv+xWTO0BUjQaeTA5OLUdP7cbxWyFC2sa6HuB+Fb
+	POpHN6nAWhIFHnaINIvcDXxOgYBeSY4qIbWtE0KLSj1l156mXHf6Uzs0/zpFCh7k
+	qP3LOYC6g5EK1a00ZpQGaw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1790975865; x=
+	1791062265; bh=YX7f5u1JAxSjRaaI8LoRy7woQY9evgYyUE4A3mVXrJo=; b=C
+	jNitlPjJ3/T9rV+YlZjIUQLTMAHuKNNZpI4JdoTwJZLjr7MFnDrAR0XYXi0CwQAB
+	cM5nKYx9Iee5QPh1/jdGe2WhH8dwgTJ39RGvwY7pVWfZz0wn+UQuEwJLHVxPy9Bu
+	JQOUaBxvDqtr65r9wdjWg86J/jB2pHhp7xm7hR3sGaVEqdaYCw3Rpk9SpM8yTKxG
+	EDMzEFwh4BnSDseIib0C1J4e3oNkGMVk8SBt4/oL4iHxDfoKAhnpjL71BhcdlQNL
+	Cxk41q4jcwm+y/huAFwnDj7dqOmUAIGGiV3zv/lQruFL11Eq8mJUU9/gWBBah2I6
+	cdc/ITP6GgMmG7Tzut4Ug==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-09-30; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1790975865; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BrZXJuZWwub3JnPg==;
+	s=fm1:rsa-sha256:OL5HYcPw2/3RIUn3aCrCmvggSzJo7jpF/Wf2MApGCrzWx8Y
+	ij0SprM/FgRvNwYqoAmD42onhuJTj45yt08jmgyZOwlpUO4iiu+3mrcAjRAEcJMi
+	rXd0LRlcKp91R8Ng8tY5IPhD6MOwQ+6ff+qAiagDURbBkEcE1H/B/Rb6RNpGVh0C
+	YCnHoUwItQrmAJYgIFvfL1GeJtcZrKJDkM41Nlc8X5Quv4IXpo93z9jD/SDIpXa3
+	WsZ04aIzwbZE1cAHQlYFr4Md6dWeE452ffrtxXT1RLGpeJBuidzl+lz/ZI3WwHtd
+	ArNnuC5gjar4AduTKsanbCpAXYg6m+CDpewIfeg==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-09-30; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:OgrhGqbnQeK3nZJVUWQxI+pE8gcw3piOULHYYH0INTM=:SwVzjzCEvI9xgzYskQdRtxzYscx6RxP9paKnYNf4bDY=;
+X-ME-Sender: <xms:dR_AaupNS1Ce6Kdq4kz4Wym18PH2nIG-kkw5a9u4q0KvX0m_CDpDFw>
+    <xme:dR_Aanc8V3Na32mXaSmdoL1eTJkTM7Zuv8dIo96caY8M1Aa9r6XfhgC5UAo0cy7J0
+    Wla46N5w48zuyav1bvHLkM7eAB0R04rC3cMqD3kwSgt0hbx_NMg20oe>
+X-ME-Proxy-Cause: dmFkZTFk6SJTZ93NKA+M5MmtoYXlTCu0kvb9TOLJqOnPE7J0SxG8MNqPZR74cfLdrecoi7
+    nAI3UWr4DeXETGdfJFiAmiWLs9jlAkS8prf/7AupP/qsmbMaNlAJv+i/yStg0CSwIrbrI0
+    mW0kj/Yt92wMoCxwno7re/0y0kf/hv7E6/ixPkVHZq1d68Eah5PCBXKG+I8MZ2h6R0iIIn
+    3FyBCYfX+zEN4sUB9qqjss6eO8CZyewbVBkEtmzISTAEKudyq1asy4AF8FyKeAkZOCRXe+
+    XCi7xBT/hYmV1v9QbscGDx/L8y6F25zKYR4zla0S2anieUYhtCjDRKPXYM3sBkNdQ8EXMj
+    eCHe7uJjoDUWSx5Gr93PEc44jkOUFPUeMVKFutR0SU8pbPDQ1t7HT3YtAv1lyWv3hiNIPZ
+    YslURpa4JTQMlzJuoDtgU3vRw+EfLSdVj6Qb570RqBEazrDeWPzJtfgWUm3XM1UBJRUOeM
+    BIMrU7gs4wTfXKnjx3X+/w5zY5Pt2Fb0yh44DjMjwmB200xMnAAjbA61ww7ukxrh4tEakn
+    59MVrTv3kUdIyHvzL71gC7DQnBt0H7X2ovZj9izhY4WA9DTGqZTUnJ4yXd8w3+EPViAU0T
+    73bxaWgY+RrJAXijWwfJJaztiTaJOnTyNUEAPQYf87MgjJWz2d21SQDUGgrA
+X-ME-Proxy: <xmx:dh_Aarcegph4Yfs-VXEY-JkimoL4oqDeyGxQPKjPxf0jf5QhRV614Q>
+    <xmx:dh_Aak6_JNH1OwlQS20eNjz0XAnYsvhyxvxb5oPwhlxwAzZ3noJ2rA>
+    <xmx:dh_AauXiMFmN19nwQBNGljdKhyLgDh_9M_BEFdx1d6XN1jbPIKMB1w>
+    <xmx:dh_Aaj7Js4qyXLKKhU_qUz7i2ry88WjBcZd9-o_x8fiuz-hlbqoivg>
+    <xmx:eR_AapvWjpnnrQ8gq0auOo438PvFBpSK8wXqV5xa6CF9VIFi6dUx3eWK>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 979CD32A008E; Fri,  2 Oct 2026 17:17:41 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: Aw6mAajFSntB
+Date: Fri, 02 Oct 2026 23:17:11 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jens Wiklander" <jens.wiklander@oss.qualcomm.com>
+Cc: arm <arm@kernel.org>, soc@kernel.org, linux-kernel@vger.kernel.org,
+ op-tee@lists.trustedfirmware.org
+Message-Id: <67bbda51-d1b6-45ad-b798-d8c0e53bd23b@app.fastmail.com>
+In-Reply-To: 
+ <CAGgiveXqFFi+nq0834+hwBBnwJssh16aayZBgh0toYCVN+OMmA@mail.gmail.com>
+References: <20261002142443.GA778834@rayden>
+ <84c1dc64-6380-42e6-a501-9be86666e5e7@app.fastmail.com>
+ <CAGgiveXqFFi+nq0834+hwBBnwJssh16aayZBgh0toYCVN+OMmA@mail.gmail.com>
+Subject: Re: [GIT PULL] OP-TEE fixes for v7.3
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+On Fri, Oct 2, 2026, at 21:04, Jens Wiklander wrote:
+> On Fri, Oct 2, 2026 at 4:59=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
+rote:
+>>
+>> On Fri, Oct 2, 2026, at 16:24, Jens Wiklander wrote:
+>> > Hello soc maintainers,
+>> >
+>> > Please pull these fixes for the OP-TEE driver in the TEE subsystem.
+>>
+>> I noticed that the contents of this branch are not in Linux-next.
+>> Is this intentional?
+>
+> I made a small last-minute change in the commit message for "optee:
+> register TEE devices only once fully initialized". That's why it may
+> seem new.
+>
+> "tee: optee: ffa: support shared memory offsets on large-page kernels"
+> is brand new.
+>
+> I thought it was better to send them sooner than to sit on them. Both
+> are added to my next branch, so I assume they will show on the next
+> update.
+>
+> Please let me know if you want me to keep them on linux-next for a
+> minimum number of days before sending the pull request.
 
-  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+Thanks for the explanation, that makes sense. You need to decide how
+confident you are in the contents before you send them, I was just
+worried that this had not seen any testing at all because it was
+inadvertently left out of linux-next.
 
-are available in the Git repository at:
+If you are ever not sure, just mention that in the pull request message.
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-7.4/devicetree-arm64
-
-for you to fetch changes up to 4db272ba40c09eafda1ec0a4d59c0423561c8f7a:
-
-  arm64: dts: broadcom: bcm2712: Add GPU IOMMU and IOMMU cache nodes (2026-09-28 11:24:14 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64-based SoCs Device Tree changes
-for 7.4, please pull the following:
-
-- Peter adjust the display DT nodes status properties since it may not
-  be used by default and therefore that must be done at the board level.
-  He also adds the ARM PMU, thermal monitor (TMON), USB OTG nodes.
-
-- Gregor adds the 2712D0 stepping compatible string because there is a
-  need to differientate the D0 stepping to avoid crashes on boot when an
-  incorrect DTB is selected. He also adds the SPI controller to the RP1
-  southbridge chip
-
-- Stanimir adds the RP1 PWM node
-
-- Daniel adds the GPU IOMMU and IOMMU cache nodes to the 2712 DTS
-
-----------------------------------------------------------------
-Daniel Drake (1):
-      arm64: dts: broadcom: bcm2712: Add GPU IOMMU and IOMMU cache nodes
-
-Gregor Herburger (4):
-      dt-bindings: arm: bcm2835: Add 2712-d0 Stepping
-      arm64: dts: broadcom: bcm2712-d-rpi-5-b: add compatible
-      arm64: dts: broadcom: rp1: add spi controller
-      arm64: dts: broadcom: bcm2712-rpi-5-b: add spi0 interface
-
-Peter Robinson (4):
-      arm64: dts: broadcom: bcm2712: adjust display status
-      arm64: dts: broadcom: bcm2712: add arm PMU
-      arm64: dts: broadcom: bcm2712: Add thermal monitor
-      arm64: dts: broadcom: bcm2712: Add USB OTG port
-
-Stanimir Varbanov (1):
-      arm64: dts: broadcom: rpi-5: Add RP1 PWM node
-
- .../devicetree/bindings/arm/bcm/bcm2835.yaml       |   6 +
- arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts |   5 +
- .../boot/dts/broadcom/bcm2712-rpi-5-b-base.dtsi    |  41 +++++++
- arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts   |  34 ++++++
- arch/arm64/boot/dts/broadcom/bcm2712.dtsi          |  91 +++++++++++++++
- arch/arm64/boot/dts/broadcom/rp1-common.dtsi       | 128 +++++++++++++++++++++
- 6 files changed, 305 insertions(+)
+      Arnd
