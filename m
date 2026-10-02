@@ -1,393 +1,198 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE672F60B2
-	for <soc@lists.linux.dev>; Fri,  2 Oct 2026 14:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=100.103.45.18
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790950119; cv=fail; b=OKKLyAp8NorKONe18/TH/CpMhlcPfJYpKJCBo15J2kFoi7uajfJdZ1EdQGUl1suGra9NMcqscJnAnt6gtbrmXGuCY/REr5IYprFc5tM3vxef/y4jKg/MrW6vOaJvlMO/6LxaTUjCtYxok8qiDmj5CIZSOlHTsmuLFgdyVlzToE8=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790950119; c=relaxed/simple;
-	bh=i1D3X8QUcI92ugrYgb9vxHDuM01421b4TEJNkUs01l0=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=W9dmMFMt80egzeEvlpQdQz4f9ylm5CH8oJxxsqI5Efj3T40ds0W5YHUXytJuMhqKqvKImigCQn/PyTW4vItXg10/lNO2xmpTnwYNDwyEkSXWdjeK1buFV2519SWDWvSivYFJjsM9RsqDzJVkhFFuIOCnraHPvPEyYWd+2c92kbk=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=dAJsw3um; arc=fail smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF53328B71
+	for <soc@lists.linux.dev>; Fri,  2 Oct 2026 14:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790951092; cv=pass; b=MkMVfLeSnejRoDEgs9Q0+WpjvF/3/OHmp7zUZVB2W9wt3objdssnZtuleueysD5S9P+pxlsn6zT8R0nBBCDsnbLXm6gyzQGdMUHPJvgPjRP91nWcuceDeuUC0dH9jll9ZmgsMhHTmnyfHdLdflN5P32OUtbqWRHsQNud0jHLv1c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790951092; c=relaxed/simple;
+	bh=g7FcE7gRQ5DvcafTEcDaKR+a2nLAMCLq+x2SfKEYHTk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=iMJoL1E1VVYT0pJNhvSuzOlda9osk2eJXvwy9uCUa2DpeL8EnTSgmakkT7uQzMSTvuf17xQQzhFD7ZUx2VfOV3+HHZsUD4AGzqqEVvrIVyMHxqheCxXwJcvHsJEKXWdbe+pQ2NXE6GmGsfyguoIHJgn+insaHVwLZ1sFe/ZefVU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=e6XSXM45; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=HJN7i6SD; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="dAJsw3um"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="e6XSXM45";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="HJN7i6SD"
 Received: by smtp.kernel.org (Postfix)
-	id 827251F00893; Fri,  2 Oct 2026 14:08:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.84.44
-ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
-	t=1790950117;
-	b=g+M/63Z78XhUEb9d7KZEBlre7zPKIbmWJ/hEQCzc2aoeY2Jxevl0xddlTwFokXzGXMYs
-	 Y8+2tkuYMzCaLjAJdRF5QrVn91a1jH52A0HlyaQyJ61n4EOq5iciaTR6wCzakyqrgup2x
-	 5uXWi5iBhBmPZSjBzHRKLhyrKa59OlMtbJyZmkswnTGGbWBgo/C1u3HMaB5t7ylSTycGH
-	 JzzVU3SbPZpJTgBL0Vh+SsNrCtW7jsBknBwr2sEiCpgejDSsukTAlk0FBhw/LSun16rCt
-	 jHOrpb27AgvXK4l5tLKoMJCfU5vxp+KbtDsFjhBS8Q3wmMpwHB1D4mlT3qFMkOdIs4A==
-ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790950117;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:Content-Transfer-Encoding:Content-Type:
-	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-LD-Processed:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=3Ve7VB+tMulDcN/DBYp4fI3nisHsfeD0PVMfwmCylPI=;
-	b=xflqfk8NI9BDfftlf4gTQObBNlVrreu8kJ45xyNF2Qunr/PACZftRk4fN1NGObJy10pK
-	 mEmG/er66T5vxnqHvRw3UV92Fvx8jYyR6EBQByNnhR8kiM4BprfgRfE7opoxYXsn4YTBX
-	 d3FOIE7OJsqC4ZS2DgkUh0r4naMfv3isePFAN+i1YjJauSG3L22miaxpqDpvV3B44cNPB
-	 2kDkgOWT9V3fE51/NWeFIx56xOT2KFKpGfyAiQ9gFDbgVGT7Y7S6WfgY1xtx0Jm8kYirp
-	 DspVg0xeJjVIOUAxkAvih+SzNDwawzxwBQvvL+N2rPyvnQIl3jRMt2DnWlcTmul3lMw==
-ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=dAJsw3um;
-	dmarc=pass header.from=oss.nxp.com;
-	spf=pass smtp.mailfrom=oss.nxp.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.84.44
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010044.outbound.protection.outlook.com [52.101.84.44])
+	id 3E1021F00893; Fri,  2 Oct 2026 14:24:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=205.220.168.131
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1790951091;
+	b=BnK4YQtr1KvJJ6xUnbzeCaPzQuheMdHlRJyceazk03bRb+7Sh5U31rKqcF7NaElsv3MV
+	 mV7qgUHEGoGgqsl7PoMb4zVHcxa0swUPAnDiFfv86kDMtImdUIDGCsEWhtMneEv7XsX6x
+	 FEdfj+KR6jHreviWMioEDGwsFh1RAiUsCZBnpVLleI2ZXE56l5M1ZL24+KJEW8GokCMvG
+	 KHOH5WG7tFZFMztrBhZR+Z0tUITe4z3wkKVTmwuLpS9VxHYKA6/GfB5QIHp/4imP+Wjl2
+	 zZrSMX28egFkmxMr8y7euDTiF4wmKXW1QV45YQGILtONCfi0SIT+BgEJY+VtQ3dHevg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1790951091;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Date:From:
+	 To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:X-Authority-Analysis:X-Proofpoint-GUID:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=j92JAvCjEE7IzGby2lySO9Ys3n40MTdxIMDeI4JZkMo=;
+	b=D8RdI7DnKESyEDqEzxMAF9bj+QAWEfXVji6tXNZl43rQIlcKbJY4qbUMLFCZZxp1ncfr
+	 XrN4tsfIbAQGl6LlwfAjnBWCyRXwxmPKXGcl6yiJTeQs9GB4DvkSNcbZLbW/KuXlgqAVb
+	 bHM/aYnDJNjuwWr9HoqggPbqfSiCgUy7e27LRzZuiCL/7lFfUqqeId+XL/IvldjBs1KN1
+	 NVMyft19BsCH9ARJGB+UA2Y5s73h40f5ALc7UUXEQm+oIBrzqh/9Ik78jBvZ24wnKRMpV
+	 riTs0+MpAjLRqdRLf6y0GfnNl7CCsc0rF+PsivQzEuB63PZwKyLiCwen4uvafDn7Vfg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=e6XSXM45;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=HJN7i6SD;
+	dmarc=pass header.from=oss.qualcomm.com;
+	spf=pass smtp.mailfrom=oss.qualcomm.com;
+	arc=none smtp.remote-ip=205.220.168.131
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1D90B1F000FF
-	for <soc@kernel.org>; Fri,  2 Oct 2026 14:08:35 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 97F871F00899
+	for <soc@kernel.org>; Fri,  2 Oct 2026 14:24:50 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-NXP1-onmicrosoft-com header.b=dAJsw3um
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 1D90B1F000FF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dFBE+phnu5jkikgZW3H+geoLWFoC842rA21kiOK/1EN1qGJUsp1X6GAZ/S/5RbV0HqnyXpAI1RfHZwFLers7P8QxtJ0ft32AlndrzOoZraUcJIalg9rIGCMYsgzINL1nKjl8hj1ImGfLPVV0wBR9+SX5pffJNjStW9tz0aOgNaqzjJnsfLf6Hgko8DqowipaBydkSfMsKPSffUg1vF+DhtbbS+bTDH29K5odbmzBBWSXZ65GkRFZwIeoU60FV5ZqxtC3hJcePPxtotfV7SMQRdo8TerzZ3N22AalBTcpk9AZHyQnhusvQxgTVX7iFi4wGC7gjKl27gUJpEAc+nH+5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3Ve7VB+tMulDcN/DBYp4fI3nisHsfeD0PVMfwmCylPI=;
- b=yz4Z+2A0Frg2pfnTCPvpDGgVIV7qhOU+8qj5qkOX5IqjrnqsW7aKlNDdA1VRFerc9kAD7gWFaTcLEEpj8UdYr78qVkYZny63Ff7yDy1LOYjDHriTku5zDulllW5mqbt0xb8xcZYOj5/RJURdJlDqj5Ovu1JgmHBN0H14kEDQFNAvRLE0g89EMQK2m2b2AEU1+asFyj0mcQmsgQ7SOL2PVJeb4rn6jDUfvVoLufiwR59FLCOvhcYC+rfN+beYOQZq2NgLar3V/2mEKIdth1Bod+kuzc8HmuuILij+PSJZuKgr3tkxt4e8R5PrltkLSe0dzNpyefk8A8m2GCdwXt+X2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Ve7VB+tMulDcN/DBYp4fI3nisHsfeD0PVMfwmCylPI=;
- b=dAJsw3umJUFKLg58b66rPbV32hJWzjYxTJP+y0qIFNzawlPxiHlr2BF53zzab0WYteuiGo0hwTGHyQ7WYyoy4ux/FYBUzdx9cNtaei9LbKt9Y+lHhuQA8Ai9vun3W8RJnOUf2+WRsKOLhyKYq2Y5tsA1KihWja48F2t9clV4YRgmI86zBuAEv6n0PW/L/AOa8WDJRjTvDwwYGwLIl1dgGnK9m72vBNHfTcUtE8C0zUEa3//INZ31x98Fu1eDkfU0E571qZxBbQIZZTYvOSfmUnJxmOBJcCk3f/e35No3iKgV0HfdQF1G9ywakPYsOzS6u9a0WW9Qs8EZna1gnWYrMQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from GV2PR04MB11799.eurprd04.prod.outlook.com (2603:10a6:150:2cf::9)
- by GV4PR04MB11849.eurprd04.prod.outlook.com (2603:10a6:150:2de::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.18; Fri, 2 Oct
- 2026 14:08:33 +0000
-Received: from GV2PR04MB11799.eurprd04.prod.outlook.com
- ([fe80::2146:83a2:5329:b7c]) by GV2PR04MB11799.eurprd04.prod.outlook.com
- ([fe80::2146:83a2:5329:b7c%7]) with mapi id 15.21.0472.016; Fri, 2 Oct 2026
- 14:08:32 +0000
-From: Frank.Li@oss.nxp.com
-To: soc@kernel.org
-Cc: Frank.Li@nxp.com,
-	kernel@pengutronix.de,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	alexander.stein@ew.tq-group.com,
-	andrijsalivon@plajta.eu,
-	eberhard.stoll@kontron.de,
-	francesco.dolcini@toradex.com,
-	krzysztof.kozlowski@oss.qualcomm.com,
-	laurent.pinchart@ideasonboard.com,
-	mehmet.fide@screeningeagle.com,
-	nora.schiffer@ew.tq-group.com,
-	oualid.derouiche@kontron.de,
-	primoz.fiser@norik.com,
-	stefano.r@variscite.com,
-	y.bas@phytec.de
-Subject: [GIT PULL] i.MX ARM dt changes for 7.4:
-Date: Fri,  2 Oct 2026 10:08:25 -0400
-Message-ID: <20261002140826.3947315-1-Frank.Li@oss.nxp.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: PH0PR07CA0083.namprd07.prod.outlook.com
- (2603:10b6:510:f::28) To GV2PR04MB11799.eurprd04.prod.outlook.com
- (2603:10a6:150:2cf::9)
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=e6XSXM45;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=HJN7i6SD
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 97F871F00899
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 692D9jeR159970
+	for <soc@kernel.org>; Fri, 2 Oct 2026 14:24:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=j92JAvCjEE7IzGby2lySO9Ys3n40MTdxIMDeI4JZkMo=; b=e6
+	XSXM45GKfzstKyQHZvb4ezVUfM6Jp8RUFRQoj5e3FFZro6bZl2vrN5OWY0mp2cze
+	CBRQqWf9wWRm2IjguKrZHtOsmPocE0LxMmZUTLMeQ4XB2PK7F7mqHlXyieifDfFt
+	PxrwmyTLmBwNe76YioL5ClLSU603mbOhMMeu2qPV6oRPfOnRxA/9ALnNkInNkywg
+	F3enl/54ZYpEiOAd/OqM7mlu/6YmV1seqgzGwRBEcIGfes97VIC30h6SGUd2sKPB
+	ZLLJt01XvR8fu1Kr5ttjJTSQe0tzvaNO4/R9oE0ZaaOA71FGf7vEe3iQ3ttZ5bgV
+	tZcmufXBSKR2XVNQs3sw==
+Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com [209.85.217.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4h1vxebh1k-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <soc@kernel.org>; Fri, 02 Oct 2026 14:24:49 +0000 (GMT)
+Received: by mail-vs1-f69.google.com with SMTP id ada2fe7eead31-7a77961b860so1484330137.3
+        for <soc@kernel.org>; Fri, 02 Oct 2026 07:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1790951089; x=1791555889; darn=kernel.org;
+        h=content-disposition:content-type:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=j92JAvCjEE7IzGby2lySO9Ys3n40MTdxIMDeI4JZkMo=;
+        b=HJN7i6SD0v7zmYRMIF+xhB+gm5JCluhNqlA2J0GikENfYuBatsTxMW5eL4y/Dlkci8
+         SndkgcL2N2Dr2GTENlHnlQxUzobQmqHurLfgpoBjsOxcEAX0CTEazvgdIGDv98qbV7QX
+         D4Lw0zA4XCcFwfU7PAfIxvJWGd3Noz0AH+GDyRWX+G54EjqsCpLhaSpbQtL6eZSQ4nQp
+         59n3u+17bGaHGxv7eBsYZ6WqZ34N230qUzR016PD/Pj9QCQcz/NQx2C2LKvxPMakh1Na
+         kyQUrVRy9cnVdJQHJIsAwz3KHMLdiF3jSA1wBllAFkiWhhUh4qor04q2XQasJqVCAOaj
+         ek6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790951089; x=1791555889;
+        h=content-disposition:content-type:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=j92JAvCjEE7IzGby2lySO9Ys3n40MTdxIMDeI4JZkMo=;
+        b=WdCS/z/l4clCtOny2rk9RQpmaoZv5dWT7jm65FCD+HVZUteHMw1lO6Fg3YVVmRwNQm
+         fs80vbXT4sOfIEfG6r0DU3PgSozKqlW+RY0ymhz9IdRcc3tOOdy0fmLdSKaTUPJdNWx+
+         Vifusj8R7bKSEisxa5aftR75Knc68NF8tqV4aNXL5ylpX67Mqd1UWVzBqZbD/M6je85v
+         CCqFkiJQSTKESAhaOYMxZEN3aIhtZ8TCSLiTwJB12nLAF9hlZhSfsJM1hLx2PjS+GJAP
+         /3t4gBV+t8avj3CfvE5Cq1q9ssH7h8a4NkaxVAeuwH+s02n947ZMpLcW0qUlEZxlGlpL
+         utPA==
+X-Forwarded-Encrypted: i=1; AKwUvBzagWYcGG7rpbrbVehUMSg4Fy4S2aJ8LYmnvWPhPzQl+fnOKDrU0in8+84SMhvBhRAwpJU=@kernel.org
+X-Gm-Message-State: AFq9FYJQbPrJzh0B8rBED2k2DI8FY0vY3RoQi4SntK/7vjop7TcP41qz
+	t9ha7XK6GRxopwJhmiW3NqW8SzHUJr1tjYStrORyung/k76y9Er2JShnj5obObt0Zt/MpCanM2c
+	+m89ljqF5pHceXrh+UAq1hMd4g+RHSqcwbii0AuNBmhTx7ncd
+X-Gm-Gg: AYBFou3LV9GZMase0zZxCP6/J6Fki4XLC7NmYuLn+hTCtIMIeaQYWBFTyM+OTM0SZ2x
+	XL3IvPJzKRFxfMSSahXNQ0AN3IXv49f5z4zPeIPFcR6v1+RJmMxaVgdLokrTQwdXnYf6EVZCXo+
+	ORNrJLWObd9u178SXF0A3esxcJp+Kl+dlr64NZSbNCpisEnRf3RC4dbJ4VC45RMVyh7MIqcvUAu
+	bKS3a/t7ZJvJT3lm0cLvfnV7uKDKEDICjHyM59VFW/8+Ah5qA6kfcHY6VI62ON/rI12w3Ia7lyc
+	GzcI96l4EUm9WV8gzlFsb+OEwpHbVM87NxdA9x5ce1bzHaacmq6uTo8lg6R14uffao+jabfv4JS
+	WwJG1GtJ0WJ1T3be6CmUkQFlQE4axcSA=
+X-Received: by 2002:a05:6102:508a:b0:7a6:d11b:16ea with SMTP id ada2fe7eead31-7c0f4061990mr582687137.6.1790951088447;
+        Fri, 02 Oct 2026 07:24:48 -0700 (PDT)
+X-Received: by 2002:a05:6102:508a:b0:7a6:d11b:16ea with SMTP id ada2fe7eead31-7c0f4061990mr582673137.6.1790951087574;
+        Fri, 02 Oct 2026 07:24:47 -0700 (PDT)
+Received: from rayden (h-79-136-84-34.A175.priv.bahnhof.se. [79.136.84.34])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6af9d873682sm919852a12.10.2026.10.02.07.24.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2026 07:24:46 -0700 (PDT)
+Date: Fri, 2 Oct 2026 16:24:43 +0200
+From: Jens Wiklander <jens.wiklander@oss.qualcomm.com>
+To: arm@kernel.org, soc@kernel.org
+Cc: linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] OP-TEE fixes for v7.3
+Message-ID: <20261002142443.GA778834@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV2PR04MB11799:EE_|GV4PR04MB11849:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0dbcdcc2-14e3-4ba3-c84f-08df208ea47d
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|23010399003|19092799006|1800799024|10067099003|56012099006|6133799003|3023799007|11063799006|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	hYxf9oacNdhNRr8ZHIVYaqjJfIe7unNpMCgjgGboxnk+1RRBTJLfzDS0VtZ7q3Y8jAjAkGFDGIlQH/mI81y/+puQUaVIB6l61DZ4lx9isVHgcvGd0fK71F42ot0maZlw5BVHdvkHpLd52+MZIg9SklLxINZ0zSJ6lmHT4kQMa0Bsyg0NbpqIK3C7lmXsji0AI5AhxjfTrJlsYXEFxgwbGsIauBW0Y/zbD6GxrworGN5FApEtqIaiCHuBbtZ01/uJTpfDdo8W0ZC9M05BSv3sygoX2GptLL4u5rfh/aSVLko0rkXBDT9QbBqKanMBnwQuedSs8RmzHwjLNit3WsrBpfK9Itd091E/dhpmD49DozG3kOOuEzQ0n/VgpfdgWkMm/Zhj4mb6l26dZSk/hgyRbDHLJzUQOsVH0bGEYxzqWskZquFsJo2ueATi/yIYGvZFguFmcOFBQisYhTulQdNxEyHp+oyBJctH/FzWF3Z0IE4kUgbuTwmc4EKqmClxuOV7hw9K5G2xhG6a2yky9Zks1bOzZTOPS0JqQFze7vvc6RZIWqkfbrFeElnQj2k1OrwZVevgz+tt5lVWhpPAmKo+8DdpCWpTeK94hFNS6BBDPfh04N8MRAbQrDDbTcK3CGv0h6KYTEmRbJp9EQbnbU5ABAcHBPa/jUjuUqdQtAXx9Po=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11799.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(23010399003)(19092799006)(1800799024)(10067099003)(56012099006)(6133799003)(3023799007)(11063799006)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?DNBYKleQVACoIAVXQHq1kbToP+rvzKEgPI34UEGh+pClbZZg6qnDPZMEzXpH?=
- =?us-ascii?Q?Ql/MjuXRwEzEL5yj/DBvNUlcBZvGR5Fj0dsp5XUKqzqJbu8PmnvuyZrGWo3T?=
- =?us-ascii?Q?f4TH6Hgun9/7jSwUG0vmkJDhV1JSEe/GDp3MUQpoC4K8Z0OgzMTgKFHtBKPg?=
- =?us-ascii?Q?GGDwBiu4PZW+XmlE0DCkKjHntIpjh69DpMcOSVrIUlIuFo4G2lraa0JNczXu?=
- =?us-ascii?Q?z1l7FCOwq5x2fbyTsxvEny764t8BudUKUc7VdnYzifx//M3efOu5SD3yLqLf?=
- =?us-ascii?Q?n9BweNol7tcxXspKRD4wV+ZlRRLnADVL8B3P+rVnGU9NqX8tjQaZmVn+YKWh?=
- =?us-ascii?Q?aft4RCIjb2y6XnS6hMcoWIIQU4VIB/filfunjMedDFBgksOJA3UDavAtEHy8?=
- =?us-ascii?Q?HZKQNT3Ib46FrBRWcYxeIX4dXDHxMp2eOExuOPaeHiCibni51m0rp7itJghB?=
- =?us-ascii?Q?UE4Y/CYJV+4u+/JPUDJgMJ/fLfNZ/pXl5Y5s7zTaP3j5t0lxC5efomKURERc?=
- =?us-ascii?Q?CSSpTwm14rAtKXGPaKSpI6Tm39UBx2DvCciDmgGFDHpHwpkEQ0HTv+H9ei/M?=
- =?us-ascii?Q?ue4VGJNAvNVH7dOsiA0fEd2o5FOhFkp3c2pN++379CnFZjC9WeMhJ00RP5RP?=
- =?us-ascii?Q?4UWqDG4fh8anViIgFWjUBw2RvYhKAgeK8pprfdg2uAVYCBYvYkpN52dQBy7s?=
- =?us-ascii?Q?T4sUs1wCZMX0zqcaUOGdOEor6OQGdqZM3YaIfYd2W0Rp3UCJAStw4vocshCa?=
- =?us-ascii?Q?UJIDdeOvgR2sD5VCe82H4PbeW6W7Uv7VXyKBhy6yDHDLivuAuwobVWlkYkQq?=
- =?us-ascii?Q?/q8Ahg63lWpnd7pu8LbpUAVmpLE1P/az8P7MCLvzePivJWIpcKUQpTTnxjUA?=
- =?us-ascii?Q?Qk9NAWXMmP4k6zGo9kT+j6pLAlsTG6/xKxfLGsek60qy0pj3WMCskP0Pu+lK?=
- =?us-ascii?Q?5JvGon8CZR/1RFyG4qLbrYqVT8/yQr1yRW60AWpVkROp0sgbsnN6tUjdym1Y?=
- =?us-ascii?Q?esGlY0uiFHvpzlvF+PwAjuj2QWWTpwGQto9KjRXEtP4z0RQMIJxFvxGiDEi5?=
- =?us-ascii?Q?24bBYldNNZxYJYY1JlR5JkFYxGSNE5sdGkWT5HcqwZJ7pe4YNXEUYlA/PbIa?=
- =?us-ascii?Q?i0VYnOQIKAqrrfRsmxsNOHneeO3/gQmUysIEufXgOclBq0DMwK58gBi80wJt?=
- =?us-ascii?Q?2ewqXn0VCweYjjiV5A606Tpq7uHatpiE5w5n1qEYFuhLu5S2cWaDg7a07APl?=
- =?us-ascii?Q?te5HZAQkfSQwPxPeGAC5JFGlybUAuixcYbGiIrVjauSOM2ZxTdPqnzCaULkA?=
- =?us-ascii?Q?F1m+gTxHGDJpRQU1giyiIGpWqyYOVmoNpi15UNQlYWVGct9KI5LYE8BkZtor?=
- =?us-ascii?Q?oNmlvaUN5rWRIa5zxtGXM5ubMJ5IF4ux7po1b8zvhETso1Hush26FdpqxWvc?=
- =?us-ascii?Q?gKoYCKfj40XNOCqkYervYp2WAu7uQoUCWldP/WTqGJi9o6fM/HrzkoVGi3az?=
- =?us-ascii?Q?OHwY2GLvWCPGy7c09rEYYcHehyfwbMvXvn6+ihYctgKA8Fu9eqExKd3yZoPQ?=
- =?us-ascii?Q?6kkEUpPPSiQzNHPo31eR75K4Fx5ix8h70Na7s/MIEN6JhWyeDtzQoXtwAnMt?=
- =?us-ascii?Q?QkzN4s+5km0q0FOI+I5+/VUThgp76CcLYMJIrx/DbKQ42HBsuaBO4mv0tH+l?=
- =?us-ascii?Q?3IgT3i+jCmJ5z6xe1e4Ql/P9nxipxES01/M11b5DYw3kD8iGdu3vpBXkjKs4?=
- =?us-ascii?Q?h3iINfImcG1gvzTolMJS6PKar80hje+Qptb4I1kZLXBl8CtrrEFv?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0dbcdcc2-14e3-4ba3-c84f-08df208ea47d
-X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11799.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2026 14:08:32.8479
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Yfo7EGAkM+XOeXPp1xSpoFJ/0KP1uFb9hmcbjYnDtU29y/SIN1VDT0JyCHwXA2/vDWxfJhS+oocRYSrL1it+edAo4QujG8+P/EfWAnn90jW0Gjh1+daSPjiHTszvUfoH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV4PR04MB11849
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Authority-Analysis: v=2.4 cv=fdc4WEQF c=1 sm=1 tr=0 ts=6abfbeb1 cx=c_pps
+ a=5HAIKLe1ejAbszaTRHs9Ug==:117 a=dMv3lA6PLLkT9/uWe4YCGw==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22
+ a=VwQbUJbxAAAA:8 a=pat6Al7auJUlNe7RvHoA:9 a=QEXdDO2ut3YA:10
+ a=gYDTvv6II1OnSo0itH1n:22
+X-Proofpoint-GUID: Lav0W9d7Je2_goP7do_DaRwV0LfH-j6G
+X-Proofpoint-ORIG-GUID: Lav0W9d7Je2_goP7do_DaRwV0LfH-j6G
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDAyMDA1NyBTYWx0ZWRfX6sUELTSD5aiq
+ yPIpH7FfhswciLwQUXRBwmoPYjs4vwXf9xREJTdfnqrHdL0po77POGXZHkqzUyce+xECUJwmErv
+ L/5AkNQZU+8qINj9ZLQaK0RXII+sxOn32b/4f9Dg6UTc7sszuKCR/74TyBSW4w5m2fZS9tOyaKK
+ AgecXmk/urYTIzuP3C2eZomYwhtJEFQZZ9Sm/KGfSmgOBdHR8alSn6WltAvRuIinFQtYlaDQyJW
+ z48X5iy0jjhTg80dg/5Kv6kBiBQd1SA+E2y1A+HjiiVonDISrVfI39MKcOWlfFa8FU5skyippmk
+ v/b3MflQCCr8D7HyDl1DnxTuFrZpreaW8SSKvCjz5qv8aglpJq1jEyXgiFpECNomY+le4ZDbN4d
+ PcaVTH0ySkFOojUxIrJTTcqM7us/Mozm9KPvLvcXuuWH3iiK1gXQzlzPEDmCZd5MtumWUELO7pY
+ Bp27b+dUIXbmDi8TMQw==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDAyMDA1NyBTYWx0ZWRfX++11F0BKxox5
+ Ss9fKlUe6ExYc/xjjc3uvZC8FyjvohYy3i96RGSyu7fAH0AZftNjBjEoqsXcD+pxN0jYALV5US0
+ oolCGdfZmj7TweXHYf/FN+VAe4Kundg=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-02_04,2026-10-01_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 phishscore=0 impostorscore=0 bulkscore=0 clxscore=1015
+ priorityscore=1501 suspectscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2610020057
 
-From: Frank.Li@nxp.com
+Hello soc maintainers,
 
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+Please pull these fixes for the OP-TEE driver in the TEE subsystem.
 
-  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+Thanks,
+Jens
+
+The following changes since commit 8d3ae59288f1e7d58d76558a6ee96d533bc5019f:
+
+  Linux 7.2 (2026-08-16 14:32:26 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux.git tags/imx-dt-7.4
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/optee-fixes-for-v7.3
 
-for you to fetch changes up to ec7b37c768d34107d06bd629d05cde0e2218ee9a:
+for you to fetch changes up to 3c0d2f1f431c51a11253f28763be723ac782fd7a:
 
-  ARM: dts: imx6dl-phytec-mira: Add phyBOARD-Mira-i.MX6DL with eMMC (2026-10-01 11:05:32 -0400)
-
-----------------------------------------------------------------
-i.MX ARM dt changes for 7.4:
-
-- dt-bindings fixes and cleanups: allow single reg for fsl,imx6sx-ldb,
-  allow bridge@18 child in imx-iomuxc-gpr, allow display0 child for i.MX6UL
-  lcdif, add deprecated/optional properties for st,stmpe MFD.
-
-- ARM dts cleanups: whitespace/indentation fixes, drop undocumented
-  st,stmpe properties, drop fallback "dlg,da9052" compatible, remove unused
-  CSI nodes, fix/remove unrecognized PCIe/wakeup properties
-
-- ARM dts board updates:
-  - Add Variscite VAR-SOM-MX7, Colibri VF50/VF61, Amazon Kindle 4 (Yoshi)
-    board.
-  - imx7d Colibri eMMC: add Toradex Capacitive/Resistive 7" Parallel
-    displays and VGA overlay.
-  - imx7-colibri/imx6ull-colibri: set LCDIF bus width.
-  - imx7d: add Variscite VAR-SOM-MX7 and MX7CustomBoard support.
-  - imx7-tqma7: fix PMIC voltage constraints, sort I2C nodes by address.
-  - imx6ul-kontron-bl: add GPIO labels, fix USB OTG1 ID pin, replace UART3
-    with DIP switch GPIOs.
-  - imx6qdl-pico/wandboard: replace clock-frequency in camera sensor.
-  - mba6ulx: add Ethernet PHY interrupt and USB hub nodes.
-  - imx6dl-phytec-mira: add phyBOARD-Mira-i.MX6DL with eMMC.
-  - imx6qdl phycore-som: add custom volt/freq OPP table.
+  tee: optee: ffa: support shared memory offsets on large-page kernels (2026-10-02 16:08:05 +0200)
 
 ----------------------------------------------------------------
-Alexander Stein (2):
-      ARM: dts: mba6ulx: Add Ethernet PHY interrupt support
-      ARM: dts: mba6ulx: Add USB hub node
+OP-TEE fixes for v7.3
 
-Andrii Salivon (2):
-      dt-bindings: arm: fsl: add Amazon Kindle 4 (Yoshi)
-      ARM: dts: imx50: add support for Amazon Kindle 4 (Yoshi)
+- Register the TEE devices only once fully initialized
+- Support FF-A shared memory offsets on large-page kernels
 
-Eberhard Stoll (1):
-      ARM: dts: imx6ul-kontron-bl-common: Replace UART3 with DIP switch GPIOs
+----------------------------------------------------------------
+Mahantesh Salimath (1):
+      tee: optee: ffa: support shared memory offsets on large-page kernels
 
-Francesco Dolcini (7):
-      ARM: dts: imx7d-colibri-emmc: Add Toradex Capacitive Touch Display 7" Parallel
-      ARM: dts: imx7d-colibri-emmc: Add Toradex Capacitive Touch Display 7" Parallel with Touch Adapter
-      ARM: dts: imx7d-colibri-emmc: Add Toradex Resistive Touch Display 7" Parallel
-      ARM: dts: imx7d-colibri-emmc: Add VGA overlay
-      ARM: dts: imx7-colibri-iris-v2: drop no-op delete-property
-      ARM: dts: imx6ull-colibri: Set LCDIF bus width
-      ARM: dts: imx7-colibri: Set LCDIF bus width
+Shao-Fu Chen (1):
+      optee: register TEE devices only once fully initialized
 
-Frank Li (16):
-      dt-bindings: display: bridge: ldb: allow a single reg for fsl,imx6sx-ldb
-      dt-bindings: soc: imx-iomuxc-gpr: allow bridge@18 as child node
-      dt-bindings: display: lcdif: Allow display0 child node for i.MX6UL
-      ARM: dts: imx6ul-tx6ul: rename disp0 to display0
-      ARM: dts: imx51-zii-rdu1: rename node name i2c-gpio to i2c-0
-      ARM: dts: imx6qdl-emcon: Remove unrecognized disable-gpio PCIe property
-      ARM: dts: imx7d-nitrogen7: drop unsupported wakeup-gpios from tsc2004
-      ARM: dts: imx7d-meerkat96: disable lcdif node
-      ARM: dts: imx50-kobo-aura: convert sd2_vmmc to regulator-fixed
-      ARM: dts: imx6dl-b125v2: add touchscreen-size-x/y to exc80h60 node
-      ARM: dts: imx6sll: remove unused node csi@20e8000
-      ARM: dts: imx6ul-14x14-evk: remove reduntant bus-type under csi node
-      ARM: dts: imx53: drop fallback compatible "dlg,da9052"
-      dt-bindings: mfd: st,stmpe: add deprecated properties
-      dt-bindings: mfd: st,stmpe: let interrupt property optional
-      ARM: dts: imx: remove undocument properties of st,stmpe*
-
-Krzysztof Kozlowski (2):
-      ARM: dts: nxp: Correct white-space style
-      ARM: dts: nxp: imx: Replace spaces indentation with tabs
-
-Laurent Pinchart (2):
-      ARM: dts: nxp: imx6qdl-pico: Replace clock-frequency in camera sensor node
-      ARM: dts: nxp: imx6qdl-wandboard: Replace clock-frequency in camera sensor node
-
-Mehmet Fide (4):
-      ARM: dts: vf-colibri: apply the EXT_IO pin group
-      ARM: dts: vf-colibri: name the SODIMM gpio lines
-      dt-bindings: arm: fsl: add the Colibri VF50 and VF61 on Iris
-      ARM: dts: vf: add Iris carrier board support for Colibri VF50 and VF61
-
-Nora Schiffer (2):
-      ARM: dts: imx7-tqma7: correctly specify PMIC voltage constraints
-      ARM: dts: imx7-tqma7: sort I2C device nodes by address
-
-Oualid Derouiche (2):
-      ARM: dts: imx6ul-kontron-bl-common: Add GPIO labels
-      ARM: dts: imx6ul-kontron-bl-common: Fix USB OTG1 ID pin configuration
-
-Primoz Fiser (1):
-      ARM: dts: imx6dl-phytec-mira: Add phyBOARD-Mira-i.MX6DL with eMMC
-
-Stefano Radaelli (3):
-      dt-bindings: arm: fsl: add Variscite VAR-SOM-MX7 boards
-      ARM: dts: imx7d: add Variscite VAR-SOM-MX7 support
-      ARM: dts: imx7d: add Variscite MX7CustomBoard support
-
-Yunus Bas (2):
-      ARM: dts: imx6dl: Add a label to cpu1 node
-      ARM: dts: imx6qdl: phycore-som: Add custom volt/freq table
-
- Documentation/devicetree/bindings/arm/fsl.yaml     |  30 +-
- .../bindings/display/bridge/fsl,ldb.yaml           |  23 +-
- .../devicetree/bindings/display/fsl,lcdif.yaml     |   1 +
- .../devicetree/bindings/mfd/st,stmpe.yaml          |  25 +-
- .../bindings/soc/imx/fsl,imx-iomuxc-gpr.yaml       |  62 +++
- arch/arm/boot/dts/nxp/imx/Makefile                 |  51 ++
- arch/arm/boot/dts/nxp/imx/e60k02.dtsi              |   8 +-
- arch/arm/boot/dts/nxp/imx/e70k02.dtsi              |   8 +-
- arch/arm/boot/dts/nxp/imx/imx50-amazon-yoshi.dts   |  59 +++
- arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts      |   7 +-
- arch/arm/boot/dts/nxp/imx/imx51-zii-rdu1.dts       |   2 +-
- arch/arm/boot/dts/nxp/imx/imx53-m53.dtsi           |   3 -
- arch/arm/boot/dts/nxp/imx/imx53-qsb.dts            |   2 +-
- .../arm/boot/dts/nxp/imx/imx53-voipac-dmm-668.dtsi |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6dl-b125pv2.dts       |   2 +
- arch/arm/boot/dts/nxp/imx/imx6dl-b125v2.dts        |   2 +
- arch/arm/boot/dts/nxp/imx/imx6dl-mamoj.dts         |   2 +-
- .../dts/nxp/imx/imx6dl-phytec-mira-rdk-emmc.dts    |  75 +++
- .../dts/nxp/imx/imx6dl-phytec-mira-rdk-nand.dts    |   2 +-
- .../dts/nxp/imx/imx6dl-phytec-phycore-som.dtsi     |  23 +
- arch/arm/boot/dts/nxp/imx/imx6dl-plym2m.dts        |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6dl-prtvt7.dts        |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6dl-victgo.dts        |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6dl.dtsi              |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6q-bosch-acc.dts      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6q-novena.dts         |   3 -
- .../dts/nxp/imx/imx6q-phytec-mira-rdk-emmc.dts     |   2 +-
- .../dts/nxp/imx/imx6q-phytec-mira-rdk-nand.dts     |   2 +-
- .../boot/dts/nxp/imx/imx6q-phytec-phycore-som.dtsi |  75 +++
- arch/arm/boot/dts/nxp/imx/imx6qdl-apalis.dtsi      |   3 -
- arch/arm/boot/dts/nxp/imx/imx6qdl-colibri.dtsi     |   3 -
- arch/arm/boot/dts/nxp/imx/imx6qdl-emcon.dtsi       |   1 -
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw560x.dtsi      |  20 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-pico.dtsi        |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-skov-cpu.dtsi    |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-wandboard.dtsi   |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-zii-rdu2.dtsi    |  10 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl.dtsi             |  10 +-
- arch/arm/boot/dts/nxp/imx/imx6sl-kobo-aura2.dts    |   8 +-
- .../boot/dts/nxp/imx/imx6sl-tolino-shine2hd.dts    |   8 +-
- arch/arm/boot/dts/nxp/imx/imx6sll-evk.dts          |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6sll.dtsi             |  11 -
- arch/arm/boot/dts/nxp/imx/imx6ul-14x14-evk.dtsi    |   1 -
- .../boot/dts/nxp/imx/imx6ul-kontron-bl-common.dtsi |  38 +-
- arch/arm/boot/dts/nxp/imx/imx6ul-tx6ul.dtsi        |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6ull-colibri.dtsi     |   1 +
- .../arm/boot/dts/nxp/imx/imx7-colibri-iris-v2.dtsi |   1 -
- arch/arm/boot/dts/nxp/imx/imx7-colibri.dtsi        |   1 +
- arch/arm/boot/dts/nxp/imx/imx7-tqma7.dtsi          |  52 +-
- ...nel-cap-touch-7inch-parallel-touch-adapter.dtso |  58 +++
- ...olibri-emmc-panel-cap-touch-7inch-parallel.dtso |  43 ++
- ...olibri-emmc-panel-res-touch-7inch-parallel.dtso |  32 ++
- .../boot/dts/nxp/imx/imx7d-colibri-emmc-vga.dtso   |  59 +++
- arch/arm/boot/dts/nxp/imx/imx7d-meerkat96.dts      |   2 +-
- arch/arm/boot/dts/nxp/imx/imx7d-nitrogen7.dts      |   1 -
- .../nxp/imx/imx7d-var-som-emmc-mx7customboard.dts  |  23 +
- .../imx7d-var-som-emmc-wm8731-mx7customboard.dts   |  23 +
- arch/arm/boot/dts/nxp/imx/imx7d-var-som-emmc.dtsi  |  56 +++
- .../dts/nxp/imx/imx7d-var-som-mx7customboard.dtsi  | 358 ++++++++++++++
- .../nxp/imx/imx7d-var-som-nand-mx7customboard.dts  |  23 +
- .../imx7d-var-som-nand-wm8731-mx7customboard.dts   |  23 +
- arch/arm/boot/dts/nxp/imx/imx7d-var-som-nand.dtsi  |  73 +++
- .../imx/imx7d-var-som-v2-emmc-mx7customboard.dts   |  24 +
- .../imx/imx7d-var-som-v2-nand-mx7customboard.dts   |  24 +
- arch/arm/boot/dts/nxp/imx/imx7d-var-som-v2.dtsi    |  66 +++
- .../arm/boot/dts/nxp/imx/imx7d-var-som-wm8731.dtsi | 102 ++++
- .../arm/boot/dts/nxp/imx/imx7d-var-som-wm8904.dtsi | 118 +++++
- arch/arm/boot/dts/nxp/imx/imx7d-var-som.dtsi       | 533 +++++++++++++++++++++
- arch/arm/boot/dts/nxp/imx/imx7s-warp.dts           |   2 +-
- arch/arm/boot/dts/nxp/imx/mba6ulx.dtsi             |  36 +-
- arch/arm/boot/dts/nxp/ls/ls1021a.dtsi              |  10 +-
- arch/arm/boot/dts/nxp/vf/Makefile                  |   2 +
- arch/arm/boot/dts/nxp/vf/vf-colibri-iris.dtsi      | 126 +++++
- arch/arm/boot/dts/nxp/vf/vf-colibri.dtsi           |  56 +++
- arch/arm/boot/dts/nxp/vf/vf500-colibri-iris.dts    |  14 +
- arch/arm/boot/dts/nxp/vf/vf610-colibri-iris.dts    |  14 +
- 76 files changed, 2398 insertions(+), 168 deletions(-)
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx50-amazon-yoshi.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-phytec-mira-rdk-emmc.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-phytec-phycore-som.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx6q-phytec-phycore-som.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-colibri-emmc-panel-cap-touch-7inch-parallel-touch-adapter.dtso
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-colibri-emmc-panel-cap-touch-7inch-parallel.dtso
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-colibri-emmc-panel-res-touch-7inch-parallel.dtso
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-colibri-emmc-vga.dtso
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-emmc-mx7customboard.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-emmc-wm8731-mx7customboard.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-emmc.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-mx7customboard.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-nand-mx7customboard.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-nand-wm8731-mx7customboard.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-nand.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-v2-emmc-mx7customboard.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-v2-nand-mx7customboard.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-v2.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-wm8731.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som-wm8904.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx7d-var-som.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/vf/vf-colibri-iris.dtsi
- create mode 100644 arch/arm/boot/dts/nxp/vf/vf500-colibri-iris.dts
- create mode 100644 arch/arm/boot/dts/nxp/vf/vf610-colibri-iris.dts
+ drivers/tee/optee/ffa_abi.c   | 38 ++++++++++++++++++++++++++------------
+ drivers/tee/optee/optee_msg.h |  4 ++--
+ drivers/tee/optee/smc_abi.c   | 17 ++++++++---------
+ 3 files changed, 36 insertions(+), 23 deletions(-)
