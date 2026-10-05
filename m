@@ -1,62 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2100D41F7FD;
-	Mon,  5 Oct 2026 10:19:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37CF946AF08;
+	Mon,  5 Oct 2026 10:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791195547; cv=none; b=DbvsmoCooyXVgcWinwWstfo/eHMN8akv2jiXyME9t42hjVIGfv8WWCwXpLOSXVu1IfHbIr1EXIigd9JNu0nPOzXrkPOM3SevIgz0uKzvQnnEMFpEF0n7Rv5g0vB087ePia4ERNZ5o2gn8d0yzLMC1EBDAyKqFazFGE2OtU/WBJA=
+	t=1791196362; cv=none; b=isE63CsyvdhMGStl5+pCERREiQVldSOf815U435uOKwHJJ9jUUnpxV/p9rEXv63ujnMmLAiN8L+z3chzbgo29thDipNBkpzENRbYieDrTO1dB/kjbBdLg0NT9bxfiE7RspAfQbCPrW8BtN4lZ0PCSsPnN5tGrG4NM6/gvLo57EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791195547; c=relaxed/simple;
-	bh=J4wnzUkbFzSsjqh9eOxmqZc3vB/DrZrd5sVl7aANEpk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T2hJJaLhTbmBfR1aOrTeVWXtlhUA7gC04H446GeEG5qy3aSjFwoiJ6SdV0s6vK3KKSrSGfdVUCPd9Iej7jComXiP3wOgkCijw76uCkiityTYQDoFC2ngOYMq1j4LruETEnUbCbHfN4W83XEVkjiXJkNQqCgjtvsurAppB4/iZT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XVSIsfNT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791196362; c=relaxed/simple;
+	bh=cF7kn8sbCTjHjPAnkFXtSa+cYcnQlfglW+sMPEYeiXI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NCWnRYNM2jQqjRShpAaHbThd1Sq4SOgZIAMSSyWRXF8zTGfYSyto0FAYrS7aGDqjsSKgiz6VWr9mXGarbqvNdnP8tVQCszzUhyLCvFCYb9FnQPNvZ3l9KpF9AkayjTqlLI1bgjR1t81OmdtQa8U4e+KKh/IF2u3ggIVR75Cicf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iM0QOHD5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XVSIsfNT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF071F00893;
-	Mon,  5 Oct 2026 10:19:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iM0QOHD5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4525C1F000FF;
+	Mon,  5 Oct 2026 10:32:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791195545;
-	bh=rvwI9egWUv2laKFYKZYn2hBYItXRY3VXq3rv903ql14=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XVSIsfNTjOk7dq2udzYZk4OcRgP88EZJU48+gTsFU5AGARQxmQi6fvbZ4TGnaPdkN
-	 WMd1NmFvmE3BvADQ28GaMoa5dAJdC5PW9vLantH7sIWF7JF799lxfQkmHu6WFcb5w0
-	 RmSOyIzBKXLLzvx3oqyJj6aaK/sb1pAcsUOhHpi15yZ81BVoHPVdwtgt+H4vuWYjjm
-	 Y44k8gRsSeYtt/b4lAPCXhbPV8/yicFY+JpvUGLjBe69sYdfxiuNozKcFOQIE4G/eh
-	 IA+IfzIjwIfkmtxWYZzGfONAlFWsjdHq74bwtpjD1WsnVsZiJsyQ7be+6S1nQPILnl
-	 eVsXW2fle5gNg==
+	s=k20260515; t=1791196360;
+	bh=T/lUy849mj6VnNKpU9WpJMDBkHN9KlFh1cVOi8EQynU=;
+	h=From:To:Cc:Subject:Date;
+	b=iM0QOHD5DvGs59THN9N6wk73MIj4DjMjq9RJG4Tb8ym+t3Pjbi0gG9zPd4VrsHF7W
+	 zKtupEpmxEze17lWyCefCiEG6jW9jQggkYEUbO7tyTWsXsnRwnwQsnaqhqhEZS6FP6
+	 J40VEVbmVSupNlovnBCyTF3IFr5LuqAij8hzhx/MFLPVq6Kr+mQHBm4RCc7VMoWDYt
+	 Q33Mb+IVe6cp/sfIZF/BuPr+GhWRe7S1/Ehn2RtMzgBGH+d4/zwJ02nS/CfOc8Gtjo
+	 5LIjKPWYFrXDOxINesT183zCBgnTz9YCXTtae5gCOY94UctV33KRSJsvyml/GcEwvX
+	 35RBGqTZj/UXQ==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: soc@lists.linux.dev
 Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [GIT PULL 4/4] ARM: samsung: mach for v7.4
-Date: Mon,  5 Oct 2026 12:18:47 +0200
-Message-ID: <20261005101845.34752-8-krzk@kernel.org>
+Subject: [GIT PULL 1/2] arm64: dts: dt cleanup for v7.4
+Date: Mon,  5 Oct 2026 12:32:31 +0200
+Message-ID: <20261005103232.37247-3-krzk@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261005101845.34752-5-krzk@kernel.org>
-References: <20261005101845.34752-5-krzk@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2627; i=krzk@kernel.org; h=from:subject; bh=J4wnzUkbFzSsjqh9eOxmqZc3vB/DrZrd5sVl7aANEpk=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqw3mIwmuEuT5oS40keu/q2ExmOGvzS5EzHK6a+ mzrofvILjyJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCasN5iAAKCRDBN2bmhouD 1za5D/9FjQq6CtEE7GTWhJuS7na5LqxgNLDRh5U1fsO/KwCNIL8N4Owkor4xKqT6HZB6iYa0Hew yNfzh1azGmVB9kizCZs/aII4hEd9e8u2rBUanbIlY3NK1ztjtNf+mOIldECpSLEWaJm0GSDY6V/ LFJRs/0taTHTvhKWp/irU+7TH+GnFZRPTNaD8lfRRZyF1jZ2jsUltNEJQEU+dHh2TLfTKWWF+8W zmMYkvvoZH1/EF306USZOVGZ6KvHX2S2X4tg6Cz8Jn7ej0dzHzlvtVH9HF1u9yMLSWDUxKoy4kb IbEWFDj7vPg6eczsKBxx7pnhUFaXRxjv+ZFvNsVF84+EtgkX0a674V3qAHZJ1lP6j8+y1DW5bgH 3Fvbyc75Bnw7D5JBbE/K6td9Qs59+r7Dt+y6zMuAqsmzHQSfQHhKs9jj7EoBxYLKSx6KKJmDEmb I9kQfYQ8TbQB3aP/AsSO071fG726opVSe4GmhzpxoJs4CytF7TDuj7aWq/E7n+RIXXWLxMugGmK 1VQrAf8amLyRYhtH3sVOIO1liyRMCSaQTEdzMSKjhiEN7MVi6IBKcZO3Of3HBACj8n7Bz5ueLcb kkffFlyXU3X7I4tzbbWBdIpWuX5CzWtbEOU29P5LrPTcQtJJWjrL16/pi3v0tBPXootFN+9EI8y 7MgjaR1vOVpGLOA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1124; i=krzk@kernel.org; h=from:subject; bh=cF7kn8sbCTjHjPAnkFXtSa+cYcnQlfglW+sMPEYeiXI=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqw3zAIe0E9u+XD4chZ5ixi+pEkbiLCoKR9ddth QazU1Khd6SJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCasN8wAAKCRDBN2bmhouD 13NKD/9aotDiwjLm1cz4/dH/DhuK2z9l4a7AcETMf895hiW3q6u6sIfOkqfM5Tco8D0IIH5N/wi 2gN8q00h03nNRurpqUR2E0DQra+WnEJ7ecmTlb8gjMvyMogEmAjsdxtvrbIcHxT1JlHyk72uA9q S9dAAxRa6XrJj7oi5KJ4NmhzXVoHJMfd8KS6hXz1/R7bsYV8lxg+xTRkgq7MdbQld5bmwOYuROe qUtAfrL4jMkdzJVd0pa9f6Dl38bnxP/y6qDDvCHkpGxaLvPxCHSJVzQSRBvpIRtC9uQxmj0CEVF lQj7vcKBRnenRIfnMuNYsgqfN43r3qsKmdJkrSo1b2ZZuk29V9spq79W4aA2CCAvPwHiC7hrEcf Tpb53enXgyn4NXcLociQRLh0xU3tUhdGDCHqmw8jBBNMc1zglmiYPWtE+xEztZfCr2a01ZCmqkz rinoe2rT5+p5AFrDpJk3xViZtEtP3AhnoSZGY8Ike1fViP9Cyk/F7FrhVG7UItPzJEmgGUmbOZz HdZBBEVjVDwll8En8WqXf2k6EBQxK+1dIFuHCBCeNGsROPpR7c6/bQ10Z2/P0mZNhneJdoOXUfv J2yYtDY3iP+eaducth/XmKp+rRhx4k5v7zM79NnQ49XN2mCCnzbOUwuskF0NzR+cpV1qAKtTY33 SJFj0n2+PH/2kJg==
 X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
-
-Hi Arnd and SoC folks,
-
-This includes Input subsystem code, which got acks from Dmitry.
-
-Best regards,
-Krzysztof
-
 
 The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
@@ -64,47 +51,24 @@ The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-7.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-7.4
 
-for you to fetch changes up to 80c92d1f1a4e3000e6eb351ad8af16267b1d4e63:
+for you to fetch changes up to 1f6101ae9560c381bb6e3b4322b51d784a648019:
 
-  ARM: EXYNOS: Replace __ASSEMBLY__ with __ASSEMBLER__ (2026-09-04 16:09:17 +0200)
-
-----------------------------------------------------------------
-Samsung mach/soc changes for v7.4
-
-Switch to software nodes for GPIO keys, which will allow later dropping
-platform data from gpio-keys driver.  Likewise improve samsung-keypad
-input driver and drop platform data there as well.
+  arm64: dts: cavium: thunder-88xx: Replace spaces indentation with tabs (2026-09-19 08:41:31 +0200)
 
 ----------------------------------------------------------------
-Dmitry Torokhov (6):
-      dt-bindings: input: samsung,s3c6410-keypad: introduce compact binding
-      Input: samsung-keypad - handle compact binding
-      ARM: s3c: register and attach software nodes for Samsung gpio_chips
-      ARM: s3c: crag6410: switch keypad device to software properties
-      Input: samsung-keypad - remove support for platform data
-      ARM: s3c: crag6410: use software nodes/properties to set up GPIO keys
+Minor improvements in arm64 DTS for v7.4
 
-Thomas Huth (1):
-      ARM: EXYNOS: Replace __ASSEMBLY__ with __ASSEMBLER__
+A few more or less trivial style cleanups pointed out by dt-check-style
+for Actions and Cavium platorms.
 
- .../bindings/input/samsung,s3c6410-keypad.yaml     |  53 +++++-
- arch/arm/mach-exynos/smc.h                         |   4 +-
- arch/arm/mach-s3c/Kconfig                          |   5 -
- arch/arm/mach-s3c/Kconfig.s3c64xx                  |   7 -
- arch/arm/mach-s3c/Makefile.s3c64xx                 |   1 -
- arch/arm/mach-s3c/devs.c                           |  27 ---
- arch/arm/mach-s3c/devs.h                           |   1 -
- arch/arm/mach-s3c/gpio-core.h                      |   3 +
- arch/arm/mach-s3c/gpio-samsung-s3c64xx.h           |   5 +
- arch/arm/mach-s3c/gpio-samsung.c                   |  72 ++++++--
- arch/arm/mach-s3c/keypad.h                         |  27 ---
- arch/arm/mach-s3c/mach-crag6410.c                  | 135 ++++++++++----
- arch/arm/mach-s3c/setup-keypad-s3c64xx.c           |  20 ---
- drivers/input/keyboard/samsung-keypad.c            | 200 +++++++++------------
- include/linux/input/samsung-keypad.h               |  39 ----
- 15 files changed, 299 insertions(+), 300 deletions(-)
- delete mode 100644 arch/arm/mach-s3c/keypad.h
- delete mode 100644 arch/arm/mach-s3c/setup-keypad-s3c64xx.c
- delete mode 100644 include/linux/input/samsung-keypad.h
+----------------------------------------------------------------
+Krzysztof Kozlowski (2):
+      arm64: dts: actions: Replace spaces indentation with tabs
+      arm64: dts: cavium: thunder-88xx: Replace spaces indentation with tabs
+
+ arch/arm64/boot/dts/actions/s700.dtsi        | 6 +++---
+ arch/arm64/boot/dts/actions/s900.dtsi        | 6 +++---
+ arch/arm64/boot/dts/cavium/thunder-88xx.dtsi | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
