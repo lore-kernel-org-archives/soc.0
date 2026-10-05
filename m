@@ -1,52 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C0F4779A1;
-	Mon,  5 Oct 2026 10:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6554B47D926;
+	Mon,  5 Oct 2026 11:04:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791196364; cv=none; b=NSgBluhqWJYDltLUqUXZrsoSh+RF3CqlGeSxuypY5Dep2ObT5eNaYlHWwRXN7k3Jcuhu8GA+ultUWGoveHGms03abd347XSybM9TTNmpdHlK5SddkBRBrZX8Br87Vhoe03vcewP/28akhrqF357Xb3guzk/018XCasZiXhzCmq0=
+	t=1791198276; cv=none; b=PXObUq+hlM0srVYBH1NzIZVzWfbvXvTDk7HaLKf22VeBC3FhNKdRs315r0IXgBbbwAN8NlWcN6nB/iA+mApe11CcqCzhvuqmknr4vjXMTuyro/wxZ1NbWv4M4y1RnxSQY5FSNPXuPc4mgf1S2xuR7nkdrsLSE9atCVy/yOKqOLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791196364; c=relaxed/simple;
-	bh=LlCPOUvM9WMpK08kANDZYAT8KZzPLS5enR/RzvToJaM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fzV6dJFvlxSxr6EDS/xdwVg8VMqJVopwN2Z9fFBXqKas+d5N3ZOoS4UHSR9YdQQHQBoYjfzQCgmCGnaU8POB1VF2DsJeef2aLI6QrvtH0cOD7GTKfdepxwMs04vPNn3MM71UjWtHFyP5RbVd2BN+ryu9YU0kuZQZOBwy3PIyHks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qg9d6ujq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791198276; c=relaxed/simple;
+	bh=r9QOY3O2JMjozrFcWeL9WSb1mEHQftzj5pGsv5Fl7pA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nsGTvCBfUsTseHiouOSranBcnWlHkX9VP2H1fRrIub6A7mIBZuwYkp8kJWa1gzd1/S1vxGnr890iWh3D0YpyTGEZNoKJJ9mosD3BGUInfHXDxohBGnw5IfkWYAGuQNd5OMjOYnXkllnryRIFotj2G+tLMUf0CImB2rFSiwGMqh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZXXmjsG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qg9d6ujq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5241F00893;
-	Mon,  5 Oct 2026 10:32:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZXXmjsG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E7A51F00893;
+	Mon,  5 Oct 2026 11:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791196362;
-	bh=jY57LCuzIB5cNlu7Zk9xX9Q8qlrsSL3Pf/+RUB89afs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Qg9d6ujqzge+IpM1ektEAwAf0FC8IWgedGirL+BlhF59dKLVL0a3LWOAN5pZOJO+n
-	 LmLchH4o6Wjuo3Sw+L7vvZ6ba9ojzBwIJlUYBqF/ELZ0AV3H4JbFfkduVVJ9yk1KQF
-	 6+SOseFUNx6xZJ6rlqF1p8xZTWf3t1ayZ+bOhKBk4ijM1n9T1fAXp095457dkwz3KH
-	 XOEP4hMz9t8SHHWKForvJzW++YHHsflktY37eDQ34Y2s207+Jy1abgDb1Ihf3pSDKr
-	 Nat0KTX9Vq3Qlehjrch7+qAC2ht/qQ2EKgCdlClwbT97/Rwnu3NbCNVWv1r02XUOU+
-	 n1qoqIgEV5Asw==
+	s=k20260515; t=1791198275;
+	bh=XgKj1qAkEBxnr/gqSQUFgn7O9TFS7TKhWyPEdAVH1w8=;
+	h=From:To:Cc:Subject:Date;
+	b=HZXXmjsGdY0SA/LHT/Lia7eGXTrIND/62TMyDyLi414mAu6KAuM7WqHAUW63qc18G
+	 YBgKAK6UxjDJbMRBHMrnK/IWZVYiK+HIigz9DtAc1NWvbmAZLpBoJIvU6Ul/5ECR5d
+	 kI0GbwuqWXJP7UCzXnkRbdhH1SioUa1WyIuxaCmIk/arulh/ZK6b1GpdrJ42AvLxdy
+	 FhI2puZ3Z93es5y6zGUyX5fpXdoSwh/4dKCsXp7ya62o4sd6Vxf9s+FBSJRAsr9zWZ
+	 f6DuNSLHD3L6AejUner+SiNlAqGVmnMsdjOM8P7djH831C+ogNPx+HCWjx0tr0iaVz
+	 BThOxHYHvoWzw==
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: soc@lists.linux.dev
 Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [GIT PULL 2/2] ARM: dts: dt cleanup for v7.4
-Date: Mon,  5 Oct 2026 12:32:32 +0200
-Message-ID: <20261005103232.37247-4-krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers for v7.4
+Date: Mon,  5 Oct 2026 13:04:27 +0200
+Message-ID: <20261005110427.41458-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261005103232.37247-3-krzk@kernel.org>
-References: <20261005103232.37247-3-krzk@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1292; i=krzk@kernel.org; h=from:subject; bh=LlCPOUvM9WMpK08kANDZYAT8KZzPLS5enR/RzvToJaM=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqw3zBnjHD6v/uV/d1peYGEvHkch8KOGBVcvEP6 UKiivz8TIqJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCasN8wQAKCRDBN2bmhouD 1/82D/99F8nJVOUMSUxl38vWKbGP5Sg7qGlA6RUiGDRoVo5GU2rCvPLXaPfaWdTUBpKP828H8tb 7NlKRi9L9Wu1+rY6Hid1JS3594YWSubHpvTwXyiCcvsYLoCo6lpN3KgSzYWt3FZlgwblwg7VBii GmcLOyiSmdnqkmbbRtHknrbrVQrK7swAUfcZhB0NP6/usEj8syYHyiGIuFcgA3dwxE9uhI3s5K6 Z+2FLDzwTpFafz7BEWz9hAfEIOyPmtMnbNQH8FA4xyU6VfLD3O/jtgfb6YAOVrjt1aJMZMW4hxX vapTi2AKpNKWIOYfZJDVbscQJR8aWld3W/VvTkAGMbJKsL+QbZwoZ4j733q3xu25edwea1xZOLm 6+KJe5j6fQl7um2zQ7BnU4ZOeUmOkC1zG9fwq3ZiR4/7EuLdH9kdsGNMbayF5CCLiAIj3D3eFFj gveds3G+kRkMVp3cXfyIp2A6cEQVN1pHZlEL1q2NajncdhopC8Umy3BOdnGsls7paStujRmjWGu chgZYRE43jHyKo59VmpYSBSkQTCZ5hprzGNhb0LeKw0fxIGnnfuHEK4NIPytbFUjaAKkuCIuexI 3cxSroPcvTnIoRjl0O6tWcx85rZVevNe/1kAMr4jtxfpgFckXTeDAb9jKMn9eqS3646IaAWsxzg eN3VYKYu8Rs5a6g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3677; i=krzk@kernel.org; h=from:subject; bh=r9QOY3O2JMjozrFcWeL9WSb1mEHQftzj5pGsv5Fl7pA=; b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqw4Q7TD/2WfRKlrtBDpMBHS0k0bspKrcalDp6j x+UAd2poqyJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCasOEOwAKCRDBN2bmhouD 10ckD/9LNJCPgiH94Xq1x32bl9yw8SV4dQybiCXXdX/NoqhKz8HGwVjDVOFBZcwKn+BkNbfs4Vw aDeSUuzVlpJwLmzmQK6ylSy4e0DxQZaTtA34yQnMuOMf0l13FpbvKiSlTcmejs9lxND4VqrfEJx ZTWAp2ViyMVa3tic8fy0Qx+uopCi9laLVglR6PAKm2TUiokqq34j+mOriM9K9aikQpH+JCcBRw/ XkC9rzWzYBFTQo82s7Ybkugm5FxbPgJ7SegJdCLeO5iDOv7EUeDBEbhMBHwCCc2N3eMRWCFWigB wkpEHgvEyhFce2VQWJo0iqU5hdf46zl0uSOSeyupVTZqVQJGGjq6ZetMYVcsmO3JEzllm0q+NYY d7E3ZzMgh3BeAuiJlqIghkR0Sr2tR3mVtMpKpk/kUhm6rbpG9ExntlmfMfmezKq37CJul1Fmwqq +aX0sur32a1LReDL+EYGroFT+e8H7OvDueA5r4gcnF5Ei7jk0YuJJfXIwpUAj/PnPqT5WvtKDCm E3AZOFzAx4UnC8yrnZOibwY35m5tPY0omwSaQGObCzVLNulVrFM6gwGjndLja8Q1YoY83GMqvIz viO5D6hmGY/JvZ6sN7cC9Qi1Xb3l3ppJ+9IZI5DYXN/rI9k9EZu3/KbOc94cGCDvE2Y1fojShrw KyJBcVUfFelKwJA==
 X-Developer-Key: i=krzk@kernel.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
+
+Hi Arnd and SoC folks,
+
+Note that I do not treat untested, LLM-assisted fixes as critical fixes, thus
+usually do not take them into fixes cycle.
+
+Best regards,
+Krzysztof
+
 
 The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
@@ -54,26 +58,78 @@ The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-7.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-7.4
 
-for you to fetch changes up to 5b21342479d303b98796ee50a50642843318e92f:
+for you to fetch changes up to a22355280361d2a376a2020059a2bae11e6cea10:
 
-  ARM: dts: aspeed: Replace spaces indentation with tabs (2026-09-19 08:41:20 +0200)
-
-----------------------------------------------------------------
-Minor improvements in arm DTS for v7.4
-
-A few more or less trivial style cleanups pointed out by dt-check-style
-for Actions, Aspeed and ARM vexpress platforms.
+  memory: stm32_omm: fix child clock leak on set_amcr() error path (2026-09-23 19:57:14 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (3):
-      ARM: dts: actions: owl-s500: Replace spaces indentation with tabs
-      ARM: dts: vexpress-v2p-ca5s: Replace spaces indentation with tabs
-      ARM: dts: aspeed: Replace spaces indentation with tabs
+Memory controller drivers for v7.4
 
- arch/arm/boot/dts/actions/owl-s500.dtsi                   | 12 ++++++------
- arch/arm/boot/dts/arm/vexpress-v2p-ca5s.dts               |  2 +-
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-witherspoon.dts   |  2 +-
- arch/arm/boot/dts/aspeed/aspeed-bmc-supermicro-x11spi.dts |  2 +-
- 4 files changed, 9 insertions(+), 9 deletions(-)
+1. Broadcom DPFE: Fix handling kernel memory accesses with malicious or
+   compromised firmware and possible out-of-bounds read triggered by
+   buggy co-processor.  Also validate firmware image contents before
+   processing it.
+
+2. Renesas RPC IF: One fix for volatile register access, several
+   cleanups and enable autosuspend in runtime PM.
+
+3. Several minor improvements and fixes for various drivers: TI EMIF,
+   Samsung Exynos5422 DMC, Nvidia Tegra264 and STM32 OMM.  The fixes
+   seems to be effect of LLM usage, thus they were neither reproduced
+   nor tested, making them non-critical fixes.
+
+4. Mediatek SMI: Add support for MT8189 SoC.
+
+----------------------------------------------------------------
+Diego Fernando Mancera Gomez (1):
+      memory: stm32_omm: fix child clock leak on set_amcr() error path
+
+Jiawen Liu (1):
+      memory: exynos5422-dmc: handle clock enable failures
+
+Justin Chen (2):
+      memory: brcmstb_dpfe: Fix out-of-bounds access due to DCPU offset
+      memory: brcmstb_dpfe: Bounds check DCPU-supplied MSG_ARG_COUNT
+
+Kees Cook (1):
+      memory: emif: Remove const from min_tck allocation type
+
+Ketan Patil (3):
+      memory: tegra: Use named defines for Tegra264 MC apertures
+      memory: tegra: Parameterise Tegra264 MCF slice bound
+      memory: tegra: Refactor Tegra264 mc-err code
+
+Lad Prabhakar (6):
+      memory: renesas-rpc-if: Mark XSPI_CDD1BUF0 as volatile
+      memory: renesas-rpc-if: Move static bridge configurations out of dirmap hot paths
+      memory: renesas-rpc-if: Consolidate XSPI_CDTBUF0 updates in write path
+      memory: renesas-rpc-if: Consolidate XSPI_CDTBUF0 updates in read path
+      memory: renesas-rpc-if: Consolidate command setup register programming
+      memory: renesas-rpc-if: Use runtime PM autosuspend after transfers
+
+Miles Krause (1):
+      memory: emif: fix device_node reference leak on np_ddr
+
+Pengpeng Hou (1):
+      memory: brcmstb_dpfe: validate firmware section sizes
+
+Thomas Huth (1):
+      memory: emif: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+
+Zhengnan Chen (2):
+      dt-bindings: memory-controllers: mtk-smi: Add support for mt8189
+      memory: mtk-smi: Add MT8189 support
+
+ .../memory-controllers/mediatek,smi-common.yaml    |  21 +-
+ .../memory-controllers/mediatek,smi-larb.yaml      |   3 +
+ drivers/memory/brcmstb_dpfe.c                      |  41 ++-
+ drivers/memory/emif.c                              |   6 +-
+ drivers/memory/emif.h                              |   4 +-
+ drivers/memory/mtk-smi.c                           |  45 +++
+ drivers/memory/renesas-rpc-if.c                    |  87 ++---
+ drivers/memory/samsung/exynos5422-dmc.c            |  11 +-
+ drivers/memory/stm32_omm.c                         |   2 +
+ drivers/memory/tegra/tegra264.c                    | 392 +++++++++++++--------
+ 10 files changed, 398 insertions(+), 214 deletions(-)
