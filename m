@@ -1,102 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B9E3446CE
-	for <soc@lists.linux.dev>; Tue,  6 Oct 2026 11:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646A431E823
+	for <soc@lists.linux.dev>; Tue,  6 Oct 2026 11:01:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791284403; cv=pass; b=FXS3qxIdmceBc6QV8+KMiaREChGshCTeywi+6MMCp8VrrOk61SCRmjKl5F0IhEGN1AZAuVFFk5cJXvGvVVxX3VANCRf5KA7/aQ6R/dD+gYq+e2f7lhyVYR+lPvo4LeS08TokFODLYmp/uTDeO9mde9XCPeTnOI3JNMW0jTP/qnc=
+	t=1791284501; cv=pass; b=ZzxhO5UVWzZRSmob9Lvxkf9jOGsjziZDzH77DmlIKHDx3/nr9l1wvzHJ10WmZVXhfTvLISqWMfjaKs+mtXqOz0kwJZFjBi1kYyv2D0R/nD6Fo1lYIFi0AaLV2Y/rFyQuwss2S8gVlaRPDSmtSaxcpeeCwPkWyo4ST1iaYvhWd6I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791284403; c=relaxed/simple;
-	bh=sdOoDvHka+kkLSIjI9ZTsPid+q0RJ6MxNVhyJ3QwebU=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=sV4JuRS1murGqlPgVaXuCcAE4ipuL55jwcay42bUHraMf05BWHKSNOj3Innf+Aa3m6zmIDnGSDAFsS1pA14vuVkIYiDUuxdAVYZjS4dE+Y68joHGGPEdB/71v6ubuRguHfonlo4L6ll9U/6y7U+spoYx0P4c7KzKmsFE5NBmeHs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rD4yIDac; arc=pass smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791284501; c=relaxed/simple;
+	bh=QNMHBtWz9xIlORTTPTS3/58TfVLA6dBZn2rTH5KNvtY=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=KN38D1p9PJREufG7y52LdVtrh4Vr6JvmH9+3taB09ih8DiMDXonT+ny61lxXPNfnoe3w7kiGLxDL1kIGutwzuQEQlcUfh6S79ZJNdPdg02/UpvMO0XiEJFvzQBp0D/WQydUglaDV6I7r9j7OckIqZQKjd3CG7M356DP6JKY1gcc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fkm9Dxbh; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rD4yIDac"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fkm9Dxbh"
 Received: by smtp.kernel.org (Postfix)
-	id 7994E1F00898; Tue,  6 Oct 2026 11:00:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.221.48
+	id DE94C1F00893; Tue,  6 Oct 2026 11:01:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1791284401;
-	b=Fdrpp7kpNqkoYzuLaaja+SuBSptf7TWvPHUvk7RDDkeKM5aIlMwH1pSc73p8ceOkIleA
-	 Okk58foCGt0D0/xjUfpQPERwkcBnDB5VESYBpP8pT+PvERA99/Dvj9nZ8s1eikCHZDEbn
-	 50Vhd/VuBBHRxp3B+h8ZGunorTq6SulaLnjLRJFpqnZfnAbf9alcfe6CBcOipfAD64vMK
-	 Qk2kPf+i9uNHYoUCjfFGsYvwTUn8X5QSMByIMGSGIWf80/X8MtrJOis8eWcelMIkVLpJV
-	 3kNZs7/SaCpIW+2whE5ocGALBOI/7vxrnj3DZKSm3KmzKfau2AX/kiir8ZJpbPTw4NA==
+	t=1791284499;
+	b=PKy+o/XyxUWegcKa6hbd98Ms5r0Fzs13JsNXPAxVf/4sJnbKSs1hLGsg35Y0JxLGckKV
+	 EoFs1nj1WA7HrpyQlC9WhD/B06ivn18u8ph064inMvHGJj4Eg/WJ2Ei0wyuGWNaho5Pb7
+	 K84CKJEzHMWmQ7g9b/d7Y4DYu/5wAnbWJFGrUSKzQYJTZJru8mpZko+AE1DsxSd4TaB7J
+	 qjeGJoPB+pGg3BiYFmF9P0adJktRnyL4efeEvHKNruG8C0gc19QyZ7iEJ7Q1XCFMoN7Cf
+	 eWMPiHy96PT4gyoJJL68E3x11wqa1HJYIE4wvZ+JsCb8unSYLlWulTbsE/Ep8fJy+Lg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791284401;
+	c=relaxed/relaxed; t=1791284499;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
 	 MIME-Version:User-Agent:From:Subject:Reply-To:To:Cc:Content-Language:
 	 Autocrypt:Organization:Content-Type:Content-Transfer-Encoding;
-	bh=+nio9Hhvbka7Ed6Pqah8EBJxLi2/eirIVfDib3AzpKE=;
-	b=z1peIjn9Fu4+YO3n7PcHfZjTM6ElnZvIQRvz8ShPunnqZGH3meOq0fHx6OGcWRNvsAES
-	 Up1wywfSmsV7h+qssQayC0fB3r6oE7r34p20cvMbb0Az0uY81uFI3UIlKVPKzXBlu/pBt
-	 dD8Cl6f9meKl+kkIir6n0yJ/N/U2fnGWqxM7MEgKG3v0Mb0Xsf7nE/vh5NXQTlmTSAzyQ
-	 B1pxo+3MeaFHdalOtl///bitcYIuVPpez2SkoA7muRu0A9PP6rF3rXtjyGZB0IpywAc2w
-	 1Q8Ssoiwzriai5SYDhKvaTt1aYcNuX5Tjw1GWboejDTl1ffMBEG7/5NOLWFBJc4bZrQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=rD4yIDac;
+	bh=dV0RSoFV6Y+3amLPhBXn9ZC7bZtBE6S7E5l+wTKLQOM=;
+	b=eXSIy7ogI20lWvEUaju2KL1Zwfbu3Rw3vKwE3tzr50KFKwgRYYt3/zm4GDlHAA0uKnkL
+	 7SBEkDl9RSVdZ3t2efBErleGq2cOrO5xHv0PziEUzkS8dlAGWDvbJZbJI8KVGhpb2ZJGC
+	 VJKpEMkIXaMfizwl+mHchabZr8YUuucPdaSHQC/wFmk5Z567BAcQjPH3w8vqsW422O75X
+	 kMgwnIpEyW80o/AHsyHCcWGg75CJTk5jiV+V2FAhILPf6QMmaG0VFhbkmgrUgueZR8Mg4
+	 2Qmn1DMg5BF+jjUsNvzw4vdvAQ04qSY7JeG8jhzuE6IznTU6OnoVW4+r8R+9QNAHDBQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=Fkm9Dxbh;
 	dmarc=pass header.from=linaro.org;
 	spf=pass smtp.mailfrom=linaro.org;
-	arc=none smtp.remote-ip=209.85.221.48
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A9A881F00893
-	for <soc@kernel.org>; Tue,  6 Oct 2026 11:00:00 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5DF061F000FF
+	for <soc@kernel.org>; Tue,  6 Oct 2026 11:01:39 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=rD4yIDac
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org A9A881F00893
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=Fkm9Dxbh
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 5DF061F000FF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48b001cd92bso1412021f8f.2
-        for <soc@kernel.org>; Tue, 06 Oct 2026 04:00:00 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a16c1608faso7030275e9.0
+        for <soc@kernel.org>; Tue, 06 Oct 2026 04:01:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1791284399; x=1791889199; darn=kernel.org;
+        d=linaro.org; s=google; t=1791284498; x=1791889298; darn=kernel.org;
         h=content-transfer-encoding:content-type:organization:autocrypt
          :content-language:cc:to:reply-to:subject:from:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=+nio9Hhvbka7Ed6Pqah8EBJxLi2/eirIVfDib3AzpKE=;
-        b=rD4yIDacZBc0RtNgk7hcB9wxnS+U2fkdGQ783wL0Q95OFEVz/FHSxUvI1CJYwOi2cT
-         BdpUrPvho9g+WitQt0eA1EbyP3qXfPfKAptZwrtZmyJjPrKYp2quToEdnhj41m8Pae4u
-         Bvkj0RPuOVhopIoyIxNEH8zbJwB8ReVbX5E6E9+MUbU243GAguGfUMO8kiLPZ1c87gvO
-         WMu+0Eqn24ZgQRBKsQK491MlySnWH+Gg2UJQwC21NKJqerzpyvf9iSpz3QT5b5Z/xGOv
-         vCuKp/WIZVq3ys7fUJbp8UEuZHLFDwv5GUcCJukhMmfPNQgD3MPJmXLVqIrVlIcySawP
-         oxxg==
+        bh=dV0RSoFV6Y+3amLPhBXn9ZC7bZtBE6S7E5l+wTKLQOM=;
+        b=Fkm9DxbhcEbRjtIVe26Qbu67WB0GqQYHtSYnnyOwyjUdggcoQN7xQv7WMISGf6ZDtS
+         COPaxIBW42bi0zTQHqlj6YyaN49K7x7wvQI8g6mU0Mht7bGLRuDaOBWSovaj4hSxkdYL
+         6ZShpF5USHPco6e8LcEVK97PiJmb0cYtZ9pS8WyvnHRPIinAU3F1rASQOeA46GEmo8NF
+         FcxC57SWJaa0oBGIsPV3weRDviHBpfPXqWhNIlCuanMWbbJjp8flMGBbsClNWBW8fI+U
+         YboDQWzRvxuNQhjr04DkvUe41QewTvuLTTa4rqHMCcsGw7hDsmhaJzSpGN0lT1BWnxKO
+         mLEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791284399; x=1791889199;
+        d=1e100.net; s=20260707; t=1791284498; x=1791889298;
         h=content-transfer-encoding:content-type:organization:autocrypt
          :content-language:cc:to:reply-to:subject:from:user-agent
          :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=+nio9Hhvbka7Ed6Pqah8EBJxLi2/eirIVfDib3AzpKE=;
-        b=v2gdBZo/fybtr9wYYDI0gzZeAMcwpIvPUtBXdK4z8LiFduAykaDA6g9ESNohVyFkGF
-         HMpIQa62KIbCSZWkXV1sugku3X5EZFFWgLF/owK4juc7LCnGbRp4MV2pBKCSEyPyiY6m
-         QprvXUkyhEt/53VzrR8J91LtdJx81rAGG4DcAkQWO6gqIvwmKpAEgihRhGsMYAlLCLAX
-         lgIcq/4ZPLQ5QJJgaEipgUKAIDPgwh7TtLwhPW1wsnQno7f3jzzaBWiQ02hrGO9kApyZ
-         2mpPA5H9bYqMXzQRH49zAxytOoTNQifO2sy0k+m8E+6ReV2aaOWnZcOv+E9rslr4aGd5
-         GqWw==
-X-Gm-Message-State: AFq9FYKDXg1x1zZ9re6VUF51lsDvA99ezcIzwL/qsKJz7V6HKAEEm/vs
-	RIk1XbNOollg9yZwBa4lgR/nihu60sOm0BSfT04KLNZqJF8YKMIoPGNSqe0Y5Upf2GWy3/bWs4q
-	EC3+PfnLcHg==
-X-Gm-Gg: AYBFou2dpWoDVWodjKYcR7akA5y6YaSvrZDLEJwe2cdHPYbYVLBskH6SAMnyU7anqtX
-	UWQF8jMI2i72Y456Gb8DDCMDAwxK9Eol1Q9qSsWiDWvetPWtcgq2hMYCoBF7KH4QgMvPpz/qKzJ
-	uScmV+tK/W6GuZ30LWq4Fk64ZnK8TsSr3kCCpYfiFCppaZjLyco1o6v6Ni7RXkhbSYjOyggpuds
-	iQWDcj9QQKi6Jt/6lczdweeCyncQPwCI0AqkWUIP/zrV7w2WzYUwXdrn9lVE+iEthsli9Mdk3Ya
-	11k2UhsuWMoLrN5PL2A1+Z17E3X+Wd7KbZSaT5sSBAP/yOQ6Q2evSFWaadTSy/h5DdLsFSCicfK
-	gZSO2ZPElWJykl5Bmf3yZ1qwZvTwPKH4chkC6Cvl+QjRBMs5zyqUVGRDzBODR4si9f4Hk4GnAJ5
-	kbaG110F1AL0jdzUkyxMEbMnjkWW4GWLRWCyBMNGuKbo8Fa5u6zvmoXLXyeLXmMF8k3LWrqk4VA
-	FH33nCjEOss6dYv5a+IrJezM8+5wmo=
-X-Received: by 2002:a5d:5d0d:0:b0:487:b4a:3f54 with SMTP id ffacd0b85a97d-48c4800336amr17791685f8f.29.1791284398668;
-        Tue, 06 Oct 2026 03:59:58 -0700 (PDT)
+        bh=dV0RSoFV6Y+3amLPhBXn9ZC7bZtBE6S7E5l+wTKLQOM=;
+        b=Z0wJjqHtyiLvzaqqxm549UnZWuNq5uH1SEw1eiEtzx0VnBE7RsXZFsFYLu/ehbRN8L
+         5+aw7mhLT+pOQxE6OsDmzAiyXU2Ik9IP+wAjenkb2SejXXeZDJUiK1+nXwNJFiXVH6pp
+         1s3Ktj2cXUJePoz4xHgpNhxsnm+aLUPECY+Fh7cHktaCbq/Jr5D4mYFjitZX8TsmWzKo
+         /csJGI1wn4EUgPRdcsuF7ktf0cmAxayvD6PARzNLcihD9cdmGn7i9LO6uJoCdZBK9GUe
+         nKhzH67PDFjtqfn26Vo2TXvKsZ4cVszrDJpoWLESnFoZ4Thyt5J0+07d0O5KroRaj9D0
+         6UZw==
+X-Gm-Message-State: AFuF++l2mzKjubjWXNUCACpwi93etlEJXg4gu4y0JU0oB2POUOya/svv
+	FVPGn+PmUPxAikvCX3VefMM5oUL2pjLG3A4wor8wtHNC/Coz7wnPco4mSK5sLt9eohAqGhudEiK
+	/JzTLDgijtg==
+X-Gm-Gg: AYBFou3ys1d3xRA9ywaCeZFr1AwpN6999pam7hO0ks7n9bJ0ubIKNiobjOTYyQoW/WB
+	tntETAGmj19sOI1FsH9VCikQD4zsbWWGUCDTR/IJbER0uz8IOC5oW6gT7m0YauAW/IeLWnSELSv
+	ISBsVL1Q8Mp2qahBtnw0B79azjKxjhXdD3Xe37TgGMv6/iBnyfEx0kAZTRp+63aGW6dn/1ME10v
+	6/dHLXgmgSYoEyBxbYyXiafmMkWslMZ6J1Ru7aF+lylUS7uNnlH5IV4yUN0Ej3lSaGrmcLlWesp
+	H/wpDCtja8eEOW8y0i3zci6SXs3tq3FnDVu2IjGiugCeH8sTaGEp1DI5edP6Ykw68zfkwGn9Gb9
+	CrFLQAcVZ/63YhitzhwT80SdIanGYc/Uzq2UYxJKN19BqeSQqKQI85UrPbXkCjilos3BP8ukTww
+	jHij0Vwm389m9nx2tWBoKuaXhxG9KibnCVH9peDY7exrqHJYzlfHaDI6s0FeMNgXwzbtx7DfqqJ
+	fkGZpGftYTOE5TG92oQYXJXuzE7LEAp
+X-Received: by 2002:a05:600c:6046:b0:4a0:321:6dad with SMTP id 5b1f17b1804b1-4a178a396c1mr32243445e9.16.1791284495071;
+        Tue, 06 Oct 2026 04:01:35 -0700 (PDT)
 Received: from [192.168.151.96] (90-182-211-1.rcp.o2.cz. [90.182.211.1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c622907fesm10290942f8f.26.2026.10.06.03.59.57
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c6cd7c326sm2508351f8f.53.2026.10.06.04.01.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Oct 2026 03:59:57 -0700 (PDT)
-Message-ID: <8987c69f-5576-4358-92e4-e9e3b4f4f2dd@linaro.org>
-Date: Tue, 6 Oct 2026 12:59:55 +0200
+        Tue, 06 Oct 2026 04:01:33 -0700 (PDT)
+Message-ID: <a1f0aa7d-be6b-4229-8345-66595a47be74@linaro.org>
+Date: Tue, 6 Oct 2026 13:01:29 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -105,7 +105,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT updates for v7.4
+Subject: [GIT PULL] Amlogic drivers updates for v7.4
 Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
 To: soc@kernel.org, arm@kernel.org
 Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
@@ -140,10 +140,8 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's the Amlogic ARM64 DT changes for v7.4, containing spaces
-indentation fixes, MMC/I2C/MCU Fan features for the Amlogic T7
-based Khadas VIM4, clock measure nodes for Amlogic a4/a5/s7/s7d/s6/a9
-and finally changes to properly define the NOR flash on the Odroid HC4.
+Here's drivers updates for Amlogic SoCs for v7.4, mainly clock measure
+support for Amlogic a4/a5/s7/s7d/s6/a9.
 
 Thanks,
 Neil
@@ -154,57 +152,27 @@ The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v7.4
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v7.4
 
-for you to fetch changes up to b44e2be772f866985cafdf90355285069ea68495:
+for you to fetch changes up to a848d72aab71e19ea78180f2502ad7d12818723f:
 
-   arm64: dts: amlogic: meson-sm1-odroid-hc4: run the SPI NOR at 40 MHz (2026-10-02 21:30:26 +0200)
+   soc: amlogic: clk-measure: Optimize CLK_MSR_ID to reduce memory usage (2026-10-02 11:24:25 +0200)
 
 ----------------------------------------------------------------
-Amlogic ARM64 DT changes for v7.4:
-- Spaces indentation cleanups
-- Amlogic T7
-   - Pipeline Clock for the MMC controler
-   - I2C controller
-   - MCU node for FAN control for the VIM4
-- Clock Measure nodes for Amlogic a4/a5/s7/s7d/s6/a9
-- SPI NOR #hold/#WP and bus speed defining on the Odroid HC4
+Amlogic drivers for v7.4:
+- Clock measure bindings reorg
+- Clock measure support for Amlogic a4/a5/s7/s7d/s6/a9
+- Clock mesure memory optimization
 
 ----------------------------------------------------------------
 Chuan Liu (6):
-       arm64: dts: amlogic: a5: Add clk-measure controller node
-       arm64: dts: amlogic: a4: Add clk-measure controller node
-       arm64: dts: amlogic: s7: Add clk-measure controller node
-       arm64: dts: amlogic: s7d: Add clk-measure controller node
-       arm64: dts: amlogic: s6: Add clk-measure controller node
-       arm64: dts: amlogic: a9: Add clk-measure controller node
+       dt-bindings: soc: amlogic: Reordering compatible of clk-measure
+       dt-bindings: soc: amlogic: Add clk-measure compatible to support more SoCs
+       soc: amlogic: clk-measure: Support more measurement channels
+       soc: amlogic: clk-measure: Align compatible entries with DT bindings
+       soc: amlogic: clk-measure: Add support for more SoCs
+       soc: amlogic: clk-measure: Optimize CLK_MSR_ID to reduce memory usage
 
-Igor Velkov (2):
-       arm64: dts: amlogic: meson-sm1-odroid-hc4: mux the SPI NOR HOLD# and WP# pins
-       arm64: dts: amlogic: meson-sm1-odroid-hc4: run the SPI NOR at 40 MHz
-
-Krzysztof Kozlowski (1):
-       arm64: dts: amlogic: Replace spaces indentation with tabs
-
-Lucas Tanure (1):
-       arm64: dts: amlogic: t7: add the pipeline clock to the MMC controllers
-
-Ronald Claveau (2):
-       arm64: dts: amlogic: t7: Add i2c controller node
-       arm64: dts: amlogic: t7: khadas-vim4: Add i2c MCU fan node
-
-  arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi        |  5 +++++
-  arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi        |  5 +++++
-  arch/arm64/boot/dts/amlogic/amlogic-a9.dtsi        |  5 +++++
-  arch/arm64/boot/dts/amlogic/amlogic-s6.dtsi        |  5 +++++
-  arch/arm64/boot/dts/amlogic/amlogic-s7.dtsi        |  5 +++++
-  arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi       |  5 +++++
-  .../dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts  | 13 +++++++++++
-  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        | 25 ++++++++++++++++------
-  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  9 ++++++++
-  .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     |  2 +-
-  .../boot/dts/amlogic/meson-gxbb-nanopi-k2.dts      |  2 +-
-  arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi        |  2 +-
-  arch/arm64/boot/dts/amlogic/meson-gxl.dtsi         |  2 +-
-  .../boot/dts/amlogic/meson-sm1-odroid-hc4.dts      |  4 ++--
-  14 files changed, 77 insertions(+), 12 deletions(-)
+  .../soc/amlogic/amlogic,meson-gx-clk-measure.yaml  |  16 +-
+  drivers/soc/amlogic/meson-clk-measure.c            | 927 ++++++++++++++++++++-
+  2 files changed, 923 insertions(+), 20 deletions(-)
