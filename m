@@ -1,85 +1,198 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7EF370AE7
-	for <soc@lists.linux.dev>; Wed,  7 Oct 2026 15:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD4C4137A2
+	for <soc@lists.linux.dev>; Wed,  7 Oct 2026 21:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791385243; cv=none; b=ZtDMJ+0C94NC63AjGZcges0gbpChVTgvACEgPFnNAP810v97VGwnXny+18zS4+77ESPms49led1lBxVaJF0aEzNjby5wLe5b5sai78np2dhXz9HffvwJJQ9dCLT7p0CP8zxoVxyw1JznLw2OhfT/qGCg+jo4Ml1tSsYLL1zr+l8=
+	t=1791408936; cv=none; b=VUUIVUf3X6REkEFSOGCZoRCxEE2mDC1SozIVr/FU88QX3ZNoKeu8ylEbImOFfKHncQOc900src77nnT3yZ8jd5otbyFExwZlicK4XQxNAJ3YfjxFpJ1tTZrL5NxSUXE0aZkGT0mIY4IBQlxAMfPvL+tfmhrMED01+I35ejCwz8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791385243; c=relaxed/simple;
-	bh=asC6zfUUSU5aOS6AfgXlNaMp4mt/9FJYdyABnGVmH5Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mwxEy1pe0qdvXugthXvnQBl+fXeeLUUlXrRtjPvjAjmn9NSDL2GWNz4Kwi1qI6nRN/kCWiwZD1jNnnF7JGwHsav4x9BP21a0h14woPUIDUGw1TNy/WATR7qToaAUyVkchHG1s7/UwuL3fk3DaexrWBGAw7zvutS7ACBxb+PNhi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CtVVktrK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791408936; c=relaxed/simple;
+	bh=wYsP8cX//0rpRYNJSb27S+esVIVihSU1dWHck+ptWIo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=dd/5rJ6S3Ms4oicLKEkCqWA0yMSdaGDeqV+qUGUKbDzzikbeVwCQDai3ntuU0Jf1tjQzPmRGzNNvKK38XScfDfUIOQ4ro6D1AYPtRuuwT25NglNVfA1cfpCv7ad4NpSqx17UI9h86ovPeHC2w19waEeGMRt20CFi3PvsEBnEHWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cYGPI9KX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ar7EGNaQ; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CtVVktrK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CAE1F00893;
-	Wed,  7 Oct 2026 15:00:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791385239;
-	bh=oLYNuqjkWzyrA3tX1SXacbJGzDcV3DButmvf7uXrweo=;
-	h=From:To:Cc:Subject:Date;
-	b=CtVVktrKOX8rhw0sWmiumIwtGZcx30H0KJ+/9MxnxvM+Irf9xQBFjcEH0jr9am8zB
-	 /1LAR+oT8ZdV+2Q1tB9RydvDCsF1nJSrXOsnLXn8wFRBdCXrvsDjb4yDlihbgQD4vz
-	 vFSMA5UlcM/n454sx3yj9ZwQyPjBYaz29oV51OTgGgnXuaSHv8SWG6udgt+9anJP5i
-	 mTI25Ge9FMiTJyFytzlaTiOOyFRCQZPS26PmOYb0Hf+iW3vFBMDqVx5XS+4LF7hZPM
-	 19cWNHqJKRKKytR2T9nmTBb/YnI7LVddrCZurjfX2v3XNrmImwn+rS/CvKmeimPLGd
-	 HYWBT+917yuXw==
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: SoC Team <soc@lists.linux.dev>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Liviu Dudau <liviu.dudau@arm.com>
-Subject: [GIT PULL] ARM: vexpress: Fixes for v7.4
-Date: Wed,  7 Oct 2026 16:00:31 +0100
-Message-ID: <20261007150034.624664-1-sudeep.holla@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cYGPI9KX";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ar7EGNaQ"
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id E0FD014001C4
+	for <soc@lists.linux.dev>; Wed,  7 Oct 2026 17:35:33 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Wed, 07 Oct 2026 17:35:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1791408931; x=1791495331; bh=ZD
+	mP8DzJugW5eXodu1u8OXMJRWyqdoFMQGjudVwguv8=; b=cYGPI9KXhbCE7Gkvq/
+	66lWCmysX/OO1Dxffzb1WkQY7v4WBxsjqsWkZZ9Het6tbxTXPOLVCGZ+obzrl4oD
+	MHHNloaxh1LIQsyqZqoCUQw071jyIPUbaNTMsXoouoh2wdFw8WuXfLU/UExHydwa
+	cyPPCvnNb2yO9lBTdwqCFVg3FLO6ET4LScLvjqCH7B/EGHSYPgvLSChAXYKHV8na
+	kC51lZJlmqsXUmMEkfSGtsBHP3GaO83cPa/O3RHDqezMyFgKoyquGifL7jTHgmO7
+	8hJqVVVm7gzyzz6AKipr9jdnTc/lBG2juYXOVJLkC8Je5+XvNVYkz0bzB+ma2Ec0
+	2kLw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1791408931; x=1791495331; bh=ZDmP8DzJugW5eXodu1u8OXMJRWyq
+	doFMQGjudVwguv8=; b=Ar7EGNaQ3EB5n6LvjSl+UzryVQNL34Mb+451oHWaNvnj
+	pj9ai0fQiNexlFrku+uPcF7P/4c9lpo2Eh42F9upvFWlQ9THfbgVKK7csgyN5fsz
+	VpiVYepWXXi6wkuUlmPLwqpjXeVweqcPEppvlNiEuMlhe0e3ehdNGTDhcw6xqD7I
+	lNxlEF1S5CCcuudfPq5sCQ2gqhzi1dkWizCzYO6KtYnL+XzCm04gafAX2OfSQlSb
+	Q3bf0apv3CAzaol1hZo97ybUqTFUaw/uzpTMoOfRueMAi9MHajgsVTGRC8AOkkpN
+	F2onZY9HhSi8yNCaQyzSAeMwLh1aIzZFYYKxot1Qrw==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1791408931; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BsaXN0cy5saW51eC5kZXY+;
+	s=fm1:rsa-sha256:GgdYs3a4/9OUyQOoW3SDWufIzMFG/adWMTLDUgnh5FV+8qn
+	dp1lpWKIFocnoRofTD7EJT+ShFqoZ/KYun6liMa+32yiUr1CnmaubPGI3H4wMJFg
+	XbLL9N+Tsx1yaBD/IyHQEMNZ55Jou6sNRAqLYXQCud8k7xQSEk82HTFpdjUnDi7w
+	gBPVybaavONWPAI88JDq7QwAjVTnHowhCSu3GGbg3SD4mMPKUpYYU6hrup2Lt4w7
+	knI+PLpZ23GW5uNeX6wixEiyHHJwhh+nP+jC1ECFPY3Wk4rBFhJ9xK8i2Uolzwrh
+	thRCl5KVtqYYf5kYegU3vLx+7orYr27m0O7VDAg==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
+	action=mi-m=1; hc=10;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,message-id,mime-version,subject,to;
+Message-Instance: m=1; h=sha256:9RIeI19IAZDvn4hm6qyw4aDeAN8s4u31KcNaWRkoBkg=:wYsP8cX//0rpRYNJSb27S+esVIVihSU1dWHck+ptWIo=;
+X-ME-Sender: <xms:H7vGanqXgeKDC-yyKpM9Lb0kaZeiabSnFA77ekRRMGHkP0DJmaqXLg>
+    <xme:H7vGasfuSytRjJyhjFAPXNRQLGeo7D2LojqkZ9SY_D1WgjQlqGzeIeGeapOFVrEDF
+    0ugmkWE4mfOs79MJWQErQ8GUX8AfRHJjJoAyuOJUhS5yZ335nzDTNRN>
+X-ME-Proxy-Cause: dmFkZTFVcA5N6AxELDaRr8i1HexnWBvhEKMQ8baou8io56McBPAWDv3xqkYXj3kGTbmuYL
+    abVyTMMQ+JaZ4BqO1IawdKTUOBer4puvT/Ez2gwB/YaHWyV/1cTGGp1oL77ie6EmEb3bS8
+    fGZUaoX2wr5S8w4Lk0Ag798zK9TJs81OWrvQt60zxbPxGNjYOjzpTVB3V1ctA5NbaWmt+d
+    UIL4+Hl2pjJuTFX48+fDuKFWML9A+ecabJuy0w9nmFSbsajuzZM/9Bp65fR1QOJK1iSapP
+    5JyItNqqHF7BVKfrlS5OzHN+dM5zzOEFVAZWmbRUKgtR/FmleMx0ltvPzg507omKuzKYcm
+    YdKn5j7FqGudB9Rnm7P5BJeYkzLXI5b5PEZ30kHdrCbheI9v1XkABHrXI8lgjzxF1XJalI
+    Isp04p7KZgryNfYJIUars4v1hQFkwnuSjgGq8nfaw+xzdkNHJSoPdD925RjikrIleSvbM3
+    b2oXGmaVTm5DmwbrlBuXIPj+s2gwZNreckKap9R6PeEUViNp0ADpiW4vRhOSFUhXPT1p65
+    spztcfHiVGvclW6t40BxxauRkFJdBIRnoZWDPzLIGG2AQSuYRfIfUDGsaywoMnyXFKRp0C
+    znVsHmJbJe2cb60YiX6KxiNJD+CeZIbq+KFzNZTf8stM9G1HXiObIAKmWJCw
+X-ME-Proxy: <xmx:IbvGauMjFMIvm0MMfEJDhYjPqdKBYnxFcIZAlvXqRW4SQJz1KyO_lg>
+    <xmx:IbvGavM946inu2M7ORC4dNsJywJrLCS8E9lg-_GzpheZtEfbi4rJ0A>
+    <xmx:IbvGaniOsdMgDc3J-XY2gulvD49jndj5t9p9Non0dJNl3ARRpSzGzw>
+    <xmx:IbvGakvn6J2fzA1mnD8zmxZAg-UU26DWQocJuSNRzJSFq7wpX2BZ7w>
+    <xmx:I7vGamjkn4UU_g94cyHX8FYcePZaBgWhF8hIwmjlrGVTA5-rbEkNBYHj>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id BDE8332A008E; Wed,  7 Oct 2026 17:35:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AamXen0t4ZPg
+Date: Wed, 07 Oct 2026 23:35:07 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, "Stephen Boyd" <sboyd@kernel.org>,
+ "Bjorn Andersson" <andersson@kernel.org>
+Message-Id: <1399951d-6afa-4977-8514-ed30c5a2c865@app.fastmail.com>
+Subject: [GIT PULL] soc: fixes for 7.3, part 2
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi ARM SoC Team,
+The following changes since commit 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e:
 
-Please pull ! These came in recently and are in -next for a week now.
-I am sending these early for v7.4 as fixes instead of waiting until -rc1.
-
-Regards,
-Sudeep
-
--->8
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
-
-  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+  Linux 7.3-rc5 (2026-09-27 13:55:01 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/vexpress-fixes-7.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.3-2
 
-for you to fetch changes up to 27b98d331f1dcebe088ab51a7061a387a7440cb2:
+for you to fetch changes up to 1fc2d80928b706147e371602dabd0ba927dfe4a3:
 
-  ARM: vexpress: fix device_node refcount leak in vexpress_smp_dt_prepare_cpus() (2026-10-01 09:37:40 +0100)
-
-----------------------------------------------------------------
-ARM: vexpress: Fixes for v7.4
-
-Couple of device tree node references acquired during VExpress SMP
-preparation were never released. Add `__free(device_node)` to the node
-pointers in `vexpress_flags_set()` and `vexpress_smp_dt_prepare_cpus()`
-so their references are dropped when each function returns.
-
-Both leaks occur once during boot and have no known functional impact.
+  Merge tag 'tee-fix-for-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes (2026-10-03 23:33:02 +0200)
 
 ----------------------------------------------------------------
-Weigang He (2):
-      ARM: vexpress: fix device_node refcount leak in vexpress_flags_set()
-      ARM: vexpress: fix device_node refcount leak in vexpress_smp_dt_prepare_cpus()
+soc: fixes for 7.3, part 2
 
- arch/arm/mach-versatile/platsmp-vexpress.c | 4 ++--
- arch/arm/mach-versatile/v2m.c              | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+There are fixes in three ares this time:
+
+ - Four distinct issues in TEE firmware, all fairly minor
+
+ - Five devicetree mistakes on NXP i.MX8, lx2160a and Qualcomm
+   based machines, one of these may cause file system corruption
+   from an incorrect SD card supply voltage
+
+ - Five fixes for clk drivers on new Qualcomm platforms,
+   addressing issues with incorrect enable states
+
+----------------------------------------------------------------
+
+Note that the clk driver fixes should have gone through the
+clk subsystem tree, we had some miscommunication that led
+to me picking them up here but decided to leave them in here
+to avoid extra work for everyone while we're at lpc.
+
+
+Arnd Bergmann (6):
+      Merge tag 'qcom-clk-fixes-for-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+      Merge tag 'qcom-arm64-fixes-for-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+      Merge tag 'imx-fixes-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux into arm/fixes
+      Merge tag 'optee-fixes-for-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+      Merge tag 'qcomtee-fix-for-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+      Merge tag 'tee-fix-for-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+
+Babanpreet Singh (1):
+      tee: qcomtee: fix kernel-doc warnings
+
+Dale Whinham (1):
+      arm64: dts: qcom: x1-denali: Fix microphone distortion
+
+Georgiy Osokin (1):
+      tee: shm: reject zero-sized allocations in tee_dyn_shm_alloc_helper()
+
+Imre Kaloz (1):
+      MAINTAINERS: update my email address
+
+Luca Weiss (3):
+      clk: qcom: gcc-eliza: Fix always-enabling PCIE_RSCC clocks
+      clk: qcom: gcc-hawi: Fix always-enabling PCIE_RSCC clocks
+      clk: qcom: gcc-kaanapali: Fix always-enabling PCIE_RSCC clocks
+
+Mahantesh Salimath (1):
+      tee: optee: ffa: support shared memory offsets on large-page kernels
+
+Shao-Fu Chen (1):
+      optee: register TEE devices only once fully initialized
+
+Stefano Radaelli (1):
+      arm64: dts: imx8mp-var-dart-sonata: Fix Sonata SD I/O supply
+
+Taniya Das (2):
+      clk: qcom: gpucc-glymur: Mark the GPU CX GDSC as votable
+      clk: qcom: gpucc-kaanapali: Mark the GPU CX GDSC as votable
+
+Vincent Jardin (3):
+      arm64: dts: lx2160a: fix incorrect pinmux
+      arm64: dts: lx2160a: fix IIC1 pinmux submask rejected by pinctrl-single
+      arm64: dts: lx2160a: fix the iic5 spi3 pinmux offset and value
+
+ .mailmap                                           |  1 +
+ MAINTAINERS                                        |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-lx216x.dtsi      | 19 +++++++----
+ .../boot/dts/freescale/imx8mp-var-dart-sonata.dts  |  1 +
+ arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi  |  4 +--
+ drivers/clk/qcom/gcc-eliza.c                       |  6 ++--
+ drivers/clk/qcom/gcc-hawi.c                        |  6 ++--
+ drivers/clk/qcom/gcc-kaanapali.c                   |  6 ++--
+ drivers/clk/qcom/gpucc-glymur.c                    |  2 +-
+ drivers/clk/qcom/gpucc-kaanapali.c                 |  2 +-
+ drivers/tee/optee/ffa_abi.c                        | 38 +++++++++++++++-------
+ drivers/tee/optee/optee_msg.h                      |  4 +--
+ drivers/tee/optee/smc_abi.c                        | 17 +++++-----
+ drivers/tee/qcomtee/async.c                        |  4 +--
+ drivers/tee/qcomtee/qcomtee_msg.h                  |  2 +-
+ drivers/tee/qcomtee/qcomtee_object.h               |  1 +
+ drivers/tee/tee_shm.c                              |  4 +++
+ 17 files changed, 76 insertions(+), 43 deletions(-)
