@@ -1,127 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD67748B38F
-	for <soc@lists.linux.dev>; Wed,  7 Oct 2026 14:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7EF370AE7
+	for <soc@lists.linux.dev>; Wed,  7 Oct 2026 15:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791383862; cv=none; b=lVeOcLBXVvjJ4aA0rDD6zKRC4ABcl+W+j9tbbqynp7zTkfb4vhMv6W1Z72qL3ML49k6a52HmGwEedp4nLuqw4Qqcin2UZ33MqC5a49KJoWg4Yl5MqYfVj146sn9aGAgBoKF+JmFFniirAilZwTgiKX3XXEAu7Df7QLOElU+JSJY=
+	t=1791385243; cv=none; b=ZtDMJ+0C94NC63AjGZcges0gbpChVTgvACEgPFnNAP810v97VGwnXny+18zS4+77ESPms49led1lBxVaJF0aEzNjby5wLe5b5sai78np2dhXz9HffvwJJQ9dCLT7p0CP8zxoVxyw1JznLw2OhfT/qGCg+jo4Ml1tSsYLL1zr+l8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791383862; c=relaxed/simple;
-	bh=fRyNkI3fn8Au5OASxWCAyrnTfbevmHFPaBcPO1EffQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sM5w/+1TVcqgeS0/asmjLV7v3yl5WvYPNa/NZdYqJsZgZCFuAOiBsFmHqvAsAjEQdQYLRY+69qVKNZHEw8OmhEDjd6mpz5mmviowPgLZeQ0qwXPvB+CwIxk4268hQqk6BInJzrdVYNuoN8kloDPfKm+/0KjygZk1w2HFu9YU8hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jee8JM5I; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791385243; c=relaxed/simple;
+	bh=asC6zfUUSU5aOS6AfgXlNaMp4mt/9FJYdyABnGVmH5Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mwxEy1pe0qdvXugthXvnQBl+fXeeLUUlXrRtjPvjAjmn9NSDL2GWNz4Kwi1qI6nRN/kCWiwZD1jNnnF7JGwHsav4x9BP21a0h14woPUIDUGw1TNy/WATR7qToaAUyVkchHG1s7/UwuL3fk3DaexrWBGAw7zvutS7ACBxb+PNhi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CtVVktrK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jee8JM5I"
-Received: by smtp.kernel.org (Postfix)
-	id A25441F0089B; Wed,  7 Oct 2026 14:37:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C13C1F0089C;
-	Wed,  7 Oct 2026 14:37:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CtVVktrK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CAE1F00893;
+	Wed,  7 Oct 2026 15:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791383857;
-	bh=sIcv331wntNvMfBhP0jH3BFhPY14ilEwGB4AgDf0gDw=;
-	h=Date:From:To:Cc:Subject;
-	b=jee8JM5Is6ioiatnT8WCeH8cVVygoBaSeClOvKBrFIG4byCR3bo+bY8KlfXjAutcG
-	 JtaVGigOhRpRkVVg+w+yRjMPOh7VAdxx4wjltjIru+enJC+4AgYn8NxtxcLAvL9xuU
-	 sUzWaVLstyfsR7q0VV1hsFeJwCAe86XIsNPBtgj18Yk2GXtlYQB0SdGfg5BwIkYRey
-	 g0Zu2wHg/UKFEINFHXFiIc+d20sjFKxcW9eJsnNp54AB1SvooEh7+dOkzIBfv62PsT
-	 3hCqMtbLp2mE6V253nKxsd8AfBRPp9lrX9nbboF1m/mNtI+L2RMF/6WY2qXCyFFL9V
-	 3AR5veNkagYWg==
-Date: Wed, 7 Oct 2026 22:37:33 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Allwinner DT Changes for 7.4
-Message-ID: <asZZLRnqygKV8hMl@home.wens.tw>
+	s=k20260515; t=1791385239;
+	bh=oLYNuqjkWzyrA3tX1SXacbJGzDcV3DButmvf7uXrweo=;
+	h=From:To:Cc:Subject:Date;
+	b=CtVVktrKOX8rhw0sWmiumIwtGZcx30H0KJ+/9MxnxvM+Irf9xQBFjcEH0jr9am8zB
+	 /1LAR+oT8ZdV+2Q1tB9RydvDCsF1nJSrXOsnLXn8wFRBdCXrvsDjb4yDlihbgQD4vz
+	 vFSMA5UlcM/n454sx3yj9ZwQyPjBYaz29oV51OTgGgnXuaSHv8SWG6udgt+9anJP5i
+	 mTI25Ge9FMiTJyFytzlaTiOOyFRCQZPS26PmOYb0Hf+iW3vFBMDqVx5XS+4LF7hZPM
+	 19cWNHqJKRKKytR2T9nmTBb/YnI7LVddrCZurjfX2v3XNrmImwn+rS/CvKmeimPLGd
+	 HYWBT+917yuXw==
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: SoC Team <soc@lists.linux.dev>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@kernel.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Liviu Dudau <liviu.dudau@arm.com>
+Subject: [GIT PULL] ARM: vexpress: Fixes for v7.4
+Date: Wed,  7 Oct 2026 16:00:31 +0100
+Message-ID: <20261007150034.624664-1-sudeep.holla@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BDuy6gkAhz2wqgtr"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+Hi ARM SoC Team,
 
---BDuy6gkAhz2wqgtr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Please pull ! These came in recently and are in -next for a week now.
+I am sending these early for v7.4 as fixes instead of waiting until -rc1.
 
+Regards,
+Sudeep
+
+-->8
 The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-7.4
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/vexpress-fixes-7.4
 
-for you to fetch changes up to eabc3c090e81ea329b2c7530ca655a70228dfaa4:
+for you to fetch changes up to 27b98d331f1dcebe088ab51a7061a387a7440cb2:
 
-  arm64: dts: allwinner: sun50i-h616: Add video engine (2026-10-06 05:27:57 +0800)
-
-----------------------------------------------------------------
-Allwinner Device Tree Changes for 7.4
-
-Main changes: H616 gained its video codec engine, while H6's video codec
-engine device node was corrected. OrangePi PC2 got Ethernet LEDs added.
-
-In addition, A20 .dtsi got a whitespace cleanup.
-
-New boards:
-- Teclast P80 tablet based on A133 SoC
+  ARM: vexpress: fix device_node refcount leak in vexpress_smp_dt_prepare_cpus() (2026-10-01 09:37:40 +0100)
 
 ----------------------------------------------------------------
-Aleksander Jan Bajkowski (1):
-      arm64: dts: allwinner: h5: OrangePi PC2: add ethernet LEDs
+ARM: vexpress: Fixes for v7.4
 
-Andre Przywara (3):
-      dt-bindings: vendor-prefixes: Add vendor prefix for Teclast
-      dt-bindings: arm: sunxi: Add two Teclast tablets
-      arm64: dts: allwinner: A133: add basic support for Teclast P80 tablet
+Couple of device tree node references acquired during VExpress SMP
+preparation were never released. Add `__free(device_node)` to the node
+pointers in `vexpress_flags_set()` and `vexpress_smp_dt_prepare_cpus()`
+so their references are dropped when each function returns.
 
-Chen-Yu Tsai (2):
-      arm64: dts: allwinner: sun50i-h6: Add missing SRAM region for video engine
-      arm64: dts: allwinner: sun50i-h6: Add missing IOMMU for video engine
+Both leaks occur once during boot and have no known functional impact.
 
-Jernej Skrabec (1):
-      arm64: dts: allwinner: sun50i-h616: Add video engine
+----------------------------------------------------------------
+Weigang He (2):
+      ARM: vexpress: fix device_node refcount leak in vexpress_flags_set()
+      ARM: vexpress: fix device_node refcount leak in vexpress_smp_dt_prepare_cpus()
 
-Krzysztof Kozlowski (1):
-      ARM: dts: allwinner: sun7i-a20: Replace spaces indentation with tabs
-
- Documentation/devicetree/bindings/arm/sunxi.yaml   |  10 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- arch/arm/boot/dts/allwinner/sun7i-a20.dtsi         |   2 +-
- arch/arm64/boot/dts/allwinner/Makefile             |   1 +
- .../boot/dts/allwinner/sun50i-a133-teclast-p80.dts | 205 +++++++++++++++++++++
- .../boot/dts/allwinner/sun50i-h5-orangepi-pc2.dts  |  22 +++
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi       |   4 +-
- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     |  12 ++
- 8 files changed, 255 insertions(+), 3 deletions(-)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a133-teclast-p80.dts
-
---BDuy6gkAhz2wqgtr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmrGWS0ACgkQOJpUIZwP
-JDB7thAAzfuPpQJgPM5QtwD7lAPzkFkl2siC+HZymBCvAjn43et7WNCVhOts+qtf
-/l1eZGn9BDDM8rlgbqNTuTfrq6T7nxZLt2jxRfhKx1bXyZOqb4IwnzrV6PmDXEFg
-xIJoSze93VCErjCbhkH6hMbbHM4oxQo/KLUwK8MJjTHdjZZ8UfPerbX6hgYZ9q3p
-AcKC1jM3gvdBI886mx853wNlLGFq68kycX7hItpX3R6cO0Ql54jIP5Wc2WWoj+A4
-F8oSVI295y4sfvfzIK8erNW6OBQ+7vFR8lymUwOp4DqhIXdwBu0uQD4OxrUCbTka
-Y5BJ25gXS+fVE8fmtFdEGZHSu3oLL2/ZXUOycVEeO49ZaTrnl2xSxBmmMU2BFO3w
-kv15oh2qRNy1XOZsxRthsa4+BxhJ9iwZX3vQV6ArSFxs86uaLoCNt5R8SShDqU6z
-vwAQk0I1DbT2QWz0Z3rqH1zXWOoqR4T+0FK6vm1ISkmTdsW5onuj+ztQikthPcQK
-nJrRoy58zN2N/n0un99JKPqEpclCW/1j4aqxi94JnxEGVUVtCBvqfDczQxnbBotI
-gFcwMtoYAfXzDApfme7ZCE7IMTYiR+uAjpeZI5ZfPPn1exD2ZBnjZYPKBhM1a/gu
-n5Baa2QN5Gr2jWHzcWd154wOZkBs7uhhUh81SGjS0n5RekpycHQ=
-=bJ0u
------END PGP SIGNATURE-----
-
---BDuy6gkAhz2wqgtr--
+ arch/arm/mach-versatile/platsmp-vexpress.c | 4 ++--
+ arch/arm/mach-versatile/v2m.c              | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
