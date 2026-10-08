@@ -1,198 +1,156 @@
-Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD4C4137A2
-	for <soc@lists.linux.dev>; Wed,  7 Oct 2026 21:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A85D14F70
+	for <soc@lists.linux.dev>; Thu,  8 Oct 2026 01:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791408936; cv=none; b=VUUIVUf3X6REkEFSOGCZoRCxEE2mDC1SozIVr/FU88QX3ZNoKeu8ylEbImOFfKHncQOc900src77nnT3yZ8jd5otbyFExwZlicK4XQxNAJ3YfjxFpJ1tTZrL5NxSUXE0aZkGT0mIY4IBQlxAMfPvL+tfmhrMED01+I35ejCwz8Q=
+	t=1791422448; cv=none; b=U5nI35r+1PFa7toLyHzrQZOPxT6B5/ruwnMm8TTCfK0Sqg1CvV6dVAbPN/YQ9/fTVM8pfu+2J6JU+/TGf3x1Rg+XKAvlb5fG3Nd1rhDw9/gyQ05rDcomF4EFpZP2GOgBuzct628etbe7hmJWXyYMTxL2OlNPSSCoecnU8Re55Hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791408936; c=relaxed/simple;
-	bh=wYsP8cX//0rpRYNJSb27S+esVIVihSU1dWHck+ptWIo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=dd/5rJ6S3Ms4oicLKEkCqWA0yMSdaGDeqV+qUGUKbDzzikbeVwCQDai3ntuU0Jf1tjQzPmRGzNNvKK38XScfDfUIOQ4ro6D1AYPtRuuwT25NglNVfA1cfpCv7ad4NpSqx17UI9h86ovPeHC2w19waEeGMRt20CFi3PvsEBnEHWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cYGPI9KX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ar7EGNaQ; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1791422448; c=relaxed/simple;
+	bh=CLPOfl3bbRiD5l6fcc46ga7VhcI0uwZ5ljr5joJHmSQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Yl3HB6p/4i6iGk01fc7ZjjdfisuWifPF8v6Kp3a4OdXnGRmuhCJZQ2s/nk8Oxs1i/QNAN/bpEnT15J+Btr4VeYtJpRgcuG5VpLB3DRQB4fsPXJd0eTxetR/eOnJn15DrxHPm/3odnezmAF6AXdc9JwGA+GWl+17T7SnKq0NUvf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m0doytP4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cYGPI9KX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ar7EGNaQ"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id E0FD014001C4
-	for <soc@lists.linux.dev>; Wed,  7 Oct 2026 17:35:33 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Wed, 07 Oct 2026 17:35:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm1; t=1791408931; x=1791495331; bh=ZD
-	mP8DzJugW5eXodu1u8OXMJRWyqdoFMQGjudVwguv8=; b=cYGPI9KXhbCE7Gkvq/
-	66lWCmysX/OO1Dxffzb1WkQY7v4WBxsjqsWkZZ9Het6tbxTXPOLVCGZ+obzrl4oD
-	MHHNloaxh1LIQsyqZqoCUQw071jyIPUbaNTMsXoouoh2wdFw8WuXfLU/UExHydwa
-	cyPPCvnNb2yO9lBTdwqCFVg3FLO6ET4LScLvjqCH7B/EGHSYPgvLSChAXYKHV8na
-	kC51lZJlmqsXUmMEkfSGtsBHP3GaO83cPa/O3RHDqezMyFgKoyquGifL7jTHgmO7
-	8hJqVVVm7gzyzz6AKipr9jdnTc/lBG2juYXOVJLkC8Je5+XvNVYkz0bzB+ma2Ec0
-	2kLw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1791408931; x=1791495331; bh=ZDmP8DzJugW5eXodu1u8OXMJRWyq
-	doFMQGjudVwguv8=; b=Ar7EGNaQ3EB5n6LvjSl+UzryVQNL34Mb+451oHWaNvnj
-	pj9ai0fQiNexlFrku+uPcF7P/4c9lpo2Eh42F9upvFWlQ9THfbgVKK7csgyN5fsz
-	VpiVYepWXXi6wkuUlmPLwqpjXeVweqcPEppvlNiEuMlhe0e3ehdNGTDhcw6xqD7I
-	lNxlEF1S5CCcuudfPq5sCQ2gqhzi1dkWizCzYO6KtYnL+XzCm04gafAX2OfSQlSb
-	Q3bf0apv3CAzaol1hZo97ybUqTFUaw/uzpTMoOfRueMAi9MHajgsVTGRC8AOkkpN
-	F2onZY9HhSi8yNCaQyzSAeMwLh1aIzZFYYKxot1Qrw==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1791408931; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BsaXN0cy5saW51eC5kZXY+;
-	s=fm1:rsa-sha256:GgdYs3a4/9OUyQOoW3SDWufIzMFG/adWMTLDUgnh5FV+8qn
-	dp1lpWKIFocnoRofTD7EJT+ShFqoZ/KYun6liMa+32yiUr1CnmaubPGI3H4wMJFg
-	XbLL9N+Tsx1yaBD/IyHQEMNZ55Jou6sNRAqLYXQCud8k7xQSEk82HTFpdjUnDi7w
-	gBPVybaavONWPAI88JDq7QwAjVTnHowhCSu3GGbg3SD4mMPKUpYYU6hrup2Lt4w7
-	knI+PLpZ23GW5uNeX6wixEiyHHJwhh+nP+jC1ECFPY3Wk4rBFhJ9xK8i2Uolzwrh
-	thRCl5KVtqYYf5kYegU3vLx+7orYr27m0O7VDAg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=mi-m=1; hc=10;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,message-id,mime-version,subject,to;
-Message-Instance: m=1; h=sha256:9RIeI19IAZDvn4hm6qyw4aDeAN8s4u31KcNaWRkoBkg=:wYsP8cX//0rpRYNJSb27S+esVIVihSU1dWHck+ptWIo=;
-X-ME-Sender: <xms:H7vGanqXgeKDC-yyKpM9Lb0kaZeiabSnFA77ekRRMGHkP0DJmaqXLg>
-    <xme:H7vGasfuSytRjJyhjFAPXNRQLGeo7D2LojqkZ9SY_D1WgjQlqGzeIeGeapOFVrEDF
-    0ugmkWE4mfOs79MJWQErQ8GUX8AfRHJjJoAyuOJUhS5yZ335nzDTNRN>
-X-ME-Proxy-Cause: dmFkZTFVcA5N6AxELDaRr8i1HexnWBvhEKMQ8baou8io56McBPAWDv3xqkYXj3kGTbmuYL
-    abVyTMMQ+JaZ4BqO1IawdKTUOBer4puvT/Ez2gwB/YaHWyV/1cTGGp1oL77ie6EmEb3bS8
-    fGZUaoX2wr5S8w4Lk0Ag798zK9TJs81OWrvQt60zxbPxGNjYOjzpTVB3V1ctA5NbaWmt+d
-    UIL4+Hl2pjJuTFX48+fDuKFWML9A+ecabJuy0w9nmFSbsajuzZM/9Bp65fR1QOJK1iSapP
-    5JyItNqqHF7BVKfrlS5OzHN+dM5zzOEFVAZWmbRUKgtR/FmleMx0ltvPzg507omKuzKYcm
-    YdKn5j7FqGudB9Rnm7P5BJeYkzLXI5b5PEZ30kHdrCbheI9v1XkABHrXI8lgjzxF1XJalI
-    Isp04p7KZgryNfYJIUars4v1hQFkwnuSjgGq8nfaw+xzdkNHJSoPdD925RjikrIleSvbM3
-    b2oXGmaVTm5DmwbrlBuXIPj+s2gwZNreckKap9R6PeEUViNp0ADpiW4vRhOSFUhXPT1p65
-    spztcfHiVGvclW6t40BxxauRkFJdBIRnoZWDPzLIGG2AQSuYRfIfUDGsaywoMnyXFKRp0C
-    znVsHmJbJe2cb60YiX6KxiNJD+CeZIbq+KFzNZTf8stM9G1HXiObIAKmWJCw
-X-ME-Proxy: <xmx:IbvGauMjFMIvm0MMfEJDhYjPqdKBYnxFcIZAlvXqRW4SQJz1KyO_lg>
-    <xmx:IbvGavM946inu2M7ORC4dNsJywJrLCS8E9lg-_GzpheZtEfbi4rJ0A>
-    <xmx:IbvGaniOsdMgDc3J-XY2gulvD49jndj5t9p9Non0dJNl3ARRpSzGzw>
-    <xmx:IbvGakvn6J2fzA1mnD8zmxZAg-UU26DWQocJuSNRzJSFq7wpX2BZ7w>
-    <xmx:I7vGamjkn4UU_g94cyHX8FYcePZaBgWhF8hIwmjlrGVTA5-rbEkNBYHj>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id BDE8332A008E; Wed,  7 Oct 2026 17:35:27 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m0doytP4"
+Received: by smtp.kernel.org (Postfix)
+	id 0670E1F00893; Thu,  8 Oct 2026 01:20:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A6961F000FF;
+	Thu,  8 Oct 2026 01:20:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791422446;
+	bh=SRa88cNDS8cS4jU92wvDH+YDXSST8V7u1mZXBFhdDVk=;
+	h=From:To:Cc:Subject:Date;
+	b=m0doytP40LLZ4FriMFqm1HtdO0LZMo+7+bougZMLabiZyfioaLVMGzcDBgKp/wsHi
+	 nJya4to7vF6IUI+ZEuKyDK2VUfdp7oGG1e81PtCEoFNATLGdhtHzrYiGuVSH9dfndy
+	 Ptf0S1OtFQr5zrgVjf0rECIFzLXHoqXE/As4gJXXnKe8ZQUE26rQWivNNjEJoFgx+g
+	 Hjf1JCC0dP9m+3SMvCm2XUoqmjY/dzT9q9ySWxyR2xCu1VvOUVi6+/K8y6OgVoRLpN
+	 sRmONQUjn7Q8ex+38j7fb4RyKW3FJrmwgGwCbDTZYYNaDmzsPVET4Z9WXitb0zgaXh
+	 X+8NUW8ExfY2g==
+From: Yixun Lan <dlan@kernel.org>
+To: soc@kernel.org
+Cc: Yixun Lan <dlan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RISC-V SpacemiT Devicetrees for v7.4
+Date: Thu,  8 Oct 2026 01:20:40 +0000
+Message-ID: <20261008011902-KYC9093695@kernel.org>
+X-Mailer: git-send-email 2.56.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AamXen0t4ZPg
-Date: Wed, 07 Oct 2026 23:35:07 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, "Stephen Boyd" <sboyd@kernel.org>,
- "Bjorn Andersson" <andersson@kernel.org>
-Message-Id: <1399951d-6afa-4977-8514-ed30c5a2c865@app.fastmail.com>
-Subject: [GIT PULL] soc: fixes for 7.3, part 2
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e:
+Hi SoC Maintainers,
 
-  Linux 7.3-rc5 (2026-09-27 13:55:01 -0700)
+   Please pull SpacemiT's DeviceTree changes for v7.4
+
+Yixun Lan
+
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-7.3-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/spacemit/linux.git/ tags/spacemit-dt-for-7.4-1
 
-for you to fetch changes up to 1fc2d80928b706147e371602dabd0ba927dfe4a3:
+for you to fetch changes up to d5eefaf546eb83f98206137a5784b6b8510e4fe5:
 
-  Merge tag 'tee-fix-for-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes (2026-10-03 23:33:02 +0200)
-
-----------------------------------------------------------------
-soc: fixes for 7.3, part 2
-
-There are fixes in three ares this time:
-
- - Four distinct issues in TEE firmware, all fairly minor
-
- - Five devicetree mistakes on NXP i.MX8, lx2160a and Qualcomm
-   based machines, one of these may cause file system corruption
-   from an incorrect SD card supply voltage
-
- - Five fixes for clk drivers on new Qualcomm platforms,
-   addressing issues with incorrect enable states
+  Merge branch 'spacemit-misc-for-next' into spacemit-for-next (2026-10-06 11:51:34 +0000)
 
 ----------------------------------------------------------------
+RISC-V SpacemiT DT changes for 7.4
 
-Note that the clk driver fixes should have gone through the
-clk subsystem tree, we had some miscommunication that led
-to me picking them up here but decided to leave them in here
-to avoid extra work for everyone while we're at lpc.
+For K3 SoC
+- Correct CLINT and ACLINT
+- Add USB nodes info
+- Add cpu scaling
+- Add rfkill node
+- Add i2s info
+- Fix IMSIC
+- Enable thermal and fan control (CTF230)
 
+For K1 SoC
+- Set mac address from eeprom
+- Enable onboard eeprom
 
-Arnd Bergmann (6):
-      Merge tag 'qcom-clk-fixes-for-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
-      Merge tag 'qcom-arm64-fixes-for-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
-      Merge tag 'imx-fixes-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux into arm/fixes
-      Merge tag 'optee-fixes-for-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
-      Merge tag 'qcomtee-fix-for-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
-      Merge tag 'tee-fix-for-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+MISC Changes:
+- MAINTAINERS updates
 
-Babanpreet Singh (1):
-      tee: qcomtee: fix kernel-doc warnings
+----------------------------------------------------------------
+Andre Heider (1):
+      riscv: dts: spacemit: k1-musepi-pro: add cpu scaling
 
-Dale Whinham (1):
-      arm64: dts: qcom: x1-denali: Fix microphone distortion
+Aurelien Jarno (4):
+      riscv: dts: spacemit: k3: move USB3 phy to board level
+      riscv: dts: spacemit: k3: add USB3 B and C controllers for Pico-ITX board
+      riscv: dts: spacemit: k3: add rfkill node for Bluetooth on Pico-ITX board
+      riscv: dts: spacemit: k3: add rfkill node for WLAN on the K3 Pico-ITX board
 
-Georgiy Osokin (1):
-      tee: shm: reject zero-sized allocations in tee_dyn_shm_alloc_helper()
+Chukun Pan (3):
+      riscv: dts: spacemit: sort nodes on OrangePi RV2
+      riscv: dts: spacemit: enable onboard eeprom for OrangePi
+      riscv: dts: spacemit: set ETH MAC from eeprom for OrangePi
 
-Imre Kaloz (1):
-      MAINTAINERS: update my email address
+GUO Ren (XuanTie) (1):
+      riscv: dts: spacemit: k3: fix IMSIC num-guest-ids
 
-Luca Weiss (3):
-      clk: qcom: gcc-eliza: Fix always-enabling PCIE_RSCC clocks
-      clk: qcom: gcc-hawi: Fix always-enabling PCIE_RSCC clocks
-      clk: qcom: gcc-kaanapali: Fix always-enabling PCIE_RSCC clocks
+Guodong Xu (1):
+      MAINTAINERS: add entry for SpacemiT reset controller driver
 
-Mahantesh Salimath (1):
-      tee: optee: ffa: support shared memory offsets on large-page kernels
+James Morris (1):
+      riscv: dts: spacemit: k3-com260: keep dldo4 enabled
 
-Shao-Fu Chen (1):
-      optee: register TEE devices only once fully initialized
+Jennifer Berringer (3):
+      riscv: dts: spacemit: set console baud rate on OrangePi RV2
+      riscv: dts: spacemit: k3-com260-ifx: Add USB nodes
+      riscv: dts: spacemit: k3-com260-ifx: Add rfkill nodes
 
-Stefano Radaelli (1):
-      arm64: dts: imx8mp-var-dart-sonata: Fix Sonata SD I/O supply
+Jonatan Hazell (1):
+      riscv: dts: spacemit: orangepi-r2s: Add cpu scaling for K1 SoC
 
-Taniya Das (2):
-      clk: qcom: gpucc-glymur: Mark the GPU CX GDSC as votable
-      clk: qcom: gpucc-kaanapali: Mark the GPU CX GDSC as votable
+Junhui Liu (7):
+      riscv: dts: spacemit: k3: Drop guest properties from M-level IMSIC
+      dt-bindings: timer: thead,c900-aclint-mtimer: Add SpacemiT K3
+      dt-bindings: interrupt-controller: thead,c900-aclint-mswi: Add SpacemiT K3
+      dt-bindings: interrupt-controller: thead,c900-aclint-sswi: Add SpacemiT K3
+      dt-bindings: timer: sifive,clint: Remove spacemit,k3-clint
+      irqchip/aclint-sswi: Add support for SpacemiT K3
+      riscv: dts: spacemit: k3: Replace incorrect CLINT node with ACLINT nodes
 
-Vincent Jardin (3):
-      arm64: dts: lx2160a: fix incorrect pinmux
-      arm64: dts: lx2160a: fix IIC1 pinmux submask rejected by pinctrl-single
-      arm64: dts: lx2160a: fix the iic5 spi3 pinmux offset and value
+Troy Mitchell (4):
+      MAINTAINERS: Add Troy Mitchell as a SpacemiT SoC reviewer
+      riscv: dts: spacemit: Add K3 I2C6 pinctrl state
+      riscv: dts: spacemit: Add CTF2301 on K3 CoM260
+      riscv: dts: spacemit: k3: add i2s0-i2s5 nodes
 
- .mailmap                                           |  1 +
- MAINTAINERS                                        |  2 +-
- arch/arm64/boot/dts/freescale/fsl-lx216x.dtsi      | 19 +++++++----
- .../boot/dts/freescale/imx8mp-var-dart-sonata.dts  |  1 +
- arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi  |  4 +--
- drivers/clk/qcom/gcc-eliza.c                       |  6 ++--
- drivers/clk/qcom/gcc-hawi.c                        |  6 ++--
- drivers/clk/qcom/gcc-kaanapali.c                   |  6 ++--
- drivers/clk/qcom/gpucc-glymur.c                    |  2 +-
- drivers/clk/qcom/gpucc-kaanapali.c                 |  2 +-
- drivers/tee/optee/ffa_abi.c                        | 38 +++++++++++++++-------
- drivers/tee/optee/optee_msg.h                      |  4 +--
- drivers/tee/optee/smc_abi.c                        | 17 +++++-----
- drivers/tee/qcomtee/async.c                        |  4 +--
- drivers/tee/qcomtee/qcomtee_msg.h                  |  2 +-
- drivers/tee/qcomtee/qcomtee_object.h               |  1 +
- drivers/tee/tee_shm.c                              |  4 +++
- 17 files changed, 76 insertions(+), 43 deletions(-)
+Vincent Legoll (1):
+      riscv: dts: spacemit: orangepi-rv2: Add cpu scaling for K1 SoC
+
+Yixun Lan (1):
+      Merge branch 'spacemit-misc-for-next' into spacemit-for-next
+
+ .../thead,c900-aclint-mswi.yaml                    |   1 +
+ .../thead,c900-aclint-sswi.yaml                    |   5 +-
+ .../devicetree/bindings/timer/sifive,clint.yaml    |   1 -
+ .../bindings/timer/thead,c900-aclint-mtimer.yaml   |   1 +
+ MAINTAINERS                                        |   9 +
+ arch/riscv/boot/dts/spacemit/k1-musepi-pro.dts     |  35 +++-
+ arch/riscv/boot/dts/spacemit/k1-orangepi-r2s.dts   |  69 ++++++-
+ arch/riscv/boot/dts/spacemit/k1-orangepi-rv2.dts   | 132 +++++++++---
+ arch/riscv/boot/dts/spacemit/k3-com260-ifx.dts     |  77 +++++++
+ arch/riscv/boot/dts/spacemit/k3-com260.dtsi        |  18 ++
+ arch/riscv/boot/dts/spacemit/k3-pico-itx.dts       |  38 ++++
+ arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi       |  11 +
+ arch/riscv/boot/dts/spacemit/k3.dtsi               | 229 +++++++++++++++++++--
+ drivers/irqchip/irq-aclint-sswi.c                  |   1 +
+ 14 files changed, 571 insertions(+), 56 deletions(-)
