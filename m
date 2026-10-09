@@ -1,108 +1,136 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAFD1ADFE4
-	for <soc@lists.linux.dev>; Fri,  9 Oct 2026 00:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791505847; cv=none; b=JHeMehVCOhEc7egoEr9Pwbt/HWZOvhBhNTTsQSizLJK0cQAyYaT6W3aD51PVrtlx0KIOBesQ3YFUhB98rnUCJaAeue2jSMZgIs4rgP9u7IWDiAx48U+m/F8mTUsZf3ppHFrzU+6gYL+yRCzEBqKaK+El4Ou1RVNi7dvtGVa0f4s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791505847; c=relaxed/simple;
-	bh=5doB1BE1XPWENnR7lFHz2tgV1MGaGm+wbaE1Da8t4cI=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=hTk2FZ7T4miWtLraB24GmZpl3jSJXmt39yZZxOWFGAPXqXLYzoi/tX41Nv7iVQ/ysP6zgkhjZAIsxj93PyQMb9ZeIncYG69tMqocOsXy15iJ8Sy2r1R4U/8FXrmzVtR+Nwa02siEIpwXe2cJqvGTtiIUF8TcaJXHgE/93v7Giyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=Q3YhmVQw; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D748542AFBB
+	for <soc@lists.linux.dev>; Fri,  9 Oct 2026 06:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791526242; cv=pass; b=BSwfEjh7+J+ahYUCBzGRtCq2qTQUGi2Np6MJIk3Y9nY0IlCdq76y3kcRYks5Z8HgZhdnijYv7BIjaldi51GxAEU0B/6DL2/sgSYf2DiAF1py4D0czwvlYECjL8JLC25A7/9TztRqfdXmfImwyiXjiO7cErsr0I3LzQe1lbkVKmo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791526242; c=relaxed/simple;
+	bh=wSoSTy9cQ20md/2wENe+ZbYpjr9JxgQF9HlddJklHyk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eiDcbCYLA4lo3JWJ+JKySCT6EUlOTCQmCTVWLCU/kTsFhtQeOE2Rp4nmWGaNmBcOYzO0qZ3BkX5CnQuXjPiZkunoJhVDMnqUKzQDk9LDAKEyNida0vHvxSHjIkXCmhKYJrVH3ymbSn42/85KVKpbSFEY39MSVVBEDdJIF/Mu3/A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=WsjTTbdo; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="Q3YhmVQw"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="WsjTTbdo"
+Received: by smtp.kernel.org (Postfix)
+	id CFAA11F000FF; Fri,  9 Oct 2026 06:10:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=209.85.221.45
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1791526240;
+	b=ajEeikm1fkPlVb7tDOTeWJ4ZFyz25mknMc4/bVaENfHY2IRaS57C0GGbqXRbL1Qr0X8t
+	 W0OCcon4muo2/gz/I/rJ2LBzveEQ4W6+ZHH9doVEBTv4GTZVFpXRWZLw3ouOJ1NYwWOtK
+	 VznftuMG1HTo+3hDdy1GJlJlZJ3DFoInn1K36WJ6nS4tUJHtGCAzHaU3jbRm8ELxwHrUJ
+	 syXz81Qaj7Ly1jw40Zf81yfh3a8J81CWf8jjjDT7Q4I/5zoJedW4GiDx/njTBkdI8JRhm
+	 PZNwY4MA/JCy7QE1FIdp7HFWH1XjumLUYVV1YnHhDeLXXAs5MfgTTKfnPXIAFvjl1Ig==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1791526240;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=Ax4ioHhBTibMhrV/ZkvgxvrIeWrtpbyT/2pgDBLqygs=;
+	b=SO4SI4pYkhTVcYgqPyWs//FrcWaFmCisTpdKvh2d23PSScRYrbpuqMztt+R7LeW8Pl5K
+	 qmlIo/3QJcmDnooAr92bK5/rneLeQmeL32AK+P7k9qC1oM5744YpJwWwmNOIPzgFQaM2s
+	 2l4/0IbsxX97FRdVv3DAVWZLHLEL7+fsWw0Q/cwi6Z+e8Iu0hmnaCfcKCHIsmxHFb1tea
+	 NLZqBKguwv8C0StY0tViBWURRoeBRzwUNCmzbLy2UX4i0Qe0WaZy1LCK5R7vSu9NjEDIZ
+	 8vdZDk4Ar66N4XxcGAk7aymEfsQ7kPDePg2MVHsp+1CNWHOVS7sjZHiYpPTGUxuvOGg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=tuxon.dev header.i=@tuxon.dev header.a=rsa-sha256 header.s=google header.b=WsjTTbdo;
+	dmarc=none header.from=tuxon.dev;
+	spf=pass smtp.mailfrom=tuxon.dev;
+	arc=none smtp.remote-ip=209.85.221.45
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 91DA11F00893
+	for <soc@kernel.org>; Fri,  9 Oct 2026 06:10:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=tuxon.dev header.i=@tuxon.dev header.a=rsa-sha256 header.s=google header.b=WsjTTbdo
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 91DA11F00893
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48b0d19cf7eso1030166f8f.1
+        for <soc@kernel.org>; Thu, 08 Oct 2026 23:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1791505837;
-	bh=waRfuVZmS/2NjhSFY0tBe8TyRqDp7UrLfXWJQxU09HU=;
-	h=Subject:From:To:Cc:Date;
-	b=Q3YhmVQwB9+RIreU54jWKPRuoPrE6/uvQFVIUI651pGL/jGOMTXh9GG3IErHcAyBH
-	 7Y9/RhA49V7KdzAVyk6rotpaLUqyUeZdGZCQkzg8pnz5wkJSnVOHY/sy5nabTCX63r
-	 A+/4bOC9Pn+WaqW/f77hOCnbT4H15d7WvwuPTa4x5oBCHzHifMZoDr4H+Gk+fgfqF1
-	 6LVHodLQGEbw3EPxT7oydKAq66+LwK5C2KxtEV5ltFnw7RAPY0mvbWuosvIoojvF6M
-	 wtfZejvKe8e4qjIxB+mdp22nNpclx/tuaNAfwx4r6OvvSg5rLL8MxrBmEOfleGY6zk
-	 baaDhldkLzkVw==
-Received: from [192.168.68.117] (unknown [180.150.113.112])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 7CA046F499;
-	Fri,  9 Oct 2026 08:30:36 +0800 (AWST)
-Message-ID: <1a070f5c87b1e4e765a7e481b53f66242a9753ec.camel@codeconstruct.com.au>
-Subject: [GIT PULL] nuvoton: First batch of arm64 devicetree changes for v7.4
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: soc <soc@lists.linux.dev>
-Cc: linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>, Tomer Maimon
-	 <tmaimon77@gmail.com>
-Date: Fri, 09 Oct 2026 11:00:35 +1030
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+        d=tuxon.dev; s=google; t=1791526238; x=1792131038; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Ax4ioHhBTibMhrV/ZkvgxvrIeWrtpbyT/2pgDBLqygs=;
+        b=WsjTTbdoMh9JqtmwN1Wz1N+5LV1/yfHw3YTvzXtHh5pcdwOqpHPB2Keat79ue09QVB
+         eGydM7D9CLl/4ukMgxg3GvYizCeOBBjGMyh37qbI4V6tn/3f8VpbNKbwbshjdj4oRCXb
+         SHNpVf00+ZQGiEIodlmu3VMDYG4uJ4df6RvRvsa7IjnvcrM8pGzPgh89jNhFI2Ld8SWc
+         GD6NlDnq7idoIaEto29QZOQMwSERXt3IKlJICimlAq/g7eYPSI6BwgDujTcmhMUs9rG2
+         N/0S6KffvJydl6tM3BlMbHXfO8LUEs33Bc8bVZ0HwoO4J7ubSLsgPQBlc9BBaoWGahl8
+         xFnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791526238; x=1792131038;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Ax4ioHhBTibMhrV/ZkvgxvrIeWrtpbyT/2pgDBLqygs=;
+        b=EKcL1JoSmqMw5DEOZQ9csgxwJ3CIPSEyL39VwRlH2Aw1rvLkMbN5UM6eff5iJZafFn
+         138Ch3ouyEBqIZ2/xwgPdCN3bze5sQYCMLQc9bevoqMCxCR3kKkRRzQ2rSejP8iF1XT4
+         K+9LtVhzACdZZa9gwq2sMjT6fxTjilppoY6IlPM3w+z+mlN0a5MWfpo65EPtS9KSmLcL
+         htWGKI5k1pHCtPTx4XNkJIS4BhT2m020dFSDNkBv6027AY1cR2bolz0GAJgCC4JaeigH
+         Zen78os8XC9/u4C1Uvcb9cX6MjtOJbaQIZvbPMKPzN8emRRz4tPHgLrHM1mU4HIyPg3f
+         oaZg==
+X-Gm-Message-State: AFuF++kwSV5lsGYVg7K1Nx07hZuzjmq3nIUgiDpw/CabeIPDDkXRqmEP
+	Il0JLVC29QFG5B8UCAaXNre3U3fb9LPVcseSdXrME01so5D6sMJLZeTOrrCAN1jNOYGEEPX4auH
+	igpcK
+X-Gm-Gg: AYBFou055lnJRQMCUFo1a685Im4E+Q5GgdMm18WTsaNPmuP/JlgagE70lCY3v9INT5t
+	t0cRPCzz6ZM2m7b7ilxPDHe0trhZiA3t20RV5EJhcV9mMz/k/HC6LzFyaHbg/5AovfD4qbKc0hG
+	arbnokp6T+pMgSJgRr+7aV8yPHnxUkcezc9n9gxzcCxyHUvX3e+/2WBYiZ34qlgVTTSUmlGTVEk
+	ixK+HAbHu2GieNEFKYS7fermbtWyZYBnBhKQz7zbsM9FdIGFnp82byuKn6ZPKgnM4BHljmtg3FG
+	MVUq4M9+IC+RK3MBg4NtrqcIGfkxpUzclBfV9nrO+LVS/jc1gCGPpiZdpUpjtid0zW/QSviqiac
+	i6blJYSdX+QVrgi6hllegmRZKjxkjT69BcHDJeofO7Ci6Bvx8/d2ynlJLnbEDzw57nPq3Zop1wR
+	Z/0LGpIKcQuUCTXd8xOmv7lQw8rt+PbqmoxnSwi3cJRyhUc2DX4jFATeEVoKJifuc2Gk/FQRoj7
+	nBDZJfE/rhTYkObe3m+WGhKst/WqIKxr76dteQ5t7c=
+X-Received: by 2002:a05:600d:82c5:b0:4a1:6282:1cf3 with SMTP id 5b1f17b1804b1-4a18e497a94mr15845945e9.9.1791526237748;
+        Thu, 08 Oct 2026 23:10:37 -0700 (PDT)
+Received: from claudiu-TUXEDO-InfinityBook-Pro-AMD-Gen9.. ([82.208.30.17])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18bf21276sm56616715e9.8.2026.10.08.23.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 23:10:35 -0700 (PDT)
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	linux-arm-kernel@lists.infradead.org,
+	claudiu.beznea@tuxon.dev
+Subject: [GIT PULL] Microchip AT91 fixes for v7.3
+Date: Fri,  9 Oct 2026 09:10:34 +0300
+Message-ID: <20261009061034.29475-1-claudiu.beznea@tuxon.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello SoC maintainers,
-
-I've been absorbed with efforts outside of the kernel recently so
-there's not much activity in the BMC tree this time around. This is the
-only PR I plan to send for v7.4. That said, there are are many patches
-on the list that need attention. I will get to them.
-
-Various revisions of series I've applied from Tomer have been on the
-lists for a while. I've worked through some tidying with him in recent
-days so we can get them applied. There are still some process
-improvements necessary on his part with regard to sending patches for
-the BMC tree, which I've discussed with him. I've had to lightly rework
-v10 of his series in order to get it applied as noted in the relevant
-commit messages.
-
-The work in the tag is currently in linux-next and I am yet to receive
-any negative automated feedback on it.
-
-I'll be travelling for the next week for the OCP Global conference but
-will keep watch for any concerns that arise.
-
-Please merge.
-
-Thanks,
-
-Andrew
-
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935=
-:
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/nuvoto=
-n-arm64-7.4-devicetree-0
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-7.3
 
-for you to fetch changes up to c895734d0ec6c3e94f1fb3a0575b9a7076201d9e:
+for you to fetch changes up to afb1ecfeda3fc31d6300a176f4854cc62e289bf3:
 
-  arm64: dts: nuvoton: npcm845-evb: Add peripheral nodes (2026-10-08 10:23:=
-24 +1030)
+  ARM: configs: sama5: enable current Microchip KSZ DSA symbols (2026-09-20 16:22:20 +0300)
 
 ----------------------------------------------------------------
-nuvoton: First batch of arm64 devicetree changes for v7.4
+Microchip AT91 fixes for v7.3
 
-A short series of enhancements for the NPCM845 SoC and its evaluation board=
-.
+This update includes:
+- use the correct Kconfig flags for the Microchip KSZ switch
 
 ----------------------------------------------------------------
-Tomer Maimon (4):
-      arm64: dts: nuvoton: npcm845: Split APB address ranges
-      arm64: dts: nuvoton: npcm845: Add peripheral nodes
-      arm64: dts: nuvoton: npcm845-evb: Fix DTS coding style
-      arm64: dts: nuvoton: npcm845-evb: Add peripheral nodes
+Pengpeng Hou (1):
+      ARM: configs: sama5: enable current Microchip KSZ DSA symbols
 
- .../boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 700 +++++++++++++++++=
-+++-
- .../arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts | 439 ++++++++++++-
- arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi   |   7 +
- 3 files changed, 1141 insertions(+), 5 deletions(-)
+ arch/arm/configs/sama5_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
