@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314D31FF7C7
-	for <soc@lists.linux.dev>; Fri,  9 Oct 2026 07:22:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94E1476059
+	for <soc@lists.linux.dev>; Fri,  9 Oct 2026 07:28:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791530524; cv=none; b=IIRGSQPxZLaFYOBZwCDUfSOf1Nx6G2qcmyMqZFTVbaevHDmgXgZB2hSCnUh12AP7ogxWUAZCeMewDtH5U3pv++kyfxsy5KFPmeIE5AMWhFWW4+kbcB8ZMQRuIemr6MwybLdLoNqGOjbw9/CJnOvgpt0Is3Fo177qM++TgEYrkHI=
+	t=1791530901; cv=none; b=IV4D0nEt2MCyK1KrKr49cnYDQUmy956J2Euitt8uncV20h7F+YRTQv5lhhVyie/Ut4JL8z+LQUseYzUgeXwzmqNABKWVV/CGfpL1IU945zEkGnidB/ODqH32MpvokZ5vrXsLXc1uNj3dBdWmTi4cQlRpxA//Cvcx34pcJGz/Ilo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791530524; c=relaxed/simple;
-	bh=e41qWPLzPWwybXV2ln8dMaSYlSrONXhjBHyvQ4e9C1k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kCItIfWdnS0mpeisLTG2TVd0d9p5el7dgvKIRNiie0I1JItl7L1DCG2VwEgrPUUWMRTPa350S3KxX9IziEoO2R4popYrV6Y3nKCa614AVxFUBD1ZT7+HeLXQt8JOfC1UjM6jSZOLzDr+c6cVCJYe6ErBw8phW4lowBnjefKkL94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hEE9oa3D; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791530901; c=relaxed/simple;
+	bh=4047o51YozPqVfcX42C3zdihUsf6pPX83zNBRWxWHBc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=O3SsA8uqfH/hfAT6un5GXATYoEkzUR3gYxyQ0NvEpa1JJIo/SfsTIQ0k8JhtAHnvLbGGQuSbUb5TZiwwmk+R7wLcl+4hkDMDlDagiZg6zlNL8gHVsKEyL1YCvt2BrmEwXXC7CsU7ZAE6HnekEbE6UOVoqe9shw+vBu1VqZ9IyAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOdlqDsP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hEE9oa3D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOdlqDsP"
 Received: by smtp.kernel.org (Postfix)
-	id D16291F0089A; Fri,  9 Oct 2026 07:22:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D8D1F00899;
-	Fri,  9 Oct 2026 07:22:00 +0000 (UTC)
+	id 898241F00898; Fri,  9 Oct 2026 07:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABCA1F000FF;
+	Fri,  9 Oct 2026 07:28:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791530522;
-	bh=E89qvmRken/+oQ1DfI3NkNvZxh+BpvxrNXdddiAS7xM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=hEE9oa3DE9QH+3pGmE4ohosUoth5lRc6FFkE693UmsOL1i2TDoaQ9H7WUnsAyZaKY
-	 FruQFXSvqCgjkK4XaCKc6LD4P4LpnUOX0eqtRXNZDrSrPvoy+zaV3R4pcIFX6VZNXX
-	 lkiI0G6YYSkwmrkjfseciTd5a+cCCWNAgQPyiOCre2VhgksRjNRpCAFwmzMtNksx6X
-	 iPczw1NLM6wwI7iI/7zN4oWaxHS/2jTPKCPzkP49vtcou7UXs4fBn2IELWjEUUpcQn
-	 sx6y+M3FrSTCHalGcs5Ae/2oJpao7uHZUyonJZenFMYMmlrk1xJvgglb1Ybf2T8eyr
-	 F6MIuO9BuUkSQ==
-Message-ID: <b2e182bc-6707-4147-bc04-fba3c379160f@kernel.org>
-Date: Fri, 9 Oct 2026 09:21:58 +0200
+	s=k20260515; t=1791530900;
+	bh=3ochuzTWM4V34l70Ffd53HPtFv1TRtidFe+9vEvB6V0=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=fOdlqDsPNy/BOHDSsGrcvSUxzXDVEy/n91vALtajkpxrtSAipZRGdiMKP/Bl+5YuI
+	 B57rJT5WqiN4eOC3EqfHno8f6BMp7VHCq1z4KUzXx2ctONWpcEOjmK1z0GBcJp3HpZ
+	 sbhJMLQ3aYDYsa5r6wYi5FAYY6RjAmhbNkKTcJpW9k0pXdijvptIOmcmw8SFms820g
+	 GrQQWs25Du4xuHIZVXq8vcNM4akbG2+EibZpi3NU1qugWJpbDsWRF29w07ktSKgviK
+	 1ouDhCv8pIJuaVwajvMxkVmZZGrElHjja0nx/TBSr1zln+FR1cXaduKGFqkbKuk3xC
+	 W4cE/smVc36iA==
+Message-ID: <28ced1ee-b0e0-49a9-a414-0b1e6eeb28fa@kernel.org>
+Date: Fri, 9 Oct 2026 09:28:15 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -38,13 +38,14 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [GIT PULL] ARM: mvebu: dt for v7.4 (#1)
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
  Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>,
  Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
  linux-arm-kernel@lists.infradead.org
 References: <87o6d96w7w.fsf@BLaptop.bootlin.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <b2e182bc-6707-4147-bc04-fba3c379160f@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -89,30 +90,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  K9bCVaboTA2T77QYkRcRJYSsO1alGX0ome/hMLD1daXlkrNUp1HWa3K4iytLRXjCSIorWiGs
  n+q3krnpXu3TFkA8qtOFZMdnIiFuiq1yLT8hptsV5xh1TA2nsVvSYiaCr3q4s4BKjS/KrLDb
  qoxzw8ISjdUp4pA85vb6YLCmb39NgidD+7PmAr65lBNveIFynTgsja1rRQ4=
-In-Reply-To: <87o6d96w7w.fsf@BLaptop.bootlin.com>
+In-Reply-To: <b2e182bc-6707-4147-bc04-fba3c379160f@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/10/2026 22:34, Gregory CLEMENT wrote:
-> ----------------------------------------------------------------
-> Krzysztof Kozlowski (1):
->       ARM: dts: marvell: Replace spaces indentation with tabs
+On 09/10/2026 09:21, Krzysztof Kozlowski wrote:
+> On 04/10/2026 22:34, Gregory CLEMENT wrote:
+>> ----------------------------------------------------------------
+>> Krzysztof Kozlowski (1):
+>>       ARM: dts: marvell: Replace spaces indentation with tabs
+>>
+>> Rosen Penev (10):
+>>       ARM: dts: helios4: fix lm75 supply name
+>>       ARM: dts: armada-385-clearfog-gtr: fix vmmc property name
+>>       ARM: dts: marvell: add missing SDHCI clock-names
+>>       ARM: dts: armada-395-gp: drop unsupported SDHCI clock-frequency
+>>       ARM: dts: armada-388-helios4: fix vmmc property name
+>>       ARM: dts: helios4: fix vbus-supply for USB2 PHY
+>>       ARM: dts: helios4: fix spi1 location
+>>       ARM: dts: helios4: use national,lm75 compatible
+>>       ARM: dts: helios4: add #phy-cells to USB nop phys
+>>       ARM: dts: marvell: armada-388: use onnn,pca9655 compatible
 > 
-> Rosen Penev (10):
->       ARM: dts: helios4: fix lm75 supply name
->       ARM: dts: armada-385-clearfog-gtr: fix vmmc property name
->       ARM: dts: marvell: add missing SDHCI clock-names
->       ARM: dts: armada-395-gp: drop unsupported SDHCI clock-frequency
->       ARM: dts: armada-388-helios4: fix vmmc property name
->       ARM: dts: helios4: fix vbus-supply for USB2 PHY
->       ARM: dts: helios4: fix spi1 location
->       ARM: dts: helios4: use national,lm75 compatible
->       ARM: dts: helios4: add #phy-cells to USB nop phys
->       ARM: dts: marvell: armada-388: use onnn,pca9655 compatible
+> Your pull introduces new warnings for undocumented compatibles:
+> 
+> https://lore.kernel.org/all/202610021617.AlVUa9No-lkp@intel.com/
+> 
 
-Your pull introduces new warnings for undocumented compatibles:
-
-https://lore.kernel.org/all/202610021617.AlVUa9No-lkp@intel.com/
+And I found the binding patch which is not right (which was pointed out
+at v1 but never responded to), so neither is DTS change.
 
 Best regards,
 Krzysztof
