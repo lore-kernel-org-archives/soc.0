@@ -1,142 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F7D46EF92
-	for <soc@lists.linux.dev>; Fri,  9 Oct 2026 14:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791556526; cv=pass; b=ncWgD5QTRV/SfN0skKUvojWcCPZKgrPzZGe71CWWn8x0JDtfNn6/mDYmNFUjMwqdEHlK7nTC9FHsUZ5qv+u5dc9Gf/sPyLxCnon06pYoWpKgY6imgV6XIKzd2nK04Pc73pMIIYspFrg8kTxUjdm5CUEpEr/SkEf3b4UOowvcdW8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791556526; c=relaxed/simple;
-	bh=UnsLEH4QCzdtJL20xPP0hKPmfusPEwPrRKkP+07FlDY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ehjH9bhLPJ8j8yqLLdNHG5f+UcVIzTG4izHSlgH+bc9qFx3Ym2fSjyqSNZg5XqL2FtkpJuV0xhQd02Noj2W1sqiLiyx7VL0m831bvTzob8jpr0hG9eJZ10cHOlxL6Hi02Ha8fjDbIs/18ucHfhGYNSIDdy+QctWIzG4NdLT3V5I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qQPUp+Vk; arc=pass smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3178A33EB01
+	for <soc@lists.linux.dev>; Fri,  9 Oct 2026 14:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791556875; cv=none; b=fIBt6zu2bDTC+gWCGrFVU11BVqsE1r41KiZOa7YCPSpmzOWpC4yxKo+oo0THgLY+b57Swf2eSDWUkxM5qOCZg+XoHVeHFwYDHcFjTnZVnhP41FXMHpBKuBx+pPMOWMbCBs8n1x6SWuez8S1rVxPMONxMs75GJW+gOAAudasNUyU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791556875; c=relaxed/simple;
+	bh=VGwb8w/CTS/Awofai3R9Dapygq+bnYx7ocoH9w57fWg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VIzrH8+85qGvbqMn6yJXG9iYr3IMBCHCWwIeJOQqeG4mqf495Cw1ptQ5AZlkrEUYKiGHkswnIPGDGJwakaICCstR+6UiYBeq1AwOxoIyOJ+mtzi8fPQkp8UMiDphOr2IMSnlF6IAE9mtcQV9zxEBEWVMKpldaQkSpsqVyiLzztA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQSRW8eh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qQPUp+Vk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQSRW8eh"
 Received: by smtp.kernel.org (Postfix)
-	id ABB4E1F00893; Fri,  9 Oct 2026 14:35:23 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.246.84.56
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1791556523;
-	b=rgITAVgCuesmoYhp3And/gM+zi37rBJH0qvM16h2o8VvudVzfdAv3DbQJm4WU6LNiF87
-	 oLw9XgjVuRyu2J8yKctmU8BFAffaqe70vOpXqK8UVWIBZ96MQ9L+qZJNR5boZ70CbZhC7
-	 hIWik0JpbmeP52pJxhluN/NXT+R0e9d/LaETWy/0EMvgzozY2evOAj9MeoQcxr8bI2TUi
-	 ceTCVZwEsoyQnBakDLmsJw4MgaNrSRORnAQWSLFDkW434m1QKnaA7DNPV6SUfl1J0Cd+B
-	 IzJOsJsB+1iHQlRxfNBwMTyXYcQiEs7l4/CE5ySdrmV9liX2hJ50ZFBPoUk8HZaiCsA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791556523;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:To:Cc:
-	 Subject:In-Reply-To:References:Date:Message-ID:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
-	bh=5JzFqGxHzHN5rnVUak2+jKVigs7VEUnyyVH0rb7Zh1U=;
-	b=qCoR2UoF0ZCR216oWiub0RpGm1ubZqqVRRXo/eQvTfnYJVoDd0FahXznuziMfvZDDjIQ
-	 LURtc2n3n0dOeG8TD47AKSIlxUnIPpfpS8N/I8kEFpgfZNuJdC8qYeJClMwz7NAeDJ3oc
-	 7LCsnpPkaAioOG2euQSLV9edDPVq3AFFydhNJELIRyzEt81RuIaYKdzqP5iUybyZE+vHr
-	 ZI+YXtqA94eGbjpqAyEY/2lZYCIvNa7EyFMJKMUHi1e8UavpfdyjMDi7zoE89iPkbZK9U
-	 tdDTiPBSKfj6K1bxduHAfV9wr43oTvvwWul+I0EGwrEuCkN6qZDTARrE2xAkz7Xr5vg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=qQPUp+Vk;
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	arc=none smtp.remote-ip=185.246.84.56
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8396E1F000FF;
-	Fri,  9 Oct 2026 14:35:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=qQPUp+Vk
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 8396E1F000FF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id C6F631A119F;
-	Fri,  9 Oct 2026 14:35:20 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 9469760754;
-	Fri,  9 Oct 2026 14:35:20 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2F5D311D70889;
-	Fri,  9 Oct 2026 16:35:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1791556519; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=5JzFqGxHzHN5rnVUak2+jKVigs7VEUnyyVH0rb7Zh1U=;
-	b=qQPUp+VkdyzkWric8+3zSygpFsJEGXCyZhN8KuajXk+ByGp44gj+AnaXF0J3j1iGyLykif
-	eFPkKQ9ZnwKfIK0We7I/nWcv/zWEogQC2poENVKbRP90YIuuJSs6NkdKMcIroeEzkq3lj4
-	W82rKlR6/9eh3TcyQMM62W2vqfHTvr1K/lmviyrEZXBGYz2aEvumhFcdKqHWkfeGupPhMa
-	eKWbCqYZlkUDUFheN33SzN5cIq/8r5tuG4Lk84ppfrOd9/WVaMMlgxcExf1xlOOirLdcrB
-	Sl/W3lkNM174RlN6BJ6NuuFFDeMPDiJUMC2myawm9ei3AurF03U+XGPr9nouEQ==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- arm@kernel.org, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] ARM: mvebu: dt for v7.4 (#1)
-In-Reply-To: <28ced1ee-b0e0-49a9-a414-0b1e6eeb28fa@kernel.org>
-References: <87o6d96w7w.fsf@BLaptop.bootlin.com>
- <b2e182bc-6707-4147-bc04-fba3c379160f@kernel.org>
- <28ced1ee-b0e0-49a9-a414-0b1e6eeb28fa@kernel.org>
-Date: Fri, 09 Oct 2026 16:35:15 +0200
-Message-ID: <87y0c754d8.fsf@BLaptop.bootlin.com>
+	id 1F0341F00899; Fri,  9 Oct 2026 14:41:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF951F00893;
+	Fri,  9 Oct 2026 14:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791556874;
+	bh=8SZPkRoQGUDE+klT0jysAtuinRd5m5pRffY1ELPRh0w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=VQSRW8ehq/rC8c/u6SI1a3Z5W+9uf0yJ1hWYdIYriwUoMOsxs0+7di+mrEOZqTD53
+	 +Vqi72pBIJvCbhQ0MlVK+VZpDttPzN9AYkZx03qgZ7O5dggO8Drvjy0Qn4UWFQAmow
+	 aSifDHy/H4Faw4bFuWDl4qIcFRJK39HWiNlurTG33Uv6qLbHSof2+j7oJdxWQjWLT/
+	 GUeX7MnfPG4P0TYwtFKbTzaZd5UroX90t2rGRliqRLzAl4/L6jclNCJc+6s+Xw+/T1
+	 jE+xBz/kCPufaZ94OZ8g9o6fgzryHGU3P0yQTOBfPga90I/AZvBXN8rjlVbZw7oE99
+	 O6uccjkXTJ8oA==
+Message-ID: <0a29124e-2c46-4f47-af14-a8b803069d3b@kernel.org>
+Date: Fri, 9 Oct 2026 16:41:09 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL] ARM: mvebu: dt for v7.4 (#1)
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ linux-arm-kernel@lists.infradead.org
+References: <87o6d96w7w.fsf@BLaptop.bootlin.com>
+ <b2e182bc-6707-4147-bc04-fba3c379160f@kernel.org>
+ <28ced1ee-b0e0-49a9-a414-0b1e6eeb28fa@kernel.org>
+ <87y0c754d8.fsf@BLaptop.bootlin.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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
+In-Reply-To: <87y0c754d8.fsf@BLaptop.bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Krzysztof,
-
-> On 09/10/2026 09:21, Krzysztof Kozlowski wrote:
->> On 04/10/2026 22:34, Gregory CLEMENT wrote:
->>> ----------------------------------------------------------------
->>> Krzysztof Kozlowski (1):
->>>       ARM: dts: marvell: Replace spaces indentation with tabs
+On 09/10/2026 16:35, Gregory CLEMENT wrote:
+> Hello Krzysztof,
+> 
+>> On 09/10/2026 09:21, Krzysztof Kozlowski wrote:
+>>> On 04/10/2026 22:34, Gregory CLEMENT wrote:
+>>>> ----------------------------------------------------------------
+>>>> Krzysztof Kozlowski (1):
+>>>>       ARM: dts: marvell: Replace spaces indentation with tabs
+>>>>
+>>>> Rosen Penev (10):
+>>>>       ARM: dts: helios4: fix lm75 supply name
+>>>>       ARM: dts: armada-385-clearfog-gtr: fix vmmc property name
+>>>>       ARM: dts: marvell: add missing SDHCI clock-names
+>>>>       ARM: dts: armada-395-gp: drop unsupported SDHCI clock-frequency
+>>>>       ARM: dts: armada-388-helios4: fix vmmc property name
+>>>>       ARM: dts: helios4: fix vbus-supply for USB2 PHY
+>>>>       ARM: dts: helios4: fix spi1 location
+>>>>       ARM: dts: helios4: use national,lm75 compatible
+>>>>       ARM: dts: helios4: add #phy-cells to USB nop phys
+>>>>       ARM: dts: marvell: armada-388: use onnn,pca9655 compatible
 >>>
->>> Rosen Penev (10):
->>>       ARM: dts: helios4: fix lm75 supply name
->>>       ARM: dts: armada-385-clearfog-gtr: fix vmmc property name
->>>       ARM: dts: marvell: add missing SDHCI clock-names
->>>       ARM: dts: armada-395-gp: drop unsupported SDHCI clock-frequency
->>>       ARM: dts: armada-388-helios4: fix vmmc property name
->>>       ARM: dts: helios4: fix vbus-supply for USB2 PHY
->>>       ARM: dts: helios4: fix spi1 location
->>>       ARM: dts: helios4: use national,lm75 compatible
->>>       ARM: dts: helios4: add #phy-cells to USB nop phys
->>>       ARM: dts: marvell: armada-388: use onnn,pca9655 compatible
->>=20
->> Your pull introduces new warnings for undocumented compatibles:
->>=20
->> https://lore.kernel.org/all/202610021617.AlVUa9No-lkp@intel.com/
+>>> Your pull introduces new warnings for undocumented compatibles:
+>>>
+>>> https://lore.kernel.org/all/202610021617.AlVUa9No-lkp@intel.com/
+> 
+> Is it OK to resubmitted a PR without the patch introducing the error ?
 
-Is it OK to resubmitted a PR without the patch introducing the error ?
+Yes, sure.
 
->>=20
->
-> And I found the binding patch which is not right (which was pointed out
-> at v1 but never responded to), so neither is DTS change.
-
-I finally found what you refereed;
-https://lore.kernel.org/all/20260907-unnamable-geography-d04f61df0fe5@spud/
-
-I was not in CC for this one, and indeed when applying the patch I only
-checked that the driver supports the compatible string, I wrongly
-assumed that if the driver support it then the binding was already
-merged. Sorry for the mess.
-
-Regards,
-
-Gregory
-
->
-> Best regards,
-> Krzysztof
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+Krzysztof
