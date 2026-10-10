@@ -1,155 +1,232 @@
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB641392823
-	for <soc@lists.linux.dev>; Fri,  9 Oct 2026 14:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68ECB37CD39
+	for <soc@lists.linux.dev>; Sat, 10 Oct 2026 07:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791557765; cv=none; b=CnJyOpo3QFsOTZ+EHYgKBktugag2wfOdnTfSp2axV7QX96CirxGJ8oDMl6VgyJET9zIYegT5x/1pUxLzsXyU8nXoxLolnqGq9gnupAHGFw36rJN2E2GMKuQladezJ+aWVy/hVxJIficm5eoyl9FpWagKz0vubsM/KqQVMGOoH2E=
+	t=1791617786; cv=none; b=S9jBYoNe1iqLUa04XkkRJSeF1Nwd4qH0+/Fs9QkUhsHoM7MK7GUDQ9UjFTDlmZwP3Nl8zhizwYnhc8FeAmJi/XQEJAV9MwPi20AkdYHxZz+ZI1FAMhD1OPpkGuYcAuU93L+pM/izQXW8sdOIdTtXUw3jAuEEospdadsBgnbU6Uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791557765; c=relaxed/simple;
-	bh=YofAd0oLdISy5ffEbw6L2vXkCkMZJJQFjD9dwQ/xgDE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ShPlJyncQzJ0AczkQ59tFxFZZYfDzRoPY3+6Uwlj6x5je89TnZRg+tJbAzt93UN/G5/4F0Cd/rNQD9+/5B/MYUuDV8ORwtBIEIy+CZ57frbFGQErguuq11p/1/N+uG/QH06assTI1auFA6QqAlPvOl0ySn6Il0YxF5mP38b/bfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=XSpv85Fw; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HusQy3kk; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1791617786; c=relaxed/simple;
+	bh=F0o4Bkp8DruAVx/yd8MOtX06N5C1Mf+FV0JIqG9Dkkc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cLzmesdl2I6wmbQtY4nT2KLdAA2afhoFm0vQEi0jtuQkluRWycMNRMc2tT7rx+QVGtRnLHSjit+sXnhkpdzEMJZb/HuWVxBxioXk+mevRgMUhYU7m+jkd90rTE8XtUG9b/xrcI3GM4kwPXE9McF9UuKK3X4FPpAFCEe4NeaEUEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JNQzzeCT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="XSpv85Fw";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HusQy3kk"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.phl.internal (Postfix) with ESMTP id 267F7EC09A7
-	for <soc@lists.linux.dev>; Fri,  9 Oct 2026 10:56:02 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Fri, 09 Oct 2026 10:56:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1791557753;
-	 x=1791644153; bh=ysNHmMEub3nXV2fVbbKoB7BvmncFWa+ykTnACh3vKVY=; b=
-	XSpv85FwVpj6f/Q123Ku5snZB6f6DXKHLcLllrg1WVIjIXtmJX63Bu6IlYbPwcZR
-	rD1SAuDyR6CFQILJzzy/EpD4lYPmvXL7thwvaRNDfUgZkr9IyNx6Fe06VqGEr+W4
-	IiDC4hTulQAj65rDWX/mDnVx1L2/A2rAmpNjp2RtSDwvKmpVuTVcx83cKDINlgo7
-	FWrJSLc/+yHFw9uEGvvhN+n4/FtSps2JJAG+9xDCnv2cbgFfqbYf14oMBbLj/KTj
-	HBdpgaaYGDoLbe1k78F55mQk/52CIXWeL+n9VK7Sdbkg7x4pjzEc3vO7ddDu/G81
-	8yioTfhBtUQJKutKaWgP5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1791557753; x=
-	1791644153; bh=ysNHmMEub3nXV2fVbbKoB7BvmncFWa+ykTnACh3vKVY=; b=H
-	usQy3kkp3yHPLp8UUYQm4okPWAy7mOFAPRsxDi2xsT2QJXudvfxPg3aBpxzV8L7k
-	F22+CD42He7CO+FbOjHn4vfOaQVFhVIfIc44FDqR947J6a6mj6IJbnUpXv/K+Ped
-	ZchWQk3HWUf9qQZpyBPley5llnWA7XSiL/e9xgPbfN+406nEFpw3R/aou9L6MY4R
-	IHin8/ETQ94yyp8kvB3YzNvdMNVDXTLjSysljJb/pWj0v+8NzwKTXoNgwSHVd3HK
-	f62ZucmfyUI078es9FcKgToOI3lqhEF62VseGVzNF0+PxLcmqfQc4vWufjPgQ3/O
-	kM2fvZkQjFZ1rrZEJ+Dhw==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1791557753; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BsaXN0cy5saW51eC5kZXY+;
-	s=fm1:rsa-sha256:DVEjRl7cvqhAtU12YL9gXElHVi173ksYmaMgX/PhXgy5xxD
-	uKrIrgb3GroE9YmZ7dRAd6jRtUo9el/K4lCN3e9zZzyg1VUG1791WL6bRLDteVF8
-	ZXmYKwsFSz16Y7z6dHK0BbBfZc66fSK4JNTSYDEkOyjoj/Lv9UKSMasYs+7/+c9C
-	1DB9VLV8YqzxMOG/GcZpSqlCPWT3CM1rHnGvtrvPXoelNhnDvqNDtrT4AITyaiDM
-	eKUujJypmef/77b9SVRck2XKYIuhGGeOF82SJJHqFXs89kZ+IyJcu1YLe3A5RO3K
-	zQ9dINh1G/ztboT1GcTdG9u/bhnEeyrKhgltiVQ==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:XXGpeO/YmQwCKf7M0XVPtgOpG83veHWzCgaYuUnnDhk=:YofAd0oLdISy5ffEbw6L2vXkCkMZJJQFjD9dwQ/xgDE=;
-X-ME-Sender: <xms:bADJakCZIqprAk-Cfkgd8oKVpTmcXORv_0L0iSLeZZBYxIepxqPnnQ>
-    <xme:bADJahWU-SgG_CUcigw6KQAtRJ5oPXyyQN-bPFk_H4EQ4vQNiavjBVQ_SaOLHUVm5
-    US1addiYFR-qdCd9CjNqAsQSg6CSemYH4VwvzH6fnHu_vGtWV74Ge50>
-X-ME-Proxy-Cause: dmFkZTEJayRhQxc0vKpBsdIsSAVWjFwdChche+mtH1Jx0kOIH/5Zr/HdLbAB+GR5Gedxcf
-    vLt+01ODtHppZjY4Rzuf2BnBd9wb7qZwkArWQjyrPorOQQBCvxKONcF9Fo9bmV31/oecRk
-    gzALbeQ7+yrnzGNRMw2MH1yC4RWP6fa6dtPxV2Joc7KnIVHMNyOpalAsWMsmX6ETwYGwd6
-    AndjR8ne3hlxTHDCay9AW5D9D/PCdYRBca6upRYxRXRBMGgZmsBWk0UvYJl8ejSjRiDtIn
-    kgWN61zC4V4v0W2r7ZypxB+9vuznUpUgHnQXtSeaVqgodADkAeMWwCpXIrQ14KAREl5Eaz
-    QhkS0wymOQFto9XhzbJEiAsaJrYVDbyIRf66e5gURh+fOVSv9oFTgncmR6D8IhUPc/WqUh
-    YvNYf2uttdcZ6w+nmSL7NyDT3Wf2IVzbE+3DdmdjjfqH8vgBnq6GL8pVYNqVLQjdqWz2Zp
-    RJRNiTCmzEbxS/ownyPb2XHnKm4Hjfips/Qzs0qt6Q5dwv3blGmEFEYdeHGTPjZxEF7opB
-    frh+GEATn0Thv8xRSyLwWIY7bMOvjY5RPZZW/W22KlUiwa/QpxGtUp9DPqwn+SwjuBEUwV
-    3PGb4hyeYjZprznkD5hESsD101g/qRsDLmBhhmEKLJCO5uxDrP3yCH+mUjPA
-X-ME-Proxy: <xmx:cQDJajmB0Wm94rXyVUq-HO27gEdKVAOQoF_YYPsy3_XslvuWHByLxw>
-    <xmx:cQDJaoea6BqZtZ7PzR42N9GIyzoECk1C_nwdRZH4Mqq2rv1J_UQm1g>
-    <xmx:cQDJaoW_RJpIfJeZYSTZnWC0ZhVMZnGVfn5_8V7vN5jonGOH_GeICA>
-    <xmx:cQDJakFh6g9dtce22r8K4rMHk97EvLg5OU-37cxkPJgoWBH5eN6cgQ>
-    <xmx:eQDJaraZnKcjGo9k3CHjRLLST4BziwMhZO_yWxaLrHvknhv6syFIWZrv>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id C6CF732A008E; Fri,  9 Oct 2026 10:55:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JNQzzeCT"
+Received: by smtp.kernel.org (Postfix)
+	id 18D321F0089A; Sat, 10 Oct 2026 07:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 080C81F00893;
+	Sat, 10 Oct 2026 07:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791617784;
+	bh=cRgLFkyoBuE3L4Ictvl2wcXbnRTXQVUImPpuYM8flQY=;
+	h=From:To:Cc:Subject:Date;
+	b=JNQzzeCTCAAMy95SODsD2ECnbql92IaFOJKxTRNSZc+H3x58n32UbGtZH2O/otcGa
+	 1gh++F0ZqkRwqbPYjbpNJTs7vNvuZel+1A6dHUil6PYAFzcbNpPc0AMmqyREKZBI4K
+	 e1/O8fZRCa3HDq2U3sp9QZweTTwL+vFGiIMgezExGRlIK162udm08A9qYEF5Z7w7sU
+	 zTcdC/jErlOlmQ7DzqmRUKmWDSpNGIm7XeTkIXvw56zn5eWtQm5Ij4xQUZsreIFTGj
+	 ONwFOLRGsDQHH4tJN4nlEO5EyQ1QLTWndm18Zpxuv4oE80MOZ6qlZPRIvMAk1tJLJc
+	 EW9+JdgSNn+ew==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
+	Maulik Shah <maulik.shah@oss.qualcomm.com>,
+	Ben Dooks <ben.dooks@codethink.co.uk>,
+	Hardeep Sharma <hardeep.sharma@oss.qualcomm.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Sreeshankar K <sreeshankar0910@gmail.com>,
+	Wangao Wang <wangao.wang@oss.qualcomm.com>,
+	Abel Vesa <abel.vesa@oss.qualcomm.com>,
+	Abel Vesa <abelvesa@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+	Dan Carpenter <error27@gmail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Gopikrishna Garmidi <gopikrishna.garmidi@oss.qualcomm.com>,
+	Gourav Kumar <gouravk@qti.qualcomm.com>,
+	Hongyan Xu <getshell@seu.edu.cn>,
+	Jason Pettit <jason.pettit@oss.qualcomm.com>,
+	Jie Gan <jie.gan@oss.qualcomm.com>,
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+	Linmao Li <lilinmao@kylinos.cn>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+	Pan Chuang <panchuang@vivo.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	bui duc phuc <phucduc.bui@gmail.com>
+Subject: [GIT PULL] Qualcomm driver updates for v7.4 (second attempt)
+Date: Sat, 10 Oct 2026 02:36:02 -0500
+Message-ID: <20261010073609.3689061-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AKEFTclLsUFV
-Date: Fri, 09 Oct 2026 16:55:17 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: soc@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- "Aaro Koskinen" <aaro.koskinen@iki.fi>,
- "A. Sverdlin" <alexander.sverdlin@siemens.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
- "Andi Shyti" <andi.shyti@kernel.org>, "Andrew Lunn" <andrew@lunn.ch>,
- "Daniel Baluta" <daniel.baluta@nxp.com>,
- "Daniel Mack" <daniel@zonque.org>, "Frank Li" <Frank.Li@nxp.com>,
- "Giulio Benetti" <giulio.benetti@benettiengineering.com>,
- "Gregory Clement" <gregory.clement@bootlin.com>,
- "Kevin Hilman" <khilman@baylibre.com>,
- "Linus Walleij" <linusw@kernel.org>,
- "Nicolas Ferre" <nicolas.ferre@microchip.com>,
- "Nicolas Pitre" <nico@fluxnic.net>,
- "Vladimir Murzin" <vladimir.murzin@arm.com>,
- "Vladimir Zapolskiy" <vz@mleia.com>,
- "Dario Binacchi" <dario.binacchi@amarulasolutions.com>,
- "Kyungmin Park" <kyungmin.park@samsung.com>,
- "Ralph Siemsen" <ralphs@netwinder.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
- "Stefan Agner" <stefan@agner.ch>, "Tony Lindgren" <tony@atomide.com>
-Message-Id: <e4da2f9d-d3b9-4267-9b64-b0f2cb43402a@app.fastmail.com>
-In-Reply-To: <2afd5f78-0174-4955-8c1b-be18aea3800b@app.fastmail.com>
-References: <2afd5f78-0174-4955-8c1b-be18aea3800b@app.fastmail.com>
-Subject: Re: [GIT PULL] soc: deprecated platform removal
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 28, 2026, at 23:46, Arnd Bergmann wrote:
-> The following changes since commit df2908090cda368b01ff43709f51890076c56157:
->
->   Linux 7.3-rc2 (2026-09-06 15:07:20 -0700)
->
-> are available in the Git repository at:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git 
-> tags/board-remove-for-7.4
->
-> for you to fetch changes up to 1b200c44654d654bd0d04cbf55823b9e275b2a56:
->
->   ARM: axxia: remove entire platform (2026-09-28 21:43:31 +0200)
->
-> ----------------------------------------------------------------
-> soc: deprecated platform removal
->
-> In the 7.3 kernel, I marked a number of platforms and features as
-> deprecated, with the plan to keep these around for the LTS kernel, but
-> remove them in 7.4, see [1].
+Now with the missing #define...
 
-It was pointed out to me at LPC in Prague this week that 7.3 is most
-likely not the LTS release after all, so we should wait another
-release before actually removing the code in order to keep it all
-alive in the 7.4LTS kernel.
+Thanks,
+Bjorn
 
-I'll rebase this on top of 7.4-rc1 and resubmit for 7.5.
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
-      Arnd
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-7.4-2
+
+for you to fetch changes up to 87802d4dc4850bf27b3955ee9162b1e52c99da1a:
+
+  firmware: qcom: scm: Allow QSEECOM on Asus Zenbook A14 (UX3407NA) (2026-10-05 09:10:43 +0200)
+
+----------------------------------------------------------------
+Qualcomm driver updates for v7.4 (second attempt)
+
+Add UBWC 7.0 configuration for Hawi and Maili, and reuse Glymur's UBWC
+configuration for Nord.
+
+Parse Glymur's DDR information from SMEM, including its frequency plan and
+highest bank bit. Correct DDR frequency overflow and byte order, and handle
+unrecognized DDR layouts correctly.
+
+Configure dedicated LLCC slices for the IPQ5424 PPE and Wi-Fi datapaths,
+adjust the CPU slice, and propagate errors from optional IRQ lookup.
+
+Allow the GENI serial-engine driver to be selected on 32-bit Qualcomm SoCs
+such as Kuno. Fix firmware loading bounds, endianness, and writes to
+read-only firmware.
+
+Allow QSEECOM on the Glymur-based HP EliteBook X G2q 14 AI, Lenovo Yoga
+Slim 7x Gen11, and Asus Zenbook A14 (UX3407NA), enabling EFI variable
+access on the HP and Asus laptops. Release SCM reserved memory on probe
+failure or unbind, and limit Qualcomm firmware Kconfig options to Qualcomm
+platforms.
+
+Defer PMIC GLINK altmode work until devices resume to avoid accessing
+suspended I2C controllers.
+
+Fix cleanup of failed APR service registrations to prevent stale lookups,
+and remove unused APR device-ID matching.
+
+Add the SM7250 SoC ID, correct SMSM and SMP2P I/O annotations, and clean
+up RPMh kernel-doc and redundant IRQ error messages.
+
+Document the Kuno SCM interface, Shikra CTCU fallback, and Milos CPU
+bandwidth monitor. Add Abel Vesa as a Qualcomm SoC reviewer.
+
+----------------------------------------------------------------
+Abel Vesa (2):
+      soc: qcom: pmic_glink: Fix device access from worker during suspend
+      MAINTAINERS: add Abel as reviewer for linux-arm-msm
+
+Ben Dooks (2):
+      soc: qcom: smsm: fix __iomem annotations
+      soc: qcom: smp2p: fix __iomem annotation on entry->value pointer
+
+Bjorn Andersson (1):
+      firmware: qcom: scm: Allow QSEECOM on Asus Zenbook A14 (UX3407NA)
+
+Dan Carpenter (1):
+      soc: qcom: smem: Fix signedness bug in smem_dram_parse()
+
+Geert Uytterhoeven (1):
+      firmware: QCOM interfaces should depend on ARCH_QCOM
+
+Gopikrishna Garmidi (1):
+      soc: qcom: smem: fix 32-bit overflow in DDR frequency calculation
+
+Gourav Kumar (1):
+      soc: qcom: ubwcg: Add Nord UBWC config
+
+Hardeep Sharma (2):
+      dt-bindings: firmware: qcom,scm: Document SCM on Kuno SoC
+      soc: qcom: geni-se: allow selection on 32-bit ARM Qualcomm SoCs
+
+Hongyan Xu (1):
+      soc: qcom: apr: clean up failed service registrations
+
+Jason Pettit (1):
+      firmware: qcom: scm: Allow QSEECOM on HP EliteBook X G2q 14 AI
+
+Jie Gan (1):
+      dt-bindings: arm: add CTCU device for shikra
+
+Kathiravan Thirumoorthy (1):
+      soc: qcom: llcc: Update the SCT table for IPQ5424
+
+Konrad Dybcio (2):
+      soc: qcom: smem: support Glymur DRAM info
+      firmware: qcom: scm: Allow QSEECOM on Yoga Slim 7x Gen11
+
+Linmao Li (1):
+      soc: qcom: smem: Fix byte order in v3 14-frequency parser
+
+Luca Weiss (1):
+      dt-bindings: interconnect: qcom-bwmon: Add Milos cpu-bwmon compatible
+
+Maulik Shah (3):
+      soc: qcom: rpmh-internal: fix kernel-doc issues in rpmh-internal.h
+      soc: qcom: rpmh: fix kernel-doc issues in rpmh.c
+      soc: qcom: rpmh-rsc: fix kernel-doc issues in rpmh-rsc.c
+
+Mukesh Ojha (1):
+      firmware: qcom: scm: Use devm_of_reserved_mem_device_init()
+
+Pan Chuang (1):
+      soc: qcom: Remove redundant dev_err()
+
+Sreeshankar K (2):
+      dt-bindings: arm: qcom,ids: Add SoC ID for SM7250
+      soc: qcom: socinfo: Add SM7250 SoC ID
+
+Uwe Kleine-König (The Capable Hub) (1):
+      soc: qcom: apr: Drop unused apr_device_id
+
+Viken Dadhaniya (4):
+      soc: qcom: geni-se: Fix endian conversion for serial_protocol comparison
+      soc: qcom: geni-se: Widen fw_size to u32 to prevent wrap-around
+      soc: qcom: geni-se: Fix fw_end computed before round-up; propagate size to caller
+      soc: qcom: geni-se: Fix write to read-only firmware buffer
+
+Wangao Wang (2):
+      soc: qcom: ubwc: Add configuration for Hawi
+      soc: qcom: ubwc: Add configuration for Maili
+
+bui duc phuc (1):
+      soc: qcom: llcc-qcom: Handle errors from optional IRQ lookup
+
+ .../bindings/arm/qcom,coresight-ctcu.yaml          |  1 +
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |  1 +
+ .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |  1 +
+ MAINTAINERS                                        |  1 +
+ drivers/firmware/qcom/Kconfig                      |  4 +-
+ drivers/firmware/qcom/qcom_scm.c                   | 25 +++----
+ drivers/soc/qcom/Kconfig                           |  1 -
+ drivers/soc/qcom/apr.c                             | 69 ++++++++----------
+ drivers/soc/qcom/llcc-qcom.c                       | 60 +++++++++++++---
+ drivers/soc/qcom/pmic_glink_altmode.c              |  4 +-
+ drivers/soc/qcom/qcom-geni-se.c                    | 45 ++++++------
+ drivers/soc/qcom/qcom_aoss.c                       |  4 +-
+ drivers/soc/qcom/rpmh-internal.h                   | 16 +++--
+ drivers/soc/qcom/rpmh-rsc.c                        |  4 +-
+ drivers/soc/qcom/rpmh.c                            | 40 +++++++----
+ drivers/soc/qcom/smem_dramc.c                      | 81 ++++++++++++++++++++--
+ drivers/soc/qcom/smp2p.c                           | 12 ++--
+ drivers/soc/qcom/smsm.c                            | 20 +++---
+ drivers/soc/qcom/socinfo.c                         |  1 +
+ drivers/soc/qcom/ubwc_config.c                     | 10 +++
+ include/dt-bindings/arm/qcom,ids.h                 |  1 +
+ include/linux/device-id/apr.h                      | 21 ------
+ include/linux/mod_devicetable.h                    |  1 -
+ include/linux/soc/qcom/apr.h                       |  4 +-
+ include/linux/soc/qcom/llcc-qcom.h                 |  4 ++
+ include/linux/soc/qcom/ubwc.h                      |  3 +
+ 26 files changed, 277 insertions(+), 157 deletions(-)
+ delete mode 100644 include/linux/device-id/apr.h
