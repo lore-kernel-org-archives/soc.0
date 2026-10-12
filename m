@@ -1,111 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C4F40F742
-	for <soc@lists.linux.dev>; Mon, 12 Oct 2026 10:57:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3DC3EDE6C
+	for <soc@lists.linux.dev>; Mon, 12 Oct 2026 11:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
 ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791802665; cv=pass; b=aqsK0cHDYCdBA3T2G0Y33ZNS9Q4SHBKM+bY5Ci2wPrHf7java24dEY2w25k9tSUporS8Gs4yM1slkNysxdceV9EZ7HGoHPuUr9gUtsSNiCABhJS7yak6qVOYTvlq+t+AFnlN7S9RkRfje/aMU+QBzeFfPNLYUKth35iAqemBg7M=
+	t=1791803353; cv=pass; b=AopGyZ86KZrpEpNnnVRDvLdEuws+rhpT4J+BQtgXR4NJwRm5jzJqmB4J9qWzEed/MyHlFIr9oFkhRee2VprUuNX02hfh7wE/CHXAMzijXDNGFIEPG80e4C+DTr3ZbT7Cyh2Fb1HBobG8IOM+ISzHehDIUC6P4W+5TOLUZYNb3cA=
 ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791802665; c=relaxed/simple;
-	bh=DEjfN1YSoTzhQ6oHO8rgUtrjWBtvsh1zdPdlwmBWQEY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=bqiTNm7/6NIEyxT6IFI12EQB+2ULdoGCrhflyNSzaERUt6wBLsw3h7kb6OXGVDFEnwGMcA4ZMUfWxBzCtCOSR8i6r/K6q8eyJjYlJnSdvZMGFtu6a7zwCuUMkp4X0DzdV3VVsh//ANQFQTfQCxS/b9OIfipVeXb9ym0Ga0CoITI=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=Y8D4vMVt; arc=pass smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791803353; c=relaxed/simple;
+	bh=7bl5nJljIAb2WspolmCw5jLQZg+Zgu0ZBalzXimmxmY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=g/gy4yQtoevXdZbPkCLUnxmxcNtwEurvCM2ouU8+I/h6wt/eXiHpUPcHKWv+Hh+AbnYMLEzj0dGEZfG6Flhv+Pc/cLn2Pb5MH+uP51n91/8HaghW+JSOWgVTFnyjtdcxWrV+44b2LqkHdhowsfcaqMrPGCf/i0Ge0KSmilE1xvg=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=K6PBkWpc; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="Y8D4vMVt"
+	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="K6PBkWpc"
 Received: by smtp.kernel.org (Postfix)
-	id DF4E11F0089E; Mon, 12 Oct 2026 10:57:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.170
+	id 061501F0089C; Mon, 12 Oct 2026 11:09:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.169
 ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
-	t=1791802659;
-	b=LNMQxhvnfNMDgZXncwTd/xFLU2Ebv+OA1NA23cWZ7XfwbzEroNUN3AIuNY8HnwfKQasA
-	 dXqe59RpE2xMcztgYWcT0bLiW7X4v1grU5K8W86VQkgY1+R8Bw+i3iyuPvCeNQWhHQDkH
-	 PsR0194qSLb8YgsEAvrDcsl6x+e7wrfjVV5ZYhsU84js5bv1PJD/L0nz3ER7aEEpWqWfY
-	 3MdOznRdH4ArRFutkXz6WK4pLc+r+p1AyA6Vr8WKwmq0XNisk0ePRGmOSbsmZxa+dcneg
-	 dZdJZmHLS/3Ibe6sbiExHPAAxnt7lqgwqB5gnbdBsv+9vx6qIoTHA9SsPlkPRsjotmg==
+	t=1791803350;
+	b=JFSI6XfBPcxE2FHtDpu3YYdm1yvJdl8nhANuQIOvIGgPKb4etgiXlbE2yV2oATgjiYfj
+	 epRtRByJx6febexLXKEw841eSR6tLnT4c+YzrFwhbpbGWkfg5m6bEph75WLesftYdpQuE
+	 hzi52mnOa5n27HST8Stqs0w383+9q8CefGt4nV3QAs/CL8zxYTOiMgmy2tEox63nATye5
+	 FV34zs8Uj6mAg6RhdiNRAwMRmAVDp9oEl5c8BfL17iRFzmTsNvcDI6jr/zJ7625miaiAj
+	 UuGrEOcdl7BZ2lFqjZPR9eemiw6CkEIUtWOLrnkfGNVb1ym2yHENqCvBpxT/sZUUgjw==
 ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791802659;
+	c=relaxed/relaxed; t=1791803350;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
 	 X-Gm-Features:Message-ID:Subject:To:Content-Type;
-	bh=Fscg4JINZL7Vzeywayyz5wQLf/idjMk2AC90hL5b11o=;
-	b=iap51VwiqWqCE/H3rUyzC+E5cqnmH2l8ckXovs198z2IRmZWh2mZGSxyIW7IHBcuas9T
-	 SZNrvttMvK5gOAHwb7CfNxCnlqKadImmnB8mG7Eo1h71z8WKKkBauHUw/A6FAlFnZdU2w
-	 TA+0Gu7pHYijmNbpBZTJHpMRyXf9nbV5Ne6n3QOxRzTSiW0nHzWpWvyby48GWpyWvyEme
-	 Yrb/3dWHTBuuBWpEvJJXi4Ar5gpv9bTVwrPA+5Fsegr/lWn1r0ge6aCD1C62sbS3nBdk6
-	 30ySnhHNRO0uHtCy54PUIghlflwo0TYF2oZnu6IJzBiWIivDQiyrB1e1QGOR/4Ldr8A==
-ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=Y8D4vMVt;
+	bh=eli0+6uoBuIk4h0bsFH6RRHGJp3/IMgTauKkefW7ffQ=;
+	b=f5ZmUuMSyeFVlTJLGxZvReZU1aAO9EG9BktZMalAVCSVOcJyc0Q4qbqbVKW2UO1sE6GC
+	 oI04Uztmm16DuGfEkkJVrx9SwMv+y3qrmpBoNUYTUUVOTWBe+hULtbqE+W2lkQc5Rm5n6
+	 XpTkRoinvqzdjcS2yW+QpFYNAWdVp04SBWe2sp27/JWtvTmzSqPo7/emP7Tb80HtSMi5L
+	 F3eStvvfYw6me35RS6N7pUY+DDa7rXr6W6sNG65joUw23JjcxBFmzglELOLQ9pPtaHSg9
+	 UMJRN4oCh3TuiTwKouvbvhs+n+0Jh0IRmpT5wPT+hNJVWv/WgbnKkE6QcUrCKs5t8dQ==
+ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=K6PBkWpc;
 	dmarc=none header.from=monstr.eu;
 	spf=none smtp.mailfrom=monstr.eu;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.170
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.169
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 152711F0089B
-	for <soc@kernel.org>; Mon, 12 Oct 2026 10:57:37 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 882AF1F0089B
+	for <soc@kernel.org>; Mon, 12 Oct 2026 11:09:08 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=Y8D4vMVt
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 152711F0089B
+	dkim=pass (2048-bit key, unprotected) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=K6PBkWpc
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 882AF1F0089B
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8ae9bc9a2fcso29108757b3.1
-        for <soc@kernel.org>; Mon, 12 Oct 2026 03:57:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791802656; cv=none;
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-8b0a921ee46so3948737b3.2
+        for <soc@kernel.org>; Mon, 12 Oct 2026 04:09:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791803348; cv=none;
         d=google.com; s=arc-20260327;
-        b=WTT8jv7Sp8Scs2flXzzStdkbOq4SXMv3PaS24kr10V/VH7qxLhlEzmzdCpfk8IgJfe
-         IbJ1FOG60/iQGKo1c6eQMXxtsuYuK3tDwzTq3Dope93aFm95/WWO+e1t05TgxnqWZzbC
-         dp8a5/cMyZq0v5oYebfXiJlO/8yzo+tTsR86b5GYthD6toTKsoMolq2pMjkZ5ZnZQDUZ
-         DXsfDM7w//ceWZQfQ4gEUdOKg8AqVJIvK1ZbC1RBQVgaCsJJXrr4K/j/B2DOF3i0vbWe
-         rhJugDIhjtftuVk6EEsiM+qH0T/7VNy+2abm7oOeRcjWIQhtXgkG3Das7RqTcZ+ffZCl
-         NblA==
+        b=T2o6MKKdaTQFVd3q4BN2KWLS5QPAYDUbUyCdEGvCiNWfERT1bzT2GwU4xOgTJC9gU8
+         yTDi79MzIPou66xJLfVhV+zuJsjns5Ek8bqeYK9iwwiWCnRxHMeYQ9MVTD0a75gpXLvj
+         iO1OUfnEOTQzJGE5Z87OqMqM8e7H0exca4TeGXG88v6bVNu3AoqNQdPqy6MA+OoNIBeR
+         M9sCbPR+meXpB6p0PhyAPb84Lwr4J9kiTDA0FTqNPfHjRp4L0qmjFhN7JnArPZ/QdLtP
+         fr+3MAuJ707M1xirkF9AgO4UjZPiY5UDKIuMlChaAbK8rrcOxU6d8CtNYr/bAkHUFdDw
+         7SNw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=Fscg4JINZL7Vzeywayyz5wQLf/idjMk2AC90hL5b11o=;
+        bh=eli0+6uoBuIk4h0bsFH6RRHGJp3/IMgTauKkefW7ffQ=;
         fh=USfxQ7v9YbbgbzUCK5rgK5xnF5L0usnYcuhWnAGI6mY=;
-        b=dla1Ur3gipZdtkaZiLqVHXpbXZllNYLRL5udI1glesMB7DV0KNOfyt3YS5qjSwOY08
-         1FVEiFCNB3jSw4eDiNPH8TLp8kpa8lIYEhxed8AUgEUuqJ/0QyzhDmXpYvGZiArtYUPM
-         jTy49EWy4Wy4jj7gVQUYM58X6/T1U7QrfTSmplOjXJoZyJHR+6S01usb5A0F5GMpUf+x
-         0T5pxuzggiwqnDb1e9eSAQBE7LzbDZcCOVfsAh0H3sLmYHVbL4UtOztY+WCoqEO242yg
-         jYrPfr37N2RhIAhp7TUGOlV0/3ZX5Ebn/bGOUdO266lvuQ2oh8ZB01qHtF1YYIFkDBz5
-         LNjg==;
+        b=lXv+sSqCwb6H4O6vmbV8IEbrS0cRgMf2a+6FarE05eXr8PB2dZZrhjEXRyGI/7A5Rm
+         HHgOArooC+Q8A26XSXxlqVpw81Hm7unoxEV43/wD1PWcD8LHteLG/DAtZGbkMxLBT0YC
+         kuaA7ZInFFkXn/VaLE+/937QMPbQDCStET+zRWnGQiEtsdn/ZMye1qYtCiOgvnsMv/Qu
+         B3ivFzKeqk8s2M7Mk+iNkS2SzDO17LZLZfqHJtunXOa/fgSVcSvxWe8JLAlA6Gx5ldyh
+         QgfQO0a8FMCaTkATWchbQwl1hjDEzceiXLra+j6LchnIWkWs80Wgoi36epwzLlSyk2Cq
+         PZJw==;
         darn=kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1791802656; x=1792407456; darn=kernel.org;
+        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1791803348; x=1792408148; darn=kernel.org;
         h=content-type:to:subject:message-id:date:from:mime-version:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=Fscg4JINZL7Vzeywayyz5wQLf/idjMk2AC90hL5b11o=;
-        b=Y8D4vMVtniXYhA/QYfUO98SW2Rb35dwrQYRMHCq6bSGr0rm3Yd6fv6qyntWG/fe9HC
-         ZOEtK6ZTteMt8YhNzg2xvRpQoosDoCHqWHEXMwGRLM2zNuGv4f3zmIiOO+ZKbed1GuKO
-         PZSnCixlXoC8B1ZJtBHHRgX3J8c10nLGs9Bx6BAJRZmaok1xW+vGdiiP98feabPMP/Kp
-         aBPx0ykFimIn6St8Tqpk4/bpUfYBNkSBJZWJZE/jJg6KM/jm+gl14CGJzCSMMbwUhUjH
-         SmJ0Zl1fY7arEK0IVYXHj4O3Ny/3uWr1MqvWatTeFnAwE4bIm42kqT2nfrAl/yAHk/Yi
-         s67w==
+        bh=eli0+6uoBuIk4h0bsFH6RRHGJp3/IMgTauKkefW7ffQ=;
+        b=K6PBkWpc2+aPX8OyCSz62+YFuXXo3VU70aTkfu/0YddRL67ZBzZdG1Zd3rg292V+qG
+         KZMl7MFqUHiIxSqXpAwbQj+kqs15w5biwn4ibx3nYIK7VpeyN9EAXUGrQN8WxtQq/5Tj
+         AAgfd9VDmQ3T5fbVvW3e4YokuaRd2FaFQLIhOEu0i830QyyT7ronQXIlNiJzwY2iyp49
+         QHmTPF+S128BWDDVXKT8+zlGD1kRWaQ3zDsMNSO8q4+iqmZ+9PA1kuR4ELgseox73YnG
+         NrWiXdBRTGxI3vH9t9V/2g5LkB7wzeFKNS92BIrJYOQPyeVgCtPxEo0guuwH3H3ZOomU
+         rnyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791802656; x=1792407456;
+        d=1e100.net; s=20260707; t=1791803348; x=1792408148;
         h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Fscg4JINZL7Vzeywayyz5wQLf/idjMk2AC90hL5b11o=;
-        b=EDyU0MeOGbD/5nG02drHoPlHW/YLw6h0ci7ZlYnm7IZ/A+vPMtvXHFCyLBDeEuOb0h
-         26N2yPIsRaVbXkLMwjjJE/T0eQxxr4R1CahvZAw566WsY1lMgk4s6cyEa0TugaMZzqw6
-         gTmQIWUbCm8u36c9ytbP5/eDmCB2Fy2Pdme8+GAR/2trx0tkv0bvplmuxRGuqa9K2dPr
-         EvhrcVqILIA2fqhRsx9sbDO3D7RZHzxhj7XBuw6FMEcHFYeh+BwT9atZK44RwcQ2jWZD
-         TPc987UytrbrRNwvIqM1DzGA1qH9PCG4+CCcD6wkXC4LAvcn7q4zLeJ2c0FIeFdGyQDV
-         tUvA==
-X-Gm-Message-State: AFq9FYKXTrXuvXbUc73Cik0jlE8O5t8UTDR0XclNKWcBKm+5VybQ3yhO
-	/9JL+5sx2DRvCQU1bnZYaFAiR0j5MFghytwlVjkDlGUh2xbW/q4X9T31Kr2U870UCp+6aFcJgtG
-	WXzrZXe4UrUPbXTvGC1Vd6rwvDVauZ6eTvbsJWgnfeqRgGhBrH9BoH7yGxBE=
-X-Gm-Gg: AYBFou3cH8zmh1JeQE+R2StcjH/C7Aw5DtBUoSdxpoyWldxGsKiw2Rsumw9CtXjm5WZ
-	ksgLmB+AC7Wzu5vAWvCdbeBNM4jPsaKRhbp0Zzf1MSrYtbVj7ZUaq2gxJCDtIAPLlt8MO61arm2
-	dAmSWuKKI2OvNytagagUvN0AfrNO3imieWyHCTLfhfHA7Wl9f6jYP9AJMagBq1gGWPTy+4Hi1XW
-	Q7tBgzJbN/ak4Xfaal4Kj8rFDqYi2ZuVd2dA7O6e27By2UJTOrVAocPjhIX5TWAljThI3m2YhoY
-	aixgujJRpYxlbiIoZStiwGcx3mcT36jeGYr32czPk6vr4vkr6OO91KLKcGDSk/iPt0QVtAi03j6
-	PkwLg2ZBTyvMq
-X-Received: by 2002:a05:690e:dc2:b0:675:5b6b:64f2 with SMTP id
- 956f58d0204a3-6793693562cmr2851523d50.31.1791802656620; Mon, 12 Oct 2026
- 03:57:36 -0700 (PDT)
+        bh=eli0+6uoBuIk4h0bsFH6RRHGJp3/IMgTauKkefW7ffQ=;
+        b=MZjY9JifYU52KYiu4GtWgF7wujEmGhGRVrZ7r4BK10YM56kOFIvq6QwsVlLM0oep7S
+         LgMFeSaU6u9e0QuusySi4pv2wmcTTsYk8ypDukNQ5MjWiE682+YLO01FJ5LJpQl5nY83
+         q5mzlhGhvAru7ewhxgpY9nijjgPFBNWMUmmonmKLpLBgKbxg2Wt4JyElMjGaIr9/X8SU
+         HuOHyicpFix11WkTZsMZjNCRhwwXgoeUwaZPTFNm8sJ7P2xyX257G3Ny4qefKBNSvPmV
+         Yu4BkeqhOZ+k13vQgZntaXT6FFPfpkvXaZhNZBoLzjVEMkOB9fS0vjJC27SaYKpOxjqT
+         6X+w==
+X-Gm-Message-State: AFq9FYKudaUyVzRBnq6DXvq1/RTXC99XaSvtorsO+d3zKkY3Rw330ZvI
+	nVoNx0WV9kQiZhzo4ZMA1Vp3DO9Ffw96JbO7xJV+T+LiaqwMPTz4X7jU+3Wj4c5ypQgrN+iz7NH
+	3XTVtzguLZZtehvgSAJ7nBWNA4UyT0a7EGM/qrFkNjSuGK9DZfQiVgU/D4M4=
+X-Gm-Gg: AYBFou04OQtcmXfoSALlly+Q3zrt3UftRaZzd4SsyYp23qRTyZwG7HZz0CzSoXm1asR
+	WebSJavyHoqeyh1hdt3syw/7H0gCYS06eZAq8BHyabneOswyVYB08E63c15XFUBolGqMDm87/JO
+	qELswlh7A6Isc/vedABjTCRbmlM7km7t4jhv2rOt2+vRR7kZXBoEwbLaTu8teDcfN+DTRpUl+zp
+	f6lp5SjjCS+PcxLQSIbH56dJcZmtx9T474j+lIwQwrNr+HAuVCi7Uq/Ui5APIQA+XFfaronF1X5
+	d6gcHf/HFZ/uYDoNfKrH8/T2NPOdymEeqDov2SgAeKw094H0OwkSC9qWcuuIYudgX+ky7CG/rwM
+	M+3wXLPCuxl0U
+X-Received: by 2002:a05:690c:370a:b0:8ac:e42d:336 with SMTP id
+ 00721157ae682-8b07edb8fabmr25482837b3.76.1791803348051; Mon, 12 Oct 2026
+ 04:09:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -113,16 +113,16 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 From: Michal Simek <monstr@monstr.eu>
-Date: Mon, 12 Oct 2026 12:57:25 +0200
-X-Gm-Features: AclHuK8n4GCiKTJKoIe_GD4HnQ9qVHRTmopzfVjqxwULnllVJTlGBzQoSjMWJk4
-Message-ID: <CAHTX3dJ4Hi0sHT9acVE+4r1pBU91Ryew9f-2D2vfDYcF98P7kg@mail.gmail.com>
-Subject: [GIT PULL] arm64: AMD/Xilinx SOC changes for v7.4
+Date: Mon, 12 Oct 2026 13:08:55 +0200
+X-Gm-Features: AclHuK8i4XW95QdXP2VomS2Z7dIRWbsChmcMmz7GfYRQPqOAo1HawWLt6tev11Y
+Message-ID: <CAHTX3dKJ9DKTUHOj+KvUVuePPXF25gmiLeaDJChTko9jV0DmFA@mail.gmail.com>
+Subject: [GIT PULL] arm64: AMD/Xilinx DT changes for v7.4
 To: SoC Team <soc@kernel.org>, linux-arm <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 
 Hi,
 
-please pull these 2 SOC patches to your tree.
+please pull this simple patch to your tree.
 
 Thanks,
 Michal
@@ -133,32 +133,26 @@ The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
 are available in the Git repository at:
 
-  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc-for-7.4
+  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-7.4
 
-for you to fetch changes up to 118be086595e8f98b19e8fa8e24276466a8e9483:
+for you to fetch changes up to 7061674069cb2524e7bc58173d4c816ed6529da6:
 
-  firmware: xilinx: support RPU boot from DDR (2026-09-25 15:42:55 +0200)
-
-----------------------------------------------------------------
-arm64: Xilinx SOC changes for 7.4
-
-firmware:
-- Update UFS and remoteproc firmware interfaces
+  ARM: dts: xilinx: Replace spaces indentation with tabs (2026-08-31
+09:16:56 +0200)
 
 ----------------------------------------------------------------
-Michal Simek (1):
-      firmware: xilinx: ufs: move PHY/SRAM ready polling into the
-firmware backend
+arm64: Xilinx DT changes for 7.4
 
-Tanmay Shah (1):
-      firmware: xilinx: support RPU boot from DDR
+zynq:
+- Fix DT indentation
 
- drivers/firmware/xilinx/zynqmp-ufs.c     | 70 ++++++++++++++++++--
- drivers/firmware/xilinx/zynqmp.c         | 44 ++++++++++--
- drivers/ufs/host/ufs-amd-versal2.c       | 46 ++++---------
- include/linux/firmware/xlnx-zynqmp-ufs.h |  8 +--
- include/linux/firmware/xlnx-zynqmp.h     |  5 --
- 5 files changed, 120 insertions(+), 53 deletions(-)
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      ARM: dts: xilinx: Replace spaces indentation with tabs
+
+ arch/arm/boot/dts/xilinx/zynq-7000.dtsi      | 8 ++++----
+ arch/arm/boot/dts/xilinx/zynq-parallella.dts | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
 
 -- 
