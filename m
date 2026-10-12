@@ -1,129 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D049843F080
-	for <soc@lists.linux.dev>; Mon, 12 Oct 2026 08:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94EA43CE73
+	for <soc@lists.linux.dev>; Mon, 12 Oct 2026 08:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791792912; cv=none; b=QfiFeQBOmblrWO+jbtZ5FmviAaPrfLGKqQpIwW9+KKJdhP7MJwZYsSl+pqF6xGD305lECUCPkpsnSdcCZJ1QmJ91xqoY78YanLndkhrOeetDi8oPad0i6b+aN7lI684WB3R/a5QEzmReKY0EjPx6rh+dgSQfBRssLXY0V2YNvkY=
+	t=1791794406; cv=none; b=jp5CQO3nZwRK8eeXKy+I/tax0DjGOcLN48XIxnlY6qdfCH/cVQ3nLCe8FWjrWwdXwCZnGygknnm99AX86/ckztmwaNS6uPMeEFN2OB1rNEPuYkq8a35Rm/ss675Do9Zc5KagiWRF+7EVggE07jpGaARTHiq1UGe2JusJ3wPJH0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791792912; c=relaxed/simple;
-	bh=ROObucFTsDIGKDF7Z8aakDEPa2dmF3a1EdWKJgLi8Hc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=s8W9bvbz3wCOK7fWtDbZC+3IoxpbUW2eSDynv2KOKFytJwwpqaoA1p7bTeGKUvAVZJn8UPkVLSzYxnK9DiCaAI87HqlL9LJy4vAv2bFaOA5dF8hwzbIpC0oxQvQ186nAmgkDlLJmg817v/vIhotiZ7nTXJy48RbB3OLign58jmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jVBctgAo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791794406; c=relaxed/simple;
+	bh=9KN4ZkfSEbP4Mw+zEhq2dhy83by152+HnYL1NB2DQGg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=caHB2OJwl67IQpotqxPc/mtrCs5WoySNUPfdstzcAh20+ycL+BqXR8D+UwB2czbg4YER4o2+ZuCi/3dHPfnxdrp2Y8DaWHnp1KzagMHycMCOTU6vftkhu4FdTnoexQDMCQ62h8Cx1jGqDuMe3wX7KSqPtOXiuwY9iNDsDWKOjDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Py/5rMwE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jVBctgAo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Py/5rMwE"
 Received: by smtp.kernel.org (Postfix)
-	id 8AB541F0089C; Mon, 12 Oct 2026 08:15:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493651F0089B;
-	Mon, 12 Oct 2026 08:15:10 +0000 (UTC)
+	id 602421F0089D; Mon, 12 Oct 2026 08:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4DD1F0089C
+	for <soc@kernel.org>; Mon, 12 Oct 2026 08:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791792911;
-	bh=lEkUMyHMlBAvoEF5z4XVe5MLmITsomeYb++GA+vuPSc=;
-	h=Date:From:Subject:To:Cc;
-	b=jVBctgAoZZt9HTls/+F5SCSLEHSA6hNrPUiDe6ha+/68m410dKKe0uXDVa977/7vN
-	 OzvISS1u3XKBD+t058Joa0jOpF0r+CHWWFdpuA2Zh9jd5KMLEafcsQ0z52TD5i7oxS
-	 DQ6rNH+vD9dclW0aYVDfqmmvRZxyiF5ms4WoU3MvxL+tTG/MfkDD9bb0O3w9s0XGO7
-	 8hvZzWzVRfpObanDo3m08ZQeP3HjWiE+jJFt3eUJWVa29ugkEtCE/8+YFk4qzdI4SG
-	 QkszaGhQAD/RdjO4gamUJTlFJfXn/eHER/93jxl53gqrcKRQ6I9lknkByCHK88GbfW
-	 Reosmqo8PsdbQ==
-Message-ID: <53a2dd80-3d3e-4b6f-9419-c71434c41a82@kernel.org>
-Date: Mon, 12 Oct 2026 10:15:02 +0200
+	s=k20260515; t=1791794405;
+	bh=vZ1Fm8L6X+3FHOuFPWok4/VcebxAmT1u9KfPBqPAMPI=;
+	h=Subject:From:Date:To:Cc;
+	b=Py/5rMwE9EtKey3sZUEjMe6UgVC79F1wTHZqALhIKZ047ZCA9SBb4jB8bexcPsC8n
+	 q1ot9EnJsepMi35nrolRgYUc9B98qj5HcGV4j795rbdZxpqTgL5Mc/5LlHj8DAQN/W
+	 WvxGfwbTn9o2lHRtHY50wT9wSd/mw/btlEEPMIEZzYF96kl6VAaGBHTyz8JQ3bdTUk
+	 s0oLwplo24BCBMJQ6T+myFv2BWs18bs+5e8vO2s5FOsTumy4HpdA4OiZdwqZgVNsE6
+	 dAHHVQJvXufXITy5eYAz3Q6LQrgeZJo2LrDyV9KQ3IwVKaYPSbdrNjIkWdWsyKgj/i
+	 wLDLIDfQ+A4CA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 21E943811A4C;
+	Mon, 12 Oct 2026 08:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Subject: [GIT PULL] SOC FSL for 7.4
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Ioana Ciornei <ioana.ciornei@nxp.com>
-Content-Language: fr-FR
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <179179440377.3278488.4231275694205187761.git-patchwork-summary@kernel.org>
+Date: Mon, 12 Oct 2026 08:40:03 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-Hi Arnd,
+Hello:
 
-Please pull the following Freescale Soc Drivers changes for 7.4
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-Changes to fsl-mc bus are reviewed or acked by Ioana
-Changes to usb drivers are acked by greg
+Patch: [GIT,PULL] ARM: dts: OMAP fixes for v7.3-rc
+  Submitter: Kevin Hilman <khilman@baylibre.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/series/1175469/
+  Lore link: https://lore.kernel.org/r/7hecedb7mv.fsf@baylibre.com
 
-Thanks
-Christophe
+Patch: [GIT,PULL] Microchip AT91 fixes for v7.3
+  Submitter: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/series/1182111/
+  Lore link: https://lore.kernel.org/r/20261009061034.29475-1-claudiu.beznea@tuxon.dev
 
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+Series: [GIT,PULL,1/2] soc/tegra: Fixes for v7.3
+  Submitter: Thierry Reding <thierry.reding@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/series/1178808/
+  Lore link: https://lore.kernel.org/r/20261003095505.1369507-1-thierry.reding@kernel.org
+    Patches: [GIT,PULL,1/2] soc/tegra: Fixes for v7.3
+             [GIT,PULL,2/2] arm64: tegra: Device tree fixes for v7.3
 
-   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
-are available in the Git repository at:
+Total patches: 4
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/chleroy/linux 
-tags/soc_fsl-7.4-1
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-for you to fetch changes up to a7831c657c90e8f9165f6bbe0cc56262fee075e8:
 
-   soc: fsl: dpio: Free the IRQ before releasing the I/O object 
-(2026-10-09 10:15:19 +0200)
-
-----------------------------------------------------------------
-FSL SOC Changes for 7.4
-
-Freescale QUICC Engine:
-- Fix sparse warnings in GPIO
-- Drop GPIOD_FLAGS_BIT_NONEXCLUSIVE
-
-Freescale CPM1 Timeslot Assigner:
-- Fix clock leak in tsa_of_parse_tdms()
-
-Data Path I/O:
-- Free the IRQ before releasing the I/O object
-- Fix cleanup on IRQ registration failure
-
-Freescale Management Complex:
-- Annotate fsl_mc_io.portal_virt_addr with __counted_by_ptr
-- Drop the fwnode links of the dpmacs nodes
-- Register the object drivers after misc_class exists
-- Set dma_mask for the DPRC devices
-- Fix repeated word 'for' in comment
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-       soc: fsl: qe: drop GPIOD_FLAGS_BIT_NONEXCLUSIVE
-
-Bill Wendling (1):
-       bus: fsl-mc: Annotate fsl_mc_io.portal_virt_addr with 
-__counted_by_ptr
-
-Christophe Leroy (CS GROUP) (1):
-       soc: fsl: qe: Fix sparse warnings in GPIO
-
-Hemanth Selam (1):
-       bus: fsl-mc: fix repeated word 'for' in comment
-
-Myeonghun Pak (2):
-       soc: fsl: dpio: Fix cleanup on IRQ registration failure
-       soc: fsl: dpio: Free the IRQ before releasing the I/O object
-
-Vincent Jardin (3):
-       bus: fsl-mc: set dma_mask for the DPRC devices
-       bus: fsl-mc: register the object drivers after misc_class exists
-       bus: fsl-mc: drop the fwnode links of the dpmacs nodes
-
-Wentao Liang (1):
-       soc: fsl: cpm1: tsa: Fix clock leak in tsa_of_parse_tdms()
-
-  drivers/bus/fsl-mc/fsl-mc-bus.c    | 64 
-+++++++++++++++++++++++++-----------
-  drivers/bus/fsl-mc/fsl-mc-msi.c    |  2 +-
-  drivers/soc/fsl/dpio/dpio-driver.c |  9 ++---
-  drivers/soc/fsl/qe/gpio.c          | 67 
-+++++++++++++++-----------------------
-  drivers/soc/fsl/qe/tsa.c           | 16 ++++-----
-  drivers/usb/host/fhci-hcd.c        |  2 +-
-  include/linux/fsl/mc.h             |  2 +-
-  include/soc/fsl/qe/qe.h            |  6 ++--
-  8 files changed, 91 insertions(+), 77 deletions(-)
