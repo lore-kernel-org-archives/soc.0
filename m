@@ -1,206 +1,169 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE86225C804
-	for <soc@lists.linux.dev>; Mon, 12 Oct 2026 10:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C4F40F742
+	for <soc@lists.linux.dev>; Mon, 12 Oct 2026 10:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=100.103.45.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791800462; cv=pass; b=r1QleBnd4sRPDg+zviNxp+lxAZ0ibiD1bks9EUOl6zNbYaB456sI7bjPd8Q1OTBUTlb9MTQ76/psSeNpz7KPzqmpyYyVQ0D20cfQR96ePpiahQZmdG5QhMIl8bF2Z0KIwzTeeQF8RuQ6tzt9rGPoR/W4b6DHxNzjWJsxahsVI1E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791800462; c=relaxed/simple;
-	bh=1a8OTHcpdPwb8gQhojKDlJ917XB1Oejsk+t5PVvmd7A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ckWh/qzi2JePvmHLVTJdzj3CHuiXcN8SpVxa2yfIe8yl52C9Wrh/Iri5upnhmYzlvA91Gl5kRW3uhWlg6Y/iyov9AcN2s6q7xsEfmCoM2zHI8nfOTNNUfTr0sSi4ME3iPKG1BfBat4Z9wsqTwT9gAFJOjgwMGt4/jVGccRqNIxM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=AP3JnuKH; arc=pass smtp.client-ip=100.103.45.18
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791802665; cv=pass; b=aqsK0cHDYCdBA3T2G0Y33ZNS9Q4SHBKM+bY5Ci2wPrHf7java24dEY2w25k9tSUporS8Gs4yM1slkNysxdceV9EZ7HGoHPuUr9gUtsSNiCABhJS7yak6qVOYTvlq+t+AFnlN7S9RkRfje/aMU+QBzeFfPNLYUKth35iAqemBg7M=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791802665; c=relaxed/simple;
+	bh=DEjfN1YSoTzhQ6oHO8rgUtrjWBtvsh1zdPdlwmBWQEY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=bqiTNm7/6NIEyxT6IFI12EQB+2ULdoGCrhflyNSzaERUt6wBLsw3h7kb6OXGVDFEnwGMcA4ZMUfWxBzCtCOSR8i6r/K6q8eyJjYlJnSdvZMGFtu6a7zwCuUMkp4X0DzdV3VVsh//ANQFQTfQCxS/b9OIfipVeXb9ym0Ga0CoITI=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=Y8D4vMVt; arc=pass smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="AP3JnuKH"
+	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="Y8D4vMVt"
 Received: by smtp.kernel.org (Postfix)
-	id 2334C1F0089C; Mon, 12 Oct 2026 10:20:42 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1791800442;
-	b=B9jwN90DLi3wSmWz5jsej2GSp3s/zxvoahAdwrQ1OCbIhXj5L1a8kJmjonoLeHCm51wg
-	 CRW5cdGuF5OLrzy1V592NFcJG+vnLlh6QSxJqQpGhbhVFhKpg6UxlK7YxMFwDjXnc6QB8
-	 wrBZaZRbw8T6vuaW4ZxlvNsgSgbTSjhWca+ftYQ6iOiZtHW5nVBNGn5fNEq5s+dIc0DOG
-	 iy7iUADxkf/TsEMW/1Tk+gGs3RoOeZ24BLg9XeR4lZHgnkJ5eXmZNOSdmcpgOf/SgSbZQ
-	 XOZ1kQ+xhLe8kIfjHmdEi6xfy5Zv6w26u7HoRvzpqoCJ60nlB7AENOuSvMpBSu9Aa5g==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791800442;
-	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type;
-	bh=SLBCl332laY7zsY7WJDeYl95lbnGzbtwn7xkysuYFDY=;
-	b=MGAwEv4mDoXaWL6epS9uQ6q3UkiQqzKoubASiNoI0PvvL5uno3Hfmfwx7IGDRYpWidcK
-	 SnMR3+w29Q5UHNs9Nna+bjp7cmd2QD+N0u9U2jg22vw1C23IAnBTp406u8preaEC8IXHj
-	 jXD3e1K8Myla/vfzMJw7QnO72IY6Ggj+al4vaFIgcTQn7btpMzm8dYFoZWHr5f9umM2Y1
-	 XO3MUHQOH1/f5Jlltyqb6ksozm0wU01d1aK08qnm27Iyf9kpXbK95SB5zGCq21a0YZOlw
-	 VYpbtut/Kx6rROle+4oMoPNnvTlVoaWgHyhAzlDJIRVo6g6rLTCUvMnJl8WVE+lr8Ew==
-ARC-Authentication-Results: i=1; smtp.kernel.org; dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=AP3JnuKH;
-	dmarc=pass header.from=sntech.de;
-	spf=pass smtp.mailfrom=sntech.de;
-	arc=none smtp.remote-ip=185.11.138.130
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	id DF4E11F0089E; Mon, 12 Oct 2026 10:57:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.170
+ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
+	t=1791802659;
+	b=LNMQxhvnfNMDgZXncwTd/xFLU2Ebv+OA1NA23cWZ7XfwbzEroNUN3AIuNY8HnwfKQasA
+	 dXqe59RpE2xMcztgYWcT0bLiW7X4v1grU5K8W86VQkgY1+R8Bw+i3iyuPvCeNQWhHQDkH
+	 PsR0194qSLb8YgsEAvrDcsl6x+e7wrfjVV5ZYhsU84js5bv1PJD/L0nz3ER7aEEpWqWfY
+	 3MdOznRdH4ArRFutkXz6WK4pLc+r+p1AyA6Vr8WKwmq0XNisk0ePRGmOSbsmZxa+dcneg
+	 dZdJZmHLS/3Ibe6sbiExHPAAxnt7lqgwqB5gnbdBsv+9vx6qIoTHA9SsPlkPRsjotmg==
+ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1791802659;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Content-Type;
+	bh=Fscg4JINZL7Vzeywayyz5wQLf/idjMk2AC90hL5b11o=;
+	b=iap51VwiqWqCE/H3rUyzC+E5cqnmH2l8ckXovs198z2IRmZWh2mZGSxyIW7IHBcuas9T
+	 SZNrvttMvK5gOAHwb7CfNxCnlqKadImmnB8mG7Eo1h71z8WKKkBauHUw/A6FAlFnZdU2w
+	 TA+0Gu7pHYijmNbpBZTJHpMRyXf9nbV5Ne6n3QOxRzTSiW0nHzWpWvyby48GWpyWvyEme
+	 Yrb/3dWHTBuuBWpEvJJXi4Ar5gpv9bTVwrPA+5Fsegr/lWn1r0ge6aCD1C62sbS3nBdk6
+	 30ySnhHNRO0uHtCy54PUIghlflwo0TYF2oZnu6IJzBiWIivDQiyrB1e1QGOR/4Ldr8A==
+ARC-Authentication-Results: i=2; smtp.kernel.org; dkim=pass header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=Y8D4vMVt;
+	dmarc=none header.from=monstr.eu;
+	spf=none smtp.mailfrom=monstr.eu;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.170
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C138E1F0089B;
-	Mon, 12 Oct 2026 10:20:40 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 152711F0089B
+	for <soc@kernel.org>; Mon, 12 Oct 2026 10:57:37 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=AP3JnuKH
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org C138E1F0089B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=SLBCl332laY7zsY7WJDeYl95lbnGzbtwn7xkysuYFDY=; b=AP3JnuKHpnMXLw5lodkNehn9nC
-	3KSJ7dp/QPaqGJXpGcCJcbH7yMxZeEHQYZO1VMMG+qOR6xoGuOhGG8CxnY6EolSt2shvXolwR6+CO
-	W1QEqY2ami7Z05VV2RZc744QwbNiaZuqMJymisc5GttqCtmavhM/6jhsA1NQV3TN8SH8TnR5pmPgM
-	wh1poFKu1igGaX2bWQ3xI4SVT/M5edhmqNn4atYbAziflHCpfp52eYTZdJMFRRx1WdZugW2BJj624
-	8r69CQ/yw2nzu0YyIp7l76toeTwvCo22wyfBqC7NBguoPoB7r2jX5T1pRVVwfHrr7/1BHFR2TkXBC
-	Ayv9O/Hg==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 7.4 #3
-Date: Mon, 12 Oct 2026 12:20:30 +0200
-Message-ID: <2330337.ZfL8zNpBrT@phil>
+	dkim=pass (2048-bit key, unprotected) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=Y8D4vMVt
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 152711F0089B
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8ae9bc9a2fcso29108757b3.1
+        for <soc@kernel.org>; Mon, 12 Oct 2026 03:57:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791802656; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WTT8jv7Sp8Scs2flXzzStdkbOq4SXMv3PaS24kr10V/VH7qxLhlEzmzdCpfk8IgJfe
+         IbJ1FOG60/iQGKo1c6eQMXxtsuYuK3tDwzTq3Dope93aFm95/WWO+e1t05TgxnqWZzbC
+         dp8a5/cMyZq0v5oYebfXiJlO/8yzo+tTsR86b5GYthD6toTKsoMolq2pMjkZ5ZnZQDUZ
+         DXsfDM7w//ceWZQfQ4gEUdOKg8AqVJIvK1ZbC1RBQVgaCsJJXrr4K/j/B2DOF3i0vbWe
+         rhJugDIhjtftuVk6EEsiM+qH0T/7VNy+2abm7oOeRcjWIQhtXgkG3Das7RqTcZ+ffZCl
+         NblA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=Fscg4JINZL7Vzeywayyz5wQLf/idjMk2AC90hL5b11o=;
+        fh=USfxQ7v9YbbgbzUCK5rgK5xnF5L0usnYcuhWnAGI6mY=;
+        b=dla1Ur3gipZdtkaZiLqVHXpbXZllNYLRL5udI1glesMB7DV0KNOfyt3YS5qjSwOY08
+         1FVEiFCNB3jSw4eDiNPH8TLp8kpa8lIYEhxed8AUgEUuqJ/0QyzhDmXpYvGZiArtYUPM
+         jTy49EWy4Wy4jj7gVQUYM58X6/T1U7QrfTSmplOjXJoZyJHR+6S01usb5A0F5GMpUf+x
+         0T5pxuzggiwqnDb1e9eSAQBE7LzbDZcCOVfsAh0H3sLmYHVbL4UtOztY+WCoqEO242yg
+         jYrPfr37N2RhIAhp7TUGOlV0/3ZX5Ebn/bGOUdO266lvuQ2oh8ZB01qHtF1YYIFkDBz5
+         LNjg==;
+        darn=kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1791802656; x=1792407456; darn=kernel.org;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Fscg4JINZL7Vzeywayyz5wQLf/idjMk2AC90hL5b11o=;
+        b=Y8D4vMVtniXYhA/QYfUO98SW2Rb35dwrQYRMHCq6bSGr0rm3Yd6fv6qyntWG/fe9HC
+         ZOEtK6ZTteMt8YhNzg2xvRpQoosDoCHqWHEXMwGRLM2zNuGv4f3zmIiOO+ZKbed1GuKO
+         PZSnCixlXoC8B1ZJtBHHRgX3J8c10nLGs9Bx6BAJRZmaok1xW+vGdiiP98feabPMP/Kp
+         aBPx0ykFimIn6St8Tqpk4/bpUfYBNkSBJZWJZE/jJg6KM/jm+gl14CGJzCSMMbwUhUjH
+         SmJ0Zl1fY7arEK0IVYXHj4O3Ny/3uWr1MqvWatTeFnAwE4bIm42kqT2nfrAl/yAHk/Yi
+         s67w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791802656; x=1792407456;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Fscg4JINZL7Vzeywayyz5wQLf/idjMk2AC90hL5b11o=;
+        b=EDyU0MeOGbD/5nG02drHoPlHW/YLw6h0ci7ZlYnm7IZ/A+vPMtvXHFCyLBDeEuOb0h
+         26N2yPIsRaVbXkLMwjjJE/T0eQxxr4R1CahvZAw566WsY1lMgk4s6cyEa0TugaMZzqw6
+         gTmQIWUbCm8u36c9ytbP5/eDmCB2Fy2Pdme8+GAR/2trx0tkv0bvplmuxRGuqa9K2dPr
+         EvhrcVqILIA2fqhRsx9sbDO3D7RZHzxhj7XBuw6FMEcHFYeh+BwT9atZK44RwcQ2jWZD
+         TPc987UytrbrRNwvIqM1DzGA1qH9PCG4+CCcD6wkXC4LAvcn7q4zLeJ2c0FIeFdGyQDV
+         tUvA==
+X-Gm-Message-State: AFq9FYKXTrXuvXbUc73Cik0jlE8O5t8UTDR0XclNKWcBKm+5VybQ3yhO
+	/9JL+5sx2DRvCQU1bnZYaFAiR0j5MFghytwlVjkDlGUh2xbW/q4X9T31Kr2U870UCp+6aFcJgtG
+	WXzrZXe4UrUPbXTvGC1Vd6rwvDVauZ6eTvbsJWgnfeqRgGhBrH9BoH7yGxBE=
+X-Gm-Gg: AYBFou3cH8zmh1JeQE+R2StcjH/C7Aw5DtBUoSdxpoyWldxGsKiw2Rsumw9CtXjm5WZ
+	ksgLmB+AC7Wzu5vAWvCdbeBNM4jPsaKRhbp0Zzf1MSrYtbVj7ZUaq2gxJCDtIAPLlt8MO61arm2
+	dAmSWuKKI2OvNytagagUvN0AfrNO3imieWyHCTLfhfHA7Wl9f6jYP9AJMagBq1gGWPTy+4Hi1XW
+	Q7tBgzJbN/ak4Xfaal4Kj8rFDqYi2ZuVd2dA7O6e27By2UJTOrVAocPjhIX5TWAljThI3m2YhoY
+	aixgujJRpYxlbiIoZStiwGcx3mcT36jeGYr32czPk6vr4vkr6OO91KLKcGDSk/iPt0QVtAi03j6
+	PkwLg2ZBTyvMq
+X-Received: by 2002:a05:690e:dc2:b0:675:5b6b:64f2 with SMTP id
+ 956f58d0204a3-6793693562cmr2851523d50.31.1791802656620; Mon, 12 Oct 2026
+ 03:57:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+From: Michal Simek <monstr@monstr.eu>
+Date: Mon, 12 Oct 2026 12:57:25 +0200
+X-Gm-Features: AclHuK8n4GCiKTJKoIe_GD4HnQ9qVHRTmopzfVjqxwULnllVJTlGBzQoSjMWJk4
+Message-ID: <CAHTX3dJ4Hi0sHT9acVE+4r1pBU91Ryew9f-2D2vfDYcF98P7kg@mail.gmail.com>
+Subject: [GIT PULL] arm64: AMD/Xilinx SOC changes for v7.4
+To: SoC Team <soc@kernel.org>, linux-arm <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi soc maintainers,
+Hi,
 
-please find below some more Rockchip dt changes for arm64
-for the next merge window.
+please pull these 2 SOC patches to your tree.
 
-Please pull.
+Thanks,
+Michal
 
-Thanks
-Heiko
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
-
-The following changes since commit fa932a9b632ff0d80390b940e6aabe38ac305fe1:
-
-  arm64: dts: rockchip: Add MangoPi M28K (2026-10-01 00:22:48 +0200)
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.4-rockchip-dts64-3
+  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc-for-7.4
 
-for you to fetch changes up to ae965b9856f033145e292b0c29082a26bcc45efd:
+for you to fetch changes up to 118be086595e8f98b19e8fa8e24276466a8e9483:
 
-  arm64: dts: rockchip: Add Radxa E54C (2026-10-10 14:04:34 +0200)
-
-----------------------------------------------------------------
-New boards: Radxa E54C using the RK3582 (a production variant of the
-RK3588 where probably defective cores and gpus get disabled),
-DP-carrier for the RK3588-tiger SoM, NanoPi M6
-
-Interesting new peripherals: DPHY, CSI-2 and VICAP on RK3576 so all 3
-bigger current-gen SoCs (RK3568, RK3576, RK3588) can now receive camera
-data - yay.
-
-Apart from that a rename of the hdmi-audio-cards to allow actual alsa
-profiles to bind to something actually sane; and the regular bunch of
-board-specific peripheral enablement/fixes.
+  firmware: xilinx: support RPU boot from DDR (2026-09-25 15:42:55 +0200)
 
 ----------------------------------------------------------------
-Amin Gattout (5):
-      dt-bindings: soc: rockchip: add rk3576 csidphy grf syscon
-      arm64: dts: rockchip: add csi dphy nodes to rk3576
-      arm64: dts: rockchip: add mipi csi-2 receiver nodes to rk3576
-      arm64: dts: rockchip: add vicap node to rk3576
-      arm64: dts: rockchip: add radxa camera 4k on rock 4d
+arm64: Xilinx SOC changes for 7.4
 
-Chukun Pan (5):
-      arm64: dts: rockchip: fix adc button voltage on Radxa E52C
-      arm64: dts: rockchip: enable NPU on Radxa E52C
-      arm64: dts: rockchip: remove FRL GPIO for 100ASK DshanPi A1
-      dt-bindings: arm: rockchip: Add Radxa E54C
-      arm64: dts: rockchip: Add Radxa E54C
+firmware:
+- Update UFS and remoteproc firmware interfaces
 
-Dennis Gilmore (1):
-      arm64: dts: rockchip: Use GPIO function for PCIe reset on Orange Pi 5 Pro
+----------------------------------------------------------------
+Michal Simek (1):
+      firmware: xilinx: ufs: move PHY/SRAM ready polling into the
+firmware backend
 
-Detlev Casanova (5):
-      arm64: dts: rockchip: Rename rk3328 HDMI audio card
-      arm64: dts: rockchip: Rename rk3399 HDMI audio card
-      arm64: dts: rockchip: Rename rk3566 and rk3568 HDMI audio cards
-      arm64: dts: rockchip: Rename rk3576 HDMI audio card
-      arm64: dts: rockchip: Rename rk3588 HDMI audio cards
+Tanmay Shah (1):
+      firmware: xilinx: support RPU boot from DDR
 
-Heiko Stuebner (2):
-      dt-bindings: arm: rockchip: add RK3588 DP carrier from Theobroma Systems
-      arm64: dts: rockchip: add RK3588 DP carrier from Theobroma Systems
-
-Igor Velkov (2):
-      arm64: dts: rockchip: Add buttons to Kobol Helios64
-      arm64: dts: rockchip: Add the fan tachometers to Kobol Helios64
-
-Joachim Eastwood (12):
-      arm64: dts: rockchip: fix missing sdmmc cd pinctrl on rk3588s-nanopi-r6
-      arm64: dts: rockchip: fix missing pcie rst pinctrl on rk3588s-nanopi-r6
-      arm64: dts: rockchip: remove pull up on rtc int pin on rk3588s-nanopi-r6
-      arm64: dts: rockchip: add pcie2x1l2 clkreq on rk3588s-nanopi-r6
-      arm64: dts: rockchip: remove always-on and boot-on from vdd_npu_s0 reg on rk3588s-nanopi-r6
-      arm64: dts: rockchip: remove useless vcc_3v3_pcie20 from rk3588s-nanopi-r6
-      arm64: dts: rockchip: add gmac1 phy-supply to rk3588s-nanopi-r6
-      arm64: dts: rockchip: remove bogus vcc5v0_usb regulator from rk3588s-nanopi-r6
-      arm64: dts: rockchip: add comment about gmac phy-mode to rk3588s-nanopi-r6
-      arm64: dts: rockchip: refactor rk3588s-nanopi-r6 to support M6 boards
-      dt-bindings: arm: rockchip: add FriendlyElec NanoPi M6
-      arm64: dts: rockchip: add support for NanoPi M6 board
-
-Shawn Lin (2):
-      arm64: dts: rockchip: add pcie30phy data-lanes on rk3588 coolpi-cm5-evb
-      arm64: dts: rockchip: fix M.2 E-key reset pinctrl on rk3588 rock-5-itx
-
-Yaozhong Li (3):
-      arm64: dts: rockchip: fix analog headphone output on rk3399-firefly
-      arm64: dts: rockchip: disable unused i2s0 on rk3399-firefly
-      arm64: dts: rockchip: enable HDMI audio on rk3399-firefly
-
-Youngwon Son (1):
-      arm64: dts: rockchip: Enable the NPU on ODROID-M2
-
- .../devicetree/bindings/arm/rockchip.yaml          |   15 +-
- .../devicetree/bindings/soc/rockchip/grf.yaml      |    1 +
- arch/arm64/boot/dts/rockchip/Makefile              |    8 +
- arch/arm64/boot/dts/rockchip/rk3328.dtsi           |    2 +-
- arch/arm64/boot/dts/rockchip/rk3399-base.dtsi      |    2 +-
- arch/arm64/boot/dts/rockchip/rk3399-firefly.dts    |   36 +-
- .../boot/dts/rockchip/rk3399-kobol-helios64.dts    |   82 ++
- arch/arm64/boot/dts/rockchip/rk3566-base.dtsi      |    4 +
- arch/arm64/boot/dts/rockchip/rk3568.dtsi           |    4 +
- arch/arm64/boot/dts/rockchip/rk356x-base.dtsi      |    1 -
- .../boot/dts/rockchip/rk3576-100ask-dshanpi-a1.dts |    9 -
- .../dts/rockchip/rk3576-rock-4d-radxa-cam4k.dtso   |  105 ++
- arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  172 ++-
- arch/arm64/boot/dts/rockchip/rk3582-radxa-e52c.dts |   38 +-
- arch/arm64/boot/dts/rockchip/rk3582-radxa-e54c.dts | 1172 ++++++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      |    2 +-
- .../boot/dts/rockchip/rk3588-coolpi-cm5-evb.dts    |    1 +
- arch/arm64/boot/dts/rockchip/rk3588-extra.dtsi     |    2 +-
- arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts |    2 +-
- .../rockchip/rk3588-tiger-displayport-carrier.dts  |  110 ++
- .../arm64/boot/dts/rockchip/rk3588s-nanopi-m6.dtsi |  142 +++
- .../boot/dts/rockchip/rk3588s-nanopi-m6v1.dts      |   57 +
- .../arm64/boot/dts/rockchip/rk3588s-nanopi-r6.dtsi |  792 +------------
- arch/arm64/boot/dts/rockchip/rk3588s-nanopi.dtsi   |  797 +++++++++++++
- arch/arm64/boot/dts/rockchip/rk3588s-odroid-m2.dts |   36 +-
- .../boot/dts/rockchip/rk3588s-orangepi-5-pro.dts   |   14 +-
- 26 files changed, 2777 insertions(+), 829 deletions(-)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-rock-4d-radxa-cam4k.dtso
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3582-radxa-e54c.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-tiger-displayport-carrier.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-nanopi-m6.dtsi
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-nanopi-m6v1.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-nanopi.dtsi
+ drivers/firmware/xilinx/zynqmp-ufs.c     | 70 ++++++++++++++++++--
+ drivers/firmware/xilinx/zynqmp.c         | 44 ++++++++++--
+ drivers/ufs/host/ufs-amd-versal2.c       | 46 ++++---------
+ include/linux/firmware/xlnx-zynqmp-ufs.h |  8 +--
+ include/linux/firmware/xlnx-zynqmp.h     |  5 --
+ 5 files changed, 120 insertions(+), 53 deletions(-)
 
 
-
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
