@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED0A51B174
-	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:10:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65C251AFE9
+	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:10:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791907846; cv=none; b=NxL89D+yoy/TnzrCeqN0g/l1bXvK8kNYsEn+ABNCEYtEnjcxTGFtAWrOHW4SHiGuUmxC3lpXkCAxaaxP4Cdpbj3SDlhg4bXE3dwqWEmn4eVzCYTFtx8XkTjEVbztFpxpdBluY71pwsDGjfT9KousQukveGdUSGqaQKnsUYRyWEA=
+	t=1791907848; cv=none; b=piGKhArL6jDRJfcMTamzCeic9lfAmfp6cbLGdSamC/HbcQf3e0sltiSyZnQYFndbSzgnzhgkH2kwChJHwgWvSZKp70HcWdRd3olqoq/jxPzNfozNTwuUwkM/csBxHooN30T2P3pj8rlrJIvK553I0vvm/oH7HDwikRXpEG5U0k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791907846; c=relaxed/simple;
-	bh=twnpT+U9o23BJVwRHOvDFdRNyH6Psko8DgOKU0JFbTQ=;
+	s=arc-20240116; t=1791907848; c=relaxed/simple;
+	bh=5lrUUyyQwpLcZx/KLC+F03DvTYhDmQOSZmXNGCrg4Bs=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=uIUvkaw6JShj1d9UL5vdHf4sRxe50TYoLvnPKHsl5Malr+qn8WUEJmPu3pGM8GiE+oiLYnJAufbjAKjSoKT4guZmkZ0Z3N/pvoT/8E+Qn6uKtYt6Ca7WSxbRkA+kFWkSGLA2fAmIiQJcizwBb2W/4LGUXTgfRWAqtGsuILrOGps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FODk8WpZ; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=dbq4LvSMUyFrXMuWpDyHznBZB/ePOHKjiwVRtU/ixpEQj8AEYI8OCmRO0bBEUccuVZCM6iNY/rVB2M56W/6DpxubnfWYL9URrrE2QgG5FbSASus4ROdnAmmQo/IIOp5DD7vE64QXQ3YNhx0aaS2wNky8XRvbjbevIs40VxszyKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WY5y+BLY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FODk8WpZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WY5y+BLY"
 Received: by smtp.kernel.org (Postfix)
-	id 5A0CE1F00899; Tue, 13 Oct 2026 16:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 439201F00898;
-	Tue, 13 Oct 2026 16:10:45 +0000 (UTC)
+	id D216D1F00893; Tue, 13 Oct 2026 16:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBFB31F000FF;
+	Tue, 13 Oct 2026 16:10:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791907845;
-	bh=+RnM/Ln5e+0peVHc7nlzBfYP6VMtZ81b7aKGT1tOm6Q=;
+	s=k20260515; t=1791907846;
+	bh=YquWlNOg1M1hVBQFgCDkbVIFBm7J8UrNOhJ5NRszmbY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=FODk8WpZjNGwG6WkZoZBxhwp6yAa4KfJBtmdMRTw2OYy5icTU7obztRRk0zYa2ker
-	 HkHQn+VsJMODPpIlvusgU5VtpAUNFgaojRpvoBAzk5+zKtGpt5m1FLYAtdZvdeuIZ4
-	 qt5WCbhmulLGcFTJGYAF/5PT1DvP/vJXoN84ff0fFPvBH9yqjXXlGplPfwchoBskkJ
-	 dAek6gxZuVR32RLfp5VOf0iTnotr742CMU75uAv5CGlAyOkb3V6u10I2uf6J7EoX++
-	 7ublRssbzJ8/Xis8bCOVqgLjpjk89DGrlzfBD6JN1/76hqkRVjZchIUotN5EvfdZsL
-	 VlQXPHDfAuGKQ==
+	b=WY5y+BLYDqxMlKnO1UsUfSfKOMjlgg3LN8KOm1SCVPI7LD5OddI3N1kaAaDlrtoyf
+	 Y6LaxzXavIJlWpsIzofYpCRXKtDSJNoqdum62dgk1m62SOlLCy8aeb2NKwtOy1FHXE
+	 QIbBHFyigk6ItvnwUDuHdIn+GKVB9TclPsERDlYiNMtVND7Pf9K2dX9ZL9mJBCSPIY
+	 A/NHFONbEVM540oik/U1MC91FoKMq5RyF9Idrp/g/YkKVe9UGUgLGAB0wH8ePxPgcA
+	 EYHGI7++9ii83WrEoZXiyhsn6zzEH+AnWkW3KKOIFhan9dqCtLsiWLTumEJF1unKlx
+	 Wf8Tkx2STq8MQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A29339D5FD8;
-	Tue, 13 Oct 2026 16:10:45 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B463B39D5FD8;
+	Tue, 13 Oct 2026 16:10:46 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/7] Device tree bindings changes for v7.4-rc1
+Subject: Re: [GIT PULL 1/2] SoCFPGA DTS updates for v7.4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179190784376.417156.11183312983794596980.git-patchwork-notify@kernel.org>
-Date: Tue, 13 Oct 2026 16:10:43 +0000
-References: <20261003095924.1370238-1-thierry.reding@kernel.org>
-In-Reply-To: <20261003095924.1370238-1-thierry.reding@kernel.org>
-To: Thierry Reding <thierry.reding@kernel.org>
+ <179190784527.417156.1172897057001665375.git-patchwork-notify@kernel.org>
+Date: Tue, 13 Oct 2026 16:10:45 +0000
+References: <20261008164735.566333-1-dinguyen@kernel.org>
+In-Reply-To: <20261008164735.566333-1-dinguyen@kernel.org>
+To: Dinh Nguyen <dinguyen@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,32 +54,22 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat,  3 Oct 2026 11:59:16 +0200 you wrote:
-> From: Thierry Reding <thierry.reding@gmail.com>
-> 
-> Hi ARM SoC maintainers,
-> 
+On Thu,  8 Oct 2026 11:47:35 -0500 you wrote:
 > The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 > 
 >   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 > 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v7.4
+> 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/7] Device tree bindings changes for v7.4-rc1
+  - [GIT,PULL,1/2] SoCFPGA DTS updates for v7.4
     (no matching commit)
-  - [GIT,PULL,2/7] ARM: Core changes for v7.4-rc1
-    https://git.kernel.org/soc/soc/c/017f5744ffd8
-  - [GIT,PULL,3/7] soc/tegra: Changes for v7.4-rc1
-    https://git.kernel.org/soc/soc/c/eaeb993aa8f3
-  - [GIT,PULL,4/7] firmware/tegra: Changes for v7.4-rc1
-    (no matching commit)
-  - [GIT,PULL,5/7] ARM: tegra: Changes for v7.4-rc1
-    (no matching commit)
-  - [GIT,PULL,6/7] arm64: tegra: Changes for v7.4-rc1
-    (no matching commit)
-  - [GIT,PULL,7/7] arm64: tegra: Default configuration changes for v7.4-rc1
-    https://git.kernel.org/soc/soc/c/be8c7a788adb
+  - [GIT,PULL,2/2] MAINTAINERS: socfpga: update for v7.4
+    https://git.kernel.org/soc/soc/c/41eb191bcd8f
 
 You are awesome, thank you!
 -- 
