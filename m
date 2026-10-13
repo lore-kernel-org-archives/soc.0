@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0306247C110
-	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01EB51DDE7
+	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791907837; cv=none; b=VPdS+npxpwpCt4fUX1m23GE7oIv/uh1un+P5zqYj46o6gXgn6TXKxjbKR7IFNA+eJ6lqKUlwtwzhiw1sFT+Ny6bQg60lNAOZZhgibLzKL9b/ZUfDO9AULu4CvjVnWX+bLRhizKxG1syBhn1ZllvZqvhyt272RPg3ck0AK9Z7q98=
+	t=1791907837; cv=none; b=uMKI7o/diqclceSK26tgHXm9HY4FzfPCFdkAElOUSriaAXW/0dpzGAUI1WqJUX57Jofam7BH1ND+knGfxTDZvNG7Qq7IEULwt2hKDAHgjyiBLAGxHnl01k/Uw0/3zU+Z7n37F0tQXooPvlA6SeTHG020wblrPZuuWmEPe41Z4zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791907837; c=relaxed/simple;
-	bh=1KKrVtxviSL3Cf0eXPoefuOWNtdMTscFrtL08nrEaJA=;
+	bh=zkcqmx5ajRNo6rVUJAIks1KBoZre6iGVM5qS8oY8uh0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fQGsmcK9EkBZOH5GNzCaQcY0YDa7sqVvp0feu4O1/UqysdssY0J2TvO6yUyIuZRod3oB1I9H9V65oQW6Lg37uiPqOKUqja9IMV+5OcVMs1tFb8s2X2j3jptiz8psaDRyo+vYJNGlQ+r5vGPpbPse1sApMnIRglFdiYHn5mHr22E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFbLfuZP; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=GChy2auYVBbopp8duscrAlpZExLu56wrMHS22HPTwlZHhCJ013ThZ0zRPWffszLJniTuXNuQ6MvQOScKAY002fZ3RMfMCP2Mrc7spkuWeuFKzs055x9nD0+d0a7hQN2KrZywo+sJWrFNXXFBFZ1jpoFLjeoF93veBqP/EdAaBV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UbhXq3Cx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFbLfuZP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UbhXq3Cx"
 Received: by smtp.kernel.org (Postfix)
-	id D15651F00893; Tue, 13 Oct 2026 16:10:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB1A21F000FF;
-	Tue, 13 Oct 2026 16:10:34 +0000 (UTC)
+	id 596911F00898; Tue, 13 Oct 2026 16:10:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432FA1F000FF;
+	Tue, 13 Oct 2026 16:10:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791907834;
-	bh=qcmeazRaL8B0kMcSvB3oVsTw932dP9bNVXS4waa+n5w=;
+	s=k20260515; t=1791907836;
+	bh=gxA81hwSOhMK08Wz1HnQg170aM00FpJLcPD/EXsk2to=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=SFbLfuZPoWhTHQm2qrpd7DA+vp9UcNne9JXMCNLbAll4l2yKWuFha5Mv72RKmvckD
-	 khG2iIxMEzyQ42vcE1ur59a7gUES4WlPC656yQ/8Y3G9/gVM7TjG4pS488SmRymrSI
-	 W/gVS1Sm2FdY6yFJTzAxU0qX90rGPpTtxSsoq4eWLVQS2jqgwt95xx0fTdTpltFYXd
-	 XwRPE2zNAY86X39uUF8lCROeNw5G6YDa0t3qJ49XswgNRfKBSzDS6aCSKpZInx9JbX
-	 ADV1DaPDQ5MneqXJyPBzjAlBfhTnLGAxzZv7lE6hLazLgOXZS703miz2OL7UmFDmT8
-	 WxUUSMIAEbhwQ==
+	b=UbhXq3Cxgut31rY+7q/BK92knwX3LJdM1gH/5TZLffCKuS2iZMImpoOssPq3KxApM
+	 cfwz+ejtdZefxB80KTMNdccUNDzSuS2lWWGyeumZWFVnTIe8+ckblmQOz6pQD/NgAE
+	 9SDOf9RZq7DC7rXXNoyGNxktg2iVr1unxofnMHip8yx3iIdlKrLMm4+Lexeq2lF+Sc
+	 dCjJKg1JgvC3S/sa51KpDdlucTMaq5MxSYxCipo8K51zDqHxgSkh38crZaEmau2sMV
+	 wjYq6znA+5uAEVG3ljtwenCXsWhFA3BIeU0N6qkOrJoj/YrHw+vM1/GyEnF0XTqcQO
+	 M/gqvBnNOrIAg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B434239D5FD8;
-	Tue, 13 Oct 2026 16:10:34 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A2E539D5FD8;
+	Tue, 13 Oct 2026 16:10:36 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,36 +39,35 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/2] Renesas SoC updates for v7.4 (take two)
+Subject: Re: [GIT PULL] memory: drivers for v7.4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179190783326.417156.1663397262442818063.git-patchwork-notify@kernel.org>
-Date: Tue, 13 Oct 2026 16:10:33 +0000
-References: <cover.1790939711.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1790939711.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+ <179190783476.417156.15556587784553119005.git-patchwork-notify@kernel.org>
+Date: Tue, 13 Oct 2026 16:10:34 +0000
+References: <20261005110427.41458-2-krzk@kernel.org>
+In-Reply-To: <20261005110427.41458-2-krzk@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri,  2 Oct 2026 13:28:38 +0200 you wrote:
-> Hi SoC folks,
+On Mon,  5 Oct 2026 13:04:27 +0200 you wrote:
+> Hi Arnd and SoC folks,
 > 
-> This is my second pull request for the inclusion of Renesas SoC updates
-> for v7.4.
+> Note that I do not treat untested, LLM-assisted fixes as critical fixes, thus
+> usually do not take them into fixes cycle.
 > 
-> It consists of two parts:
+> Best regards,
+> Krzysztof
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Renesas driver updates for v7.4 (take two)
-    https://git.kernel.org/soc/soc/c/21b58b7b9610
-  - [GIT,PULL,2/2] Renesas DTS updates for v7.4 (take two)
-    (no matching commit)
+  - [GIT,PULL] memory: drivers for v7.4
+    https://git.kernel.org/soc/soc/c/2699c4615ea6
 
 You are awesome, thank you!
 -- 
