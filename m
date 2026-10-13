@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDADC51DAE0
-	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E0B51DB17
+	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791907829; cv=none; b=bBjqdAq2u9Im0KpcmH0vmbEibv4TDU/g1MjphYPQJXUMU5xjIKKW+j/gdzteYNXgPjNmi6zvFtShG1vZc9pcW7Tup8YRc7TRCDmlvGf5PrLG2UlhphK+5xECYjZnmG7hASwvjIh0XYziVTD3afkMBUzppV92v/WYKUXvkJ1WnTk=
+	t=1791907831; cv=none; b=C1K78uBBBoMpyCODxp8NQ+o+8wt6LGj+RenxpeL2X9sAWa4vZuPMXrE+sRCrqc/wWX2lun4HAFOLKNvl6C+RiP+Ljz0P+vBKhC6iX0vzfHZU0kqL944nY348OI/7Ou0tR+WU9unuAAjjEflzGbjCV6rBc4pFcqsVSxSAkV0YiSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791907829; c=relaxed/simple;
-	bh=2czIidCVRby4QBSJDkI3Hz6Y6F208Sk3NW1kKgfmc60=;
+	s=arc-20240116; t=1791907831; c=relaxed/simple;
+	bh=6aM5OwAe2tVF0L1g+/qzxehngJQSsp4w7KFYe3BJkTE=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=b4J+/3Xn287o0SRpyGArxO3LCjXMUnd42v+Tf+/Vd1X2lolDYKpR4uWQ25Um3Ijb1R/ZmLq0zigAZ3fw6MnoWxNYDvoTjOCjnPdMc2rPoDmO5u7VKDUDbFwdFUCMPux6Gzf9wTH7YSAdBc3r3Q5nH/44mwPPsKhIj3O+LfRK2Gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kbOfoSSZ; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=FPiVDFFEslnBeZR7NocnV2ZFg8mWPWd2aCigOoH0XK3ShknAwrkF24hgZC7GCesTnBSWKfHukvFxzorEn20LGSj1KPcMqFVPujBTzKaOEBXIzOX6hnrmr2n/zA9RA/6l53c8CwLgtgxldG56U+caBXIM3+0aW5ITYoGOzFF96r0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A329KtJO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kbOfoSSZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A329KtJO"
 Received: by smtp.kernel.org (Postfix)
-	id 970BD1F00898; Tue, 13 Oct 2026 16:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804031F000FF;
-	Tue, 13 Oct 2026 16:10:28 +0000 (UTC)
+	id 5BE041F00893; Tue, 13 Oct 2026 16:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44FC71F000FF;
+	Tue, 13 Oct 2026 16:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791907828;
-	bh=0sERbwJ20Svh9UH6z8+FcBhw4XQU12PXFmIPT/E93uk=;
+	s=k20260515; t=1791907830;
+	bh=8XIkN5AngF1kl8PHoAJ/lGDvvoPwSXFAHb1FKstBeWo=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=kbOfoSSZKBqC9M/lk+Tse3LK2yGFCgIYfbisHR5Y1pAO4uVelyo1vlCPnru4JDZAw
-	 CyneW4epW9DOHCFhk5AeeIoqLtVk5dh0IeDUFaDcE0NA2X04r90DlqPI0E1hDjTO/o
-	 G7T49biXQOFmpiyA7s+KeYFUizfg9QFTM+hwB/kGg1lcS0ge4iWM/xD79TA/fcM918
-	 joDYnVNK0EnFvPzcV9wGw79s+ZIsu++5BoFG2Vx7tsuG0w0TjG4FsAMwsjf7AtHEBt
-	 eHRxJkcRT1EnGH+G7WYTy1pzE1hcsHQ6azapw1ZQ9/d4YuPXhe59L28sFH3tIHnKF4
-	 Ii+jSrZpb5x0Q==
+	b=A329KtJOELc1oiqroDAvURu35zSWajHR2It85d7PbEC7Zc7nxoKDnGEgGEA/vTAlI
+	 LFuPiaUSQ8LNSDhKoH+c2QTnjN3VONtQY+fZXMJ8l4Egnwsy1nye6rmEr9ArzYp/DA
+	 pGUJyf6A6H9W/qnbzvHbf3rowhHZOyTujZAXE98hLxTUcdO8Xr/x/kVfL46Ip+3ifI
+	 RK+H9PWkzenKVZm1pFoPSSPd+Mc3sHOqxxsz/PJJxV9VFZnuWxvzJjW5YAfSpnt3LY
+	 Oo2oKFsZUrW4pmfM3I8Y0affkYDGp9WzQjNPlpDMvORS9+sEmPLc2D7XQPRoit07DR
+	 EvnAZlqKjR2Qw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7737E39D5FD8;
-	Tue, 13 Oct 2026 16:10:28 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A2FA39D5FD8;
+	Tue, 13 Oct 2026 16:10:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,35 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] More Qualcomm Arm64 defconfig updates for v7.4
+Subject: Re: [PATCH v1] bus: arm-cci: Drop CPU node reference in
+ cci_ace_init_ports()
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179190782713.417156.16400718731723305255.git-patchwork-notify@kernel.org>
-Date: Tue, 13 Oct 2026 16:10:27 +0000
-References: <20261012192301.13361-1-andersson@kernel.org>
-In-Reply-To: <20261012192301.13361-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+ <179190782882.417156.13700588876464951575.git-patchwork-notify@kernel.org>
+Date: Tue, 13 Oct 2026 16:10:28 +0000
+References: <20260923163536.596107-1-oss.patchbox@gmail.com>
+In-Reply-To: <20260923163536.596107-1-oss.patchbox@gmail.com>
+To: Yuho Choi <oss.patchbox@gmail.com>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 12 Oct 2026 14:23:00 -0500 you wrote:
-> The following changes since commit 897cf6d54f366885e190e75b3a221e7b3ae35065:
+On Wed, 23 Sep 2026 12:35:15 -0400 you wrote:
+> cci_ace_init_ports() looks up each possible CPU's node with
+> of_get_cpu_node(), which returns the node with its reference count
+> raised, but never releases it: neither when the CPU has no ACE port nor
+> after the port has been recorded.  Before the commit below the loop used
+> for_each_child_of_node(), which manages the references itself.
 > 
->   arm64: defconfig: Enable PMIC5 Gen3 ADC thermal monitor (2026-09-12 14:18:26 -0500)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-7.4-2
+> The node is only needed for the port lookup, so drop the reference right
+> after __cci_ace_get_port().
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] More Qualcomm Arm64 defconfig updates for v7.4
-    https://git.kernel.org/soc/soc/c/6db3ea21a541
+  - [v1] bus: arm-cci: Drop CPU node reference in cci_ace_init_ports()
+    https://git.kernel.org/soc/soc/c/41d6c0fcd4d7
 
 You are awesome, thank you!
 -- 
