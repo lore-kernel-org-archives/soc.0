@@ -1,77 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D66B4FD283
-	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85656516171
+	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791907858; cv=none; b=PB2lCBd5BNOeuPqw21JqEWIrg3E6byOpcGNP/TkliOlVwGgcE0DDehRmv/ejh7hxc97ixH5hPz/ldoJFS60LI9i7W3LqlCMEz+5AZuMUuAYbf1b8wJAZdvd2M7+VUYVS7ax977h0UKGGS0res5742UhEjA0q0C/UgyFs9ACP9Kk=
+	t=1791909537; cv=none; b=dDUgElho5HBC4eP8uXXRaB+dDSzrPYDiCTogYSZph3ScznnGfka9UJPSIvx1lEvnnEkBgHJOB3LQXVrWF1MGH4wLrSXm1g3T7LsfN0i2EibTKZz9Ikd+GJRcfvVvaOao+DAoia0o5DqEUotg4RdlsOi/VG8sogr/F+JGhD66MNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791907858; c=relaxed/simple;
-	bh=c9wUsQ4iykeOErwIcfvg+dUN75TKwxTEBVT4+D9FgxU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=s54qQj61sv9HFCP6ooUvi3o1roJSCXD1kG8m2b+fwzWw4L4vqV/3DLBbjS1XOAHGyzloCpHTQaAGYTEpvET2sS2oaio+0DPeUV0VPuSr2nqLDkXkHjLF+MFh0pi7BloA1kGpEdvF6ptnC3GSevs7VLLbVAmtuvZ95Q24zhMy7Yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZU/ASof; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791909537; c=relaxed/simple;
+	bh=aoc8nug3Q5d4idvy+yC0Mx43dQ2bXsa5/t1xC0cav2Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mETAgokE3daD192YOkk6vznFmhiLH/PTu7CW84VIuwI+gNXB0e/LIM+mI52QdGPFhfY76gyREoNasCj19UOhS7lCE/JjyBM9u+plA2/y2Jc+DRdB4PcbvbSddMyu/PzjvwW/GP7oRmc9mcahbUPMr7qMwY+aKac7ht4zCDoUFII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EIXr0/Nq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZU/ASof"
-Received: by smtp.kernel.org (Postfix)
-	id 594421F00898; Tue, 13 Oct 2026 16:10:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432E11F00893;
-	Tue, 13 Oct 2026 16:10:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EIXr0/Nq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319F21F0089E
+	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 16:38:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791907857;
-	bh=BwoS7SEaIs2SGjZaLA1O2BEG+keWCAcbPzJQpbqA1r0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=IZU/ASofifqMlJxmfsDR420ORYm24jLDgM9n8naZlxyG1VMfRZt/D32YhF7BzSStL
-	 UjF+DqzX2IkorjZFaAAmsP3nSEzlAB9VIjCeeqi//xukBpWLTxLTCdMCZ4FwPcGMKF
-	 1ksvWtS2kv6zyvy7SlbkOtHgBaLBqy4DkXplrvB6j8Kv/8688q4OOG+wdF7EPgdefM
-	 w/roUNU3YYDBz7zLS+qDOs5lIA8e9ublOL6CbYJVKWswa69xCRmA3xtIn5TWL3bu+a
-	 DjqisnVrHZjWeIGG/A4JX7YFkieNgBA0dzhM5fw+tpw34elVz7USRSDrwjtqVqqQCi
-	 jJ83hxyd6w/GA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A20F39D5FD8;
-	Tue, 13 Oct 2026 16:10:57 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1791909536;
+	bh=aoc8nug3Q5d4idvy+yC0Mx43dQ2bXsa5/t1xC0cav2Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=EIXr0/NqPFBPFbx1LaDsMXlKsGpxcyH5MhiMvJJEZ0hq0e0/HC3jK3AP1NrWRjgJ0
+	 9d+nW7mdbCZJFLBgvbC5gEY/xtmIeMTs8CfOlk1pibY1P/VXzO6VDvkSex+a/sQXwN
+	 JnsYAeNzc+oKZ6PMto84QQDBwMXAHAxm5+0qr302BxdESzqlPu72UGNyXChQ4ZYlW7
+	 TBEzkfcGSCutzCxu3ePjH/mnwPyN0Z2BazHlesETGhJDeapcn82BQpOxKPnbkJzAYZ
+	 54GU+w60CWQYtSjOWvzvxPPDu7y+qTe8EdOGslq1DfkZhUdWbgDnzizxDKE5xj+M/q
+	 q9MeRX/XD/Ewg==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5bcb3726952so1440941e87.3
+        for <soc@lists.linux.dev>; Tue, 13 Oct 2026 09:38:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBz5URswmK8z7XsvYLEjE5/I5IYssLpWNF1k5XDHsZ3FgWwRqLnTbP2MvISz9PIsoEmUTdg=@lists.linux.dev
+X-Gm-Message-State: AFq9FYKmhZaNhd+aigkmA8lAYQV7rrgjhKyqhTlljQoa90dc+ChyISqe
+	mGPubva74qXBvBMWi59L+A7vOLBA/ZYTwaWfeIz9KBLETvlrxsN+gY1eeYJY9a6DfFZzfuOY8f8
+	TM5vMRuQ+fNmOlL7/UxsWBPxtJU8rJ4A=
+X-Received: by 2002:ac2:4e0c:0:b0:5ba:3b49:1ed4 with SMTP id
+ 2adb3069b0e04-5bcde8be31dmr4294291e87.44.1791909534950; Tue, 13 Oct 2026
+ 09:38:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1] bus: arm-cci: Drop cci-control-port node reference in
- __cci_ace_get_port()
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <179190785576.417156.12603332394740019251.git-patchwork-notify@kernel.org>
-Date: Tue, 13 Oct 2026 16:10:55 +0000
-References: <20260923164122.596910-1-oss.patchbox@gmail.com>
-In-Reply-To: <20260923164122.596910-1-oss.patchbox@gmail.com>
-To: Yuho Choi <oss.patchbox@gmail.com>
-Cc: soc@kernel.org
+References: <20260921-cv75-v5-v8-0-282ff5d98dda@ambarella.com>
+ <20260921-cv75-v5-v8-4-282ff5d98dda@ambarella.com> <CAD++jLmKF5XxHsJX29sdXC_6JHKn-7HkE=N+TKtk5xODtQj3_w@mail.gmail.com>
+ <b2256847-3ec1-47e8-ac79-ceca86eb09e7@kernel.org> <CAD++jLkrXXg9xrhAZ8HETc5Qcv5BbkY-ibjvzBmE5WZVqDEGWQ@mail.gmail.com>
+ <a0eca34d-5eb2-4730-b8c7-0f2302bcf265@kernel.org> <CAD++jLm=T-U07vAVCogMnfOfkDf=i9QhGGc8ok2N-ZUh50WLNA@mail.gmail.com>
+ <56dc6c05-7fd6-43de-bc62-c353ae1dbcc3@kernel.org> <54b55ad7.9d3a.1a135b09587.Coremail.zl020895@163.com>
+In-Reply-To: <54b55ad7.9d3a.1a135b09587.Coremail.zl020895@163.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Tue, 13 Oct 2026 18:38:40 +0200
+X-Gmail-Original-Message-ID: <CAD++jLmrQwAT1Sb8HGgoM8x48rN9-pPT2RB1GE18h5YA7c4CwQ@mail.gmail.com>
+X-Gm-Features: AclHuK-C40htUqR0sQkUyvXzKiDDbUaAdB38TRfKZGEWECC-r-8bfyITN0j8-AE
+Message-ID: <CAD++jLmrQwAT1Sb8HGgoM8x48rN9-pPT2RB1GE18h5YA7c4CwQ@mail.gmail.com>
+Subject: Re: Re: [PATCH v8 04/18] dt-bindings: pinctrl: add Ambarella CV75 pinctrl
+To: zl020895 <zl020895@163.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, longzhao@ambarella.com, Arnd Bergmann <arnd@arndb.de>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Jerome Brunet <jbrunet@baylibre.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Lee Jones <lee@kernel.org>, 
+	mfd@lists.linux.dev, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Tue, Oct 13, 2026 at 4:36=E2=80=AFPM zl020895 <zl020895@163.com> wrote:
 
-This patch was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+> Would this work?: I send a standalone
+> "dt-bindings: vendor-prefixes: add Ambarella" patch to Rob with only
+> the two lines in vendor-prefixes.yaml, and drop that hunk from the
+> SoC series. Once the prefix is in linux-next, the vendor-prefix
+> warnings should be fixed. The remaining example matches, such as
+> ambarella,drive-strength-syscon, still need the separate
+> GPIO/UART/pinctrl bindings.
 
-On Wed, 23 Sep 2026 12:40:55 -0400 you wrote:
-> __cci_ace_get_port() looks up the device's "cci-control-port" node with
-> of_parse_phandle(), which returns the node with its reference count
-> raised, and only compares the pointer against the probed ports.  Neither
-> the match nor the no-match return releases it.
-> 
-> Drop the reference on both paths once the comparison is done.
-> 
-> [...]
+That works for me and solves my problem so go ahead.
 
-Here is the summary with links:
-  - [v1] bus: arm-cci: Drop cci-control-port node reference in __cci_ace_get_port()
-    https://git.kernel.org/soc/soc/c/810ccc792193
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Yours,
+Linus Walleij
