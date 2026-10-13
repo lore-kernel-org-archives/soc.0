@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9428451C050
-	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 15:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B0953F6AC
+	for <soc@lists.linux.dev>; Tue, 13 Oct 2026 15:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791905492; cv=none; b=ar6aoAGnESTTRzSczYBEw9XHIWSbP/Zmt47v5wgvYTvcOVUal/jrJzUbx08jEssvJu/if1L4RJQ9jfvLvJPNu2FX55OV25ehVyRAP7w5uvOtO9R745/HG81ZwEKYZrh9ShDnakAMInGlfU1HmQ4DVhYghahyT0qrqU4UH6wq0sQ=
+	t=1791905914; cv=none; b=Fv/avyudE9XATAIhaXH31bLRd4KmJZsasKpq5odR6RyBLGfw+hq6C+jsstPuvvnN/z5UqeceO5rfJUYkAn0R+BtJhDW7KK/DmXZ/elAiEh0t2ieu/fsqOfYuNCa4Utab8Nxo+dXHeYTz2ND9JZXp2tyU7ReRZYysNSEhejk93rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791905492; c=relaxed/simple;
-	bh=ko82K1Jqzm+7uP5Zu8WUB0dPhh+VEsn/b6E75Irl69E=;
+	s=arc-20240116; t=1791905914; c=relaxed/simple;
+	bh=1/fxJrG6/91JCycp9Vhwu/h9lhclwWHuy2a6SZ+Itw8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ORfQY325foH0pKtGg+sSLQKaKfC7TUq4poYHhV2kqjEkbnTBJ4LsLfNVgAvmI25xgwa6Sc4iGwuHhDfNDGFbEhjmn/Gjx2SxiZCwcyVaAqX7BPB0MdpKdmgOjCxBVESH6zqBqamkrHR9iMyU3RXKfY5U7ulas1SksFsmXXCy9Ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W0hazhnT; arc=none smtp.client-ip=100.103.45.18
+	 Content-Disposition; b=N4f7G+ev5b438V61Q0LPezOnHsfHjRjXJwuvCYqxapvXMXYnXm7FuuyM+Ber6UHz3Pp4gvHVF5Ef2BLQVyLfiQ5+Ca+QJ5RDyCThk72cIxMHQIa69E6WyVe9ILaFDPpP5pOhrDcGiWLbL+Z1R0Rak7ycS4yIGCVBTGTi4RIxsa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y5MRWl7q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W0hazhnT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y5MRWl7q"
 Received: by smtp.kernel.org (Postfix)
-	id 613AE1F0089C; Tue, 13 Oct 2026 15:31:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5111E1F00893;
-	Tue, 13 Oct 2026 15:31:29 +0000 (UTC)
+	id 94B171F00893; Tue, 13 Oct 2026 15:38:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 893021F000FF;
+	Tue, 13 Oct 2026 15:38:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791905490;
-	bh=2Z+wy+HJU5krqdxCh4MNGqLRoB1+mk+v8/zUlqrh22g=;
+	s=k20260515; t=1791905911;
+	bh=N5Oj7Rkk38MwzvIcIM8NuJ7v/KOF73abuNQ17LhAzq4=;
 	h=Date:From:To:Cc:Subject;
-	b=W0hazhnTnW3hhi4sanfiSqAdRpV6jfBRnjttjUxgx73EEKBTm4DMvONWgZRBdTDd3
-	 O1vK57fDRcoS5rHIKv5PnpYdMNrzpGzVrqCBijE8P+brD7x6qVlIUmu/rQFyljdNa/
-	 kOpZC+H+OZ0sPmWyq6/hmh1x+jwvSSlJ6atzLYVe2GTqoAVXZdGN8nf7Q5QkX6myjx
-	 POR/Zh8YFH3GVJu+S7Fwk9G0jNXJbWrrIR0gNLTKTjvNtoTJVKsMm+fWWPAD9SqALf
-	 WN91wJ2/VXMCb6fWLYG/yeT+XePn2WDckSEZOOJWFGxGw6/GOtpsvI6W2lHKz7A8tQ
-	 VCTL2TjSpMfow==
-Date: Tue, 13 Oct 2026 16:31:27 +0100
+	b=Y5MRWl7qm1PyyvXnY8GILGL4uJXUB7tJICIK7eKfbDsVOewYl8ws1qMNp7/svlJDK
+	 5y8EsOnX5a4+6T+Y5txmHhsYqkyRzTUcwVaExN4poswdlpYLtI9QJ6g7UQe5PoKwMo
+	 W+lKGNIrQGE59jxm0T8ztiZJ6h7lf1KIwmWKXbpM22cuWMBLz0fRsI30tfYSHwITmW
+	 b40v8EWrQXBGhV/KCYd/LTh5belkC/lGbEigMUj9p71P/c/QZVQV5iof0OO1Htmjwl
+	 dZ1tAY9PS02KIG56ZJ3N1S6qUpAkjqTyWQb39CUAjJt/pwTsHGFWyd30oJyeHLbl2G
+	 wLgq8LO+BXigw==
+Date: Tue, 13 Oct 2026 16:38:28 +0100
 From: Conor Dooley <conor@kernel.org>
 To: soc@kernel.org
 Cc: conor@kernel.org, linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [GIT PULL][2/4] RISC-V misc. devicetrees for v7.4
-Message-ID: <20261013-easily-lint-c427bdee2754@spud>
+Subject: [GIT PULL][3/4] RISC-V soc drivers for v7.4
+Message-ID: <20261013-glitter-lingo-dce2f8d724c9@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -42,74 +42,108 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BotAtISf3NwQU4DG"
+	protocol="application/pgp-signature"; boundary="MitpuVuUhMgl0OnZ"
 Content-Disposition: inline
 
---BotAtISf3NwQU4DG
+--MitpuVuUhMgl0OnZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey folks,
 
-Small enough PR here, I was hoping to get the StarFive jhb100 SoC in, but
-that'll have to wait for 7.5, along with the deprecation of the Canaan K210
-that Arnd and I discussed last week.
+Diff here contains a lot of clock bindings, so I've provided an explanation
+in the tag.
 
-Cheers,
+Thanks,
 Conor.
 
-The following changes since commit 82ab962ef6c2a3571e3d590b30c023118c92b776:
+The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
 
-  Merge branch 'k230-basic' into riscv-dt-for-next (2026-06-14 17:14:51 +0100)
+  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-dt-for-v7.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-soc-drivers-for-v7.4
 
-for you to fetch changes up to 2186ec5f59c23fcf0bf896ca0543b6a1135d7bb5:
+for you to fetch changes up to 6f77194e1147d85c10b4964edee7091c701a25c2:
 
-  riscv: dts: starfive: Correct pwm nodes (2026-10-02 18:35:12 +0100)
+  soc: mpfs: use kref cleanup on probe failure (2026-10-13 15:43:15 +0100)
 
 ----------------------------------------------------------------
-RISC-V misc. devicetrees for v7.4
+RISC-V misc. soc drivers for v7.4
+
+StarFive:
+Syscon bindings and a socinfo driver for the JHB100. There ended up
+being several clock bindings here also because the clock tree needed the
+whole lot due to headers and I envisaged this being part of a three-way
+shared tag between my soc driver branch, dts branch and the clock tree.
+Due to timing, the dts branch didn't get this content, leading to the
+slightly odd branch here.
 
 Microchip:
-Add Valentina as a second maintainer because Daire is largely inactive.
-
-Starfive:
-Fix the PWM nodes, because a opencores,pwm-v1 instance only ever provides
-one PWM channel.
+A bugfix for teardown code in the mpfs system controller driver.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Conor Dooley (1):
-      MAINTAINERS: update RISC-V Microchip maintainers
+Changhuang Liang (9):
+      dt-bindings: clock: Add StarFive JHB100 System-0 clock and reset generator
+      dt-bindings: clock: Add StarFive JHB100 System-1 clock and reset generator
+      dt-bindings: clock: Add StarFive JHB100 System-2 clock and reset generator
+      dt-bindings: clock: Add StarFive JHB100 Peripheral-0 clock and reset generator
+      dt-bindings: clock: Add StarFive JHB100 Peripheral-1 clock and reset generator
+      dt-bindings: clock: Add StarFive JHB100 Peripheral-2 clock and reset generator
+      dt-bindings: clock: Add StarFive JHB100 Peripheral-3 clock and reset generator
+      dt-bindings: soc: starfive: Add StarFive JHB100 syscon modules
+      soc: starfive: Add socinfo driver for JHB100 SoC
 
-Hal Feng (1):
-      riscv: dts: starfive: Correct pwm nodes
+Guangshuo Li (1):
+      soc: mpfs: use kref cleanup on probe failure
 
- MAINTAINERS                                        |  3 +-
- arch/riscv/boot/dts/starfive/jh7100-common.dtsi    | 28 +++++++--
- arch/riscv/boot/dts/starfive/jh7100.dtsi           | 67 +++++++++++++++++++++-
- arch/riscv/boot/dts/starfive/jh7110-common.dtsi    | 27 +++++++--
- arch/riscv/boot/dts/starfive/jh7110-milkv-mars.dts |  6 +-
- .../boot/dts/starfive/jh7110-milkv-marscm.dtsi     |  6 +-
- .../boot/dts/starfive/jh7110-pine64-star64.dts     |  6 +-
- .../jh7110-starfive-visionfive-2-lite.dtsi         |  6 +-
- .../dts/starfive/jh7110-starfive-visionfive-2.dtsi |  6 +-
- arch/riscv/boot/dts/starfive/jh7110.dtsi           | 67 +++++++++++++++++++++-
- 10 files changed, 200 insertions(+), 22 deletions(-)
+ .../bindings/clock/starfive,jhb100-per0crg.yaml    |  70 +++
+ .../bindings/clock/starfive,jhb100-per1crg.yaml    |  70 +++
+ .../bindings/clock/starfive,jhb100-per2crg.yaml    |  76 +++
+ .../bindings/clock/starfive,jhb100-per3crg.yaml    |  76 +++
+ .../bindings/clock/starfive,jhb100-sys0crg.yaml    |  63 +++
+ .../bindings/clock/starfive,jhb100-sys1crg.yaml    |  71 +++
+ .../bindings/clock/starfive,jhb100-sys2crg.yaml    |  64 +++
+ .../soc/starfive/starfive,jhb100-syscon.yaml       | 115 +++++
+ drivers/soc/Kconfig                                |   1 +
+ drivers/soc/Makefile                               |   1 +
+ drivers/soc/microchip/mpfs-sys-controller.c        |   7 +-
+ drivers/soc/starfive/Kconfig                       |   6 +
+ drivers/soc/starfive/Makefile                      |   2 +
+ drivers/soc/starfive/socinfo/Kconfig               |  13 +
+ drivers/soc/starfive/socinfo/Makefile              |   2 +
+ drivers/soc/starfive/socinfo/jhb100-socinfo.c      | 105 ++++
+ include/dt-bindings/clock/starfive,jhb100-crg.h    | 554 +++++++++++++++++++++
+ include/dt-bindings/reset/starfive,jhb100-crg.h    | 189 +++++++
+ 18 files changed, 1482 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jhb100-per0crg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jhb100-per1crg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jhb100-per2crg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jhb100-per3crg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jhb100-sys0crg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jhb100-sys1crg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jhb100-sys2crg.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jhb100-syscon.yaml
+ create mode 100644 drivers/soc/starfive/Kconfig
+ create mode 100644 drivers/soc/starfive/Makefile
+ create mode 100644 drivers/soc/starfive/socinfo/Kconfig
+ create mode 100644 drivers/soc/starfive/socinfo/Makefile
+ create mode 100644 drivers/soc/starfive/socinfo/jhb100-socinfo.c
+ create mode 100644 include/dt-bindings/clock/starfive,jhb100-crg.h
+ create mode 100644 include/dt-bindings/reset/starfive,jhb100-crg.h
 
---BotAtISf3NwQU4DG
+--MitpuVuUhMgl0OnZ
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCas5OzwAKCRB4tDGHoIJi
-0n7jAP0ZtoAQTFjlb0T6hm8d7m4Df2HMXwWGTS/jd1xsoqOtCAEA8Y5C14AWIoay
-z7URj7kOzL6Us6y2I3I/7k44cd3xoww=
-=8T9u
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCas5QdAAKCRB4tDGHoIJi
+0jH+AP0aVmvcevkuXqE6dzgDkjyO0XSwMne8cPLhcSO5ptt3egEArnvMedLcdF8Q
+oI1swvs1+0c6K14n6Q8ftzqm4wHXMgE=
+=35bQ
 -----END PGP SIGNATURE-----
 
---BotAtISf3NwQU4DG--
+--MitpuVuUhMgl0OnZ--
