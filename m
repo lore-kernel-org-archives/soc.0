@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058AF3E3D85
-	for <soc@lists.linux.dev>; Thu, 15 Oct 2026 03:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85523E558A
+	for <soc@lists.linux.dev>; Thu, 15 Oct 2026 03:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792033824; cv=none; b=ZyHTjtBry0n+iUea0sFwUQSP8FupEift40aaM0Q1rHg1jEeZmQHbt8lsRzuWbF3sqcrnucUsdo1RJxLsucNZPe9MOqGgGxxwce5l1bzm4SnzR8dcyxnkjW1xyErLoL3CPiLXVVxo2AeGbgHns/62kHcgG5KzVpZspBDD9UK6jJU=
+	t=1792033825; cv=none; b=ow+j1oms1SdSQjF9q06pR2p6Of9vtjdnNRdeum0zGP/Wc5JWZHS1TgikHB1k5mYDE5BpP9IiHJLHknNVDOozxKf4z93ztt7GQ6sRzVe+/M8uwpEf7jHPyXbSyQvTfe/MQ8WoWJizrCyAhIhmuMTDkVaYCvRJwDED+3qS2HoAi2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792033824; c=relaxed/simple;
-	bh=0AMLTqgttnMsOhUiRLl+TZZxVHcsnZufu6aR1g9IR4o=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=lBVlCYPfDxR6ahIpCKhwc2ROOCF5Y5fvXrRyiGHvbqaPp8up5wasKBsOxach1Jwqf8ZastG0dpn0YfdHn/wkJ5rFMsnibpWoytukgTlTYatEytqvixlt57N4fMOeOyaoPwzeZjPvykUApLmDaJ3tV2RNoDX5ja3kLh39VzfYaBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFJ8l+SK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792033825; c=relaxed/simple;
+	bh=F61ZYrpL1qPfLAEGtqKlrNKSTIDEeTm8F7Gvv8sQ/rE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=qCnS35G/3wAangVqvGEuQyaHeSnqMAce5/cELMH+IiF3KwUCT5LNAhBjkeywjj7+RNsOVZX05cRNJubMLUid6Ofyb99mQmt+dNgSn8b2XeqKYWijLeqQVcWe50uc+44QZrvYtEhCN+Rb8gc3Xe8qYeAaWQEe8CcNEgHeL6uW1Bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4gHv/ms; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFJ8l+SK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4gHv/ms"
 Received: by smtp.kernel.org (Postfix)
-	id 00CF91F000C5; Thu, 15 Oct 2026 03:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5A71F000C4
-	for <soc@kernel.org>; Thu, 15 Oct 2026 03:10:19 +0000 (UTC)
+	id 1B63D1F000C6; Thu, 15 Oct 2026 03:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 054E01F000C4;
+	Thu, 15 Oct 2026 03:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792033819;
-	bh=YF9bcYnHTFV0q5bHnQwLlDBLhQihBKYuQVsC/UcvZGY=;
-	h=Subject:From:Date:To:Cc;
-	b=GFJ8l+SKWJ1NAANCONSh3kt61mhmenrqY2Ubo0DF1BGpVejjU1OFOpAjdlx5febPa
-	 +DbOaWQ0Mq0EvbPIfoTIW+BXL0iPKtjjKWMbCDs7+9kfgjKTB6vZsTfC8uy1cIP/ue
-	 Bhds4jfiTUTpJ7PkeOr1K9JMwbrZFCLAHElYWzBnEgLV6fTBmsQxL0rUp6nHOpJ8Ap
-	 jiGPVmPM3ReWMR8hhgDUxZNjuqrbCHOoqGLbVFuKfZCIdY01k70I5Y1J/ejy0En/5j
-	 9rTcYjS/y1Up7PYo5AzyqAK1uEdjkcuH0alKy3gxlvr6CwmDPqkpTuOSSaC3HGMsY7
-	 nOcyQ8gtwULhQ==
+	s=k20260515; t=1792033821;
+	bh=fttTEXPBqfw+687GtnkOoMt2NjXk2UTv6MiLlwuWc9g=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=F4gHv/msXb02FnVzXLK7kYQ9q79lOFnGCYyhkyVTEHOMcLv+jIhxXrahIba08XQc0
+	 ESSAK4uMLTiJe018WLbgvS0bM53KSaO2Zkpa5zQPl6EKDnD2Vdf01+R0Rmi+WAJVGz
+	 ayMi8DGzmr1PSN6999VOJEXjiz6rnPN3YfwBtEmUfxOH6+YVC0IdUNgIBi16NP8wyi
+	 Y9c/SumASqrvx7oAZv802odDm6iinY9LKdO6H34P4gifkpSWXdK73nTf3Em6v7SlBO
+	 vH83HrAr2QqRFviFIkMUvKmjd5M2s5Yj5wdwcrS9xsUZ2rZ+BFUFXcYV+6it7xegCD
+	 FMw2CcmycGMEA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B6F89392E992;
-	Thu, 15 Oct 2026 03:10:19 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F166D392E992;
+	Thu, 15 Oct 2026 03:10:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,74 +39,36 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] arm64: google: New ARCH_GOOGLE for v7.4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179203381813.3155468.8618238026449619902.git-patchwork-summary@kernel.org>
-Date: Thu, 15 Oct 2026 03:10:18 +0000
-To: soc@kernel.org
+ <179203381977.3155468.555430907180343658.git-patchwork-notify@kernel.org>
+Date: Thu, 15 Oct 2026 03:10:19 +0000
+References: <20261005101657.34571-2-krzk@kernel.org>
+In-Reply-To: <20261005101657.34571-2-krzk@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Alexandre Belloni <alexandre.belloni@bootlin.com>:
 
-Patch: [GIT,PULL] arm64: google: New ARCH_GOOGLE for v7.4
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Committer: Alexandre Belloni <alexandre.belloni@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/series/1179529/
-  Lore link: https://lore.kernel.org/r/20261005101657.34571-2-krzk@kernel.org
+On Mon,  5 Oct 2026 12:16:57 +0200 you wrote:
+> Hi Arnd and SoC folks,
+> 
+> New SoC platform, in the future this will be handled by Peter Griffin.
+> 
+> Best regards,
+> Krzysztof
+> 
+> [...]
 
-Series: [GIT,PULL,1/4] samsung: drivers for v7.4
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Patchwork: https://patchwork.kernel.org/series/1179533/
-  Lore link: https://lore.kernel.org/r/20261005101845.34752-5-krzk@kernel.org
-    Patches: [GIT,PULL,1/4] samsung: drivers for v7.4
-             [GIT,PULL,2/4] arm64: dts: samsung: for v7.4
-             [GIT,PULL,3/4] ARM: dts: samsung: for v7.4
+Here is the summary with links:
+  - [GIT,PULL] arm64: google: New ARCH_GOOGLE for v7.4
+    https://git.kernel.org/soc/soc/c/42d6a93bff56
 
-Series: [GIT,PULL,1/2] arm64: dts: dt cleanup for v7.4
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Committer: Alexandre Belloni <alexandre.belloni@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/series/1179553/
-  Lore link: https://lore.kernel.org/r/20261005103232.37247-3-krzk@kernel.org
-    Patches: [GIT,PULL,1/2] arm64: dts: dt cleanup for v7.4
-             [GIT,PULL,2/2] ARM: dts: dt cleanup for v7.4
-
-Patch: [GIT,PULL] Rockchip dts64 changes for 7.4 #2
-  Submitter: Heiko Stuebner <heiko@sntech.de>
-  Committer: Alexandre Belloni <alexandre.belloni@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/series/1179300/
-  Lore link: https://lore.kernel.org/r/2088481.8hb0ThOEGa@phil
-
-Patch: [GIT,PULL] i.MX arm64 dts updates for v7.4
-  Submitter: Frank Li <Frank.Li@oss.nxp.com>
-  Committer: Alexandre Belloni <alexandre.belloni@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/series/1178410/
-  Lore link: https://lore.kernel.org/r/20261002142852.3968477-1-Frank.Li@oss.nxp.com
-
-Patch: [GIT,PULL] i.MX ARM dt changes for 7.4:
-  Submitter: Frank Li <Frank.Li@oss.nxp.com>
-  Committer: Alexandre Belloni <alexandre.belloni@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/series/1178393/
-  Lore link: https://lore.kernel.org/r/20261002140826.3947315-1-Frank.Li@oss.nxp.com
-
-Patch: [GIT,PULL] STM32 DT changes for v7.4#1
-  Submitter: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-  Committer: Alexandre Belloni <alexandre.belloni@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/series/1178368/
-  Lore link: https://lore.kernel.org/r/44917365-a20e-484e-a252-f420f566ddb1@foss.st.com
-
-Patch: [GIT,PULL] ARM: mvebu: dt64 for v7.4 (#1)
-  Submitter: Gregory CLEMENT <gregory.clement@bootlin.com>
-  Committer: Alexandre Belloni <alexandre.belloni@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/series/1179277/
-  Lore link: https://lore.kernel.org/r/87qzi56wjp.fsf@BLaptop.bootlin.com
-
-
-Total patches: 11
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
