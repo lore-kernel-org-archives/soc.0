@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F8A3E1692
-	for <soc@lists.linux.dev>; Thu, 15 Oct 2026 03:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7517A3E40EB
+	for <soc@lists.linux.dev>; Thu, 15 Oct 2026 03:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792033832; cv=none; b=mWHIUXcDaqYMohpx116ZihQYw4thCyLrP08RfbBPp1S4fwkbI+i/IcdfLBTNP+cF1LuaRE8V8vy7ECwmOs5oIPQLU4cVHO80U4Ba2WANH9udzTgL+FXDtulYf7xDbCZuWlCQJ2/kN0HGwbB4M5jJ59Xf27NF/UEWjZYmlS9XB+w=
+	t=1792033832; cv=none; b=Ug5XKSjgouGMF0kX+J2yFr0Se296+W2E2wSi/luvT53klg0fhvdLN78r3N4Thtv6/NHHZeiTfbefeMMzLC6oI19Ie7EV5q+CZ2Dq0Oz6YGH8LS4ZzfrTjg6yngrLhzKSxbLV/ViY2EpZ1u4WE4HvWhcIhfW0sRpMKISsKkozlxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792033832; c=relaxed/simple;
-	bh=yyoho1UQIkrmPHE5KpPd+xaqTFbj0cy26KKwtCGM22Q=;
+	bh=2bWpmQmtQuKXrN323tXIt5pEOJO3xsBRZZqXZJuSccQ=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=I6EldOA3YO3Lv8wc2+xKoC0ukDxSlzQvBUX6R1HIjyWMWL4tma31KAzO2wcoo9xPvIjH/9rq6rEQ2/vH39yN0K6OqD1zlxBahqDl0VQlR0CLYt0+sT/ptTfJ1xHmw61scKlE7w2GhPGR3yKfjCCR5UqxI0BZ+MNwd8bLem9Hzjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VirIVpSm; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=oHuNjRoRPag99HT8dD9O/WIh6YiJbAgxEcyWv+w+TW5swjetpy+9eozQNr9obXetXmyzKc8EsqQN3qPDw/cOe30ukXytmMlk4QYJ8dBzscAilzXbxV2NIJHdhsYa+TTP3Idr8Ac0rFc1gLJeqFO12AxQ7qH9nUAtkTlDn5iPuWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpuLMygv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VirIVpSm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpuLMygv"
 Received: by smtp.kernel.org (Postfix)
-	id 1C47C1F000C6; Thu, 15 Oct 2026 03:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06AD71F000C4;
-	Thu, 15 Oct 2026 03:10:27 +0000 (UTC)
+	id 226F51F000C7; Thu, 15 Oct 2026 03:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4F61F000C4;
+	Thu, 15 Oct 2026 03:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792033827;
-	bh=9m6rlNla0gUx1oF0GrpF3jGCJwKdmjrxK42tNnm1L6o=;
+	s=k20260515; t=1792033830;
+	bh=AouwVkgK236QL6JHp/kPkZinWKxId0W7uOcrNSwrnGg=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=VirIVpSmBmvJyTq10UWHuk26SFbYRsqYy5tS3SkxHhem4VjXElOc5IPR07/u8x3cl
-	 juXarxFmFKmLeaIvgGG/YSc4TJQGg13Zzqa3/ObnscPNGGgIhDQF1hEWajDrbcv2Xq
-	 Fc03toslsL/p4cuiRBR/tI73wpyCeivCL8RYaFNmNnRMe0aySdacvPk3tLblqnE8Pt
-	 OtIrJ0NnxpjMxhoTkojVuQ/mOkfgdZ5CPsvqWB+sUxClwUjwABc59Qdb+2wxoWDuSX
-	 kIU/nd5gEbwjCMvbZr74xfYGWKOXgEibiBhkoFq+EqRKhEZYESjxmJztHu31e7ayKM
-	 BuLXafyteaCBg==
+	b=LpuLMygvnIxwLja3t26ta0iTZqRyP8Z2twb8FYLBnfxwack1g04J2N0JSgDPIU6K5
+	 N2zMhq2CuCWuidg+YNG2QU/peATZSiwsUIsM/utA1FjskHCCR9hGRyI7SfxBNj7pmV
+	 05k2BbxQifHtum8TKZs8s1cQutDXqb1iDklCoaOo83ludm2UJp1P/8PNEPScLum38i
+	 PmWEteiS1mEzrNsIIZOjBqTLLaXHaGNDf+iuT+p4pQaHIUzPv00UVQ5Gmf1wVjZSq+
+	 +Tz0wMQ5GWJU/rbJoOHsvY6E5gzQkzSxFM+s9n9LQsTrUt2uq382Imfb5pA4Mtw6id
+	 QZ4ygs7WF7jsQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F15F1392E992;
-	Thu, 15 Oct 2026 03:10:26 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F1521392E992;
+	Thu, 15 Oct 2026 03:10:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX arm64 dts updates for v7.4
+Subject: Re: [GIT PULL] STM32 DT changes for v7.4#1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179203382551.3155468.12253782718945495034.git-patchwork-notify@kernel.org>
-Date: Thu, 15 Oct 2026 03:10:25 +0000
-References: <20261002142852.3968477-1-Frank.Li@oss.nxp.com>
-In-Reply-To: <20261002142852.3968477-1-Frank.Li@oss.nxp.com>
-To: Frank Li <Frank.Li@oss.nxp.com>
+ <179203382851.3155468.9541892301905386115.git-patchwork-notify@kernel.org>
+Date: Thu, 15 Oct 2026 03:10:28 +0000
+References: <44917365-a20e-484e-a252-f420f566ddb1@foss.st.com>
+In-Reply-To: <44917365-a20e-484e-a252-f420f566ddb1@foss.st.com>
+To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Alexandre Belloni <alexandre.belloni@bootlin.com>:
 
-On Fri,  2 Oct 2026 10:28:50 -0400 you wrote:
-> From: Frank.Li@nxp.com
+On Fri, 2 Oct 2026 15:37:10 +0200 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+> Please consider this first round of STM32 DT changes for v7.4 cycle.
 > 
->   Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
-> 
-> are available in the Git repository at:
+> Thanks
+> Alex
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX arm64 dts updates for v7.4
-    https://git.kernel.org/soc/soc/c/c49df889a015
+  - [GIT,PULL] STM32 DT changes for v7.4#1
+    https://git.kernel.org/soc/soc/c/32ac8f2a7246
 
 You are awesome, thank you!
 -- 
