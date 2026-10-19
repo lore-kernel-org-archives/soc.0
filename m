@@ -1,85 +1,187 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB4A1C8604
-	for <soc@lists.linux.dev>; Mon, 19 Oct 2026 02:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A718345D911;
+	Mon, 19 Oct 2026 04:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792375259; cv=none; b=YdBOr/MrqI2d9wSMmY1zyB2jxOWFztQqZkAuQeC2Scrl12W7mGnI8W3AyELkdQDJhW9bfJptR24pJ7VR+ORTTKrjqqi47vY0iZiCwV8H+CvgU0T1QRdvtMAlU6B3ac+egHWsv2NgNU8Sa5Ix1XZKROcM/8VXjs3NtUNMdUqe9SY=
+	t=1792385746; cv=none; b=fkBXApSu0FSqHjmJYUgd06cM7WN7ZZMLtC4Br6XcixL9uFVUhrP8/CIGVopSn1mSMYo3ymGfJE4VOtMcsgkmrfQE8Y0oSCQzw6sUTFVoj9QvEGhDkq+UGgGmA0+g+IbRioTgdQm1wnondp+VbBybS1rKATfKfs10ZiRL4FfPazw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792375259; c=relaxed/simple;
-	bh=lK+xi1CtkJn6VZaJl1i9UBW4/J1clWLoaX/IdvnnHiE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HKARIDrmWN8X3Dl2eigKE8iwUsYJXpVUo4bdNCzkmgaomwwMqkOH+RCK9dIB+QhZyq5yiCsog8YynAJQJ7J/yci/k9DwJP2LMNjkOfB2jmW/4e0YYEX93S6j6emYxm1OkuipiXOxcE9mmTHhUmyT6UfbgrZApR+DZezXhXKQY7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BBhIJ946; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792385746; c=relaxed/simple;
+	bh=ZhUYbZ95NLFa/Rn1zmjWlfg7lpCSN/HC3tfwt4ccO2k=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WdnxFP2i7UkP1qIGiQdNNRHM0YYobesSZ5iezq+QZfZX0xBePgj2VJ/zMm7ce6HsPFNS+6FS4nx6vqXeKv7oV9Vk79CJhvvvcjVVc/VC2AxwWWEEbPd13BOB6rrNcCK2sIaCdEIAp34KBSZfvM2cBLuUpRR3vnu5R43Jy4AKSBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KxPoUGhK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BBhIJ946"
-Received: by smtp.kernel.org (Postfix)
-	id DF37F1F000C6; Mon, 19 Oct 2026 02:00:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8EC51F000CC
-	for <soc@kernel.org>; Mon, 19 Oct 2026 02:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792375258;
-	bh=lK+xi1CtkJn6VZaJl1i9UBW4/J1clWLoaX/IdvnnHiE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=BBhIJ946GQK80KG9eKnZtuEenkHQsoxoNskMAKXKmBi75OwPHgoyMyWIhAENHyEI8
-	 Z+ijaCs4OHW+n4TTMRdtPtSRAgr474mftliH+Pkrt12zMm3tWdATikR5UDQFRuDpSv
-	 XEcoK+Pe329cSTBUWawVckkaTAVffOKK5MHA/n0QcH8KTJiP+DsZG9otYZm1yyA3f+
-	 cItZ9huzuBs7jFr0HUlKcVZWRicOwxsmwcEo3GZHQM7NVkRAJ1VUIC2WOtPSXWjB+3
-	 mw9HCRhejqDIM2stDRzAs1OUFt8nAMT8kgMsgL47ccmQWGfxYk6QbXZ3tL2eM/Srv8
-	 ESFi3/t3UOCuQ==
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6a642495d81so1974954a12.2
-        for <soc@kernel.org>; Sun, 18 Oct 2026 19:00:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzk3WDHiHGsyr56JmhPpG9ACqCSW+UqZHeeoelve3WlLOMNOOhzQn5bkNeGYyHVTjNCKw4=@kernel.org
-X-Gm-Message-State: AFq9FYKfZ37wfyPKXiB2E/8dq4uct8TNHN6WFBVSYGpff17oNnbZuBtU
-	NiVIZ+imu5Nj1YRdbwRve0A4E/Vlc1KCPiOm8wECo6A0wbqYpt1bJ5atTKf2PqDqVaJ2CozOLAK
-	2DOaHItb7dTTSNqxBARE1z8f+Q1gUf7I=
-X-Received: by 2002:a05:6402:1952:b0:6ac:aec6:a3c5 with SMTP id
- 4fb4d7f45d1cf-6b3a81b74fcmr3685234a12.42.1792375257407; Sun, 18 Oct 2026
- 19:00:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KxPoUGhK"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F87CC2BCF4;
+	Mon, 19 Oct 2026 04:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1792385746;
+	bh=ZhUYbZ95NLFa/Rn1zmjWlfg7lpCSN/HC3tfwt4ccO2k=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=KxPoUGhKuoAQgV3Y34Pe7Pw6PAXKXgRRH2HliH5txWP0NlsFFc0VGcQs49wH2qxop
+	 zPrMseUdsVBFn/8O67jq07sSnSIDJKLVZOx41boTlVoHiV1x7kD5cqFcBSvJ5YGy7i
+	 MmvImxNMifLmuxu0WnMDFSSGCq/9Rs88Dcc3K5vEeHowb/5O1SiODiihd6r5VIcGZ3
+	 7GlDijpjWr54N9Ucxy+d197X+Kf7Na8sXsAwiNsjorKpTORj/R21gl0kXI3CmA/Zue
+	 Qnx6G8s3i+Zb6MU41c37vujAeCgfi0PMEi45k0QfqTpoBQLl+7fl+cbQI9ZPKmHnhB
+	 BelyNRV7pR0Tg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF958CCF2D4;
+	Mon, 19 Oct 2026 04:55:45 +0000 (UTC)
+From: Long Zhao via B4 Relay <devnull+longzhao.ambarella.com@kernel.org>
+Subject: [PATCH v10 0/5] arm64: add Ambarella CV75 SoC support
+Date: Mon, 19 Oct 2026 12:55:38 +0800
+Message-Id: <20261019-cv75-soc-v10-0-d386065e2dd5@ambarella.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260303070642.2785715-1-zhoubinbin@loongson.cn> <f0baa480-cd6d-42ad-bdb9-92cb793d774e@kernel.org>
-In-Reply-To: <f0baa480-cd6d-42ad-bdb9-92cb793d774e@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 19 Oct 2026 10:00:46 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4REngu3boHogg+s0PTkgEDFQk+JnQFtt-jF86jN3NqgA@mail.gmail.com>
-X-Gm-Features: AclHuK-3zlBaxQjMu1BZEqroXGyYsh0v3LJ2zcYsvyXhuT3eNUNMdX67fFDnKmE
-Message-ID: <CAAhV-H4REngu3boHogg+s0PTkgEDFQk+JnQFtt-jF86jN3NqgA@mail.gmail.com>
-Subject: Re: [PATCH] soc: loongson: loongson2_guts: Use of_root instead of own reference
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMqi1WoC/zWNQQ6CMBBFr0JmbU2pUAor72FYlHGQGqCmxUZDe
+ ncLxGQ2/+f9Nyt4coY8NNkKjoLxxs4p5PyUAQ56fhAz91SA4ELmnFcMQ1Uyb5GRFKq/lFXPpYS
+ Evxz15rO7bu2R/bt7Ei7bfiMG4xfrvvuzUG/cX5sf2pCuZpwVSiIKVeuiU1c9ddrROOoz2gnaG
+ OMP/TT72rYAAAA=
+X-Change-ID: 20261007-cv75-soc-e628f357f066
+To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>
+Cc: Jerome Brunet <jbrunet@baylibre.com>, linux-clk@vger.kernel.org, 
+ Brian Masney <masneyb@kernel.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, devicetree@vger.kernel.org, 
+ Long Zhao <longzhao@ambarella.com>, Long Zhao <zl020895@163.com>, 
+ linux-kernel@vger.kernel.org, Linus Walleij <linusw@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792385743; l=4886;
+ i=longzhao@ambarella.com; s=20260730; h=from:subject:message-id;
+ bh=ZhUYbZ95NLFa/Rn1zmjWlfg7lpCSN/HC3tfwt4ccO2k=;
+ b=LResnsxn04Owvm0w55MCC1Uo/RgsQXcvWGXasac6sOU6bloesyJhMTc+5mirtAswNhKvCIiXf
+ z5B5m98br0KAJNrpJ5SG+bsFZqqtb4ObU9Jvqw1CJtCCYeP2jL0AAtM
+X-Developer-Key: i=longzhao@ambarella.com; a=ed25519;
+ pk=/xGhPTOX0/eYsyTWzyjjgAIW1Z/YD+IlnOnvcdRozow=
+X-Endpoint-Received: by B4 Relay for longzhao@ambarella.com/20260730 with
+ auth_id=903
+X-Original-From: Long Zhao <longzhao@ambarella.com>
+Reply-To: longzhao@ambarella.com
+
+Apply the patches in this order:
+
+1. board binding
+2. RCT clock binding and clock ID header
+3. RCT clock driver
+4. ARCH_AMBARELLA and the CV75 SoC and EVK device trees
+5. MAINTAINERS
+
+cv75.dtsi includes the clock ID header, so patch 2 has to be applied
+before patch 4. The DT sources then preprocess without a separate
+clock series.
+
+The ambarella vendor prefix [1] is in linux-next (applied by Rob).
+Lee has applied the CV75 secure scratchpad syscon binding in the
+mfd tree. This series does not repeat either of them.
+
+GPIO [2] and UART [3] stay separate series. The prefix they need
+is in linux-next. Their drivers do not depend on it. The CV75
+pinctrl binding and driver are not in this series.
+
+This is v10 of the SoC and clock patches from the combined CV75
+series. The posting on Oct 9 numbered them v1 after the split. That
+was a mistake. This series merges the SoC v1 and the clock v1.
+
+Tested on the CV75 EVK. The board boots. That boot used a local tree
+that also includes the GPIO, UART and pinctrl patches.
+
+Changes since the combined v9 [4]:
+- Fold the clock v1 into this series (Krzysztof). The clock series
+  will not be resent:
+  https://patch.msgid.link/20261009-cv75-clk-v1-0-6959b4da83c5@ambarella.com
+- clk: drop CLK_GET_RATE_NOCACHE. The driver only implements
+  recalc_rate (Brian).
+- clk: use reverse Christmas tree order for the locals in
+  cv75_pll_recalc_rate() (Brian).
+- clk: the RCT helpers stay in clk-cv75.c for now. Only CV75 uses
+  this PLL model, so the common part can move out when another SoC
+  shares it (Brian).
+- binding: #reset-cells stays on the RCT for now. This series has no
+  resets= consumers, so the reset provider and the soft-reset IDs
+  can wait for the first user (Brian).
+- Link to v9: https://patch.msgid.link/20261001-cv75-v5-v9-0-486cc289a4b8@ambarella.com
+
+Changes since the Oct 9 SoC posting [5]:
+- the fold, clock and reset items listed above.
+- Link to that posting: https://patch.msgid.link/20261009-cv75-soc-v1-0-808330e93ff1@ambarella.com
+
+[1] https://patch.msgid.link/20261014-cv75-prefix-v1-1-fe95ed567880@ambarella.com
+[2] https://patch.msgid.link/20261009-cv75-gpio-v1-0-5836bd438423@ambarella.com
+[3] https://patch.msgid.link/20261009-cv75-uart-v1-0-38c098efaa99@ambarella.com
+[4] https://patch.msgid.link/20261001-cv75-v5-v9-0-486cc289a4b8@ambarella.com
+[5] https://patch.msgid.link/20261009-cv75-soc-v1-0-808330e93ff1@ambarella.com
+
+To: Arnd Bergmann <arnd@arndb.de>
 To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Binbin Zhou <zhoubb.aaron@gmail.com>, 
-	Huacai Chen <chenhuacai@loongson.cn>, Yinbo Zhu <zhuyinbo@loongson.cn>, 
-	Arnd Bergmann <arnd@arndb.de>, Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, 
-	soc@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: soc@lists.linux.dev
+To: linux-arm-kernel@lists.infradead.org
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: linux-clk@vger.kernel.org
+Cc: Brian Masney <masneyb@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Lee Jones <lee@kernel.org>
+Cc: mfd@lists.linux.dev
+Cc: devicetree@vger.kernel.org
+Cc: Long Zhao <longzhao@ambarella.com>
+Cc: Long Zhao <zl020895@163.com>
+Cc: linux-kernel@vger.kernel.org
 
-On Sat, Mar 7, 2026 at 6:14=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
->
-> On 03/03/2026 08:06, Binbin Zhou wrote:
-> > There is already a global of_root reference. Use that instead of gettin=
-g
-> > one on our own. We don't need to care about the reference count either
-> > this way.
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
->
->
-> Please follow standard defconfig submission rules, so as explained in
-> maintainer soc profile document: you are not supposed to send patches
-> soc@ for review.
-Applied to the loongarch tree.
+Assisted-by: LLM
+Signed-off-by: Long Zhao <longzhao@ambarella.com>
+---
+Long Zhao (5):
+      dt-bindings: arm: add Ambarella CV75 platforms
+      dt-bindings: clock: add Ambarella CV75 RCT
+      clk: ambarella: add CV75 RCT clock controller
+      arm64: ambarella: add ARCH_AMBARELLA and CV75 EVK DT
+      MAINTAINERS: add ARM/AMBARELLA SoC support
 
-Huacai
+ .../devicetree/bindings/arm/ambarella.yaml         |  24 ++
+ .../bindings/clock/ambarella,cv75-rct.yaml         |  64 ++++
+ MAINTAINERS                                        |  14 +
+ arch/arm64/Kconfig.platforms                       |   6 +
+ arch/arm64/boot/dts/Makefile                       |   1 +
+ arch/arm64/boot/dts/ambarella/Makefile             |   3 +
+ arch/arm64/boot/dts/ambarella/cv75-evk.dts         |  30 ++
+ arch/arm64/boot/dts/ambarella/cv75.dtsi            | 177 ++++++++++
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/clk/Kconfig                                |   1 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/ambarella/Kconfig                      |   9 +
+ drivers/clk/ambarella/Makefile                     |   3 +
+ drivers/clk/ambarella/clk-cv75.c                   | 361 +++++++++++++++++++++
+ include/dt-bindings/clock/ambarella,cv75-rct.h     |  14 +
+ 15 files changed, 709 insertions(+)
+---
+base-commit: 34cf6dafc47441dfb6b356a095b89c3585a93714
+change-id: 20261007-cv75-soc-e628f357f066
 
->
-> Best regards,
-> Krzysztof
->
+Best regards,
+--  
+Long Zhao <longzhao@ambarella.com>
+
+
