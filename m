@@ -1,110 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792659231;
-	b=X4PREPNt83c0UpHb0SXAdkwwFzBASWxgjihbixyyCcmFZILPNwOYSOK2VslNJVaqcpPM
-	 RLVauiacVLv2HE8V6kOIyGGBRecjsekNnOgL8D5Ll/GHNa4WLuMbLUcuIzat3bhxpDq25
-	 L0sVjx+iaZwZvTDBNfVOEth8G51VTDkxwiMQvGE8w4HH/V23DuCUqRYwxN1rVdkx6z/QV
-	 8SN0Db275hJMsi3kuTXlZmUIr566K48WBi9WSbgvcWf0U/924i5KSEvcAJEGF+2XbZ7KC
-	 QZ8aVxiqvjNE1eO+kDfJ2rY/huyUxUCxGhOFBFI1BIE9Hhb5LgK7vkJSpnZX3pbrofQ==
+	t=1792693860;
+	b=fLFawH3awS6s4R2e635xK09Eg/MvVc/Fye0xewQ4V2r78mD0lymtSMAwGuikGIfG6wvt
+	 Fz9ZUTk5nzhF1NVGc/ikTegZSL0+qVbnY8WagjS4Njy8Lk+oSHvuktu0c3KVk3zoNZoj+
+	 e6veJNhaXy7Fzww/g7k8V92D9yG7SubczcqGf3L6zXnIxnjg4X4UtzRDYzcGjQCjEyMr4
+	 aqfZM60OdluVoGNRdHts4EHFjYXN2nVIK2GSdo32x1mF2FzuBZvxosLtWufJRQVHGUBjP
+	 3rRMyPu7tQxip51ibPv6heLjPPdUIbHZNOyZob/aMNF6ipXC1WnLxydXIEOqcWWmYUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792659231;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type:Content-Transfer-Encoding;
-	bh=E63uSBy+rrZHGWfaoHHE5jbH6TiYBdUdn0QA3wYVyl8=;
-	b=MNgHr+HSh/RL1bgO4lZkRQiIq7p4bQ7db2fB+/a+LM0BTc+sgTS0r4LEeEY6eXVQJr8J
-	 fHDXKsSsZ3WPsJsdjJ/c75g51K9CcVIWR7146guQe4hHjjZF//ja0z0E8OXRvKcZB+A6W
-	 padUtpQZPc2YfLw8EqLyn0UKQxIuC1SEJKHLyy2tZpSRquM3OxGb+608/3K8Jcp6KlELe
-	 OAEp1NpS2i2k89NFUMRmE9CisvF8YQkwVQcNn3N7m3OHoOFXWycSTMgN7ap8mrmvMj4RJ
-	 X4uY0jTcAknXxXxMyEGfbUHl6FHwTZni3PziesnZKHHxZYdGbakOSPtlMFY7egyDc7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792693860;
+	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
+	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
+	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
+	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
+	bh=rp9LYTtMZB4juqGaag+zhPciOxxBTLZDtNH3dChyOg8=;
+	b=r9jzaJCQuoEIdPqarl6+H5gqL94CZ82/dDQ3k/fTZOpw81WcjulJaeJudoq/ihfy+atK
+	 hOY41JNpLy4iX60aw10iVw+2jH8GEWT0TYOQGnq/YltUAFJrfBe0yPrx0A1eYy98bGs2V
+	 +73ohfurIxrRr4PM/ayWBL5aQ7nL4Hs59+n/hKPCpn3LT+4F/aszeUAvZoi9Xh6lXJMC5
+	 jGBjBw3MjPj0YI4bowl3nLbeAB48jxyff6HZKjinNJLcMor3mi56NuU6PdoCohHp1EjtW
+	 UDRcsGli07Rkg4LiR9UUxUzaegFbMCZ9xySwWyhDnQfodgVgMel68cV9r2IUYcjLESw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=ghNIdN4m;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=ijQ6U6XO;
-	arc=none smtp.remote-ip=103.168.172.154
-Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QKKJcfXC;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DA5606A31A
-	for <soc@lists.linux.dev>; Thu, 22 Oct 2026 08:53:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85DA5606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF53606A31A;
+	Thu, 22 Oct 2026 18:31:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=ghNIdN4m;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=ijQ6U6XO
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id B877A1400198
-	for <soc@lists.linux.dev>; Thu, 22 Oct 2026 04:53:49 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Thu, 22 Oct 2026 04:53:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1792659228;
-	 x=1792745628; bh=E63uSBy+rrZHGWfaoHHE5jbH6TiYBdUdn0QA3wYVyl8=; b=
-	ghNIdN4mv1oj3VfTHXeFapGWkVOMLtzil9aSPKWHBFzBoXhjBzFyeTR3EpCjniKC
-	3n4Cp0pVbDdNO3WPovoFymPjEDNQyMxUxNTD7dh7yThihrQSu8OYFysO3/FjRMuo
-	CRSOedzlZLjkt+eCNW15L50urHJz2nQhfVL7aEUzj9+ovDzhcXLLNSxe5MDNT8Jy
-	AkByiIcPI/+MyYvAX03UDZkihOdFiiK1MzSYpYfSn0RYWz8csujTrxgxx4LTy75a
-	u2FqmBBQoD6Mbz7t/A6fgkd+DUa+HcbaeeXLY2nB/muxbmlHrdM61/M/mrgdxIox
-	oRNvqJVv07o/vpGiQXaTGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1792659228; x=
-	1792745628; bh=E63uSBy+rrZHGWfaoHHE5jbH6TiYBdUdn0QA3wYVyl8=; b=i
-	jQ6U6XOde2xKFhyHSW3e8LVdN6xJ5QXsg6hQVaTd+6SWyF990IvIb0p1z8JkrDXk
-	75+N0lT8UXZEzQvsRSA+monQWUv5Ad1yU3oF3fpGjwqINFYjUTLvwMg0yMDB9jV7
-	TEUO/PM6sJ6lN/W9Eck4onb2sFd/0hwsNc75hhtinfeBMt8GlZLQK6dMLb0Gdx0t
-	ppgzWDu5B4uPG2vUC6FPItJkrX9KTqQmNlZubKb7Ey1T/SMeBXD4gommmuuFVfjo
-	040YuiGj0BRIgopCt/lS5jjTyapBNzIP4vWUuuL6r1T0mJBRPU4wWrLNnUd+ILCe
-	Purtb2ooupaI4c9wR9QvA==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1792659228; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BsaXN0cy5saW51eC5kZXY+;
-	s=fm1:rsa-sha256:Sd7egMKSkS7P+17AJ1ixo1t4+2voKCaPPKS8SRAmqpNY+XA
-	yqzBc9Py+4Epq8VZI/vORycqLyZ47W0oYDHx1PrUWZFrabkt/+YQcSnTcc5tEI2c
-	gMfeBNXzht5hSU61+/Q25w9AHerwXSM9a2xDuFgES0UNOAgDImEPOLwLajkf1EFT
-	eWDJf4d1UfFY6/iwrYllHnhT/tsO8XtqBBgC4qe+nkatYIDC3KxqSoCpjsVcm6G0
-	RFU7QPK5Un2Av6k+QFKG6QW0bfHw2qleoohX3FBnahxxC1HEouA4KTSZ70EQnTV7
-	B38x3+4nl03SLgQpV96Cyb0Mi2PxppVjMDTf7Yg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:VdvleR4OnY0nM2uyxhMPy57tYev5ABwW4FpKLlHaz/k=:bN217+7kpRwB6Qa0M1yj34uK5dMFIju2TsfpNKDlmoI=;
-X-ME-Sender: <xms:Gc_ZauQR5rufmvyM17GbH2t1W63zGwCeZkgYlO6OH46CSOJsae-srg>
-    <xme:Gc_ZaulJx8aUvk-LQ2zAddg_TZ0HTdRbsVFXcEcYHTcQED7MSWrHYXVYvZiOp8w2G
-    3m0-X4ozl5TMe-n413y7wIBZQhl7bt1DAPr5jlhA1nmDK6_kr-xzCY>
-X-ME-Proxy-Cause: dmFkZTE5P8LREIKrBsPwPUasG4xSROejQwAWTc0fL913Rrwk7N9358/0evvy3mthDKN5Rv
-    g3HMHx0ZWBbM+OySbW7WBPoTza1+FSOmkRqLhmhzRCyGlrJfrKqrYqlm/GoFEILfpEUlW8
-    qprp4LX36uzTEBJFYUdP2gdmxeButstMDY4meeP6gU4kbC/v8UyjRjEL8F09gBvcOkKNlC
-    ICYhHgFSVkzPLbSG7V/zB2anzg1Z3lmjFl47dsQOhO/oYh9BeFmv4ghbTc98aMaioj8BOq
-    V+XSQQcx8XRLEzHWpAQ8C7YFkq8O8ybCf2lBCWfs46EwKKv10XmsIMxYGaHOEOT/iF8oso
-    2f9TqxUw5wu9nw1uYuBqSDmpdX4/AyfivKKzQIA7m3ZXtPOXUUYTfOUWZegqXvz8wk9EE1
-    ZlyUIQiXatpcvQDLnhe7xlW7ATRmpNXzyLo2ybZXfCazBeqXs3rsTlLo1zbCRshvbLayUL
-    SN6LQDR3buiGV3gPrnIgDictMfTJ7YqjKkBesyt9H43q1ih0X39PIq7xiAZK0LK0Ce0zct
-    DKDi1q+yLdS302ui6LjYBmsdKyPhW/ceSvyM4P+p7F2hc92bfVWX4kn2n5AhVmM8+F2yqH
-    POFln2zz08kQfhVpRMn9d/jYdLS4MsijDuhj0QPEro5D2XmlGtCpaQqvn6Mg
-X-ME-Proxy: <xmx:Gs_Zan_usB9OcMb7VPoS9IAZ0GkOQHFLf2aVaHSDsi4YYpof4jR5aQ>
-    <xmx:Gs_ZaqmM3I6lInRF4e7ux5dIEFh-zWak9qYskHobVXImUEOTcsaXJg>
-    <xmx:Gs_ZatVMJtcTpNphou9gDvB-5Q1nKB_iFUqWXzLw_FJ3LMxY8aJC4Q>
-    <xmx:Gs_ZavE-UxTk8sVUqJouqRCp9cdWZi5rMzB3CoJZMr2Hz9U8mVjkWw>
-    <xmx:HM_Zav03zQ1yByrkqrg3voN1EM7jlqKKnwKWEJfNDoMIA-N7jT1jfkLU>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 40FCB32A0093; Thu, 22 Oct 2026 04:53:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QKKJcfXC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486071F031E0;
+	Thu, 22 Oct 2026 18:31:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792693860;
+	bh=rp9LYTtMZB4juqGaag+zhPciOxxBTLZDtNH3dChyOg8=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=QKKJcfXCFWM9giBQ1pqPvL5f8vi/cRzK+5lnOfw0FtlST0SCWZZUJbOGHmUak/Eze
+	 +pAZMr7gpRnt66304ClAj+xk5SM8Bqe534MFjFVY1RKfbkbL3FrhQUpsn2psg/wYZ/
+	 EkFIfLnNSx76toXXwQbW0uQPl7XQRB4cQBt3SgOnaBAf75lLyKs/NMEZPMgMEvucvr
+	 gG+Xg20Sc7GVzBWOsrLU6IYreyXbPFLdiF2UComdRAAl6BmqZKnR/mWDAqzvhr4gV4
+	 Fs/teS206ixQjK630+rOHNmbYBKtR3c6hI9WOASyXmP3ZibsqpzOkNjsaZxWwWOdto
+	 5j9UxNY100d1A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ECCBA380822E;
+	Thu, 22 Oct 2026 18:30:59 +0000 (UTC)
+Subject: Re: [GIT PULL 1/4] soc: devicetree updates for 7.4 
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <417575f9-464e-4966-b051-5ecb122bcb10@app.fastmail.com>
+References: <6c776ba1-f114-44c3-96ee-938dcd7ac82d@app.fastmail.com> <417575f9-464e-4966-b051-5ecb122bcb10@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lists.linux.dev>
+X-PR-Tracked-Message-Id: <417575f9-464e-4966-b051-5ecb122bcb10@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-7.4
+X-PR-Tracked-Commit-Id: 15644868ad522eac914d368fd08c340051f1076c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7b9a0e857b427cdda5a08b662dbea7321e6bb470
+Message-Id: <179269385870.87271.867381443730942294.pr-tracker-bot@kernel.org>
+Date: Thu, 22 Oct 2026 18:30:58 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -113,138 +67,16 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Date: Thu, 22 Oct 2026 10:52:57 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Message-Id: <b5df3f05-41ba-4d46-818b-776067467f14@app.fastmail.com>
-In-Reply-To: <6c776ba1-f114-44c3-96ee-938dcd7ac82d@app.fastmail.com>
-References: <6c776ba1-f114-44c3-96ee-938dcd7ac82d@app.fastmail.com>
-Subject: [GIT PULL 4/4] soc: arm board file changes for 7.4
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+The pull request you sent on Thu, 22 Oct 2026 10:50:39 +0200:
 
-  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-7.4
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7b9a0e857b427cdda5a08b662dbea7321e6bb470
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-7.4
+Thank you!
 
-for you to fetch changes up to cfe69169c03e71e2a22870317ef4cffb51f6f06d:
-
-  Merge tag 'ti-k3-maintainer-for-v7.4' of https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into soc/arm (2026-10-16 18:54:22 +0200)
-
-----------------------------------------------------------------
-soc: arm board file changes for 7.4
-
-These are mostly smaller cleanups for the remaining platform code in
-arch/arm/, the most notable one being the conversion of the s3c/crag6410
-board to use software nodes for GPIO references in place of plain GPIO
-numbers.
-
-The earlier plan was to drop the deprecated (since 7.3) board files
-here, which would have been a much larger set of changes, but that
-is now deferred to 7.5.
-
-----------------------------------------------------------------
-Arnd Bergmann (10):
-      Merge tag 'omap-for-v7.4/soc-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap into soc/arm
-      Merge tag 'imx-soc-7.4' of https://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux into soc/arm
-      Merge tag 'visconti-soc-7.4' of https://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti into soc/arm
-      Merge tag 'tegra-for-7.4-arm-core' of git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into soc/arm
-      Merge tag 'mvebu-arm-7.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into soc/arm
-      Merge tag 'samsung-soc-7.4' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into soc/arm
-      Merge tag 'vexpress-fixes-7.4' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into soc/arm
-      Merge tag 'socfpga_maintainer_update_for_v7.4' of git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into soc/arm
-      Merge tag 'at91-soc-7.4' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into soc/arm
-      Merge tag 'ti-k3-maintainer-for-v7.4' of https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into soc/arm
-
-Chiam, Evon (1):
-      MAINTAINERS: Drop arm64 dts/intel path from ARM/SOCFPGA ARCHITECTURE
-
-Dmitry Torokhov (6):
-      dt-bindings: input: samsung,s3c6410-keypad: introduce compact binding
-      Input: samsung-keypad - handle compact binding
-      ARM: s3c: register and attach software nodes for Samsung gpio_chips
-      ARM: s3c: crag6410: switch keypad device to software properties
-      Input: samsung-keypad - remove support for platform data
-      ARM: s3c: crag6410: use software nodes/properties to set up GPIO keys
-
-Ethan Nelson-Moore (1):
-      ARM: OMAP2+: remove unused ctrl_module_wkup_44xx.h header
-
-Francesco Dolcini (1):
-      MAINTAINERS: Add git tree for TI K3 ARCHITECTURE
-
-Geert Uytterhoeven (1):
-      soc: atmel: Convert to of_machine_device_match()
-
-Heiner Kallweit (1):
-      ARM: imx6q: remove KSZ9021 PHY fixup
-
-Nobuhiro Iwamatsu (1):
-      MAINTAINERS: Change ARM Visconti5 architecture maintenance status to Odd Fixes
-
-Qingfang Deng (1):
-      ARM: mvebu: fix Cortex-A9 errata selection for Armada 38x
-
-Thierry Reding (1):
-      ARM: tegra: Fix Trun -> Turn typo
-
-Thomas Huth (5):
-      ARM: imx: Replace __ASSEMBLY__ with __ASSEMBLER__
-      soc: imx: Replace __ASSEMBLY__ with __ASSEMBLER__ in header file
-      ARM: OMAP2+: Replace __ASSEMBLY__ with __ASSEMBLER__
-      ARM: EXYNOS: Replace __ASSEMBLY__ with __ASSEMBLER__
-      ARM: at91: Replace __ASSEMBLY__ with __ASSEMBLER__
-
-Weigang He (2):
-      ARM: vexpress: fix device_node refcount leak in vexpress_flags_set()
-      ARM: vexpress: fix device_node refcount leak in vexpress_smp_dt_prepare_cpus()
-
-Yo'av Moshe (1):
-      ARM: imx: Fix suspend/resume crash with Clang CFI
-
- .../bindings/input/samsung,s3c6410-keypad.yaml     |  53 +++++-
- MAINTAINERS                                        |   4 +-
- arch/arm/include/asm/linkage.h                     |  29 +++
- arch/arm/mach-at91/pm.h                            |   2 +-
- arch/arm/mach-exynos/smc.h                         |   4 +-
- arch/arm/mach-imx/hardware.h                       |   2 +-
- arch/arm/mach-imx/mach-imx6q.c                     |  30 ----
- arch/arm/mach-imx/mxc.h                            |   2 +-
- arch/arm/mach-imx/pm-imx6.c                        |  26 ++-
- arch/arm/mach-imx/suspend-imx6.S                   |   6 +-
- arch/arm/mach-mvebu/Kconfig                        |   4 +-
- arch/arm/mach-omap2/control.h                      |   8 +-
- arch/arm/mach-omap2/ctrl_module_wkup_44xx.h        |  89 ---------
- arch/arm/mach-omap2/soc.h                          |   4 +-
- arch/arm/mach-omap2/sram.h                         |   4 +-
- arch/arm/mach-s3c/Kconfig                          |   5 -
- arch/arm/mach-s3c/Kconfig.s3c64xx                  |   7 -
- arch/arm/mach-s3c/Makefile.s3c64xx                 |   1 -
- arch/arm/mach-s3c/devs.c                           |  27 ---
- arch/arm/mach-s3c/devs.h                           |   1 -
- arch/arm/mach-s3c/gpio-core.h                      |   3 +
- arch/arm/mach-s3c/gpio-samsung-s3c64xx.h           |   5 +
- arch/arm/mach-s3c/gpio-samsung.c                   |  72 ++++++--
- arch/arm/mach-s3c/keypad.h                         |  27 ---
- arch/arm/mach-s3c/mach-crag6410.c                  | 135 ++++++++++----
- arch/arm/mach-s3c/setup-keypad-s3c64xx.c           |  20 ---
- arch/arm/mach-tegra/sleep.S                        |   2 +-
- arch/arm/mach-versatile/platsmp-vexpress.c         |   4 +-
- arch/arm/mach-versatile/v2m.c                      |   4 +-
- drivers/input/keyboard/samsung-keypad.c            | 200 +++++++++------------
- drivers/soc/atmel/soc.c                            |   4 +-
- include/linux/input/samsung-keypad.h               |  39 ----
- include/linux/micrel_phy.h                         |   5 -
- include/soc/imx/cpu.h                              |   2 +-
- 34 files changed, 378 insertions(+), 452 deletions(-)
- delete mode 100644 arch/arm/mach-omap2/ctrl_module_wkup_44xx.h
- delete mode 100644 arch/arm/mach-s3c/keypad.h
- delete mode 100644 arch/arm/mach-s3c/setup-keypad-s3c64xx.c
- delete mode 100644 include/linux/input/samsung-keypad.h
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
