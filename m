@@ -1,146 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792620719;
-	b=rcEf9Dq135Oe810FMXcKUfpFrsrrJhXHARoEp/3ayjkddbfuTo7UmJLishriWcz/RHIn
-	 j6NfvwbU3SxyTQGVO2nYGAHibZktDSagz+UML7rCO3x4NNRthUNxl2KT/Qb/hFKI0Y8wb
-	 zQmUOmJKCCchu8XpQM7Fb4Y+GZjL/kaTqKbA8ECXrommdZKyBTcHi8Pio7jDbIiW9uvGf
-	 xU4JWEVBc8/dh+zngwhph9RwWYzG8sCRf9tuWJB5LzEtDEE417caKRrO6i18jHKF//dgV
-	 yq/yla5ZTu/5trIF3H38OzqeBRKJlqtCDSbLMB9x7djA1QmIF33mY+3n0thD/OJfsVg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792620719;
-	h=Received:Delivered-To:Received:DMARC-Filter:Received:Received:
-	 DKIM-Signature:DKIM-Signature:X-DKIM2-Info:DKIM2-Signature:
-	 X-DKIM2-Info:Message-Instance:X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:
-	 Feedback-ID:Received:X-Mailer:MIME-Version:X-ThreadId:Date:From:To:Cc:
-	 Message-Id:In-Reply-To:References:Subject:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=diVWNjKYAFTtGF52+kg4yoJtUyOBdWwJP4GiW6bE1HI=;
-	b=13rmGuB5sDqomElt1xTXmO1fl06oUMCO60B0R6if4Nj2PwWE1nSA2xHQkHeP+aF2/cKN
-	 yue4tCbWlYkJNtP9Cn1t7hMwR3/bNZlKQcPfsdEYdB+97LoLSxYS1w78dOv8GQSQW7wfg
-	 COcW13FYQjSXjamDnA30ID+4PUWCtrNeZ3PMFoAEZ5qUD0jQqn5ljXFUDBksADPAQ9i1p
-	 mMTYCEpkM9uuYEqHU0EUkzJsBevXJc2EALVTZ1fOXrLsrgyqfydBKsMDkYdpC9kCsJ8ya
-	 v9QZXcJs5EyWPQMOI+Xgtp6ZtdiQlkkifqzdvzfDEAaMBKewNR9sIrpuRIenwl75JoA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=IHQCbfWh;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=v9cW0vRd;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D967F606A321
-	for <soc@lists.linux.dev>; Wed, 21 Oct 2026 22:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=IHQCbfWh;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=v9cW0vRd
-Received: by smtp.kernel.org (Postfix)
-	id 7A9BD1F000C2; Wed, 21 Oct 2026 22:11:58 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=202.12.124.153
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792620718;
-	b=3UnZDt59ADytVGh292DzhW3ffRbdAZG5xcZAE5iwr5pUcSyHA+b3+JNaUrMHG2IznYaJ
-	 vBXC08qWjvhKUi8BtgK3r7xAhLfEqEDIIOMAUdygnnOSWzKojiAr2xeu6kYzzbpOQnuRr
-	 HX0OTHzLK75Le1RPDZNW8ZxlCJurjpaIUMkgOAgCwEVuGeImueFMm9GqR/r2W90Vf/X5t
-	 yHYl48vmmZc6wQR+8mteTT2uzCgvYPMpwqmlFDmjhBvXkJjD0R0h0JQRfToRzRSIFqjsf
-	 4hWgU3c+sinAQmTe6JJnW80gQvOJV9e8djSxZpeVUklg7PmWvnDrhKUk6wuNdZKHQdQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792620718;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.146
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792656516;
+	b=EVR4+HU5Neqg8wmsnSMf/NQ7q+5kOc+SJ7uVpdAfOAJpY7J2KWKTBKvJYxmu8gx8S/sa
+	 QCqoAt9kEuvfX3bsuZzaS2YI3cA56FMIZKa5fiRqM022l29cI2YvCK2zmTLpi6o3JkqzV
+	 q3Gs51Kf4R/Tw/PTt7BFpMb3PFwLtz1Ynq9IMvnUX1iP4PmHswWFjkpzbiRqsW9DWHVjm
+	 jIIYtgINgs0LEJB5zRF8lsRICiBl7R6zs0jFcM7eBYX16jdeXiCQFlAhmZZO1YyiTywx8
+	 SMMjdJttVEHlL5XlgxTEYY2m51P6+lKE82QXoa6jJNx2enBDciWwBqdhr/uNLhCyEDQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792656516;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
 	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
 	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=diVWNjKYAFTtGF52+kg4yoJtUyOBdWwJP4GiW6bE1HI=;
-	b=IG5b2OvpzGFxcuiaY4MAADJga0t5TWOp48o27OFFWT1qLy3Aw984dkj3Pi3/bQ7s5obQ
-	 kDJmjZJO7oQPJV0WS0WUGmtaEmkeXDNaIP7unnlzc2ggvmfEVuXYJhD+TREo83uPjksxD
-	 /lXj3JKe4CsJLRW0WwIX5owFQBt9/dlv6OX9OKttc08oYJsK8NbIwmgbIZhmUmSIQdhie
-	 1Y12jiRph5Pw54yN8ZSObkxPxK+SXRF35ArvWAUXXcGX2ewphDxkwWt7AWIw6lMaSIdkY
-	 nP+FSlfFr6SbcVbBxWr4L34J6Zhsu3ttZb0sdf+Dmrp9Jgxu7XiO5mk56POBvYlMDVA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=IHQCbfWh;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=v9cW0vRd;
+	 MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=qCWsWZXzlIkVJ1bwg/ctXg0ZlNLI2VEgz60sAmLxP3s=;
+	b=emCcd5D+vNpZAcGG7tx1kJ7J8/F9BsqAmThnylxbl+xlpQbn9g9aJA5Yd4hr/12r5yKi
+	 1oTBZcyPV6ZlFBhY2iRvoVGsp8FtZVX+QUNxBbdWbaZs819zqjTSXJcot7fiCdiOGtO5Z
+	 cxTwtnFajzZ7o1dwlDbcQXaMorjWyKuyrxAQiV2fIHYZRuJPcpVv4ILbL8vspdt5qJlR8
+	 lGBlNA3c77wZ471f8TaSmhzn5kr3iImFbg/LM/XKZFXW9zCCTE3xfTPyIOxz7THQxAzhN
+	 cGO/fw3ABzrJA3XxUcSC4RdQgA1ESaHRKOm5OZp+IDR39X92RRxbNR9B9tHklbDEjgw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arndb.de;
 	spf=pass smtp.mailfrom=arndb.de;
-	arc=none smtp.remote-ip=202.12.124.153
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=paitTs9q;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=AEhiFeJ3;
+	arc=none smtp.remote-ip=103.168.172.146
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 75BD11F000C3
-	for <soc@kernel.org>; Wed, 21 Oct 2026 22:11:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=IHQCbfWh;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=v9cW0vRd
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 75BD11F000C3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FA9606A31A
+	for <soc@lists.linux.dev>; Thu, 22 Oct 2026 08:08:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47FA9606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm1 header.b=paitTs9q;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=AEhiFeJ3
 Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id C7FDB7A007B
-	for <soc@kernel.org>; Wed, 21 Oct 2026 18:11:56 -0400 (EDT)
+	by mailfout.phl.internal (Postfix) with ESMTP id 0917EEC0175
+	for <soc@lists.linux.dev>; Thu, 22 Oct 2026 04:08:33 -0400 (EDT)
 Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Wed, 21 Oct 2026 18:11:56 -0400
+  by ams-compute-02.internal (MEProxy); Thu, 22 Oct 2026 04:08:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1792620714;
-	 x=1792707114; bh=diVWNjKYAFTtGF52+kg4yoJtUyOBdWwJP4GiW6bE1HI=; b=
-	IHQCbfWhKlyhWvMPUomqtGIcxC/9aTOpgt4jgau5rkLwpYm1YtKwUJi4va+Ii4DE
-	8OYWrDd62zwgaTWqJ1DynefBGq0iaRiKb7norMe4v+i8RYlZgDxEjVLd/ocF0pug
-	jiHiiaiRfDJMH0PWNzWqfKXsnFLDpTZKmR8nCdCU0RBUs/nshCrpgdwUTzldLpPG
-	a4Z5GTcfPaYjAYOxSJ5Deu/WqghOxqgMmv2cszeTi7BpgvJ93z5qmmVoxPg3coGE
-	96No3HKNbFeSapy4O84/X+5lQijFGx6bAJpYGqg0Xo9+7FGeV2WXOjbY4Q45KIcJ
-	yIUQXFVx7Sy1r0vj93ubGw==
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1792656512; x=1792742912; bh=qC
+	WsWZXzlIkVJ1bwg/ctXg0ZlNLI2VEgz60sAmLxP3s=; b=paitTs9qANsKZvIo99
+	GI9ouujB8FAtVpC/h3GDMex8Da/32VmqexeW6krGkzwe5DwZ4CQunnlklSp39gqg
+	eE3a7/KlVTXyop/R0h8QWqSjkOZpsm9vN5f0SMmaQgMtM6627f6mAX1Okljyy5eO
+	PwYkgrcDLi5GKb+rY4/Aa4caX1VOWcSSbzZycpC4QkHBoMkdn1mRzCCS4Y4ugTjT
+	YJTpIEhqMkUKJhIMjPOGi+nW5wK35XSCWPG3zfnqagVdX8RTBoMR0mnOvZauMcBB
+	WB1ajM3bxY+BXTlT0SUxog5zbCyF7ifBQ1/7h70KI7c1Tlqcv0N9pKCt8J7MML4Y
+	CxMA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1792620714; x=
-	1792707114; bh=diVWNjKYAFTtGF52+kg4yoJtUyOBdWwJP4GiW6bE1HI=; b=v
-	9cW0vRd/dQKuHtSUkqT6BcPuJjI5AZdI6ldkq3Ery/n6c0PCKIPeafamF4xsvCK7
-	EtHza1Hk/1IyOjRiYaobrHvzvnbq9WGFkMjgLP4ZOH44r+5kXhhjW+0sLOKwTYVa
-	Ae1VV+Jde3Mf02RW5IqAlm/JF5nPmZ/iAawvZvaTugBoHZGC+7m5B83YG6t0Xy8r
-	D5qh/ANaF+Qmt05dXNHD/C7AVF2A7MUa+XI1Yx6fRz3209jittK3donifpRCn8eA
-	HQx62fAKmQbxGe2aIHVWtjeEFfWh8kaiHNlr1185mD8xiFphKuEcJdeJOtqNNC3y
-	QrIcpLK4/0Xqwyht/NpAg==
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1792656512; x=1792742912; bh=qCWsWZXzlIkVJ1bwg/ctXg0ZlNLI
+	2VEgz60sAmLxP3s=; b=AEhiFeJ3Ljdbt8HsMUcUNlitKocqLR2Vz8bjVGor3TEn
+	patX7XSlMhaA74/KekMnUQ+gGzK4sxdgLYUQQQQHyzstD0quIzKgRaUGzrtdZfXk
+	kFVkqlS2hc88Bc8Ezom/+N79nfsjby0FHUnzR5QBIzZ0GTkG3ZhELCiLGO+PEE7C
+	BAALepJAfYFlj/tYdqcJgTS0qEE1G45BnuFDX+HHYsvqpeiQlQw76Ft4gYN2TGZa
+	Bvc4wT+mX9D1nhtDEkFN+IghXcsT4iqyCLL3p/wto9kOMLlzUUWPwcAXtVu2nXQG
+	njW3x7guhMgqjqOdel46ZMr7gP4iq8g3WgEe7SA9xQ==
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
 	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
 	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1792620714; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BrZXJuZWwub3JnPg==;
-	s=fm1:rsa-sha256:AftoqVw2bZHTa2Mt4CWwv0jNPMWr7PKNcmwfhAqxPYahVZa
-	MxSumE6Mub4Q3be4t5ugGwzbvpAJQ4qCbpq+BFtdo0uG0o8dg40aQaGR2/8vMLmE
-	YEC+hlj+ctGRXhVfbuBFloIYHibjv9F9iLTPOzsJmpGhCL0aZlzI6GqeN8Ouhvi0
-	QJn4F+kNFJeG02mrTNJbgmH9dDuDbm98mLrUAFYQqM2ck/lg/BD3nJ4M0MVjDQ9/
-	ANCvDpSQ+o2SwM8IDqKMJO6q0CUtBefbjhPsvXeAEMMzcUy7Fywu60EwVULfUjF+
-	xdbvw72i8iGTLQcihed3ksziNeNP+f/E01iahCw==;
+DKIM2-Signature: i=1; m=1; t=1792656512; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BsaXN0cy5saW51eC5kZXY+;
+	s=fm1:rsa-sha256:B4PnuFQt/BhDkVFx3dqbC/rsU/Oh02ltai/KZO8KuWAkfSb
+	EOERck5vlH2mMWDYKVcgICxzDf1YUzAGMZhF6gsr3xIAxeg/QhbVNDDerYsNywcS
+	SrCaBGfU1eeUBAbzyS/NWES0mSld/8UBCxzioBYRbZpH+bShBgRBlKRruQgmheCt
+	2Q5NnZrhbX7MJltGTp/ToYLqAVGkcPjyoUb1ZplmD1nPl1Y+Yn1u4TZNPM1GYxFp
+	5+SwIjptb9z8LywMvC5ChP0yoNOtfdC3ALBjvGnMCTeDcjFsae7Dbz2k24ItylMi
+	qya/7GPH8r3OOvrwVmQMzvIFMDVqEzcrBG+/++g==;
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
 	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=mi-m=1; hc=12;
+	action=mi-m=1; hc=10;
 	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:BMfSP0EaWWq3lvDMy8cmqRgmoERzA5G+7NEql4k7v+8=:o68rVCZZOVKH5TeyIwvIrDMJaSwbm/KMW1B/6I39VwQ=;
-X-ME-Sender: <xms:qDjZai3IF13njyKp72hyXlDex8d7HlkzzXtTYuBajrZXTp5Wl6mAkQ>
-    <xme:qDjZav58A2zGY0ZGOmTR-CC0bZnQE0zwFGNeAhWy_FZ5GzQYpVhxp1pdYNdM_1qOV
-    Rs3bpoUt0rxgsKV1nyt01VlPzoS2DdCXoBiCcSIHT9d1le9KKB0d_ux>
-X-ME-Proxy-Cause: dmFkZTF0HUsFyeJfrfJr7fkkgCzjU3p6Xvrloquy42PVyu9vqMT2mPaejtdXgXK13BC9Pq
-    etqqytp127rTRCb8igdhFi4PLjzf+X6hlM0xXPnXB1gvwrE+5tN/0sEFDJpOEPa85ucZvC
-    7DTUUjOcMv9rau14antoRasCGMlT2lHrkODnY2wfc8k27pljNLuqfsfT3qiQHpXe7+9IHF
-    qY4nBowJ9xqUmKODPRPJANQjbWa7cMt1HAgVIKmRC9wgGgzG5IwsQuKAPl24+yxoADIkZ4
-    Jiz4TuO2KGMdGNm6CPcOs5q6bKTf2nAfTPoP1e5+Ld3QturMkU+KNChK7bjZOaSt0egRT9
-    Cps+/ko/hvmWWWqcYvypXlREa2Mm/1xHKJzcUfnCuzB43uLzUFrwVk8DCKWK2EUBrzONLi
-    1LlNT5BCx5olzDO6Ow+Hmu7B3eZbQjjMoU9Bn7fRFOwxEivl2q6GsaNoe9IzKxBUWvKIYH
-    5357MlkIxc0hN3thUKngcb9t0h4ZqALAOT2DR+TwYistiPtd9ow/e7IhoWirB0lV5gQXsJ
-    aBwJStd3Rfqxi+WEeQf9eTJwpT8zAodW6FSD9UeQjPyRSA8JbdMR3WMyVHHY4C9F8pRn2O
-    mcQE2pdA9ecgfa57HJd344E182ve13XRed/lwEIsFLATO8FM0c1lopJ3AcLQ
-X-ME-Proxy: <xmx:qTjZakXY0W-XMtacaOLIyTWzDGmNHFza2ZtakVgtHDROvWgoH3ehuQ>
-    <xmx:qTjZagALFQzwykJ4JWhhvjROesgFjOFVMxlEf-fYHmbtvMj7AeNgUw>
-    <xmx:qTjZaly3VWVR8Y362jf2vnalk5o8nnPyUyUeZjgShUQ0RcHpSqGEeg>
-    <xmx:qTjZatA91uHp804J6AOlfpa3blIQG6YuPQUrueQ9t2w12iixthTK5w>
-    <xmx:qjjZanHbpXeDI2UPRX1urS-rZqpw8iTRXHjg0nbVJ2J8D1jyYJOqibvW>
+	from,message-id,mime-version,subject,to;
+Message-Instance: m=1; h=sha256:VBLg5YZtKwSL01YbU5JCaXHeChAmfQl8LIVHi09UDdQ=:036vB2x/PkQq8v8OBqvh3qALNh9htmEL0DcMl4FNkfo=;
+X-ME-Sender: <xms:fsTZamDCCiGL-CaDdP379PxqTvMCDsOd__52AE8awZrXQbWunXKPVw>
+    <xme:fsTZarXWRQiA-eRPcc8A6dt2lNUwncgLSV0tWb0ShOr7WpNPwP8C-GeWRhGSZeL9o
+    gWsogNb3-vXQqYT75r49T7GJu2DWCrqP1YJuJLXsDo01pflzQU65gWj>
+X-ME-Proxy-Cause: dmFkZTFhNJk4VCqz6DYoNlXTSkJrnGFc5admzae8p8EL2R8LQluaUApHOMwtUK97WfxmCO
+    cKgys9XYom4tF6WqSdustQCIWxgJrAetY0hGgGaIoXA7CKM42YJgfuv2EeF1UHPFKscL4m
+    NEZefm4wPilajjgG/Cp4e1Np2mlHUIpmpwBgTRI5lkqXpqKIYoLkVam8vOlgKbLDhaY3JM
+    96qEUHWp3A56ZjLLY36zQ8vNkLIkzBURD09BHMn3b+nO0ZEr8NO/HRXiB86a4OhVFFJLMI
+    SlmwBTGv1HMMTJaQ5yW1KP1niP4TSjGyzYCzJbwn+CXQh8f8CuSYOSQ/tuvUgpuQWDUkfg
+    l1DFpthnVh/KnRmO5qnZ5zlaWt1ehGUuDGrXadK40D+eR4MH5ECSL9S9OxEQvYbRhpbqxb
+    2MPsZ/mS5NWrZG4X6+CHMwvStQQW8sINmLMAibhh2NN2Ab86jnTI0jGaDGrZp7OUCE7RkI
+    lnDBKHpa22ls5xnZ2vp7xpf/0CIlzBeDnLKTs6JgMcLwS1fO7ydLEOPBRnWf71GTF80xWo
+    o4S1UMft8Bx+S/YSIHVMjuVFudUbtvhSw7q8C0um6+lfl8We5o7V0soJRoMyi0Yp1ntfxo
+    kE+THAbIZ8j5rL8hSgVZIqjMf3tSjp8BuD4FyO606jWHEPBCiQTOiDB+KpXQ
+X-ME-Proxy: <xmx:f8TZavuMwy8djJw7D0dDBl1ysndNZpZHnrZVm2jNX9sb6CmY6Gdyug>
+    <xmx:f8TZanVvfcMrQPE4M5DU4QNrRqh58thiCUy1Nu5yL6SdO9AojJiwqw>
+    <xmx:f8TZarElesdIdwjKcYcn-VMwEZrDkFp0vl6KqGfh0gEe4QPipFtbJg>
+    <xmx:f8TZap08rG8GBaM7JAy4lt8_PRxsjgrLPZRA4mzn2NVNJ9fT8R0coQ>
+    <xmx:gMTZaoli7a0deJm3p66BEiXs2gOJoU_MjbjIXj-pWIv0mDx6VaEYXCXA>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 7A2D832A0098; Wed, 21 Oct 2026 18:11:52 -0400 (EDT)
+	id 02C6432A0097; Thu, 22 Oct 2026 04:08:30 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -151,54 +113,130 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AiF43aUDa7Cs
-Date: Thu, 22 Oct 2026 00:11:32 +0200
+Date: Thu, 22 Oct 2026 10:06:59 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Dinh Nguyen" <dinguyen@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-Cc: soc@kernel.org
-Message-Id: <3008ed57-eb91-4eae-bec2-5109cbe2661d@app.fastmail.com>
-In-Reply-To: <c4f40f7a-f2ef-408f-9aa4-57dcb7a5d9e2@kernel.org>
-References: <20261008164735.566333-1-dinguyen@kernel.org>
- <179190784527.417156.1172897057001665375.git-patchwork-notify@kernel.org>
- <e47367d1-9c46-43fe-b657-28358def2804@kernel.org>
- <93418744-ba09-4031-b96b-24fea70d4cb8@app.fastmail.com>
- <2a568553-b3b5-4072-9313-a8f63d3541a5@kernel.org>
- <f6262d7d-d5da-4be3-b37a-81ba3e35bba5@app.fastmail.com>
- <202610211826058f634946@mail.local>
- <c4f40f7a-f2ef-408f-9aa4-57dcb7a5d9e2@kernel.org>
-Subject: Re: [GIT PULL 1/2] SoCFPGA DTS updates for v7.4
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <6c776ba1-f114-44c3-96ee-938dcd7ac82d@app.fastmail.com>
+Subject: [GIT PULL 0/4] SoC updates for 7.4
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 21, 2026, at 22:33, Dinh Nguyen wrote:
-> On 10/21/26 13:26, Alexandre Belloni wrote:
->> On 21/10/2026 18:46:39+0200, Arnd Bergmann wrote:
->>> On Mon, Oct 19, 2026, at 15:21, Dinh Nguyen wrote:
->>>
->>> Sorry for missing this: Alexandre pointed out that when he looked
->>> at the branch it was not part of linux-next and did not pull it,
->>> and I assumed that he had notified you about it when I did the
->>> final merges for 7.4.
->>>
->>> I see that you have a for-next branch with a different set of commit
->>> IDs but overlapping contents. Can you explain what is going on?
->>> I normall expect that whatever you send for inclusion in the soc
->>> tree has seen some time in linux-next using the exact git commits.
->
-> Yes, I was aware of the linux-next requirement and have been placing the 
-> commits into the for-next branch. I was cherry-picking the commits into 
-> my for-next branch. I didn't realized you needed to preserve the same 
-> commit IDs as well. I will change my process to keep the same commit IDs 
-> going forward.
+At 1252 non-merge changesets, the 7.4 cycle is rather large for the SoC
+tree, and most of that is arm64 devicetree updates, with smaller changes
+for riscv, 32-bit arm and drivers than the last few times. In both
+drivers and devicetree updates, Qualcomm has by far the most contributions
+including two new SoCs and 22 of the 81 new boards, followed by NXP
+with 19 new machines.
+Other new SoCs include the Apple M4/A18pro and Google Tensor 5.
 
-Thanks! There are two reasons for requiring the exact commits here:
+There are a couple of trivial conflicts between the soc/dt and
+soc/drivers branch from a driver that ended up getting merged along
+with the DT changes, and from defconfig changes in a previous bugfix
+branch.
 
- - we all rely on scripts to check if commits are merged already,
-   and those break if the changesets are different.
+I had originally planned to include a larger update[1] for 32-bit Arm
+to remove most of the remaining legacy board files that were recently
+deprecated. As the idea was to still have them in the LTS kernel and
+there was some confusion whether that would be 7.3 or 7.4, we ended
+up deferring that branch to 7.5, and the associated drivers likely
+won't be dropped until 7.6.
 
- - once the branch gets merged into the soc tree, it may conflict
-   with the same patches in another branch, at least if there are
-   multiple patches touching the same lines.
+The contributions came from 309 individual developers, the most common
+ones being the usual names:
 
-      Arnd
+     49 Marek Vasut
+     43 Krzysztof Kozlowski
+     40 Abel Vesa
+     36 Krishna Chaitanya Chundru
+     31 Thierry Reding
+     29 Francesco Dolcini
+     21 Lad Prabhakar
+     21 Frank Li
+     19 Svyatoslav Ryhel
+     19 Judith Mendez
+     18 Dario Binacchi
+     17 Chancel Liu
+     16 Janne Grunau
+     15 Yureka Lilian
+     15 Luca Weiss
+     14 Mukesh Ojha
+     13 Peng Fan
+     12 Taniya Das
+     12 Joachim Eastwood
+     12 Geert Uytterhoeven
+     12 Chuan Liu
+     11 Linus Walleij
+     11 Konrad Dybcio
+
+The dirstat is:
+
+   0.4% Documentation/devicetree/bindings/arm/
+   0.7% Documentation/devicetree/bindings/clock/
+   0.1% Documentation/devicetree/bindings/input/
+   0.1% Documentation/devicetree/bindings/power/
+   0.1% Documentation/devicetree/bindings/soc/starfive/
+   0.1% Documentation/devicetree/bindings/soc/
+   0.2% Documentation/devicetree/bindings/
+   0.1% arch/arm/boot/dts/marvell/
+   2.7% arch/arm/boot/dts/nvidia/
+   2.1% arch/arm/boot/dts/nxp/imx/
+   0.2% arch/arm/boot/dts/nxp/vf/
+   0.1% arch/arm/boot/dts/qcom/
+   0.1% arch/arm/boot/dts/renesas/
+   0.8% arch/arm/boot/dts/st/
+   0.1% arch/arm/boot/dts/ti/omap/
+   0.1% arch/arm/boot/dts/
+   0.1% arch/arm/mach-omap2/
+   0.3% arch/arm/mach-s3c/
+   0.5% arch/arm/
+   0.1% arch/arm64/boot/dts/allwinner/
+   0.1% arch/arm64/boot/dts/amlogic/
+   3.1% arch/arm64/boot/dts/apple/
+   0.2% arch/arm64/boot/dts/broadcom/
+   0.2% arch/arm64/boot/dts/exynos/
+  12.1% arch/arm64/boot/dts/freescale/
+   0.3% arch/arm64/boot/dts/google/
+   0.1% arch/arm64/boot/dts/marvell/
+   0.1% arch/arm64/boot/dts/mediatek/
+   1.0% arch/arm64/boot/dts/nuvoton/
+   3.9% arch/arm64/boot/dts/nvidia/
+  41.0% arch/arm64/boot/dts/qcom/
+   5.8% arch/arm64/boot/dts/renesas/
+   5.7% arch/arm64/boot/dts/rockchip/
+   2.5% arch/arm64/boot/dts/st/
+   0.3% arch/arm64/boot/dts/tesla/
+   1.5% arch/arm64/boot/dts/ti/
+   0.1% arch/arm64/configs/
+   0.5% arch/riscv/boot/dts/spacemit/
+   0.2% arch/riscv/boot/dts/starfive/
+   0.2% arch/riscv/boot/dts/thead/
+   0.1% arch/
+   0.9% drivers/firmware/arm_scmi/transports/
+   0.8% drivers/firmware/arm_scmi/
+   0.2% drivers/firmware/qcom/
+   0.1% drivers/firmware/xilinx/
+   0.2% drivers/input/keyboard/
+   0.5% drivers/memory/tegra/
+   0.2% drivers/memory/
+   1.2% drivers/soc/amlogic/
+   0.1% drivers/soc/apple/
+   0.1% drivers/soc/fsl/qe/
+   0.2% drivers/soc/mediatek/
+   0.7% drivers/soc/qcom/
+   0.1% drivers/soc/renesas/
+   0.1% drivers/soc/samsung/
+   0.1% drivers/soc/starfive/socinfo/
+   0.3% drivers/soc/tegra/fuse/
+   0.1% drivers/soc/tegra/
+   0.2% drivers/
+   1.8% include/dt-bindings/clock/
+   0.3% include/dt-bindings/reset/
+   0.2% include/linux/
+   0.1% include/
+ 1235 files changed, 95202 insertions(+), 11056 deletions(-)
+
+       Arnd
+
+[1] https://lore.kernel.org/lkml/2afd5f78-0174-4955-8c1b-be18aea3800b@app.fastmail.com/
