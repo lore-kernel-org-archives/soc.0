@@ -1,54 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=199.89.1.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792766134;
-	b=nguzJzCjI/j8cAN2StisqsxV9zI1zlCIUcXQedoI05DlmsIasrS9cRv70Z9KkrBIY6iZ
-	 9+Lgd13hnjpZHJVLOAB2DQZxyic/znUWoyZmQNUz57/CBcwr4bqMF6LC/52aGf0HdnoP3
-	 cwQ+DFvI+ozNgPPWnH2khFS0kfN5YmHIOxvocYXFv3gyHccMej2/JQhEEumvqe8yGdbHr
-	 R1cDyTNM5+Ex96gHu4jwwE32iHbgkAJgYGjjsuzABosQt2Wrnbd+EqTO+HGCSfuYj/luR
-	 lGAUHNbtZGr3xaCUyEmqDFKy43ty3YJvhQ1U1/W89GKI922/p0BGC0Qp1MK+5GaZgdQ==
+	t=1792769637;
+	b=j9pjp7oFx3WojXedYhXbgFRjZmcpLtg2y7EXOf9liQhal3LtECddxJdfZPy0JYFLw69Z
+	 BzrKY/RKwSCk7me2+i4HJ1Z91oevgpWk0amFCyMhx4tC397LdiY0JQmDVOkFU//8ZG8Or
+	 L8cw/Rg1hNfvn8Z95Tb5ThzDaCqHvMvfU6EAgMzKH2uu82DEUr3kkZw/5H/J1W71wIBcE
+	 3OVnzuTLLzs/XDc3atNHQNoaL+WkbirEudPwu95042wNLT9HPM2odFWJMsrtmv34k0zA9
+	 WEeMzGMTEnneES/PfD5WN3g4X0h4A7404OLvM4QZZh7PDdYtgvHDUcwrwQbYmRaazPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792766134;
-	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
-	 MIME-Version:Content-Type:Content-Disposition;
-	bh=1QoN6cdYjd7lccIt+f66hMTmtEPYBbKaaVE8fnfLrr0=;
-	b=wU3F5XOruzLCnC1608QSUWNwATrOWx967HNLdBIsR36T/3V0d16ED0155camqcUJlm7K
-	 Ek8CHBYM+p2gZzlG7I7XfURfK73HcVFhWxrH15QxDWexjDU5V7Ov1TXAAAi1eONv8Umdm
-	 v5Htc4tY94PG3raHnyT6nMUmpwyOolj2584Xq0ViFetiRNf5pax8HZ1xtqCwsNKFDveyb
-	 L33XqAGwbhgqQkuzB+oOg4LguccQmJiBCsb1+LqFCaRYD35kCuU6K0XgpJVHIU9Zb78fK
-	 ssqnfsOvi2DQJxgUthwFk6kr6BT2d4cqhKojWI4ovkIGfpXL+3OoyjqJz2a/wSV28NA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792769637;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Virus-Scanned:Received:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=7Wb1v2r/qYRtiPl0jIe1hNPHXwCTAadI+O91fZCXmrY=;
+	b=Jn15oz7rLsTzbDfS7096jbugDoHBAKahbGHaCeHCCzv0GoAB+kVAtd2qb/sz0DKO35RK
+	 /on5Q//CY/X7mOHT7GdY8hKKzytCyDUPvRLYJdPOv38NMRzexd3dm0bdt4lOUz6ffaiaY
+	 igto4mOh2Nzesvfd425DXUhD9MTsM+jC2DJeBucl2d2IjZf1ZQXkKfLnxDFXGsMYtkYTk
+	 VBgmJUlcD6MNhIJ5N7IDUX/pJoRUiSpMUPT0IMJ6t+dC/HN8xfiF3sFd+nHUkty2So0vS
+	 BP2JZTCBbaWomQRiMjO54V+rZahKJV1nhimrLHXQ7pyOCMEnq7XtgF7F61aT3Ykm3VA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CR96nJz8;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=acm.org;
+	spf=pass smtp.mailfrom=acm.org;
+	dkim=pass header.d=acm.org header.i=@acm.org header.a=rsa-sha256 header.s=mr01 header.b=rCMuRByi;
+	arc=none smtp.remote-ip=199.89.1.16
+Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03146606A31A;
-	Fri, 23 Oct 2026 14:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E92C606A31A;
+	Fri, 23 Oct 2026 15:33:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E92C606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CR96nJz8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 761E21F01825;
-	Fri, 23 Oct 2026 14:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792766133;
-	bh=1QoN6cdYjd7lccIt+f66hMTmtEPYBbKaaVE8fnfLrr0=;
-	h=Date:From:To:Cc:Subject;
-	b=CR96nJz8Ew3Av5ozmSqGwVxXtRZFk1iQI1GxgjmvketBo7CwFraT3cpr+CTKGc5Fv
-	 snZHDFHP0XXphWI3sx0WDM+zvVmJUuN0fOfg3l4xHuev4S22EHOjxBcyng5OvY4pHl
-	 tz1Q2vt+zghzFISjHXJQ2gXigCKDFt54HGPS40td6x1pPFJouLcEZnrxwKCC9IM6+l
-	 /nWJunz0AWqEf2mVayqle1JIFsEPpzFST6eWkmcLoYBhBX5p5ZLetg8LAAHwKsFHS+
-	 CZx6AJ/4Lj9WNqlaudaqHN1IuMBYuK+ULPvs+cZJQbWEZQp5ChfV2fohuwJFi2+54W
-	 609VsjyYUAmIg==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id E37261AC5994; Fri, 23 Oct 2026 15:35:30 +0100 (BST)
-Date: Fri, 23 Oct 2026 15:35:30 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, soc@lists.linux.dev
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the arm-soc tree with the origin tree
-Message-ID: <attwspRf09lDVPrZ@sirena.co.uk>
+	dkim=pass (2048-bit key, unprotected) header.d=acm.org header.i=@acm.org header.a=rsa-sha256 header.s=mr01 header.b=rCMuRByi
+Received: from localhost (localhost [127.0.0.1])
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4jB6W76QDmzlfvq1;
+	Fri, 23 Oct 2026 15:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1792769630; x=1795361631; bh=7Wb1v2r/qYRtiPl0jIe1hNPH
+	XwCTAadI+O91fZCXmrY=; b=rCMuRByiWmhZFjeZ5qLIAzfq617H+WMca34naCk3
+	+sjbZEgrMBWR+Rg+mW77Y00vOUwDFZ3llPkSwwu3j7QMahdVgK8PsPIA7qiToMLf
+	k+cyGtIzD49k1z3b/4X5J+ZB1t9Om2nf3PessiURNiiEmrpIbFEGJRGjMfDWAQyq
+	o4hfO4UV9XnA5aQYtlZwCBpO64jNHpP92IBp5+b8KSdUVnuQdmlMoX/wdTFzD/qL
+	+jckkjiweaK9ssfqz6B7WWwoROpJ8Myx6YEnrsnqxLltQRl4rxdFPdTQz/ajAtAD
+	5kHwdsIKjyHgm5Tz6FmyV0GwCQ0vaj3YB2M13viGoDLbEQ==
+X-Virus-Scanned: by MailRoute
+Received: from 013.lax.mailroute.net ([127.0.0.1])
+ by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id qHTd1dz6LMfl; Fri, 23 Oct 2026 15:33:50 +0000 (UTC)
+Received: from [192.168.51.14] (c-24-6-239-25.hsd1.ca.comcast.net [24.6.239.25])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4jB6W13c5Czlfvps;
+	Fri, 23 Oct 2026 15:33:49 +0000 (UTC)
+Message-ID: <9aa270db-bfc6-4a33-a7f1-225782e9226e@acm.org>
+Date: Fri, 23 Oct 2026 08:33:48 -0700
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -58,79 +70,38 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zOAHGtiWWHZFc3B5"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 12/13] include: Replace __ASSEMBLY__ with __ASSEMBLER__
+ in non-uapi headers
+To: Thomas Huth <thuth@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Russell King <linux@armlinux.org.uk>, Chris Li <sparse@chrisli.org>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-sparse@vger.kernel.org, llvm@lists.linux.dev
+References: <20261023064908.66707-1-thuth@redhat.com>
+ <20261023064908.66707-13-thuth@redhat.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20261023064908.66707-13-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 10/22/26 11:48 PM, Thomas Huth wrote:
+> While the GCC and Clang compilers already define __ASSEMBLER__
+> automatically when compiling assembly code, __ASSEMBLY__ is a
+> macro that only gets defined by the Makefiles in the kernel.
+> This can be very confusing when switching between userspace
+> and kernelspace coding, or when dealing with uapi headers that
+> rather should use __ASSEMBLER__ instead. So let's standardize now
+> on the __ASSEMBLER__ macro that is provided by the compilers.
+> 
+> This is a completely mechanical patch (done with a simple "sed -i"
+> statement).
 
---zOAHGtiWWHZFc3B5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For future patch submissions, please include the command that has been
+used to modify the code in the patch description. Anyway:
 
-Hi all,
-
-Today's linux-next merge of the arm-soc tree got conflicts in:
-
-  drivers/soc/Kconfig
-  drivers/soc/Makefile
-
-between commit:
-
-  2e51c645fee24 ("Merge tag 'soc-drivers-7.4' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/soc/soc")
-
-=66rom the origin tree and commit:
-
-  3cd9904284fba ("Merge branch 'soc/drivers' into for-next")
-
-=66rom the arm-soc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --combined drivers/soc/Kconfig
-index 483cbdcae1534,be933b2d9c32a..0000000000000
---- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@@ -24,8 -24,8 +24,8 @@@ source "drivers/soc/renesas/Kconfig
-  source "drivers/soc/rockchip/Kconfig"
-  source "drivers/soc/samsung/Kconfig"
-  source "drivers/soc/sophgo/Kconfig"
- -source "drivers/soc/starfive/Kconfig"
-  source "drivers/soc/st/Kconfig"
- +source "drivers/soc/starfive/Kconfig"
-  source "drivers/soc/sunxi/Kconfig"
-  source "drivers/soc/tegra/Kconfig"
-  source "drivers/soc/ti/Kconfig"
-diff --combined drivers/soc/Makefile
-index 5a3efd68355cd,5bedcf8d513c4..0000000000000
---- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@@ -30,8 -30,8 +30,8 @@@ obj-y				+=3D renesas
-  obj-y				+=3D rockchip/
-  obj-$(CONFIG_SOC_SAMSUNG)	+=3D samsung/
-  obj-y				+=3D sophgo/
- -obj-y				+=3D starfive/
-  obj-y				+=3D st/
- +obj-y				+=3D starfive/
-  obj-y				+=3D sunxi/
-  obj-$(CONFIG_ARCH_TEGRA)	+=3D tegra/
-  obj-y				+=3D ti/
-
---zOAHGtiWWHZFc3B5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQReagvpf3TrrA7BoYYv73Ows9A4iQUCattwsgAKCRAv73Ows9A4
-iafkAP9WiJ9Y7PYhzxpNazQz45hZzMoChDJTV1f53lCJHYJUOAEA0DmsqpgJG+mN
-YShMCQOwe75/P4grI5mDFdA3kEVmqwE=
-=VNnH
------END PGP SIGNATURE-----
-
---zOAHGtiWWHZFc3B5--
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
