@@ -1,74 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792738181;
-	b=4BYs8LcGf/iqP4N9ETvMkvPJCQ434sVO+CTYDI27MtIZTnGY/EkTJYbhHHFtfG/W5eXI
-	 Pj61UkmQygeCdKjI0YrJRwXHKcup8n/d8P1jP5PBIWN62DuTqjtRRrZ8j06XoNBYaYNNk
-	 V/fTJgx6DcFyYPFvKZBN8D4q2KxykKLPJCruDt2OpIvm2/EHBn/+B3XIUt9Gt5zFTy5CX
-	 4AN9eRX+ScP3f6wor+2EE+cG+gb7Wicsqz7zTkZiUIZZSRFMa1Wo9fkwfXfqziYg9iD15
-	 FBCCyW+n764jzaF7nFCYz0NzF0Ab3l8UlUy+JMVWthy4pa3wQttdFJAxPI4PYe/wXxQ==
+	t=1792738182;
+	b=VQiINLFOR6JzKLblJ9aL+y/nDAoESpPYHZgHrtIdoR5bSvRiNTR87ImnPBmEGdXHHDH1
+	 Z/vx0SAm0Fk4mWLU1a5gamY0temmN92YqG6YIElLc2eYWj1GBByzGdHLHSzDz7tFG5Ml3
+	 pqih2kzSNpxn6/dNu5Q9kvRqh7TJvHDOCHjYPOlghZxLQ9LNRfhSFsPEvgQ20LmrfcK9/
+	 AT95/FLo4nsXVfVU9Ji6uMv+38gBcgjKQg4id0eTf7HqlOf6wKcL55iy2fsLtgySjQ6Gb
+	 8M+a0LXAhCKI//gy8gLJGM10nPIIJoAoiOp18VCQH8lwYbIW20swikb/0cEfSvS/9eg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792738181;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792738182;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:X-Scanned-By:
 	 X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:
 	 Content-Transfer-Encoding:content-type;
-	bh=d0gKi9bpiz5OB7/rDKl6lal/fHmcINerAfxrtrB7vus=;
-	b=C72MDI7wnux0WMyoT0yR7w74rRka4iTxwBtLBDkOZLLsQW9yaumaH7bcbJJcwyiVIZqA
-	 ZFzzX3dXjUh1HzxW52GvqK8SNy6QSiN+Eo9RYmeH6YKKiK8lzOm1xySODruqpV/OfssH7
-	 eBF7WhLiDrWnnrZ89yapXIiGWXG257ONtKPN032gxQ6aBpfux6baDI+UUhVaQfh0IW25x
-	 QwgUKrGxvnhoPhZE46zODaH8ymPCTRr1RKD6xHnsCUjYm+Ze+J+/XX3TMRlwymiadjZCE
-	 ZcFl4WvYpNUf0kAOiw7HVToHIopRKk9M/+Jbqz0riJApQeEN+Iy1Y9vrP9XQswDf8sA==
+	bh=NTq5B2Hm0FOnw+vWb0Xc3ff/4P/VqEFyOk2WyaUnR5I=;
+	b=5Til0/6656OUK9d4y6IGjhlX5K5waOO2q1d6sqULVs4u8XOi2Kg5lyL+HIJNqqRRk0uj
+	 1xp3UmCMaUspWM9vImctZkWad9VvMHsgz3QpmNUjTCwtQCuq+jIwFMKJvUtC2gpd4o1fU
+	 2kpvA0uDGnuZtSZZvxjROeWfpWNDv4MR3trV4z8GZOo9wmmUykHC8X3i+luG6OE/YrWSq
+	 hB78Lov7jtUcXlBXmzqA3p+igR+T+BBedMobKfOO8HXDfIosdDUeGr1nSzPhOPy9JaE3w
+	 D+z5lmp2vzgZBZ1wKi+0yRT9VrvLsrmWVxcCDK3Xfmf3ShXQ4CUlU0u5srDb/9UVWiQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=FXncCubC;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b="YJSaAL/l";
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBC7606A31E
-	for <soc@lists.linux.dev>; Fri, 23 Oct 2026 06:49:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFBC7606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7F1606A322
+	for <soc@lists.linux.dev>; Fri, 23 Oct 2026 06:49:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F7F1606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=FXncCubC
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YJSaAL/l
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792738179;
+	s=mimecast20190719; t=1792738180;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=d0gKi9bpiz5OB7/rDKl6lal/fHmcINerAfxrtrB7vus=;
-	b=FXncCubCCTG3aJe/f4AJ3ttamznrhElwQgrcXKC6K1ld3eC+TYBwzyVQ89vwEly1IM45py
-	/2FJmUey5tyBIYUmxcWq+DWLQbTsYzZPLzPSIJ73yHDM3pFOZwUQAOvE2e1RtJ/MpBv4eP
-	mXZ6ZoeV25kAEQ9FEqaeH1Oi8SjmLlc=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=NTq5B2Hm0FOnw+vWb0Xc3ff/4P/VqEFyOk2WyaUnR5I=;
+	b=YJSaAL/lzAFeXn/D2SD+31SrXN2JOuGFY9r2uH7wFhY64TK8pCC9+KBs1TUWzzMBz31QXc
+	0tTohRcOrEnjNtaQTHBPrxnsUYWw2FbniluYNWIndvbi1n1tH5R+sv+YwHnmHoGZ7uRv9L
+	qkiAgcaUSZ8RXrhu/G5Y6zInyef6wMI=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-25-Qpiri9SrMVaNcnWCda3mbg-1; Fri,
- 23 Oct 2026 02:49:35 -0400
-X-MC-Unique: Qpiri9SrMVaNcnWCda3mbg-1
-X-Mimecast-MFC-AGG-ID: Qpiri9SrMVaNcnWCda3mbg_1792738173
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-462-Tk87mULwMgur0MjOnfTSaw-1; Fri,
+ 23 Oct 2026 02:49:33 -0400
+X-MC-Unique: Tk87mULwMgur0MjOnfTSaw-1
+X-Mimecast-MFC-AGG-ID: Tk87mULwMgur0MjOnfTSaw_1792738160
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6087C18005BC;
-	Fri, 23 Oct 2026 06:49:32 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1A65F1955F05;
+	Fri, 23 Oct 2026 06:49:20 +0000 (UTC)
 Received: from thuth-p1g4.redhat.com (unknown [10.44.48.42])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 00B081956095;
-	Fri, 23 Oct 2026 06:49:26 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0B2AD19540C2;
+	Fri, 23 Oct 2026 06:49:15 +0000 (UTC)
 From: Thomas Huth <thuth@redhat.com>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nicolas Schier <nsc@kernel.org>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@kernel.org>
 Cc: soc@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kbuild@vger.kernel.org,
@@ -76,11 +74,11 @@ Cc: soc@lists.linux.dev,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v5 03/13] ARM: PXA: Replace __ASSEMBLY__ with __ASSEMBLER__
-Date: Fri, 23 Oct 2026 08:48:40 +0200
-Message-ID: <20261023064908.66707-4-thuth@redhat.com>
+Subject: [PATCH v5 01/13] of: fdt: Replace __ASSEMBLY__ with __ASSEMBLER__ in of_fdt.h header file
+Date: Fri, 23 Oct 2026 08:48:38 +0200
+Message-ID: <20261023064908.66707-2-thuth@redhat.com>
 In-Reply-To: <20261023064908.66707-1-thuth@redhat.com>
 References: <20261023064908.66707-1-thuth@redhat.com>
 X-Mailing-List: soc@lists.linux.dev
@@ -93,51 +91,44 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-MFC-PROC-ID: UhMLeCOLmN1EiaIfXDG8W6he83meYv4dUGtlCuQ_Yk0_1792738173
+X-Mimecast-MFC-PROC-ID: nmOXyONgEZebRNw_f4RgzLnfEyC3URK3bHVylWoTkrs_1792738160
 X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
 content-type: text/plain; charset="US-ASCII"; x-default=true
 
-While the GCC and Clang compilers already define __ASSEMBLER__ auto-
-matically when compiling assembly code, __ASSEMBLY__ is a macro that
-only gets defined by the Makefiles in the kernel. This can be very
-confusing when switching between userspace and kernelspace coding, or
-when dealing with uapi headers that rather should use __ASSEMBLER__
-instead. Let's standardize now on the __ASSEMBLER__ macro to avoid
-this confusion.
+While the GCC and Clang compilers already define __ASSEMBLER__
+automatically when compiling assembly code, __ASSEMBLY__ is a
+macro that only gets defined by the Makefiles in the kernel.
+This can be very confusing when switching between userspace
+and kernelspace coding, or when dealing with uapi headers that
+rather should use __ASSEMBLER__ instead. So let's standardize now
+on the __ASSEMBLER__ macro that is provided by the compilers.
 
 Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
- arch/arm/mach-pxa/irqs.h     | 2 +-
- arch/arm/mach-pxa/pxa-regs.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ include/linux/of_fdt.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mach-pxa/irqs.h b/arch/arm/mach-pxa/irqs.h
-index 22bf536a462d0..07d7aa3a65065 100644
---- a/arch/arm/mach-pxa/irqs.h
-+++ b/arch/arm/mach-pxa/irqs.h
-@@ -94,7 +94,7 @@
- 
- #define PXA_NR_IRQS		(IRQ_BOARD_START)
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- struct irq_data;
- struct pt_regs;
- 
-diff --git a/arch/arm/mach-pxa/pxa-regs.h b/arch/arm/mach-pxa/pxa-regs.h
-index ba5120c06b8a5..b56c8899042c4 100644
---- a/arch/arm/mach-pxa/pxa-regs.h
-+++ b/arch/arm/mach-pxa/pxa-regs.h
-@@ -31,7 +31,7 @@
- #define io_v2p(x) (0x3c000000 + ((x) & 0x01ffffff) + (((x) & 0x0e000000) << 1))
- #define io_p2v(x) IOMEM(0xf2000000 + ((x) & 0x01ffffff) + (((x) & 0x1c000000) >> 1))
+diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
+index 51dadbaa3d63a..72b452e388eeb 100644
+--- a/include/linux/of_fdt.h
++++ b/include/linux/of_fdt.h
+@@ -16,7 +16,7 @@
+ /* Definitions used by the flattened device tree */
+ #define OF_DT_HEADER		0xd00dfeed	/* marker */
  
 -#ifndef __ASSEMBLY__
 +#ifndef __ASSEMBLER__
- # define __REG(x)	(*((volatile u32 __iomem *)io_p2v(x)))
  
- /* With indexed regs we don't want to feed the index through io_p2v()
+ #if defined(CONFIG_OF_FLATTREE)
+ 
+@@ -103,5 +103,5 @@ static inline void unflatten_device_tree(void) {}
+ static inline void unflatten_and_copy_device_tree(void) {}
+ #endif /* CONFIG_OF_EARLY_FLATTREE */
+ 
+-#endif /* __ASSEMBLY__ */
++#endif /* __ASSEMBLER__ */
+ #endif /* _LINUX_OF_FDT_H */
 -- 
 2.56.0
 
