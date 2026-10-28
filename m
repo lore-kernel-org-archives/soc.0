@@ -1,101 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792809480;
-	b=kX1BwXQE1ruT6z0QLk3sAhx4x5R85u+ovv0V1w+T+CnLiJ0PK/0IYdvtlsRqnCme7JGX
-	 5lzuKXhfF1RKhQxYzGXgSv6ciYvl9frTB6vrf2fYYEmja+KORWynX2z0cwg6Gy+wopzYF
-	 LGI7+0VJ7FDrXmcGrLsORHCR3CPYgH5RS40qz8ta52vi80f4/B8O89nGS4Ihkw3Y8drXt
-	 cdaGJ/A6ngM1bOVdq/8q0yZkMzMx+6CxbTOLb0O2CkUUvx7MZCLDW5KogeJh4Lt+30Ex4
-	 Yb6lTcO8nVsiE8KF4ulF4HibyDa8ZL/VOV+cIFuIPw4hg3qL/MaBjDef3bNsH70cF7Q==
+	t=1793183932;
+	b=b/VxihkVXvX7PlOFbJXyfa1Hgf3Jdh5dRWDy8ra5hJiVQUkPYEzgonN/e3nU3g5jBJ1c
+	 Jk9e2YlM9W1hWG/ofiLoazO4OfdW/A3T4qO8cbWCU0TIatbW3QbPTgTuMUqJ70aKjlMKy
+	 X/dckwoYpLFqZkSS/RECzFFRDI4kxYqwu0GNDtBsScufnL9pMEzdxX0rHZvDDvBjAIYVZ
+	 Od6K33V9/55iqTkswgsf6Tlnd7QT+rhuaf4oIDyrapD0mZ28sPDORTkLoqYT17ROmfsnW
+	 cj+QpgRgvWaSeTMzosMDk4rbPjW13K/s73WwLB2ArzQSpPkBpMlYNfF/ENJxUsjDmgw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792809480;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=4aeP3BkhskeN4vpePbdVXng4dknkyS1fsNJYB/+44kg=;
-	b=ZITuOtlpx+XsffgQRA2LQk1fUUf3GTQly1wIL0HW97Gcd2G8WiLpoPdbQ7lGXwGCAxHF
-	 9UHpnhmWnqOucH1rDkm+fg23+8FMePvGS9zE4IvcZV+RVFaogsURnrjOXNKEO7cTmoZfM
-	 ekvCVxxOlu/+COIU03zQWy5WbaZGDrDT5QawqnFMixfr5CxUGLD7R+mwGyiS35xuemhlU
-	 JjMSTtubhILJzwz1AheqVVSJrCO7p+DrDqsbodnPyHmmRpRM/7NGvsCHP+xiCDbWcYkFV
-	 CL7YCU9OWi4dm8eyfPGxXQWRzaeqPcVfDclWyQbyAZlERvvsj6nKQ8PZAj1bi5xdyBA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793183932;
+	h=Received:Delivered-To:Received:DKIM-Signature:Received:From:Subject:
+	 Date:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
+	 X-Developer-Key:X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=5o/pZvqhbTecT88RxUKMYDf2DRxUNlJZBmhZdxERoUA=;
+	b=i795AVDqfVGYQQWEkMUUykY6XlNLbfkT6EBP2Zex3xbnCLZmH6iVgKpkjsSQwYk8d6E7
+	 jnyhiVfV0SkY53cUKkRjMevOSqV5tTYVaSuB64eDHZmW2ftYYu8u2GHWKzftN3nVZxDHb
+	 EtXHhRxW7SS4KakrrLm3PGNZ/YjaHs3VoryLNIW9DuE1pKlrE8Q30AkPDTVoFux5zfasO
+	 qAhZS9aD+IPsPwOvLhmcjL5eUJ8bLb5BBh6pOlp0uo2ZhgMWeBw5PwFm/orShH+6A7jzl
+	 S5HMiLz0clnhBtw4EkhtPTI26b4dGo0G0zyBUijfn0Vwzy4ytb2VOqlW/JV5oL1VcYg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=W+fPEw9I;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.50
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UZXCsKsa;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E069606A325
+	for <soc@lists.linux.dev>; Wed, 28 Oct 2026 10:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UZXCsKsa
+Received: by smtp.kernel.org (Postfix)
+	id ACEEA1F031EE; Wed, 28 Oct 2026 10:38:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793183931;
+	b=zKzaIYGViITyXea3b72S/1APMs+HvOy/hC8C0wwKk2840p3paK+L6Xpyuj8ITTfV92IG
+	 1WWy5ZjxDxXYf3VQ1Yngc1DwDZHBvONf8wEEMCcKQ6qs4Y2N94C/Jcyijyfh8YF5AFZpC
+	 7BDxAQmos32ukEbaFR1qGQKOtYp+5T6EZsPeA1c15HUpK2IBPdcs59dBO1kTlaQnrPxNU
+	 kJY25RuGXubO5MdXUAYO53J5V1uv2iV/awtrOO4F/g95/StnwzWO8DV8WY+JSl4fBKYX9
+	 MXrXfkJbbpxAPTFxHe6cldiAUn4mJxbroZDQrSama1mJ8lNlQu98uM2HLi8pHcXTBYQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793183931;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=5o/pZvqhbTecT88RxUKMYDf2DRxUNlJZBmhZdxERoUA=;
+	b=0gBGjJ18fgywABLfD5NZ2LA8xZJEOEbcp55xNBJbSy086oatxRwsIObkuqFDSmUeUQTi
+	 8coya796fFkKGmJ2f5n9q6HJqEScUnYWmlH3mzJh/bY3xQRDJcO6DLM61DsqN+RutkDuD
+	 SZQrP/pEft2QKPhQsSUj8d3oPKxBbEOM7ZpAigq+X3m7txAFUSerQBvHUC+uL9U0wRjPr
+	 l6/HKFBCw45Ra8YT0pWxaD59mjWNww7L98kQ2IcOK13utSm5Dz5ujHsVebjbYLVcVMyYP
+	 6ttSFZcKIGFQc4Pd7BbTMGT50xmv75YZXoKi1RERrOqkaWC/tWd9hP//QtH8XOM3ZHA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F8F606A31A
-	for <soc@lists.linux.dev>; Sat, 24 Oct 2026 02:37:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2F8F606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=W+fPEw9I
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c3f8d72d7ceso219208866b.3
-        for <soc@lists.linux.dev>; Fri, 23 Oct 2026 19:37:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792809478; cv=none;
-        d=google.com; s=arc-20260327;
-        b=de9Ab0QvTU0LoMhkTEltRwmUifsdygzAcl9GU5VHfodlG4UFokWQjOsSFDFJDuDZmD
-         leL+FeVsNfthaqhHQMui8ijtw4H7/DztLSksEsWxB3ijtyUkZo6uEE5QYJPUEwX+9gPE
-         /fQk2fPQcDXZQ/yRwYLGex/EedGQUqI3+sEg/BspXcbG+41du1vcmKr4b0umCdU83LHk
-         +9GVUvY9Su5B3C//q7b795aR0jT256GDBpGZottZQiUfoA6orTkXbxHhhgm1jLTUU+Jn
-         NTUyz3bdvy60YCG2bRag1xxLG48stl9uJjj14gPreK9bhCldb6w0d2tXCsXcplc24KPd
-         dpqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4aeP3BkhskeN4vpePbdVXng4dknkyS1fsNJYB/+44kg=;
-        fh=Yh881X94Efawx3Knfw/wIAEYmR6HlrGUQmNmvjgiu/k=;
-        b=FQazG9EF3qlVrTy8eOP7qye9gHs23lbQc8mF2HYbopSmQV5oGF0puiBKSrH1l8ZGmR
-         gaZV9xPTKNYaIZzP8j/GJ7WSuyh5BYt6ICGnpA+6prlFUK5bRGbddF08Ww4QPDPPhOLv
-         KeN0ZO7+ekE+GUS43+b8K7MIXJfv9wVSG1bY/+IPqCWon8NnOgDk4uF+vq/o/xyPrqZg
-         KgelLVB02KlXVLYW3y3llqc0Go8++jiXcxV/juKRh1B+4jM4Ec5OjBAVd/KIhNtdyds/
-         I8AtySznQwAyuF5x0lwZwX7QtoO/3iVu8OXmlmkICWhP2lWqchpHd2z9dzMd92QBKwhy
-         +vNA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792809478; x=1793414278; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=4aeP3BkhskeN4vpePbdVXng4dknkyS1fsNJYB/+44kg=;
-        b=W+fPEw9I/4sLTiS9Yqf5hcix34ycinSD0ARrJEOVOHyjhdjbhpKvX1aVsuD2VK5pqU
-         xPIJuPRaYAkzNWG0z4wJ2+Vpwm9Pja3BD02k2m0Bs5wnGtuA6uH/JY8r5o7wDsHotcaZ
-         cGDiS0pZ5xFVdJc4ykMdO9TAdTqWZTIxlSyvcJakNssCnPpyE2lHwrDzGOkVVZNiW0qd
-         um2KNNJV5Zy8hUrAl3T1RCSB69tfVcxfBoZtfDoTMaDft4MydCPEiv9wjMquzK/Mka3d
-         MU2IhPlTsgSJAlXbBrOjlqARooLfPXgVdv+7v8xwJCBoiw2Pfihn7w7MpkSyQX7g/5x4
-         B1hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792809478; x=1793414278;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4aeP3BkhskeN4vpePbdVXng4dknkyS1fsNJYB/+44kg=;
-        b=hP2WNagoO1BkQ7VPh1/3PVfdmV/9MWBEnHS8c3M/DkpbTwnkzcL8cGk6g8JZSTNI6R
-         itbmFT/8r/+EURUWkXNEWt0FZIMTPrWpzrX/DCVIt28ikfFT3qSvjSTKde94wRkFZ6mm
-         0Whhg1cp2lYNo6Q0eIME3seeHhCqPdVztY1q+JV9yggAvIoqAngjQ5boex64apIH/nWR
-         wwvTlTm+tGZLojRCoRVJ/i6lkVchmxphomwaq5Wm3U9yDbAatjg48tBp/dVCl7MTmdu0
-         NuMHMCuiYbdiM+PQzfWFhx4agy1w8sm0Qi9Oo9dY2fymqtOFI7Y1DuEm3GyPrlHHJvr4
-         rcHg==
-X-Forwarded-Encrypted: i=1; AKwUvBxCmksBI3ZumTCj4oU+v0Qsfas7oZ9slissoXKpGOytEs8iCSWmj+WhCq/LpbBH0DnZ//Q=@lists.linux.dev
-X-Gm-Message-State: AFq9FYKHgBXSLgcpH0NdFIXdHQ36aiwRJ6gzDxbFJw928lTquCHz5p9P
-	+KZhCPCsKm2GoeTw13MKKudVVSP9WvapUtd6U4l7FOK1u+Cqn96HmYuQBxG4u1ff0NB21UouKOg
-	8FEeIy93ww0rEFN+fiwuM5Z8Vf6wT4Q==
-X-Gm-Gg: AYBFou146vQLAvvBwmowXdMJv51C+bmsIoW1tpjk+IysHVYodQAFmPazMPS6iiOQ/bX
-	hg0gn7RnwjP/lZV2Nu6Iy6QgJbXHasvjcxpximPGLGsUfkQ2qNpPcsLi7vT/fqmQiFB9Uw9e7Nr
-	O3EOmgwwwL4poesZDrDfxpfEXfiCDSb1fElQJY60NdgpXFIMNKw1aN2gnvovfWT2yEW4sZv38Bi
-	NaohwLsUdTuS6QMIbfNDoa5HFkKt23phWvodIlkGdh4Z5UaPrilTGG1rCiDlCsD6ULg6+5KShFQ
-	VrszAu1UwwMfKxUWCg9pfGMX4epS0+BYAeydxy2bD72Rq1yrB7/oz4Yhyphsdb2pGLwZDNBvf9Q
-	PtXVBtfNTJX3wA5UsI80I83aWuvYTWb9fiFz6ZiH/ldP875RocybGl+9eTz8XSXB5ME7Zcgl1fp
-	0r1HY7PqFlERSYLuJ57xhjw5k9AFaFsdn2L+sDbbTfgnQiEVlZqg==
-X-Received: by 2002:a17:906:9fd0:b0:c2a:b1cc:158d with SMTP id
- a640c23a62f3a-c46bde97dbbmr85486066b.32.1792809478280; Fri, 23 Oct 2026
- 19:37:58 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0CBDD1F031EA;
+	Wed, 28 Oct 2026 10:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793183931;
+	bh=5o/pZvqhbTecT88RxUKMYDf2DRxUNlJZBmhZdxERoUA=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=UZXCsKsaL/y4ohnuI04PKTlXgXG9IK+Z/AMJG8cPqPjQsX0lWBK5Zy/c5yygirCvb
+	 VPd6nI2GrerNRJmkliT7lu97DZCQrnxUl6gEcaSQ8F1A/73xtwug7Nu4YobzrsB4VF
+	 4qS9KCJko3LYfbErxhI2EjXPx6EusAyVQ/T8oKSQf6V3dqBCcY1xmtqdtk6zhNo2JA
+	 hXSBhT6Op67Egp2y9CaqCjzyV13hRW/67Gv5mQN5azteJz98Jbdkpnj8E1aGJbTX6Y
+	 T4C44GtcvGafXaCnqi1BNZ5B/jVcUGSmosomVx1B1x4yUeRWSzg+b3Vsnov+59Wf1f
+	 Dj3JgABs0deZg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 5CF61453F3;
+	Wed, 28 Oct 2026 10:38:50 +0000 (UTC)
+From: Roman Vivchar via B4 Relay <devnull+rva333.protonmail.com@kernel.org>
+Subject: [PATCH v4 0/3] soc: mediatek: pwrap: mt6572 support + log level
+ fixes
+Date: Wed, 28 Oct 2026 12:37:49 +0200
+Message-Id: <20261028-6572-pwrap-v4-0-1780c58d2097@protonmail.com>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -105,131 +86,86 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261016013918.3492835-1-mhun512@gmail.com> <atXYWrNAI5pmyMHD@solitude>
-In-Reply-To: <atXYWrNAI5pmyMHD@solitude>
-From: Myeonghun Pak <mhun512@gmail.com>
-Date: Fri, 23 Oct 2026 22:37:46 -0400
-X-Gm-Features: AclHuK8ISi6y0PGRQ1melezhjTDPOEdeAo6Lz8Ja0WFr0Na_5A0mSRW3u1OesuA
-Message-ID: <CAGEsz8F1x+nDPe4tAuQENFWfqRCwkSKif_Jn1w3iaqmYJEu8vQ@mail.gmail.com>
-Subject: Re: [PATCH] platform: cznic: turris-omnia-mcu: stop button emulation producers
-To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
-Cc: linux-kernel@vger.kernel.org, soc@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, Ijae Kim <ae878000@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23NTQ6CMBCG4auQrq2hPxRw5T2Mi1KmUqOUtFg1h
+ LtbMEaILr9knncG5MEZ8GiXDMhBMN7YNg6+SZBqZHsCbOq4EU2pSHNCschyiru7kx3mqiSZYEr
+ XlKEIOgfaPObY4fje/ladQfVTYbpojO+te87fApnuPmG+DAeCU1wXkElWKp2D3nfO9ra9SnPZK
+ ntFUz3Qpc9WnkZfgSR1kRJVkOqvZ19f0vV/Fr3guSgrwbmQ6seP4/gCiA/uhDsBAAA=
+X-Change-ID: 20260712-6572-pwrap-4c91563cfd23
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Flora Fu <flora.fu@mediatek.com>, Alexandre Mergnat <amergnat@baylibre.com>, 
+ soc@kernel.org
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ Roman Vivchar <rva333@protonmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793183929; l=1859;
+ i=rva333@protonmail.com; s=20260510; h=from:subject:message-id;
+ bh=rJSpPVEVPd0aF8LzZm8VDw4PaJi/3ZvOaWXpH7hlhls=;
+ b=2v0NrIKTGEwX1A5XYHkOaJuwQKzzo2fV2ckeeI/DM5UdabuqfcoyLQJlDC0Ln0egcudaPuE8I
+ vFTkIO6uwbxDfZGyHXcNxRykDseZXINxapSKlk8azImrEvgRDCa133R
+X-Developer-Key: i=rva333@protonmail.com; a=ed25519;
+ pk=zww/nWjBGoQ4POXCG0BV6fx2iuXK6jx77rsKPA5YK5Y=
+X-Endpoint-Received: by B4 Relay for rva333@protonmail.com/20260510 with
+ auth_id=777
+X-Original-From: Roman Vivchar <rva333@protonmail.com>
+Reply-To: rva333@protonmail.com
 
-Thanks for the Ack.
+This patch series adds support for the mt6572 pwrap.
 
-Agreed that an autodisable helper would be useful. I=E2=80=99ll look into a
-separate follow-up, including the impact on existing callers.
+All known mt6572 devices use mt6323 PMIC, which is already supported
+by the upstream drivers. mt6572 also shares SoC-specific init with
+mt2701.
 
-2026=EB=85=84 10=EC=9B=94 19=EC=9D=BC (=EC=9B=94) =EC=98=A4=EC=A0=84 5:48, =
-Marek Beh=C3=BAn <kabel@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Acked-by: Marek Beh=C3=BAn <kabel@kernel.org>
->
-> This makes sense.
->
-> But I wonder whether the devm_delayed_work_drop() from devm-helpers.h
-> should not be changed to use disable_delayed_work_sync() instead of
-> cancel_delayed_work_sync().
->
-> In this case the initialization function in devm-helpers should be called
-> devm_delayed_work_autodisable() instead of devm_delayed_work_autocancel()=
-,
-> though.
->
-> On Thu, Oct 15, 2026 at 09:39:18PM -0400, Myeonghun Pak wrote:
-> > The legacy MCU IRQ thread can requeue button-release emulation work
-> > after its managed cleanup has canceled it. Since the IRQ is still activ=
-e
-> > at that point, the newly queued work can outlive device teardown and
-> > access freed MCU state.
-> >
-> > Use disable_delayed_work_sync() to prevent further queueing and drain
-> > the worker before the IRQ action is released. Keep the parent IRQ activ=
-e
-> > while the worker completes. devm_add_action_or_reset() also drains the
-> > work if action registration fails.
-> >
-> > This issue was identified as part of our ongoing research while
-> > reviewing kernel code.
-> >
-> > Fixes: dfa556e45ae9 ("platform: cznic: turris-omnia-mcu: Add support fo=
-r MCU connected GPIOs")
-> > Assisted-by: LLM
-> > Co-developed-by: Ijae Kim <ae878000@gmail.com>
-> > Signed-off-by: Ijae Kim <ae878000@gmail.com>
-> > Signed-off-by: Myeonghun Pak <mhun512@gmail.com>
-> > ---
-> >  .../platform/cznic/turris-omnia-mcu-gpio.c    | 31 +++++++++----------
-> >  1 file changed, 15 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/platform/cznic/turris-omnia-mcu-gpio.c b/drivers/p=
-latform/cznic/turris-omnia-mcu-gpio.c
-> > index 4e430d6c3fc4..8f43bfa92373 100644
-> > --- a/drivers/platform/cznic/turris-omnia-mcu-gpio.c
-> > +++ b/drivers/platform/cznic/turris-omnia-mcu-gpio.c
-> > @@ -11,7 +11,6 @@
-> >  #include <linux/bug.h>
-> >  #include <linux/cleanup.h>
-> >  #include <linux/device.h>
-> > -#include <linux/devm-helpers.h>
-> >  #include <linux/errno.h>
-> >  #include <linux/gpio/consumer.h>
-> >  #include <linux/gpio/driver.h>
-> > @@ -841,6 +840,18 @@ static void button_release_emul_fn(struct work_str=
-uct *work)
-> >       generic_handle_irq_safe(mcu->client->irq);
-> >  }
-> >
-> > +static void omnia_disable_button_release_work(void *data)
-> > +{
-> > +     struct delayed_work *work =3D data;
-> > +
-> > +     /*
-> > +      * The IRQ thread may requeue this work while the IRQ remains act=
-ive.
-> > +      * Disable and drain it before releasing the IRQ action and the M=
-CU
-> > +      * state used by the worker.
-> > +      */
-> > +     disable_delayed_work_sync(work);
-> > +}
-> > +
-> >  static void
-> >  fill_int_from_sts(unsigned long *rising, unsigned long *falling,
-> >                 unsigned long rising_sts, unsigned long falling_sts,
-> > @@ -1082,21 +1093,9 @@ int omnia_mcu_register_gpiochip(struct omnia_mcu=
- *mcu)
-> >               return dev_err_probe(dev, err, "Cannot request IRQ\n");
-> >
-> >       if (!new_api) {
-> > -             /*
-> > -              * The button_release_emul_work has to be initialized bef=
-ore the
-> > -              * thread is requested, and on driver remove it needs to =
-be
-> > -              * canceled before the thread is freed. Therefore we can'=
-t use
-> > -              * devm_delayed_work_autocancel() directly, because the o=
-rder
-> > -              *   devm_delayed_work_autocancel();
-> > -              *   devm_request_threaded_irq();
-> > -              * would cause improper release order:
-> > -              *   free_irq();
-> > -              *   cancel_delayed_work_sync();
-> > -              * Instead we first initialize the work above, and only n=
-ow
-> > -              * after IRQ is requested we add the work devm action.
-> > -              */
-> > -             err =3D devm_add_action(dev, devm_delayed_work_drop,
-> > -                                   &mcu->button_release_emul_work);
-> > +             err =3D devm_add_action_or_reset(dev,
-> > +                                            omnia_disable_button_relea=
-se_work,
-> > +                                            &mcu->button_release_emul_=
-work);
-> >               if (err)
-> >                       return err;
-> >       }
+Patch 1 adds dt-bindings compatible.
+Patch 2 fixes improper log levels in the driver, improving UX when
+debugging.
+Patch 3 adds mt6572 support.
+
+Tested on various mt6572 devices without any failures.
+
+Note: this series was reviewed since July, but still wasn't applied.
+Pings and resend for MediaTek maintainer were unanswered. Could the SoC
+maintainers consider picking this up directly? The series cleanly applies
+to v7.3 tag.
+
+Signed-off-by: Roman Vivchar <rva333@protonmail.com>
+---
+Changes in v4:
+- Send to soc@kernel.org, no other changes
+- Link to v3: https://patch.msgid.link/20260924-6572-pwrap-v3-0-64769b6446ac@protonmail.com
+
+Changes in v3:
+- Pick up Krzysztof's tag
+- No other changes, resend
+- Link to v2: https://patch.msgid.link/20260715-6572-pwrap-v2-0-bea1d801c81b@protonmail.com
+
+Changes in v2:
+- Fix typo in patch 2 commit message ('Errors paths' -> 'Error paths')
+- Drop unused registers in pwrap driver and use existing mt2701 array
+- Also clarify mt6320 register usage
+- Link to v1: https://patch.msgid.link/20260714-6572-pwrap-v1-0-d8e5a39cf7ef@protonmail.com
+
+---
+Roman Vivchar (3):
+      dt-bindings: soc: mediatek: pwrap: add mt6572
+      soc: mediatek: pwrap: use correct log level
+      soc: mediatek: pwrap: add mt6572 support
+
+ .../bindings/soc/mediatek/mediatek,pwrap.yaml      |  1 +
+ drivers/soc/mediatek/mtk-pmic-wrap.c               | 71 +++++++++++++---------
+ 2 files changed, 44 insertions(+), 28 deletions(-)
+---
+base-commit: 8cd9520d35a6c38db6567e97dd93b1f11f185dc6
+change-id: 20260712-6572-pwrap-4c91563cfd23
+
+Best regards,
+--  
+Roman Vivchar <rva333@protonmail.com>
+
+
