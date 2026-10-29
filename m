@@ -1,144 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=3; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793216216;
-	b=Ry9MF0qC/+dLd8pOickf953jOPvaZDVxQygPwxHc2P+kvkpRfemuZ748Ea8kPywAs7ag
-	 jVV9VuIE8iY3nRd4rpxpjAUYsw6ZWOd8h/ouIxuHcz6A1WOA438yRtfYUYRZdeh6dKKEw
-	 vlUB23a9/oxwzDe4EgXhMicVgfQVj/GMj0e8ockyaKLh5A60DIn3dRXkP32iDmFUJv0Hz
-	 GWU7bB3Q2lSWQabZjd+JSLmXy+XlThY3tey4lm6TUMYgpGacheT+Z1U/r0ZsHwcLb755i
-	 ehmH6DJ/xsQ7pmXoKf1Ns414gymE/GwjLUsN+moHLQ++pFrXyXqypY5iQLGqaZUW79g==
-ARC-Message-Signature: i=3; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793216216;
-	h=Received:Delivered-To:Received:DMARC-Filter:DKIM-Signature:Received:
-	 Received:X-MS-Exchange-Authentication-Results:Received-SPF:Received:
-	 Received:From:To:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-EOPAttributedMessage:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:Content-Type:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=yPMdXhrkVsDgU0CG3yAL/+E1FrHLSRjibkPMaHjchH8=;
-	b=AqLbnUJUG+CkmVpD6LcF1aOtNTN9Qs77L9GwD26mRxJe3MCO3mIUCv1P3ukbwXZ8ghCW
-	 pfqMkUlaogAxV90QOFjq0NiBZ8lwC3GArHQlFG2Yma3gST4OuTA/3trIOOkgMzRgZKNUt
-	 d/utWXg6jnSldbmMikwvNNmwQfLAZGLy3MwicIzKgcYGSDDlzZLZbQDNexw9OOvhMaCXi
-	 TJktnhzhTA7DISmXhBxhjqtL4OgLzrl8i0r1kzm3MMAf4Gu1fJ5ktZTHvZafbV/yoXiaA
-	 YvysT9hLfOsQQ+xfRxLAjkydK7cIdjpBD/9v9K+PN7bV8bamFR71R/1QHrNvi+yPuFQ==
-ARC-Authentication-Results: i=3; smtp.subspace.kernel.org; 
-	dkim=pass header.d=axiado.com header.i=@axiado.com header.a=rsa-sha256 header.s=selector1 header.b=JLr9VliM;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.89.44.33
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793247807;
+	b=Y+FnSd45MF3J2KLljLy/OetCIExrAOV/3htNlx6v0dgEQU1oocK9O5tHfgZM+CG6zhxt
+	 mZRLPh4zFd9QDtLeRmu4dS3neEJAZXZs0/9aVpb0KYsKyx2UyXWGIThx1g4u7WbyC18i4
+	 J8Z5cXEUH7N+EYgGn16YLhq52t/IhK/257EKHaBw5ucF/i5XuEkajReuJZHODwjQfB4jn
+	 shW+Fy0PL1NxC3bAJSDymNWYkQZYjqwVAYA7JD6m1reNkasF6FRjfa6GEXsqrsAIof7z9
+	 jI3Lv+ypaZtVMhBfNe3EIErUeDQ6rhB0ClacHB0QHm373ivYrbw2zBamI+oFe1/USEA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793247807;
+	h=DMARC-Filter:Received:Received:X-Authority-Analysis:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-BWhitelist:X-Source-IP:
+	 X-Source-L:X-Exim-ID:X-Source:X-Source-Args:X-Source-Dir:
+	 X-Source-Sender:X-Source-Auth:X-Email-Count:X-Org:X-Source-Cap:
+	 X-Local-Domain:X-CMAE-Envelope;
+	bh=WY5wnUr0YMRLXTa+IeVdTK62D3adKCL9XnatFjihAzk=;
+	b=ksLrZAFL92/XZIJpeZWzsdVufpr1O8mhvSDZ3tY1t053BIPlcObT02ZHxSp6YDlKiY9B
+	 ZrEqsMeTlqSElzdBGlEiY+dPKGSD8AQKVMKeOEolCQ3LkF9QkkwMX0n6wv3zbwnurAEQV
+	 DBP8jEij/iS5MI6bkEk07XPVcdkxKyKK67HM6/9iTtkDhe8mVaAhNinJReqDd4v2obNv6
+	 WCZnKvxY1hXeJvX9mzRZ1NnKhWuZLa3IAptXEzcRImGLOAgVcWLf+w0hpmETkvDII1hP3
+	 8/xW8Nbkq5P0RftqxXNS38uBmZfcMi3anCndOqGm9NtlydSm7a0tCMiKnW+xXFlDWyw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=roeck-us.net;
+	spf=fail smtp.mailfrom=roeck-us.net;
+	dkim=pass header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=OKYVWu5I;
+	arc=none smtp.remote-ip=35.89.44.33
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E80606A31C
-	for <soc@lists.linux.dev>; Wed, 28 Oct 2026 19:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F958606A31A
+	for <soc@lists.linux.dev>; Thu, 29 Oct 2026 04:23:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F958606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=axiado.com header.i=@axiado.com header.a=rsa-sha256 header.s=selector1 header.b=JLr9VliM
-Received: by smtp.kernel.org (Postfix)
-	id 16DF61F01829; Wed, 28 Oct 2026 19:36:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.195.91
-ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
-	t=1793216216;
-	b=rKSvbInCwRM2FkKPhios9p3XKIaSAkoIAeso1HvaS1ZYi1CrnJVyEdZYlxCV48uXs08r
-	 zfLC03cGm6jQsRGU2k5BFb7CuZch7avdyMIyZE19FXBHWgaVJDbIPQfxXTzLXpQiO0jwu
-	 CesattTcmsMTqH2oEQa6GZE09MbzZl7j0BSa4XQEFeK83/CWFsEcRPsnYC+zHad3y3CSI
-	 GAKpyqkbOSgbw9XgM2p0ufkKT2SyW8UqT/Nuy6g0GUFuQZWNstEK5miuuH3UWDYHsMli0
-	 NTbsOlsBVIspY88zfTwbWVETDXBQaxYgpTyJBrXfatHdo01LJwOO9Os7V2qJXiM5xJQ==
-ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793216216;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
-	 From:To:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-EOPAttributedMessage:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:Content-Type:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=yPMdXhrkVsDgU0CG3yAL/+E1FrHLSRjibkPMaHjchH8=;
-	b=H9YKfqMgnG/TT6aofun4zxPDy6CSy8nIB5WB5kGmBGXWXK5d6JfNQqP15OYFfRMUwdc2
-	 jczI+IKJJLbNasU3DoQSp42eKfEWhk4TAQ80puX99eVHQ8FARCbVoHOQU9y188ILN65BR
-	 luAgKVJIu5OAXL6sh+J6vfro4iG2oaXG2WT3q1wpAMbYyvinYFP/wtyx7cTmFwLmTSbXI
-	 KI40fbTd5XBhkCJ3v9KRN84Xy4PX1zXKDCngMe8tqvVGsboIxbm96HZZ5L7fJvr6eNmQE
-	 84uvQySD+pTu6GCePInaRsfQ+pC1yD/LX5pVjMvnfeF6rD5235w19mdhPXgS1QccyVA==
-ARC-Authentication-Results: i=2; smtp.kernel.org; 
-	dkim=pass header.d=axiado.com header.i=@axiado.com header.a=rsa-sha256 header.s=selector1 header.b=JLr9VliM;
-	dmarc=none header.from=axiado.com;
-	spf=pass smtp.mailfrom=axiado.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.195.91
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11022091.outbound.protection.outlook.com [40.93.195.91])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4997E1F01825
-	for <soc@kernel.org>; Wed, 28 Oct 2026 19:36:54 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=axiado.com header.i=@axiado.com header.a=rsa-sha256 header.s=selector1 header.b=JLr9VliM
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 4997E1F01825
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=axiado.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=axiado.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Fq7UpYFZtd916UTWmYd5Z/lWK+m4XdUSIC2kXgq0FK20EeZaC8c5v70Odpzl4hNUs3q2fzDbgOF+qPGkPoNti2rIgIap/4JS6f0vOEGkB6ehuzxzFQTAzs2UxzucEzZ0GIcFr+g+vkK2UzBW6RoaSWnX2XzOdaPUQRqztKg+Vy8P7rvuWdLJifkWQQU/+BATGnqag66cLUFIb+UsRhgz+3o2UfNVmNyvglRDE8FCo58cfNCUHCgh887arNXv/ssmnk/NbwJjPWMM1S7UQm0GJ4vYjR1R2O6UsT8XKMhpd6i0I5qFDRJbyFjeyi2Pi3lnJK91sbH5xL1oiTdfAksD1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yPMdXhrkVsDgU0CG3yAL/+E1FrHLSRjibkPMaHjchH8=;
- b=X0yRaCjDtkNvVWL4tSv14HTgxjlQR8hl7n9P3OO3mcha/hQy2GQvyQkxq9voAQ1BS0YI4mmuCjNikYNjZ2I93U08G5ZPg5tpVXmLBn1ClKn4+hyzcJs+9r5LvPCvhnW3jGD04bFBCEGD0+QaDYBt+YivmpQq82VcDCTYSGV+EBm9O9cGMsAKrPAAFdPfPDH5wdcqkLn9RD/EX5CgpauymxZc9HypP/QDuOBYrjWSyZlkTdcGCrUmX1O0/p8iNT/lQl2nESIP3lIqjfEmuXHUakadEPZS2zEIh63tZwoj6G7P75C/iimTtcosL9+FtlzpgWuIbIlDCi0dS+XeahjCfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 64.62.143.114) smtp.rcpttodomain=kernel.org smtp.mailfrom=axiado.com;
- dmarc=none action=none header.from=axiado.com; dkim=none (message not
- signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axiado.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yPMdXhrkVsDgU0CG3yAL/+E1FrHLSRjibkPMaHjchH8=;
- b=JLr9VliMIwNO35rTZZ3O6+Xjg1yTGU9ta35j6aKR5osGgGb3McIS0qLR9lWVtC5fcm9dWU0evgUk60IZ9COekQdQ/ii17wyc6gRaFDHTFk4r6PF5xa+ktGa1ftOFd8i/UN0HC0ZhxTnI7u793DV/jw6t+ON8FGd6KPNcRAytWX+20cfrd2Y9GGaUjSB7XKt22j6CbvzQmFyvGwL0jNq+G5iP4MuYZOzLwUDlRED3fp9fOoqHxp5PbFyUZ34lkeFyEgpox0eU4boNxwJ9T/IbcjdO9es6Rc8xZcuxBCmNDq4pid0j11q1fDvAr/wfPNZ8gdLuquHbM7Yn7aqPWgP1Bg==
-Received: from CH0PR03CA0296.namprd03.prod.outlook.com (2603:10b6:610:e6::31)
- by CH3PR18MB5891.namprd18.prod.outlook.com (2603:10b6:610:1d6::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.16; Wed, 28 Oct
- 2026 19:36:49 +0000
-Received: from CH01EPF000BE94E.namprd02.prod.outlook.com
- (2603:10b6:610:e6:cafe::9a) by CH0PR03CA0296.outlook.office365.com
- (2603:10b6:610:e6::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.546.22 via Frontend Transport; Wed,
- 28 Oct 2026 19:36:49 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=fail (sender IP
- is 64.62.143.114) smtp.mailfrom=axiado.com; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axiado.com;
-Received-SPF: Fail (protection.outlook.com: domain of axiado.com does not
- designate 64.62.143.114 as permitted sender) receiver=protection.outlook.com;
- client-ip=64.62.143.114; helo=smtp.corp.axiado.com;
-Received: from smtp.corp.axiado.com (64.62.143.114) by
- CH01EPF000BE94E.mail.protection.outlook.com (10.167.244.203) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.569.4
- via Frontend Transport; Wed, 28 Oct 2026 19:36:48 +0000
-Received: from http://axiado.com (unknown [10.14.1.22])
-	by smtp.corp.axiado.com (Postfix) with ESMTPS id 4FAF04186B53;
-	Wed, 28 Oct 2026 12:36:48 -0700 (PDT)
-From: Tzu-Hao Wei <twei@axiado.com>
-To: soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Axiado DT updates for v7.4
-Date: Wed, 28 Oct 2026 12:36:48 -0700
-Message-Id: <20261028193648.73841-1-twei@axiado.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key, unprotected) header.d=roeck-us.net header.i=@roeck-us.net header.a=rsa-sha256 header.s=default header.b=OKYVWu5I
+Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
+	by cmsmtp with ESMTPS
+	id MFQxxySuiaC0UMHfhxwv8s; Thu, 29 Oct 2026 04:23:25 +0000
+Received: from 162-215-252-36.unifiedlayer.com ([208.91.199.152])
+	by cmsmtp with ESMTPS
+	id MHfgxRKBjLr2uMHfgxcvav; Thu, 29 Oct 2026 04:23:24 +0000
+X-Authority-Analysis: v=2.4 cv=UudjN/wB c=1 sm=1 tr=0 ts=6ae2ca3c
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=M0FbrtG7MMAA:10 a=e5mUnYsNAAAA:8
+ a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=MDvQDARPIxcOL7T4D4kA:9 a=CjuIK1q_8ugA:10
+ a=Vxmtnl_E_bksehYqCbjh:22 a=7h6zrudLq975CqBWz9ej:22 a=KPbNTLLc3YvdawN95zVk:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=WY5wnUr0YMRLXTa+IeVdTK62D3adKCL9XnatFjihAzk=; b=OKYVWu5IWjJ697XodiKp8mPZMo
+	40q5C15s3gWM5WgNuKMhIM/I/DdoMBnOZEVTC4mZJ3rkZlUi7YFnmmP8ZdHLwRMtdnYHiKr0axDhw
+	sUjuhm3tLAxeIUsdw+3B3FOF+jOOQVcgrqx3+4NWXrsA3nEJJD1b9o/AtIzVSlz5kAbonopoGfsbz
+	UL54DZdn4m6hRNDgMWbBfA3yWRIoYCm12+9AKRzH7Y+fTxiEuV92MZHtvHRxSaqcpzx+T448ao3Y6
+	TL+lmTOJOACd4tLbeMYHz7xc//MaZ2ZJxWVm2+VNJbpRo8YnOb1T48ZuDrcXD9c0mnrEE1sOlrg/m
+	RJzWpe4g==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:53758 helo=server.roeck-us.net)
+	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <linux@roeck-us.net>)
+	id 1xMHff-00000003SdK-3t8p;
+	Thu, 29 Oct 2026 09:53:24 +0530
+Date: Wed, 28 Oct 2026 21:23:22 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>, soc@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 1/4] gpio: sa1100: register software node for GPIO
+ controller
+Message-ID: <2a561a27-a3bf-4cac-a4dc-bfbc5c859f45@roeck-us.net>
+References: <20260706-sa1100-swnode-v1-0-332759bbd930@gmail.com>
+ <20260706-sa1100-swnode-v1-1-332759bbd930@gmail.com>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -148,72 +87,85 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH01EPF000BE94E:EE_|CH3PR18MB5891:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: ec7b5e13-f087-4f3c-3293-08df352acf26
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|34020700016|42112799006|82310400026|23010399003|36860700016|376014|1800799024|18002099003|261028144727099003|261026140227099003|13003099007|10067099003|261026121527099003|261009223027099003|56012099006|261021121427099003|261022105027099003|261021123027099003;
-X-Microsoft-Antispam-Message-Info:
-	TX08SXCrv7OwyXoqBHVfQsrLz+J4NuE1M2NWrgCOIailQFXO/hcrbdHlMc5UJJ5nzKE7TQyTRlf3MfwbqoJwpXxJ/MFISrky68I7itU9dx8KQgbcZNL9ALoztY7wUOr+INv/zsKqfWLhAkCPhYBaqkRBvWmRDoyI1fMu2ID11UPNqvkgBkIPHjjw9SvZIt9d3hsVWclTDgkvd5pdxg0u9N2CTB4wJNC3g8u4XWzJAQ9imXLsjOLq7T2cWA+eyNQBEkS/cr/sHCNbxuQ7T6dzKscWvnUPSxGDWm+v7PVLEwC+M67OQ8KLevMOCr0RgscY49Fn+YtLe5RBWDxROe1QVtD8Sz/y64XbDb2K4+ljuupPE/0cqORgOWWPksI34+iViAvIEtcA0O8AHOR0i8cNv/N3gKUbj9bS8WldHxP4BKqfQifIsQSg/Vvjf3XKv2kGxtN3Sg1iPr5bjk8lPQcniXynbNsnWadHdjJ0R+OjLzCGuxcCDBSULSqiE+xhVaJx+9sWR0fE4QtW6+fr9SzGQZtPxjF5KoDvc0c2yhapovyjsqMZZ7KRYz7aIjTaHRFLDFxW45ofp73GFIajPOEho1V+v+8coyqMDzNZoDDw9V+tlF82Bq0TLrCWFQ4UNeTmvPqO11n+NeAJ8DgHcETWPpvWiUFK56vdNzZX+F2hHqvk7r0WS/K2IQwsC98vJ9W0PPn9Fp7VEkbgolvsnqxfgQ==
-X-Forefront-Antispam-Report:
-	CIP:64.62.143.114;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtp.corp.axiado.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(34020700016)(42112799006)(82310400026)(23010399003)(36860700016)(376014)(1800799024)(18002099003)(261028144727099003)(261026140227099003)(13003099007)(10067099003)(261026121527099003)(261009223027099003)(56012099006)(261021121427099003)(261022105027099003)(261021123027099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	2HymePvVl4i20e+SpK08vfnY/tAdg3hriu/m1BDn9sosF+osrEz7Gribs7oR5ONpQG3jJR90Cw+y4zImqYce2TYgfZjqRTvQ1by9O34AtVnYJI/6ulAcbJC4WSUg7GRTo7PreS+UwRUg+OH6hGRpdDYFf6VzESZ33BhrDAnQDYk/iqRw5Skuqqr5/Oy1K4J3hZGHe3mTlgWXSzNlg4Ums249FvVU9QUbu+n48UwKcS0Xc3kn3/DCd1QYqAcL0a/dg938HkdZ+lmXV2/26x6gR8kUGPQLMpifqDT87oIhqym8Fy8dk1wcD5mCL6qghmPIIZL6ZGGxLgtZX/if+xCEP7NovM69HigLIgrNZTfWsFgFXbszEUW4MrmJ6pm3QHp3VkR4BMpyCTcZQ4pbUrxl/pXGgAthCSQdPVYxJ/tVNslepRpalr7q5utrI/kOzL0q
-X-OriginatorOrg: axiado.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2026 19:36:48.8797
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec7b5e13-f087-4f3c-3293-08df352acf26
-X-MS-Exchange-CrossTenant-Id: ff2db17c-4338-408e-9036-2dee8e3e17d7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=ff2db17c-4338-408e-9036-2dee8e3e17d7;Ip=[64.62.143.114];Helo=[smtp.corp.axiado.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH01EPF000BE94E.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR18MB5891
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260706-sa1100-swnode-v1-1-332759bbd930@gmail.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1xMHff-00000003SdK-3t8p
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (server.roeck-us.net) [108.223.40.66]:53758
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 4
+X-Org: HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKXkocQe36ZvzO3nby330NP1eyglu9X3wt6ZjurYu4MW5zjwEYmoPdyLGS31WV5OEMcqcF8X+nac/quCo6ONQFKMaAB/WK3/WGTiX4Lnt6PvS3l1PJsd
+ igJWmPj4W3tLKZXhv4QwOGFusKs/Z3MDyviS+qAHWxDQzN4E1vnGROW2GYG8KysYDC+LYHeW5vbU7PQYqnQbJegNamyA85YkpGw=
 
-Hi SoC maintainers,
+Hi,
 
-Please pull the following Axiado Devicetree updates for v7.4.
+On Mon, Jul 06, 2026 at 08:14:00PM -0700, Dmitry Torokhov wrote:
+> Define and register a static software node (sa1100_gpiochip_node) for the
+> SA-1100 GPIO controller during sa1100_init_gpio(). Assign its firmware node
+> directly to the GPIO chip prior to calling gpiochip_add_data().
+> 
+> This allows StrongARM SA-1100 board setup files to reference the SoC GPIO
+> controller in property entries when converting legacy platform data to
+> software nodes, resolving pin bindings directly via the attached firmware
+> node without relying on name matching.
+> 
+> Assisted-by: Antigravity:gemini-3.5-flash
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-This pull request includes:
-  Initial Devicetree support for the AX3005 SoC and evaluation board.
-  AX3005 EVK compatible string in the Axiado board binding.
-  Minor hexadecimal formatting cleanup in the AX3000 Devicetree.
+With this patch in the tree, the qemu "collie" emulation no longer works.
+There is no console output.
 
-Best regards,
-TH
+Bisect log is attached for reference.
 
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+I am not suggesting a revert if that is even possible, but maybe it is time
+to retire collie support if no one else reported this problem.
 
-  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
+Guenter
 
-are available in the Git repository at:
-
-  https://github.com/axiado/linux-axiado-dev tags/axiado-soc-for-7.4
-
-for you to fetch changes up to e728a5b8d68e4b567ea9420667450456121136d0:
-
-  arm64: dts: axiado: Add initial support for AX3005 SoC and eval board (2026-10-27 12:25:28 -0700)
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      arm64: dts: axiado: Use lowercase hex
-
-Swark Yang (2):
-      dt-bindings: arm: axiado: add AX3005 EVK
-      arm64: dts: axiado: Add initial support for AX3005 SoC and eval board
-
- Documentation/devicetree/bindings/arm/axiado.yaml |   6 +
- arch/arm64/boot/dts/axiado/Makefile               |   1 +
- arch/arm64/boot/dts/axiado/ax3000.dtsi            |   2 +-
- arch/arm64/boot/dts/axiado/ax3005-evk.dts         | 327 +++++++++
- arch/arm64/boot/dts/axiado/ax3005.dtsi            | 844 ++++++++++++++++++++++
- 5 files changed, 1179 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/axiado/ax3005-evk.dts
- create mode 100644 arch/arm64/boot/dts/axiado/ax3005.dtsi
+---
+# bad: [c03c1a14507dfaf8b856c2608f9ac216021fc222] Linux 7.3
+# good: [8d3ae59288f1e7d58d76558a6ee96d533bc5019f] Linux 7.2
+git bisect start 'v7.3' 'v7.2'
+# bad: [4e69c1856bfd9ffb7e9d335a25842fa211628929] Merge tag 'drm-next-2026-08-20' of https://gitlab.freedesktop.org/drm/kernel
+git bisect bad 4e69c1856bfd9ffb7e9d335a25842fa211628929
+# bad: [5a8cd539ac19f7a68e68e1d25ef9ca2ff55b8500] Merge tag 'bpf-next-7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next
+git bisect bad 5a8cd539ac19f7a68e68e1d25ef9ca2ff55b8500
+# bad: [abea5c349368a683e40fdc2e745099aaaacc89d7] Merge tag 'i2c-7.3-part1' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux
+git bisect bad abea5c349368a683e40fdc2e745099aaaacc89d7
+# good: [bbd0571269b5a17bb0685fc30ea0b89b950801f5] Merge tag 'x86_cleanups_for_v7.3_rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+git bisect good bbd0571269b5a17bb0685fc30ea0b89b950801f5
+# good: [658ed6d54e9775a627662f152c8e21509eea68c7] Merge tag 'dt64-cleanup-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt into soc/dt
+git bisect good 658ed6d54e9775a627662f152c8e21509eea68c7
+# good: [368cf60c36a3a311474de08e52dc6314df3b06ce] Merge tag 'soc-drivers-7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good 368cf60c36a3a311474de08e52dc6314df3b06ce
+# bad: [1be05c6afbb2c4052d0a13fc91ddcd89aaee9614] Merge tag 'input-for-v7.3-rc0' of git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input
+git bisect bad 1be05c6afbb2c4052d0a13fc91ddcd89aaee9614
+# bad: [c36a4991e231242c04141536718d47255ec80887] Merge tag 'chrome-platform-v7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux
+git bisect bad c36a4991e231242c04141536718d47255ec80887
+# bad: [7c8af4b5b627d8bbf88c6783db49c52dd6b43f5a] Merge tag 'imx-soc-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/frank.li/linux into soc/arm
+git bisect bad 7c8af4b5b627d8bbf88c6783db49c52dd6b43f5a
+# good: [809177dbf32e3c649abcd027334dbcfe34720446] Merge tag 'arm-feature-deprecation-for-7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc into soc/arm
+git bisect good 809177dbf32e3c649abcd027334dbcfe34720446
+# bad: [ab1c3ab445b44d6b412bc4f7fad3db4f3857a80e] ARM: sa1100: h3xxx: convert gpio-keys to use software nodes
+git bisect bad ab1c3ab445b44d6b412bc4f7fad3db4f3857a80e
+# good: [9212f660d34c385f2ba8ad5fb7b94c1d45c166cb] Merge tag 'ixp4xx-arm-v7.3' of https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator into soc/arm
+git bisect good 9212f660d34c385f2ba8ad5fb7b94c1d45c166cb
+# bad: [ea07a154791e7e95525f843beaa72402a4fcf88a] ARM: sa1100: assabet: convert gpio-keys to use software nodes
+git bisect bad ea07a154791e7e95525f843beaa72402a4fcf88a
+# bad: [e4671f292ebb363fdea08ae3b0cd18ba7a2b486f] gpio: sa1100: register software node for GPIO controller
+git bisect bad e4671f292ebb363fdea08ae3b0cd18ba7a2b486f
+# first bad commit: [e4671f292ebb363fdea08ae3b0cd18ba7a2b486f] gpio: sa1100: register software node for GPIO controller
