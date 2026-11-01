@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793572779;
-	b=1Yki0kUpoINeuTsVzYD1D+pPSTWXHxOaFWafT5MhROtul7EZx1ei0CNQ5eTaQDB333A9
-	 Vj55qVUS6p2CTO9FODEaCDsJpUALLoRaYIN3i+6h5q4BTuo6kfueplCUwzXPJwih9CysL
-	 ADz7sKivHIcjptBoqDhsI9NsXn5UKd4kUrsNGwAjsZZyD9aQHiktQ/aGhicMQsVHWT5dG
-	 53c4byfB+M5LkzrmNjD8BJfp3rGfUwMVWTASDSY7A/8ah1ZNZPN3AUFyKqsaWpDNukRtp
-	 4oRCv4c/bp70Ff6an/eduD3duNw4ON/thMKIQqdC3L7fsvx5RRA1Ineke0wDQReZQAw==
+	t=1793572783;
+	b=p7tbs6wOkUONT82KQACCgPiXrc4n1WWWK3wYl9/wyRJMuNxXfeVs5ylIylXvOY3kFqB5
+	 5Dku+iqKvaXDIxpVvEWZCGQucoDnos9pwwNiPxsTpYda6asMNzY3o2qDcqVI2nKX1c3nS
+	 HFRrxjnxAef9KY7tz3eAVwhwOqJ4yz+gOkpGw32ZqzIbUuCkFrMC5gr3/QB2EcLtSxO0N
+	 27sX9+5LE+Bp1cimlhAM84wPbA5SxU/jY0XZ0ePi1imyjoGbjLMBectW4LsyDoi41JxyG
+	 DQ5ripyc+l3OQtaW7n9pEsiH6L+agIPjSZbTGmJprePAkjjJ860504FFVvsLKuoEFPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793572779;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793572783;
 	h=Received:Delivered-To:Received:DKIM-Signature:Received:Content-Type:
 	 MIME-Version:Content-Transfer-Encoding:Subject:From:Message-Id:Date:
 	 References:In-Reply-To:To:Cc;
-	bh=DRQRIRQarXTnNZOzq36UNa3LsErU7BTljNQ23y9A7r0=;
-	b=wQePgP+jR1mwcUJkHQwaX9YfZN+elc+H/FIGcr4qkPLOCDF+pXTeXuKm9WTEH3Gakzlf
-	 Af1ld2vtcKIqV+lNR7UHbdWDXc1Xp5VWxI5kFUl8LnceK7iciG1sJSN8IZBW2evq6Gpi1
-	 uybbPHG9dsFpPTDHAb0Q1374AfvlOgQgt+pH0LourgH/fC5MoJXYldUViPXucIsdS0ynR
-	 71JJ2Hxs7FsdDRYkmguxynb3fa4w99SX7KT29z097tsVX8GmLxKX2WzFEh9JjDLyIm7c5
-	 kkgjaOD4j+/Gn7Q0tkIgZvk5f0H4mAClVy2Iu2jtvvyDraOPSjDEEK7LBXtmEEfuL7g==
+	bh=uKOf/sWuocTr+7AtsLJJEtOK0qwIac4arzN8no/qmUE=;
+	b=WqLGKHGn8xB+1TSZxUy4n1o4Wq6qHcV8GqFWOyTNsGO5tJb7qU9mzX4Af5bOsb9NaWwi
+	 VrPrzTrFZ1XiNrUuwWCbyXLLyRaWy5i1OqiqmT5vI+mq5SfeCdYHOJHSOiYGO+2zZggi8
+	 Wp2UCfvoSoT8yxhMMtCEvKgfEVzU37RGBF7IE1Myqqz9dck4vQAV24FT/zFxdVLX/bHEq
+	 wZQ9GLoy0ZUXmjfvKL2LzK887UywNTM0Qzo+lWvMqmcF6atrjF0sY4nNrESjtJO3sAiZj
+	 l+0Y+c/dgOKyrwPvLPJLh2FnLpzfoyX1yxeJHp0T6rvMdA1Aq8kp2O96oHbqc9jscnA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="NMPhMg7/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QphlQCK8;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F10D606A334
-	for <soc@lists.linux.dev>; Sun,  1 Nov 2026 22:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36361606A334
+	for <soc@lists.linux.dev>; Sun,  1 Nov 2026 22:39:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NMPhMg7/
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QphlQCK8
 Received: by smtp.kernel.org (Postfix)
-	id DF6901F00A17; Sun,  1 Nov 2026 22:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C614E1F00A15;
-	Sun,  1 Nov 2026 22:39:38 +0000 (UTC)
+	id DDA661F00A16; Sun,  1 Nov 2026 22:39:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5CEB1F00A15;
+	Sun,  1 Nov 2026 22:39:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793572778;
-	bh=DRQRIRQarXTnNZOzq36UNa3LsErU7BTljNQ23y9A7r0=;
+	s=k20260515; t=1793572781;
+	bh=uKOf/sWuocTr+7AtsLJJEtOK0qwIac4arzN8no/qmUE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=NMPhMg7/LznAP1qKPdQhcyzfkoRnuRkq7vWZjqAO6yYDMCI3+mTSy00GNoTykPN/l
-	 I+GcNSBWN/4lKNE6BrbqMKRcw2/+bmGiav7aSTicXO36taBJC5NZH18IU5+Coi0wDA
-	 gdR+edr+EYORtPTeI3PIdccVm00zUB6RTLyHFT1po3Dthbd/+/AQoelHGin4MWU/kH
-	 uoyu3FyWLf+cXi9OWPgdTyEABrwXLQsIAJPmb66RPyboOjS6jYP2HlbHO9F5enDPf3
-	 gg8XEGofYWsoGjADLkrLrV//hLH/EIbWNPvi1BLJ2/pR3iSrs8Q6hADfijvq8CV2e9
-	 aclo/6XUh1New==
+	b=QphlQCK8cpyKZuXZE49sZvVNg4wC9zZbAZq8JggdsOIJ5/Jv2HOTHHVSr0SGZ0VfM
+	 SGfAJrhIQjrkWNZd67JOm67gETu116yDg0Y8XASkdC0QA/KPSft57ElcJKmgx9sq8n
+	 CI6zyrHdsnmPr4N01ivysUI89C+y4mjbbCXC+i5g3V5Hq5DjWt0sI6f38KF3/IjTUq
+	 +rgjeOvteGPHVDbr8i7jkfzvIprxCsgDafSYnknEU9zUGJvnacnYVJV+/Bgs1ofO/6
+	 uUWECZt8Y7dugr1aIceBUnZrRXbRHK0jqlPPUn5/02FKZLMujct1uqmvCxMnAXDvM4
+	 HxQN66YfkYiDQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA314391AF9C;
-	Sun,  1 Nov 2026 22:39:38 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA41C391AF9C;
+	Sun,  1 Nov 2026 22:39:41 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -56,39 +56,38 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL][1/4] RISC-V firmware drivers for v7.4
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v7.4
 From: patchwork-bot+linux-riscv@kernel.org
 Message-Id: 
- <179357277729.2624073.16276179294842565397.git-patchwork-notify@kernel.org>
-Date: Sun, 01 Nov 2026 22:39:37 +0000
-References: <20261013-defame-busload-7eeb111f35ce@spud>
-In-Reply-To: <20261013-defame-busload-7eeb111f35ce@spud>
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-riscv@lists.infradead.org, soc@kernel.org,
- linux-kernel@vger.kernel.org
+ <179357278029.2624073.4779038529304323110.git-patchwork-notify@kernel.org>
+Date: Sun, 01 Nov 2026 22:39:40 +0000
+References: <aff6ff25-8969-4a35-9543-9113afb2e003@linux.dev>
+In-Reply-To: <aff6ff25-8969-4a35-9543-9113afb2e003@linux.dev>
+To: Chen Wang <chen.wang@linux.dev>
+Cc: linux-riscv@lists.infradead.org, soc@kernel.org, arnd@arndb.de,
+ conor+dt@kernel.org, inochiama@gmail.com, sophgo@lists.linux.dev,
+ gaohan@iscas.ac.cn, lihangfan@iscas.ac.cn, chenyou910331@gmail.com,
+ andrey.lalaev@gmail.com
 
 Hello:
 
 This pull request was applied to riscv/linux.git (for-next)
 by Alexandre Belloni <alexandre.belloni@bootlin.com>:
 
-On Tue, 13 Oct 2026 16:14:18 +0100 you wrote:
-> Hey folks,
+On Fri, 9 Oct 2026 17:23:58 +0800 you wrote:
+> Hey Arnd,
 > 
-> Might be my last mini PR here, since the RISC-V SSE driver is coming via
-> the actual RISC-V tree, so there'll almost certainly be a much increased
-> activity here going forwards.
+> Please pull this dt changes for RISC-V/Sophgo.
 > 
-> I'm a bit late PR wise (sorry) but I blame conferences and a busy week
-> beforehand for that...
+> Thanks,
+> 
+> Chen
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/4] RISC-V firmware drivers for v7.4
-    https://git.kernel.org/riscv/c/7c2871861461
-  - [GIT,PULL,2/4] RISC-V misc. devicetrees for v7.4
-    https://git.kernel.org/riscv/c/928fdc6ff69b
+  - [GIT,PULL] RISC-V Sophgo Devicetrees for v7.4
+    https://git.kernel.org/riscv/c/5d299ec9395e
 
 You are awesome, thank you!
 -- 
