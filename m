@@ -1,55 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793642108;
-	b=ziQZmvm+vltMwX9OmWNOGj5fIow8KDGsllWPBq0pAY5T7M1UIKPUbMjPeDldJKrS1Uzo
-	 2GK4cJYlpSImbKuCoPws/8OQ3ROwcFHFAA7MSmwNy4qz8BygHKVaOmy2ckK9CeE36WCbF
-	 7/6R4wmG5KtzTx07QqCY5CuFCUGgwa6jobMupKw8KqId1YW9c7pwiqUdJeFPsZBWDJvOc
-	 RDxSZ/yVSFJxNTL0DmURWWckTuAqYK7t6RvOCBfngaHqw0hBr1VN7d4pmMz8r691gwr4l
-	 XhFWi/wy5t7QYRfS7gUhsJNe+3dY3+qn/lMEPfp3mu+SIpRPiqajO1INPU0Czwxfrsw==
+	t=1793712227;
+	b=ks3gV699BXl1civ3s0tQ4EyN9w15PL1aBYZDkbQeH60oYj1lnT3iF2fbRu2Up+c6J5Lb
+	 RqoC1ouXMRDPxFt63ue2taLytvceDj6BjrUxCYZJIbw0dU42RwPD66jnfI+wMwV2e9p18
+	 EfwfzGOzOEzBWioYvXPV87MSVfSJAJbOWUtFSV2LQZd2Q3Acpks+xj9sYuwC+GkVe3X9j
+	 3UGid6cV7GoKQT4oAyANqWSv84jKRp20L+Pw+FrWpQxvuZvAo+YVbALMJEcLasMxZhko0
+	 ii6Zq44/ijsTMtblzL/bQ+u6KsxWuICaL8c/mfizlh9E3IN9ln+e5lT9elcdMVTFuFw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793642108;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=pQrWz1faFiddLliYKRPxrOHyvprHZLzoea8K55JlsvA=;
-	b=j+ce8q83s2rSYZ2jD394q4tUSr+pbI1QDvTV3Foje9D9UeXkDiUqrRrG7Koqfco8IwyO
-	 T0TAejxYiWB+F0XMEsoReD5wR1wpqzKWzSMr33a3pp6dJaNTs5g3Je+VTBIIQndzEOfOV
-	 p+CD4RybuXb07Tj2wrBAUJ+nwTrDA1uHtbrFNtCFhDGh7FLX5JvL/XHE2ppXYEna4cQuy
-	 m1BIMe6YRRO7N4EcPPxm8uGb1esrElMCyYPP5xHFzT/Wz3G4vXiOf79UXI5a9j/virZK0
-	 VJ2Uv7ZT4JjPZcKQueDYQVVQAyRzk/5vsU/XYqe5EQWDKs9/w2ErAJkwOt6PbK/dUDA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793712227;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:In-Reply-To:References:User-Agent:Date:Message-ID:
+	 MIME-Version:Content-Type;
+	bh=LYqgeXyiX8XVMyFZcD47JEncntf0/UCmpJA/xWCOZns=;
+	b=l43CTQ3M73T9Gx4WpM4ay6FvGKB0IkQE95WStX4cBwCpCar8iWnrzjVC70cZphGB2c5N
+	 h0kUCBUNB8pTYUl7qzrRhtSOKfIzYN1D3ZMtrInxhBEPWJL1gVjbB1d/9ZuOFb9wwUv20
+	 1Ykf6xpbCiUIge5rz1RG6Vgot530xt8k1/99yZLLTeiTe3klSbwsqOKkCTlhrTxTCdLRp
+	 J81SMVANORlwTHSQLy/erz771lTBOoyJrcGLRzcVMo4cyDXXdI84mIjFfN8IPV3JbZRsj
+	 QXsXhTt6kerz05DcYfb4Kkmi2Xc7RAOk5ZuJxG0CCagvCBZ3SPcR+OIVYhqjCnpGTRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IxwSX640;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=ffroot.co.za;
+	spf=pass smtp.mailfrom=ffroot.co.za;
+	dkim=pass header.d=ffroot-co-za.20260707.gappssmtp.com header.i=@ffroot-co-za.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VH5al2XJ;
+	arc=none smtp.remote-ip=209.85.128.50
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F84606BA5C;
-	Mon,  2 Nov 2026 17:55:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12CE0606A32F
+	for <soc@lists.linux.dev>; Tue,  3 Nov 2026 13:23:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12CE0606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffroot.co.za
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ffroot.co.za
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IxwSX640
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A95311F00A18;
-	Mon,  2 Nov 2026 17:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793642107;
-	bh=pQrWz1faFiddLliYKRPxrOHyvprHZLzoea8K55JlsvA=;
-	h=From:To:Cc:Subject:Date;
-	b=IxwSX6408H/Hh9XMwSjSUDTsMmbsJ8td4vzSrd2svDG55I6Mhggzo+nAaFy2AhBPR
-	 DTDTsoIxwQxSY0v6WyVxTHLIFOypG2Zjo4Dy5PswE1m5HIakzrvXie1gsPy+kvBh7s
-	 iR53zpuyPRXamc5TS8QHBgyjBt89PvLSCaHP8KDAGEjRvsmnX1y+NWgxxytLeCKTcn
-	 tSbwT6ykzso3UD1GwObfo9M+VawWPgxBGLNMsbZXEjvSxEIdSmLlB7ooUGLfxGzbLj
-	 z1S+9YJO5sSdopvAtSPryEHHZJKc7+CHc+jVvpn6wiYn8hthkeT3eq75X2UWEBwyUH
-	 btXnDw99SN8lg==
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: SoC Team <soc@lists.linux.dev>,
-	arm-scmi@vger.kernel.org,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm: Fixes for v7.4
-Date: Mon,  2 Nov 2026 17:54:39 +0000
-Message-ID: <20261102175440.1063545-1-sudeep.holla@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key, unprotected) header.d=ffroot-co-za.20260707.gappssmtp.com header.i=@ffroot-co-za.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VH5al2XJ
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a2084d62cdso37151085e9.1
+        for <soc@lists.linux.dev>; Tue, 03 Nov 2026 05:23:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffroot-co-za.20260707.gappssmtp.com; s=20260707; t=1793712224; x=1794317024; darn=lists.linux.dev;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=LYqgeXyiX8XVMyFZcD47JEncntf0/UCmpJA/xWCOZns=;
+        b=VH5al2XJUeHT8jL+AEn0OhKdjorRVTevczx8+kOcggrnShpEGrMzHJp6wap7Gnp3hA
+         wdqdO4RoWgUJJiLU2nGS0fAZf3S4uTsTBHX2teQjvGNu5fhOjuaC4+j+3dw0F0OofvQQ
+         AggDftHu4SGo1EDzymg5ZKK/r0/M4PV16YGbMQIbC2Nd4/ImLliW09PpaPJsF1Bc/ISc
+         pbYivKhmfTlDrf+ikDlRI/ue7E3P92+bBjspO/0iwOiB8WrWTSd0U/qrAKpgZgIzSqZh
+         QfO3Z7obaD+8nVpTiLWQBvMY6wLDMCP+BucPCuM2ZzLkepX7C+pU+jq98gSb/D1VmmIj
+         FCeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793712224; x=1794317024;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=LYqgeXyiX8XVMyFZcD47JEncntf0/UCmpJA/xWCOZns=;
+        b=cFS0qtbubyGyuIMGrx22JVWdlAfFly9vJmQjy4+AriCVBGSNAF7FGtv+kQ5+I2B7Nl
+         I/I3LKAgLIliUnP7LSGYekNKaAMc847Fof+y5QUdrEOeB29eIrR/cNeevfCxlQUVIcOr
+         CirGJG7spm+CPfHMp+m5gVLiceFuRfU7XE44ia31jO0MNzALRSjD0dinILlH/nS0TSE+
+         srGv6nWVV5K1Uo8jX+BY2onHRAqkJ8cfJ+PIqWeSW7AryTIAwDmbhMpzm4nAA5vjCyId
+         nwDw7cxtR60smSbWiEz09NC7t65JmB0bOnc9Tmtc5ARI8+OhtA3pIR4ZQESX0FTXs8O2
+         LihQ==
+X-Forwarded-Encrypted: i=1; AKwUvByByIWS9qLpe95e8PIfBmk7rmWjC1cp0GihMyRrW4uT2FL6IsZxjhJqeaC7PhJRwzesiAI=@lists.linux.dev
+X-Gm-Message-State: APuU4Z8HkcBqcclml+dIQkdpotnQ+3xhtwtO9IMyS8nchUERKNYBAgy6
+	upGmmgTea2GFMXXtXOXm+wq7FESuPI5SPPAC6EGaTFn5NjcKSrv9oj3NWdDjG/RbY1M=
+X-Gm-Gg: AYBFou3jMhgihO/eEtW7ayHt4bRrQnz3+gWFA/MoclJExHvCFm0f8lRtgG2/Oa3pU6v
+	HmBr7y2/NCWSdFXfz8H9jKUv/d/N26l2tMDEUfG5xxgm6tieFMnbCUpT43a6cHp8ouaEEbZOvSH
+	puH3dxq78avtfkuJ/39QAxvYAFVqtP/wm8oXLIqGufVdGZX8VoQoydFMFJn3AZQ6zdJ80uBQR38
+	OFiCeSWVaQKvEPfso64wCaMO2x+oqnmsiPm3pnUK1Wl/zIiNR5VBCsZAmprtwWBKfhnCgQiLmQN
+	yvHncoUgpWrbldQA3kd6dyLvIFcC23UxIkpZVFx0EsvyHYkC+opggg0kwjKRDnZ/kTwQmpTfgA0
+	V06NxToqZ18YCzvhP6bT3Fl9PxAS9v+60wkl5GSdSA99lrB2VCUHkDyUCdgI378keuFC8uLQt/S
+	ZKKLugfzwAVvJPGUToP9wjDdf1ZYUTOC4Z75+4AfOoaYPOb8oHjGbqXCB95mFZsPAh3/vtNRlHg
+	g6iYRnCfE1ziYR9mI+bmu7XPsFsqY8N/PXlVEN9xYFKXIu4VTh3fFyr9NuBNvUlcMFGZYEjedT/
+	nHkOMC5IVn6oPYF5O5tCuY6Et8SJbQ2nd7bGqHfvoteaooO4Kc9VpOPUqA==
+X-Received: by 2002:a05:600c:e547:10b0:4ad:5e09:ae43 with SMTP id 5b1f17b1804b1-4ad5e09ae61mr139983985e9.29.1793712224232;
+        Tue, 03 Nov 2026 05:23:44 -0800 (PST)
+Received: from andrew.office ([192.145.132.58])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ad414e298bsm163615055e9.2.2026.11.03.05.23.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 05:23:43 -0800 (PST)
+From: Andrew Gaylard <ag@ffroot.co.za>
+To: linux-arm-kernel@lists.infradead.org
+Cc: devicetree@vger.kernel.org,  qinjian@cqplus1.com,  robh@kernel.org,
+  krzk+dt@kernel.org,  conor+dt@kernel.org,  linux@armlinux.org.uk,
+ soc@lists.linux.dev, arnd@arndb.de
+Subject: Re: [PATCH v5 0/6] arm: sunplus: add Tibbo LTPP3G2 board support
+In-Reply-To: <20260924164922.117236-1-ag@ffroot.co.za> (Andrew Gaylard's
+	message of "Thu, 24 Sep 2026 18:49:16 +0200")
+References: <20260924164922.117236-1-ag@ffroot.co.za>
+User-Agent: mu4e 1.12.14; emacs 30.2
+Date: Tue, 03 Nov 2026 15:23:39 +0200
+Message-ID: <sa6mrrqhwv8.fsf@andrew.office>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -59,92 +99,29 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi ARM SoC Team,
+Andrew Gaylard <ag@ffroot.co.za> writes:
 
-Please pull !
+> The Tibbo LTPP3G2 is a board based on the Sunplus SP7021 SoC:
+> https://tibbo.com/store/tps/ltpp3g2.html
+> It is the platform that underpins Tibbo's industrial IoT products.
+>
+> This series adds board support to linux-next:
 
-I have included one dts file fix in this, hope that is OK. Let me know
-if you prefer to keep DTS separate even for fixes.
+Hi all,
 
-Regards,
-Sudeep
+Ping?
 
--->8
-The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
+v5 was posted on 24 September.  Patches 1 and 2 are DT binding changes
+and have been ack'd (thanks Conor).  I haven't heard anything from the
+SP7021 maintainer; mails to qinjian@cqplus1.com bounce.
 
-  Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
+The SP7021 platform entry in MAINTAINERS has no git tree, so I am not
+sure how this series should be routed. Could the SoC maintainers advise
+whether they can take it directly, or who should pick it up? 
 
-are available in the Git repository at:
+It still applies cleanly to v7.4-rc1.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/arm-fw-fixes-7.4
-
-for you to fetch changes up to 09fd63fe687ffa2d6594cd31d6fcf5fa7740a63c:
-
-  Merge branches 'for-next/smccc/fixes', 'for-next/scmi/fixes', 'for-next/ffa/fixes' and 'for-next/juno/fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux (2026-11-02 11:33:33 +0000)
-
-----------------------------------------------------------------
-Arm Firmware Interfaces(SCMI/FF-A/SMCCC) fixes for v7.4
-
-SCMI fixes correct protocol-device creation and request tracking in raw
-mode, allow the generic and i.MX pinctrl drivers to share the standard
-SCMI pinctrl device, and avoid creating unused performance-domain
-devices that block cpufreq consumers through fw_devlink ownership. It
-also includes dropping now unnecessary ACPI config guards and several
-robustness fixes: bound i.MX MISC syslog and control responses,
-unregister notification callbacks on event-enable failure, and free
-mailbox state when shared-memory mapping fails.
-
-The FF-A notifier fix distinguishes notification IDs within a hash
-bucket, preventing callback registration and delivery from using a
-colliding ID.
-
-SMCCC and GICv3 fixes restore builds on 32-bit ARM when SMCCC discovery
-is unavailable, while restricting the discovery dependency to arm64
-where the NVIDIA erratum workaround applies.
-
-Finally, correct the Corstone1000-A320 GIC redistributor region size
-for its GICv4 configuration.
-
-----------------------------------------------------------------
-David Cemin (1):
-      firmware: arm_ffa: Compare notify_id when looking up notifier callbacks
-
-Geert Uytterhoeven (2):
-      firmware: arm_scmi: Update ARM_SCMI_HAVE_TRANSPORT rationale
-      firmware: arm_scmi: Fix grammar s/thing/things/
-
-Julian Braha (2):
-      firmware: smccc: Provide stubs for HAVE_ARM_SMCCC_DISCOVERY=n
-      irqchip/gic-v3: Select HAVE_ARM_SMCCC_DISCOVERY only on arm64
-
-Rob Herring (Arm) (1):
-      arm64: dts: arm: corstone1000-a320: Fix GIC redistributor region size
-
-Sudeep Holla (10):
-      firmware: arm_scmi: Avoid protocol devices in exclusive raw mode
-      firmware: arm_scmi: Skip requests for standard protocol devices
-      pinctrl: imx: Match the standard SCMI pinctrl device
-      firmware: arm_scmi: Skip unused performance-domain devices
-      firmware: arm_scmi: Drop redundant ACPI configuration guard
-      firmware: arm_scmi: imx: Track copied syslog words
-      firmware: arm_scmi: imx: Validate MISC control response size
-      firmware: arm_scmi: Unregister notifier on enable failure
-      firmware: arm_scmi: Free mailbox state on mapping failure
-      Merge branches 'for-next/smccc/fixes', 'for-next/scmi/fixes', 'for-next/ffa/fixes' and 'for-next/juno/fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux
-
- arch/arm64/boot/dts/arm/corstone1000-a320.dtsi     |   2 +-
- drivers/firmware/arm_ffa/driver.c                  |  11 ++-
- drivers/firmware/arm_scmi/Kconfig                  |   2 +-
- drivers/firmware/arm_scmi/bus.c                    | 110 ++++++++++++---------
- drivers/firmware/arm_scmi/driver.c                 |   4 -
- drivers/firmware/arm_scmi/notify.c                 |   4 +-
- drivers/firmware/arm_scmi/transports/Kconfig       |   2 +-
- drivers/firmware/arm_scmi/transports/mailbox.c     |   7 +-
- .../firmware/arm_scmi/vendors/imx/imx-sm-misc.c    |  18 +++-
- drivers/irqchip/Kconfig                            |   2 +-
- drivers/pinctrl/freescale/pinctrl-imx-scmi.c       |   2 +-
- include/linux/arm-smccc.h                          |   7 ++
- include/linux/firmware/imx/sm.h                    |   6 ++
- 13 files changed, 113 insertions(+), 64 deletions(-)
+Thanks,
+Andrew
