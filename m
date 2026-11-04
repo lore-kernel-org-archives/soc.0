@@ -1,58 +1,125 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793809713;
-	b=rh8fI4AKEXRfvx709576RBue5uxOvYuAXY/hfEwrRcJNvAZD8HbN+Af97kEHalCsmZ4B
-	 QTybZFT+rDCUcSo0QDaV76Ph3sTpe3aMYDLLbOPrI4wz84cXKpV1vD9PiogcfvbrypbhA
-	 uF5DL9z0kUQ+su8UAEjmZ+d+7R9GiGw4dlzTfmrUj1DHL6BRFxln8P/yhEurjyRE0bjRa
-	 V6mc85Y5Z5SOS1hm7XyaPhtdM0Gr4lMB9Vq7tJxRI/PnRfK+QTysi5q4n+RAwReR4H26q
-	 WTcZF0zvgjnKoqOAFdvomi1Y1jdSsJXi8bcZCmzQl1hsREgPqqXH6W7f9l6YUN2vp/Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793809713;
-	h=Received:Delivered-To:Received:DKIM-Signature:Received:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:X-Gmail-Original-Message-ID:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=jfcE8CDgamiFwy3XoIjlQTqfdF2WZ6cuol7wMJuYXpM=;
-	b=KY7vpatI9qiIUXlgyIjZQJzhEpJhw1gqQ53oIkgd6P9fQkB6VFOb8ZgP+NErxy4S/Tl5
-	 GUTGkeMIjp2+6J8cwWi+Yiel0dZP2r1G8YovW6S+fy1gd4/KzcYzAOkj/qN5j58Q/U2XG
-	 wmWazQSsPffTmQI4bf7I2cIYUlCMxVgYjZPLUlyNuCMdNM7CUKWBdryLsIm77OhYFySwg
-	 X/fs8ErMQmi6VdvNKzNFUG5HjkIg5eCBFSZ6EObu1DyHcAll8McN6X/UVQfj3KS+Fb7Qp
-	 WK/laFY7FVeSf0Rv8W/hVtQFeKzfgR4ft3DZOCjBFQ1Q6TrPhpyx4b7XwFAN+qNvtIQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I+UKHhRX;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793812089;
+	b=DrAvvV58q+Y/nHNEwlOWirnmsRPAeg1psK4AfoGtDED1CHgnJQFX6Gs5NnYlUrKXjVn6
+	 N8lXJhNT8Tdn2MB3VNAkPjfFZEYPkm9EjOHb42xmzXkLxqgJ89uNCM9cNMyFuvhAXqUlX
+	 SgjjvLapUzQ2PpBRASOc5f7PjtxucSDwwPTHzXEoKL+nCcGiE4XpG3MO6alq7Tpm5nJZ7
+	 dbkTNxcHdKsD6nK2AWdIM/sway6hVXYIDS1L6LtryP0pNOWHhoZ9A3EokxZnoNa4uktNu
+	 9WOok0WyYfxoVdIQn+HD1myuLePE3MIB8WBFJXrl93kaBwsGuKcX7vOPJ3A/dY3bpeg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793812089;
+	h=Received:Delivered-To:Received:DMARC-Filter:DKIM-Signature:
+	 X-CSE-ConnectionGUID:X-CSE-MsgGUID:X-IronPort-AV:X-IronPort-AV:
+	 Received:X-CSE-ConnectionGUID:X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To:Organization;
+	bh=HM1X62uqqSW8+dQdfDbaF9vMh4Xi6tzQU0GrJjMKdtg=;
+	b=2RbZPRjsjcc7Pg+pYXT7Y6w8es02/IX8FUC/AwkDq4HWETUC0147dOYhOtMKR1YTlXH6
+	 i5d/GZdoHNeN4jOWgWijSfGi5qNjoZi0oPvJ77T3TJpHnPf40Y7suIOoL8nclIuaXPekM
+	 6wpSGTLpEkD8rusoZIZfvJJHMx4ajmm5Wmq9TVVOGCGLPx8UBP07o8eEJrNfPRTKs2zb1
+	 yLmDyhR+oH4I+s0ptekg/lwNjB0mcTfK2dihYUqxAjCM33tb3ZpAPMjI4umZUhz9cS15a
+	 ukNlO7G4exzt5fcpJZ/h0fa+bSHpH/fIhePC7xWm2orA2fyDy+h5F4r2+LFd1adNB/A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YvTm5R0s;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C2D606A328
-	for <soc@lists.linux.dev>; Wed,  4 Nov 2026 16:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BF3606A32C
+	for <soc@lists.linux.dev>; Wed,  4 Nov 2026 17:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I+UKHhRX
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YvTm5R0s
 Received: by smtp.kernel.org (Postfix)
-	id 0CE5F1F000C1; Wed,  4 Nov 2026 16:28:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB07D1F00A1B
-	for <soc@kernel.org>; Wed,  4 Nov 2026 16:28:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793809713;
-	bh=jfcE8CDgamiFwy3XoIjlQTqfdF2WZ6cuol7wMJuYXpM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=I+UKHhRXR8JE0GAZduul4QyJTGO5UjILh4yWr7h+1iJgiOY35vKkYxv2u0FNkSgbP
-	 AsrHTxulwbg6uH6BbxwmKI3AwAA+WNOtknZJkqy578SDySUmYIc8OhkMCvwMUN9zMm
-	 RbhZBabi53kMehbermX8dDbmbw1OdPcdUMVCCuV0RsiwqHX7oEfFzPPK6NZKXCkvWK
-	 EYToTwzgKpSxPlFVer6tDxHumErHrkBD/R4kTYaSIzQdlnMvOkmeX0pTHUR8TYeMtR
-	 X1IZJ3hwfuJ5SwVtCM5AaM+AzQazlgiImB0ZftUKiHp9eb4nEc40mH8PfN9M5t8fuk
-	 6bNk8Sj8BzY2g==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5be3ed646a5so1112542e87.1
-        for <soc@kernel.org>; Wed, 04 Nov 2026 08:28:32 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvByg2AKbtT8w/wQhI6cIV4AOXZc1wjKPeZ8aoKaNgGXQTO4V6xMjTz9bs/eyxCBonWQOPjw=@kernel.org
-X-Gm-Message-State: APuU4Z/ZQa1CS+XcLtMrmbQi6Tm4vpez8sbHWcAuutp/7LEdtmDomPsU
-	EtogoMXgXUvinuT1DrM32kvoIh2X6KIkljLBmcDx9Y9spdSZKeMgG+5vcDvCIyElmUGZEJt/lmJ
-	SsOlmFSAu1W1Xto4qt149r6J0+gECNl0=
-X-Received: by 2002:a05:6512:130c:b0:5bf:e7d5:c22e with SMTP id
- 2adb3069b0e04-5bfe7d5c338mr3508206e87.65.1793809711135; Wed, 04 Nov 2026
- 08:28:31 -0800 (PST)
+	id AFDD11F00A17; Wed,  4 Nov 2026 17:08:08 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=192.198.163.11
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793812088;
+	b=k1KRTWJdMA8XLDdbCMrovSjwgkPaVCXGmORC3HMqdUxG/AfBGlNdTuAaGoIfH/fOFZEh
+	 PJkIPREby9Nsh9fVhEDIG1sGhEVDpiIM7ksw8gBYW6rpThDQpC/kSOFHAjuAKyZSXh8F/
+	 VLIxFSuLqR6pXBesxZbSrGXNvouqExqTWhihZm3vbAkx6rMi3VeYLFmMIvs9YTnrki/YK
+	 EkR+/oZTpfCW+TzFIpdwyyKixL3c8ozbmief+3+wHX3gSSYN+/ruEoOB4cF1JRWYnej5c
+	 2D+1QHan6cFqUS/1R2MDbKYDbUfYTWtkzdhHyh75V9wn0GLnP11HfIxz/jwZSTKVr/g==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793812088;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
+	 Organization;
+	bh=HM1X62uqqSW8+dQdfDbaF9vMh4Xi6tzQU0GrJjMKdtg=;
+	b=K0r7E35RhBd0LbNEEwjIoS5U7OtjY+4JzD6IHqI4Lyo7o8M/fy39ClooAucZts4lvbLZ
+	 ger/mGz0A9hC74zr2QC3UP4ockDogHkO5+B2s7aorUwiaX+C/GyZisBflDmZyvB2U/Vk0
+	 q8RxjgCoR4C4/M9WHt5EtVuKiH5SaBaDTFiAJxbM2PGbr3lNI1dtCUqZALOEQqQ/ei4rP
+	 Wg2le5vE8RiumtCyHphYvZUOiqd6RpXE1EaQToJcs4yz1QRLnPlpsr0vg+huL5lazf5nU
+	 TCbbVUbuUSoFG3EN4aV9q+KrMite2N7sP5SIDLaCoyRJ6V5zT3LA0gnzwjXY4Y3AM8g==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YvTm5R0s;
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A14E71F000C1;
+	Wed,  4 Nov 2026 17:08:07 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YvTm5R0s
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org A14E71F000C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793812088; x=1825348088;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ft8VhpNUkwAoJ7C9+JE583msFXwVNKOM2x9mwVzGgq4=;
+  b=YvTm5R0snyRyUa0/zKz4x+hZp2SuKFh8UigZycDNenL1viGBmk7/xcDp
+   1Fy9MqEozFP3l35dAyyEs/b/dM/uRIIqYAxr818fwWqpoiR6wXxvNnYOj
+   Q4abgHHjJ5BfeT7PY3SK7P9CKWrG3/DqB5O1NhqrinUOK/Y2Ro6yTLJLH
+   DQm19zHT03jFc5vVCzKxtgeX/y9m5Oqnz/qVNpy+6AUZO24m8yA/nyM1i
+   bEHJcUL5wZJ4ZRwKcoQ5eSSjSCty99/b7A9pMYH6rbIZE6l9zv46OuECM
+   TYgoKGXhwGsdNUspYq8DbR82bgAIH/EwaahCvpO4O6vxaeLTP4Mi5z/Ek
+   g==;
+X-CSE-ConnectionGUID: HRTh4nRjRIO7tYS7iFusHg==
+X-CSE-MsgGUID: 36cH8aMPQ+6JP10shQvOcA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2483180"
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="2483180"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 09:08:07 -0800
+X-CSE-ConnectionGUID: hp/hoIyeSCK3mj/fpTGilw==
+X-CSE-MsgGUID: npWrMFopRXuq3g6GQJvZnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="6781883"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.24])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 09:08:03 -0800
+Date: Wed, 4 Nov 2026 19:08:01 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Cc: Thierry Reding <thierry.reding@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, arm <arm@kernel.org>, soc@kernel.org,
+	Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, Len Brown <lenb@kernel.org>,
+	linux-acpi@vger.kernel.org,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Mika Westerberg <westeri@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [GIT PULL 4/7] firmware/tegra: Changes for v7.4-rc1
+Message-ID: <autmcaraWcXIoRfZ@ashevche-desk.local>
+References: <20261003095924.1370238-1-thierry.reding@kernel.org>
+ <20261003095924.1370238-4-thierry.reding@kernel.org>
+ <928b3eaf-32da-43a9-9ca5-d59ef8a3b330@app.fastmail.com>
+ <auslF5pwDHtcNoCy@orome>
+ <bcad1d7e-387d-4251-8974-7f0dcd2f9734@app.fastmail.com>
+ <autADOKsSVVMn6r9@orome>
+ <CAJZ5v0iyaHGj2b7H8g0nqrxvz8GpXiE6hkVp9RM7KF+KDckjrA@mail.gmail.com>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -62,132 +129,129 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261003095924.1370238-1-thierry.reding@kernel.org>
- <20261003095924.1370238-4-thierry.reding@kernel.org> <928b3eaf-32da-43a9-9ca5-d59ef8a3b330@app.fastmail.com>
- <auslF5pwDHtcNoCy@orome> <bcad1d7e-387d-4251-8974-7f0dcd2f9734@app.fastmail.com>
- <autADOKsSVVMn6r9@orome>
-In-Reply-To: <autADOKsSVVMn6r9@orome>
-From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Wed, 4 Nov 2026 17:28:18 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iyaHGj2b7H8g0nqrxvz8GpXiE6hkVp9RM7KF+KDckjrA@mail.gmail.com>
-X-Gm-Features: AclHuK9jbg6mFv5SXKdFu2bSKH-sKGt4sGStSGUbedXh5N3Tvf8yZIcMh90hjQg
-Message-ID: <CAJZ5v0iyaHGj2b7H8g0nqrxvz8GpXiE6hkVp9RM7KF+KDckjrA@mail.gmail.com>
-Subject: Re: [GIT PULL 4/7] firmware/tegra: Changes for v7.4-rc1
-To: Thierry Reding <thierry.reding@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: arm <arm@kernel.org>, soc@kernel.org, Jon Hunter <jonathanh@nvidia.com>, 
-	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Hans de Goede <hansg@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Mika Westerberg <westeri@kernel.org>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iyaHGj2b7H8g0nqrxvz8GpXiE6hkVp9RM7KF+KDckjrA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Thierry, Arnd,
-
-On Wed, Nov 4, 2026 at 3:41=E2=80=AFPM Thierry Reding <thierry.reding@kerne=
-l.org> wrote:
->
-> On Wed, Nov 04, 2026 at 03:11:09PM +0100, Arnd Bergmann wrote:
-> > On Wed, Nov 4, 2026, at 13:42, Thierry Reding wrote:
-> > > On Tue, Oct 13, 2026 at 07:22:23PM +0200, Arnd Bergmann wrote:
-> > >> On Sat, Oct 3, 2026, at 11:59, Thierry Reding wrote:
-> > >>
-> > >> Where is the ACPI binding documentation for this driver, and who is
-> > >> responsible for reviewing it?
+On Wed, Nov 04, 2026 at 05:28:18PM +0100, Rafael J. Wysocki (Intel) wrote:
+> On Wed, Nov 4, 2026 at 3:41 PM Thierry Reding <thierry.reding@kernel.org> wrote:
+> > On Wed, Nov 04, 2026 at 03:11:09PM +0100, Arnd Bergmann wrote:
+> > > On Wed, Nov 4, 2026, at 13:42, Thierry Reding wrote:
+> > > > On Tue, Oct 13, 2026 at 07:22:23PM +0200, Arnd Bergmann wrote:
+> > > >> On Sat, Oct 3, 2026, at 11:59, Thierry Reding wrote:
+> > > >>
+> > > >> Where is the ACPI binding documentation for this driver, and who is
+> > > >> responsible for reviewing it?
+> > > >
+> > > > Sorry for the late reply, this fell through the cracks.
+> > > >
+> > > > Admittedly there's not much of a formal process here at all. Anything
+> > > > I've received up to now seemed to be fairly straightforward support
+> > > > extensions like this where the ACPI tables basically provide the same
+> > > > information as the DT via standard resources like register ranges.
+> > > >
+> > > > I suppose for anything beyond this, we'll want better documentation and
+> > > > broader review.
+> > > >
+> > > > Is there anything in particular that you're looking for? Should I guide
+> > > > people internally to always Cc linux-acpi for anything that concerns
+> > > > ACPI?
 > > >
-> > > Hi Arnd, Rafael, Len,
-> > >
-> > > Sorry for the late reply, this fell through the cracks.
-> > >
-> > > Admittedly there's not much of a formal process here at all. Anything
-> > > I've received up to now seemed to be fairly straightforward support
-> > > extensions like this where the ACPI tables basically provide the same
-> > > information as the DT via standard resources like register ranges.
-> > >
-> > > I suppose for anything beyond this, we'll want better documentation a=
-nd
-> > > broader review.
-> > >
-> > > Is there anything in particular that you're looking for? Should I gui=
-de
-> > > people internally to always Cc linux-acpi for anything that concerns
-> > > ACPI?
+> > > I don't know, I'm also still learning about how this is done, I
+> > > was hoping that there was already an established way.
 > >
-> > I don't know, I'm also still learning about how this is done, I
-> > was hoping that there was already an established way.
->
-> Yeah, me too. Maybe Rafael and Len can provide some guidance here.
+> > Yeah, me too. Maybe Rafael and Len can provide some guidance here.
+> 
+> I cannot speak for Len, and he has not been actively involved in the
+> maintenance of ACPI support in the kernel for several years.
+> 
+> As far as I'm concerned, the code maintained by me is mostly located
+> in drivers/acpi/ (as per the relevant MAINTAINERS entries) and it is
+> mostly generic code related to ACPI support.  I generally don't
+> maintain device drivers using ACPI support except for the ones under
+> drivers/acpi/ which mostly bind to devices representing interfaces
+> defined in the ACPI specification (which is kind of a special case).
+> 
+> But there is more.  There is ACPI support code in other places (like
+> for instance gpiolib-acpi maintained by Andy and Mika, or platform-x86
+> drivers maintained by Ilpo) and there are experienced kernel
+> developers in the ARM ecosystem with quite a bit of ACPI-related
+> knowledge (Hans, Jonathan, Sudeep, Lorenzo - all CCed) who can be
+> reached out to for guidance (and arguably they have more experience
+> with ARM platforms than I do).
+> 
+> > I don't know how ACPI on more traditional platforms works, but I imagine
+> > that it's a lot of the same anyway, except perhaps that people have more
+> > experience with the spec and today might be doing a good job already.
+> 
+> If you have any specific questions, I think I should be able to answer
+> at least some of them, but I'm afraid I cannot give you general
+> guidance on how to do ACPI support in device drivers that would be
+> universally useful.  Different drivers have different needs.
+> 
+> There are things in ACPI that are not present in DT and vice versa.
+> It also depends on what bus types we're talking about (platform vs PCI
+> vs USB etc).
 
-I cannot speak for Len, and he has not been actively involved in the
-maintenance of ACPI support in the kernel for several years.
+And don't forget the big player(s) such as Microsoft that from time to time
+creates an "extension" to the ACPI (in means of additional tables or how some
+of the existing data should be interpreted if it's not clear from the ACPI
+specification). For instance, above mentioned USB ACPI support for some cases
+heavily relies on the MS "extensions". Or earlycon support for ACPI is based
+on MS defined SPCR table. And so on...
 
-As far as I'm concerned, the code maintained by me is mostly located
-in drivers/acpi/ (as per the relevant MAINTAINERS entries) and it is
-mostly generic code related to ACPI support.  I generally don't
-maintain device drivers using ACPI support except for the ones under
-drivers/acpi/ which mostly bind to devices representing interfaces
-defined in the ACPI specification (which is kind of a special case).
+> > > Having a review done by the ACPI maintainers would definitely
+> 
+> So as per the above, who exactly do you mean by "ACPI maintainers"?
+> If you mean "the people maintaining the code in drivers/acpi/", that's
+> just me and quite frankly, I'm not sure if my review, specifically,
+> would be super-useful for driver development (the fact that my review
+> bandwidth is almost completely saturated nowadays aside).
+> 
+> My recommendation would be to ask other people within the ARM
+> ecosystem who have more experience with ACPI for help.
+> 
+> > > help from my point of view, but I'm not sure whether they are
+> > > set up for that, in case there are a lot of new drivers.
+> 
+> I am not and had I been trying to do it, it wouldn't have scaled anyway.
+> 
+> > I think platform maintainers need to be a first line of defense here
+> > since they sit at the intersection of a lot of this. At least that's the
+> > case for me. Also, I'm eager to learn how to do this right, but I'm
+> > often at a loss of where to start. The spec is a bit daunting, and then
+> > there's various extensions, too. Maybe the AI genies can help me ramp
+> > up.
+> 
+> My advice would be to reach out to people within your ecosystem in the
+> first place.
+> 
+> > > I assume there is a knowledge gap in both subsystem maintainers
+> > > regarding ACPI (certainly this is the case for me for drivers/bus,
+> > > drivers/firmware, drivers/soc, etc) and ACPI maintainers regarding
+> > > many of the subsystems that we support with DT.
+> >
+> > Agreed. I've seen some patches where the ACPI support was as simple as
+> > just adding an ID table entry and the rest was all standard, but I think
+> > once we move beyond standard resources things might get a bit more
+> > complicated. I imagine that ACPI may not even have specs for certain
+> > aspects that we currently handle in DT...
+> 
+> That certainly is true, but the ACPI specification is under active
+> development and pieces that are missing can be added to it.  There is
+> a process for that in place and ARM people take part in it.
 
-But there is more.  There is ACPI support code in other places (like
-for instance gpiolib-acpi maintained by Andy and Mika, or platform-x86
-drivers maintained by Ilpo) and there are experienced kernel
-developers in the ARM ecosystem with quite a bit of ACPI-related
-knowledge (Hans, Jonathan, Sudeep, Lorenzo - all CCed) who can be
-reached out to for guidance (and arguably they have more experience
-with ARM platforms than I do).
 
-> I don't know how ACPI on more traditional platforms works, but I imagine
-> that it's a lot of the same anyway, except perhaps that people have more
-> experience with the spec and today might be doing a good job already.
+On top of the above in Linux we also developed some "extensions", for instance
+how I²C muxes are described, or how some multi-functional devices are being
+enumerated. These specifics we usually document under
+Documentation/firmware-guide/acpi/ (see i2c-muxes.rst for the mentioned case).
 
-If you have any specific questions, I think I should be able to answer
-at least some of them, but I'm afraid I cannot give you general
-guidance on how to do ACPI support in device drivers that would be
-universally useful.  Different drivers have different needs.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-There are things in ACPI that are not present in DT and vice versa.
-It also depends on what bus types we're talking about (platform vs PCI
-vs USB etc).
 
-> > Having a review done by the ACPI maintainers would definitely
-
-So as per the above, who exactly do you mean by "ACPI maintainers"?
-If you mean "the people maintaining the code in drivers/acpi/", that's
-just me and quite frankly, I'm not sure if my review, specifically,
-would be super-useful for driver development (the fact that my review
-bandwidth is almost completely saturated nowadays aside).
-
-My recommendation would be to ask other people within the ARM
-ecosystem who have more experience with ACPI for help.
-
-> > help from my point of view, but I'm not sure whether they are
-> > set up for that, in case there are a lot of new drivers.
-
-I am not and had I been trying to do it, it wouldn't have scaled anyway.
-
-> I think platform maintainers need to be a first line of defense here
-> since they sit at the intersection of a lot of this. At least that's the
-> case for me. Also, I'm eager to learn how to do this right, but I'm
-> often at a loss of where to start. The spec is a bit daunting, and then
-> there's various extensions, too. Maybe the AI genies can help me ramp
-> up.
-
-My advice would be to reach out to people within your ecosystem in the
-first place.
-
-> > I assume there is a knowledge gap in both subsystem maintainers
-> > regarding ACPI (certainly this is the case for me for drivers/bus,
-> > drivers/firmware, drivers/soc, etc) and ACPI maintainers regarding
-> > many of the subsystems that we support with DT.
->
-> Agreed. I've seen some patches where the ACPI support was as simple as
-> just adding an ID table entry and the rest was all standard, but I think
-> once we move beyond standard resources things might get a bit more
-> complicated. I imagine that ACPI may not even have specs for certain
-> aspects that we currently handle in DT...
-
-That certainly is true, but the ACPI specification is under active
-development and pieces that are missing can be added to it.  There is
-a process for that in place and ARM people take part in it.
