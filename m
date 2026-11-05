@@ -1,147 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793872527;
-	b=QanOjIvoy9zqcohyEamfxejecqYViWKgkqhEl7eWTlVuuzzw809paFMrpPj8Z10OYuAE
-	 AcE9ZGIa2zKw5xMAJqT82UpH0tjGdves2XN8gFOQ9LLvuK4obTreFE3OZeTgz1qv3MJnI
-	 Q7iY3vFgxumhH/0QRvEig7UCXtPza6Uyqyy5guDJg4VeHjQ0xZG+3HJ0MMYYmSx6p/Ikr
-	 mIUeaj5Z1yNmdom3BcigyzHjil8al9kzUobUj3wlJ+2Yf6M16zyfiTGT3Db2vPL6+bDPQ
-	 yNYVLtMJHuV0y0BTRmZLHzs6swVkpfVzOI+Y/CrnTSuwjD6tvPyJfIOIFuIl+Mhl08Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793872527;
-	h=Received:Delivered-To:Received:DMARC-Filter:Received:Received:
-	 DKIM-Signature:DKIM-Signature:X-DKIM2-Info:DKIM2-Signature:
-	 X-DKIM2-Info:Message-Instance:X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:
-	 Feedback-ID:Received:X-Mailer:MIME-Version:X-ThreadId:Date:From:To:Cc:
-	 Message-Id:In-Reply-To:References:Subject:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=yYe6CIEzHHIU5GeXhJHljatRQTHK1/buaPUEJDpwMkg=;
-	b=1VeN/Yfko+/PnQ4SGAtPOaV27G6m45uZb6dAB9LLSiAMoAxheie1/YFm09fKHIV8pGGB
-	 yYAN14HCjcTqMX3+TctMdOAz+LFVbg44JKoypXhroTao44lWzT44V0Y2yP8sg8LmQPjIC
-	 z+wUQwaCk1o1AF4JhXoMJaEfQibug8gPSd2M3FoUmAP8bJH58AHp46ZhCc6hchRuryNaF
-	 /Qa0a7PxlJxJcdczYYKmilP09UkV8+yL6ZCV6+EsPlNAXm6ysNTepR/+qbd7PR5Kc0q2e
-	 rQoD093rSBgWRnZyHl60zDEHahBklJS50oukm2PuyQ3qE/gvc7BEDU3mwqhLo3fJgPA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=KDs36gqI;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=BwAB4lVo;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793874209;
+	b=Lci2lm5iXMOgCyyGQOnuZMGxV8LiuU0hCRhwHzcAccj8RkmMLyXzYw5Y6Pk61+6S17/D
+	 25Gn+Y1BPxaTMIqeWMcyLxvjMAAygbbMroq7iMxNch9P8BSVJY5kkyB4Zuj/Qwe6BhzRz
+	 fj/fDJFm5ePx3Jx5dTTEU2jCnVDyAt9huNgEP1U8O2sbnteHk8fFNWJJmDGaseuT9Mvwi
+	 cUhda0sstUZeeo2Eeas4eItUCSZ0gUQ9spVAAu6vmJlLP4kJ4l6uYN6CiFZhUfhV5e1jL
+	 +4/v9zGL67yLS6DhWm1HHVjuBsSikhQha55gxp7EtL/gV4GOJ3m0IMf77+2mYZ2Za9w==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874209;
+	h=Received:Delivered-To:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=EdnV/i4B0S0fh3g81bf4RkgqVZQyJPUIZHVCvawFMIg=;
+	b=EkKgUV1heniW1V4ys2LTA3Cgb6KJaELiIIv/hcRA3CpgqFq+BsAHFSzeJuh2vVXaiAmH
+	 yUbBKOfBtgsjnGb87U95YDoRZQhR+r2XwsoP5djhkdbfELC2tCw9FCfekGsR29Zj5MyoU
+	 1YASlr+75+qjkhfiCtCACxb8DSiTokpi5BIqiF/RV2vhlnoT+2V9gimsDb+0IG38MJeGX
+	 53DKt43kAWsY3zmtuWNgpWps41WJlf+6GQf1mq+ePBCkKmdsBgmW415kmKN0bQ75AI4oS
+	 UZYzTncmIFs7hrB1eoms6yi+qyH0vG7ejO1S42jdK7Rz/Ycm4fAZDORUxDeZ/MNbcFg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WrMJ9jdV;
+	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB42606A326
-	for <soc@lists.linux.dev>; Thu,  5 Nov 2026 09:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B89606A328
+	for <soc@lists.linux.dev>; Thu,  5 Nov 2026 10:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=KDs36gqI;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=BwAB4lVo
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WrMJ9jdV
 Received: by smtp.kernel.org (Postfix)
-	id 0E94F1F00919; Thu,  5 Nov 2026 09:55:27 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=202.12.124.147
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793872527;
-	b=m3kDu4nXiLt9R6U38oFpdU0hTMRB7x1U9j9Gmo3Ta/uQRroFgH0BdTJImUUudibmMqEP
-	 f+H3aJ1tKDcNH3JsXbKALEX73xXxvErfF5iXu5sVNxi6dSYi5sxaUAPXg0NRNJ4ebZ34x
-	 LpYoV+DHGFOhK8a1mZmWSXbAUMqJ1fcNHHvJxaQQ2XEBoDHh0mJd8OjlZj2gm2PYQbwWO
-	 6axay/pAzFJY0om4TvBPuRKUvPn0eIS4ij1cIOEQv5OdHE+Pt8U8ZiTLAEUkuX1smYWEv
-	 sQVC4jYD536pPL1oUb8xHHCvnt5/abp3KmYKFrd14RHpcBGCt8RD+ttprngwJ49HJbA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793872527;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=yYe6CIEzHHIU5GeXhJHljatRQTHK1/buaPUEJDpwMkg=;
-	b=l68nCbVpKW2jsqaH+/9TqTCHNewDA67e7jThiA9ZH4j2l1i7P0f+5kzQVVnouCcv8dru
-	 RW5toYNs57O6vmWr+6lbxXVG0pTsmrOwOnrYXpR37BLStgRB8dBJZa+UChfnpVuUdprNw
-	 aUkClncpXMg1RrzA9KrDtNh19Kj5cxCzBb7qsrq88kcmeTqIGzC6ElMQsqp5m3hVTVkcd
-	 R7PiXgNyQ4n+WzmXUOj5X46Q7soFSsWJ0Ef6rZrq+3PfF9v6G2ZbDvXle8xP0aJAnBqip
-	 CAHGaIi/m7AmLqwfMhuxR/+z6S67uJnaSrsxuy81GZnHBqHigqRmUA79+oBHAXAvHdw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=KDs36gqI;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=BwAB4lVo;
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	arc=none smtp.remote-ip=202.12.124.147
-Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 78B0C1F000C1
-	for <soc@kernel.org>; Thu,  5 Nov 2026 09:55:26 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=KDs36gqI;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=BwAB4lVo
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 78B0C1F000C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.stl.internal (Postfix) with ESMTP id AC9F91D00181
-	for <soc@kernel.org>; Thu,  5 Nov 2026 04:55:25 -0500 (EST)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Thu, 05 Nov 2026 04:55:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793872519;
-	 x=1793958919; bh=yYe6CIEzHHIU5GeXhJHljatRQTHK1/buaPUEJDpwMkg=; b=
-	KDs36gqI3uiWbSo5Nq9ioN7evjZ6TcDxqEJJ2uFOVOZFaEWZu2riXOj793mSnSXW
-	xCXBwKkiE1r96MCzEPA1Eoyk7rSNPF2UqnxP43vbJxPc3UEo7xPrFaEEOvR6i9Ug
-	pxqixVIo65QLZYGCT+JIs1CzBBlmuydRpFOSR2tdIRpgnCVKUlfctmuib90ERZkw
-	Id9PxNAs55xhYT6fAWZlNezQFasWf0nxcVjEyiVN6R2M6eaqjQaWp7tj6cKTf1s/
-	vcJH455QbYD7/+ML/3QjAwOvnhBkOlaNqDbY9biqzpM4rVfP9Nft0sF4tHsYWHAO
-	ssrgnJ5CZ+pYHq6gKe8R5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1793872519; x=
-	1793958919; bh=yYe6CIEzHHIU5GeXhJHljatRQTHK1/buaPUEJDpwMkg=; b=B
-	wAB4lVo2hy1QNhQ78Cm9AX0hg+SnCZ4foAEUota4c2DUNe7kFUMmJ3VR8DVrEHHQ
-	4mvMquylkKwyVJFqAaYcOV01zgE+awwLSKHHHPA3yAeUSjW1jcY/cxp5bQb6EXhz
-	K+RKOaAA0wl8eqmUp8l5Y+rUkwif9pEo2mw39Q01DT6mceUYasfS32p9xvTN1JY8
-	IZ6GECymD1zc2ozfspJH1LQujNAwe8r0cRy6a9ZB+XPdu0EwW5QUQkFub4ZYsR16
-	Fk5+i5r9OfsYqsv/c4ZobqpIIJuOhh78fJD2k7z4p7M5eReU243QEZU2cTz05aw4
-	4vHue3vEba6VFXs4ZWkaA==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793872519; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BrZXJuZWwub3JnPg==;
-	s=fm2:rsa-sha256:i5HM6JT9+o53QcL/CdiGp7UjbVzIVmyLryX6ExD7BcKRO0Q
-	JiU5aTFTCeJK9tQN7wOrYk2dUcT0lUHrT0z9ftZ5+CczwzIKOwpGfn1qR7Gc0BHh
-	Er2HuBVgdINkNMNHSo8tR/wZA0C7fP8fd62qIyQSozqBjVaArvvRo0rT2gKOJFji
-	YpnKo/T8p/rtYCxdFAOLKZvCrr/IU00+WJOnxNvmz0nUSc3UzS4R+enlVojSh9ie
-	x34J9UODv8aDG33PpINSIrvHFNtay02LGHd0Sbm9XCSViBx9gC5w8Y2+lvDUUqJW
-	Jalge6tgr+wXLOMOJYxtW9hjUZoT1+pt0DLDSfw==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:P8Kh0SV27nFzy5+qlPgzS0dQZrOaPuYkmuY2IvHDwAQ=:uYdk09vuVwBFCmYlcqg2fixxKgonfy3RDZ+Q6EFVc9k=;
-X-ME-Sender: <xms:gVLsaj0sbFfE7q-z85_VG37V1N-9GAI68Z5wFUuJMYYZTLKRCJPQvw>
-    <xme:gVLsas53mPKtRA_S4BIa_NQfLvB1kxOBSjVhzJxh4g6z7ZQEXchKmKAhGLLiw-Cbb
-    kTgjARPTyMi_ArTQMVe1bXjiTERHxBKS91Tj52UoJX0uxRCupwTg3I7>
-X-ME-Proxy-Cause: dmFkZTGPZKrpK5u23rORwwLT4VcYjpOGZf3598mqc5qOQMCBzaafa8Wy9yw28dXD8b1Z5T
-    BgrdmYNHuIX42ZpBNE+ClLn/OyWCusOaI+18SMDwzRoinwpq/yxS3TOrzxLu5FFRs/lz6p
-    9DxH/iqqZ8vrPgnc0wkHjaW+VjgtHRLStx/jdwKMTtPgPdJ5JwwjQw63HXILQS84TNn/kb
-    6l4x6O3QdVWX3fZtkZbX9w3Lf6RHr3xqZY+/QESgnfLLhr47EWqmjfdbDxM9E/QD3qKNoA
-    tK5npRZx09cl7kB2b0YMP9gm8f5/PeyrmdlXxPTXNbH3SkME6rLQE+QHfp+a6MAERjnVt3
-    qpDeivDWHrTolLr0rANMg8uEwtmRGE1Uux5+t2HMGMTYXcFHaJC01/9kXx7ltQ1ggnQHGf
-    WsKMf/HRlPLUeEANPNHdHvBwqY62i9kxY7cUy599e5PW+YBm9k0wxzjjOCsGs1sKIiLRM0
-    Mur46/M8P/uatm7Q9qGPYqVetGBXQyEhmUv3KITfgfxM2gm0gZtd/bt5/+r8XDIAxCMZTn
-    ZopY865rZ7ieF7sc6TYmzyYO8GztgJHC23M6TOfeof+LzVc9M4N9AhfFDiPojnKO7HPXKb
-    /ppbr3a+Tk8kZ5Ld0mQyOQgOkCeJbQwRGRFZJY8W2YUVpaSXZiM6+lPm5gmg
-X-ME-Proxy: <xmx:hFLsaoMygJZEtNhr4I2XHpP_ye6aFV380_3Mte1cJTLnO4JVCVUihw>
-    <xmx:hFLsavXnyTbzWl7xvLzoQg15tZKu1J8kDPiuVvPWZVPDmsiADGzD_A>
-    <xmx:hFLsagbv84RL1yQWdoTVZQbHx9R4vrJtmuamqMSgtuhN2wRJ57XWJA>
-    <xmx:hFLsasva9e8PnvS2O-DWbc7k-SeL-2JeR908j6V24eJtdnuBRbEDXQ>
-    <xmx:h1LsajVXGhqXW5KkG2wi3Bh6LRcA_rB0wM-ZxI1qIqOMdnJwwMKsfP7d>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 31C9232A0099; Thu,  5 Nov 2026 04:55:13 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	id 5BAA81F00A1D; Thu,  5 Nov 2026 10:23:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 369CA1F00A1B;
+	Thu,  5 Nov 2026 10:23:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793874209;
+	bh=EdnV/i4B0S0fh3g81bf4RkgqVZQyJPUIZHVCvawFMIg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WrMJ9jdVqMB/+klFKPsxQ8m9Q2qKNJQ3adCE8vFYfbB8tr1I9sCMmjMeKiFsoDP+c
+	 jkyGE/XGllGI0hhhPsCFf6PSiNCRk9M5As0SNQ2S7wBUSGFM00ff+nLkrkOamSzw2z
+	 A0NB72DU/XhVarz+wvVRKfXEwmHB+jcb8ey0j22y7WuAkaqnl20plErLAq1WgDfbII
+	 ph1KfxNXJkWN3ksj9oLixwTKgoMhvXgAoEWk3c6uqqwjm3oP6FHvGCp0/te1/DTr4b
+	 YaiIzx73dGgXfcTyuZamxewcAmxUAubZMNUIgaLp6xenLUpyOVAR8ySV1IJyijRCFT
+	 Y9SUG0gPpE4mQ==
+Date: Thu, 5 Nov 2026 10:23:24 +0000
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Thierry Reding <thierry.reding@kernel.org>, arm <arm@kernel.org>,
+	soc@kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Mika Westerberg <westeri@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	James Morse <james.morse@arm.com>, Ben Horgan <ben.horgan@arm.com>,
+	Sizhe Liu <liusizhe5@huawei.com>
+Subject: Re: [GIT PULL 4/7] firmware/tegra: Changes for v7.4-rc1
+Message-ID: <20261105-quizzical-wine-oryx-e6f91a@sudeepholla>
+References: <20261003095924.1370238-4-thierry.reding@kernel.org>
+ <928b3eaf-32da-43a9-9ca5-d59ef8a3b330@app.fastmail.com>
+ <auslF5pwDHtcNoCy@orome>
+ <bcad1d7e-387d-4251-8974-7f0dcd2f9734@app.fastmail.com>
+ <autADOKsSVVMn6r9@orome>
+ <CAJZ5v0iyaHGj2b7H8g0nqrxvz8GpXiE6hkVp9RM7KF+KDckjrA@mail.gmail.com>
+ <autmcaraWcXIoRfZ@ashevche-desk.local>
+ <20261104161125.00000523@oss.qualcomm.com>
+ <20261105-inventive-partridge-of-maturity-793a2e@sudeepholla>
+ <8f45711b-d415-4694-a47a-12d4b7427e0f@app.fastmail.com>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -151,92 +80,92 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: Ar0hN4MWufik
-Date: Thu, 05 Nov 2026 10:54:42 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Sudeep Holla" <sudeep.holla@kernel.org>,
- "Jonathan Cameron" <jonathan.cameron@oss.qualcomm.com>
-Cc: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "Thierry Reding" <thierry.reding@kernel.org>, arm <arm@kernel.org>,
- soc@kernel.org, "Jon Hunter" <jonathanh@nvidia.com>,
- linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- "Len Brown" <lenb@kernel.org>, linux-acpi@vger.kernel.org,
- "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
- "Hans de Goede" <hansg@kernel.org>, "Jonathan Cameron" <jic23@kernel.org>,
- "Mika Westerberg" <westeri@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "James Morse" <james.morse@arm.com>, "Ben Horgan" <ben.horgan@arm.com>,
- "Sizhe Liu" <liusizhe5@huawei.com>
-Message-Id: <8f45711b-d415-4694-a47a-12d4b7427e0f@app.fastmail.com>
-In-Reply-To: <20261105-inventive-partridge-of-maturity-793a2e@sudeepholla>
-References: <20261003095924.1370238-1-thierry.reding@kernel.org>
- <20261003095924.1370238-4-thierry.reding@kernel.org>
- <928b3eaf-32da-43a9-9ca5-d59ef8a3b330@app.fastmail.com>
- <auslF5pwDHtcNoCy@orome>
- <bcad1d7e-387d-4251-8974-7f0dcd2f9734@app.fastmail.com>
- <autADOKsSVVMn6r9@orome>
- <CAJZ5v0iyaHGj2b7H8g0nqrxvz8GpXiE6hkVp9RM7KF+KDckjrA@mail.gmail.com>
- <autmcaraWcXIoRfZ@ashevche-desk.local>
- <20261104161125.00000523@oss.qualcomm.com>
- <20261105-inventive-partridge-of-maturity-793a2e@sudeepholla>
-Subject: Re: [GIT PULL 4/7] firmware/tegra: Changes for v7.4-rc1
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8f45711b-d415-4694-a47a-12d4b7427e0f@app.fastmail.com>
 
-On Thu, Nov 5, 2026, at 10:30, Sudeep Holla wrote:
-> On Wed, Nov 04, 2026 at 04:11:25PM -0800, Jonathan Cameron wrote:
+On Thu, Nov 05, 2026 at 10:54:42AM +0100, Arnd Bergmann wrote:
+> On Thu, Nov 5, 2026, at 10:30, Sudeep Holla wrote:
+> > On Wed, Nov 04, 2026 at 04:11:25PM -0800, Jonathan Cameron wrote:
+> 
+> >> 1) Basic stand alone driver stuff.  Mostly that's all pretty standard
+> >>    and follow the specs where possible.  If there are gaps start asking
+> >>    questions. Linux definitely  doesn't support all the stuff that has been
+> >>    added to the spec in recent years.  So this covers things like register
+> >>    addresses, interrupts etc.  All fine, hopefully a subsystem maintainer
+> >>    can take a look and will have enough of any idea.  If not ping the folk
+> >>    on this thread for help.  Things are a bit flexible for consumer type
+> >>    devices where fixed and bodges are common, generally less so if it is
+> >>    server grade hardware.
+> >> 
+> >> 2) Stuff that is an ACPI spec gap or place where we'd expect generalization.
+> >>    There are several examples of this on list this week and a few more in
+> >>    my inbox.  The particular series here might fall into this category.
+> >>    I've not figured out enough of the details yet to say definitively.
+> >> 
+> >
+> > Nicely summarised or categorised Jonathan. Nothing much to add.
+> 
+> +1
+> 
+> >> I'd also expect a driver using AML as the target interface to either
+> >> point at a published spec doc, or to include some snippets
+> >> of the AML - that can be a lot easier to read than the driver code
+> >> (imagine reading DT by only looking at how drivers parse it).
+> >> 
+> >
+> > Ideally, it should be just HID that any vendor needs to publish unless
+> > they make use of any custom methods or something device specific like
+> > DSD/DSM. I would expect most of the devices to use standard methods and
+> > properties that are already well defined in the ACPI spec.
+> 
+> >> Given that has new ABI etc, I'd expect that to have gotten broader review
+> >> as well.  Probably keeping it to linux-tegra and lkml alone wasn't
+> >> going to result in anyone noticing!
+> >> 
+> >> https://lore.kernel.org/all/?q=20260929095915.2215685-1-anrao@nvidia.com
+> >> 
+> >
+> > Agreed, it shouldn't hurt to cc linux-acpi for such driver ACPI enablement
+> > patches.
+> 
+> Is the "BMRQ" in
+> https://lore.kernel.org/all/20260929095915.2215685-3-anrao@nvidia.com/
+> a custom method then? 
+> 
 
->> 1) Basic stand alone driver stuff.  Mostly that's all pretty standard
->>    and follow the specs where possible.  If there are gaps start asking
->>    questions. Linux definitely  doesn't support all the stuff that has been
->>    added to the spec in recent years.  So this covers things like register
->>    addresses, interrupts etc.  All fine, hopefully a subsystem maintainer
->>    can take a look and will have enough of any idea.  If not ping the folk
->>    on this thread for help.  Things are a bit flexible for consumer type
->>    devices where fixed and bodges are common, generally less so if it is
->>    server grade hardware.
->> 
->> 2) Stuff that is an ACPI spec gap or place where we'd expect generalization.
->>    There are several examples of this on list this week and a few more in
->>    my inbox.  The particular series here might fall into this category.
->>    I've not figured out enough of the details yet to say definitively.
->> 
->
-> Nicely summarised or categorised Jonathan. Nothing much to add.
+I’ve quickly reviewed the patch; it does implements a custom method BMRQ
+rather than a standard or out-of-the-box solution. More details on this is
+used based on my understanding below.
 
-+1
+> How does this relate to the EC and PCC interfaces in ACPI systems?
+> 
 
->> I'd also expect a driver using AML as the target interface to either
->> point at a published spec doc, or to include some snippets
->> of the AML - that can be a lot easier to read than the driver code
->> (imagine reading DT by only looking at how drivers parse it).
->> 
->
-> Ideally, it should be just HID that any vendor needs to publish unless
-> they make use of any custom methods or something device specific like
-> DSD/DSM. I would expect most of the devices to use standard methods and
-> properties that are already well defined in the ACPI spec.
+I am still evaluating how the BPMP driver is intended to operate on ACPI
+systems. In the meantime, I share the same questions noted above. The current
+commit message lists several driver features that may not be required for
+ACPI, which has introduced some clarity issues regarding the intended design.
 
->> Given that has new ABI etc, I'd expect that to have gotten broader review
->> as well.  Probably keeping it to linux-tegra and lkml alone wasn't
->> going to result in anyone noticing!
->> 
->> https://lore.kernel.org/all/?q=20260929095915.2215685-1-anrao@nvidia.com
->> 
->
-> Agreed, it shouldn't hurt to cc linux-acpi for such driver ACPI enablement
-> patches.
+> In current mainline, I see that the bpmp driver is used on DT systems
+> by the tegra specific cpufreq, memory and pci drivers, but I would
+> expect that on ACPI those all use shared drivers. Are there any other
+> users that are not already covered on ACPI?
+> 
 
-Is the "BMRQ" in
-https://lore.kernel.org/all/20260929095915.2215685-3-anrao@nvidia.com/
-a custom method then? 
+For ACPI systems, CPUFreq operates through CPPC via PCC, MEMIO, or
+supported backends.
 
-How does this relate to the EC and PCC interfaces in ACPI systems?
+My understanding is that the BMRQ method is called by tegra_bpmp_transfer(),
+which supports Tegra-specific drivers for power domains, clocks, resets,
+I2C, PCIe, and memory. On ACPI, these can be abstracted through PCC
+OpRegions as part of standard methods like _ON/_OFF or other device state
+methods. Although device/memory DVFS is trickier since the ACPI
+specification lacks standard methods for it today, the commit message
+implies these components are largely unused on ACPI systems.
 
-In current mainline, I see that the bpmp driver is used on DT systems
-by the tegra specific cpufreq, memory and pci drivers, but I would
-expect that on ACPI those all use shared drivers. Are there any other
-users that are not already covered on ACPI?
+I have raised a query on the thread to clarify this.
 
-     Arnd
+-- 
+Regards,
+Sudeep
