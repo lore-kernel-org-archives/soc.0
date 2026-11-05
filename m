@@ -1,78 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793876829;
-	b=1xoR2oXYiDs/XcGAF4O8j6Z9XJ6jc+TbI/n8hP8OuHK4kzYGXCpb5GIhU9KmSGZoGTqS
-	 4hVkK6VRjvEnJaU/BmE9qsQ5OFz0LnWhCohWhPkKc58rsVp4QavSsCYMJosHapAa8gk2o
-	 73Pv7Lk5OXEbEltjfwwAYcHHSlEkXumdCQ/Bh03VH68uLeYxkT0ltxNHtXLhp2UYbdo74
-	 3n7jLKaHbkQPQRqqtQEhDuEQeudBcY9Q7r0YJHrPotykZItUUX1f1V/sHK99uzsaqI7iS
-	 j/xrx8vP5E+KOTyjnLI/5phfagWcP4/L+O0FODUuFyoqtYfhSNa52aDtKbQGKTbLkJA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793876829;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Na+yNwADVHtT0+06vQ945iPzbZLRjZ92Pxuevq6zNF8=;
-	b=W3iPapZE4IAOkIjzlezpmkTkPYJTM0HuqevdQGkJz77qpPuJwmDNOmvpuFtOoYbRtJm/
-	 DsdiZZtrhGIRyRkFUhDupYdYmyrc3zi+vr044+zVdnpr2cD0qa3xRwhDv8bOQLNpMoE0j
-	 HfNaUTJ10Iz1Zyzb9BSkXlBZRpbtG6hSXMhC2smO8QIyXcsymghNZ22QDuiL7zeE+X+Hw
-	 21oHvsGy3laVPD2NTjCdxH1R5TwXxrhaLBtBdNG0Tv5/D0sut6SuIGGpEP0NfNk99q+GW
-	 e2jog4sAVdEoHD7i0wHXoHvJxt6O/JCt4SnYc4wh5VdOGLsrd606ig2/xD8D7PyvYRQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gUAaUuz4;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793885494;
+	b=Wjx+SoudjVmu5PmxO4GyTT8OOE0FvsL0ZxK27zZQ4C9jlX2f9TPlxM3B26/+4FQpaBvG
+	 2B96RX+MZbjKPBxtb7XQu9GCzZQ3OtZvK+KWNV+2WdNMnO3neK2zC0e4FSJji7Y2LZbwO
+	 J/VZi+i7e1LAOjsXf/9TFQdGoUDHiT4pkBehzV5FBasAeQbcU4SzyRsxhBxJJyWCzcoOr
+	 BiSeWFRZFpjYSj6V7WkpIThG+sGmd5dsIpKKI/+EcQcm2yFZCyqj82PJ4brmkSa/0ZLSx
+	 AtqHg98qboG0YBQ2+2XwxNGcaEPkmaodNrBeQ+KyJ9hJRJtJoWN3bzZRoEvXCQjAR5w==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793885494;
+	h=Received:Delivered-To:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=/QvKnUG4iFq+pg6e/pJ49FqAE2AbwcrtIOiNlhBH95A=;
+	b=sZrHk4hpH4y0LDrDabKYslmih/U+Nv7ojbd0LfqrqIoOON/a9Wqo0xziZFRo/Qjn7ZpD
+	 QjjaJwSKdYOcyXG6S50nDBTLdXzSf3iu7Q89cZVLwg94gjuEbwBiDddGyy26Rcuyx7ge9
+	 WG1LmGDs0QkvvMD6z89FYM91UocN9kOKjk7mKUCW9ss92JpDvc/5IbokG5ktM5aW7fn5K
+	 UbMdetoj3i+TU8s7eDQLXvWiPPuuHWK0pqfPEiJ8nNUEiim9GdCfuTt6gFz/GEB/e6bSL
+	 bG3ekqNnWztPLkLmI19QF9kFIJtqISfEs61+ef1olFFSQgFx8buSW5uWfiUuFmLsaYA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ws1hHqpC;
+	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D394B606A329;
-	Thu,  5 Nov 2026 11:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F71D606A31B
+	for <soc@lists.linux.dev>; Thu,  5 Nov 2026 13:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gUAaUuz4
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793876828;
-	b=s96P2GJdw+RyW5J4ghmu1liE3uEatmNjgoWMFYvtoss7yXQveo+GKM5YOa4ciOvU3fAp
-	 NaOHffNW2iQIBrM5g8jqLsygOlYXNQsERW6ui1uM6PY9H7WGc0GqMp5QytvR9DW8jvTu7
-	 iUgYky8ptbYA/BmYTg4IA2PSKe6Ug290vWJyX52zUU1uyobKhMqYc0B63Q4hWNyTfW1Z6
-	 5G8tkYDvGBb0cE9Sl5A0uG6f9dqoS9GZ8MgfepPD2R0Rfbv+Nyybn1X7uKMNWBwVx/HLn
-	 7f7s9XkulnS8CcTSRgvT1PP5lMPOvQCNAwQ1NIvXXeyW6wozw20WQ9ZS6LxaG2lXpDw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793876828;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Na+yNwADVHtT0+06vQ945iPzbZLRjZ92Pxuevq6zNF8=;
-	b=jCrPANQEZ3M4E5yLEYdEaAz8fdHDrQrwqk2ROuNyipHsL9v9N10u3BZmVBsqM1Wr7c8k
-	 RpHJlAFjKF6JullJLG43ZDYpMh6gIubTljQrnGC0loN2PfABDwtDqQR3k8+8TGLkmthDO
-	 biH7ozcvgDjcn8LysHNydOnPnVQJ7x0kWFhRXYCylZEW4TvmDblVekCV61Q9JEnz4ch1b
-	 hlYGdDArlya/mSmPQX3edAaBiETpp3aLHYu78POMfyXe33EQ6lr6UWGSTgP6/0qivbCVB
-	 /bc7skJxNOjM8dsv5Wshe7eOJG8MdXV9yU5mNhE5FVMzdse/Iu7AmqaHRbdzWgSBE1A==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F2FF41F00A02;
-	Thu,  5 Nov 2026 11:07:06 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ws1hHqpC
+Received: by smtp.kernel.org (Postfix)
+	id 318FA1F00A18; Thu,  5 Nov 2026 13:31:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4171F000C1;
+	Thu,  5 Nov 2026 13:31:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793876828;
-	bh=Na+yNwADVHtT0+06vQ945iPzbZLRjZ92Pxuevq6zNF8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=gUAaUuz4bH4JwQ5ITO9U5C/moLkQm6VlKx7w5Kgmz9W+VJ+V5iHYCNUM/jPuuK85C
-	 O5gSErDnsU5fQr86s2xKaW/nbw0lysOqQ0ELlqHbzriPR5j93V4qvHAFqGe8TbGhzA
-	 9J29EIHd6VfrES1N/A6lxTubeeZkoyo/gNiC7T+nA6sXrHHsO/jPa/c05rCXadteA1
-	 BWskZGNHEEXXv74hZgUprNtoh1l7/Rue2F53qxunlq89ef1J8m+Ss9CUTyf7LLDYk1
-	 YT+Dlvoa0dLX8wMUJ5AIwhfElbND4oJTZ32rDT4O+Ympw5GUXwR+vdfNyQzA8sIvx1
-	 G75tqdILPuwKg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 83AC147213;
-	Thu,  5 Nov 2026 11:07:05 +0000 (UTC)
-From: Long Zhao via B4 Relay <devnull+longzhao.ambarella.com@kernel.org>
-Date: Thu, 05 Nov 2026 19:06:39 +0800
-Subject: [PATCH v11 5/5] MAINTAINERS: add ARM/AMBARELLA SoC support
+	s=k20260515; t=1793885494;
+	bh=/QvKnUG4iFq+pg6e/pJ49FqAE2AbwcrtIOiNlhBH95A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Ws1hHqpCrTO3vv5+xWSpKi1W3FzvYwAnjHo7ZBri+xFew3S/iI+cg+vaLDpwRX4Bq
+	 7CH55eaByLgICZl7qi4fjM2FWC0dAz7vDsAicN5XTdy7H9aMIAAut0u2LoqDOF0kcC
+	 qCcUi4Q2GjAQWl+Zxb6je9rfvn6D4UylfxObtecabLBvOk5dz+OzpM2go58G+puAzL
+	 2jPeQsLvvjE/3CRV8jGtCR8s4rMoyzf0+UCKnZHc6okGrT2VzObWstYJpBUnNr19x1
+	 DhUau/mWTXC4er4D5cHYEemg2gy+4t9OgFaQVk8yQ7Y6RO4oWngYTJlems/uva3Y3a
+	 ep/1AInJyJiEw==
+Date: Thu, 5 Nov 2026 14:31:31 +0100
+From: Thierry Reding <thierry.reding@kernel.org>
+To: Sudeep Holla <sudeep.holla@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, 
+	Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, arm <arm@kernel.org>, soc@kernel.org, 
+	Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Hans de Goede <hansg@kernel.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Mika Westerberg <westeri@kernel.org>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, James Morse <james.morse@arm.com>, 
+	Ben Horgan <ben.horgan@arm.com>, Sizhe Liu <liusizhe5@huawei.com>
+Subject: Re: [GIT PULL 4/7] firmware/tegra: Changes for v7.4-rc1
+Message-ID: <aux_4NxiWvD9uVev@orome>
+References: <928b3eaf-32da-43a9-9ca5-d59ef8a3b330@app.fastmail.com>
+ <auslF5pwDHtcNoCy@orome>
+ <bcad1d7e-387d-4251-8974-7f0dcd2f9734@app.fastmail.com>
+ <autADOKsSVVMn6r9@orome>
+ <CAJZ5v0iyaHGj2b7H8g0nqrxvz8GpXiE6hkVp9RM7KF+KDckjrA@mail.gmail.com>
+ <autmcaraWcXIoRfZ@ashevche-desk.local>
+ <20261104161125.00000523@oss.qualcomm.com>
+ <20261105-inventive-partridge-of-maturity-793a2e@sudeepholla>
+ <8f45711b-d415-4694-a47a-12d4b7427e0f@app.fastmail.com>
+ <20261105-quizzical-wine-oryx-e6f91a@sudeepholla>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -82,77 +75,157 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261105-cv75-soc-v11-5-aa6ee0b2380d@ambarella.com>
-References: <20261105-cv75-soc-v11-0-aa6ee0b2380d@ambarella.com>
-In-Reply-To: <20261105-cv75-soc-v11-0-aa6ee0b2380d@ambarella.com>
-To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, soc@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>
-Cc: Jerome Brunet <jbrunet@baylibre.com>, linux-clk@vger.kernel.org, 
- Brian Masney <masneyb@kernel.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- devicetree@vger.kernel.org, Long Zhao <longzhao@ambarella.com>, 
- Long Zhao <zl020895@163.com>, linux-kernel@vger.kernel.org, 
- Linus Walleij <linusw@kernel.org>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793876823; l=1241;
- i=longzhao@ambarella.com; s=20260730; h=from:subject:message-id;
- bh=66/FpPmSuU75AtQewU8cj7mu+Qa/5qamx4Km8ySoeYo=;
- b=xAh3tkUI2kmwUkqlbkc1QWPFQD/HdhXVQhlU8BXpEX2u+sz+O9JyPIE8rVMYW/JtELUrTdBSD
- NBuBvxdiaj5CHQ8X5WOgk94QE+DZNn1Jtq5NrV5bnbRUOwSp7uOhT/v
-X-Developer-Key: i=longzhao@ambarella.com; a=ed25519;
- pk=/xGhPTOX0/eYsyTWzyjjgAIW1Z/YD+IlnOnvcdRozow=
-X-Endpoint-Received: by B4 Relay for longzhao@ambarella.com/20260730 with
- auth_id=903
-X-Original-From: Long Zhao <longzhao@ambarella.com>
-Reply-To: longzhao@ambarella.com
-Content-Transfer-Encoding: 7bit
-
-From: Long Zhao <longzhao@ambarella.com>
-
-Add a maintainer entry covering Ambarella CV75 bindings, DTS and
-related drivers.
-
-Reviewed-by: Linus Walleij <linusw@kernel.org>
-Signed-off-by: Long Zhao <longzhao@ambarella.com>
----
- MAINTAINERS | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 803b60ad628f..59e5b32d7a02 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2502,6 +2502,20 @@ F:	drivers/clocksource/asm9260_timer.c
- F:	drivers/rtc/rtc-asm9260.c
- F:	drivers/watchdog/asm9260_wdt.c
- 
-+ARM/AMBARELLA SOC SUPPORT
-+M:	Long Zhao <longzhao@ambarella.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+L:	devicetree@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/arm/ambarella.yaml
-+F:	Documentation/devicetree/bindings/clock/ambarella,cv75-rct.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ambarella,cv75-pinctrl.yaml
-+F:	arch/arm64/boot/dts/ambarella/
-+F:	drivers/clk/ambarella/
-+F:	drivers/pinctrl/pinctrl-ambarella*
-+F:	include/dt-bindings/clock/ambarella,cv75-rct.h
-+N:	ambarella
-+
- ARM/AMD PENSANDO ARM64 ARCHITECTURE
- M:	Brad Larson <blarson@amd.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-
--- 
-2.34.1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="z7tak3mo2ipp6x3b"
+Content-Disposition: inline
+In-Reply-To: <20261105-quizzical-wine-oryx-e6f91a@sudeepholla>
 
 
+--z7tak3mo2ipp6x3b
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [GIT PULL 4/7] firmware/tegra: Changes for v7.4-rc1
+MIME-Version: 1.0
+
+On Thu, Nov 05, 2026 at 10:23:24AM +0000, Sudeep Holla wrote:
+> On Thu, Nov 05, 2026 at 10:54:42AM +0100, Arnd Bergmann wrote:
+> > On Thu, Nov 5, 2026, at 10:30, Sudeep Holla wrote:
+> > > On Wed, Nov 04, 2026 at 04:11:25PM -0800, Jonathan Cameron wrote:
+> >=20
+> > >> 1) Basic stand alone driver stuff.  Mostly that's all pretty standard
+> > >>    and follow the specs where possible.  If there are gaps start ask=
+ing
+> > >>    questions. Linux definitely  doesn't support all the stuff that h=
+as been
+> > >>    added to the spec in recent years.  So this covers things like re=
+gister
+> > >>    addresses, interrupts etc.  All fine, hopefully a subsystem maint=
+ainer
+> > >>    can take a look and will have enough of any idea.  If not ping th=
+e folk
+> > >>    on this thread for help.  Things are a bit flexible for consumer =
+type
+> > >>    devices where fixed and bodges are common, generally less so if i=
+t is
+> > >>    server grade hardware.
+> > >>=20
+> > >> 2) Stuff that is an ACPI spec gap or place where we'd expect general=
+ization.
+> > >>    There are several examples of this on list this week and a few mo=
+re in
+> > >>    my inbox.  The particular series here might fall into this catego=
+ry.
+> > >>    I've not figured out enough of the details yet to say definitivel=
+y.
+> > >>=20
+> > >
+> > > Nicely summarised or categorised Jonathan. Nothing much to add.
+> >=20
+> > +1
+> >=20
+> > >> I'd also expect a driver using AML as the target interface to either
+> > >> point at a published spec doc, or to include some snippets
+> > >> of the AML - that can be a lot easier to read than the driver code
+> > >> (imagine reading DT by only looking at how drivers parse it).
+> > >>=20
+> > >
+> > > Ideally, it should be just HID that any vendor needs to publish unless
+> > > they make use of any custom methods or something device specific like
+> > > DSD/DSM. I would expect most of the devices to use standard methods a=
+nd
+> > > properties that are already well defined in the ACPI spec.
+> >=20
+> > >> Given that has new ABI etc, I'd expect that to have gotten broader r=
+eview
+> > >> as well.  Probably keeping it to linux-tegra and lkml alone wasn't
+> > >> going to result in anyone noticing!
+> > >>=20
+> > >> https://lore.kernel.org/all/?q=3D20260929095915.2215685-1-anrao@nvid=
+ia.com
+> > >>=20
+> > >
+> > > Agreed, it shouldn't hurt to cc linux-acpi for such driver ACPI enabl=
+ement
+> > > patches.
+> >=20
+> > Is the "BMRQ" in
+> > https://lore.kernel.org/all/20260929095915.2215685-3-anrao@nvidia.com/
+> > a custom method then?=20
+> >=20
+>=20
+> I=E2=80=99ve quickly reviewed the patch; it does implements a custom meth=
+od BMRQ
+> rather than a standard or out-of-the-box solution. More details on this is
+> used based on my understanding below.
+
+To get everyone on the same page: in a nutshell, BPMP is a separate
+processor that handles various aspects of power management (Boot and
+Power Management Processor). The CPU communicates with it over a shared
+memory region and a mailbox/doorbell for signalling.
+
+> > How does this relate to the EC and PCC interfaces in ACPI systems?
+> >=20
+>=20
+> I am still evaluating how the BPMP driver is intended to operate on ACPI
+> systems. In the meantime, I share the same questions noted above. The cur=
+rent
+> commit message lists several driver features that may not be required for
+> ACPI, which has introduced some clarity issues regarding the intended des=
+ign.
+
+My understanding is that an ACPI systems, as opposed to DT where we do
+this all through kernel drivers, the inter-processor communication is
+done via AML. This is because standard power management operations use
+this same mechanism to enable clocks, deassert resets, etc.
+
+> > In current mainline, I see that the bpmp driver is used on DT systems
+> > by the tegra specific cpufreq, memory and pci drivers, but I would
+> > expect that on ACPI those all use shared drivers. Are there any other
+> > users that are not already covered on ACPI?
+> >=20
+>=20
+> For ACPI systems, CPUFreq operates through CPPC via PCC, MEMIO, or
+> supported backends.
+>=20
+> My understanding is that the BMRQ method is called by tegra_bpmp_transfer=
+(),
+> which supports Tegra-specific drivers for power domains, clocks, resets,
+> I2C, PCIe, and memory. On ACPI, these can be abstracted through PCC
+> OpRegions as part of standard methods like _ON/_OFF or other device state
+> methods. Although device/memory DVFS is trickier since the ACPI
+> specification lacks standard methods for it today, the commit message
+> implies these components are largely unused on ACPI systems.
+
+I think this goes back to the disconnect from the patch thread and
+earlier in this discussion: the intent was very much to encapsulate all
+the power management within standard ACPI methods, and that's working
+fine, hence why clocks, resets and power domains are not getting exposed
+on ACPI systems.
+
+However, there's no equivalent in ACPI to expose these MBWT knobs, hence
+the need to expose this through BPMP directly.
+
+Thierry
+
+--z7tak3mo2ipp6x3b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmrshTAACgkQ3SOs138+
+s6F/FA/+ObQrZtsqOmcyTIJjG1fJSEbJOLpkQwiKNY62NJ38g6XFAQhHDquZK7fU
+Q8zZA0rub/mrtVypRyvKH4aVCdFSRd1g6aCSbTa7P46GPlk+aqwqWiZTLFVQOMXN
++/aHuJvK7hh98Bz0FJl6uElcDjGG9+DkSThb7wMiqnqXCT/+Nn6FlqDpAMmobiby
+MrY+FwU4LI4LApngp1EhEmA79HuuoRfPZwPgOXvcuT4W8Mp/fX2ObKHcbrjUWh/F
+KQRcI+/6yemzKGUUn77IDoSm3BcYoFpMSoT17pToEjGnLMw8OIIJgetGCwY1Vo0O
+luXnMzylpJ5Dv9b5PtOhayc3RMjXXNGVpjeiZYTmkCXpd6gpNbYJL3h1hoRoEWad
+t0ETWzP7TAdkVocXmZwo65U7vI6E+1DgXgE6FDTJUaCPQpvNcAlwWlUFF3X2Mh0L
+dMLkX8ywPdGb0z3/J70LVwwn2F0lbKfbYTRkHTi829x3iJXbQ1MK2llCCm58gBwz
+7MjwrYHFZmiCGWFqjYAADDmAaYR11PMRlSkJjWdaURIgtyugFSuE4MzFY7RoIdNd
+jtbxlWsiaM8FKd79mBUA6uCSWLb2VTbpJc6mkA7notTGmApThOfPi8r9sn4W2Drj
+X5ZBqtAzUt/qlKjMrQ08k3zYg+4QMddSGiwTk47KF6qoZNJ/YLk=
+=QkJC
+-----END PGP SIGNATURE-----
+
+--z7tak3mo2ipp6x3b--
