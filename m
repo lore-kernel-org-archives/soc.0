@@ -1,42 +1,53 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793960279;
-	b=il3BCsKCUMNbL4jXsGD2vzBCl6MiKhSjRH6A3mMSzjTsmiFR0TjSIR4ub2MEq1vfv1vH
-	 +CpKfJn9aKJEpo5m5wUM+zap2ibZ1ivzIJM6FE3SM+kz+sbj+vNQnu8fyn5cmbyod2qCd
-	 mMiyKQjGCBW2vR6yfPqrANBhB2T173pEngxtP8YbyqYzVQX4z5pYreXnzZsEDfe5RKDqW
-	 Z9c2XnoxMomjl/d1XwnV9itALGfSgasHReAPcE61sEXqfcgEpHqXN75Dgr2XDsobZAGRf
-	 TdpjpLsOtODIdBW59s0l92nVDYA1AfoBL46nY/h8uK+6FFF15lfKbajoCXfg9PLn5JQ==
+	t=1794150943;
+	b=S6KTmTCRbvycsXYh1mIB8ZY+7JidFJUmFcsnPYx2mggHy6AB5rM+7Pg8mHRtF1XA3Lw1
+	 b7BYjBpfjEzZRHJGmmYYF3Lz/kPAIqpHWk6AcuUp2jS7MUGX/I6sBpBv+oNbgWJH1V39u
+	 mn43GWJ659OFD+QoavAFu91ZZ/EPMd7NGIxusoP8kRaXCXbkMgdjUNO+M3jwepyvXA3Ur
+	 FQGzpfY4lbQVTu3NW0LuMnzDblpVKiBpc0S/S6H168BMlelUAMZZIdYmTgJ4PdR+dxcSN
+	 11bvVlFKwuUueXUvjxszhxEBg27zDaGXi/hp6vxPIE2lWT5wjv09Q+awU/XT5MK4Luw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793960279;
-	h=Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=83X7I5YDbIYy10X4mgzlqvfEyStnFtsT7gAcWs1z/GQ=;
-	b=S4mZAV93+cMPQoh3hGoFpXdPd4Buslc+8n7FCsw4V1nGF3bpEEUZuFpoje+d7PdKAJz5
-	 ZKd4k5S8foQYH8hBdsUjJ/ZCTVuIrnp0q/ThXZ7ewOOkjyM/mNt7tzstYYqFI052YVEEm
-	 pPt0Wzc1E3R0EQqcNrlocmNF0v3QxEPTpbQCYvrcw7OSrbtd1Std2or+CPE5KTFEKc9fA
-	 wugLIgGkv8EYpL8PtQ1qxk2HiGVuwuHZL+tzffxAfbZ93aUnquoHOYs5M6Cztv8VN/gwQ
-	 o2ZCOS/kX0LorqdbbBixYjtGN9h9rEIjllb7hmijO7HQUrhBJk2gpX9UkUZSNor2Erg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794150943;
+	h=Received:DKIM-Signature:Received:X-Gm-Message-State:X-Received:
+	 MIME-Version:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=K1wv4P9LkVe//Bk8oo2Vt8BpwtAtk9Cmoa2L4e+Ln+k=;
+	b=STjXdJRyZ+CqYsww3ydDxpWKLbVbNWgqmJvedmII50MCd5J/hTkY4BKI+GWqlOVDwhNY
+	 0oehyBuD61RcnFAzV2ZU0RaruJ3iAAEC6UXz8/BaNQpRtvD8jnFbveHbnub42AgKnSpJg
+	 TbJ/uxYk3Tzl/ez1xotPxVhz0N+XsytQNWZVUOVFrbOkMNOjr+eApUVPsA8pVIpUYX3PT
+	 839KpJxY8ci01/2Hsl52ETABEiOGEULqy6Fbn5YowADAo4DSIhIabhomB7x6Zn9Kk3A+Q
+	 O/BOHxv/q9R/JZn13pmLR3CKBNuv2Pd+F82zysvEtxPipQXN7hELj6b7p/WIT0jjMIw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SPsKDDVq;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C14606A32C;
-	Fri,  6 Nov 2026 10:17:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8C91F0089F;
-	Fri,  6 Nov 2026 10:17:57 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL] Renesas SoC fixes for v7.4
-Date: Fri,  6 Nov 2026 11:17:50 +0100
-Message-ID: <cover.1793960114.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE7C606A31C
+	for <soc@lists.linux.dev>; Sun,  8 Nov 2026 15:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SPsKDDVq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7368B1F0089F
+	for <soc@lists.linux.dev>; Sun,  8 Nov 2026 15:15:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794150942;
+	bh=K1wv4P9LkVe//Bk8oo2Vt8BpwtAtk9Cmoa2L4e+Ln+k=;
+	h=From:Date:Subject:To:Cc;
+	b=SPsKDDVqSGn6EV8y2o/iPxzkQBr/S/OtpUuk4lJ2GIlAjBBUrxRZl/MLjbeKwX/DY
+	 I8Rw92/qWH9iZHFPh5XSRguFVkcmAqVwLCSKDt5Qv842bDtESd4qRQkL+CgbQy8cRS
+	 ldqMRW3lqOWa1k5zau88wI+r1ZNSu7QjBZRPC8Iz4hSJtqwRD1Z8AKSASkQ2lBH4PQ
+	 47/TsdOmdKfsyLcqpDykBq0IoEBFhPs0TPdNIA3qVnPKaA7S2rVjqvHJz7BUqxs4vJ
+	 3LHM4J7CSS5uQqt2IiHOJcVV61cER+cd5HkmaFGgqA0mKWDXSEoXDG9bdW3EQNf9cF
+	 IO7F/DwrlSxvA==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5bccb867d6fso113607e87.0
+        for <soc@lists.linux.dev>; Sun, 08 Nov 2026 07:15:42 -0800 (PST)
+X-Gm-Message-State: APuU4Z/3qrv7dFBEZI8yCtpKWF9TVP88QJnmea4YAbIKCG/9yiadIyWb
+	PDWKwn2ugCK+oerFmr96NLiAtxFO9ws+bodz8lOqLVOH7sRRY7I62LndOrnF6jJjAYeOYvQfxtY
+	T86Nmltb0Bj1VR7qFxWXNuU6taMJAqdU=
+X-Received: by 2002:a05:6512:3986:b0:5be:58c0:c674 with SMTP id
+ 2adb3069b0e04-5c14bf7beb1mr473407e87.5.1794150941244; Sun, 08 Nov 2026
+ 07:15:41 -0800 (PST)
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -46,9 +57,29 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Linus Walleij <linusw@kernel.org>
+Date: Sun, 8 Nov 2026 16:15:29 +0100
+X-Gmail-Original-Message-ID: <CAD++jL=Ap8G6E0pzBEuufRstvSCZ=Owo=n50pnHHODb3swLqOw@mail.gmail.com>
+X-Gm-Features: AclHuK-G56ovpD2VqIImn6Zr3zGs43aGmBuAyqZR9JxoVjNzUz56CLaNqp2LDIo
+Message-ID: <CAD++jL=Ap8G6E0pzBEuufRstvSCZ=Owo=n50pnHHODb3swLqOw@mail.gmail.com>
+Subject: [GIT PULL] configs: TEO cpuidle governor defconfig for ARM32 multi_v5/7
+To: soc@lists.linux.dev
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-	Hi SoC folks,
+Hi SoC maintainers,
+
+this selecte the TEO cpuidle governor in the defconfigs for multi_v5 and
+multi_v7.
+
+In this pull request I have squashed the two individual patches to not create
+too many individual changes.
+
+Please pull it in!
+
+Yours,
+Linus Walleij
+
 
 The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
 
@@ -56,34 +87,22 @@ The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-fixes-for-v7.4-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+tags/soc-v7.5-teo-arm-cpuidle
 
-for you to fetch changes up to 8ca80811c3ba01691b424f4fef4db8960955df4f:
+for you to fetch changes up to c351cb712444b5a31158570271d953546f6f5e3b:
 
-  perf/renesas: Remove remaining RISCV_ALTERNATIVE references (2026-11-02 11:52:48 +0100)
-
-----------------------------------------------------------------
-Renesas fixes for v7.4
-
-  - Fix enabling RZ/Five support.
-
-Thanks for pulling!
+  ARM: configs: multi_v5/7: Enable the TEO cpuidle governor
+(2026-11-08 16:08:38 +0100)
 
 ----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      perf/renesas: Remove remaining RISCV_ALTERNATIVE references
+This selects the TEO cpuidle governor as default for
+multi_v5 and multi_v7 ARM32 systems.
 
- drivers/perf/Kconfig        | 2 +-
- drivers/soc/renesas/Kconfig | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+----------------------------------------------------------------
+Linus Walleij (1):
+      ARM: configs: multi_v5/7: Enable the TEO cpuidle governor
 
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ arch/arm/configs/multi_v5_defconfig | 1 +
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
