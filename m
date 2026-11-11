@@ -1,100 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794383492;
-	b=W+eEficY3lYdGOmsAVjfLVZ7PKrwmE1bTOt8oBCvXD34D4/Bog7aehPb/NnK5Ds5tyGA
-	 sSX7d87Akz88UqqwLRkG2TfvCFvHwsqmDIaCbhVz4yFpSN3YZyhGjvHTUPhiuA4ww2MlO
-	 B3iM/y+j6OxhqWpA46r01GPESHhjCosLH+u3hqTwNWuAzVs/8bYuvi05RW6txilwVImNa
-	 0Hy/EF+iOTc4h8gDTA1gyrlZ76MI2fVVGwXRMrzLRCABQoiBIkAqQbQ1Pjl5+fxEuAt+c
-	 enMOLWOvWEb8zkzBi+pWHR5/26wtUBCMz7zL5R0qBRh8N0Hwr4l4oipwSAnbl3JisYQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794383492;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=LFEMjHMawTmVswvfRrvWbFxJOe74UcDMeDcBfOcyoV4=;
-	b=Ci5Ap2hCXa2lWtnvzb0luX1hBJ6h7aqzMqSyepK/KbKHuUMnTxTiWGF2bSEiOaDPSELJ
-	 hnNoLMGO6E+93zRcTFaKc5xpa13rmYPmj246Xo+FLiYqJk+1pKY+I2jEVphIa3ZnIVutt
-	 Rzpytr43Fu/7YxLGlYXcPKAzK0bCWZeK+22yUzZsWITRRA1r8OomLKzm5mNrwT868ax4F
-	 H1nH6Ke5mpmJVW8rEs8egwGq6bogIhlaTSUjPgi1N6USB6UoLE6IyX3Ukm5D4lr8egsVe
-	 F6UmFJBPyjCLbIjUewnlgcwpdymZMHemAHxHgZnOS91TdLOd2mZp/7n+8VAg2lBgsLQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="D/+Rff47";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794399911;
+	b=BsoAtCKe0ndizzflzyB+hG+eEhIjfoP2KE6w5MamTbC0VejLBL8NA+p5XhyboZw6igZ9
+	 hETRsR1vkvCDYhB5+4IaFGgKErV9Rb3rvKKJaOhwCMHwOExm9F3IGtOc7lxelmLnyfGfK
+	 tUHKTMcoUibmEm2Jnv8hskNGr8UHWR4+sAhXmOcUTEUEwr+WN4U+57kI1yCA5T+UtMZ0j
+	 zJZ+saHateCTULWB5tYEwJFSbQ2fW7Jn28bv9NqI6PONWawFzCqHA4eyMgXpvgMXzrFqV
+	 6Slt7Pl7qL9uII1ZFfXpxjUjLqOzzbH0jj21tpvdvAs7NR7ZYDMheWbuDj+2rU9lS1A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794399911;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 User-Agent;
+	bh=STCS3l/zlpLuADxUotZrhurI2/8ti5xPCPFt7Px/rs8=;
+	b=eU9xlHu6G0kqDWufWXASEecPmr6Isx0ykQ4t82BGOZxf+giWeIvKSFdj48u24vMYNT99
+	 N/X5H9bYQ2CxYBF/PVZsDXVIogn9Ume1Pz4EWpxwPqE4SK+NC8mDxcdFd0LoRyHmHZ3Li
+	 UpN0uxIgK7k+sLhyDJyfGY+pMBe823KMPKnCxDyThVkhJqsCPhz4/6H7zC43qZebcnUFJ
+	 PlVM0oj3Kneed1xzXzmznS5hA73RHjlYpixYrOvgnxhVoWIA6o41bRhFieUpYlt+cUvQz
+	 9CUyjJpMb0+YDRYmZsIc+wJQajqRmLNkLDmu7Tf5Qy1jF295HwLMhnrryDmDQ7TCG0w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bRlg66S4;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F18606A32A
-	for <soc@lists.linux.dev>; Wed, 11 Nov 2026 07:51:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47F18606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FDE606A321;
+	Wed, 11 Nov 2026 12:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D/+Rff47
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c506094fd93so163281366b.1
-        for <soc@lists.linux.dev>; Tue, 10 Nov 2026 23:51:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794383490; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Yp41Xdm3VWtdR0Vjk11QQsr0B53qk3iPjKcXyVyFrMV7ge54+8KivuCvNztEKHF+uz
-         mJI6/cM1UyjuLcpv9NPYYxDSQbW2I/LO5WZmIJongGJL3yEVWIBqNm695FBr3P+gc9BR
-         DMs3Ci6qZ7bLNNhWmMBBbJ+GXzqd6wols1AO9sGLVjqExODq2u3BbZfqVHzp/jFB9Ux0
-         lBS7YWv0QMFjQ5RYOh3CPuOhxtrp52qCNgM5KCZFG5pWjmrrgJs7SRfKbINEJbhb9Yv9
-         jmYmP6IyBojqQK3aAstuerLM2uQg7RGcS30suTb7CgoJeXbADNs0WvTjcbv2VFzmYNIv
-         tocA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LFEMjHMawTmVswvfRrvWbFxJOe74UcDMeDcBfOcyoV4=;
-        fh=xcTEv0sPMQs8TE81XoksuMypkoE2sM4T05w1HI3IGeU=;
-        b=izXNEZKrK2tF0U+rUxBC4g5L+kDuk5HwiFALL1hRDEiQRP7qX6ebPxmCoqKmth/KPV
-         z6WlsZrObZOBugdC5OjRGlw29mS1tAKX33ybbncR0fAgKgA/yD6yjZkNY18FfEsQMlZy
-         E2aIUT9P45qUZIpe7bXhfp5DYCXep7mqJjTnfwJvclhMWCgmL4/UUDgdqbNTB9HPrMhl
-         jZP0B/Sn6IptxbH1neVd1pumg2IRI52GJN6hYgny6Ap5g++wXLFcS1rxz5T0JDXs+VSB
-         1O2KXY8ocZ9SpkEXgoZHPRs/wYoWyp2/B6vs3GJwMYacGiTkBKIg0HspCA4oqNtWGmnm
-         e2BQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794383490; x=1794988290; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LFEMjHMawTmVswvfRrvWbFxJOe74UcDMeDcBfOcyoV4=;
-        b=D/+Rff47tP3Kb0bgJpoxjlljW9j7Bda/qJwFkFp3HwVrBh9jRgeDJ4QafM/Mi14lNk
-         VLjG79CX25P+g4VvM+mDybtm0EfMWc976+8XTUs6KSjLDDyah6i85wOtC/aCQy5aGaO0
-         1nC5EqwWwOrv4PAC/3mI3qH4TV4D9wsuShgfNK/OpG+ht/vgAyheK+SqUZTy7XrVQR1l
-         zS4oJizpvF5ytyg37FFVpjPgDbq6rD8fXH3WxJTM0v1iD8UWK9Ht59tf7QOxjRDYxRcS
-         rS6QeW7AhEgWTnKfpn47DyMvTmVLbNaLGRuA9ed7A5yd/fwK3/CDAL3RrBGcvzXcCUMG
-         jmpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794383490; x=1794988290;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LFEMjHMawTmVswvfRrvWbFxJOe74UcDMeDcBfOcyoV4=;
-        b=p5RferQ7ycUA+Ev0sicTw9l5DRNwOugjnyBuypXDVwz+SVFJg1qlguKSbCOCB+J3/M
-         rsr7Wx764wa0sDshcx9zcyckuiuRayCuc5gWL5d4spEVgAWbKbl2uNxVAhrA/Gh8cyu+
-         M11JBaaExjVsorUwr4ogBWCmTp9wLgev2VR2SgPn7fVPUnq8dclOcBRa9YWPpdHza/2o
-         1L5rTPhMju67VjivQ9mYjHtY/PupLlJdxDWLvUfkOpQ1F8ycTQBX12TSuJSukYk3JQxB
-         pNUdFcOatFoMAdnOZ2wR1WWsdFqLbC/tzys5oidBBtH1LTaghFEtXBkNctqa0nA7yRaZ
-         Zi0g==
-X-Forwarded-Encrypted: i=1; AL+hErEcJvX/OOj9pMH6cRUcOAfv+UbxhWXXjDMKRSpTomClUejCbbKABVBbkx/+Te0XxaNVq8s=@lists.linux.dev
-X-Gm-Message-State: APuU4Z+cPbugCKWGT8GHBIeHOKcvCv7658utkE5Oo8QGPmhjEgo0oOnR
-	MWdtV65iQIuwV2A7c/iXns/CEOjpy0KHtGG2MnNYgG9WYbLHv+5mnv1E51iTtHzYjthbKxc6n/6
-	yyHOfIdI5PjnTeD6LZEakuLLxG/6sJq0=
-X-Gm-Gg: AYBFou0o2Vww6m2eNSpfpnUM5+d+PVujbGPRh0UKLd23/Me9POWDzGFdQxo8+lEXFli
-	+ZuQ1q654MJCn8hu+ux+845ZcbwiPllMaEqiox0sXxgP6SMj45tBVZzizWLvgBZ5p4E5alwONOQ
-	qhy2AXpDh9D2IsZ1jZQGDpfhtFsnSKE2ykb75kdb7rOIQDRtwBZUkj3KVj+6Ojr1cy6w75leUlq
-	tz7gaTlVgeIT51nWoc9ER8CeuLRvezNWB/Eh0ULGtiCfC4VEfyKQXvpkyas7nlZTx0nAWLDSau7
-	ij28W4TPCDWvhmUS1VwlC9+fXC8Xr1n/a86pwp3o7nTaN5IS2fENe92j9wKqaj4BStS9XswgJVH
-	8UO72YRu2k5tvUvAgO8YlVDcZcxeJWLmnRqM3YGuOSNye0ZSUaflhsL5yzG6baTZPSM0CuA==
-X-Received: by 2002:a17:906:f596:b0:c33:923b:ad66 with SMTP id
- a640c23a62f3a-c5066d0bb14mr114825966b.43.1794383490428; Tue, 10 Nov 2026
- 23:51:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bRlg66S4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8CB71F00A09;
+	Wed, 11 Nov 2026 12:25:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794399911;
+	bh=STCS3l/zlpLuADxUotZrhurI2/8ti5xPCPFt7Px/rs8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=bRlg66S4iIXJo+2HWV2SwS8uM9Xye5xipVQWhkWwFlH8LK5W360qY/YEz4j1PAG0a
+	 6pgX9vYTQitWSDG8/WUlT++MR65jDJbJ8q9q5qVwY2yIC+zh2NN5ueGCa6lFY7s72T
+	 wl3tWtwv7F9TwZ8Bptv4fkyoRFoFuZCbuUTmaT1jKA6BmlVaNbkrPp1BuHmY+kmQwj
+	 wZFRKBOl1YYp8pjiRSD6gZgj2BF8l0JWMBnFiNm66yfHeO2p409KwZ1oerndynr9lo
+	 SqnUtJK05DmeOadb7yWC7Ia3oe7BpPHi/AZFDoSWrkPM8sKIWzOhxyFbXE3ZAZSaRR
+	 MSaKoYNYVrtgw==
+Date: Wed, 11 Nov 2026 07:25:07 -0500
+From: Brian Masney <masneyb@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Long Zhao <longzhao@ambarella.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Jerome Brunet <jbrunet@baylibre.com>, linux-clk@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+	Long Zhao <zl020895@163.com>, linux-kernel@vger.kernel.org,
+	Linus Walleij <linusw@kernel.org>
+Subject: Re: [PATCH v11 0/5] arm64: add Ambarella CV75 SoC support
+Message-ID: <avReozTC_GEmfIxG@x1g10>
+References: <20261105-cv75-soc-v11-0-aa6ee0b2380d@ambarella.com>
+ <179427375370.1061670.4050288038934218487.b4-review@b4>
+ <20261110-interesting-hilarious-shark-2dbfc0@quoll>
+ <7eeaf54d-2d7d-420c-a34e-eebc6dd0effe@app.fastmail.com>
+ <bbc16906-45e2-4d81-ae81-ad93e87b13be@kernel.org>
+ <c67939c7-9725-459e-97dd-e104f3b14022@app.fastmail.com>
+ <avMM8z-LYncKS8ip@x1g10>
+ <avMmKJpczepWTRdc@ashevche-desk.local>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -104,175 +79,56 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261105-tonyk-syscall_table-v9-0-8d1275885d9c@igalia.com> <20261105-tonyk-syscall_table-v9-12-8d1275885d9c@igalia.com>
-In-Reply-To: <20261105-tonyk-syscall_table-v9-12-8d1275885d9c@igalia.com>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Wed, 11 Nov 2026 08:51:18 +0100
-X-Gm-Features: AclHuK9CC8htHdABEClpUnIw4kUNRCRbcWaYA_peZjxEX-MI6234hqDvVucRruU
-Message-ID: <CA+=Fv5QBnNipJH5SKKV0iiPc1CQz+6f8dGzsRoKt1riMNxxOOg@mail.gmail.com>
-Subject: Re: [PATCH v9 12/15] alpha: Use the common syscall table
-To: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmanon <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, kernel-dev@igalia.com, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-alpha@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	soc@lists.linux.dev, linux-mips@vger.kernel.org, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avMmKJpczepWTRdc@ashevche-desk.local>
+User-Agent: Mutt/2.4.2 (2026-08-30)
 
-Hi Andr=C3=A9,
+Hi Arnd / krzk,
 
-On Thu, Nov 5, 2026 at 9:06=E2=80=AFPM Andr=C3=A9 Almeida <andrealmeid@igal=
-ia.com> wrote:
->
-> Remove some of the duplicated code by using the common syscall number
-> table.
->
-> Tested-by: Magnus Lindholm <linmag7@gmail.com>
-> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
-> ---
->  arch/alpha/kernel/syscalls/Makefile    | 14 +++++++---
->  arch/alpha/kernel/syscalls/syscall.tbl | 49 ----------------------------=
-------
->  arch/alpha/kernel/systbls.S            |  1 +
->  3 files changed, 11 insertions(+), 53 deletions(-)
->
-> diff --git a/arch/alpha/kernel/syscalls/Makefile b/arch/alpha/kernel/sysc=
-alls/Makefile
-> index b265e4bc16c2..03099daff6b9 100644
-> --- a/arch/alpha/kernel/syscalls/Makefile
-> +++ b/arch/alpha/kernel/syscalls/Makefile
-> @@ -7,17 +7,23 @@ $(shell mkdir -p $(uapi) $(kapi))
->  syscall :=3D $(src)/syscall.tbl
->  syshdr :=3D $(srctree)/scripts/syscallhdr.sh
->  systbl :=3D $(srctree)/scripts/syscalltbl.sh
-> +systbl_common :=3D $(srctree)/scripts/syscall_common.tbl
-> +abis :=3D common,__clone3
->
->  quiet_cmd_syshdr =3D SYSHDR  $@
-> -      cmd_syshdr =3D $(CONFIG_SHELL) $(syshdr) --emit-nr $< $@
-> +      cmd_syshdr =3D $(CONFIG_SHELL) $(syshdr) --emit-nr \
-> +                  --common-tbl $(systbl_common) --common-offset 110 \
-> +                  --abis $(abis) $< $@
->
->  quiet_cmd_systbl =3D SYSTBL  $@
-> -      cmd_systbl =3D $(CONFIG_SHELL) $(systbl) $< $@
-> +      cmd_systbl =3D $(CONFIG_SHELL) $(systbl) \
-> +                  --common-tbl $(systbl_common) --common-offset 110 \
-> +                  --abis $(abis) $< $@
->
-> -$(uapi)/unistd_32.h: $(syscall) $(syshdr) FORCE
-> +$(uapi)/unistd_32.h: $(syscall) $(systbl_common) $(syshdr) FORCE
->         $(call if_changed,syshdr)
->
-> -$(kapi)/syscall_table.h: $(syscall) $(systbl) FORCE
-> +$(kapi)/syscall_table.h: $(syscall) $(systbl_common) $(systbl) FORCE
->         $(call if_changed,systbl)
->
->  uapisyshdr-y           +=3D unistd_32.h
-> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/s=
-yscalls/syscall.tbl
-> index 59eb066a40bf..7066a3920899 100644
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@ -463,52 +463,3 @@
->  532    common  getppid                         sys_getppid
->  # all other architectures have common numbers for new syscall, alpha
->  # is the exception.
-> -534    common  pidfd_send_signal               sys_pidfd_send_signal
-> -535    common  io_uring_setup                  sys_io_uring_setup
-> -536    common  io_uring_enter                  sys_io_uring_enter
-> -537    common  io_uring_register               sys_io_uring_register
-> -538    common  open_tree                       sys_open_tree
-> -539    common  move_mount                      sys_move_mount
-> -540    common  fsopen                          sys_fsopen
-> -541    common  fsconfig                        sys_fsconfig
-> -542    common  fsmount                         sys_fsmount
-> -543    common  fspick                          sys_fspick
-> -544    common  pidfd_open                      sys_pidfd_open
-> -545    common  clone3                          __sys__clone3
-> -546    common  close_range                     sys_close_range
-> -547    common  openat2                         sys_openat2
-> -548    common  pidfd_getfd                     sys_pidfd_getfd
-> -549    common  faccessat2                      sys_faccessat2
-> -550    common  process_madvise                 sys_process_madvise
-> -551    common  epoll_pwait2                    sys_epoll_pwait2
-> -552    common  mount_setattr                   sys_mount_setattr
-> -553    common  quotactl_fd                     sys_quotactl_fd
-> -554    common  landlock_create_ruleset         sys_landlock_create_rules=
-et
-> -555    common  landlock_add_rule               sys_landlock_add_rule
-> -556    common  landlock_restrict_self          sys_landlock_restrict_sel=
-f
-> -# 557 reserved for memfd_secret
-> -558    common  process_mrelease                sys_process_mrelease
-> -559    common  futex_waitv                     sys_futex_waitv
-> -560    common  set_mempolicy_home_node         sys_set_mempolicy_home_no=
-de
-> -561    common  cachestat                       sys_cachestat
-> -562    common  fchmodat2                       sys_fchmodat2
-> -563    common  map_shadow_stack                sys_map_shadow_stack
-> -564    common  futex_wake                      sys_futex_wake
-> -565    common  futex_wait                      sys_futex_wait
-> -566    common  futex_requeue                   sys_futex_requeue
-> -567    common  statmount                       sys_statmount
-> -568    common  listmount                       sys_listmount
-> -569    common  lsm_get_self_attr               sys_lsm_get_self_attr
-> -570    common  lsm_set_self_attr               sys_lsm_set_self_attr
-> -571    common  lsm_list_modules                sys_lsm_list_modules
-> -572    common  mseal                           sys_mseal
-> -573    common  setxattrat                      sys_setxattrat
-> -574    common  getxattrat                      sys_getxattrat
-> -575    common  listxattrat                     sys_listxattrat
-> -576    common  removexattrat                   sys_removexattrat
-> -577    common  open_tree_attr                  sys_open_tree_attr
-> -578    common  file_getattr                    sys_file_getattr
-> -579    common  file_setattr                    sys_file_setattr
-> -580    common  listns                          sys_listns
-> -581    common  rseq_slice_yield                sys_rseq_slice_yield
-> -582    common  fchroot                         sys_fchroot
-> diff --git a/arch/alpha/kernel/systbls.S b/arch/alpha/kernel/systbls.S
-> index 68f3e4f329eb..9a67d29f7818 100644
-> --- a/arch/alpha/kernel/systbls.S
-> +++ b/arch/alpha/kernel/systbls.S
-> @@ -7,6 +7,7 @@
->
->  #include <asm/unistd.h>
->
-> +#define __SYSCALL_WITH_COMPAT(nr, native, compat)        __SYSCALL(nr, n=
-ative)
->  #define __SYSCALL(nr, entry) .quad entry
->         .data
->         .align 3
->
-> --
-> 2.56.0
->
+On Tue, Nov 10, 2026 at 04:11:52PM +0200, Andy Shevchenko wrote:
+> On Tue, Nov 10, 2026 at 07:24:19AM -0500, Brian Masney wrote:
+> > On Tue, Nov 10, 2026 at 09:46:29AM +0100, Arnd Bergmann wrote:
+> > > On Tue, Nov 10, 2026, at 09:27, Krzysztof Kozlowski wrote:
+> > > > On 10/11/2026 09:23, Arnd Bergmann wrote:
+> 
+> ...
+> 
+> > > > There is a build dependency - DTS needs clock binding
+> > > > header - so it has to be second, unless the dependency
+> > > > is decoupled.
+> > > 
+> > > Ok, I see. Let's go with Brian's suggestion then.
+> > 
+> > I see that the pinctrl driver was merged into v7.4-rc1 and also
+> > lists ARCH_AMBARELLA. It doesn't cause any build warnings or issues, so
+> > I'm fine with this too just as long as ARCH_AMBARELLA is going to appear
+> > in the tree.
+> 
+> We have a bug about dangling / orphaned symbols in Kconfig. It's discouraged to
+> have them. I dunno if we get the checker patch being applied (it was some
+> activity a few months ago).
 
-This also needs an adjustment when combined with my Alpha for-next:
+OK that makes sense.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/lindholm/alpha.git
-  branch: for-next
+So how about this:
 
-Following d38895ba9330 ("alpha: dispatch system calls from C"), Alpha
-uses sys_clone3 directly. The ABI selection should therefore be:
+- Have Long post a new version that splits out the creation of the new
+  Kconfig symbol ARCH_AMBARELLA into it's own patch. I assume Arnd could
+  provide an ACK on this?
 
-  abis :=3D common,clone3
+- I create an immutable branch that contains that the two dt-binding
+  patches, plus the ARCH_AMBARELLA Kconfig patch.
 
-rather than common,__clone3. The removal of the old table entries
-also conflicts because the clone3 entry has changed.
+- Then I can merge the clk driver cleanly. The DTS folks can take the
+  DTS changes.
 
-For testing, I skipped patch 11, removed the entries from 534 onward
-as intended here, and selected common,clone3.
+If the DTS folks didn't want the ARCH_AMBARELLA in the immutable branch,
+then we could do two immutable branches:
+one for ARCH_AMBARELLA from SoC folks, and one from me for the
+dt-bindings.
 
-With those adjustments, full GENERIC SMP and DP264 UP builds passed
-using GCC 14.2.1. The generated syscall numbers are unchanged.
-Comparing the native dispatch entries shows only patch 10's intended
-change at syscall 560; clone3 remains sys_clone3.
+Alternatively, I could just provide an Acked-by for the clk driver, and
+this could just go through the SoC tree.
 
-The only build warning was the previously observed saved_config
-COMMON-symbol warning. I have not runtime-tested this combination.
-
-Thanks,
-Magnus
+Brian
