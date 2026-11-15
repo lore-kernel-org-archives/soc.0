@@ -1,47 +1,53 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794648417;
-	b=spidJJ6H+MNmrZsUVqFlZ4sJDger3vPzmvATqm19pg2DJnILUelEPayG4gWQxOzoEokw
-	 IsZ8ZKQ8QbapdKl8IYcbQzggY+EZDC4QZwusRujK+kQz3jReYXSOyUJyU9ne9I+7Pvnld
-	 EyfMUq+cfc6NytpkLi3eIc+8wvWGIzLkMfzMTryiz68vwqvaz0rZgUQNhhQdl5e20Hh4K
-	 L2D26R1hPyxcIhaOD7Khj4L2DiRJ26+yg+8fRGVzaxXWer0SZrsJWd3ZWBWLV1lI6EfSn
-	 DyQfh478shft8Ikxmn/niDPBkvjelvAN5iZeb5pJ73WPR4kotUVX0fvQMaC/GF1zcSg==
+	t=1794766064;
+	b=Z2tE8+/EWjoUdmI4jgHqJCF5Q7aiD/wCOCM22Yym8f8yzuwKPPFmhYZwVSc51llEhN5u
+	 aQAL4xGAcEAyCAffIQ4L4y1HmmVFjbB4xa9TURzeZTsdKmevFJsLM8mbNZweOUAOlnKDn
+	 IYKmy5pvg2dSKFfVURBpXiSrFXvfe2EPOQgLlJXpib7cZYlJZ4h0hB/d5FdtPvcY/nMgT
+	 nZWX7vWZgSwvgYmuCR0IWsoKXNZShjzR6K3D+PkO+5NCSOt7RKOl2OgXNrnr7mmdJO/y3
+	 R7E0BYNqr3ec7Rs8geiE6FbSr3MXLMGAVwntLcdjhHfu/jxy2Jn+L+hWlqOju8Ns6ww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794648417;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=zcQxJ2MKNJlnoqlvpsdMkMWFchNJxAPyGsFmqT4MTY0=;
-	b=mrN0Tl8hk3dlArQM7TZ+l8EKcP2CaXZtEttUEwWWPRG83M6CRIdwFiUUxRC4VpRSQhM/
-	 JZAU6GwXtYbPKzLg0y9uIxURbsGk90bG80hQsw9ArT1zbsD1KXlm7UHx4b7/eiYa2sL5b
-	 KpY06oO9HsN+qTrJ8wd8pa7BGss12hpAKqS2KCbKsCIQB/eaXtwG9pUa/EFBMcMRFERhW
-	 ufhnNDMPugg0d73v26/tk8nlRTM2cB9CEMPlUdYEOz8O2ymjsXBwAIpa3PNJN2IWnlQiU
-	 PQ5Srmap9j7lJTnmV2ifnzBXPDOhVoB8lnn7l77wo+RsLk6mfCVIrkqeRR1nVh0ktgA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794766064;
+	h=Received:DKIM-Signature:Received:X-Gm-Message-State:X-Received:
+	 MIME-Version:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=08ECguGEt5mKY5O0zhlWhlszKnOmF7Z1WUHLZizEhZg=;
+	b=NDUzci+9QG+ToNg1Migl6SbMNPnvO56b5BEsRCiBme11mP5J9i9UMeGWfCXGx4YWKkor
+	 8XLm1G+5WsWHXdwZTN+b3WmfVtcN0XNXx+xBnYrwSMO7WQhG9jtbSm+8pXuvGhEUZq5HE
+	 SRIgE4AZXRZ9m0QNrwUAsvp6u9R0Smgt8Z6o3umhn1bAlKj8xnCY7plFob97FG/VantQa
+	 EBzHzRH/N3r6KE1rifEa1gQZ9XXFtNM4NvJKV42ilK0L/EjdLe61NuP97BTV8GstPlpjQ
+	 EzXCDWgfCY1yaMVV38l/tOBWw7zLjI9xV/6c25274y34VBqZB9JH95fGLUQkeEfNdWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dStpRgps;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HwtEBNat;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE902606A331;
-	Sat, 14 Nov 2026 09:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A23606A31E
+	for <soc@lists.linux.dev>; Sun, 15 Nov 2026 18:07:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dStpRgps
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B8A1F000C4;
-	Sat, 14 Nov 2026 09:26:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HwtEBNat
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A292B1F000C7
+	for <soc@lists.linux.dev>; Sun, 15 Nov 2026 18:07:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794648417;
-	bh=zcQxJ2MKNJlnoqlvpsdMkMWFchNJxAPyGsFmqT4MTY0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=dStpRgpsedWmh98AjBH9rNJyY5OK/oGWWitYc3v8hTpBy1I5YS7K0352eSE/sO1yO
-	 HLQ91/zpV3K6d/01wBCZW6cQnRkV3duSJswM3DN7UhUT0Ocfs6BoeMoxNLjU9nEkv3
-	 JTmuS1iz0Rht2o26UFKlRPrNDDilurDtKi7nPylP/NRMgv8Jw5abECuZKGkBu8/SYd
-	 iIYTGZtqcoBOCkn5lnPe4/kWGAzF7qQH2RQfSuBYbYVy4tfRhVqWJHPGAERkcuPTNR
-	 Pb3cg6bl9bbWC+JOpFk6QONm4UuOzh0O6OHyUE3U7PlAJ8ATNgImjWmEvO2hSSReML
-	 5bP3c1VS8YQYA==
-Message-ID: <de187a23-ab35-4a18-824b-88879f9563ba@kernel.org>
-Date: Sat, 14 Nov 2026 10:26:54 +0100
+	s=k20260515; t=1794766063;
+	bh=08ECguGEt5mKY5O0zhlWhlszKnOmF7Z1WUHLZizEhZg=;
+	h=From:Date:Subject:To:Cc;
+	b=HwtEBNatawJhYBqAdi26+Fuw/aOPiZ3JNzspnfWuZrU+HIohjDxnDHSDqTzUgchiF
+	 ZOkcMXpKMfHTj9TbH2VDCFjSP4KG9RGJ45kCqedfev5aSOdpdGmod5B3htnOaRTGSC
+	 8GgSkOMEMrDhn8eGEzrjbNtaAUrkdwgf8TE8cAdtRDvpm2LdK0obcXMoBOoJKvDFWL
+	 LsltVAOsbM6/5PSEcfJoS7ABwP7vdKMlGOLyWbb/dTDbnDS2EPbMDTD3qrLQL6DeIk
+	 93EAjCKz+lEmyCBxcSWA3YB4Ggn1bup8+iQgkvPh2ZfVgFvTEBnKyLnXkrU6ulcWi5
+	 IKI2Gp7s3XfsQ==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5c1465bbbdaso2482726e87.3
+        for <soc@lists.linux.dev>; Sun, 15 Nov 2026 10:07:43 -0800 (PST)
+X-Gm-Message-State: APuU4Z/Gf99I1SLc6ZsYlNE00LXfekjVL5aElUwHx/jRvu689RFgcqmk
+	7Co6vqhZGGxQcueHv5GtJKc72QYMvHr/OqfdVaxmnCkCm2+4SvPTcqUq6FKSpwu+xHJctAUOaFE
+	fAsU2OIUjFc9wakDKY+ZqZzitAz9DXWU=
+X-Received: by 2002:a05:6512:b88:b0:5bf:dd05:3a89 with SMTP id
+ 2adb3069b0e04-5c170a0fce2mr3165979e87.61.1794766062318; Sun, 15 Nov 2026
+ 10:07:42 -0800 (PST)
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -51,81 +57,86 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] memory: fixes: driver fixes for v7.4
+From: Linus Walleij <linusw@kernel.org>
+Date: Sun, 15 Nov 2026 19:07:29 +0100
+X-Gmail-Original-Message-ID: <CAD++jL=z=i8dKwA7XBjjM+tNXPmZDttCYz00gpkZE86Wwh1Mzw@mail.gmail.com>
+X-Gm-Features: AclHuK8USlSPTfgH0T_EpOBmC23ixDquMOtn57B_dNGjY89wO27Ifa-8NHjtVYI
+Message-ID: <CAD++jL=z=i8dKwA7XBjjM+tNXPmZDttCYz00gpkZE86Wwh1Mzw@mail.gmail.com>
+Subject: [GIT PULL] U8500 defconfig updates
 To: soc@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org
-References: <20261113073632.34241-2-krzk@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <20261113073632.34241-2-krzk@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 13/11/2026 08:36, Krzysztof Kozlowski wrote:
-> Hi Arnd and SoC folks,
-> 
-> A few less and more important fixes.  Sashiko as usually exaggerates and calls
-> some of these "Critical" but exploitation likely requires already root
-> privileges, e.g. through device unbind.  Cannot rule out chaining
-> vulnerabilities these days, thus sending these as fixes.
-> 
-> Best regards,
-> Krzysztof
-> 
+Hi SoC maintainers,
 
-I forgot, there will be a conflict here with Linus' tree.
-Resolution from linux-next should be corrected a bit:
+the posted update of U8500 defconfigs.
 
-- 	fsl_ifc_ctrl_dev = devm_kzalloc_obj(&dev->dev, *fsl_ifc_ctrl_dev);
-- 	if (!fsl_ifc_ctrl_dev)
- -	ctrl = devm_kzalloc(&dev->dev, sizeof(*ctrl), GFP_KERNEL);
-++	ctrl = devm_kzalloc_obj(&dev->dev, *ctrl);
-+ 	if (!ctrl)
-  		return -ENOMEM;
+I have been told in the past, sharply, to split up these updates, so a lot
+of patches. Feel free to just squash them into one or however you like it!
+A rundown of the changes in the signed tag.
 
-Best regards,
-Krzysztof
+Please pull it in!
+
+Yours,
+Linus Walleij
+
+The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
+
+  Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/u8500-defconfig-v7.5-soc
+
+for you to fetch changes up to f908ea8a0f2de52dca6b19ef14885ed6f034fe58:
+
+  ARM: configs: u8500: Enable compressed firmware loading (2026-11-15
+18:52:05 +0100)
+
+----------------------------------------------------------------
+Annual U8500 defconfig update
+
+This config is mostly used by the Nura (former PostmarketOS) project.
+
+- Refresh to Kconfig changes.
+- Update to contemporary scheduling and using e.g. the TEO cpuidle
+  governor, BSD process accounting, PSI and autogrouping.
+- Enable control groups and namespacing, checkpoint-restore.
+- Enable generational LRU, DMA-CMA for memory management, disable
+  PAN (too slow) and ramdisk commandline.
+- Enable FUSE, DM/dmcrypt, squashfs, ZRAM.
+- Enable basic IP routing, nftables, TUN and VETH.
+- Move a bunch of U8500-applicable device drivers to be modules.
+- Enable I2C mux (MPU3050 is the sole user but we need to support
+  it.)
+- Move V4L2 support (used for flash) into modules.
+- Disable devices such as the STM32 MMCI we don't use.
+- Move all IIO sensor drivers to modules.
+- Enable some security features, crypto XTS, EXT4 ACLs, BPF
+  jit compiler.
+- Update Coresight debugging options and move it to modules.
+- Enabled the Audio Graph Card2 as introduced for U8500 in
+  kernel v7.4-rc1.
+- Finally enable compressed firmware loading as Nura uses this.
+
+----------------------------------------------------------------
+Linus Walleij (15):
+      ARM: configs: Refresh U8500 defconfig
+      ARM: configs: u8500: Update scheduling and accounting
+      ARM: configs: u8500: Enable control groups and namespaces
+      ARM: configs: u8500: Update boot and memory configuration
+      ARM: configs: u8500: Enable storage support
+      ARM: configs: u8500: Enable IP routing and filtering
+      ARM: configs: u8500: Build peripheral drivers as modules
+      ARM: configs: u8500: Enable I2C mux support
+      ARM: configs: u8500: Update media support
+      ARM: configs: u8500: Disable unused drivers
+      ARM: configs: u8500: Build IIO sensors as modules
+      ARM: configs: u8500: Enable security features
+      ARM: configs: u8500: Update debug and CoreSight support
+      ARM: configs: u8500: Enable audio graph card2
+      ARM: configs: u8500: Enable compressed firmware loading
+
+ arch/arm/configs/u8500_defconfig | 187 +++++++++++++++++++++++++++++----------
+ 1 file changed, 140 insertions(+), 47 deletions(-)
