@@ -1,80 +1,122 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794801643;
-	b=b6GhyWOyZ9nWi/kPcQO6Gr50qBcxxCpmga6go8Yc9SyKxWz4dAR8YX4F6iJSdrzhoL+F
-	 ATUpZfZjYkEKgaQXKYhxQ643yduCgRGgtA23yplB1PyR6P6QhcKGy5yt8YmtjxoHdNdmR
-	 A50/8uzbihMtpt3LyCpGuVEpV/fbYF00ttgjk0/D4Sp3nvI18ghWxCDBNVznuYeKYUWub
-	 w94iu78l7dDPZmR1mcvreT1gHQqVJTllHlAW6kH5/qMentkd4u7uj6LyLsKjn5U6838br
-	 IvJWnde/PnewusecZef0k6/X4rFGDrt9cyYRJgH2Fj6AosQ0DyOG1xkir0B5ifA0fNA==
+	t=1794843944;
+	b=iiVEhuqfdtp18/VjYM18eo79wJ7yUbzPf72/6NT6qD3/Eu9mUF2irpESt+/fVUtF5zNu
+	 HLmXuSfJSAr8aJ/tSUoc0gq2RzFmweWZvC5FW3A9RPkvtjVULlLagSspXa7vZgalpUMrB
+	 BgjLflB14YTsDAphz+RkOMORV23nT+ZM4EVMXasPmjT4XVUEnyUTcnahDuU2hWz9yX9Ct
+	 RtnoXqAoosFsAoDlTmp9Nowfzwg2ars/iyxoHUHeGhOWq4Ntb68yYhHsMRThD1Z3MlYvr
+	 X1GVkWason4ZcPjmp5M3BrecGIvcdekmAvGbMTYctmbSbRUWZwItX/6zG8FMm97NqZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794801643;
-	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:X-Priority:
-	 X-Mailer:In-Reply-To:References:X-NTES-SC:Content-Transfer-Encoding:
-	 Content-Type:MIME-Version:Message-ID:X-Coremail-Locale:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=FpUz6VKa8cvlk6B0dGTvOD8cphJCOZqOzq+OFwLdeBs=;
-	b=dueUosxZ11dIiIE0lPheZ7OPsvLRmI8sOSmo03ojznICAAq8Hp8ptW6FSoXP0YJI1Oop
-	 t5C1cZzdj6R6aDsS/+X1MWpdIGWI5h+DQcaNfxj9ymAFHMa1mbT65oNhEwFei4G1toVE9
-	 B/UHsHhqHzEEMrtywFoc5o8XOr2EoMSHMXnTaEKxbzX0pl02ps0K1yqVkw0upUTqR/WIu
-	 sGpl6MBlmOlQiMa0ipxb4idAsCvgLa7nXf5DVW/HgJdWAspXqUQ2Vuwr+KnywazsPpNcj
-	 YNHTS++wIWi+BUtjs+LaIrsRMwJnrkBAwoUoTsjdL7i0Bb0a0/rbqs9vgyLltZdYenA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794843944;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:In-Reply-To:User-Agent:X-Mimecast-Spam-Score:
+	 X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:Content-Type:
+	 Content-Disposition;
+	bh=01d72rU72jpJUH9kDy6vqeWai86JF2Ta6ELfzrX1GeI=;
+	b=eHu/hBecUwSwOqp1WcAvaoRDpplhM+K/bd4YX/tIE2biLQf8wF51oY90CJLgbUHkSShr
+	 7Z9izUpGfOh0ZlRZ61+Xa7LIdX6WuTsAN5u9+WTVa5T9ZhVvy9jQMLgqEAz7C9YFNDWUU
+	 wEj7RNQPhP1/mEMLzJDjePEpzGKf1WLPIZeIleQN5/nNoIjQXBIFL71f4Fs/XeMyGgzWS
+	 LX3CGmuQIktTVp7+VtchI+cwrxzfH/U0USPNhn0gLRco1oHFrYhkk76c0Uhhe17hb+6M5
+	 D1L/VWF0amSXpZm9ozmxgIJoUCTVZzSMr29xVognCoR0luEWUoIBXizcWTHrbAxPG5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=EzqouExK;
-	arc=none smtp.remote-ip=117.135.210.4
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Dj9FE5Ke;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7352D606A32A
-	for <soc@lists.linux.dev>; Mon, 16 Nov 2026 04:00:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7352D606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB171606A880
+	for <soc@lists.linux.dev>; Mon, 16 Nov 2026 15:45:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB171606A880
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=EzqouExK
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=FpUz6VKa8cvlk6B0dGTvOD8cphJCOZqOzq+OFwLdeBs=; b=E
-	zqouExKnTvZUMVriMCOwD/uSYdsMP/czsL2DMfiu3JLeUS+3MZRXiGwWpx98Uf+d
-	itu6wmCOwZusjspjo+JvlaPXSFRmtYsyQvwrQEYeUrJDQcjmiz5Ahj9cGNY/fbDW
-	3hw0Pk3i/ffg5ErGR7V3nj/yP0CquYlMg9taPdK+/U=
-Date: Mon, 16 Nov 2026 11:59:28 +0800 (CST)
-From: zl020895  <zl020895@163.com>
-To: "Brian Masney" <masneyb@kernel.org>
-Cc: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-	"Arnd Bergmann" <arnd@arndb.de>,
-	"Krzysztof Kozlowski" <krzk@kernel.org>,
-	"Long Zhao" <longzhao@ambarella.com>,
-	"Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Dj9FE5Ke
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794843943;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=01d72rU72jpJUH9kDy6vqeWai86JF2Ta6ELfzrX1GeI=;
+	b=Dj9FE5KedxW0IF/nQT/h8NCoTTteH0GzC8kWon+duGFaxAHI5UPvqjuiiwzJLL3B718d5U
+	zIpHU98gm/bDf0nHhvSgGcb8C/ppgOK9dlFvOusbQRxHaLpNIHiE40JCi+qfvvqaDeaCbv
+	x1vxKxqcowOD2xxbeTRonnTFujs4gts=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-282-3We4oY_ENkOWcOs-n0Bszw-1; Mon, 16 Nov 2026 10:45:42 -0500
+X-MC-Unique: 3We4oY_ENkOWcOs-n0Bszw-1
+X-Mimecast-MFC-AGG-ID: 3We4oY_ENkOWcOs-n0Bszw_1794843941
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-944138ed63fso554703485a.3
+        for <soc@lists.linux.dev>; Mon, 16 Nov 2026 07:45:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794843941; x=1795448741;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=01d72rU72jpJUH9kDy6vqeWai86JF2Ta6ELfzrX1GeI=;
+        b=fAqyRTRYLgZSXrxrmcc4bFJxwxEdsV1d7EAlxkMJ+wGmZYyrfzGpx1nvvoMXcf2FBk
+         jjp+U9fJr9qVw2YktJsjYekv3LvzzyJRmBMEWrD9vXh2M+Xf6+4fht+q8afaM+khwA9C
+         4E2s7LTIHLH8HzuUm+zxnrvMYE9TBzT8bctOUqqyFo4QnvizEiOpD9BVgBGIMYdd15UV
+         7FicxEetL4WLMmzt6KYTEoaOWy4SItHmxoPDM37BcSf1aMMGSD/s/d+/eor/ORJHLraJ
+         6Lbbgupvrw1xqAS8VEEcNcaNH+GsxxDO8N7u8ip2Xu5oyIaJp9TKBwoyU/lQSeAEy1nI
+         sEew==
+X-Forwarded-Encrypted: i=1; AL+hErFEopEYzxBb1udsKM3pRU12Gmldfbsj+GWQkMna2DfAA9fZAU5NDvpW4n/rUHTkWguKprE=@lists.linux.dev
+X-Gm-Message-State: APuU4Z/G8lnC1N1UzsWYDFd1lwdu3fpy3h3BEKJB+ZLV2Uo1K2q48PK3
+	KMZLk7zHKQ8Ob13X+wuWn/2hWqT1w6iUFEnZGu4W9lpYYaapwRfFmH3+hwKt49AUediKiDrfFYD
+	DY9iNfce0FvXhTbu/jmuNOx8ugC8vbIrwrOeApG7uLRqCQ4BF7eQCYg==
+X-Gm-Gg: AYBFou2ibHldf7Wty9t7IO7Xan6CvV43GVaLlxy1MEX3cG7j+H1iYYAdmG5tboYRMAw
+	bNGpm0X76g6wr/vsbmMoC8hKVw3qBeTT3/aPMMFhaf56ZtW8aLnCQZL7hGF2dpzf0SfU2/OxglI
+	Rvy5qmgb+GdqKtmOI3GyqFhjtr4Hg+PSMhTUV8vX8gdtJB0HOoTBX9bkmtk9E0WGBwDyhzdLaM0
+	fYR6hNInT4aaoUCeutnctEJWtvbMTBtnKwRF1NMY/S/ljdKWp2NUAFSPjXdB7Dv86FPkCql7+d8
+	p2j1rZJAmelsoOHD6dq2GDORRYcTGuLrM9H3eczrQIozjFul5MNFVQ7HC+6iTCXA/f4tNnyV6VP
+	nFTSYUW2GCJ3azv9uMtqDxDhCZtsKnauId2NasM/zXG1tLF4Aeh1ug/zW2O/GbrMg2StBg5psPd
+	kcXzzZpSm+Kl+xjxHGwcJ8X99hMVTDasGri2OSBItp
+X-Received: by 2002:a05:620a:2805:b0:93f:1ed3:a9cc with SMTP id af79cd13be357-9494bbdd1e6mr1849380385a.17.1794843941206;
+        Mon, 16 Nov 2026 07:45:41 -0800 (PST)
+X-Received: by 2002:a05:620a:2805:b0:93f:1ed3:a9cc with SMTP id af79cd13be357-9494bbdd1e6mr1849341285a.17.1794843938440;
+        Mon, 16 Nov 2026 07:45:38 -0800 (PST)
+Received: from redhat.com (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9494c8b889csm877596085a.32.2026.11.16.07.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 07:45:37 -0800 (PST)
+Date: Mon, 16 Nov 2026 10:45:35 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: zl020895 <zl020895@163.com>, Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Brian Masney <masneyb@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Long Zhao <longzhao@ambarella.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	"Michael Turquette" <mturquette@baylibre.com>,
-	"Stephen Boyd" <sboyd@kernel.org>,
-	"Jerome Brunet" <jbrunet@baylibre.com>, linux-clk@vger.kernel.org,
-	"Rob Herring" <robh@kernel.org>,
-	"Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-	"Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>,
-	"Conor Dooley" <conor+dt@kernel.org>,
-	"Catalin Marinas" <catalin.marinas@arm.com>,
-	"Will Deacon" <will@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, "Linus Walleij" <linusw@kernel.org>
-Subject: Re:Re: [PATCH v11 0/5] arm64: add Ambarella CV75 SoC support
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <avReozTC_GEmfIxG@x1g10>
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Jerome Brunet <jbrunet@baylibre.com>, linux-clk@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Linus Walleij <linusw@kernel.org>
+Subject: Re: Re: [PATCH v11 0/5] arm64: add Ambarella CV75 SoC support
+Message-ID: <avslH10GRqkVT9fU@redhat.com>
 References: <20261105-cv75-soc-v11-0-aa6ee0b2380d@ambarella.com>
  <179427375370.1061670.4050288038934218487.b4-review@b4>
  <20261110-interesting-hilarious-shark-2dbfc0@quoll>
  <7eeaf54d-2d7d-420c-a34e-eebc6dd0effe@app.fastmail.com>
  <bbc16906-45e2-4d81-ae81-ad93e87b13be@kernel.org>
  <c67939c7-9725-459e-97dd-e104f3b14022@app.fastmail.com>
- <avMM8z-LYncKS8ip@x1g10> <avMmKJpczepWTRdc@ashevche-desk.local>
+ <avMM8z-LYncKS8ip@x1g10>
+ <avMmKJpczepWTRdc@ashevche-desk.local>
  <avReozTC_GEmfIxG@x1g10>
-X-NTES-SC: AL_Qu2SBvSbvk0t7iiZbOkdnUoTj+Y/XMK0uvwk1YdVc+MGpT/J9BIGcENYL0vb4v2JJgSKuzq3WhJU6vpweI9IrcCebcyksFrj0mpy8H3qeg==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+ <2b30e92.3c75.1a1e2828c3a.Coremail.zl020895@163.com>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -84,20 +126,37 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Message-ID: <2b30e92.3c75.1a1e2828c3a.Coremail.zl020895@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:lSgvCgBXl_egf_pqETJvAA--.5849W
-X-CM-SenderInfo: d2oqjiqyzvqiywtou0bp/xtbC7gBh0mr6f6DTZgAA3n
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+In-Reply-To: <2b30e92.3c75.1a1e2828c3a.Coremail.zl020895@163.com>
+User-Agent: Mutt/2.4.3 (2026-10-09)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: kufeanUYeSBK9zXpiSXtKwZiStF0uAx7tXZUT0PbAtw_1794843941
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-SGkgQnJpYW4sCgpBdCAyMDI2LTExLTExIDIwOjI1OjA3LCAiQnJpYW4gTWFzbmV5IiA8bWFzbmV5
-YkBrZXJuZWwub3JnPiB3cm90ZToKPlNvIGhvdyBhYm91dCB0aGlzOgo+Cj4tIEhhdmUgTG9uZyBw
-b3N0IGEgbmV3IHZlcnNpb24gdGhhdCBzcGxpdHMgb3V0IHRoZSBjcmVhdGlvbiBvZiB0aGUgbmV3
-Cj4gIEtjb25maWcgc3ltYm9sIEFSQ0hfQU1CQVJFTExBIGludG8gaXQncyBvd24gcGF0Y2guIEkg
-YXNzdW1lIEFybmQgY291bGQKPiAgcHJvdmlkZSBhbiBBQ0sgb24gdGhpcz8KPgo+LSBJIGNyZWF0
-ZSBhbiBpbW11dGFibGUgYnJhbmNoIHRoYXQgY29udGFpbnMgdGhhdCB0aGUgdHdvIGR0LWJpbmRp
-bmcKPiAgcGF0Y2hlcywgcGx1cyB0aGUgQVJDSF9BTUJBUkVMTEEgS2NvbmZpZyBwYXRjaC4KCkp1
-c3QgY2hlY2tpbmcgaW4gLS0gdGhlcmUgaGFzbid0IGJlZW4gZnVydGhlciBmZWVkYmFjayBmcm9t
-CkFybmQvS3J6eXN6dG9mIG9uIHRoZSBwbGFuIHlldC4KClNob3VsZCBJIGdvIGFoZWFkIGFuZCBw
-cmVwYXJlIHRoYXQgc3BsaXQgZm9yIHYxMiwgb3IgaG9sZApvZmYgdW50aWwgQXJuZC9Lcnp5c3p0
-b2YgY2hpbWUgaW4/CgpCZXN0IHJlZ2FyZHMsCkxvbmcgWmhhbw==
+Hi Long (and Arnd/Krzysztof),
+
+On Mon, Nov 16, 2026 at 11:59:28AM +0800, zl020895 wrote:
+> At 2026-11-11 20:25:07, "Brian Masney" <masneyb@kernel.org> wrote:
+> >So how about this:
+> >
+> >- Have Long post a new version that splits out the creation of the new
+> >  Kconfig symbol ARCH_AMBARELLA into it's own patch. I assume Arnd could
+> >  provide an ACK on this?
+> >
+> >- I create an immutable branch that contains that the two dt-binding
+> >  patches, plus the ARCH_AMBARELLA Kconfig patch.
+> 
+> Just checking in -- there hasn't been further feedback from
+> Arnd/Krzysztof on the plan yet.
+> 
+> Should I go ahead and prepare that split for v12, or hold
+> off until Arnd/Krzysztof chime in?
+
+I haven't heard back from Arnd/Krzysztof yet. How about wait 48 hours to
+see if they respond, and if they don't respond within that timeframe,
+then go ahead about post a v12 with the ARCH_AMBARELLA split out into
+it's own patch. I think that's a good change to make anyways.
+
+Brian
+
