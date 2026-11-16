@@ -1,53 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794766064;
-	b=Z2tE8+/EWjoUdmI4jgHqJCF5Q7aiD/wCOCM22Yym8f8yzuwKPPFmhYZwVSc51llEhN5u
-	 aQAL4xGAcEAyCAffIQ4L4y1HmmVFjbB4xa9TURzeZTsdKmevFJsLM8mbNZweOUAOlnKDn
-	 IYKmy5pvg2dSKFfVURBpXiSrFXvfe2EPOQgLlJXpib7cZYlJZ4h0hB/d5FdtPvcY/nMgT
-	 nZWX7vWZgSwvgYmuCR0IWsoKXNZShjzR6K3D+PkO+5NCSOt7RKOl2OgXNrnr7mmdJO/y3
-	 R7E0BYNqr3ec7Rs8geiE6FbSr3MXLMGAVwntLcdjhHfu/jxy2Jn+L+hWlqOju8Ns6ww==
+	t=1794801643;
+	b=b6GhyWOyZ9nWi/kPcQO6Gr50qBcxxCpmga6go8Yc9SyKxWz4dAR8YX4F6iJSdrzhoL+F
+	 ATUpZfZjYkEKgaQXKYhxQ643yduCgRGgtA23yplB1PyR6P6QhcKGy5yt8YmtjxoHdNdmR
+	 A50/8uzbihMtpt3LyCpGuVEpV/fbYF00ttgjk0/D4Sp3nvI18ghWxCDBNVznuYeKYUWub
+	 w94iu78l7dDPZmR1mcvreT1gHQqVJTllHlAW6kH5/qMentkd4u7uj6LyLsKjn5U6838br
+	 IvJWnde/PnewusecZef0k6/X4rFGDrt9cyYRJgH2Fj6AosQ0DyOG1xkir0B5ifA0fNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794766064;
-	h=Received:DKIM-Signature:Received:X-Gm-Message-State:X-Received:
-	 MIME-Version:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=08ECguGEt5mKY5O0zhlWhlszKnOmF7Z1WUHLZizEhZg=;
-	b=NDUzci+9QG+ToNg1Migl6SbMNPnvO56b5BEsRCiBme11mP5J9i9UMeGWfCXGx4YWKkor
-	 8XLm1G+5WsWHXdwZTN+b3WmfVtcN0XNXx+xBnYrwSMO7WQhG9jtbSm+8pXuvGhEUZq5HE
-	 SRIgE4AZXRZ9m0QNrwUAsvp6u9R0Smgt8Z6o3umhn1bAlKj8xnCY7plFob97FG/VantQa
-	 EBzHzRH/N3r6KE1rifEa1gQZ9XXFtNM4NvJKV42ilK0L/EjdLe61NuP97BTV8GstPlpjQ
-	 EzXCDWgfCY1yaMVV38l/tOBWw7zLjI9xV/6c25274y34VBqZB9JH95fGLUQkeEfNdWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794801643;
+	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:X-Priority:
+	 X-Mailer:In-Reply-To:References:X-NTES-SC:Content-Transfer-Encoding:
+	 Content-Type:MIME-Version:Message-ID:X-Coremail-Locale:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=FpUz6VKa8cvlk6B0dGTvOD8cphJCOZqOzq+OFwLdeBs=;
+	b=dueUosxZ11dIiIE0lPheZ7OPsvLRmI8sOSmo03ojznICAAq8Hp8ptW6FSoXP0YJI1Oop
+	 t5C1cZzdj6R6aDsS/+X1MWpdIGWI5h+DQcaNfxj9ymAFHMa1mbT65oNhEwFei4G1toVE9
+	 B/UHsHhqHzEEMrtywFoc5o8XOr2EoMSHMXnTaEKxbzX0pl02ps0K1yqVkw0upUTqR/WIu
+	 sGpl6MBlmOlQiMa0ipxb4idAsCvgLa7nXf5DVW/HgJdWAspXqUQ2Vuwr+KnywazsPpNcj
+	 YNHTS++wIWi+BUtjs+LaIrsRMwJnrkBAwoUoTsjdL7i0Bb0a0/rbqs9vgyLltZdYenA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HwtEBNat;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=EzqouExK;
+	arc=none smtp.remote-ip=117.135.210.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A23606A31E
-	for <soc@lists.linux.dev>; Sun, 15 Nov 2026 18:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7352D606A32A
+	for <soc@lists.linux.dev>; Mon, 16 Nov 2026 04:00:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7352D606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HwtEBNat
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A292B1F000C7
-	for <soc@lists.linux.dev>; Sun, 15 Nov 2026 18:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794766063;
-	bh=08ECguGEt5mKY5O0zhlWhlszKnOmF7Z1WUHLZizEhZg=;
-	h=From:Date:Subject:To:Cc;
-	b=HwtEBNatawJhYBqAdi26+Fuw/aOPiZ3JNzspnfWuZrU+HIohjDxnDHSDqTzUgchiF
-	 ZOkcMXpKMfHTj9TbH2VDCFjSP4KG9RGJ45kCqedfev5aSOdpdGmod5B3htnOaRTGSC
-	 8GgSkOMEMrDhn8eGEzrjbNtaAUrkdwgf8TE8cAdtRDvpm2LdK0obcXMoBOoJKvDFWL
-	 LsltVAOsbM6/5PSEcfJoS7ABwP7vdKMlGOLyWbb/dTDbnDS2EPbMDTD3qrLQL6DeIk
-	 93EAjCKz+lEmyCBxcSWA3YB4Ggn1bup8+iQgkvPh2ZfVgFvTEBnKyLnXkrU6ulcWi5
-	 IKI2Gp7s3XfsQ==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5c1465bbbdaso2482726e87.3
-        for <soc@lists.linux.dev>; Sun, 15 Nov 2026 10:07:43 -0800 (PST)
-X-Gm-Message-State: APuU4Z/Gf99I1SLc6ZsYlNE00LXfekjVL5aElUwHx/jRvu689RFgcqmk
-	7Co6vqhZGGxQcueHv5GtJKc72QYMvHr/OqfdVaxmnCkCm2+4SvPTcqUq6FKSpwu+xHJctAUOaFE
-	fAsU2OIUjFc9wakDKY+ZqZzitAz9DXWU=
-X-Received: by 2002:a05:6512:b88:b0:5bf:dd05:3a89 with SMTP id
- 2adb3069b0e04-5c170a0fce2mr3165979e87.61.1794766062318; Sun, 15 Nov 2026
- 10:07:42 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=EzqouExK
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=FpUz6VKa8cvlk6B0dGTvOD8cphJCOZqOzq+OFwLdeBs=; b=E
+	zqouExKnTvZUMVriMCOwD/uSYdsMP/czsL2DMfiu3JLeUS+3MZRXiGwWpx98Uf+d
+	itu6wmCOwZusjspjo+JvlaPXSFRmtYsyQvwrQEYeUrJDQcjmiz5Ahj9cGNY/fbDW
+	3hw0Pk3i/ffg5ErGR7V3nj/yP0CquYlMg9taPdK+/U=
+Date: Mon, 16 Nov 2026 11:59:28 +0800 (CST)
+From: zl020895  <zl020895@163.com>
+To: "Brian Masney" <masneyb@kernel.org>
+Cc: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+	"Arnd Bergmann" <arnd@arndb.de>,
+	"Krzysztof Kozlowski" <krzk@kernel.org>,
+	"Long Zhao" <longzhao@ambarella.com>,
+	"Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+	soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	"Michael Turquette" <mturquette@baylibre.com>,
+	"Stephen Boyd" <sboyd@kernel.org>,
+	"Jerome Brunet" <jbrunet@baylibre.com>, linux-clk@vger.kernel.org,
+	"Rob Herring" <robh@kernel.org>,
+	"Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+	"Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>,
+	"Conor Dooley" <conor+dt@kernel.org>,
+	"Catalin Marinas" <catalin.marinas@arm.com>,
+	"Will Deacon" <will@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, "Linus Walleij" <linusw@kernel.org>
+Subject: Re:Re: [PATCH v11 0/5] arm64: add Ambarella CV75 SoC support
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+In-Reply-To: <avReozTC_GEmfIxG@x1g10>
+References: <20261105-cv75-soc-v11-0-aa6ee0b2380d@ambarella.com>
+ <179427375370.1061670.4050288038934218487.b4-review@b4>
+ <20261110-interesting-hilarious-shark-2dbfc0@quoll>
+ <7eeaf54d-2d7d-420c-a34e-eebc6dd0effe@app.fastmail.com>
+ <bbc16906-45e2-4d81-ae81-ad93e87b13be@kernel.org>
+ <c67939c7-9725-459e-97dd-e104f3b14022@app.fastmail.com>
+ <avMM8z-LYncKS8ip@x1g10> <avMmKJpczepWTRdc@ashevche-desk.local>
+ <avReozTC_GEmfIxG@x1g10>
+X-NTES-SC: AL_Qu2SBvSbvk0t7iiZbOkdnUoTj+Y/XMK0uvwk1YdVc+MGpT/J9BIGcENYL0vb4v2JJgSKuzq3WhJU6vpweI9IrcCebcyksFrj0mpy8H3qeg==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -57,86 +84,20 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-From: Linus Walleij <linusw@kernel.org>
-Date: Sun, 15 Nov 2026 19:07:29 +0100
-X-Gmail-Original-Message-ID: <CAD++jL=z=i8dKwA7XBjjM+tNXPmZDttCYz00gpkZE86Wwh1Mzw@mail.gmail.com>
-X-Gm-Features: AclHuK8USlSPTfgH0T_EpOBmC23ixDquMOtn57B_dNGjY89wO27Ifa-8NHjtVYI
-Message-ID: <CAD++jL=z=i8dKwA7XBjjM+tNXPmZDttCYz00gpkZE86Wwh1Mzw@mail.gmail.com>
-Subject: [GIT PULL] U8500 defconfig updates
-To: soc@lists.linux.dev
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <2b30e92.3c75.1a1e2828c3a.Coremail.zl020895@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:lSgvCgBXl_egf_pqETJvAA--.5849W
+X-CM-SenderInfo: d2oqjiqyzvqiywtou0bp/xtbC7gBh0mr6f6DTZgAA3n
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-Hi SoC maintainers,
-
-the posted update of U8500 defconfigs.
-
-I have been told in the past, sharply, to split up these updates, so a lot
-of patches. Feel free to just squash them into one or however you like it!
-A rundown of the changes in the signed tag.
-
-Please pull it in!
-
-Yours,
-Linus Walleij
-
-The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
-
-  Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/u8500-defconfig-v7.5-soc
-
-for you to fetch changes up to f908ea8a0f2de52dca6b19ef14885ed6f034fe58:
-
-  ARM: configs: u8500: Enable compressed firmware loading (2026-11-15
-18:52:05 +0100)
-
-----------------------------------------------------------------
-Annual U8500 defconfig update
-
-This config is mostly used by the Nura (former PostmarketOS) project.
-
-- Refresh to Kconfig changes.
-- Update to contemporary scheduling and using e.g. the TEO cpuidle
-  governor, BSD process accounting, PSI and autogrouping.
-- Enable control groups and namespacing, checkpoint-restore.
-- Enable generational LRU, DMA-CMA for memory management, disable
-  PAN (too slow) and ramdisk commandline.
-- Enable FUSE, DM/dmcrypt, squashfs, ZRAM.
-- Enable basic IP routing, nftables, TUN and VETH.
-- Move a bunch of U8500-applicable device drivers to be modules.
-- Enable I2C mux (MPU3050 is the sole user but we need to support
-  it.)
-- Move V4L2 support (used for flash) into modules.
-- Disable devices such as the STM32 MMCI we don't use.
-- Move all IIO sensor drivers to modules.
-- Enable some security features, crypto XTS, EXT4 ACLs, BPF
-  jit compiler.
-- Update Coresight debugging options and move it to modules.
-- Enabled the Audio Graph Card2 as introduced for U8500 in
-  kernel v7.4-rc1.
-- Finally enable compressed firmware loading as Nura uses this.
-
-----------------------------------------------------------------
-Linus Walleij (15):
-      ARM: configs: Refresh U8500 defconfig
-      ARM: configs: u8500: Update scheduling and accounting
-      ARM: configs: u8500: Enable control groups and namespaces
-      ARM: configs: u8500: Update boot and memory configuration
-      ARM: configs: u8500: Enable storage support
-      ARM: configs: u8500: Enable IP routing and filtering
-      ARM: configs: u8500: Build peripheral drivers as modules
-      ARM: configs: u8500: Enable I2C mux support
-      ARM: configs: u8500: Update media support
-      ARM: configs: u8500: Disable unused drivers
-      ARM: configs: u8500: Build IIO sensors as modules
-      ARM: configs: u8500: Enable security features
-      ARM: configs: u8500: Update debug and CoreSight support
-      ARM: configs: u8500: Enable audio graph card2
-      ARM: configs: u8500: Enable compressed firmware loading
-
- arch/arm/configs/u8500_defconfig | 187 +++++++++++++++++++++++++++++----------
- 1 file changed, 140 insertions(+), 47 deletions(-)
+SGkgQnJpYW4sCgpBdCAyMDI2LTExLTExIDIwOjI1OjA3LCAiQnJpYW4gTWFzbmV5IiA8bWFzbmV5
+YkBrZXJuZWwub3JnPiB3cm90ZToKPlNvIGhvdyBhYm91dCB0aGlzOgo+Cj4tIEhhdmUgTG9uZyBw
+b3N0IGEgbmV3IHZlcnNpb24gdGhhdCBzcGxpdHMgb3V0IHRoZSBjcmVhdGlvbiBvZiB0aGUgbmV3
+Cj4gIEtjb25maWcgc3ltYm9sIEFSQ0hfQU1CQVJFTExBIGludG8gaXQncyBvd24gcGF0Y2guIEkg
+YXNzdW1lIEFybmQgY291bGQKPiAgcHJvdmlkZSBhbiBBQ0sgb24gdGhpcz8KPgo+LSBJIGNyZWF0
+ZSBhbiBpbW11dGFibGUgYnJhbmNoIHRoYXQgY29udGFpbnMgdGhhdCB0aGUgdHdvIGR0LWJpbmRp
+bmcKPiAgcGF0Y2hlcywgcGx1cyB0aGUgQVJDSF9BTUJBUkVMTEEgS2NvbmZpZyBwYXRjaC4KCkp1
+c3QgY2hlY2tpbmcgaW4gLS0gdGhlcmUgaGFzbid0IGJlZW4gZnVydGhlciBmZWVkYmFjayBmcm9t
+CkFybmQvS3J6eXN6dG9mIG9uIHRoZSBwbGFuIHlldC4KClNob3VsZCBJIGdvIGFoZWFkIGFuZCBw
+cmVwYXJlIHRoYXQgc3BsaXQgZm9yIHYxMiwgb3IgaG9sZApvZmYgdW50aWwgQXJuZC9Lcnp5c3p0
+b2YgY2hpbWUgaW4/CgpCZXN0IHJlZ2FyZHMsCkxvbmcgWmhhbw==
