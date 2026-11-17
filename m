@@ -1,112 +1,80 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794912496;
-	b=t+ZQCdbmTv+YDKyOpchleKmMgeaJuhjeMDbssHVUKgDGcjI4c+YKz+JE0DR9lDeJBLN6
-	 O5JhZFUEAwY1HoUT3IMFjN0wU2YT9TrJkZbymBUdxfcHFmzczIirrBYNSmbqBvSrcmteX
-	 LfcnZX3LOjQxCyrF/+mmDOe4uNeiYDfS/JB2Qfz27Cb/zi2B9yMdmFnmYYtcCd372qBpE
-	 29SSMUDodEO5ax/+bqM6BisiCQyGcUKQAB9dbpBZ8WpSGMaHq3Lb78s9sQRrlKvEBWCX+
-	 BCDgL24NpMBO4DijYzrHINs3TgS26a3jyBJqXkOVeWQwVKu18CLZT1OsLNURXLZkWrA==
+	t=1794920820;
+	b=BDCSv4duKTIFWoQ4ZqQoMoF073z+aJIpRmjDIWqpoK5VJZFylOUVlOsbKx+RNIQw+QCV
+	 tceKmi/bB+Q+7MNavviiFNQuQS0IAXLMbaZGYQyDcCxyIGNAYSijJZhTgo6vpKxmOnEE3
+	 s1wlwc5LJ0oTyT2ykCeWUqn010F/fjnoiaHPOxDJnexbmaQ3vZvDjJeYxJI9vftZ6Hi54
+	 KmROmEcTzKgaenQ4g+lK8oOX6F7XU7sB445WXZIcmLPOcwLf5em7aJco9ZFX765uw0rOn
+	 W80bmSsqx10Y1pR9uwByitLCxQINTuItUCAF47sKN0bd26IZiInut5w04CK7vnuOg1g==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794912496;
-	h=Received:Delivered-To:Received:DMARC-Filter:DKIM-Signature:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=RUN7O4VqPfmqBa2m1SYf0FMJzaRQzyuKWgap+ftrtUI=;
-	b=hon33SzeqZMs8jsDiarfk//Ubck+nZuP72LoZow4BeZzPOxHJqTh0pjU0rOYjFCrIu9+
-	 jg301X1iqLQBoCtzbAx5EnX0tC8mtBdkHkLiaHfd6VKNhBCEOAmv+YjrJs1ftRN08oBfd
-	 PvhBh8ilk+b/DNxTxGwqiVR8JZNagfHFSZlB7LTVYxyYELnPLr65PXnPmKNBsuXah6i0y
-	 a6ATkwR1kKcpiEE0wZu6TN8Jtw6rZ7I2uTFfauZDu8wePI+hWOwpY+w/2mucV0kvSLxpI
-	 O7Q11Q3lAa3I7MJJIzbpEN7nF1zGkFIPJLeiw48sHYuwfSauP41eOBFtjFw/rzMsVdQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794920820;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=HVEE3Tcbne75iVGjTL3VoYX5NV8IDX+fOPLq54L1FA0=;
+	b=KHC9X0D73LsIykY2KpLde5Hv9pwVrfgrS2LeJ7JqS6bjl6fHcS853TH0wGLobwH2fG2Z
+	 Jki9EOvQnZzad80C30ivbZ6w2E+mtTTpJVOY903DOlzO8YstNJ8APuiucRjAcOJhgRdGr
+	 9LeOXsHHOeppRxO1av3lhViEG0LrBZ03l4Wud/cwfd5pwvppOJaYRkBBcSN9/sUlac3DC
+	 mWs7QoPd1zMTIkyk9rf7Mi/Xfn2cWRKln7he99iFd0YrbYxzBrXsQ9UxtfF9mLwXHxjeN
+	 1BDZH3QOg4cEq/7YrQS1mZAiQwIDVNVrgpgycd6fGxQpcWpQpopi83jZMV/U7c2ujAQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=KKdqhzGl;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KusGYfdX;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3F3606A338
-	for <soc@lists.linux.dev>; Tue, 17 Nov 2026 10:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B50606A330;
+	Tue, 17 Nov 2026 13:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=KKdqhzGl
-Received: by smtp.kernel.org (Postfix)
-	id 1A9401F000C7; Tue, 17 Nov 2026 10:48:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=148.251.105.195
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KusGYfdX
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794912496;
-	b=AtQSF+VxS7vNjLa+7nhalwN4rao4oVhtJbTHEzxia+gZUDE789nHy/+/kRoD/aKuBp6M
-	 +Hi2wPaXQP6A+Ig2yqJ9K2bO6sCzkmvRiQYWwQsmQOK+IeBgSE+TvyE54jDymZHvPBbYz
-	 uOOUxDE5YBFXXUFdX8MTDGMNdmKUc/2O1VD0pr+Eu4tlMXESX+MTSabmNSJbc4EPVxIg6
-	 6oo0146aTQOt+D8RUoYMTGEfRSn8McjMTokvFADs9fWFCwRQGBeU+AlWOGXeE2Y1kiR73
-	 CRxKJE49yZ6BAAvTWV8zhZ22c7nl7huc0m2lXG1C4Nso2SUr8y0Z7e7WxtqJVBLNONA==
+	t=1794920819;
+	b=0r9uRdivsCoewUCIvlrK4zMxlXevmaH6yWMBF+nT7p7HRRZwZyZ5PsWuYdrw6719GIgp
+	 dFzSInt/f9S19cPSXf2QiPx6zOnJIt3+RZNMSK03yqEl6juUkILnEQ+af5h32WmT9jiEJ
+	 h1S7UhkxbfJ79ZDOFZX+X9217yluSyE41q6v6R9Kv70ghOK10WTY2TmQRE8QIe13dX8ca
+	 auTwZmNEMwep+/oh4QxP5y8AkSnXfHaXo2ZJXoptZBW2jdjzXpBVB81OrmmhKVKmVviQg
+	 BHR76q/vVpWLF1ZvB6eCxWagW7rBasBykwESyrQPGlTVtUOnBsxpqE0H1zeBizIGPQQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794912496;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=RUN7O4VqPfmqBa2m1SYf0FMJzaRQzyuKWgap+ftrtUI=;
-	b=S9uJ9wJMGtBUG7aGIhRGH2exZAzgVpO3dwQi+SI75k5luyKPaSO+7E0Cxi5eyCZmntmD
-	 lyL4/5t+5tsiSaoNGsd/TYhJnJQMuJbSy5CH60n6caKGf23rfrp2afkie+yFLK3vBjE+V
-	 oOKJaPcTYFoSjHR3pr9SAfUAR2xpLRUWcSbjRL5E7aXg+e0Z9/Tkwl8M6kNymKpxO/V/x
-	 dZr2BjTbTCOJIpeVpgC+LmaJGoqC7N8bSbuJ/pJZ/btv8GCxERaYG5eMKSC4YcNwtZ0La
-	 EZ0z8hEkJTEMFXiTddmdiVGhBjnJBcGsfL0AcZI/2gwY3j9nFgn+WNYK8mucB90L05A==
+	c=relaxed/relaxed; t=1794920819;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=HVEE3Tcbne75iVGjTL3VoYX5NV8IDX+fOPLq54L1FA0=;
+	b=QuwfeivrjGypZTmqkpMEujYkm3IHy0bLqL7n4tt0kO118sRj+oTPiPYVck0QOVqfFGux
+	 a9wjEalkmDuqeBoewJMa9AD2qTRJtDA6rMGCoiNpBWu7G+6BP7UWl8AjbeSt79XGjBOtF
+	 D04LgHeMNB1sHrdOp0HAyuCL02AjCusuOIIU60BFm+siaFYycxAog+ycZO98rI0IFUkvo
+	 Xq3GhLBWqdJzPPRfxf4CZ/UFcQFHDLs/qUcOGFYjBH/Ki0fmUlMb7LUt/ZZs/q73vrcPs
+	 oAV38JDwbXSBdVUn0S8QGhPTyS94qbPM33HsjgbqpNf5NLPPMdN0CsFm5MYaTRxWuUg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=KKdqhzGl;
-	dmarc=pass header.from=collabora.com;
-	spf=pass smtp.mailfrom=collabora.com;
-	arc=none smtp.remote-ip=148.251.105.195
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 275101F000C9;
-	Tue, 17 Nov 2026 10:48:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=KKdqhzGl
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 275101F000C9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1794912493;
-	bh=orTpcthCg6xt0FFxOp+32oPMMXPRwoSXOB9hmuEtzZM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KKdqhzGl7ss26Gd1p9ybq1A4+RX5yccpkO75+8WDjf3yEi5JN2L1tN4bAtNssE8Zc
-	 QQ49jh2I6rcszoPQ9PvZsjc3Akc6imyLZapzk5yyCudW8QVzjGeT9qnJBvx0I8DbCQ
-	 WICUb/UBzPC50deyPUdS7Od1pRf8f8uQRsaCZGd8NBsjxoVEVx+Hyg+XB64FCZ2dW7
-	 NHwsuKWtnuPZXQeOjcrNEswtLzGIKzWEMjhO7hziXiZhKNxUFy6eYfkbqAYO2DT9FW
-	 KMeoNfSbg8f+1VcTZpDC+JYH05raDhMnsbnwUYEpM3U0jNbPR4K7nESzN3kCMCqeJl
-	 KrL74qhD6UvDA==
-Received: from IcarusMOD.eternityproject.eu (unknown [100.64.1.21])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 71A3517E0BCC;
-	Tue, 17 Nov 2026 11:48:12 +0100 (CET)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: Matthias Brugger <matthias.bgg@gmail.com>,
-	Coia Prant <coiaprant@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Flora Fu <flora.fu@mediatek.com>,
-	Alexandre Mergnat <amergnat@baylibre.com>,
-	soc@kernel.org,
-	Roman Vivchar <rva333@protonmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Lu <roger.lu@mediatek.com>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	stable@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: [PATCH v4 0/3] soc: mediatek: pwrap: mt6572 support + log level fixes
-Date: Tue, 17 Nov 2026 11:48:08 +0100
-Message-ID: <179491248220.154190.177723023436695190.b4-ty@b4>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261028-6572-pwrap-v4-0-1780c58d2097@protonmail.com>
-References: <20261028-6572-pwrap-v4-0-1780c58d2097@protonmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 22FEB1F000C5;
+	Tue, 17 Nov 2026 13:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794920819;
+	bh=HVEE3Tcbne75iVGjTL3VoYX5NV8IDX+fOPLq54L1FA0=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=KusGYfdXQi2wznXRCzHL7Aq4lwcI8FtpRcxI+2rN3pyAUNIB3woFzVIh3AutC1hgi
+	 fYAFXsw46f1BdQHReX7Dbig8Rgg55iTaNTfyUm2CO1fz/iWIJGZL1B08w/Of9Zey3G
+	 kv7GV2YQFIgFqLSwMzDgWD9Xtl4nCR13o6Qz4+igw1oTdUZ64qW7tg/RwNpryK0SrX
+	 TW5wiftGS8u73LDaPHWh52KpWh48T3vEK5iEPkQG8kUXW6EstME8pCEE5iXBG+3I2i
+	 sxegNTHNEumVyHqKukHUZrw5YAPhSYI7tZPVfFPH/DIpBc8nOgI6UITtZmwaDtGZnQ
+	 X7LKRPH5JMZ0Q==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 934E14A97F;
+	Tue, 17 Nov 2026 13:06:58 +0000 (UTC)
+From: yy-Local-LLM via B4 Relay <devnull+yogo.0917.sabu.gmail.com@kernel.org>
+Subject: [PATCH RFC 0/6] SiRF AT550 / YPL514si initial RAM-boot platform
+ support
+Date: Tue, 17 Nov 2026 22:06:50 +0900
+Message-Id: <20261117-at550-rfc-v1-v1-0-5879573cb825@gmail.com>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -117,31 +85,132 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzNDQ0Nz3cQSU1MD3aK0ZN0yQ10jU0tDQwvTRKO0VAsloJaCotS0zAqwcdF
+ KQW7OSrEQweLSpKzU5BKQQUq1tQBphOzAdQAAAA==
+X-Change-ID: 20261117-at550-rfc-v1-2591185a2fe8
+To: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Thomas Gleixner <tglx@kernel.org>, Radu Rendec <radu@rendec.net>, 
+ Ulf Hansson <ulfh@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+ Adrian Hunter <adrian.hunter@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Russell King <linux@armlinux.org.uk>, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>, 
+ linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-doc@vger.kernel.org, soc@lists.linux.dev
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794920817; l=5303;
+ i=yogo.0917.sabu@gmail.com; s=ypl514-20261117; h=from:subject:message-id;
+ bh=2VJuHtWvJ/6kBBAKkOQqaxVnf8LunGjT3BvQbOpAQfM=;
+ b=TqlrSuhkixWIR2lMSrU1nGDY+ADJU4gjIR3CMH3zWTCgohhAVNsc4WHccWXgrO6bUMFtL6UWE
+ irl8pnb2GR4D1jPLdZS1FC97ZoM/BZRsaNtgzdRlcZRgSrzz+BDGTh1
+X-Developer-Key: i=yogo.0917.sabu@gmail.com; a=ed25519;
+ pk=TIQ8Tk4xQrxyn8rmk3GI2f5qg/kO6g2KZm7YOOyBHeg=
+X-Endpoint-Received: by B4 Relay for
+ yogo.0917.sabu@gmail.com/ypl514-20261117 with auth_id=1550
+X-Original-From: yy-Local-LLM <yogo.0917.sabu@gmail.com>
+Reply-To: yogo.0917.sabu@gmail.com
 
-On Wed, 28 Oct 2026 12:37:49 +0200, Roman Vivchar wrote:
-> This patch series adds support for the mt6572 pwrap.
-> 
-> All known mt6572 devices use mt6323 PMIC, which is already supported
-> by the upstream drivers. mt6572 also shares SoC-specific init with
-> mt2701.
-> 
-> Patch 1 adds dt-bindings compatible.
-> Patch 2 fixes improper log levels in the driver, improving UX when
-> debugging.
-> Patch 3 adds mt6572 support.
-> 
-> [...]
+This RFC adds initial SiRF AT550 support for the ARM1136-based Yupiteru
+YPL514si navigation device. It splits the working 6.12.60 bring-up into
+normal kernel subsystems and ports it to the 7.4-rc3 development tree.
 
-Applied to v7.4-next/soc, thanks!
+The device owner has now booted this 7.4-rc3 candidate on the YPL514si
+through the JWM desktop, with the console and screen keyboard. The CE
+handoff record confirms a 32 MiB Linux-owned allocation, all 8192 PFNs,
+and a counter rate of 124387750 Hz. The deployed EXE/DLL hashes match the
+prepared kit. The WM result is reported by the device owner, rather than
+being inferred from the CE pre-handoff log.
 
-[1/3] dt-bindings: soc: mediatek: pwrap: add mt6572
-      commit: 44584adbef2d5786ff4e4bedef48f476a700248f
-[2/3] soc: mediatek: pwrap: use correct log level
-      commit: b5c4ee18cc154623cbc04dc41e3642df3b045ce5
-[3/3] soc: mediatek: pwrap: add mt6572 support
-      commit: 0e19a950e5c1863b3805ba3969ec661396bf1db5
+The kernel uses standard IRQCHIP_DECLARE, TIMER_OF_DECLARE, common clock,
+input polling, SDHCI PIO and simplefb paths. Generic ARM head.S, init/main.c,
+MMU and RealView execution code are unchanged. The CE RAM allocator,
+page-table checks, handoff bridge, DT fixups and GUI software are not part
+of this kernel series.
 
-Cheers,
-Angelo
+Firmware must initialize SDRAM, peripheral clocks, pin multiplexing and
+the LCD. The bootloader supplies the actual usable RAM and post-divider
+counter rate in the DT, and enables only peripherals handed to Linux.
+Memory/clock zero values in the source DTS are explicit fixup placeholders.
+The timer driver preserves the divider and rejects a running watchdog.
+
+Validation:
+- AT550-only defconfig Image/DTB build, plus built-in/module leaf drivers.
+- W=1 on the new drivers, dt_binding_check with examples/yamllint, scoped
+  dtbs_check, and ARM32 tests of the actual loader DT fixups.
+- ARM1136 QEMU at 16/24/32 MiB through JWM, five-point calibration,
+  screen-keyboard input into rxvt/PTY/ash and a readonly SD fixture.
+- Physical YPL514si boot through WM, reported by the device owner.
+QEMU uses GIC/SP804/PL181 and synthetic touch, so it is not being presented
+as validation of the physical AT550 controllers. The no-VFP defconfig also
+produces an existing unused-variable W=1 warning in unmodified signal.c;
+there are no reported new-driver warnings.
+
+Initial limits: firmware clock/pin setup is inherited; cold initialization,
+clock-tree control, DMA translation and board suspend are not implemented.
+The board DT limits SD to 25 MHz, no 1.8 V, no MMC and no SDIO. SD writes,
+card removal and suspend/resume have not been separately validated. The
+AT551 draft was cross-checked with AT550 CE mappings and prior hardware
+behavior; it is not claimed to be a complete AT550 specification.
+
+I would appreciate early feedback on the initial platform scope and the
+firmware/DT handoff contract before extending clock, pinctrl or DMA support.
+
+Signed-off-by: yy-Local-LLM <yogo.0917.sabu@gmail.com>
+
+---
+yy-Local-LLM (6):
+      dt-bindings: add SiRF AT550 and Yupiteru YPL514si descriptions
+      irqchip: add the SiRF AT550 interrupt controller
+      clocksource: add the SiRF AT550 counter and match timer
+      Input: add polled SiRF AT550 resistive touch support
+      mmc: sdhci: add SiRF AT550 programmed-I/O support
+      ARM: add the SiRF AT550 platform and YPL514si board
+
+ Documentation/arch/arm/at550.rst                   |  55 +++++++++
+ Documentation/arch/arm/index.rst                   |   1 +
+ .../devicetree/bindings/arm/sirf,at550.yaml        |  22 ++++
+ .../bindings/input/touchscreen/sirf,at550-ts.yaml  |  36 ++++++
+ .../interrupt-controller/sirf,at550-intc.yaml      |  46 +++++++
+ .../devicetree/bindings/mmc/sirf,at550-sdhci.yaml  |  51 ++++++++
+ .../bindings/timer/sirf,at550-timer.yaml           |  47 ++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |  17 +++
+ arch/arm/Kconfig                                   |   1 +
+ arch/arm/Makefile                                  |   1 +
+ arch/arm/boot/dts/Makefile                         |   2 +
+ arch/arm/boot/dts/sirf/Makefile                    |   2 +
+ arch/arm/boot/dts/sirf/at550-ypl514si.dts          |  52 ++++++++
+ arch/arm/boot/dts/sirf/at550.dtsi                  |  66 ++++++++++
+ arch/arm/configs/at550_defconfig                   |  34 ++++++
+ arch/arm/mach-at550/Kconfig                        |  13 ++
+ arch/arm/mach-at550/Makefile                       |   2 +
+ arch/arm/mach-at550/at550.c                        |  11 ++
+ drivers/clocksource/Kconfig                        |   6 +
+ drivers/clocksource/Makefile                       |   2 +
+ drivers/clocksource/timer-at550.c                  | 134 +++++++++++++++++++++
+ drivers/input/touchscreen/Kconfig                  |  10 ++
+ drivers/input/touchscreen/Makefile                 |   2 +
+ drivers/input/touchscreen/at550-ts.c               | 108 +++++++++++++++++
+ drivers/irqchip/Kconfig                            |   5 +
+ drivers/irqchip/Makefile                           |   2 +
+ drivers/irqchip/irq-at550.c                        | 110 +++++++++++++++++
+ drivers/mmc/host/Kconfig                           |  10 ++
+ drivers/mmc/host/Makefile                          |   2 +
+ drivers/mmc/host/sdhci-at550.c                     |  62 ++++++++++
+ 31 files changed, 914 insertions(+)
+---
+base-commit: 666539eecdf4db623f5e3c3e55cf9f2dfad24aa4
+change-id: 20261117-at550-rfc-v1-2591185a2fe8
+
+Best regards,
+--  
+yy-Local-LLM <yogo.0917.sabu@gmail.com>
+
 
