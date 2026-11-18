@@ -1,58 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795018106;
-	b=XUlhERpLqB/js+T2Hq6+mJ204KfX7vufEeVkQ9FcbgLKUWnLUKdAjZXM9grBh7+O1frm
-	 q8Ufu2XBt/LBNHbhNxThLY1FUDvGkug6XTFMT1/RYt5+V/F1q/sj9mBhxnq1OXU4ukeQh
-	 lAJOXSxITlTbzrtpFyqJO4fmWxUDKsybNQvPhOSnuRjuM/l30rxDQyO/GRPU2K1yfMeje
-	 LPQeXOg3We8b9QX51XSCSxbrv7jIma+GjBbWitzTrdPq9NqyauQOU6s+t5y9xnd0Hitf7
-	 hQ+0v08av/0NZsbXkJ4JAxhk3ONmWUvA+Zxu+0eO7gatvqVZOL+rv4Be41xco+7D+BA==
+	t=1795019405;
+	b=eXvoNvmiBrpvw7Ymn84BCZ6cNW8szhHqD6Csp/wxIb1NLUGBLOZtourS+6POzrYibnYh
+	 d0Gh5lKkPWpE8KKeuxP1qp5CFmlAxu1O5/6C9cnTezr35wPBl/jFjuvJrTfmb0XdYawFd
+	 oj9RMHYVxyCquOnxPsiYSZ8QguJcFX61B42w2kUHiv4+AIG0s6AdVeWhfbNlsMH4oRHZQ
+	 9pLMYKy3b7fEw96GiMTU0vvDwejqgcpwsYExsCDCRBnZkSZQPTHijc2dPfu0IBYTVdyq2
+	 YvefUWNwFTkZxhxU6nmGLp6f7VGcct3nJTYHJ+EG2nA5bdzH+dUtz51R5eA9ug3TPuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795018106;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=eX5+FQsuccBi8Flwb7EhSWhHXuSZgtTPDPOP8aOOEYY=;
-	b=s0xD0Y+oP3aoKXRH0I8gHrgSOb8GkkkRcqYh1xzOU/G9CCdHSNcBJ6rv0EOy/BgoihwA
-	 tgev2pu52WcbOaIMMQxv9Vz+EWdH3sYemUDax5/B8lIJH7aoWisy2jm5tO0AZ5af8pFZu
-	 /P+xGgEM37hcihlOjhdavn+cmNk0MbXzJo834jZtS3uNHNeC0Q/qI3tEWmwnfkEQ/N8o5
-	 oAt+CDu+jOvFfElraClKlP6cGwA2qy/tdIJcd1VlFMddV7xpMBEvYltNJyf3Xws8ZrzNN
-	 IV9QydkM7mKB75fZd122e/Y5VrdwqgZLMS3vYiqdN5yojT+RqJ64P6D+HyNkSAtd1kA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795019405;
+	h=Received:Delivered-To:Received:DKIM-Signature:Received:Content-Type:
+	 MIME-Version:Content-Transfer-Encoding:Subject:From:Message-Id:Date:
+	 To:Cc;
+	bh=coq4/oE5EYG4zq2Y45obdqPu8+UG/xtmYQpXh3uvX9Y=;
+	b=giPDE8+CfU9DeFBGFhJKrnXfvxCSyywEw5/1H826/ivTmof7xkc/K0yRnkhf1TFyjV2E
+	 nYQ8o2zSBjFnKEEcHlBJSB1Fp9WP0CYN1KrxehEvTd5pdIgBWj+8btwlD24NJw37Uftxj
+	 xMbFH6hE7Wndh7RbdzhIaEeykpwEclfIuG2wMZhA1laPjd22pqghHoUSCBZFY0LaPXTL8
+	 OIgXjYj4gL1DEGaIN3JijenvufLrwyUFA7OiBHansSeS4dSfrZkqC2Rr+fHUr4vh3ELpr
+	 6rbfkUzd1dShcVYF1bTUhmARQ7/aB2lzKmzMtS+fvbr+WSLP7OaoavPWMKO1ucvu8jA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P4DB6X+Q;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NWtQe3fC;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07960606A320;
-	Wed, 18 Nov 2026 16:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725E460A2605
+	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P4DB6X+Q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C599F1F000C5;
-	Wed, 18 Nov 2026 16:08:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NWtQe3fC
+Received: by smtp.kernel.org (Postfix)
+	id 05ABF1F01573; Wed, 18 Nov 2026 16:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E208E1F000CA
+	for <soc@kernel.org>; Wed, 18 Nov 2026 16:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795018105;
-	bh=eX5+FQsuccBi8Flwb7EhSWhHXuSZgtTPDPOP8aOOEYY=;
-	h=From:To:Cc:Subject:Date;
-	b=P4DB6X+QgsIS5swsW8E5NSdFw55ebvCSinmqzhbeKZUmGuFVIVCQp92fLAjnmLcuU
-	 NxOGddGznszOUbEbIC/dWuzEv3VNQDoDU9ivDcngQlbcCRSELGFf3hPf3crL1zPeWG
-	 zkjTHR9x3GdNlUHqzzYYngcUjMIwJicpEaDwreVzCo6lssp9EFmDyKML+0UU98Mw/V
-	 6jfiGxG/CrfvRqgJTub3XK/XCmaOPSP3YkyLzgivtnIN6e3uzG/t5xiw77FK6LSbjj
-	 jALl4mCSZkvl4Uxc5k3vWq2beFmQeiPZM7uI2pyUXEFdlAE74l5Iz9e+WSUJFrey4J
-	 61NAc6SnohS9w==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Stafford Horne <shorne@gmail.com>
-Cc: soc@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Simon Schuster <schuster.simon@siemens-energy.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	linux-openrisc@vger.kernel.org
-Subject: [PATCH] openrisc: stop using libgcc
-Date: Wed, 18 Nov 2026 17:08:20 +0100
-Message-ID: <20261118160820.2994933-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20260515; t=1795019404;
+	bh=coq4/oE5EYG4zq2Y45obdqPu8+UG/xtmYQpXh3uvX9Y=;
+	h=Subject:From:Date:To:Cc;
+	b=NWtQe3fCk1ajHcK5jVc5j0pSXBYkqxQN2KM+k7Tgj3CZKfOvh2aKoY2/pttUdmAVl
+	 qSeBPiY5iOeueKfv+S4xKQPotHPACDYlAGH870pWXicL8g3T31tM5SQIoUA0a46/gO
+	 vxgYlyoWys3zqMAfdwiRbhWQwO9ETaKITD+ZBONG8Ao0AJ/eaSoh3ys3q5To4wH2Gp
+	 T5DWQSIbvfshQva+5iRzd2dqxCCcxBNSJzqS4GUeNeoilUaO+ZrHpjXYZBqOOMGG+4
+	 lu/PTyB18yxDz3QM9/5uP8glQmqkmSlPAvwp5RLpqJXXA74a6hpvv5gD6d23KkpKFM
+	 EPbtJ9BTx209Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B683C3808210;
+	Wed, 18 Nov 2026 16:30:04 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -63,106 +56,31 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <179501940343.1837438.6662802605501972966.git-patchwork-summary@kernel.org>
+Date: Wed, 18 Nov 2026 16:30:03 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello:
 
-Based on the work for nios2 and arc, remove the inclusion of libgcc
-and instead use the kernel's own copy of the required functions.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-Cc: Jonas Bonn <jonas@southpole.se>
-Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Cc: Stafford Horne <shorne@gmail.com>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Simon Schuster <schuster.simon@siemens-energy.com>
-Cc: Vineet Gupta <vgupta@kernel.org>
-Cc: linux-openrisc@vger.kernel.org
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-Hi Stafford,
+Series: [GIT,PULL,1/2] Broadcom drivers fixes for 7.4
+  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/series/1211156/
+  Lore link: https://lore.kernel.org/r/20261114034550.878760-1-florian.fainelli@broadcom.com
+    Patches: [GIT,PULL,1/2] Broadcom drivers fixes for 7.4
 
-I've based this on top of the branch at
-https://lore.kernel.org/all/20261118144652.3124085-1-dinguyen@kernel.org/
-which I've merged into the asm-generic tree. Vineet already
-has a similar patch for arch/arc, and I did the one for
-arch/openrisc after seeing that everything is there.
 
-If this looks ok to you, please Ack so I can merge it in the 
-asm-generic tree as well.
+Total patches: 1
 
-      Arnd
-
- arch/openrisc/Kconfig             | 10 ++++++++++
- arch/openrisc/Makefile            |  3 ---
- arch/openrisc/kernel/or32_ksyms.c | 14 --------------
- 3 files changed, 10 insertions(+), 17 deletions(-)
-
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index 6aaedc67a5e0..5be29befd86c 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -22,6 +22,16 @@ config OPENRISC
- 	select GENERIC_IRQ_CHIP
- 	select GENERIC_IRQ_PROBE
- 	select GENERIC_IRQ_SHOW
-+	select GENERIC_LIB_LSHRDI3
-+	select GENERIC_LIB_ASHLDI3
-+	select GENERIC_LIB_ASHRDI3
-+	select GENERIC_LIB_MULDI3
-+	select GENERIC_LIB_UCMPDI2
-+	select GENERIC_LIB_DIVSI3
-+	select GENERIC_LIB_MODSI3
-+	select GENERIC_LIB_UDIVSI3
-+	select GENERIC_LIB_UMODSI3
-+	select GENERIC_LIB_MULSI3
- 	select GENERIC_PCI_IOMAP
- 	select GENERIC_IOREMAP
- 	select GENERIC_CPU_DEVICES
-diff --git a/arch/openrisc/Makefile b/arch/openrisc/Makefile
-index 68249521db5a..38dc87bc6a3a 100644
---- a/arch/openrisc/Makefile
-+++ b/arch/openrisc/Makefile
-@@ -18,7 +18,6 @@
- KBUILD_DEFCONFIG := or1ksim_defconfig
- 
- OBJCOPYFLAGS    := -O binary -R .note -R .comment -S
--LIBGCC 		:= $(shell $(CC) $(KBUILD_CFLAGS) -print-libgcc-file-name)
- 
- KBUILD_CFLAGS	+= -pipe -ffixed-r10 -D__linux__
- KBUILD_CFLAGS	+= -msfimm -mshftimm
-@@ -55,8 +54,6 @@ ifeq ($(CONFIG_OPENRISC_HAVE_INST_SEXT),y)
- 	KBUILD_CFLAGS += $(call cc-option,-msext)
- endif
- 
--libs-y		+= $(LIBGCC)
--
- PHONY += vmlinux.bin
- 
- vmlinux.bin: vmlinux
-diff --git a/arch/openrisc/kernel/or32_ksyms.c b/arch/openrisc/kernel/or32_ksyms.c
-index 5aabef30ca09..7ae38030a9d4 100644
---- a/arch/openrisc/kernel/or32_ksyms.c
-+++ b/arch/openrisc/kernel/or32_ksyms.c
-@@ -27,20 +27,6 @@
- #include <asm/hardirq.h>
- #include <asm/delay.h>
- 
--#define DECLARE_EXPORT(name) extern void name(void); EXPORT_SYMBOL(name)
--
--/* compiler generated symbols */
--DECLARE_EXPORT(__udivsi3);
--DECLARE_EXPORT(__divsi3);
--DECLARE_EXPORT(__umodsi3);
--DECLARE_EXPORT(__modsi3);
--DECLARE_EXPORT(__muldi3);
--DECLARE_EXPORT(__mulsi3);
--DECLARE_EXPORT(__ashrdi3);
--DECLARE_EXPORT(__ashldi3);
--DECLARE_EXPORT(__lshrdi3);
--DECLARE_EXPORT(__ucmpdi2);
--
- EXPORT_SYMBOL(__copy_tofrom_user);
- EXPORT_SYMBOL(__clear_user);
- EXPORT_SYMBOL(memset);
 -- 
-2.53.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
