@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795019410;
-	b=4Ik6kZSmuVcrJsDRPJzpBnd8aemgEnCEeb9bM6fA55+5iRM9hif+dcHdQahWC83bdMks
-	 +VXaz728Zt2dx4DD1usVuTasKGhIYzMyO6HGnrzQZ8XsC+YcB8uNEa+5MadFilKW98d7w
-	 VlqlvGHg4fpBRvc91Vjl8qYwVU93QMG6DwP0Fa7XlaaznQm65AXLpkBkAhElWeiV/0K7Q
-	 oH9rGDQvWJ8Ec/ox1mJdM6ojwJfol0r07HGjoVwf05763sKR16kCZpDUJIvcVOxG4I0Rq
-	 YvouNOxtmhkN+l3ocC7tbUAGwNgomY0TPk0qn38mjloFG3svJ9Us3aZtSjqBuai1pmQ==
+	t=1795019412;
+	b=IhS1Oxm+T76uCrt+eLDp/11N318isvnepglck05wgVnM7k8niiuVtTBd8J5yIw5ql12Q
+	 aYucnVXvTPQVuo3ly6EHpD8rgYtO1AdbQUIGXJgKh1z9qf14Uzfgf2sgHhIamKu7F8srS
+	 NHu479dqTOXn3/sHTvLcw84YIXWagQv+JxAS/QRul3sy5cc++m0l4y//SCRJk2Ky7j72g
+	 LjJkAEW4rs0tvHXMS/sbelwstryJoZ2jvMjkFa4M7eF/gfUVtxb9IB/8nO7k8ln7p5wA3
+	 hTKNglN5Jy1MmeXq4Td/wAnPiS8hxK3W/ApU4Np0IOGMU62Cif/DqTtI4+44imYzWmA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795019410;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795019412;
 	h=Received:Delivered-To:Received:DKIM-Signature:Received:Content-Type:
 	 MIME-Version:Content-Transfer-Encoding:Subject:From:Message-Id:Date:
 	 References:In-Reply-To:To:Cc;
-	bh=DONrlBj2NtswDmsH/aoAZ8gpNmp88TBVxFMlC0VLAWI=;
-	b=UsDhtX0FQi3F9LDVUxsVVzHqDT+yKCB2oXVhzh2XRFznca9aonN5kaHgjQNvqme3RALj
-	 aQMJS11ZcALTlHYviJqh9kkUizO9330jEN53jxp5gALoCvJPSx0J87mlF95UVnNCBybpc
-	 WDqJFXZ8WXcFidSowtTdzSVfUn6MHoOoVjETGEwRaqh2adFiWhgFn43lDLoJ/VnQ+VJrh
-	 +iCBFFt4YfdZuFEuhwirUNBhHmTYSD+HFkx4e29xAGtNnU+VVUWa88Y/JR96qPDVcN8LW
-	 1QY8wADg/Ih6koI6iVpTNS7y2B3u8c8zCr1huCtw+Ci10v2EMW7Blm2wOlquu0Nqpcw==
+	bh=1Aye9ayN0z8yDHD1qFsp4UmSa8MX258Th50ulx97SNs=;
+	b=Ra1eF5UWoY5JAMKjJBOLzyOjcRYcyqzJ6QyAR3qkaEYaht95nq23YECwsqYcP6wrOz7r
+	 gO/ZPxYu17LKlxMXbEvOh+mDAyZsG3jGkAC2q+TE3pL1zO/PQrPAbk2wqM18b8AfIIZ3i
+	 efMxU22S1tmB7xQ+FQNOCNv2sCb8rKb07lLdwD1ttpadKuZ06it4FRyNgEkdUICUs4DIg
+	 qfMgomDSeeS07I8IseJav7LD61rZ8hrxfIuW8FMsncpFt5Ja5uaB15OccLGJLbYpsRukm
+	 ogHkz6Q2KS1bzNepZeEPvNtUWIQhZhNACj2ALEp2AT7GDjSh/wUnIa1WJ01Q9/nEwuA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Z+T23v/8";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HWrRLvU7;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DBF60A2635
-	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53C860A2621
+	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z+T23v/8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HWrRLvU7
 Received: by smtp.kernel.org (Postfix)
-	id 9776C1F0093B; Wed, 18 Nov 2026 16:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800161F000C7;
-	Wed, 18 Nov 2026 16:30:10 +0000 (UTC)
+	id D91E21F00ADF; Wed, 18 Nov 2026 16:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAEC1F01573;
+	Wed, 18 Nov 2026 16:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795019410;
-	bh=DONrlBj2NtswDmsH/aoAZ8gpNmp88TBVxFMlC0VLAWI=;
+	s=k20260515; t=1795019411;
+	bh=1Aye9ayN0z8yDHD1qFsp4UmSa8MX258Th50ulx97SNs=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Z+T23v/8dGiGiw/JNjFBdhHHv4FtGPs/4F8MfiPeCjD/ZgbhmCUSPGmDiuLJiui66
-	 AuS7BJKh+1QIRKVQF3lJvBpSpB7MHmv2KzsDXtR5hXx/gcSM3iD2mdPfO3c7pnuUCm
-	 HjRqZJyVHmVgFYfZCROenC1thw61MI0gi/c2fGbm9DB31+v00RsuT4JP3ZL/Hzx2NJ
-	 glu9kO6vJsGES1Bdn4e3tSyN6KkdCYAUtgo8FLnYG5sXiGOVmkN1CFJZjy6Ba/+7X8
-	 NFeBU00oUSgBMMYjdPXowHD77rKPBMME203W7wKzbKNlJ76+6N3xbm0FWV2/vyQlQx
-	 lcgFA5Gh+pZUQ==
+	b=HWrRLvU7vF7+jXzyPMbG8+jkqeHFh7JCrIKKqF/uatw1Y6Ni3rEc94DYm/pm3NHjW
+	 oXgFOz7n/T/BeobeFzrb2h9Ov15hz/GTc6nBtETNWSm9KiTLBl3HpgfKUzNiy548oH
+	 GEyWRGJQnJ/goiUlnBN0k5LTNd+/gRugRIy8fYEJza1JhgbWJjjsZFA2ZoLwlRcHkr
+	 85HDWt93hqeXJKy63le8/DbXXpeUOjPusp8GGhCksnF9/od5nqDbWwvMoUgDL4IF8j
+	 ktpCvVoJsLcc8cEQ6HLi4sSni/n3abBL3mP+O7aGorajYpIB3HCMWZzqk+ZNyqlANZ
+	 iLgyOzZkVEupA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 773C03808210;
-	Wed, 18 Nov 2026 16:30:10 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43EB3808210;
+	Wed, 18 Nov 2026 16:30:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -56,37 +56,36 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] Broadcom drivers fixes for 7.4
+Subject: Re: [PATCH v2] arm64: defconfig: drop four symbols that no longer
+ exist
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179501940927.1837438.150981374330398438.git-patchwork-notify@kernel.org>
-Date: Wed, 18 Nov 2026 16:30:09 +0000
-References: <20261114034550.878760-1-florian.fainelli@broadcom.com>
-In-Reply-To: <20261114034550.878760-1-florian.fainelli@broadcom.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
+ <179501941052.1837438.2145000799734629536.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Nov 2026 16:30:10 +0000
+References: <20261111220718.2586239-1-takano32@gmail.com>
+In-Reply-To: <20261111220718.2586239-1-takano32@gmail.com>
+To: TAKANO Mitsuhiro <takano32@gmail.com>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 13 Nov 2026 19:45:49 -0800 you wrote:
-> The following changes since commit 7475ea8b58616b33c04afb976cf0fbaad9dd63fb:
+On Wed, 11 Nov 2026 22:07:18 +0000 you wrote:
+> None of these symbols exists any more; the lines are left over from the
+> removal of the options they name:
 > 
->   Linux 7.4-rc2 (2026-11-08 16:22:20 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-7.4/drivers-fixes
+>   NFS_V4_1                  folded into NFS_V4 (7537db24806f)
+>   SLIM_QCOM_CTRL            driver removed     (7cbba32a2d62)
+>   NET_VENDOR_PACKET_ENGINES vendor removed     (aec3202247b4)
+>   SCHED_DEBUG               option removed     (b52173065e0a)
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Broadcom drivers fixes for 7.4
-    https://git.kernel.org/soc/soc/c/5b425110d843
-  - [GIT,PULL,2/2] Broadcom maintainers fixes for 7.4
-    (no matching commit)
+  - [v2] arm64: defconfig: drop four symbols that no longer exist
+    https://git.kernel.org/soc/soc/c/866c6b48b700
 
 You are awesome, thank you!
 -- 
