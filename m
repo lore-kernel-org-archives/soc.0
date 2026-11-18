@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795019412;
-	b=IhS1Oxm+T76uCrt+eLDp/11N318isvnepglck05wgVnM7k8niiuVtTBd8J5yIw5ql12Q
-	 aYucnVXvTPQVuo3ly6EHpD8rgYtO1AdbQUIGXJgKh1z9qf14Uzfgf2sgHhIamKu7F8srS
-	 NHu479dqTOXn3/sHTvLcw84YIXWagQv+JxAS/QRul3sy5cc++m0l4y//SCRJk2Ky7j72g
-	 LjJkAEW4rs0tvHXMS/sbelwstryJoZ2jvMjkFa4M7eF/gfUVtxb9IB/8nO7k8ln7p5wA3
-	 hTKNglN5Jy1MmeXq4Td/wAnPiS8hxK3W/ApU4Np0IOGMU62Cif/DqTtI4+44imYzWmA==
+	t=1795019413;
+	b=J2+ts8ZDG1WS1DoMiuf7A5g6CiwOgq/g1kXueNzLAONBuuMnTwMtkDr0FSJoNlI4yj9g
+	 ld9c4zax7Iu9ACRJ8ubcpxP43lCLDzE7ydkYVxBKCD8ETQHM5KnA1RhKuKibsSO8rMBjN
+	 2bh4lxHoGwPrQk1D28OO/zKEhN2BbSbpmVoj34ki/0k/ZjILwtY6viJawjNxd0ilJV+bS
+	 U0daegFvIhBWtdpJeoRdASV/uhBk8KYMOQ1h77qWls8qmzuhNgw4j+v/sINAzQgH3c3il
+	 QpXGEwo8airbO3Z7TYsXva0HYVPhNSVK6K0gjt2OyMQ8dSF94EcRHsXboO1W0+nzgnw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795019412;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795019413;
 	h=Received:Delivered-To:Received:DKIM-Signature:Received:Content-Type:
 	 MIME-Version:Content-Transfer-Encoding:Subject:From:Message-Id:Date:
 	 References:In-Reply-To:To:Cc;
-	bh=1Aye9ayN0z8yDHD1qFsp4UmSa8MX258Th50ulx97SNs=;
-	b=Ra1eF5UWoY5JAMKjJBOLzyOjcRYcyqzJ6QyAR3qkaEYaht95nq23YECwsqYcP6wrOz7r
-	 gO/ZPxYu17LKlxMXbEvOh+mDAyZsG3jGkAC2q+TE3pL1zO/PQrPAbk2wqM18b8AfIIZ3i
-	 efMxU22S1tmB7xQ+FQNOCNv2sCb8rKb07lLdwD1ttpadKuZ06it4FRyNgEkdUICUs4DIg
-	 qfMgomDSeeS07I8IseJav7LD61rZ8hrxfIuW8FMsncpFt5Ja5uaB15OccLGJLbYpsRukm
-	 ogHkz6Q2KS1bzNepZeEPvNtUWIQhZhNACj2ALEp2AT7GDjSh/wUnIa1WJ01Q9/nEwuA==
+	bh=nCM+og5j/qgEuvXAZarwW3kBrdPzgv0R3MOkNbzUFcY=;
+	b=E7+DBHSzsx/ZnwvcpS3qPs5HkGe6bgCC4rOsfOOoznwX5mJ06bzwu8D2Gx17khQDzKbQ
+	 uz0XdIlOQcf5FzUSzCMGQF2hwfvPbAWMeHE93ssR5v3Zfq5kXEwQJMTOOp9kUW/iaB7dy
+	 wwk9p7nHMrx2vSbE7AkyFvKpxCZVJKHSlxjuDMy444PAmujXRoX1R23pAyD2GH6ppH3Qa
+	 cTACF9gS5L4hisoq1H3jAlREDv/esT0Phore8kLoHTMN82H8rk7AGdxVoP1n8UsCiNWo3
+	 Zcg9HjNGye8l1uXISpdcXwGq9rvsyLkNRAM0x4FLRZ5y0nxbb7tfVFn/d0pZTYeLKtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HWrRLvU7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VdAKNtpQ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53C860A2621
-	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9E360A2605
+	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HWrRLvU7
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VdAKNtpQ
 Received: by smtp.kernel.org (Postfix)
-	id D91E21F00ADF; Wed, 18 Nov 2026 16:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAEC1F01573;
-	Wed, 18 Nov 2026 16:30:11 +0000 (UTC)
+	id 1F92F1F000CE; Wed, 18 Nov 2026 16:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B371F00AE3;
+	Wed, 18 Nov 2026 16:30:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795019411;
-	bh=1Aye9ayN0z8yDHD1qFsp4UmSa8MX258Th50ulx97SNs=;
+	s=k20260515; t=1795019413;
+	bh=nCM+og5j/qgEuvXAZarwW3kBrdPzgv0R3MOkNbzUFcY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=HWrRLvU7vF7+jXzyPMbG8+jkqeHFh7JCrIKKqF/uatw1Y6Ni3rEc94DYm/pm3NHjW
-	 oXgFOz7n/T/BeobeFzrb2h9Ov15hz/GTc6nBtETNWSm9KiTLBl3HpgfKUzNiy548oH
-	 GEyWRGJQnJ/goiUlnBN0k5LTNd+/gRugRIy8fYEJza1JhgbWJjjsZFA2ZoLwlRcHkr
-	 85HDWt93hqeXJKy63le8/DbXXpeUOjPusp8GGhCksnF9/od5nqDbWwvMoUgDL4IF8j
-	 ktpCvVoJsLcc8cEQ6HLi4sSni/n3abBL3mP+O7aGorajYpIB3HCMWZzqk+ZNyqlANZ
-	 iLgyOzZkVEupA==
+	b=VdAKNtpQ7xSKSbwMuoXClFnVv49rJej0k+oyVy0jmwM/pZtCD/EXRQ4x4HpfuMoHs
+	 URnZTGEU3CqWjeTYbWVx2XIsQF8WhyuSrULunYBvvEi4HO38GFKMb54G42MZ5eCSZY
+	 cIb0EplQXxunCp5CJEFaNkI5k5yaxrXVUnKRo2Xk3FcNzUtzoRv78QHC/ChJOeL6k5
+	 /gaB87R+8MhGv+4Fpz5z6ryQQ8MesrHRMZdcR2961TXTBwxuy7m6kfrLz8Gbix+hia
+	 +QkZNC6794Q8qZu90afnBBsNKJB2EKzH8WudCd2EoTBt/MUaVv6tHjgYAH2X7AP1Vj
+	 CcJJaZa156IzQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43EB3808210;
-	Wed, 18 Nov 2026 16:30:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F13E23808210;
+	Wed, 18 Nov 2026 16:30:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -56,36 +56,38 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] arm64: defconfig: drop four symbols that no longer
- exist
+Subject: Re: [GIT PULL] configs: TEO cpuidle governor defconfig for ARM32
+ multi_v5/7
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179501941052.1837438.2145000799734629536.git-patchwork-notify@kernel.org>
-Date: Wed, 18 Nov 2026 16:30:10 +0000
-References: <20261111220718.2586239-1-takano32@gmail.com>
-In-Reply-To: <20261111220718.2586239-1-takano32@gmail.com>
-To: TAKANO Mitsuhiro <takano32@gmail.com>
+ <179501941177.1837438.12192628234455902086.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Nov 2026 16:30:11 +0000
+References: 
+ <CAD++jL=Ap8G6E0pzBEuufRstvSCZ=Owo=n50pnHHODb3swLqOw@mail.gmail.com>
+In-Reply-To: 
+ <CAD++jL=Ap8G6E0pzBEuufRstvSCZ=Owo=n50pnHHODb3swLqOw@mail.gmail.com>
+To: Linus Walleij <linusw@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 11 Nov 2026 22:07:18 +0000 you wrote:
-> None of these symbols exists any more; the lines are left over from the
-> removal of the options they name:
+On Sun, 8 Nov 2026 16:15:29 +0100 you wrote:
+> Hi SoC maintainers,
 > 
->   NFS_V4_1                  folded into NFS_V4 (7537db24806f)
->   SLIM_QCOM_CTRL            driver removed     (7cbba32a2d62)
->   NET_VENDOR_PACKET_ENGINES vendor removed     (aec3202247b4)
->   SCHED_DEBUG               option removed     (b52173065e0a)
+> this selecte the TEO cpuidle governor in the defconfigs for multi_v5 and
+> multi_v7.
+> 
+> In this pull request I have squashed the two individual patches to not create
+> too many individual changes.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] arm64: defconfig: drop four symbols that no longer exist
-    https://git.kernel.org/soc/soc/c/866c6b48b700
+  - [GIT,PULL] configs: TEO cpuidle governor defconfig for ARM32 multi_v5/7
+    https://git.kernel.org/soc/soc/c/84af494361e1
 
 You are awesome, thank you!
 -- 
