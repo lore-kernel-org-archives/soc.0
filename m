@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795019413;
-	b=J2+ts8ZDG1WS1DoMiuf7A5g6CiwOgq/g1kXueNzLAONBuuMnTwMtkDr0FSJoNlI4yj9g
-	 ld9c4zax7Iu9ACRJ8ubcpxP43lCLDzE7ydkYVxBKCD8ETQHM5KnA1RhKuKibsSO8rMBjN
-	 2bh4lxHoGwPrQk1D28OO/zKEhN2BbSbpmVoj34ki/0k/ZjILwtY6viJawjNxd0ilJV+bS
-	 U0daegFvIhBWtdpJeoRdASV/uhBk8KYMOQ1h77qWls8qmzuhNgw4j+v/sINAzQgH3c3il
-	 QpXGEwo8airbO3Z7TYsXva0HYVPhNSVK6K0gjt2OyMQ8dSF94EcRHsXboO1W0+nzgnw==
+	t=1795019414;
+	b=4cjN86MBl+b88LWAP/6ZdWtPvBpJSPojM78RQhJYkSxINE1trs15tiRSAvo+nSM2gKiG
+	 pz5WeK+RptD19qWKMGoL5CDhxRYKPFxKZKhh3SzIfQ1c2LpFCYf48b/J6ok7qkTJy0E0N
+	 m3ZsZFJJ6NImU/rJAYvAVZdnMCrJC3++tv/N1mSpWUucFvSFgrnFGVOGHURUcwLPwvvpM
+	 3zKCytP0PZ/K0YlOAHLwl9SJxvgQwEJucYK9P0RybJiXLrYQtLhDMssVQ4iBzpcFNvvcq
+	 Tyg7aLHSjCV78NTSx7U9faOVS9FQ1Gywll8jpurtn9iC8Nc94idnpriBewBHiST6Aew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795019413;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795019414;
 	h=Received:Delivered-To:Received:DKIM-Signature:Received:Content-Type:
 	 MIME-Version:Content-Transfer-Encoding:Subject:From:Message-Id:Date:
 	 References:In-Reply-To:To:Cc;
-	bh=nCM+og5j/qgEuvXAZarwW3kBrdPzgv0R3MOkNbzUFcY=;
-	b=E7+DBHSzsx/ZnwvcpS3qPs5HkGe6bgCC4rOsfOOoznwX5mJ06bzwu8D2Gx17khQDzKbQ
-	 uz0XdIlOQcf5FzUSzCMGQF2hwfvPbAWMeHE93ssR5v3Zfq5kXEwQJMTOOp9kUW/iaB7dy
-	 wwk9p7nHMrx2vSbE7AkyFvKpxCZVJKHSlxjuDMy444PAmujXRoX1R23pAyD2GH6ppH3Qa
-	 cTACF9gS5L4hisoq1H3jAlREDv/esT0Phore8kLoHTMN82H8rk7AGdxVoP1n8UsCiNWo3
-	 Zcg9HjNGye8l1uXISpdcXwGq9rvsyLkNRAM0x4FLRZ5y0nxbb7tfVFn/d0pZTYeLKtQ==
+	bh=VCKASn6ApIJHmgIeeIf8bl5HB0+lWz/oGlL8LqEX3KU=;
+	b=PyvpoNzO3XHfjQMQGtjctBeaZYjWB9H1lGLH9DFTm67IetbLYGZDUZUIcNuFf7v5KDCP
+	 cbe9VSLQp9B09iHZB6xBKUwAb+wMFuhA3y1phR4MfLZKI1I202Q7ecUA/vFuI/hqwflDh
+	 ouSYNKPfqK33rsA59g6zj8AAM4cYiRHJzbzukshHLCzmTCIv3nhb0Du4e1PN4vNAU2bed
+	 beCCDU9w/gBfIlu6I/5y6T0hPfSeH0dusG2UJ97XlP4jajzwebW2oNxkn2aIzHmvbdmhW
+	 XkLB4s2THZvYatWBxb+qUzF07M5Js0p1ItsSqf2qavwtojDbg0UJwgJQ9cd3tqOnd4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VdAKNtpQ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PkPQZMW7;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9E360A2605
-	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6989D606A339
+	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VdAKNtpQ
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PkPQZMW7
 Received: by smtp.kernel.org (Postfix)
-	id 1F92F1F000CE; Wed, 18 Nov 2026 16:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B371F00AE3;
-	Wed, 18 Nov 2026 16:30:13 +0000 (UTC)
+	id 5D0251F00935; Wed, 18 Nov 2026 16:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 462571F000CE;
+	Wed, 18 Nov 2026 16:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795019413;
-	bh=nCM+og5j/qgEuvXAZarwW3kBrdPzgv0R3MOkNbzUFcY=;
+	s=k20260515; t=1795019414;
+	bh=VCKASn6ApIJHmgIeeIf8bl5HB0+lWz/oGlL8LqEX3KU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=VdAKNtpQ7xSKSbwMuoXClFnVv49rJej0k+oyVy0jmwM/pZtCD/EXRQ4x4HpfuMoHs
-	 URnZTGEU3CqWjeTYbWVx2XIsQF8WhyuSrULunYBvvEi4HO38GFKMb54G42MZ5eCSZY
-	 cIb0EplQXxunCp5CJEFaNkI5k5yaxrXVUnKRo2Xk3FcNzUtzoRv78QHC/ChJOeL6k5
-	 /gaB87R+8MhGv+4Fpz5z6ryQQ8MesrHRMZdcR2961TXTBwxuy7m6kfrLz8Gbix+hia
-	 +QkZNC6794Q8qZu90afnBBsNKJB2EKzH8WudCd2EoTBt/MUaVv6tHjgYAH2X7AP1Vj
-	 CcJJaZa156IzQ==
+	b=PkPQZMW7AoDUnu20GHxn8It56uLHl85JkDcjx5XVH8/jNtrMUSBUlBQTTfzNsKqJD
+	 Ha4PCQ+GcD+Lx/0kMhqZ9jujinmqe63Fz8Ct2ZaaE/GHdzjzuRaYaqRce/IG8Zy0Sm
+	 4BsVQrIpoqbLokaQzhECaXU9ecvd5D1GeLeQ8ebOE65qnzyo2DG3XJtezQ7oC3cotB
+	 6Ezapxx5Fq8WMYYUFARqthXX0z/ELNTbsbIodzu+HHkQePJBBWjGABYAAuJEM0DA2T
+	 Napy5uwpbhjuyTE3BxfJ1uWfaYb3aIg8JDAGujJdA2THYXcNBFoiyhgm9ucaiUG6j8
+	 3seNLtgZVUl+Q==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F13E23808210;
-	Wed, 18 Nov 2026 16:30:12 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A10A3808210;
+	Wed, 18 Nov 2026 16:30:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -56,16 +56,15 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] configs: TEO cpuidle governor defconfig for ARM32
- multi_v5/7
+Subject: Re: [GIT PULL] U8500 defconfig changes
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179501941177.1837438.12192628234455902086.git-patchwork-notify@kernel.org>
-Date: Wed, 18 Nov 2026 16:30:11 +0000
+ <179501941302.1837438.2807752262726991134.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Nov 2026 16:30:13 +0000
 References: 
- <CAD++jL=Ap8G6E0pzBEuufRstvSCZ=Owo=n50pnHHODb3swLqOw@mail.gmail.com>
+ <CAD++jL=FzG1EMuZUZ3_14VqV-1U9=c06gCUJYaTZpAkdB9+5Cg@mail.gmail.com>
 In-Reply-To: 
- <CAD++jL=Ap8G6E0pzBEuufRstvSCZ=Owo=n50pnHHODb3swLqOw@mail.gmail.com>
+ <CAD++jL=FzG1EMuZUZ3_14VqV-1U9=c06gCUJYaTZpAkdB9+5Cg@mail.gmail.com>
 To: Linus Walleij <linusw@kernel.org>
 Cc: soc@kernel.org
 
@@ -74,20 +73,21 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 8 Nov 2026 16:15:29 +0100 you wrote:
+On Mon, 16 Nov 2026 21:33:48 +0100 you wrote:
 > Hi SoC maintainers,
 > 
-> this selecte the TEO cpuidle governor in the defconfigs for multi_v5 and
-> multi_v7.
+> this is an annual update of the U8500 defconfig.
 > 
-> In this pull request I have squashed the two individual patches to not create
-> too many individual changes.
+> The details of the update are in the signed tag.
+> 
+> I dropped the tail commit off of this pull reques becuase
+> Stefan raised a concern regarding the generality of that patch.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] configs: TEO cpuidle governor defconfig for ARM32 multi_v5/7
-    https://git.kernel.org/soc/soc/c/84af494361e1
+  - [GIT,PULL] U8500 defconfig changes
+    https://git.kernel.org/soc/soc/c/5170a198f5d8
 
 You are awesome, thank you!
 -- 
