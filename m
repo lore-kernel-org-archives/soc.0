@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795017623;
-	b=e4td3z9JFuaKdBP0aAqqXp9lG23jjLHWiqU2FxsGWPTBinMRQIY+oLCTn/eIoI+gmXFR
-	 0LgDmDj0xP6RhwoglbVcbluWRQxr+2SEoRXjWM5mzBnZUrS/+bANqFX4pxU64Fzd8iQ1A
-	 agS6XtHGGf/CSwt1oteVN09ylsooaTYZyhDdzc2/zlCJxAkf9gBkRAHAkRW2d1Qm+uirb
-	 5I4JJMNQ7enhBFtauJyGOMTfMEhAlNwgQTgZvujWo53Zeb8bI6YsWOXx2/y3vklFK81D2
-	 xcYBvfmUyLCgdXvAd4s18MzkaraLtnErBXJiCst9eCwAy25KtblleA9w2KZxqpz/aDQ==
+	t=1795017624;
+	b=4gjLDf00cXwGPjAJMsSRuhno9xJeNJuVLibRVDx9CLhns4mg5hhgBSMumzvNwutn0LIH
+	 5CE/aFm240YGWcUVFvROTRwIdyUlUASVzfLn/hW8KwBchNTto95ERPbjutzxMnk0b6zKl
+	 pZLj1LESDHfSm+stoRD26Z6r9WWGxapCV+aP4qtvacXAgioRt5RYu4ncGCG2DIY/Z4Puh
+	 v7eEZ1WrLy/jRzU3PRWJwr21bYVmRyWyMnHr7boNT3RBz2IKJzRlQB/Reuu17Guf657Hc
+	 bq9EcKqLKA0WEV8vhvTjT9fH6O/feEwjSFllB9nylr66ko4aJde19AO6eXSiMCW61vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795017623;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795017624;
 	h=Received:Delivered-To:Received:DKIM-Signature:Received:Content-Type:
 	 MIME-Version:Content-Transfer-Encoding:Subject:From:Message-Id:Date:
-	 To:Cc;
-	bh=nZkBCCVUrt5k/+qkkiW+Qwj3FqtZi0Syty4cOvmmYg8=;
-	b=pHdtWSIoJM0DpezznmsxIaZh4xYeCNv2X3Ukwqx9sPHikVvCbdMmpj02DSo9f0ZSS0Gi
-	 FjsEZmhJ4VBtV6bFJoFQ4hc9tW5mLPfGRccNxlSxOKx51U2KfmViSdae6qtpe2t82QpQg
-	 5kB7LUVHj1iSUrZGIA5zpwGPXpqnxMA8Qdoo7qV8yNHkFNLQaKWE5peK8C2lw5II9daum
-	 w9GF66StGkiVoWH36yuOizAqnjnyMCCpd8kbO8okrcb6kv8ggtM3iK5GwVxJGFKDMimCF
-	 2zXLR2kxK+Fvg4eLC7uuKhwfSNHqmG8hqcLgsvn5d7vNVd7k2VnehZV+kD0AuNkZvLQ==
+	 References:In-Reply-To:To:Cc;
+	bh=i8x5YawnEbRLvzNk/+UQhLqNbO1wXLpxM/nn+/ySnfg=;
+	b=sblnopC/KcnOIGeC+OCWZLZZLUjzJ6fxZfV1P4Bj7Bm2Qpc3tnVca9y5kXIhrGTfEoP7
+	 DLpvIMvvrL7qtPt7EG3n4+ulGLCORWIEg6DCCvMtuU96Txp4/u5o5Sbej5DO93GfEFlXJ
+	 HWbs5dBNxiZnMVLcMC4cWXAlbjL+jAZLeBFatsF7d8jfx3Ca0dyAwZ3EPXoCq7H3cFGqr
+	 jqruuwuDsmnfYfKQAYXOE8lLkstaBC5v6CrJt3dqO0ges8ABYwB05kQO9uT5A/OyBTi2i
+	 /Ppa1DCD041UU6z6LdOlwKVWTD8bqyC9oAgS8iu0YFOWwOOEWM6JgdQqE4BuyWQZwew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jMc093O5;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TLTtvkob;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A81606A33D
-	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF42260A2600
+	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jMc093O5
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TLTtvkob
 Received: by smtp.kernel.org (Postfix)
-	id 5AADE1F000C5; Wed, 18 Nov 2026 16:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 444A21F000C4
-	for <soc@kernel.org>; Wed, 18 Nov 2026 16:00:23 +0000 (UTC)
+	id D238F1F000C6; Wed, 18 Nov 2026 16:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBCBA1F000C5;
+	Wed, 18 Nov 2026 16:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795017623;
-	bh=nZkBCCVUrt5k/+qkkiW+Qwj3FqtZi0Syty4cOvmmYg8=;
-	h=Subject:From:Date:To:Cc;
-	b=jMc093O5ik5IPMd2UclM+ngHlE4a4DDm42gHN/n9tNaid87+9ThzS7ZIcpRUb/mX5
-	 30CkY+So4TnnOdX17nOR/g8XYScQkpfQKYKLCeb0FIzoQHcxhR/xB3ZGe6ZhKIS/YK
-	 GWkncXCW002xcN7pfhWy6va/gympFFdoePIDyOOJsnXstEvMoWRQWzBs5f0vPw44+A
-	 ZYh6d3TQHuIYH7go5A/UhtNgBl/8Gz89E4s8INQKgmAlpENnnOD1KapTBg6RZpOdjp
-	 VrEAHOVNh0y6HMXZiQTnKGwOSwyo51HyJYn1giyuFKV2Qg9I0exu5PeXNgqQW8/2gH
-	 0aX/AX01rTyjw==
+	s=k20260515; t=1795017624;
+	bh=i8x5YawnEbRLvzNk/+UQhLqNbO1wXLpxM/nn+/ySnfg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=TLTtvkobSiA7x28wxkguCjz9s3hdOjkQPkY6DsomuxdvNRKpuF1lKCNxBTITkLFnn
+	 UummXIAPBHdl8mI1S2diyG5v1h95eTZ/X1FasPgnyZTSbfG+aDVUQCsf+GoAHL68Xo
+	 5/JUto+R6/NW4vlFQvzcrsSrccmE0ss4PZ/WiKAVYDvnnbMyj6afMzMkr4PQfLH7Dj
+	 /UNzVuWf0D/Gpx+9DMplwqR4BvhM7fIODuuv/yVHq9HmRzcoghr0aiTGEMYdMS7HNJ
+	 MvB50TPdM6s6covor4DFBoJrnU4MxqsJl8Yus/w13G2o70yA1DdlL4Lt0xxOKpu15M
+	 7C8A9/KDxcjKA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A3333808210;
-	Wed, 18 Nov 2026 16:00:23 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B44153808210;
+	Wed, 18 Nov 2026 16:00:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -56,59 +56,37 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Renesas SoC fixes for v7.4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179501762185.1802028.16940483741987765696.git-patchwork-summary@kernel.org>
-Date: Wed, 18 Nov 2026 16:00:21 +0000
-To: soc@kernel.org
+ <179501762327.1802028.5885945973852692764.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Nov 2026 16:00:23 +0000
+References: <cover.1793960114.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1793960114.git.geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Renesas SoC fixes for v7.4
-  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/series/1204034/
-  Lore link: https://lore.kernel.org/r/cover.1793960114.git.geert+renesas@glider.be
+On Fri,  6 Nov 2026 11:17:50 +0100 you wrote:
+> Hi SoC folks,
+> 
+> The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
+> 
+>   Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
-Patch: [GIT,PULL,fixes] ARM: dts: samsung: fixes for v7.4
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/series/1210230/
-  Lore link: https://lore.kernel.org/r/20261113071751.14775-2-krzk@kernel.org
+Here is the summary with links:
+  - [GIT,PULL] Renesas SoC fixes for v7.4
+    https://git.kernel.org/soc/soc/c/f1a003d0141c
 
-Patch: [GIT,PULL] firmware: arm: Fixes for v7.4
-  Submitter: Sudeep Holla <sudeep.holla@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/series/1199361/
-  Lore link: https://lore.kernel.org/r/20261102175440.1063545-1-sudeep.holla@kernel.org
-
-Patch: [GIT,PULL] iMX fixes for 7.4
-  Submitter: Frank Li <Frank.Li@oss.nxp.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/series/1213036/
-  Lore link: https://lore.kernel.org/r/20261116174947.2957972-1-Frank.Li@oss.nxp.com
-
-Series: [GIT,PULL,1/2] Broadcom drivers fixes for 7.4
-  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
-  Patchwork: https://patchwork.kernel.org/series/1211156/
-  Lore link: https://lore.kernel.org/r/20261114034550.878760-1-florian.fainelli@broadcom.com
-    Patches: [GIT,PULL,1/2] Broadcom drivers fixes for 7.4
-             [GIT,PULL,2/2] Broadcom maintainers fixes for 7.4
-
-Patch: [GIT,PULL] memory: fixes: driver fixes for v7.4
-  Submitter: Krzysztof Kozlowski <krzk@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/series/1210242/
-  Lore link: https://lore.kernel.org/r/20261113073632.34241-2-krzk@kernel.org
-
-
-Total patches: 7
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
