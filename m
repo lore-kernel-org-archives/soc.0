@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795017628;
-	b=JSh9kAllRxOxwQBTsvnpJkEnPo4whgg0Yi5GzAoJdz+8jlWLh5ZRkrHoCa0iQV35es8D
-	 kQFQccSDhi2BgYpL2mXRjp1fM3fpDhcYCFX7ZXHVbtAuoJcPUGvsQ9oN6pDeD27ut7Cr+
-	 B1S9n0B5mjmfz1YEXuHVnsWVuBscLqbKHUtc3FXiouMFqC6835RARHTeJ/74GUiws+EVo
-	 G2wf157CGvPPZ2WvZupUhJ82JqGqWSlV2oU5szxbco6PrkSqFgwFCijcI58CdVDTJBCGV
-	 FVIjZR3ZYhTq9fZSO+iGkfel6FsGC9Hlqp6euZXK2L9CC6s12lJECz4iVrfcbyI9cFQ==
+	t=1795017629;
+	b=P95LY8alra6Wo5+5XLC4gFb8qx21JCHCC8Z4tkc+4nsGHWpgm1Yl3KnXjlghtryG7nwa
+	 rhfiKx6HDslhSqZOPFAVSTxf2pgJIWYrk9w0zRGTJRGaYqL/JGMN4NPvIDDo8YGa9Dr0C
+	 /rgVN3S48/beT/NW5/3xQL8i5ccbE+weCUu7iSzW4LQU14OYd9tef6tOzE7J0HI3VRr7W
+	 MDkNYQST09/ILiLyHhjZ20IdIgq7RQa/LYMefU/v1fVMxlyhQXtlGs8afP5b/4Dqjb+TP
+	 SrN8XUsz841LU1YL9p5BTa/1rFM9WpWIGeNOtyFh14gGailZ05vNGRKO63qN+I4/Fnw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795017628;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795017629;
 	h=Received:Delivered-To:Received:DKIM-Signature:Received:Content-Type:
 	 MIME-Version:Content-Transfer-Encoding:Subject:From:Message-Id:Date:
 	 References:In-Reply-To:To:Cc;
-	bh=CnzTdlOAFa9PoQSfAPx3vT00WalebAriiDW21pg6U00=;
-	b=gMM+MISTd0ge43hPh008UYJhzVzMllVv5EZuLB5w6+h5IUbujlpIuRFimxMyTUrqmXdi
-	 5ZgLmLjf+thhkAHeBHwF9S9kSChRLDjbGA2VOTs5n9TmwSc3SKLVY7OzNjbK5o5mEyyNt
-	 B7E/y8q8RGmdsTt5pIVUtll98no1m4V5bjaLFtSlKXvP8N6V0bmyzASWaZK8qt0OmMQYN
-	 p4m7tkWSL8JtgB572q6QC3Ok3z5WZDWmK8qJW+HMG+ix03VrGlZa0ySqSD5YJJYTlweZd
-	 ggDuqnDW6oj4i273aopHRE77VgzCCasexC10wfGoY4rGwA0RIeWyexMfM/rRPuqwZKA==
+	bh=QqUVUBOUYFzqGC/47a5fiDDKj7exHuVc57c9NzRCgpE=;
+	b=jXzHP5ga5CpVwWaYvshzF+5LJy7d3ZBLNI7ZM2G7yFv81dVmlhYz1il5Mv2SQEuZhetu
+	 cN8RFv7ifirQsvy8En7w3tSWgMjDsGeMs2E0jljALO7cP7IJZLhg1hV9Wipfhxl8BeqyV
+	 6vf3XpTfqnz9sPCsXLwwbEdVDYfXvE1Dx0Nr5ZGcS5KQmYhBpgty1b8P89phL/xDI5EUg
+	 BwuEQYh/OpVkT85FHDEMyhwVAzu8QkGEtSZv4Rax2a7UVlekR1qQ0JX9sCTdlErPuYl9n
+	 oY5Cxpvlu3AJrh7UIxMeRR4ZB2pmcK1voY32il9Xydk5vkgsOv0bkw33ezIWkBQmTiA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Nxg3IZTa;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S45YrbSt;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3676606A331
-	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1AE606A333
+	for <soc@lists.linux.dev>; Wed, 18 Nov 2026 16:00:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Nxg3IZTa
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S45YrbSt
 Received: by smtp.kernel.org (Postfix)
-	id D628C1F000CB; Wed, 18 Nov 2026 16:00:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA5E1F000C6;
-	Wed, 18 Nov 2026 16:00:27 +0000 (UTC)
+	id 5A9951F000CA; Wed, 18 Nov 2026 16:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4488E1F000C6;
+	Wed, 18 Nov 2026 16:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795017627;
-	bh=CnzTdlOAFa9PoQSfAPx3vT00WalebAriiDW21pg6U00=;
+	s=k20260515; t=1795017629;
+	bh=QqUVUBOUYFzqGC/47a5fiDDKj7exHuVc57c9NzRCgpE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Nxg3IZTalhb8qIr8bz8xO7mBg/rZLw/25Zx9IjqLX3epJSP9W/8VncZGLnSr1vuml
-	 70PTcDJsid83zIiB8NYZNlOCiVVOMPPrwbb+V3tGmz3nXw4p+ndM7DZ3iYdYUMsqMr
-	 V+fjDI0yhMYdKfpHFS19NQ9LzSp9Yx2fBRP6lYb8FxvoKHDPKZKw5x0nJ7qmFJnAo9
-	 NuYTMDSCJAC5GIKWIECDg83NI/WBvsIwKfh9qMJAei62cvM/suEdyLYb0Mj018VN7V
-	 w0dFnZCR4s1eATURUWYY8hbJiTw69kzG5pdH3IkXgRP5oyQjzUcZktno3qmMEmOcno
-	 OHoo33rp5h7OA==
+	b=S45YrbSteXPye6IU3l8XbB//FQXUFXKFcJj5u8W3zWI9UaC5CgtO2mQk9I4gi0zyg
+	 UcGuWFfOZhfrr4quaW3X1t63qoWiKNF2iekcZq2O93EFt2p95pGhGX8W2g9XprRPoo
+	 le3/PbxQoaBKF71a7pF9W1KRilBOCbxO4n7zjccNZIFTyp/Wpwtt7MPRPcfCrbE1l9
+	 gLy3T1szkdD4pX9vKC4DQ1ONFWgqWvpIl0S4P96dttP56BqLy1bvH3Bsn1B8tMHqAe
+	 18xa+CiWxQxvKym6ATBXpgFKaQ3PM1F4Eh6ZpVbBpb7vPC9mKr8k4vW6V3BicvkBf3
+	 MuulKmc5RFn6A==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43843808210;
-	Wed, 18 Nov 2026 16:00:27 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A20E3808210;
+	Wed, 18 Nov 2026 16:00:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -56,14 +56,14 @@ List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm: Fixes for v7.4
+Subject: Re: [GIT PULL] iMX fixes for 7.4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <179501762627.1802028.4896908303617658936.git-patchwork-notify@kernel.org>
-Date: Wed, 18 Nov 2026 16:00:26 +0000
-References: <20261102175440.1063545-1-sudeep.holla@kernel.org>
-In-Reply-To: <20261102175440.1063545-1-sudeep.holla@kernel.org>
-To: Sudeep Holla <sudeep.holla@kernel.org>
+ <179501762777.1802028.5472995844113305840.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Nov 2026 16:00:27 +0000
+References: <20261116174947.2957972-1-Frank.Li@oss.nxp.com>
+In-Reply-To: <20261116174947.2957972-1-Frank.Li@oss.nxp.com>
+To: Frank Li <Frank.Li@oss.nxp.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -71,19 +71,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon,  2 Nov 2026 17:54:39 +0000 you wrote:
-> Hi ARM SoC Team,
+On Mon, 16 Nov 2026 12:49:46 -0500 you wrote:
+> From: Frank.Li@nxp.com
 > 
-> Please pull !
+> The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
 > 
-> I have included one dts file fix in this, hope that is OK. Let me know
-> if you prefer to keep DTS separate even for fixes.
+>   Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm: Fixes for v7.4
-    https://git.kernel.org/soc/soc/c/0cd364ac0a11
+  - [GIT,PULL] iMX fixes for 7.4
+    https://git.kernel.org/soc/soc/c/6730eb7d5e6c
 
 You are awesome, thank you!
 -- 
