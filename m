@@ -1,109 +1,109 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.156
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795076855;
-	b=AmTh5yvyF7ptAFZ3Pl2P8ThusfJoKu8D2QY0f+13gGbtpwjw2Zq0bxVS9NQF02VNiEgF
-	 4eFRJsm/ijxcijA5TfNm+penCZZuZDHwrxM59POhFsbYv/QmlwXD+dKB6/agklRbTLlas
-	 SnNnQzDAfHCoIJ5HnlO0AgtZgTae9TMV+3IawCubci5Z9bItCmY5Qa44Uqd7QTzwGMvjf
-	 ZuE4oN4N0ystdmq0LO5Cu+iCNyP71BfhIBzvTi7pDwkvmRlp6gpntC3/q9q5RqsTI5mu/
-	 HrpaWmHEaYz0nDLJ57PoZ+JoilnGN/Bl3jxwwtI8WP61DZfDWFYvtnYsLYUW78aIgZg==
+	t=1795078001;
+	b=FKBxGy8CiqEYsdHT+iui2xP5vjk6zPmTtmMBNcimEkq5e1XcVprIoXnbf0IWPC06DnJs
+	 ABqSZOvAvq2aSHMVQ6mT8BSLBU/Z9KGkLSf5Mlp21zyfTgVmpHMqDHeLGl4NrcwXwb17A
+	 eIVODt67T65nigViI2gIMWS8sHXmAgtttpjM3QA2+9O/bp8EpzJWf+F/zGNxmrocGt+Lx
+	 AqTR8TeCYuRD0pDbx7jtz/yJSgU1ur6IHRzZOy6TM+FZpIViyfIQgcY1XzpzozX4zsFq4
+	 1huGEChLvr7dF1LUoM/PVSY6bwD1rkRC+h0cnoxblm3zwfNp92bwzFQeUWFYcajfo2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795076855;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795078001;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
 	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
 	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
 	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
 	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=Dw2q8IL1wjmsTR+qJNvV5rMR+yLv2cKTTGNhz0woQiY=;
-	b=QtMBVp5GdnfirA0FSUzs2X4bQ2pjyGFpuorHp/qhiT0Lel1yOEXgZAzFKhZE1sQ/PvU2
-	 qIkptdiTHO3QvKOeiO/dpG/dxT7i+kcFjuni1bvPbbQ4i2lwxouieiFlKnvYyiVpXW9VT
-	 umE2GHBGtOx4URzo6Aex6CO7ScsmwDi6D0OMv7u+lm2Mv14uHoqwExXmYNv/We3vfVpvd
-	 k49SaM6qVcDRNoCGay7DUspL37eG4Ck7ZKDJ7qlpddqN8cWtr+OgpN4ZY5uzTFGtBkRwA
-	 JfPJ30Tc9f1LRQQldCTotzBSh6EgxXT8GSfT62lKjsUYGfephGywVn0MYYSB26iHsSQ==
+	bh=WW2blqW/7siEgeA3QhLwyU83G3vWkab0u6sANyXaeO8=;
+	b=YCpSBvC1WQVl+L6BuRB4R/MobN3mh2Lv5MI/9EvfB/8DcCNswaLK3CY7TCic6opWnk3M
+	 Sx7gUP/eJwE1mtAfZIbL7n6Y9Tfo2LEqfnqC4Y2zeZ7prSD5B3w8LIdskgaZmlL3BeFOa
+	 lN9PfsDM/mwgzTd2wcStz5VpzhIxh+XEUfwzvka30/smar/SmMzYctyAJaH4QP/CANKDL
+	 +X6TkwGhL9sCFilOaw0yjYlb4bARdd7DZNOsV85ly2eAfKh+C3yoBnjM1Oy4UPDd0+2Ns
+	 PZ70FBeP5i/1skUcU2LcTY+TEAbqQJjjBcpQhlyvnv1iM07kqKITXUf0+B39sQXrHtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arndb.de;
 	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=EXNfnMsS;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=XKUR1bwe;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=UYFRPMY3;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=1lzFt6eB;
 	arc=none smtp.remote-ip=202.12.124.156
 Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26E7606A320
-	for <soc@lists.linux.dev>; Thu, 19 Nov 2026 08:27:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F26E7606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6CB606A320
+	for <soc@lists.linux.dev>; Thu, 19 Nov 2026 08:46:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE6CB606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=EXNfnMsS;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=XKUR1bwe
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=UYFRPMY3;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=1lzFt6eB
 Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 254597A015D
-	for <soc@lists.linux.dev>; Thu, 19 Nov 2026 03:27:34 -0500 (EST)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 0322D7A02FD
+	for <soc@lists.linux.dev>; Thu, 19 Nov 2026 03:46:39 -0500 (EST)
 Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Thu, 19 Nov 2026 03:27:34 -0500
+  by ams-compute-02.internal (MEProxy); Thu, 19 Nov 2026 03:46:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1795076850;
-	 x=1795163250; bh=Dw2q8IL1wjmsTR+qJNvV5rMR+yLv2cKTTGNhz0woQiY=; b=
-	EXNfnMsSpzenqbvEVHu1LMUvpFnuFy6rGLQqoC6MtNEIO71BanE4eCWjn9zwHd5O
-	d+c3quKPpoWGGSt0rRVSFtp0OtEBj5Uz9sFxI8042yXyeaDmfXxBQEnariN4DGpe
-	hKPsQ+c94IG3n685i5zkTIWFK3wttbKfVWIea8B3D60MvSvBPmF8SUKX6FAsQccu
-	5R3Y1YRAPPwnRvmK/PAM9rLhtjfOg+ij7k5cW8O06GIwsYBDl2RHxKX5fSbKcYGT
-	zZmBcBN+dOgnjMK1bifLgJa+NWB6TCYmqepevSVCnUN9zjrRvQ6xDsAxZo/+4sqr
-	Ti7PKIKgQLzpzIbaj93jBw==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1795077989;
+	 x=1795164389; bh=WW2blqW/7siEgeA3QhLwyU83G3vWkab0u6sANyXaeO8=; b=
+	UYFRPMY3/jzs0xi1mXQbVIg7KpGY0usB1jjHmn3po658+6DjKILjMz+IhDaC+cBE
+	ps3He7mIolsqRniMEqAIOzT5m15/fzra7M2klC+0HbBcMBZULlWXoN4F5ASza3yg
+	q+3NpmS01SnuxB/RGfrKCxcdAycw4LmsaiAfzcA8Q05GKNrXpJ0NOVf9VxqEOjW8
+	jVXfmZw7JQEVHOQhJpOZQQ5dyhx/8TD0oUrqbf5DcxZtvDC9UPwj4hH2APLLO246
+	bfNxn9FkVoEZ15ETvCIbxiWbWCHTHo9Y5lLPg3eXBJgVjWzzNwy9xfse9NJsCPDl
+	hMEbJoitweGY4/ou+I15Yg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1795076850; x=
-	1795163250; bh=Dw2q8IL1wjmsTR+qJNvV5rMR+yLv2cKTTGNhz0woQiY=; b=X
-	KUR1bwe5BwIlpkvGwgu5OnV0gkhh1BkJ2BzyLCqBQtwYuJbEvXo92OBHZuHY55ik
-	tNUWu0YkAX2RSLVF4e1S/YdoHjRWhMVUa69VUrCHv0FxTRGA+mBzWri2W0k6ag9X
-	cCGu7V3P2bnbKQWfNjkSxOnizipIToefdkekmtgSfVsYwSd0ABaxqNHQuft6uduM
-	4YSX7V0i4BuRJzkrJA/8wXTL4LL7wJgaOq4Ccjq5EvmALVydjrHconGyEdKZAq+t
-	ZR+RbOKwi6Kg9iM22d1EvIOK+230LpeUwNNksXg9Z67POlFrh4t00Zt/9kfmv2Lr
-	hIaCuyGAg55cjGrssgXpw==
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1795077989; x=
+	1795164389; bh=WW2blqW/7siEgeA3QhLwyU83G3vWkab0u6sANyXaeO8=; b=1
+	lzFt6eBLruf12W8oA4MHDTJYYaNKfluVXK014wD2AE5/PkKRNmvaNXs6OtZD06cP
+	qARJrNv/xRZt9AogIDvj35Req9DPilSnlIblee0aYsm2ntqn7fbUcq/xS0JTanKL
+	2Du/EiNpwKhlnRKBelx+XDAkKuI4faM7ec8LPebuct9VwwneeHVVF4dny2cKDuez
+	pdbsJ5PrEYbPOqy61dw/3MSxYA3yUoq49jgVgLjTpTwMcwOy7TKCEfG7wGIfNL9p
+	zRq+GT/zgjo8yFFfGzAuaWl3sOj1zkv3jrFwPygrNsJjyffOo10Hm4d0Q0dgCs5V
+	wd4lMLkk3SAI9joAN/o3Q==
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
 	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
 	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1795076850; d=arndb.de;
+DKIM2-Signature: i=1; m=1; t=1795077989; d=arndb.de;
 	mf=PGFybmRAYXJuZGIuZGU+; rt=PHNvY0BsaXN0cy5saW51eC5kZXY+;
-	s=fm2:rsa-sha256:lU6zUd/5WTHkHJRiX3hK2cD8NBWd5qVtCEJBbMJOHB3v202
-	S+O8oTmSAFLalcONlS2oTpsla9dx5XiqHxqx2m0mMbBbii9EnnNmHU2/pSXbw7+F
-	8oKppAC1icZEZPUoN2fMrppzEq7IkCP5pe0EDQarXpiek9M3jc1EdGYePJKmjwOl
-	5EHqL+hGY92Mu6dv4aYWMT8x9iNn/+puuWTJnCYXXxCs2etciqijbp68ablwldQs
-	k4GjA5ygoG3kozfUjwnw0jkZ/AWK6Tm04VAxx4s/ctOxU7TNBTnVlnaYJ0eo48t8
-	WMDKmmYuWupSnkubJm7+DzXJXXqFlfhdEZivAvg==;
+	s=fm2:rsa-sha256:VUXWHuCmiB71BO+ja6cdy8SdSzUAyZ3KVc9qj3US4kmAOIF
+	bNOTz0+jeLEorpW285fkxFuXN/B86VMY15dJqpix95RDa1DdPdCPFxF2WbeGPnVc
+	C1m6w74RD34RgNTcuJBbgHyP3QqCwT2RolattOtD8n8O7q88YJaKoAYK8u6Er0Sy
+	oB5dA2yT9L925wZ//ksBQrz64FCnrXCXgCFTA8+Ks3oEMOwNvRynlzGcS/UNmbxx
+	QjkUTxyFq65TyN0JbolJ078CQv7iHSNrKEb2kEJRgP4809RyHAdbI+Au3hbo/AHV
+	4mtNF4AFJEmtihsrrMo5fbeHJZglkRtFIf3zzgA==;
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
 	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
 	action=mi-m=1; hc=12;
 	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
 	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:38katowk3PLIqYxjJq1fN31+3a5ifKQsxhh+W9e6f5Y=:v9sVWsIQ2Y6fKwJ6G5G1cEaPaE3lJadywxd83luirlM=;
-X-ME-Sender: <xms:7rL-ap0vSKnWuKM5bV7d6plQysQ0Ar2iyQdJbaQxK45Yq96ozPGdwA>
-    <xme:7rL-aq4nztQSHbCdhfjQcTcc_6-SL03MjkKfUKJ6ranIEf3BGYmG7rCOd81efkovf
-    dbDjnmlbqw7sOFcwioxBgQndfuJkL13RvIeuehdo5rnP_qnYa7vbGwc>
-X-ME-Proxy-Cause: dmFkZTFDzgM4lPuhyFyB7PYePOAsgiF+xpDNDzvQL5O6718m6tCxOdvKBqMnj2JpMYjRrq
-    fnMlW0tja6vUkcykU86qOM2O+jOuIlZybqBKRRsEI2HziWVGJ5Cd0JK7yDW6S42yjI9BnU
-    H9HI/lBFz87DW8LhV/72Jz2W/NKdh3Wg89z3YAutIKKYUSnwxDSlhQr4Yozvs6QR7YmVCC
-    KrOlYOKPFrgDVzFecsqDl/bZbwo75708mEZyw92qBveOlk0HpXjFUDmfO4xQX5QlQ/N2xp
-    L/reFtIezibP7xlq97dfMTSH2OZmkOcMFLSl6J0AvNbqBwIghNyYF0isD4fVzpMKLnjISM
-    r9WEzSgBsmy+UVeV6ISdLSMKgNvAiHdcsXGwXmEgt/JBwHj2gUvhydGN9oYbmUmqKXHN82
-    muUhPNr4mHGsDlo9hk4dLNCepJZgLiXzYl8sS8XblGD5A+rPvQbnLPMf4Igx2oPus5vdZJ
-    +Kfx1icFSU7F51Wf5Pz8PvYowWpdaAIXgShokVu4zN9e8c0bjzNCRG05FHUbLFSzIH5+7p
-    GstgA27kypP6qcmRACMGl1FEj5RMD22nW1aLWjCNhlZC0RWDqadjBJ8t7AzFYLGGCHwNNg
-    teKBH/RJDeVlbu/aSGbUmgKoFAH7l/GQdj9aWsKyMjXGIVqldWKcwig3+4VQ
-X-ME-Proxy: <xmx:8LL-auGbPSoCasRNthC0dMzMQ3pf6UmkgcGKqjhAAkFniXtKLG7_qg>
-    <xmx:8LL-avw6VTnay3xdP7Male_1s-nJkTigBW0C6Ak8W7N6ZKrVnw9leQ>
-    <xmx:8LL-ao2Bn62xiCFtFRnWxa5jVUzaABw8zuEdmyrA2yCtIfEbcLuowA>
-    <xmx:8LL-avq9FmfrLpjEcbBKIkDhmxZIaDStXVdEZIf4yrGJjQBB3VtdkA>
-    <xmx:8rL-at9-YqzTAFzI0o-fQA8HAuvbx6UhOzhGKmmMsfCFHduvLKsMveIX>
+Message-Instance: m=1; h=sha256:yHHEsa1F/yfYCs90xpNsERTHqBBu4lUbLy1LnnHw6Xk=:gUUvC0d3DXsIVObCQRNT9BOZ11HTUi7uu67Hd2r4Lys=;
+X-ME-Sender: <xms:Xrf-apO2eZFEucASI6Z-iV3CNj11pQgRm7s87ifIoT3yRijzcQmpRg>
+    <xme:Xrf-amyi7e9qiqX7gmNP4WTxg_MbzQiDZecDe3v_gxW7PrrnRFDcxzNqy2q0JFHoN
+    fp81TAY_BnVsc1eCXapy6fNezXHD47G7-KpFpTuHCNcd5ev0kD6g19XfQ>
+X-ME-Proxy-Cause: dmFkZTGV31TGU0zONOkJ/gBT4mhriliTNuQFY+d8+N+bTlJoW0nxIyUhLgf15xdQFnCpZF
+    9Jdi9ioVT+ArUJtExz3P/QC8IyLdAftkr1Wq16l2yCdO5JQ38cqo75FJ5tNzR0b2nUbcxk
+    GZbcqERGkx5Ta1opOW8Y57lemjWOUY2k5j74bKsnyV9KP9DtIA+lqR33B6KFt4lHZaTcDx
+    lQ2oXBNJp2LMQKvX6SkMo7pSxJyoS4jDrVgl44HQ7DI37WrXmxv7vS/8QKBcvXc0sUClTi
+    cS58SfLhGvF48w1OwGTpvIVhEIvatCY3HXo6+0Vz9gaXZ7TzA+hgU6NG1Mv3OiaUslusDi
+    3T2GvrXnApIMkjt9XqvrL6oXS5qb+9k7ziRwXOYDVHgtgNTuv6D6tvGQCN1j8lr5nqgZCN
+    MaeknzCilXGRLUxFGiJ9VCNSBaJMrIZdV0SjyNV3CqQoa0zbkih9vD3I8t0eNFAXjbpngj
+    AhAXMpl7NEOz8ey49XMybjheyeyYnBmgGy1eLkDwl498HdPtVCVizXXzvQ13k8OrDDq/y9
+    lXU4OBqi1Wj2mKykStwGX3yX+TEP4/CLLyMFQxfx0jDZiZdaRs6nonLloJTwyFBUSuKkJn
+    G98cdGW1XrPwWm//oUpWUlsaTPqzapGM3/Z8LB78Klyo9e7/liYHGbaAwUkQ
+X-ME-Proxy: <xmx:Ybf-amO7wLTg3t2P81VHzE2AxuUjkmN9b3yR1mTkfnVDq-xLyxI0BA>
+    <xmx:Ybf-ap2u_7nYAD4T1Mkv08l-ABAHYfNieXgsEMydL-YhuDcJi2PZCA>
+    <xmx:Ybf-aq13pl-t08t_dbneajYh6a3iSv704hi2unh58z0XSlYSZIdMpg>
+    <xmx:Ybf-aowyha8MxnAMV5wnHNBt5XRGuMTECRpthTTTw2e0J-4Gjm0qag>
+    <xmx:Zbf-anLwbR9PDmLBERtIf9SECCIy3j9-aMZ-xG_EavHOI2-v177KPQbr>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 3A0AF32A009C; Thu, 19 Nov 2026 03:27:26 -0500 (EST)
+	id 6974332A0099; Thu, 19 Nov 2026 03:46:22 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -114,43 +114,65 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: A9y9RtHuK9Pc
-Date: Thu, 19 Nov 2026 09:26:54 +0100
+X-ThreadId: A4QaHkHhrVgc
+Date: Thu, 19 Nov 2026 09:46:02 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Stafford Horne" <shorne@gmail.com>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: soc@lists.linux.dev, "Jonas Bonn" <jonas@southpole.se>,
- "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
- "Dinh Nguyen" <dinguyen@kernel.org>,
- "schuster.simon@siemens-energy.com" <schuster.simon@siemens-energy.com>,
- "Vineet Gupta" <vgupta@kernel.org>,
- "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>
-Message-Id: <a3d2b50c-e3ef-43d8-b330-53bcc6b804e6@app.fastmail.com>
-In-Reply-To: <av4u27rT4UqtnXUM@antec>
-References: <20261118160820.2994933-1-arnd@kernel.org>
- <av4u27rT4UqtnXUM@antec>
-Subject: Re: [PATCH] openrisc: stop using libgcc
+To: "Brian Masney" <bmasney@redhat.com>, "Long Zhao" <zl020895@163.com>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>
+Cc: "Brian Masney" <masneyb@kernel.org>,
+ "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ "Long Zhao" <longzhao@ambarella.com>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>, soc@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Jerome Brunet" <jbrunet@baylibre.com>,
+ linux-clk@vger.kernel.org, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Linus Walleij" <linusw@kernel.org>
+Message-Id: <d2cb7e5e-9c39-4534-9ed8-a5e2b6074dc1@app.fastmail.com>
+In-Reply-To: <avslH10GRqkVT9fU@redhat.com>
+References: <20261105-cv75-soc-v11-0-aa6ee0b2380d@ambarella.com>
+ <179427375370.1061670.4050288038934218487.b4-review@b4>
+ <20261110-interesting-hilarious-shark-2dbfc0@quoll>
+ <7eeaf54d-2d7d-420c-a34e-eebc6dd0effe@app.fastmail.com>
+ <bbc16906-45e2-4d81-ae81-ad93e87b13be@kernel.org>
+ <c67939c7-9725-459e-97dd-e104f3b14022@app.fastmail.com>
+ <avMM8z-LYncKS8ip@x1g10> <avMmKJpczepWTRdc@ashevche-desk.local>
+ <avReozTC_GEmfIxG@x1g10> <2b30e92.3c75.1a1e2828c3a.Coremail.zl020895@163.com>
+ <avslH10GRqkVT9fU@redhat.com>
+Subject: Re: [PATCH v11 0/5] arm64: add Ambarella CV75 SoC support
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 19, 2026, at 00:03, Stafford Horne wrote:
-> On Wed, Nov 18, 2026 at 05:08:20PM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> Based on the work for nios2 and arc, remove the inclusion of libgcc
->> and instead use the kernel's own copy of the required functions.
->> 
->> Cc: Jonas Bonn <jonas@southpole.se>
->> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
->> Cc: Stafford Horne <shorne@gmail.com>
->> Cc: Dinh Nguyen <dinguyen@kernel.org>
->> Cc: Simon Schuster <schuster.simon@siemens-energy.com>
->> Cc: Vineet Gupta <vgupta@kernel.org>
->> Cc: linux-openrisc@vger.kernel.org
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Mon, Nov 16, 2026, at 16:45, Brian Masney wrote:
+> Hi Long (and Arnd/Krzysztof),
 >
-> Acked-by: Stafford Horne <shorne@gmail.com>
+> On Mon, Nov 16, 2026 at 11:59:28AM +0800, zl020895 wrote:
+>> At 2026-11-11 20:25:07, "Brian Masney" <masneyb@kernel.org> wrote:
+>> >So how about this:
+>> >
+>> >- Have Long post a new version that splits out the creation of the new
+>> >  Kconfig symbol ARCH_AMBARELLA into it's own patch. I assume Arnd could
+>> >  provide an ACK on this?
+>> >
+>> >- I create an immutable branch that contains that the two dt-binding
+>> >  patches, plus the ARCH_AMBARELLA Kconfig patch.
+>> 
+>> Just checking in -- there hasn't been further feedback from
+>> Arnd/Krzysztof on the plan yet.
+>> 
+>> Should I go ahead and prepare that split for v12, or hold
+>> off until Arnd/Krzysztof chime in?
+>
+> I haven't heard back from Arnd/Krzysztof yet. How about wait 48 hours to
+> see if they respond, and if they don't respond within that timeframe,
+> then go ahead about post a v12 with the ARCH_AMBARELLA split out into
+> it's own patch. I think that's a good change to make anyways.
 
-Thanks, I've added this to the asm-generic tree, and now only arch/parisc
-still uses libgcc.
+Sorry about missing your question, this sounds fine to me.
 
-    Arnd
+      Arnd
