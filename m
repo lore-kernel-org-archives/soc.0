@@ -1,104 +1,119 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795425460;
-	b=SXReJD/c+hyJ4cVptaGWjLYgRrP1CtJuh245w3860HghGFy/5gl3Ul8O572fBcSGkcwh
-	 dea0liKeXMF2lVM3NX6msh4oMu2Ln2cMkUMxpYVOpsdq6/JASfa/3ySaT7wf23SAPIGOB
-	 EoOjRu1KBayubBESTverZLGybHtioXA80OOrkXUTun0dYbE4k/FZ4d133lsQh8XFe7qeK
-	 SPU3ug8t8s4hjRb+IvhsimD421K1wsdwb/a+ngxPfBDkwIuaPIdkqhi3Yf8DKWq8FG4ds
-	 kalMg+x8uhV27UCPAG4h2baewdYRmpo1sCgHtRAWc/QpiVTBt429XjZfwLRkZqHAJBQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795425460;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=XivqS2GzXFfLVs4e8GPr3drYgoFDRP+i4GE/VUr/Vsw=;
-	b=gjJH7AiX9d5DBcORGoIMU6AkJCbXSFcD9bTvyS17tl0Qy9l0+HKoeWF+0xwUkHd0HsKb
-	 0UWgBloHzD1MS+DZYEDCxJCr38Auy425Z7zY0j43OkPrGeqlXalI5I2NVk+OSqFaUWoeU
-	 FlloIyJcob3sLDr5FknlRSWcjSeqmFTzToUfRI/Y7luMvvm7HY13Z4iqjLu2BR3cvZDLR
-	 gyA8F3CxBsEerHiCRbXak8zCGCuWDsvCA2SDZvk0QuD3vmQOJoR36bv8AyNfodr+rnBFT
-	 yqY5Ps0XLfaQLOI3b1WpmlO6ZmAhwTQ1kNdhk5XZSohYH97/kfWWvrmG5lCv0uPuN0Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=baylibre.com;
-	spf=pass smtp.mailfrom=baylibre.com;
-	dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=MFO4M9mb;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=3; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795450612;
+	b=axFrtG94p1+2Dpl5v2DA/rARolgEyQK5RAKy0k4A2EUgIsra2UMPOe0roKgzcd6YT+do
+	 ut5tR4uPWtmfP8VejSdp2cvDo6Z/QKdv0eqnzGuuGQXVKuStDisFZUHUWZQEA+oruf71e
+	 gfo1FGAPxD+Ezok10WLQXDYT1wcvjZmai83+fvN3J0ac4dO0RPEl0PzPVdJnPwZUBU7/a
+	 14dCUgsC263OdB8Ad/OsDPTpMhWrSVepFIL46AU0+JGqBQ8ZVR/apn6HyoOrkFDylFkII
+	 MdELJDBuN1Y4/I/0g/HdvuSdBiTIzVUt3c7yJc4L744yqPJCkJSJeEdeSifeb1+pvxA==
+ARC-Message-Signature: i=3; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795450612;
+	h=Received:Delivered-To:Received:DMARC-Filter:Received:DKIM-Signature:
+	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=BLsGEf37HdqkCO9CHK6BxotQ7YvjkNxktfNkt6d5XB8=;
+	b=s+iTX9ADu0vjHGfWzXkbzmr6fAIi17GIxnQkldAOh/5KaOjQTuN/L9g4b+6/yNH/bdr7
+	 BVMGBjqeJUKXVQD7IP4ew4WV0JfhITOc784CbDOJpnVdM/5sJ0ZEA7lYCDEGLwta5g+WT
+	 spmMRF+2Xsjz6T2MlIK1Si5NphP5/3GhKsOPZ+g6gYLnxjXNWfxVNtEIw7cqJima1uri3
+	 +7lq3/GpgGq1wBLlMRtcqEdwm7vibajSyVMzSqp9vS1yZHh40no5dEXgLeQ+7Z5mQV2ax
+	 HgSEMYIEYgJU9UF8t3o9Zo8BJ1NGMUSKhEDC1O/Zk4qZjgU3+YJO3bKGAgS7VT5URrA==
+ARC-Authentication-Results: i=3; smtp.subspace.kernel.org; 
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=SWva0iSU;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDDE606A31A
+	for <soc@lists.linux.dev>; Mon, 23 Nov 2026 16:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=SWva0iSU
+Received: by smtp.kernel.org (Postfix)
+	id 0AC701F000C0; Mon, 23 Nov 2026 16:16:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+ARC-Seal: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=pass;
+	t=1795450611;
+	b=cNYlxaUtsmaIYnQbTo/aLqZ136hc1S+25U8WKhDdrDks/TbkJvuMD+pgvFhMFJcZjLOR
+	 VW+PZ6iyy9z0xVPZxmmer8sIoJ1QF6wv2FBIaysEyEPh1cFK3IUMzUihISgqBqfMsvzhT
+	 3gMnNjixz1vC67QNfoY7XC1LdfDtS17p3Ss7dJvQiZBD5g6Mx+p8pgEUieIbKVKM6ieLQ
+	 nr11a5I2HfvzNU902B2bhspaCPkehvKL1c07x8qUTfv/h5zp6sLoncuerpsfIJm+KWzhe
+	 axNq0uUfhUqt0C8jbbYhqrj5RTDAMauYxOI6IymsQx8NUbWA9oobs0s3VnL/zAj4OVg==
+ARC-Message-Signature: i=2; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795450611;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=BLsGEf37HdqkCO9CHK6BxotQ7YvjkNxktfNkt6d5XB8=;
+	b=GtCb2bwe6nZRB2YfWItEbbD1do6+rrH30jsnCT8w62CmOFysSfmxSwJgS8oW1c7jj2+L
+	 1kyfuIDPsZsVxlY2vBLQywzXZWHCZQVRwUYWYRTlySL29pfVlONNMNXvIJI7FLdZkjpsG
+	 nAfOnUMYvC8lrvlK89EdEKBO60vUuvPiS5lChO0RFGLQu38eqEhivgR60UYK0CDbnvjaT
+	 YhKKnaMh2AkwESbk8Rs2NiHEXdHS5tfYI83ddfKb0mlHdgBQXHHZP/NQ8yd6s/7zz3gTO
+	 ZODQlitfFNQzpHzlN+5PNUttT47zMqAnhx9D3mYSouDg8hS70A9aeQyaxKV1kz+t0Dw==
+ARC-Authentication-Results: i=2; smtp.kernel.org; 
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=SWva0iSU;
+	dmarc=none header.from=pengutronix.de;
+	spf=pass smtp.mailfrom=pengutronix.de;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEC160A3825
-	for <soc@lists.linux.dev>; Mon, 23 Nov 2026 09:17:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FEC160A3825
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=MFO4M9mb
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4bb70074ab2so30118965e9.0
-        for <soc@lists.linux.dev>; Mon, 23 Nov 2026 01:17:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1795425458; x=1796030258; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XivqS2GzXFfLVs4e8GPr3drYgoFDRP+i4GE/VUr/Vsw=;
-        b=MFO4M9mbKRX7OGQeosHJZHAHLMN+S3HrFAdk5eAgDLJryqQ9HVMawSOeVMChzl6pm5
-         XKKjqyzUJOwahKUVfCuasUQN6hhde1f9FVr5lziZ/Em9JXmB5euS11PHU6kvpF8vR7mz
-         FzsHBN91c/0igbE/LXU3JT0ct8M0tjtFFDvQxm9L71ahneP+UIKv/dy7WbqIY8zDgj4/
-         miTBVpERZzgIzPtEc7X+FXQ5+AP6Xs7+RhQNrDAVd/XH9teO97BV6vpAJSpFaITl1UCK
-         0y2cVRWpaPo6FbgMsPMuvl/PPAK8rWyKFegACnQHstxu/j3fKgb1nUiXXtWWfNNDcS/6
-         ucFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795425458; x=1796030258;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XivqS2GzXFfLVs4e8GPr3drYgoFDRP+i4GE/VUr/Vsw=;
-        b=LVHYxbeHLFZ3GXDXgXINCKEU9cDDeJpY2J8EI4D3ovXVdtXJCKiMNylSW7Qb9Mc08I
-         dggb+5z2IhFbfPdm3KHO97wSIZ4ZYbu4TSf2EI2QvpILJbzG2xeh5QcGpD2vJShFkHYk
-         KFiq3ORwY6N2E3UqQVsHB1SpA4yMbmTJ7DWxpzvkKirKIlirB4xqJIXH/IuhNt1Vw11X
-         Dg0A4FLM9wWUE6guTO/8fY8X4/SFTFWOhHHnYixZWVtYpNSKHqs2B0NudZv/6iG6ngot
-         yp4tpXNtGGVeVw85gMkHJRisDKiZEFWs7ZbDSZd+ak8SdxjJbg2k6wbx6mqfGDwfjLCe
-         Al8g==
-X-Forwarded-Encrypted: i=1; AL+hErH5J6d4DDL6CtsHOUmDDkmYoIfR84sozSu4YPd4p9WDZlp2NAIenUWjCnwPvMYvSA+rLEU=@lists.linux.dev
-X-Gm-Message-State: APuU4Z/ccQl/0Q5ijpDBd5IUSuVxyNYQGq9fl8abQ64ihNtWoO65P6OV
-	qCX+UbZDxd5SJEBFcHXX0N0JVlDpIVWWmB3vqbjHYT584d5DR62+pTsOpp+7koUboi4=
-X-Gm-Gg: AZFdTZcAJ1fygyFIGsQQuqfq1kWeQlW4ZNAMOD1PGGcIGz0IyCQzgw3HtkLVrhTL+S0
-	o8dnhy3+gazKdHAw/mh2AcB7haNjThqIe7KetJCO9Ooo3RTgJdIl8BFIDK6Y/xnKRQJu40TZ/s3
-	XTM2SKHaH3ySHa9FANf3JKcF+jYeriixP5c93jOzPPEjwbC1V7HaRKD7TsILOpCXxnc/CKXcgXt
-	yv4oFhx2Hfxv3I69wlOevd6msRwCAAFP+0y/04/qqOhxVKbn3dgnMgT8mSCmkBSxkYHELlpxo7G
-	kQa/Ror9EcWkEjZ0nCcjxgAMsrMYNMZVEGU9NjXmNhX1HV5FBtCTc46unJOoH/OfloUSKfNiFMo
-	v5JVzp2gWfi2l2jHK7CNx0NUzdS1ErykhzY/b1jY1EUeST2qE0M0sgSAl6/9IyCmp4Aw0JUonFZ
-	Iz6qQ37tDHvlqSOnnv5e0GnDttCTHvtcuYlm9dPSjXdH0G9O/PxkD6ZXvzWChndIysDWU/3s7Qb
-	8rHD3JBYM4Vsg7qrRo6gVESa/ImJ8PALXBx7UyKzBLbSRVn4c/GZ+8hto4BvbLSg71rmlOIVx1O
-	y7eo6x8MH1beX18FYoAVEzPjptIwpWegLToCHAp9ZGZ5YZu+YP0IDZ7Z8qsR90J2PC0M9QlpXUZ
-	h0c7kFqkKwZChPeo+IIn8sm/6+IBlwAHZ21ykCw==
-X-Received: by 2002:a05:600c:468b:b0:4ab:cc03:7f60 with SMTP id 5b1f17b1804b1-4bb8881b511mr224342725e9.18.1795425457707;
-        Mon, 23 Nov 2026 01:17:37 -0800 (PST)
-Received: from localhost (p200300f65f19a90438645cebc2ee104e.dip0.t-ipconnect.de. [2003:f6:5f19:a904:3864:5ceb:c2ee:104e])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4bb906e4ce6sm162891895e9.4.2026.11.23.01.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 01:17:36 -0800 (PST)
-Date: Mon, 23 Nov 2026 10:17:35 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: yogo.0917.sabu@gmail.com
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Radu Rendec <radu@rendec.net>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Ulf Hansson <ulfh@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Russell King <linux@armlinux.org.uk>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-mmc@vger.kernel.org, linux-doc@vger.kernel.org, 
-	soc@lists.linux.dev
-Subject: Re: [PATCH RFC v2 10/13] mmc: sdhci-at550: add SiRF AT550
- programmed-I/O host driver
-Message-ID: <awQEjpz2572Y9wsB@monoceros>
-References: <20261121-at550-rfc-v1-v2-0-b0309d0789b2@gmail.com>
- <20261121-at550-rfc-v1-v2-10-b0309d0789b2@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 555811F00A01
+	for <soc@kernel.org>; Mon, 23 Nov 2026 16:16:41 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=SWva0iSU
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 555811F00A01
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
+	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 5A29B201BD1;
+	Mon, 23 Nov 2026 17:16:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1795450594;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=BLsGEf37HdqkCO9CHK6BxotQ7YvjkNxktfNkt6d5XB8=;
+	b=SWva0iSUNtiYs4YrPQWnIARdosnn8kP6je8hSuDShfH3F9Npjs9OfNBjXqDJgTDYWrKUiJ
+	Xum+YJQ3SCBa5DxyyYIkhBq/NRgkRUzcqZIC0862fUGiSrN35O5SE+PwdEUZSeBAmRGmz7
+	i9WPKihCGV2o0FkxSfOLo3qPsDPdCjABp4St86ZTRysblRRV/giP8VQP25IMftDHghk9Xg
+	NRTb6Mo68R0eNCV6fCJX7lONkrtO/kUPna36IZW27iKnMYxkQizEvjmT9zuD2HhKOHV1Sl
+	q/Dv+6UrPIRMf6GhrxV5o/JRNduQVvLm/SbMOvpA32oDNxyYjWAjFEJK+ZaZug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1795450594;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=BLsGEf37HdqkCO9CHK6BxotQ7YvjkNxktfNkt6d5XB8=;
+	b=DEZaqBi+jXR5mGvun6InCSvE7U4qhLHmeUXU/iQr6vA9g8sIcZWln0yWy8GgVhC+cJ8pG0
+	7QQyXBXW772MigKfVdM3332bhCCIEyCJb2HIzFDV7qR4CNh0FZ7BSUyJ/DOQO4R1Xs/Pig
+	DTiEBrfxLH3Xjm7xlO5fbQRewheL2fKTc8P89Y5kpp85Xw+mdkQVaHMDuOmufiOkDLzUeJ
+	/7qUYhF2yvJbPcSnYNp5G6OXAHKr5KBzRqS5EOAnK9+zLOpcsWLo1OCBOolH6m3e/XQwYj
+	z5gn+DMXSFTC2LrTpfcOs/qgKPT0rKEKyHP+alXYLX7K1C5rLDZu2yTsXXUA5Q==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=relay-from-drehscheibe.grey.stw.pengutronix.de smtp.mailfrom=p.zabel@pengutronix.de
+ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1795450594; a=rsa-sha256;
+	cv=none;
+	b=HxZnzLVHqrzsWwA4xfLcc71u+2EqTjHcWcooufCQQRNXvkEGipiy6wBpZbN4NaIEzonGWS
+	+xwgrhxR4qvzKCvsfPMqYxI5ks2Lsfi6Sk2z2jZXafmLuR8Nn4/VtzOOfEKyPStYNXeVJV
+	0efbsxG8TxdQLuKkzr2m9lGgnf93t3Ws0KVTFY7ecI2EE6RqfY+jQxn1EpBGFZsiAsmBHm
+	jjcvWFfSYk+edau4TAu5PJ8XcNf+u/4RNJr40M8pTrl1cYshocxpc04ARRJYyOdKQwonrT
+	VFQtruvDqjrlcNGbACtFmDge72ABT5tzii5t6I9Dj4qQPdJVpVClllghZLTD7w==
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1xVWiX-0018kP-2S;
+	Mon, 23 Nov 2026 17:16:34 +0100
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller fixes for v7.4
+Date: Mon, 23 Nov 2026 17:16:33 +0100
+Message-ID: <20261123161633.2530037-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -108,55 +123,49 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="53xo6eipu5xw5r7j"
-Content-Disposition: inline
-In-Reply-To: <20261121-at550-rfc-v1-v2-10-b0309d0789b2@gmail.com>
+Content-Transfer-Encoding: 8bit
 
+Dear arm-soc maintainers,
 
---53xo6eipu5xw5r7j
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH RFC v2 10/13] mmc: sdhci-at550: add SiRF AT550
- programmed-I/O host driver
-MIME-Version: 1.0
+The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
 
-Hello,
+  Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
 
-On Sat, Nov 21, 2026 at 09:43:20PM +0900, Yuugo Yoneda via B4 Relay wrote:
-> diff --git a/drivers/mmc/host/sdhci-at550.c b/drivers/mmc/host/sdhci-at550.c
-> new file mode 100644
-> index 000000000..11c9de0c9
-> --- /dev/null
-> +++ b/drivers/mmc/host/sdhci-at550.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Standard SDHCI PIO only: do not assume CPU/PCI DMA address equivalence. */
-> +#include <linux/mmc/host.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
+are available in the Git repository at:
 
-<linux/platform_device.h> already provides of_device_id without the
-implied dependencies you get by including <linux/mod_devicetable.h>. So
-please drop the latter.
+  git://git.kernel.org/pub/scm/linux/kernel/git/pza/linux.git tags/reset-fixes-for-v7.4
 
-Best regards
-Uwe
+for you to fetch changes up to 586a87701101ba11477c8b5cdc1528413318ab77:
 
---53xo6eipu5xw5r7j
-Content-Type: application/pgp-signature; name="signature.asc"
+  reset: core: honour optional resets when the GPIO fallback returns -ENOENT (2026-11-17 14:27:15 +0100)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+Reset controller fixes for v7.4
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmsEBK0ACgkQj4D7WH0S
-/k7hOgf/csj9IbehNzv7kJ/jSWUzgb6r4/RUEEbwtHDzllOp2mTN98xOQkRXzRr+
-kmuM5eb3Prkbs0qQBPQiihfmm0Jo8lnvB2N8uBswWQM42XQ1o5YmtZx2RIs5cp4a
-M0FFz9Bz2fH6rmOr5ETS3FRjnZ8CNqQnaFBWD9lGusUfgppfoyqvFwbXBZyQd45Z
-KCR1pIqN6sWoDMkalLwcL8/M72VapgfDtPpmNp4qxYjf3m8WbJJZGT7uK2Mk78DG
-WWybLbbeuHCv72ICgMdJArlShc5E7A8r/LZSSpXjnNPBCxOU5AeW1Fa/7Ma+TYWI
-G0UtaE9KZSsmGdqMVovJUC5O5/MnDA==
-=R4EF
------END PGP SIGNATURE-----
+* Set up dev pointer in reset-scmi to avoid a NULL pointer dereference
+  in case of_node is not set.
+* Correct the RCPU2 PWM[0-8] reset registers in reset-spacemit-k1.
+* Fix a reset_control leak and a lockdep circular locking dependency
+  warning for reset controller removal edge cases.
+* Fix SDIO WiFi on Anbernic RG35XX by letting
+  reset_control_get_optional() return NULL instead of -ENOENT for
+  unsupported (#gpio-cells != 2) GPIO resets, as intended.
 
---53xo6eipu5xw5r7j--
+----------------------------------------------------------------
+Hung-Chun Tseng (1):
+      reset: spacemit: Fix the RCPU2 PWM reset registers
+
+Kunihiko Hayashi (1):
+      reset: scmi: Set the device for the reset controller
+
+Tzung-Bi Shih (2):
+      reset: Fix reset_control leak when put after controller unregister
+      reset: Fix circular locking dependency in reset_controller_unregister()
+
+Yang Siyuan (1):
+      reset: core: honour optional resets when the GPIO fallback returns -ENOENT
+
+ drivers/reset/core.c                       | 71 +++++++++++++++++++++++-------
+ drivers/reset/reset-scmi.c                 |  1 +
+ drivers/reset/spacemit/reset-spacemit-k1.c | 18 ++++----
+ 3 files changed, 64 insertions(+), 26 deletions(-)
