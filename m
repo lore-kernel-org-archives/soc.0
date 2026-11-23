@@ -1,85 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795356194;
-	b=YITfHbPnbV7d+9+Oonuf9Bl8NbbCXuaBTAPzCVLssIQNw0kAgCY13aH21CodbF+k1iDR
-	 z+63qzf/oz6eQNG2dpFhSMCXIqKYM0KAAQuZYtPERI2lJtYR7X/rgZXw7RihU+xuq2Z55
-	 LOvBbb/e5ke+f5rKUCYV+0FwmFvHc5w2AohDtwASzt4XBCwnBzPcFKMj549tOOQTiQ7Ah
-	 xYtr/+tAKyIJQM1GhwfxuAtb/eCLQ73Eyz8KQdTjn+pi9eTFAQX5w3IrSfHFsvKf5EDVc
-	 EWPK5/PA/T/yCeY3n5BxPrCJ/lgYfl8G+RaH1uNQ1pIQL78H4qeV6SYTUFEdw3o0M8w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795356194;
-	h=Received:Delivered-To:Received:DMARC-Filter:DKIM-Signature:From:To:
-	 Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:
-	 Content-Type;
-	bh=76p2SWlEDkeW+JfFIChbZsSZ5ZvE6h96Rg+QuZCXZnA=;
-	b=yfC0CYru16nMC0Az9snqtOHYn2qlK+Y8xjnzCpFkXvekSaZ2JGGd4V18tx6PVxLYURDt
-	 Z01vmmd4dI/IOQbY2P/SZoJyqK+7UsSCGHgFeo9bA5xGJGGMct/bLHups02ZNtA8bBLTV
-	 /sbFOhOz5vNnXP0y8H9AqkC9lu2hq0d3NgIiEMf15jX3thnfh4NX0g50cJrWuKT/WQ5zF
-	 GSFT1FjoybpU2aoPsEqHYxgWeepblwTOmfjJQzfsVM0oKBGCW7skoRODujLbmZrSL1lsO
-	 qR+gWqSFsFsXxTxItuO1amIgDR+tePCtNso0Px0vNe7xwIL9z/NyRtQ+1B3lKgpuM9Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=0hZh19VC;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795425420;
+	b=srCzOzZ3XhnpxyXpNXoBoLkZn5TY4TZZSkC/yhTzITpwkiBLYMLSXimb4ZgD9B91SXHb
+	 NQ0NekOlx609vCe2HYq1XHnh3hcq0n8LXVQyhxLkN6EZUY1ZijTIMSxwikOsW3c+ypR0l
+	 hg8C20talQWceZsu+g9p/UUB2o+rCuWZ6547cwBLqK8zJFy4sfoZ9Y20NrRUK0IYYAEaA
+	 9ARsDU5mP7whFRM9zMWtl/tptN44tMIAyNnvW/wyXAnb5Ofh78Z+3mDeUnfRxWl28Juok
+	 cHRTciYO1D/VWF91ZRdJt94v71jA6LZ/q9RvGF2jiaW831oqePautki37+FUTcR1Iag==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795425420;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=KntknVNj068zKgAq+zdLaDv094kaGVDF9/OJXVQRtwA=;
+	b=4SivCO/8P5DJN28fUXLlZ8HIbkgj7HRrLVpV3lz5x+/R5s8L7wTAwui7D9a/+JHxx9gn
+	 CuTTw4Pc5G9zz6P2ezUokxp4/+YO/qBuHLRcJi3AGdLHmplb/ukMY6/MQcdj8NQW2Y7/l
+	 4rHsIUUKwq20b9FgwqCeUeVvl5FvT5iBhfLsfsmc6QC+ScqLDzCpN8UrsdiS/bRy97egv
+	 wbsRutu6jV6MW6MMc43btxcW2BoJkjz+DaUU7YoqWKbUP/KtADqSanWd5o/IwJn+4A9KJ
+	 vm6otLeqmv5ds67BWzZO/5ghMbVQcLaVWVvONL8Qb0zl3e3E94Wy6X5rPkSl4Nrm88Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=baylibre.com;
+	spf=pass smtp.mailfrom=baylibre.com;
+	dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=ZCh352Qw;
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7360A606A320
-	for <soc@lists.linux.dev>; Sun, 22 Nov 2026 14:03:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB7C606A32A
+	for <soc@lists.linux.dev>; Mon, 23 Nov 2026 09:17:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6DB7C606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=0hZh19VC
-Received: by smtp.kernel.org (Postfix)
-	id D21171F000D3; Sun, 22 Nov 2026 14:03:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=185.11.138.130
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795356193;
-	b=oGSIN6Dnv7SR0oxrjnvq22y/INZwpkXrH8IpkL4Zbl1omp99Bu824KwIrEpfXTShbQdR
-	 3MQYwNDLE4buYwhKaRTt9IsdAOShd71EXue3VBf9yFo0gEgVU8bxrQDtW3uRlxqB2KsNW
-	 csx6O6hoykQqRN5iMtqEoghRcN/VgUHiZOufETA8NHFGACCclYhY8ev3WfvA6kLftv9O0
-	 LJ2Ev92x7rZBB9XLlOZ5NYU9+Z5s3z0CKx6DyHvfmLZsyyd7lGub6sXvSaPEzDCkoP1Td
-	 uky0m1zP6K7tZ1v+gqf7e+68Nga6q5b2VBfqZt9W+D6B94qzssdTRMHv/TUZTRwk6yw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795356193;
-	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type;
-	bh=76p2SWlEDkeW+JfFIChbZsSZ5ZvE6h96Rg+QuZCXZnA=;
-	b=Eat603APTE/UV/q6WIrqkpwGP15tgULcOP9MOf7r+rnmLzPVMhpq+etc8ZYJvfffwr+I
-	 7hnNvEV6oYzWq8k0GNu/l4DEojTp8NSXxrmcs9p2AGHlTpRpKs7DOoVbBNUlv5NrKPi4E
-	 BtFMaV9nuS3pVhQ81ufDTmT9IK9XDlACRdX7/rDseLgrVVa7gwkHvCb361WWUXF2ro73l
-	 VJMfDltNUEdVSoqPN+SSQzK/zUbdllWoUCx5C3eC8dlBaq35MOQDIUw8G1NzGEcu9xkw1
-	 EVC0Z/+72JCaNxd9md1CIAEW9IXmxpOzWdAHS9sHDsiSmk7cqB17e+UGGiwPL1SktFw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	dkim=pass header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=0hZh19VC;
-	dmarc=pass header.from=sntech.de;
-	spf=pass smtp.mailfrom=sntech.de;
-	arc=none smtp.remote-ip=185.11.138.130
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 21D361F000CA;
-	Sun, 22 Nov 2026 14:03:07 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256 header.s=gloria202408 header.b=0hZh19VC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.kernel.org 21D361F000CA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=76p2SWlEDkeW+JfFIChbZsSZ5ZvE6h96Rg+QuZCXZnA=; b=0hZh19VC4U4K8M+FGxkTzy7By8
-	SDjX09vaVpBkusoBOnEQ7WADyn3Dz9GZezTH5S3qde1kCqx9YrDW8xslqgHqAGfw5amSBreZNYEFD
-	zGl8U1VS/GExLZZxn3a8i3T3ROgvUDPh5RPoLEAOpWEklRWBSb+KESzqfu996awTWJtyW+ZZVRJNU
-	S2TkFuH3fe2GFqP0CoGMbLHYXf4Su276r+TqJs7uWxhxLMrcKOCWcJG5Wkv/0e4wLaEjPLK5YAnAn
-	YliwbTi5yBn/cdtF5InaOYVSkDe2Awm5OALbFkXKbORKxJtuIeZnfNZX6kpPjXAgEK7uJOsaamG3k
-	eETDzG5w==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 7.5 #1
-Date: Sun, 22 Nov 2026 15:02:59 +0100
-Message-ID: <0mz4dc8hQSOr4_mBKfnwog@sntech.de>
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=ZCh352Qw
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4a9be758734so1788685f8f.1
+        for <soc@lists.linux.dev>; Mon, 23 Nov 2026 01:17:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1795425419; x=1796030219; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KntknVNj068zKgAq+zdLaDv094kaGVDF9/OJXVQRtwA=;
+        b=ZCh352QwdFPYAgyWC9thx+bUpKF5v5/TIyYEvxx5RHUw7BmjlkG2w43wCkNqwAqjuK
+         v4Qg+FTBeY+mngubisY1h+rfSgpxdh3v/iOeAPbebS666icM1VLus6k6H6uJ2U45y5Da
+         oJH6Wgu6iUpDDIZB6wW6e/1QpqerI2lUy3GRkE7yrYnygsuMFAJw9Fi28wbIkD87kCjc
+         AfL8S9sZ+IYOVQZ0tJhmPnUq297Qty+Dk9ntanRRlFRtEDwBQ+vMvWMhaaKkZmbNqYRl
+         tpu5KbSaJ8JS6hubWwCD+LT/S0OP/bfkTEZ139WDkjYy8UN3G7KnSDWaAANJfxl5MUb4
+         H4YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795425419; x=1796030219;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KntknVNj068zKgAq+zdLaDv094kaGVDF9/OJXVQRtwA=;
+        b=rDwjHFXSpB5ANLuDUYN4MdZASnyzL+qMpdFPgS9evLB7zRv9s9rywX1tvv8LSoUdpZ
+         trq7wQ5iylHeJeH3puqqJ+HRTYMTTCUaN3NR/UsJG9h4r3cUxmZWjJPsil9J3kZqF9sy
+         Nn1OUOh7l7DIt2MBxAzTwIIOzLDl3GROx8t7ANDykKxLbFDBIhLZ0N4e0FTCej0zbICr
+         YxMIZ79hjXy3i9UuP8G15EbbPGwJYfvEvaDSnzFfTglKDv/nwNfujp76lpwIeUtqfOTX
+         wV3Cwgyo+DGq42Jc3mZBYXOojbI2gs/6TdYacYvQRgyvWCleg2Fn82lKkpWk2lROtK+F
+         HeVA==
+X-Forwarded-Encrypted: i=1; AL+hErEEF5tD1jj2FR2R3FAorF08PNY5hjE3CvNwyNsCRT55HqOxL8xpKCZgBrWRHMGmEJ5zjmM=@lists.linux.dev
+X-Gm-Message-State: APuU4Z8YADIZXe2ux2whDIpWxhOCKgRYvEJ/BjSeFtZsbk2KoVaH83Ol
+	V1Py9IlUzPo23MhXwi0zV8nAp2cibzwzH6hWlA3PK6K6AWa9UsKbv0yewWN2u1hRvO4=
+X-Gm-Gg: AZFdTZca7sT31doEusloxPU8S+dCcXW17pZoB1FB1oAKUSJNXDrHAGoc6iujNqikNH4
+	b7R76IR2tsLjW2wZk5UNBE/1PVA6ux3t0xPEnEM6mlL5NeQNnk4l13ahWA18y1RW0bR50DaOhHT
+	ARWOxIIo4WpOV0hRsmzdadKqMeTB24+aud8cJ6g0QmqPq4mr2vwlhPs2TRUDBY2++GMp7oFaWI5
+	aB6oE8v/QBSh5OAPeLTVBM7stuTn5Frp6HOaFyVCzu4t6PEB9WqFeX6YN0NCNFThrU/OGEXLU3/
+	QU4VfCRgA7oM95SIZJNZU0UGlusBIkwSB4our+lrBCAXE4KgckoA6IEHx2uATMKxdFsEXRwUIHU
+	FUBXHPDnpWXIZs7y7ZzdRt1sc5Q3kBduUqTyzboHmmU/2JlX3sCG5ek7DgvyNIubMzOOJIHLROc
+	NBklalH81j9rcuLn3NGiNYUVgaDv47alR3Qv8hqjWZFNJdqvpkXLM4eOl2+2z82zcSRiEdqa4G1
+	oMfXGdoMrRpKBgTwQivIqk6AREIBGNhFeKpgBIoIiGlu3GCaNMrZjLeyl9TdvxpMsqf4oCSTAo9
+	QsejJhjZQXFxdXmcy+v9ICRQso5o6Dwyi4/2aw9vKl9/eb2vlq/Lrts9lnOEzHxugSuIFh7B2lC
+	yVbrkGLrD06++1vvIZ+Qc7Nn9wFstcrSvndBzNQ==
+X-Received: by 2002:a5d:64c9:0:b0:4a7:69c3:94d5 with SMTP id ffacd0b85a97d-4abb0e469cfmr20062459f8f.28.1795425418389;
+        Mon, 23 Nov 2026 01:16:58 -0800 (PST)
+Received: from localhost (p200300f65f19a90438645cebc2ee104e.dip0.t-ipconnect.de. [2003:f6:5f19:a904:3864:5ceb:c2ee:104e])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4ab69bf61e8sm22313933f8f.11.2026.11.23.01.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 01:16:57 -0800 (PST)
+Date: Mon, 23 Nov 2026 10:16:56 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: yogo.0917.sabu@gmail.com
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Radu Rendec <radu@rendec.net>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Ulf Hansson <ulfh@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Russell King <linux@armlinux.org.uk>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Linus Walleij <linusw@kernel.org>, Drew Fustini <fustini@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-mmc@vger.kernel.org, linux-doc@vger.kernel.org, 
+	soc@lists.linux.dev
+Subject: Re: [PATCH RFC v2 08/13] Input: add polled SiRF AT550 resistive
+ touchscreen driver
+Message-ID: <awQEP9bHA0RPfRUA@monoceros>
+References: <20261121-at550-rfc-v1-v2-0-b0309d0789b2@gmail.com>
+ <20261121-at550-rfc-v1-v2-8-b0309d0789b2@gmail.com>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -89,190 +108,58 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-
-Hi soc maintainers,
-
-please find below a first bunch of Rockchip dt changes for arm64
-for the next merge window.
-
-Nothing really stands out.
-
-Please pull.
-
-Thanks
-Heiko
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="o4xfpqjjox3khpoi"
+Content-Disposition: inline
+In-Reply-To: <20261121-at550-rfc-v1-v2-8-b0309d0789b2@gmail.com>
 
 
-The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
+--o4xfpqjjox3khpoi
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [PATCH RFC v2 08/13] Input: add polled SiRF AT550 resistive
+ touchscreen driver
+MIME-Version: 1.0
 
-  Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
+Hello,
 
-are available in the Git repository at:
+On Sat, Nov 21, 2026 at 09:43:18PM +0900, Yuugo Yoneda via B4 Relay wrote:
+> diff --git a/drivers/input/touchscreen/at550-ts.c b/drivers/input/touchscreen/at550-ts.c
+> new file mode 100644
+> index 000000000..89c2d2701
+> --- /dev/null
+> +++ b/drivers/input/touchscreen/at550-ts.c
+> @@ -0,0 +1,124 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* SiRF AT550 coordinate acquisition. Layout cross-checked with AT551 draft. */
+> +#include <linux/bits.h>
+> +#include <linux/input.h>
+> +#include <linux/input/touchscreen.h>
+> +#include <linux/io.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.5-rockchip-dts64-1
+<linux/platform_device.h> already provides of_device_id without the
+implied dependencies you get by including <linux/mod_devicetable.h>. So
+please drop the latter.
 
-for you to fetch changes up to 30eb5fd93649928b9e4149d24fa182c8521fdc20:
+Best regards
+Uwe
 
-  arm64: dts: rockchip: Enable all CPU OPPs on Kobol Helios64 (2026-11-13 21:35:29 +0100)
+--o4xfpqjjox3khpoi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-New boards: FriendlyElec NanoPi M6V2, Vicharak Axon Lite, ArmSoM Sige7s
-Global: RK3576 cache hierarchy, RK3588 VOP2 reset
-And of course a big chunk of board-level improvements.
+-----BEGIN PGP SIGNATURE-----
 
-----------------------------------------------------------------
-Chris Morgan (1):
-      arm64: dts: rockchip: Add icm42607p IMU for RG-Vita-Pro
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmsEBIYACgkQj4D7WH0S
+/k6Mogf+I4t6gj7ob8tkta5kHm+YP96+f6rsROw+nYQ5NXBDBTwdaHgtuxTw/3u3
+9TSFi59BI6mt1CJkV2ldOhel8Do0lFyFlVyx1+tlaLGNAjrt3f8m2IWJcvQU4hQK
+qCxr790Ac2+n+6M13QHVHO8E7+V5Kxu109uuNUNUWIsrjawNdIUx+lqOywM9o/JT
+s7dUkwPF41vgxb8gPn3Hr9uAImmkTspc70TUfxqNtGVNmQlizkBCtSCoABv5QCdW
+mXZx4sl+NJUJpqZ/jj0ehbdZ1DT8xVBRF1ZDrDU0AdqO6EAWVEnOx3tb5+7JsaKI
+HSj3Bm7869/tgf+jXQ3QF1Uu7I1vmA==
+=UpFb
+-----END PGP SIGNATURE-----
 
-Cole Munz (1):
-      arm64: dts: rockchip: add rk3576 cache hierarchy information to CPU nodes
-
-Cristian Ciocaltea (1):
-      arm64: dts: rockchip: Add RK3588 VOP2 resets
-
-Dennis Gilmore (1):
-      arm64: dts: rockchip: Fix adc-keys wiring for Orange Pi 5 family
-
-Deomid rojer Ryabkov (2):
-      arm64: dts: rockchip: Fix VCCIO4/VCCIO6 supplies on NanoPi R2S Plus
-      arm64: dts: rockchip: Enable SDIO Wi-Fi on NanoPi R2S Plus
-
-Fabio Estevam (2):
-      arm64: dts: rockchip: Fix the BT clock-names on rk3399-hugsun-x99
-      arm64: dts: rockchip: Fix the BT clock-names on rk3399-leez-p710
-
-Hrushiraj Gandhi (2):
-      dt-bindings: arm: rockchip: Add Vicharak Axon Lite board
-      arm64: dts: rockchip: Add Vicharak Axon Lite board
-
-Igor Paunovic (1):
-      arm64: dts: rockchip: fix hym8563 interrupt pin on Orange Pi 5 Plus
-
-Igor Velkov (13):
-      arm64: dts: rockchip: Add vdd_log and vdd_center to Kobol Helios64
-      arm64: dts: rockchip: Enable HS400 enhanced strobe on Kobol Helios64 eMMC
-      arm64: dts: rockchip: Enable USB host0 on Kobol Helios64
-      arm64: dts: rockchip: Add the buzzer to Kobol Helios64
-      arm64: dts: rockchip: Add the front panel LEDs to Kobol Helios64
-      arm64: dts: rockchip: Add the GPIO expander to Kobol Helios64
-      arm64: dts: rockchip: Describe the Ethernet PHY on ROCK Pi 4
-      arm64: dts: rockchip: Add the GPU to Kobol Helios64
-      arm64: dts: rockchip: Label the fans on Kobol Helios64
-      arm64: dts: rockchip: Add the battery charger to Kobol Helios64
-      arm64: dts: rockchip: Enable SDR104 on the Kobol Helios64 SD card
-      arm64: dts: rockchip: Describe more of the power tree on Kobol Helios64
-      arm64: dts: rockchip: Enable all CPU OPPs on Kobol Helios64
-
-Jianfeng Liu (2):
-      dt-bindings: arm: rockchip: Add ArmSoM Sige7s
-      arm64: dts: rockchip: Add ArmSoM Sige7s board
-
-Jiaxing Hu (1):
-      arm64: dts: rockchip: let TCPM own the USB-C VBUS on CM5-IO
-
-Joachim Eastwood (13):
-      arm64: dts: rockchip: fix sd min/max voltage on rk3588s-nanopi
-      arm64: dts: rockchip: enable mmc-hs400 and add supplies on rk3588s-nanopi
-      arm64: dts: rockchip: add voltage iio-hwmon device on rk3588s-nanopi
-      arm64: dts: rockchip: move vcc_3v3_s0 to nanopi-r6
-      arm64: dts: rockchip: rename sd power pin from rk3588s-nanopi
-      arm64: dts: rockchip: rename usb host power pin on rk3588s-nanopi
-      arm64: dts: rockchip: rename gmac1 reset pin on rk3588s-nanopi
-      arm64: dts: rockchip: rename pcie2 power pin on rk3588s-nanopi-m6
-      arm64: dts: rockchip: rename pcie2 power rail on rk3588s-nanopi-m6
-      dt-bindings: arm: rockchip: add FriendlyElec NanoPi M6V2
-      arm64: dts: rockchip: rename rtl8211f node on rk3588s-nanopi
-      arm64: dts: rockchip: add support for NanoPi M6V2 board
-      arm64: dts: rockchip: fix pcie wlan chip on rk3588-h96-max-v58
-
-Jonathan Schmid (1):
-      arm64: dts: rockchip: Pull down the eMMC data strobe on RK3576
-
-Kel Modderman (2):
-      arm64: dts: rockchip: Move SD card regulator to Orange Pi 5/5B
-      arm64: dts: rockchip: Add headphone amplifier to Orange Pi 5 Pro
-
-Leonard Lausen (1):
-      arm64: dts: rockchip: Enable Wi-Fi on the NanoPi M5
-
-Miguel Jesus Seron Gonzalez (2):
-      arm64: dts: rockchip: use rgmii-id for gmac0 on odroid-m1
-      arm64: dts: rockchip: keep vcc3v3_pcie enabled from boot on odroid-m1
-
-Mizuno Miotsuki (1):
-      arm64: dts: rockchip: Enable audio on DFRobot UNIHIKER M10 V1.2
-
-Pufan Jin (1):
-      arm64: dts: rockchip: Enable the NPU on LubanCat 4
-
-Ricardo Pardini (6):
-      arm64: dts: rockchip: describe PCIe RTL8125 Ethernet on NanoPC-T6
-      arm64: dts: rockchip: describe PCIe RTL8125 Ethernet on ROCK 5 family
-      arm64: dts: rockchip: describe PCIe RTL8125 Ethernet on CM3588
-      arm64: dts: rockchip: describe PCIe RTL8125 Ethernet on NanoPi R5S
-      arm64: dts: rockchip: describe PCIe RTL8125 Ethernet on NanoPi R6C
-      arm64: dts: rockchip: describe PCIe RTL8125 Ethernet on ROCK 5 ITX
-
-Richard DeFrese (1):
-      arm64: dts: rockchip: route ES8388 MCLK to the IO pin on Orange Pi 5/5B
-
-Ryan Leung (2):
-      arm64: dts: rockchip: add maskrom ADC button to NanoPi R76S
-      arm64: dts: rockchip: add maskrom and recovery ADC buttons to NanoPi M5
-
-Sebastian Reichel (5):
-      arm64: dts: rockchip: Add missing PCIe wake pinmux on RK3588 EVB1
-      arm64: dts: rockchip: Enable NPU on RK3588 EVB1
-      arm64: dts: rockchip: Enable HDMI sound on RK3588 EVB1
-      arm64: dts: rockchip: Add DSI panel to RK3588 EVB1
-      arm64: dts: rockchip: Add Bluetooth to RK3588 EVB1
-
-Shawn Lin (1):
-      arm64: dts: rockchip: enable PCIe3x2 on rk3568-evb1
-
- .../devicetree/bindings/arm/rockchip.yaml          |  12 +
- arch/arm64/boot/dts/rockchip/Makefile              |   3 +
- .../boot/dts/rockchip/rk3308-unihiker-m10-v1.2.dts |  30 +
- .../boot/dts/rockchip/rk3328-nanopi-r2s-plus.dts   |  60 ++
- arch/arm64/boot/dts/rockchip/rk3399-hugsun-x99.dts |   2 +-
- .../boot/dts/rockchip/rk3399-kobol-helios64.dts    | 286 ++++++++-
- arch/arm64/boot/dts/rockchip/rk3399-leez-p710.dts  |   2 +-
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |  11 +
- arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts   |  34 +
- arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts |  30 +
- arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts  |   6 +-
- .../dts/rockchip/rk3576-anbernic-rg-vita-pro.dts   |  12 +-
- .../boot/dts/rockchip/rk3576-armsom-cm5-io.dts     |   1 -
- arch/arm64/boot/dts/rockchip/rk3576-nanopi-m5.dts  |  61 ++
- .../arm64/boot/dts/rockchip/rk3576-nanopi-r76s.dts |  14 +
- arch/arm64/boot/dts/rockchip/rk3576-pinctrl.dtsi   |   2 +-
- .../dts/rockchip/rk3576-vicharak-axon-lite.dts     | 714 +++++++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  74 +++
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      |  12 +
- arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts   | 180 +++++-
- .../dts/rockchip/rk3588-friendlyelec-cm3588.dtsi   |  15 +
- .../arm64/boot/dts/rockchip/rk3588-h96-max-v58.dts |   5 +-
- arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi |  30 +
- .../boot/dts/rockchip/rk3588-orangepi-5-plus.dts   |   4 +-
- arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts |  30 +
- .../boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi   |  15 +
- arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts    |  18 +
- .../boot/dts/rockchip/rk3588s-armsom-sige7s.dts    |  16 +
- .../arm64/boot/dts/rockchip/rk3588s-lubancat-4.dts |  35 +-
- .../arm64/boot/dts/rockchip/rk3588s-nanopi-m6.dtsi |  14 +-
- .../boot/dts/rockchip/rk3588s-nanopi-m6v2.dts      |  92 +++
- .../arm64/boot/dts/rockchip/rk3588s-nanopi-r6.dtsi |  14 +
- .../arm64/boot/dts/rockchip/rk3588s-nanopi-r6c.dts |  20 +
- arch/arm64/boot/dts/rockchip/rk3588s-nanopi.dtsi   |  55 +-
- .../boot/dts/rockchip/rk3588s-orangepi-5-5b.dtsi   |  31 +-
- .../boot/dts/rockchip/rk3588s-orangepi-5-pro.dts   |  21 +-
- .../boot/dts/rockchip/rk3588s-orangepi-5.dtsi      |  23 +-
- 37 files changed, 1896 insertions(+), 88 deletions(-)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-vicharak-axon-lite.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-armsom-sige7s.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-nanopi-m6v2.dts
-
-
-
+--o4xfpqjjox3khpoi--
