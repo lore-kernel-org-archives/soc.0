@@ -1,53 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795544349;
-	b=E88whg7u363Von9LSZmleN9Fl7P1ljg4ioa61b1Ooy0Y6AtL8SpxEbnKnAHPOcU54rAa
-	 YHSMM9pDP4Hg/7SAFrzsZ2fNKrQNGy+QeutFQTLE1nMWtbn99AugVmH07wWGaEVVfL8z3
-	 TfIydMgxCJfd4MoPtXvVNUImclC2oWalTXR0wDa9lhkFXWt7LoUTHKP2UsrqOxY08BbLm
-	 uASek/D1dBmpO6lVEaEZdRqV06BdYUkTv4BdET352Kl+gDgHoQklcLV1zxYIUrhodcMtd
-	 bZKWnW3o35yviDkHaIMSU/IUQyMqqftV/j8KrVHEejfFi5cRNo+RA7T2FFNLlrqrOqQ==
+	t=1795552805;
+	b=g8riT/iJDV5udAOd6VXniSyX6lOaJ5eR+ZY6jqSUrc0mudu3D8t9h0S2h8nWeMfUQ+Bc
+	 oLBD2gLZyfWjcM9wbDKYowQZCHSpiMq/30/72NW+KyoArpBDGkl3JR6AQcF5l/yvLCPE/
+	 cB2IO/By0dfZxx55sgmAQHi72IHAULI/0dWlLdTCjBq5xvWUd8U/7kmNQkxI4AEtjFer/
+	 2KxwHngg+YqXKFzHaYQlCyK+IVRI8vMpGDEC7Vl/+9J60BNzY6Pw7nerbnJY0QUvTcT7t
+	 eTYROVIF7YdSeNyFr/sKsaVRQ44XkSJj1o5NeTysSOcUuR5jynwKUuO2cd9mNqW5woA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795544349;
-	h=Received:DKIM-Signature:Received:X-Gm-Message-State:X-Received:
-	 MIME-Version:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=bJMzVzbCZ/eXll3kanPweMPP8+MueKszbQ0YDiOQAlU=;
-	b=aIb5tDZf05yJxxQxKb9z+zvKdcqV5H5bbvsjd6u9Qnwm+TiokQMnLrCSvI4bGbm7KtD2
-	 rht6W1R/daGur/+JXHd6aV/jgJ+W0kfKm0RyNYxrLxGIgneE+dN5PAXnnSJq9vSzY+3nM
-	 4RKIl/iUspx7ESRnNcWYpyvGE64W2ylTf6XVYmj564A1te21J2DrSoFKn0QSbfYhTbBae
-	 6AKgnqzbx0rmJHf9SBXiunAQqMycJDrzsC9i3q43EUx1htjtPnVmoT5DZqnRrIPgG7CoC
-	 fqTpZrf5bazb4RRsVweqLbg8pPcn4XeCmIh61VDTHMM321q4eqPBBD5rmc29yny+i5w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795552805;
+	h=Received:Delivered-To:Received:DKIM-Signature:Received:Content-Type:
+	 MIME-Version:Content-Transfer-Encoding:Subject:From:Message-Id:Date:
+	 To:Cc;
+	bh=fF+XGMCNdtUiSmFHDg7Us2Pd1BUVibSW3F9A1CND9sY=;
+	b=PgPI4bLYf8lilapQ2mW+ZByzqGreDlD0m7njc2N96mucFr1rnqiWqrM+FbsjQTiNRWNc
+	 axBCGqlpI9vGaspfeG7V8n1+SAnKur2MlZoSApJQwg3Q7ZNfLGiSUEcU64zOGV9B+EKRT
+	 qhP9GIBmBdBdSyvVgJtOyWyjypud4xR2aCJYDS30LHsymN7ywLEuIksOOf7NLlUheA0dP
+	 794epZ4794A/PY3MCqy8DQaAYFP29DOLk48xCmZpn0vU+/w4K6LkRCYJPKVWWWODcvarC
+	 JomRgW+S7pUK/COIjKHgC8njJlzX6Z+ShBn4X2JyoDHiVscKtPBaDRhhQe9XdIJe8Bw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=genQOJjw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lKAZHR2n;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B117A606A33D
-	for <soc@lists.linux.dev>; Tue, 24 Nov 2026 18:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4BB606A31E
+	for <soc@lists.linux.dev>; Tue, 24 Nov 2026 20:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=genQOJjw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C3B1F000CA
-	for <soc@lists.linux.dev>; Tue, 24 Nov 2026 18:19:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lKAZHR2n
+Received: by smtp.kernel.org (Postfix)
+	id 7D9B01F000CF; Tue, 24 Nov 2026 20:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A901F000C6
+	for <soc@kernel.org>; Tue, 24 Nov 2026 20:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795544349;
-	bh=bJMzVzbCZ/eXll3kanPweMPP8+MueKszbQ0YDiOQAlU=;
-	h=From:Date:Subject:To:Cc;
-	b=genQOJjwG62bqWdH29OiuvPTf9cF4IqLi+YPa8EnEf6hBIxUBsbclOl+2BOv7APlw
-	 Az0ruV1e1d1mogOug1I+38yiZLcXQXfLft+jtDsNZB+RcHW73Io6mzm2QjzZaPrC0u
-	 l5miwqJ66D4c241D0dDLIvcoomgnDCCZVtcmmZx3sB4aSLt5mgPNKLtfOG3ypAMdUp
-	 kdqOznHHcyuxijSWHNYPzTcczb/aqjYccUmjrEKQMs4AhEXznN1m6U2lNO/0f8lkEJ
-	 mb6cjY0tkT2aLXosgfZNeJ08yOZAbNPTP0QA58ij0G++WoBSp/RLiK6RYEjbDMnFw2
-	 vA7/B8fFSb60A==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5bccecba199so4697268e87.1
-        for <soc@lists.linux.dev>; Tue, 24 Nov 2026 10:19:09 -0800 (PST)
-X-Gm-Message-State: APuU4Z8OAzncMuftcuUuegq8Afa53gtfADSZXu5r1DLgfhWs3NspyN18
-	jneMtPc+YysLrEzgkOjdrgh5S9O7KRkG6HyQI60siFFTz32Iz8Y/AHnJI04Qa5b+ZI/e5kUcKAo
-	CRWdaLGe4Lgq84FfEiPZ9mx99f09ynuI=
-X-Received: by 2002:a05:6512:3ca5:b0:5bf:c239:71ad with SMTP id
- 2adb3069b0e04-5c1bc802154mr5508244e87.38.1795544348044; Tue, 24 Nov 2026
- 10:19:08 -0800 (PST)
+	s=k20260515; t=1795552805;
+	bh=fF+XGMCNdtUiSmFHDg7Us2Pd1BUVibSW3F9A1CND9sY=;
+	h=Subject:From:Date:To:Cc;
+	b=lKAZHR2n0qoNWI/oBZ9/t5nV7NWeq6fc3aenT3bRo83ws9ADBOhJJi6s4RinOoyXk
+	 pRgtZAwL2CAmgOV0Kf6QieseEZFPij0F0l9wJA9o3+gRDZpC6t25yNlyCBE1CoQlIj
+	 hJV8kX84GCskX6o6Ra4JKkd2MeGj1V9uFqj2roC56Av8W1IPANvycU6t7GeKle+3Ru
+	 jcvLLHx+WXtNOnl4R2dGIQFR0oVxEW5cd46MVGfs9MuHBQT12UGL8LefIf5wwRJ69W
+	 h1vwAs2b9QF47uYPNogri3FG18uOD0n9Ok9tmWhvUV7YFscjMBSCUpPgwDoomJXugO
+	 ZCwwLGKg3s0WA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3C9483808209;
+	Tue, 24 Nov 2026 20:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -57,66 +55,37 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:soc+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-From: Linus Walleij <linusw@kernel.org>
-Date: Tue, 24 Nov 2026 19:18:55 +0100
-X-Gmail-Original-Message-ID: <CAD++jLkAjWe12teziGE3-81R0tpO47USD6_pLMMrJ4_DXSOa9g@mail.gmail.com>
-X-Gm-Features: Aa3M54pIgl57JFg90kutrTDazmVajLRDQYbXRH0F1nZdWP8ta1PJg9pzX_V5wZA
-Message-ID: <CAD++jLkAjWe12teziGE3-81R0tpO47USD6_pLMMrJ4_DXSOa9g@mail.gmail.com>
-Subject: [GIT PULL] Ux500 Powerdomain DTS changes for v7.5
-To: soc@lists.linux.dev
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <179555280389.41195.9781719097449194243.git-patchwork-summary@kernel.org>
+Date: Tue, 24 Nov 2026 20:40:03 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-Hi SoC maintainers,
+Hello:
 
-these are the power domain changes for Ux500 for this kernel cycle.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-I'm especially happy about this one because it pays of a huge piece
-of technical debt as we started doing things wrong in ~2010-2011
-and then have tried to back out of it for 15 years. Related changes
-to powerdomains, mfd, regulators, clocks, (also bindings) etc etc
-are merged into each respective subtree.
+Patch: [GIT,PULL] Reset controller fixes for v7.4
+  Submitter: Philipp Zabel <p.zabel@pengutronix.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/series/1219825/
+  Lore link: https://lore.kernel.org/r/20261123161633.2530037-1-p.zabel@pengutronix.de
 
-I also have a large set of DT fixes that I might send for this kernel
-as well, on top of these.
+Patch: [GIT,PULL] STM32 DT fixes for v7.4 #1
+  Submitter: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/series/1221063/
+  Lore link: https://lore.kernel.org/r/7acd50d1-fe84-4c30-bdd5-11f67d7fdb1c@foss.st.com
 
-Please pull it in!
 
-Yours,
-Linus Walleij
+Total patches: 2
 
-The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/ux500-pd-v7.5
-
-for you to fetch changes up to ce2efbd2e360243deaf4b2a7502714da1a50d06d:
-
-  ARM: dts: ux500: Remove DB8500 EPOD regulators (2026-11-22 10:23:53 +0100)
-
-----------------------------------------------------------------
-Ux500 Power Domain changes for kernel cycle v7.5:
-
-- Required bindings changes have been merged to respective
-  subtree.
-
-- Rename the powerdomain node according to standard.
-
-- Add the actual power domains to each applicable peripheral.
-
-- Remove the DB8500 EPOD (electronic power domain) regulators.
-  This is an old technical debt due to power domains being
-  implemented as "some sort of regulators" in 2010 or so.
-
-----------------------------------------------------------------
-Linus Walleij (3):
-      ARM: dts: ux500: Rename power domains node
-      ARM: dts: ux500: Add power domains
-      ARM: dts: ux500: Remove DB8500 EPOD regulators
-
- arch/arm/boot/dts/st/ste-dbx5x0.dtsi | 156 ++++++++++++-----------------------
- 1 file changed, 53 insertions(+), 103 deletions(-)
