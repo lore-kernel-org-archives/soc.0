@@ -1,55 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795608856;
-	b=vnvQx3PRw2yBazfV1XZGLKminMY1bIo9S6ghqXt8LhJdpiK54t4J6KLCarEQFXBVJ/6Q
-	 B8aQX8uMf+NlbKQRwFrSjLfzMBA9MY058TEyLlJ9SAcF7Yrmxnn1EyZJ9jZlNqWIm0aMO
-	 kEgBAOLx67jydEDzMAXSRT+HBWQLvAp1r4YZG8r75wDiIh9XZDBL8bBHd0d++8PhJigIi
-	 qbMqkdfvrT9onRV8DyHn8eH+Gn2svOsdcrJyqv8jVd4Stv8ihg11AA4jmYvSAMtxgo1m0
-	 qGhjTSlwrt/sLCUfpDhDEpMYhis4EgGY0wnyx0skQ1zBE+NzMozvenjQwTS23t/gSyQ==
+	t=1795609102;
+	b=pzmb/jeuZE74x/IeBSSdVdSOoe1Xr6Z0urRTLyfZG71NaHfy2D5vizJ5flb4YcXXqPxx
+	 s71e+Bbjio0vgg8Y1XuXH8N8ooMeeOKkbrIIqi4QWqHYQcZRVf/U4AeLDkweq+1uB5xQa
+	 AYppaR8S3IE8xOI5qOmqRbHH3ZLvfMJIUUpFWAYr0qArs+lSOwsPIG+E1SKUxdrgF+RTK
+	 s0DYaJvtAC7Z+uwNTaLd29TwgD23tvYNGgpKo5p866UIsM5MBgeTfWiUg864CK7ISBjpK
+	 3I18KVWde2rFBBMvIFKePAuSD8I2KzMxW+z9spNK2Yg0GlSHEIkde2sXsmqsNuL9/Lg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795608856;
-	h=Received:Delivered-To:Received:DKIM-Signature:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=Iy0LBKjBroedimxVaC/1j6YmBtkw1EAVLklYNel3/zk=;
-	b=gBceklsFkckLh1wCQdDM8RmdIuoFW47V/oAQ22BejAJLEz7Dk8SeMko62otMMRK/T2tw
-	 nOB4Ldo9WPsOfHehvSnCAR58wS38rjBhCcpS1byXXXS4RKsZ4FaQYgO6lEort3lBWaMtM
-	 YcULVWlQ4HTyoPCSPmM4bxatIr2ifnhz9/7QAcWdZrbaQ9rS40xS2Sj/oRWAtmvKJABz/
-	 WjmsGfE77nrSGwedOeNHo8oYD5tUBZGx3MpqBMN+d7OxoQ48KBrYP5Wu20zR50LKpisKm
-	 FCqRZ4VWjqhiBNsFybmXinmJCa7pmCXGtT58waMiK9pa+y0zKCbbJjqF9nDKia6/QeQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795609102;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=w6brxhWc58ejPdDmDsjZBb3VI0jzhlT7oBmaZ1G4V/4=;
+	b=aQ59mje40fW6wyaY/HpsmA+Qk3FSCjUjxWWpEr1EINUYEQtf9DCgGdb8xKbB156UIiE0
+	 eo3SKX7bsDTIF+wjqASOmouWCz12DIsTgOK22HATd+iveY6khKZwMDk5ksthXp4M4ZObl
+	 kGqzELeoIsBWyGvPw2LJSiCNKnGwFiiN5U0y43+PleSxPjsEPM3pK45KjXIu5mheklwKI
+	 uL9ZUTadwXk6c4J3B3CSOKvWcXeK27FTTn7WMKdnq/mJ1dnk5ZR0XISsmeAJy79mCRLYh
+	 KRXDthrEYWTubhz76wlHJrCRK+wFbZSsMcv/x6kWDzg0g99+/dRhqL7XQsLR7E8EPBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TzJ+HvHD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f3UgWEen;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964B5606A31E
-	for <soc@lists.linux.dev>; Wed, 25 Nov 2026 12:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F7B606A31E;
+	Wed, 25 Nov 2026 12:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TzJ+HvHD
-Received: by smtp.kernel.org (Postfix)
-	id 7ED221F000C0; Wed, 25 Nov 2026 12:14:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E6B1F000D1;
-	Wed, 25 Nov 2026 12:14:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f3UgWEen
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022BE1F000C0;
+	Wed, 25 Nov 2026 12:18:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795608856;
-	bh=Iy0LBKjBroedimxVaC/1j6YmBtkw1EAVLklYNel3/zk=;
+	s=k20260515; t=1795609102;
+	bh=w6brxhWc58ejPdDmDsjZBb3VI0jzhlT7oBmaZ1G4V/4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=TzJ+HvHDB4WuioPqlB6xngB+hDQFIIitX/b4JQpeXskjO2YuLPvZrheYYoZqXFFYX
-	 8/eo2bAhcpD9Y/jNmWjPT1WyJbFmcMHAscdSuO+FF8ahtJoik/Mnwd6C8AeDyD7I1y
-	 bmBSOBIkLUrYa/UXuwz0NsN8KkiyurAjLRoMdg+bs9XwzUZ/z9NXSlxwa7s12IRd1q
-	 XUIpN+JFxQNoLlA+H7NC5giIw0QQGBYDyFd2Mkvf0DkURAjU8ilELWDc/EpMHYaNmF
-	 x+nf+IWrj2QncJKbFn9B6kHRarPQhgpu0rGEa5bQyuEKGevxrKpy4Y2CSCjvO9zthc
-	 oDQ7DS/njv8Pw==
-Date: Wed, 25 Nov 2026 13:14:13 +0100
+	b=f3UgWEenHgZd6XLE/pukysN5IutxEUMLdNKKdEK9zJsRki4m+Z8/DuVppUciskqiH
+	 hUv8Bg7TpLKz6HidPpPzpLGvA1Eum3t0lFmi3edx/zNZqzeijeipQWmLpJsdGQ8N6H
+	 oWgv2qkvqg6Xmvx2MwfU3uZ1EUCVOVPMQmocEFXMn9QdCrIBJovDIK1jlV8nCqgaDu
+	 pYbWX14eqOgkzt2cl5dikb1t9hi6059ZL7uwxKAGSoxCYWP+WylaOdKxfUZeHT0jKZ
+	 yfVquEHqcXFUmZUimfKX9S7dWLyb7LpsnfNfIhrWRrwClh7hVxBYdHt62y6Rnen18c
+	 gJTnK1p4kh2CA==
+Date: Wed, 25 Nov 2026 13:18:20 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 7.5 #1
-Message-ID: <20261125-practical-stalwart-ammonite-e24832@quoll>
-References: <0mz4dc8hQSOr4_mBKfnwog@sntech.de>
+To: Geert Uytterhoeven <geert@kernel.org>
+Cc: soc@lists.linux.dev, Magnus Damm <magnus.damm@gmail.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [GIT PULL 1/2] Renesas ARM defconfig updates for v7.5
+Message-ID: <20261125-tidy-screeching-nightingale-f8c74a@quoll>
+References: <cover.1795540796.git.geert+renesas@glider.be>
+ <cover.1795540798.git.geert+renesas@glider.be>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -61,21 +60,10 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0mz4dc8hQSOr4_mBKfnwog@sntech.de>
+In-Reply-To: <cover.1795540798.git.geert+renesas@glider.be>
 
-On Sun, Nov 22, 2026 at 03:02:59PM +0100, Heiko Stuebner wrote:
-> Hi soc maintainers,
-> 
-> please find below a first bunch of Rockchip dt changes for arm64
-> for the next merge window.
-> 
-> Nothing really stands out.
-> 
-> Please pull.
-> 
-> Thanks
-> Heiko
-> 
+On Tue, Nov 24, 2026 at 06:28:35PM +0100, Geert Uytterhoeven wrote:
+> From: Geert Uytterhoeven <geert+renesas@glider.be>
 > 
 > The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
 > 
@@ -83,11 +71,7 @@ On Sun, Nov 22, 2026 at 03:02:59PM +0100, Heiko Stuebner wrote:
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.5-rockchip-dts64-1
-> 
-> for you to fetch changes up to 30eb5fd93649928b9e4149d24fa182c8521fdc20:
-> 
->   arm64: dts: rockchip: Enable all CPU OPPs on Kobol Helios64 (2026-11-13 21:35:29 +0100)
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v7.5-tag1
 
 Thanks, applied
 
