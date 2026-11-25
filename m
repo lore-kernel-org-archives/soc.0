@@ -1,54 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795609216;
-	b=nJN//HyouufYeFkY26TKPu6bM4H4EeMUwOEYAmGFKlmdzCHpcqvG2Kk+wEmt82PWTxwk
-	 I2B1/MZ16f8iW3HTCX/eLWphsfemyujAmbfvwGG2PEsTTizfJYno3WnyPrNrlifr//VIv
-	 YJaH17+XsE+8QuVddp0K8WEu2KeOO66R3xKkgMXnimHPe+xpyupDaFgaYdb+Y76R6qS5j
-	 sSZFZWj7rUjthokEI2buNEjP0RfjjLQL5iYtUOXJcsB9h1Gl5lBWAIKXIni6T9x58LB0I
-	 kNZ2cBwYnd8dwJYVkC3D9GmjxLsJykkSIhYouquWwEd9/rdHGOLjghf3ie+7r6AGkJQ==
+	t=1795609286;
+	b=N+AN+8Gyvg5PbSAYr5NVO9qFbEUEQgiYTmiobaNICbDTYksgeHC+d3xKBvMCmh5/K/us
+	 4Tro4vSKoUU8aA48OBXjF+n48xCBUfxg8Ti1tsgyEAqE1D025hgtguNn1YLFwS0shkXl4
+	 km47+uJ0YNS+ppQb9oH1aunFIYSvSC0AIBLwEJOeoFYY2Rw58V0TxB0R7RNHIxjKul1Xn
+	 Y6nGySkxWp4KKASyUFEs2ZUQRJh/rlsaAY2ozLah6PwqeXjJFctAGCViiFjdCWpOpPYdX
+	 BZ6PsRn00Nucq829ypYqHxP1RJGPwv0oYkmfCGOnfsP/qFENTnVZUaLcNjvXD9x6jqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795609216;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795609286;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=g0cGllNjSZ1Dlm0jVYy1c6i4slueJeHAQyhOKe/jYNU=;
-	b=0o14rK9kAKFuSV/BkROMz1qrpBkunSM1Tj/G9HCtmZc8Y7L7lKHN06cyrFbvaOZl3/U0
-	 dNMiAxuq/FNcnaYzq4xTAB5FqI6ZRbfNLlgaZVzUFmdJfrBD2aJO0pUrVbSlA+upUSR2M
-	 VxL3qVUwxIOe89xjLwoiejyzS+DrQQ/WFlqL+vArK8TgZWi7JKEX+qWsr0Rzvt1/h2T4d
-	 9tv+tYD6DSsLXi+5WDvt2ZobWwHMIP0OQGIOxHRWEC0yN9P4NLSrwqjMzI83qV/SmpbvV
-	 VcZo0EMaYgcbBBaUM6TG7sJejd0apdauCkDEmgs0GnR3qOhrmw4e5K1bgmDj8NTHKbQ==
+	bh=eHsoi+0RuIsOwYDrm4lJh1qS5ZzfodjXVxY1o2URryM=;
+	b=kbRh/eRI70zJ1dI0JXB3NrkyjKIeI33pFHR2/6naMKN/KHYZ8WhqVBfJA+H+n+2OE09C
+	 aFBHYEroija4JpokqF85v41zb9ynuWsCv0D2nJZ5CWj+LIx6UR93mVRb27F+hTtS1Uf0M
+	 P/uIyh1b3TNbvsWIhI7pRFtkOKEbO6FoNZT+ea89cBJMbh4EDaI5Bv+k+SUmcZCPKCSQ6
+	 K8+OsZloaqMN2Fqx7T247QAafa8clAtxFTkrRnUB/N98vnOrKNVaI946lrpT1Acu5rhnu
+	 ucLpMwNbCUBDTxVE44Ivu/NpRf6KMyB93vOOsHxKzODxDoduJiywCgvjNLPYjlTGPCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d7ZAtjiu;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="B/A7/pdu";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A789F606A31E;
-	Wed, 25 Nov 2026 12:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82440606A31E
+	for <soc@lists.linux.dev>; Wed, 25 Nov 2026 12:21:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d7ZAtjiu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC8EB1F000C4;
-	Wed, 25 Nov 2026 12:20:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B/A7/pdu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F76A1F000C6;
+	Wed, 25 Nov 2026 12:21:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795609216;
-	bh=g0cGllNjSZ1Dlm0jVYy1c6i4slueJeHAQyhOKe/jYNU=;
+	s=k20260515; t=1795609286;
+	bh=eHsoi+0RuIsOwYDrm4lJh1qS5ZzfodjXVxY1o2URryM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=d7ZAtjiuRyHXkqPBq4xg2DgJbYRJHmkbUzYixCVpFSEAoCHirys2mk6dQ+JIr+J40
-	 Knp+k4We+LIxg3mN+xOf5pn5oFGpoRbB7zmzZxMp59fNS4SCtJ2M2GtceeukrKHpUR
-	 CS6JtMtrfxBZyLRsDGp7OcyFzczFogVAuryMbi2wUvYwcROvU27p/VH1dlGFp/j0Ad
-	 sFVyOPs2tdKw7uiAy7L+7ejV6na1073gaznu18X/foVmIU/fE+KlS73dpFF6YM9oXZ
-	 vrK+Iq94NSBDFzduyLUvx6GzHc6gifbkg4mmFeRxn3aIefOLWH+dKs7DKqMk8KeIil
-	 CJ/8noLwUVlcg==
-Date: Wed, 25 Nov 2026 13:20:13 +0100
+	b=B/A7/pduFevS+EDAXTfLd0ryOsu0GdCM/9NTpqcUJrMCsIH2M46VAG6evrahYf3pJ
+	 94o/yZI1VnTqFJjgY7UMiueCu8sgfm02lcnvjXv+LFMgymzGLgo2IMWSBzIA+hHB0V
+	 ciu1PosgwPh9Fez9YTcKEUD0amsraY7WhrU40yzNrZhrwiMWWBVA4k+anTKjkC6C4R
+	 +FcyRRCLdYWTXMd0IupLQC/VSFf9iUrETAKOSMV3JvdhLWhRcnSC9DGli36sbQnB/D
+	 yvul1n3Rrk+89Ll7fPZ/mBeX742BE8SkYOHGh+eAhPUpWIs6jR9SNXuwY6cFEyWrN1
+	 EaAgELpMWDqIg==
+Date: Wed, 25 Nov 2026 13:21:23 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Geert Uytterhoeven <geert@kernel.org>
-Cc: soc@lists.linux.dev, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [GIT PULL 2/2] Renesas DTS updates for v7.5
-Message-ID: <20261125-qualified-shiny-cat-ade8f1@quoll>
-References: <cover.1795540796.git.geert+renesas@glider.be>
- <cover.1795540800.git.geert+renesas@glider.be>
+To: Linus Walleij <linusw@kernel.org>
+Cc: soc@lists.linux.dev, Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [GIT PULL] Ux500 Powerdomain DTS changes for v7.5
+Message-ID: <20261125-smooth-miraculous-eagle-ae81f4@quoll>
+References: <CAD++jLkAjWe12teziGE3-81R0tpO47USD6_pLMMrJ4_DXSOa9g@mail.gmail.com>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -60,10 +57,26 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1795540800.git.geert+renesas@glider.be>
+In-Reply-To: <CAD++jLkAjWe12teziGE3-81R0tpO47USD6_pLMMrJ4_DXSOa9g@mail.gmail.com>
 
-On Tue, Nov 24, 2026 at 06:28:36PM +0100, Geert Uytterhoeven wrote:
-> From: Geert Uytterhoeven <geert+renesas@glider.be>
+On Tue, Nov 24, 2026 at 07:18:55PM +0100, Linus Walleij wrote:
+> Hi SoC maintainers,
+> 
+> these are the power domain changes for Ux500 for this kernel cycle.
+> 
+> I'm especially happy about this one because it pays of a huge piece
+> of technical debt as we started doing things wrong in ~2010-2011
+> and then have tried to back out of it for 15 years. Related changes
+> to powerdomains, mfd, regulators, clocks, (also bindings) etc etc
+> are merged into each respective subtree.
+> 
+> I also have a large set of DT fixes that I might send for this kernel
+> as well, on top of these.
+> 
+> Please pull it in!
+> 
+> Yours,
+> Linus Walleij
 > 
 > The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
 > 
@@ -71,23 +84,13 @@ On Tue, Nov 24, 2026 at 06:28:36PM +0100, Geert Uytterhoeven wrote:
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v7.5-tag1
-> 
-> for you to fetch changes up to df85c8ee22391046200bb057c85717eb906e464a:
-> 
->   arm64: dts: renesas: rzg3s-smarc: Enable CAN-FD (2026-11-23 11:05:32 +0100)
-> 
-> ----------------------------------------------------------------
-> Renesas DTS updates for v7.5
-> 
->   - Add more timer support for the RZ/N1 SoC,
->   - Add PCIe endpoint suppport for the Renesas Spider development board,
->   - Add CAN-FD support for the RZ/G3L and RZ/G3S SoCs and their SMARC
->     boards.
-> 
-> ----------------------------------------------------------------
+>   git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+> tags/ux500-pd-v7.5
 
-Thanks, applied
+I think I commented last time. Please, please fix your mailer. You keep
+stopping me from simple line selection and pasting.
+
+I applied this one.
 
 Best regards,
 Krzysztof
