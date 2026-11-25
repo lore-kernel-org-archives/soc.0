@@ -1,60 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795608423;
-	b=JjEbntknGJld9vuEW0+sBz3eoxqiIfUTu62xZR7E6stSbv3fJNKT3/GpAT6s/uAB0eg+
-	 sbC7UWMhHDEVJzUwDPR7oucPDgK6e80UsY27P9sj/jRY478pSYSjUc9Fl8oK98iV9/gCE
-	 1sUgBIKlap+92DxqzWUhtJ6GKoJaG6gQJqoDswerz0cmWEjZ/+8MtGGP97mvMy3tSbFAh
-	 Olh9HOnocxp2LQMWMV1jirI98SkPqNwagtq4KTx1wKZCPbVlxN6IoFart4/2TX6ubYFaI
-	 ir+SThpe6X2A58rCsS0wpmEgH/KX9x1l2zSXOFOLtkteUlSQs5/p0R1u5AtxjCYhvlQ==
+	t=1795608856;
+	b=vnvQx3PRw2yBazfV1XZGLKminMY1bIo9S6ghqXt8LhJdpiK54t4J6KLCarEQFXBVJ/6Q
+	 B8aQX8uMf+NlbKQRwFrSjLfzMBA9MY058TEyLlJ9SAcF7Yrmxnn1EyZJ9jZlNqWIm0aMO
+	 kEgBAOLx67jydEDzMAXSRT+HBWQLvAp1r4YZG8r75wDiIh9XZDBL8bBHd0d++8PhJigIi
+	 qbMqkdfvrT9onRV8DyHn8eH+Gn2svOsdcrJyqv8jVd4Stv8ihg11AA4jmYvSAMtxgo1m0
+	 qGhjTSlwrt/sLCUfpDhDEpMYhis4EgGY0wnyx0skQ1zBE+NzMozvenjQwTS23t/gSyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795608423;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=xqvMv36sU1arvmKl+cIGHmHRCnYWDCYqsUJxqYwyPL4=;
-	b=lnUkIdJKQoPMw1mTAZ+6UnXYEXECPa8QtToYL4ix0YokR+cUgmqgUf+5GlkEosNGnzbA
-	 AwqKPjJBMESJxDF0MpHIr1MYBfPpA+qIv91DnFgya09mCKcAt+ul202bb3AY0H7TVRsNL
-	 uT4TV52MNZyjQZGzBf9YYi+Lc8n01IftrZVLHHmg6vJo8nxsKeB4ge3/d6uHswwSFhBFJ
-	 IRzLycXPD0n4dXllHmAXg1zKm6TtWZdIwF0vy4+YP9l9BTiRLz7HPEwzvhz96zdm1pEVA
-	 Nx+0Kwl07vmji5PV1N5L0ltjvo3YFigB7/uRlQMHKMMJ0/0QLmp9HowFGlUtmKGQnDA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795608856;
+	h=Received:Delivered-To:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=Iy0LBKjBroedimxVaC/1j6YmBtkw1EAVLklYNel3/zk=;
+	b=gBceklsFkckLh1wCQdDM8RmdIuoFW47V/oAQ22BejAJLEz7Dk8SeMko62otMMRK/T2tw
+	 nOB4Ldo9WPsOfHehvSnCAR58wS38rjBhCcpS1byXXXS4RKsZ4FaQYgO6lEort3lBWaMtM
+	 YcULVWlQ4HTyoPCSPmM4bxatIr2ifnhz9/7QAcWdZrbaQ9rS40xS2Sj/oRWAtmvKJABz/
+	 WjmsGfE77nrSGwedOeNHo8oYD5tUBZGx3MpqBMN+d7OxoQ48KBrYP5Wu20zR50LKpisKm
+	 FCqRZ4VWjqhiBNsFybmXinmJCa7pmCXGtT58waMiK9pa+y0zKCbbJjqF9nDKia6/QeQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="HG3DS/xm";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TzJ+HvHD;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27F4606A329;
-	Wed, 25 Nov 2026 12:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964B5606A31E
+	for <soc@lists.linux.dev>; Wed, 25 Nov 2026 12:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HG3DS/xm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77CBD1F000D0;
-	Wed, 25 Nov 2026 12:07:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TzJ+HvHD
+Received: by smtp.kernel.org (Postfix)
+	id 7ED221F000C0; Wed, 25 Nov 2026 12:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E6B1F000D1;
+	Wed, 25 Nov 2026 12:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795608423;
-	bh=xqvMv36sU1arvmKl+cIGHmHRCnYWDCYqsUJxqYwyPL4=;
+	s=k20260515; t=1795608856;
+	bh=Iy0LBKjBroedimxVaC/1j6YmBtkw1EAVLklYNel3/zk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HG3DS/xmRh+hLy/FZR+0DYfYsuM99sOw0N5RdI595AfpTVhkw1ibfxIqv+4SLC1x7
-	 nLTTGtcYq6q5oVbibxAcXtlkQEn0KqmBebcb8ICXio1q9HiLRFhghlIyRbxaVn0Zun
-	 qQNTUDAeB+BnT4l7UoVIUviBrRlHKASCArw2XfexmDn3CRFd/OAqnOM0zwtolbMTwu
-	 PVqAwqMlY4zQ07Lqx8dmdqDP+loL413gUqnJdKgfTYjNlLqDbSTVgDsRXka+wDynLp
-	 8AUFPEzcX8r4mVwFvOFahOhpzdNI6EalJ4DGJdaAUxKqoo/QkTXHorxOnFK/6YRA91
-	 ktW9x0DaFbLmw==
-Date: Wed, 25 Nov 2026 13:07:00 +0100
+	b=TzJ+HvHDB4WuioPqlB6xngB+hDQFIIitX/b4JQpeXskjO2YuLPvZrheYYoZqXFFYX
+	 8/eo2bAhcpD9Y/jNmWjPT1WyJbFmcMHAscdSuO+FF8ahtJoik/Mnwd6C8AeDyD7I1y
+	 bmBSOBIkLUrYa/UXuwz0NsN8KkiyurAjLRoMdg+bs9XwzUZ/z9NXSlxwa7s12IRd1q
+	 XUIpN+JFxQNoLlA+H7NC5giIw0QQGBYDyFd2Mkvf0DkURAjU8ilELWDc/EpMHYaNmF
+	 x+nf+IWrj2QncJKbFn9B6kHRarPQhgpu0rGEa5bQyuEKGevxrKpy4Y2CSCjvO9zthc
+	 oDQ7DS/njv8Pw==
+Date: Wed, 25 Nov 2026 13:14:13 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Russell King <rmk+kernel@armlinux.org.uk>, 
-	Vladimir Zapolskiy <vz@mleia.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
-	Andreas Kemnade <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>, 
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Gregory Clement <gregory.clement@bootlin.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [GIT PULL] soc: deprecated platform removal for 7.5
-Message-ID: <20261125-judicious-burgundy-bee-89d514@quoll>
-References: <7d052ff3-6d0a-47ff-a1cb-b7864ad2c248@app.fastmail.com>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 7.5 #1
+Message-ID: <20261125-practical-stalwart-ammonite-e24832@quoll>
+References: <0mz4dc8hQSOr4_mBKfnwog@sntech.de>
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Post: <mailto:soc@lists.linux.dev>
@@ -66,23 +61,33 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7d052ff3-6d0a-47ff-a1cb-b7864ad2c248@app.fastmail.com>
+In-Reply-To: <0mz4dc8hQSOr4_mBKfnwog@sntech.de>
 
-On Thu, Nov 12, 2026 at 04:47:21PM +0100, Arnd Bergmann wrote:
-> The following changes since commit 7475ea8b58616b33c04afb976cf0fbaad9dd63fb:
+On Sun, Nov 22, 2026 at 03:02:59PM +0100, Heiko Stuebner wrote:
+> Hi soc maintainers,
 > 
->   Linux 7.4-rc2 (2026-11-08 16:22:20 -0800)
+> please find below a first bunch of Rockchip dt changes for arm64
+> for the next merge window.
+> 
+> Nothing really stands out.
+> 
+> Please pull.
+> 
+> Thanks
+> Heiko
+> 
+> 
+> The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
+> 
+>   Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/board-remove-for-7.5
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v7.5-rockchip-dts64-1
 > 
-> for you to fetch changes up to 273a6e23f66433952300d1810b5274786e7e4a25:
+> for you to fetch changes up to 30eb5fd93649928b9e4149d24fa182c8521fdc20:
 > 
->   ARM: at91: remove samv7 support (2026-11-10 22:18:44 +0100)
-> 
-> ----------------------------------------------------------------
-> soc: deprecated platform removal for 7.5
+>   arm64: dts: rockchip: Enable all CPU OPPs on Kobol Helios64 (2026-11-13 21:35:29 +0100)
 
 Thanks, applied
 
