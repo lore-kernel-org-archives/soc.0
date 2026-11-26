@@ -1,56 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795725565;
-	b=t0yWwEi8WEF4eOSbfYI5QsZMJlQ94u2udrfrhi1H+X0HCwRh4/uh0AL+Xs545wj4UZBG
-	 y1apJFiKK8cbvGfmTBwq7Nzn/IaNK3a0UfxlYyOP7YS6xvHghM6tBYWRiqBg0iHZPHaMO
-	 zZyxYwJV0pxHaqbCfHQvAUWOnQ4+KtTD4nVKfrrMo/mpDerkrJXfpq08UZJ92cizg/Pz5
-	 ezJZ5pq+1JP+CAW6Mx7yR2b9LroaVurBW0EgmAuM88kvsWad2/6ZQPNO5C8xjZWGQrVPT
-	 AqS3U76ukgOgz5RQTo266FkFEmTkhsG6SrMVVNuK2uH5ZVyYGhDnu8IbvO4PNh4kRSQ==
+	t=1795725800;
+	b=rBmnhP9BcVB0fTaG2t8qe+MRnLBaJdscronYKCEkrMiL5cXRiIFTmeknj0Te+Cr0dye6
+	 1XfUSJF8dBQDhP+xPHR0kc8gxVuenKgM7oRbLz47IYE8HTy0/u5aMXS1pGKO5FS3XZDuo
+	 pOqmYqR4SreYt5yOZynKAeJtrYgGcVyCp3noOkITj4AgrD4jwQYdizQv6dj0BKSIn6OEF
+	 5WHjrITJyoGPU/xzadrwKYdHW7P2Sn2hQiL7raTb5xwPQ1K3m90cMaYhmOQ3JJ8ywssZS
+	 4x5S2MrhjnnyLXsM0xwlD8gz7SFrru0UZp02AIywG1U7XlZM7z9EBfq/AGwGm0ng7jQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795725565;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795725800;
 	h=Received:Delivered-To:Received:DKIM-Signature:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=/W9cEBWU/T988b+0x4Z/R0bFFK0jxwX4qWW1NiYU7q4=;
-	b=UzTiQXkk2YbQRQnAWt0I11XB/+srlgGnF6cPstrR3OSg/Oq9+1nsnjeBuiJqzFuOPK+A
-	 8GmQlKf53SwobZLeW7ZQVS8a3LTleSnuzwphQJhWXjA5FG5fC5pj1pjHNTYhA0WnXh+kb
-	 i3TFDvePRci+yHj3HYW3UlWbuWqCXrMjaPwT76yK2VwQnvy6ofLu3Sp94/zEMPFPPyHav
-	 bH0DUWiUDMGyuKY3KgYSOgq1WTy1TbHUVKefWVh14Nn1PhC9n9ZJRj8u/dNMzpEqAHZTp
-	 lJTZhS2qdeqnoSuHJH4bcZFlOPdNALdDmhYNFzBxS9bZT0bEYufMEH80EBi82baOsJw==
+	bh=bM3ZC9yu5XH+6bnUPNa+jdnnx+eGcgI8D08Xng9WN8E=;
+	b=JquIjdoqnpoErdwon8eYLHSqDuIjHtzgEnBRJz7r+r5Q18A99UQIdM2/36hOS3GQ3MWp
+	 VyIL2M2ebBwiY0aNkJj2PjYtFsXgkoqEQ/YxTpe6LQR0UrUkXtyO4Lz4XnP009k/X831V
+	 zvCofXG0UZAPlxTankytvFg3HwD1ytwvwJeLr68/sskbOC+SiMZcapnI2pPRt7paoHxuc
+	 K5Gz/N+EIhmKqbGmmJeVef6Jtc0rWK67yLhixXw4nKkUW6xpGA29oTDinKmHQBn20fPVX
+	 b3luXJTQKNdoS2lpn/19dfn1Hb0mzbazhEF5w/ZEvKWteGTUleKQQ4ZS0FGefCM0zuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DPsOvRi7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E4EKObBl;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807FD606A323
-	for <soc@lists.linux.dev>; Thu, 26 Nov 2026 20:39:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234B2606A691
+	for <soc@lists.linux.dev>; Thu, 26 Nov 2026 20:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DPsOvRi7
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E4EKObBl
 Received: by smtp.kernel.org (Postfix)
-	id 2CB241F00896; Thu, 26 Nov 2026 20:39:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32CF1F00893;
-	Thu, 26 Nov 2026 20:39:23 +0000 (UTC)
+	id DA8E21F00893; Thu, 26 Nov 2026 20:43:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0151F000C1;
+	Thu, 26 Nov 2026 20:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795725565;
-	bh=/W9cEBWU/T988b+0x4Z/R0bFFK0jxwX4qWW1NiYU7q4=;
+	s=k20260515; t=1795725799;
+	bh=bM3ZC9yu5XH+6bnUPNa+jdnnx+eGcgI8D08Xng9WN8E=;
 	h=From:To:Cc:Subject:Date;
-	b=DPsOvRi7JlUHB6r3QAfIzuV0MqSgjLqJ+RgLGNMLVsCMd0BRKaPwFrV8miul1LUVa
-	 toKCp6ENx4D6Zo8CJ1SBUNdFYc1w56pppalY1Oz0PteP99eX3SD9DRApx8e9NoHcNo
-	 Xuc+srs6Kyb4UuunMI6Z/mVCDhuWfv1nOb/YJibXzSMuSacWjNOYMLIG3/SXUhDYtr
-	 V0zwp0HLsARyrxZXu07+TwYTBRlzX1ZfKzse0YsvNwOtAtIkt5XFJu58iz02cyfLXy
-	 TZU/pZURl+M9fgurE0EpgmNX5qfgE3k0J0CFnNPaaAqtTF8wfUC2/yuo1VqFgLfbGB
-	 oY+4J7L0lcqkQ==
+	b=E4EKObBlHAmUhpLsKjFSdoTnJ/NhxM4BCRxUirL8IM/r8aRM54FYAKohozTrB/b8d
+	 Gt8z30g7oTksu5eXkKgQwu6huQiIlmwY/iNFySnXKNCe/0R9D7GHA9zLjjGhaMi1HL
+	 7dojc6kic9Lsr/7Meu28a3snSU2Um9C6FQ1TJ/7UmiXlAZwNlo/9BINH6WsYdmSRox
+	 YQ5ReWJEky8t5tNnp3utsZ9IYLWzikSluFxCxDdn77yaZ93Bq6AkRxQRhdIOHi3Fuh
+	 5Ba0pDIz/2DvvMnjQwQSUbHJJLLaT9MrmK70uVVT6/Wtxg09UPIMS1FQbRg9LdUvxK
+	 15T2Yu/7BA7Bw==
 From: Bjorn Andersson <andersson@kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
 Cc: linux-arm-msm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Waqar Hameed <waqar.hameed@axis.com>,
-	Hardeep Sharma <hardeep.sharma@oss.qualcomm.com>
-Subject: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v7.5
-Date: Thu, 26 Nov 2026 21:39:21 +0100
-Message-ID: <20261126203922.14074-1-andersson@kernel.org>
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+	Arpit Saini <arpit.saini@oss.qualcomm.com>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Mohammad Rafi Shaik <mohammad.rafi.shaik@oss.qualcomm.com>,
+	Prasad Kumpatla <prasad.kumpatla@oss.qualcomm.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@oss.qualcomm.com>
+Subject: [GIT PULL] Qualcomm Arm64 defconfig updates for v7.5
+Date: Thu, 26 Nov 2026 21:43:14 +0100
+Message-ID: <20261126204315.15005-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.56.1
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -70,91 +74,46 @@ The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-7.5
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-7.5
 
-for you to fetch changes up to ae2005cea2e4f84692268e54199bb03f5c6f4558:
+for you to fetch changes up to 1ff72de9902a955b8446bba2c56942028c1425ea:
 
-  arm: dts: qcom: sdx65: Align multiple property data (2026-11-07 16:00:03 -0600)
-
-----------------------------------------------------------------
-Qualcomm Arm32 DeviceTree updates for v7.5
-
-Add initial DeviceTree support for the Qualcomm Kuno SoC and Kuno IDP,
-including the CPU, clocks, power domains, interconnect, pin controller,
-shared memory and UART console.
-
-Clean up formatting across Qualcomm Arm32 SoC, board and PMIC DeviceTrees.
+  arm64: defconfig: Enable Novatek NT37705 panel (2026-11-16 17:44:40 -0600)
 
 ----------------------------------------------------------------
-Hardeep Sharma (1):
-      ARM: dts: qcom: Add initial device tree for Kuno SoC
+Qualcomm Arm64 defconfig updates for v7.5
 
-Waqar Hameed (32):
-      arm: dts: qcom: pm8226: Add newline between subnodes
-      arm: dts: qcom: pm8841: Remove superfluous empty lines
-      arm: dts: qcom: pm8921: Remove superfluous empty lines
-      arm: dts: qcom: pm8941: Remove superfluous empty lines
-      arm: dts: qcom: pm8084: Remove superfluous empty line
-      arm: dts: qcom: apq8026: Add newline between subnodes
-      arm: dts: qcom: apq8026: Add space between OR-operator
-      arm: dts: qcom: apq8060: Add newline between subnodes
-      arm: dts: qcom: apq8060: Align multiple property data
-      arm: dts: qcom: apq8064: Add newline between subnodes
-      arm: dts: qcom: apq8064: Remove empty line at end of node
-      arm: dts: qcom: apq8064: Add space before line comments
-      arm: dts: qcom: apq8064: Remove tab after property name
-      arm: dts: qcom: ipq4018: Indent closing brace properly
-      arm: dts: qcom: ipq4019: Add newline between subnodes
-      arm: dts: qcom: ipq4019: Align multiple property data
-      arm: dts: qcom: ipq8064: Add newline between subnodes
-      arm: dts: qcom: ipq8064: Align multiple property data
-      arm: dts: qcom: msm8226: Add space between OR-operator
-      arm: dts: qcom: msm8226: Add newline between subnodes
-      arm: dts: qcom: msm8660: Remove empty line at end of node
-      arm: dts: qcom: msm8660: Remove space inside array property
-      arm: dts: qcom: msm8660: Align closing array bracket
-      arm: dts: qcom: msm8916: Add newline between subnodes
-      arm: dts: qcom: msm8960: Properly indent subnodes
-      arm: dts: qcom: msm8660: Align closing array bracket
-      arm: dts: qcom: msm8974: Align multiple property data
-      arm: dts: qcom: msm8974: Align closing brace properly
-      arm: dts: qcom: msm8974: Add newline between subnodes
-      arm: dts: qcom: sdx55: Properly indent subnode
-      arm: dts: qcom: sdx65: Remove empty line at end of node
-      arm: dts: qcom: sdx65: Align multiple property data
+Enable the ILI7807S panel driver for Shikra CQM and CQS EVK boards and
+the NT37705 panel driver for Fairphone (Gen. 6).
 
- arch/arm/boot/dts/qcom/Makefile                    |   1 +
- arch/arm/boot/dts/qcom/pm8226.dtsi                 |   5 +
- arch/arm/boot/dts/qcom/pm8841.dtsi                 |   2 -
- arch/arm/boot/dts/qcom/pm8921.dtsi                 |   2 -
- arch/arm/boot/dts/qcom/pm8941.dtsi                 |   3 -
- arch/arm/boot/dts/qcom/pma8084.dtsi                |   1 -
- .../boot/dts/qcom/qcom-apq8026-asus-sparrow.dts    |  32 ++
- arch/arm/boot/dts/qcom/qcom-apq8026-lg-lenok.dts   |  27 ++
- .../dts/qcom/qcom-apq8026-samsung-milletwifi.dts   |   4 +-
- .../arm/boot/dts/qcom/qcom-apq8060-dragonboard.dts |  26 +-
- .../boot/dts/qcom/qcom-apq8064-asus-nexus7-flo.dts |   7 +-
- .../qcom/qcom-apq8064-sony-xperia-lagan-yuga.dts   |   1 -
- arch/arm/boot/dts/qcom/qcom-apq8064.dtsi           |  16 +-
- arch/arm/boot/dts/qcom/qcom-ipq4018-ap120c-ac.dtsi |   3 +-
- arch/arm/boot/dts/qcom/qcom-ipq4019-ap.dk01.1.dtsi |   1 +
- arch/arm/boot/dts/qcom/qcom-ipq4019-ap.dk04.1.dtsi |  11 +-
- .../boot/dts/qcom/qcom-ipq4019-ap.dk07.1-c1.dts    |   3 +-
- arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi           |  11 +-
- arch/arm/boot/dts/qcom/qcom-ipq8064-v1.0.dtsi      |   1 +
- arch/arm/boot/dts/qcom/qcom-ipq8064-v2.0.dtsi      |   1 +
- arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi           |  24 +-
- arch/arm/boot/dts/qcom/qcom-kuno-idp.dts           |  25 ++
- arch/arm/boot/dts/qcom/qcom-kuno.dtsi              | 444 +++++++++++++++++++++
- .../qcom/qcom-msm8226-samsung-matisse-common.dtsi  |   4 +-
- arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           |   5 +
- arch/arm/boot/dts/qcom/qcom-msm8660-surf.dts       |   2 +-
- arch/arm/boot/dts/qcom/qcom-msm8660.dtsi           |   6 +-
- arch/arm/boot/dts/qcom/qcom-msm8916-smp.dtsi       |   3 +
- arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts        |  18 +-
- arch/arm/boot/dts/qcom/qcom-msm8974.dtsi           |  24 +-
- arch/arm/boot/dts/qcom/qcom-sdx55-t55.dts          |  10 +-
- arch/arm/boot/dts/qcom/qcom-sdx65.dtsi             |  14 +-
- 32 files changed, 658 insertions(+), 79 deletions(-)
- create mode 100644 arch/arm/boot/dts/qcom/qcom-kuno-idp.dts
- create mode 100644 arch/arm/boot/dts/qcom/qcom-kuno.dtsi
+Enable the PM4125 audio codec for Arduino Uno Q and Shikra boards, and
+the WSA885X amplifier driver for Shikra boards. Enable the Hawi LPASS
+LPI pinctrl driver for Hawi and Maili platforms.
+
+Drop redundant Qualcomm SoC and interconnect entries covered by Kconfig
+defaults from the ARM and arm64 defconfigs.
+
+----------------------------------------------------------------
+Arpit Saini (1):
+      arm64: defconfig: Enable ILI7807S DSI panel driver
+
+Krzysztof Kozlowski (2):
+      ARM: defconfig: qcom: Drop Qualcomm SoC drivers with defaults
+      ARM/arm64: defconfig: Drop redundant Qualcomm interconnect entries
+
+Luca Weiss (1):
+      arm64: defconfig: Enable Novatek NT37705 panel
+
+Mohammad Rafi Shaik (1):
+      arm64: defconfig: Enable Qualcomm PM4125 and WSA885X drivers
+
+Prasad Kumpatla (1):
+      arm64: defconfig: Enable Hawi LPASS LPI pinctrl driver
+
+Srinivas Kandagatla (1):
+      arm64: defconfig: Enable pm4125 audio codec driver
+
+ arch/arm/configs/multi_v7_defconfig | 11 --------
+ arch/arm/configs/qcom_defconfig     | 10 -------
+ arch/arm64/configs/defconfig        | 54 ++++---------------------------------
+ 3 files changed, 5 insertions(+), 70 deletions(-)
